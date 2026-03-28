@@ -6,7 +6,6 @@
 
 <title>Sultan II. Bayezid Külliyesi</title>
 
-<!-- FONTLAR -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
@@ -71,7 +70,6 @@ body {
     gap: 20px;
 }
 
-/* SOL, ORTA, SAĞ */
 .left, .center, .right {
     flex: 1;
 }
@@ -94,13 +92,44 @@ body {
     transform: translateY(-3px);
 }
 
+/* GOLD BORDER */
 .gold-border {
     border: 2px solid gold;
 }
 
+/* DARK KART */
 .dark {
     background: #333;
     color: #fff;
+}
+
+/* KART BAŞLIKLARI - TEK RENK + HOVER/TAP EFEKTI */
+.card h2, .card h3 {
+    display: inline-block;
+    padding: 5px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 2px solid #FFD700;  /* Altın border */
+    background-color: #FFF8DC;   /* Hafif altın arka plan */
+    color: #FFD700;              /* Altın renk yazı */
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* HOVER EFEKTI (Masaüstü) */
+.card h2:hover, .card h3:hover {
+    background-color: #FFD700; /* Tam altın arka plan */
+    color: #333;               /* Yazıyı koyu yap */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
+}
+
+/* MOBİL DOKUNMA İÇİN "active" sınıfı */
+.card h2.active, .card h3.active {
+    background-color: #FFD700;
+    color: #333;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transform: translateY(-2px);
 }
 
 /* LISTE STYLING */
@@ -176,7 +205,6 @@ body {
 </header>
 
 <div class="frame">
-
     <div class="layout">
 
         <!-- SOL -->
@@ -255,4 +283,60 @@ body {
                 </ul>
             </div>
 
-        </main
+        </main>
+
+        <!-- SAĞ -->
+        <aside class="right">
+
+            <div class="card dark gold-border">
+                <h3>Açılış Saatleri</h3>
+                <p>Yaz: 09:00 - 19:00</p>
+                <p>Kış: 09:00 - 17:00</p>
+            </div>
+
+            <div class="card gold-border">
+                <h3>Ücretler</h3>
+                <p>Tam: 50 TL</p>
+                <p>Öğrenci: 25 TL</p>
+                <p>0-7 yaş: Ücretsiz</p>
+            </div>
+
+            <div class="card gold-border">
+                <h3>ZİYARET KURALLARI</h3>
+                <ul>
+                    <li>Evcil Hayvan Kabul Edilmez</li>
+                    <li>Sessiz Olunuz</li>
+                </ul>
+            </div>
+
+            <div class="card gold-border">
+                <h3>ERİŞEBİLİRLİK</h3>
+                <p>Külliye, tekerlekli sandalye dostudur ve engelli ziyaretçilere uygundur.</p>
+            </div>
+
+        </aside>
+
+    </div>
+</div>
+
+<script>
+function playVideo() {
+    document.getElementById('video-thumb').style.display = 'none';
+    document.querySelector('.play-btn').style.display = 'none';
+    document.getElementById('video-player').style.display = 'block';
+}
+
+// Mobil dokunmatik başlık efekti
+document.querySelectorAll('.card h2, .card h3').forEach(function(header) {
+    header.addEventListener('touchstart', function() {
+        this.classList.add('active');
+    });
+    header.addEventListener('touchend', function() {
+        let el = this;
+        setTimeout(function() { el.classList.remove('active'); }, 500);
+    });
+});
+</script>
+
+</body>
+</html>
