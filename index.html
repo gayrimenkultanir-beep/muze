@@ -6,6 +6,7 @@
 
 <title>Sultan II. Bayezid Külliyesi</title>
 
+<!-- FONTLAR -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
@@ -27,7 +28,7 @@ body {
 .hero {
     position: relative;
     height: 400px;
-    background: url('assets/header.jpg') center/cover no-repeat;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('assets/header.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,7 +62,7 @@ body {
 /* LAYOUT */
 .frame {
     max-width: 1200px;
-    margin: -80px auto 50px auto;
+    margin: -80px auto 50px auto; /* hero overlap efekti */
     padding: 0 20px;
 }
 
@@ -70,6 +71,7 @@ body {
     gap: 20px;
 }
 
+/* SOL, ORTA, SAĞ */
 .left, .center, .right {
     flex: 1;
 }
@@ -80,7 +82,7 @@ body {
 
 /* KARTLAR */
 .card {
-    background-color: #F5DEB3; /* Parşömen rengi */
+    background: #fdf5e6; /* Parşömen rengi */
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 20px;
@@ -92,45 +94,19 @@ body {
     transform: translateY(-3px);
 }
 
-/* GOLD BORDER */
+.card h2, .card h3 {
+    font-weight: 700;       /* Kalın başlık */
+    color: #b8860b;         /* Altın tonlu başlık */
+    margin-bottom: 10px;
+}
+
 .gold-border {
     border: 2px solid gold;
 }
 
-/* DARK KART */
 .dark {
     background: #333;
     color: #fff;
-}
-
-/* KART BAŞLIKLARI - ALTIN RENK VE KALIN */
-.card h2, .card h3 {
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 2px solid #FFD700;  /* Altın border */
-    background-color: #FFF8DC;   /* Hafif altın arka plan */
-    color: #FFD700;              /* Altın yazı */
-    font-weight: 700;            /* Kalın yazı */
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-/* HOVER EFEKTI (Masaüstü) */
-.card h2:hover, .card h3:hover {
-    background-color: #FFD700;
-    color: #333;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transform: translateY(-2px);
-}
-
-/* MOBİL DOKUNMA İÇİN "active" sınıfı */
-.card h2.active, .card h3.active {
-    background-color: #FFD700;
-    color: #333;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transform: translateY(-2px);
 }
 
 /* LISTE STYLING */
@@ -142,14 +118,15 @@ body {
 .card ul li {
     padding: 5px 0;
     position: relative;
-    padding-left: 20px;
+    padding-left: 25px;
 }
 
 .card ul li::before {
-    content: "•";
+    content: "➤";
     position: absolute;
     left: 0;
-    color: gold;
+    color: #b8860b;
+    font-weight: bold;
 }
 
 /* VIDEO */
@@ -161,6 +138,7 @@ body {
 .video-wrapper img {
     width: 100%;
     border-radius: 10px;
+    display: block;
 }
 
 .play-btn {
@@ -188,4 +166,160 @@ body {
     .center {
         order: 0;
     }
-    .left,
+    .left, .right {
+        order: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Sultan II. Bayezid Külliyesi</h1>
+        <h2>Sağlık Müzesi</h2>
+    </div>
+</header>
+
+<div class="frame">
+
+    <div class="layout">
+
+        <!-- SOL -->
+        <aside class="left">
+
+            <div class="card dark gold-border">
+                <h3>Evliya Çelebi</h3>
+                <p>"Edirne'de Bayezid Darüşşifası..."</p>
+            </div>
+
+            <div class="card gold-border">
+                <h3>Tarihçe</h3>
+                <p>1484 yılında inşa edilmiştir.</p>
+            </div>
+
+            <div class="card gold-border">
+                <h3>Külliye Bölümleri</h3>
+                <ul>
+                    <li>Medrese</li>
+                    <li>Darüşşifa</li>
+                    <li>İmarethane</li>
+                    <li>Camii</li>
+                </ul>
+            </div>
+
+            <div class="card gold-border">
+                <h3>İDARİ BİRİM</h3>
+                <ul>
+                    <li>Personel</li>
+                    <li>Telefon Rehberi</li>
+                </ul>
+            </div>
+
+            <div class="card gold-border">
+                <h3>ÖDÜLLER</h3>
+                <ul>
+                    <li>Avrupa Müze Ödülü</li>
+                </ul>
+            </div>
+
+        </aside>
+
+        <!-- ORTA -->
+        <main class="center">
+
+            <div class="card video gold-border">
+                <h2>Külliyeye Genel Bakış</h2>
+
+                <div class="video-wrapper" onclick="playVideo()">
+                    <img src="assets/header.jpg" id="video-thumb">
+                    <div class="play-btn">▶</div>
+                </div>
+                <video id="video-player" style="display:none; width:100%; border-radius:10px;" controls>
+                    <source src="assets/video.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="card gold-border">
+                <h2>Haberler</h2>
+                <ul>
+                    <li>Yeni sergi açıldı</li>
+                    <li>Restorasyon tamamlandı</li>
+                    <li>Panel düzenlendi</li>
+                </ul>
+            </div>
+
+            <div class="card gold-border">
+                <h2>Duyurular</h2>
+                <p>Ziyaret saatleri değişmiştir.</p>
+            </div>
+
+            <div class="card gold-border">
+                <h2>BASINDA BİZ</h2>
+                <ul>
+                    <li>Tarih Dergisi</li>
+                </ul>
+            </div>
+
+        </main>
+
+        <!-- SAĞ -->
+        <aside class="right">
+
+            <div class="card dark gold-border">
+                <h3>Açılış Saatleri</h3>
+                <p>Yaz: 09:00 - 19:00</p>
+                <p>Kış: 09:00 - 17:00</p>
+            </div>
+
+            <div class="card gold-border">
+                <h3>Ücretler</h3>
+                <p>Tam: 50 TL</p>
+                <p>Öğrenci: 25 TL</p>
+                <p>0-7 yaş: Ücretsiz</p>
+            </div>
+
+            <div class="card gold-border">
+                <h3>ZİYARET KURALLARI</h3>
+                <ul>
+                    <li>Evcil Hayvan Kabul Edilmez</li>
+                    <li>Sessiz Olunuz</li>
+                </ul>
+            </div>
+
+            <div class="card gold-border">
+                <h3>ERİŞEBİLİRLİK</h3>
+                <p>Külliye her ziyaretçi için erişilebilir.</p>
+            </div>
+
+        </aside>
+
+    </div>
+
+</div>
+
+<script>
+function playVideo() {
+    const thumb = document.getElementById('video-thumb');
+    const btn = document.querySelector('.play-btn');
+    const player = document.getElementById('video-player');
+
+    thumb.style.transition = 'opacity 0.5s';
+    btn.style.transition = 'opacity 0.5s';
+
+    thumb.style.opacity = 0;
+    btn.style.opacity = 0;
+
+    setTimeout(() => {
+        thumb.style.display = 'none';
+        btn.style.display = 'none';
+        player.style.display = 'block';
+        player.play();
+    }, 500);
+}
+</script>
+
+</body>
+</html>
