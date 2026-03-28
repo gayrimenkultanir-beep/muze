@@ -9,13 +9,170 @@
 <!-- FONTLAR -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css">
+<style>
+/* GENEL RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Playfair Display', serif;
+}
+
+body {
+    background: #f9f9f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    height: 400px;
+    background: url('assets/header.jpg') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-overlay {
+    position: absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.4);
+}
+
+.hero-content {
+    position: relative;
+    text-align: center;
+    color: #fff;
+}
+
+.hero-content h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.hero-content h2 {
+    font-size: 24px;
+    font-weight: 400;
+}
+
+/* LAYOUT */
+.frame {
+    max-width: 1200px;
+    margin: -80px auto 50px auto; /* hero overlap efekti */
+    padding: 0 20px;
+}
+
+.layout {
+    display: flex;
+    gap: 20px;
+}
+
+/* SOL, ORTA, SAĞ */
+.left, .center, .right {
+    flex: 1;
+}
+
+.center {
+    flex: 2;
+}
+
+/* KARTLAR */
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.gold-border {
+    border: 2px solid gold;
+}
+
+.dark {
+    background: #333;
+    color: #fff;
+}
+
+/* LISTE STYLING */
+.card ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.card ul li {
+    padding: 5px 0;
+    position: relative;
+    padding-left: 20px;
+}
+
+.card ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: gold;
+}
+
+/* VIDEO */
+.video-wrapper {
+    position: relative;
+    cursor: pointer;
+}
+
+.video-wrapper img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 40px;
+    color: gold;
+    background: rgba(0,0,0,0.4);
+    border-radius: 50%;
+    padding: 20px 25px;
+    transition: background 0.2s;
+}
+
+.play-btn:hover {
+    background: rgba(0,0,0,0.6);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .layout {
+        flex-direction: column;
+    }
+    .center {
+        order: 0;
+    }
+    .left, .right {
+        order: 1;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <header class="hero">
     <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <h1>Sultan II. Bayezid Külliyesi</h1>
+        <h2>Sağlık Müzesi</h2>
+    </div>
 </header>
 
 <div class="frame">
@@ -52,10 +209,13 @@
             <div class="card video gold-border">
                 <h2>Külliyeye Genel Bakış</h2>
 
-                <div class="video-wrapper">
-                    <img src="assets/header.jpg">
+                <div class="video-wrapper" onclick="playVideo()">
+                    <img src="assets/header.jpg" id="video-thumb">
                     <div class="play-btn">▶</div>
                 </div>
+                <video id="video-player" style="display:none; width:100%; border-radius:10px;" controls>
+                    <source src="assets/video.mp4" type="video/mp4">
+                </video>
             </div>
 
             <div class="card gold-border">
@@ -95,6 +255,14 @@
     </div>
 
 </div>
+
+<script>
+function playVideo() {
+    document.getElementById('video-thumb').style.display = 'none';
+    document.querySelector('.play-btn').style.display = 'none';
+    document.getElementById('video-player').style.display = 'block';
+}
+</script>
 
 </body>
 </html>
