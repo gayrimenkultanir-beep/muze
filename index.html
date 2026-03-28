@@ -8,6 +8,8 @@
 
 <!-- FONTLAR -->
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+<!-- FONT AWESOME -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
 /* GENEL RESET */
@@ -19,7 +21,8 @@
 }
 
 body {
-    background: url('assets/texture.jpg') repeat;
+    background: url('assets/texture.jpg') no-repeat center center fixed;
+    background-size: cover;
     color: #333;
     line-height: 1.6;
 }
@@ -27,8 +30,9 @@ body {
 /* HERO */
 .hero {
     position: relative;
-    height: 400px;
-    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('assets/header.jpg') center/cover no-repeat;
+    height: 350px;
+    background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+                url('assets/header.jpg') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,20 +53,20 @@ body {
 
 .hero-content h1 {
     font-family: 'Cinzel', serif;
-    font-size: 48px;
+    font-size: 36px;
     font-weight: 600;
     margin-bottom: 10px;
 }
 
 .hero-content h2 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
 }
 
 /* LAYOUT */
 .frame {
     max-width: 1200px;
-    margin: -80px auto 50px auto; /* hero overlap efekti */
+    margin: -80px auto 50px auto;
     padding: 0 20px;
 }
 
@@ -82,7 +86,7 @@ body {
 
 /* KARTLAR */
 .card {
-    background: #fdf5e6; /* Parşömen rengi */
+    background: #fdf5e6;
     padding: 20px;
     border-radius: 12px;
     margin-bottom: 20px;
@@ -94,12 +98,24 @@ body {
     transform: translateY(-3px);
 }
 
+/* BAŞLIKLAR + GÖRSELLER */
 .card h2, .card h3 {
-    font-weight: 700;       /* Kalın başlık */
-    color: #b8860b;         /* Altın tonlu başlık */
+    font-weight: 700;
+    color: #b8860b;
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
+.card h3 img, .card h2 img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+/* GOLD BORDER */
 .gold-border {
     border: 2px solid gold;
 }
@@ -122,11 +138,12 @@ body {
 }
 
 .card ul li::before {
-    content: "➤";
+    content: "\f0da"; 
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
     position: absolute;
     left: 0;
     color: #b8860b;
-    font-weight: bold;
 }
 
 /* VIDEO */
@@ -169,6 +186,15 @@ body {
     .left, .right {
         order: 1;
     }
+    .hero {
+        height: 250px;
+    }
+    .hero-content h1 {
+        font-size: 24px;
+    }
+    .hero-content h2 {
+        font-size: 16px;
+    }
 }
 </style>
 </head>
@@ -184,24 +210,23 @@ body {
 </header>
 
 <div class="frame">
-
     <div class="layout">
 
         <!-- SOL -->
         <aside class="left">
 
             <div class="card dark gold-border">
-                <h3>Evliya Çelebi</h3>
+                <h3><img src="assets/icons/evliya.jpg" alt="Evliya"> Evliya Çelebi</h3>
                 <p>"Edirne'de Bayezid Darüşşifası..."</p>
             </div>
 
             <div class="card gold-border">
-                <h3>Tarihçe</h3>
+                <h3><img src="assets/icons/tarihce.jpg" alt="Tarihçe"> Tarihçe</h3>
                 <p>1484 yılında inşa edilmiştir.</p>
             </div>
 
             <div class="card gold-border">
-                <h3>Külliye Bölümleri</h3>
+                <h3><img src="assets/icons/kulliye.jpg" alt="Külliye"> Külliye Bölümleri</h3>
                 <ul>
                     <li>Medrese</li>
                     <li>Darüşşifa</li>
@@ -211,7 +236,7 @@ body {
             </div>
 
             <div class="card gold-border">
-                <h3>İDARİ BİRİM</h3>
+                <h3><img src="assets/icons/idari-birim.jpg" alt="İdari Birim"> İDARİ BİRİM</h3>
                 <ul>
                     <li>Personel</li>
                     <li>Telefon Rehberi</li>
@@ -219,7 +244,7 @@ body {
             </div>
 
             <div class="card gold-border">
-                <h3>ÖDÜLLER</h3>
+                <h3><img src="assets/icons/oduller.jpg" alt="Ödüller"> ÖDÜLLER</h3>
                 <ul>
                     <li>Avrupa Müze Ödülü</li>
                 </ul>
@@ -231,8 +256,7 @@ body {
         <main class="center">
 
             <div class="card video gold-border">
-                <h2>Külliyeye Genel Bakış</h2>
-
+                <h2><img src="assets/icons/kulliye.jpg" alt="Video"> Külliyeye Genel Bakış</h2>
                 <div class="video-wrapper" onclick="playVideo()">
                     <img src="assets/header.jpg" id="video-thumb">
                     <div class="play-btn">▶</div>
@@ -243,7 +267,7 @@ body {
             </div>
 
             <div class="card gold-border">
-                <h2>Haberler</h2>
+                <h2><img src="assets/icons/haberler.jpg" alt="Haberler"> Haberler</h2>
                 <ul>
                     <li>Yeni sergi açıldı</li>
                     <li>Restorasyon tamamlandı</li>
@@ -252,12 +276,12 @@ body {
             </div>
 
             <div class="card gold-border">
-                <h2>Duyurular</h2>
+                <h2><img src="assets/icons/duyurular.jpg" alt="Duyurular"> Duyurular</h2>
                 <p>Ziyaret saatleri değişmiştir.</p>
             </div>
 
             <div class="card gold-border">
-                <h2>BASINDA BİZ</h2>
+                <h2><img src="assets/icons/basinda-biz.jpg" alt="Basında Biz"> BASINDA BİZ</h2>
                 <ul>
                     <li>Tarih Dergisi</li>
                 </ul>
@@ -269,20 +293,20 @@ body {
         <aside class="right">
 
             <div class="card dark gold-border">
-                <h3>Açılış Saatleri</h3>
+                <h3><img src="assets/icons/acilis.jpg" alt="Açılış Saatleri"> Açılış Saatleri</h3>
                 <p>Yaz: 09:00 - 19:00</p>
                 <p>Kış: 09:00 - 17:00</p>
             </div>
 
             <div class="card gold-border">
-                <h3>Ücretler</h3>
+                <h3><img src="assets/icons/ucretler.jpg" alt="Ücretler"> Ücretler</h3>
                 <p>Tam: 50 TL</p>
                 <p>Öğrenci: 25 TL</p>
                 <p>0-7 yaş: Ücretsiz</p>
             </div>
 
             <div class="card gold-border">
-                <h3>ZİYARET KURALLARI</h3>
+                <h3><img src="assets/icons/ziyaret.jpg" alt="Ziyaret Kuralları"> ZİYARET KURALLARI</h3>
                 <ul>
                     <li>Evcil Hayvan Kabul Edilmez</li>
                     <li>Sessiz Olunuz</li>
@@ -290,14 +314,13 @@ body {
             </div>
 
             <div class="card gold-border">
-                <h3>ERİŞEBİLİRLİK</h3>
+                <h3><img src="assets/icons/erisebilirlik.jpg" alt="Erişebilirlik"> ERİŞEBİLİRLİK</h3>
                 <p>Külliye her ziyaretçi için erişilebilir.</p>
             </div>
 
         </aside>
 
     </div>
-
 </div>
 
 <script>
