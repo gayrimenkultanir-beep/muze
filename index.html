@@ -4,340 +4,317 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sultan II. Bayezid Külliyesi</title>
+<title>T.C Trakya Üniversitesi</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
-/* GENEL RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+/* GENEL */
+body {
+    margin:0;
+    background: #e6d8b8;
     font-family: 'Playfair Display', serif;
 }
 
-body {
-    background: url('assets/texture.jpg') repeat;
-    color: #333;
-    line-height: 1.6;
+/* NAVBAR */
+.nav {
+    background: #0f1a24;
+    color: #d4af37;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding:15px 40px;
+    border-bottom:3px solid #caa64b;
+}
+
+.logo {
+    font-family:'Cinzel';
+    font-size:20px;
+}
+
+.menu a {
+    margin-left:30px;
+    color:#d4af37;
+    text-decoration:none;
+    font-family:'Cinzel';
 }
 
 /* HERO */
 .hero {
-    position: relative;
-    height: 400px;
-    background: url('assets/header.jpg') center/cover no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background:url('assets/header.jpg') center/cover;
+    height:220px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#fff;
+    position:relative;
 }
 
-.hero-overlay {
-    position: absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.4);
+.hero::after {
+    content:'';
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
 }
 
-.hero-content {
-    position: relative;
-    text-align: center;
-    color: #fff;
+.hero h1, .hero h2 {
+    position:relative;
+    z-index:2;
 }
 
-.hero-content h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 48px;
-    font-weight: 600;
-    margin-bottom: 10px;
+.hero h1 {
+    font-family:'Cinzel';
+    font-size:32px;
 }
 
-.hero-content h2 {
-    font-size: 24px;
-    font-weight: 400;
+.hero h2 {
+    color:#d4af37;
 }
 
 /* LAYOUT */
-.frame {
-    max-width: 1200px;
-    margin: -80px auto 50px auto;
-    padding: 0 20px;
+.container {
+    max-width:1200px;
+    margin:-40px auto 40px;
+    display:grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    gap:15px;
 }
 
-.layout {
-    display: flex;
-    gap: 20px;
-}
-
-.left, .center, .right {
-    flex: 1;
-}
-
-.center {
-    flex: 2;
-}
-
-/* KARTLAR */
+/* KART */
 .card {
-    background-color: #F5DEB3; /* Parşömen rengi */
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
+    background:#f4e7c8;
+    border:2px solid #caa64b;
+    border-radius:8px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+    overflow:hidden;
 }
 
-.card:hover {
-    transform: translateY(-3px);
+/* BAŞLIK BAR */
+.card h3, .card h2 {
+    margin:0;
+    padding:10px;
+    background:linear-gradient(#1b2b3a,#0e1922);
+    color:#d4af37;
+    font-family:'Cinzel';
+    font-size:14px;
 }
 
-/* GOLD BORDER */
-.gold-border {
-    border: 2px solid gold;
+/* İÇERİK */
+.card-content {
+    padding:10px;
+    font-size:14px;
 }
 
-/* DARK KART */
-.dark {
-    background: #333;
-    color: #fff;
-}
-
-/* KART BAŞLIKLARI - ALTIN RENK VE KALIN */
-.card h2, .card h3 {
-    display: inline-block;
-    padding: 5px 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 2px solid #FFD700;  /* Altın border */
-    background-color: #FFF8DC;   /* Hafif altın arka plan */
-    color: #FFD700;              /* Altın yazı */
-    font-weight: 700;            /* Kalın yazı */
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-/* HOVER EFEKTI (Masaüstü) */
-.card h2:hover, .card h3:hover {
-    background-color: #FFD700;
-    color: #333;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transform: translateY(-2px);
-}
-
-/* MOBİL DOKUNMA İÇİN "active" sınıfı */
-.card h2.active, .card h3.active {
-    background-color: #FFD700;
-    color: #333;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    transform: translateY(-2px);
-}
-
-/* LISTE STYLING */
+/* LİSTE */
 .card ul {
-    list-style: none;
-    padding-left: 0;
+    list-style:none;
+    padding:0;
 }
 
 .card ul li {
-    padding: 5px 0;
-    position: relative;
-    padding-left: 20px;
-}
-
-.card ul li::before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: gold;
+    padding:5px 0;
+    border-bottom:1px dashed #bfa046;
 }
 
 /* VIDEO */
-.video-wrapper {
-    position: relative;
-    cursor: pointer;
+.video img {
+    width:100%;
+    display:block;
 }
 
-.video-wrapper img {
-    width: 100%;
-    border-radius: 10px;
+.play {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:40px;
+    color:white;
 }
 
-.play-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 40px;
-    color: gold;
-    background: rgba(0,0,0,0.4);
-    border-radius: 50%;
-    padding: 20px 25px;
-    transition: background 0.2s;
+/* GRID ALT */
+.double {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.play-btn:hover {
-    background: rgba(0,0,0,0.6);
+/* SAĞ BLOKLAR */
+.right .card-content {
+    text-align:center;
 }
 
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-    .layout {
-        flex-direction: column;
-    }
-    .center {
-        order: 0;
-    }
-    .left, .right {
-        order: 1;
-    }
+/* FOOTER FEEL */
+.card small {
+    float:right;
+    color:#777;
 }
+
 </style>
 </head>
 
 <body>
 
-<header class="hero">
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-        <h1>Sultan II. Bayezid Külliyesi</h1>
-        <h2>Sağlık Müzesi</h2>
-    </div>
-</header>
-
-<div class="frame">
-    <div class="layout">
-
-        <!-- SOL -->
-        <aside class="left">
-
-            <div class="card dark gold-border">
-                <h3>Evliya Çelebi</h3>
-                <p>"Edirne'de Bayezid Darüşşifası..."</p>
-            </div>
-
-            <div class="card gold-border">
-                <h3>Tarihçe</h3>
-                <p>1484 yılında inşa edilmiştir.</p>
-            </div>
-
-            <div class="card gold-border">
-                <h3>Külliye Bölümleri</h3>
-                <ul>
-                    <li>Medrese</li>
-                    <li>Darüşşifa</li>
-                    <li>İmarethane</li>
-                    <li>Camii</li>
-                </ul>
-            </div>
-
-            <div class="card gold-border">
-                <h3>İDARİ BİRİM</h3>
-                <ul>
-                    <li>Personel</li>
-                    <li>Telefon Rehberi</li>
-                </ul>
-            </div>
-
-            <div class="card gold-border">
-                <h3>ÖDÜLLER</h3>
-                <ul>
-                    <li>Avrupa Müze Ödülü</li>
-                </ul>
-            </div>
-
-        </aside>
-
-        <!-- ORTA -->
-        <main class="center">
-
-            <div class="card video gold-border">
-                <h2>Külliyeye Genel Bakış</h2>
-
-                <div class="video-wrapper" onclick="playVideo()">
-                    <img src="assets/header.jpg" id="video-thumb">
-                    <div class="play-btn">▶</div>
-                </div>
-                <video id="video-player" style="display:none; width:100%; border-radius:10px;" controls>
-                    <source src="assets/video.mp4" type="video/mp4">
-                </video>
-            </div>
-
-            <div class="card gold-border">
-                <h2>Haberler</h2>
-                <ul>
-                    <li>Yeni sergi açıldı</li>
-                    <li>Restorasyon tamamlandı</li>
-                    <li>Panel düzenlendi</li>
-                </ul>
-            </div>
-
-            <div class="card gold-border">
-                <h2>Duyurular</h2>
-                <p>Ziyaret saatleri değişmiştir.</p>
-            </div>
-
-            <div class="card gold-border">
-                <h2>BASINDA BİZ</h2>
-                <ul>
-                    <li>Tarih Dergisi</li>
-                </ul>
-            </div>
-
-        </main>
-
-        <!-- SAĞ -->
-        <aside class="right">
-
-            <div class="card dark gold-border">
-                <h3>Açılış Saatleri</h3>
-                <p>Yaz: 09:00 - 19:00</p>
-                <p>Kış: 09:00 - 17:00</p>
-            </div>
-
-            <div class="card gold-border">
-                <h3>Ücretler</h3>
-                <p>Tam: 50 TL</p>
-                <p>Öğrenci: 25 TL</p>
-                <p>0-7 yaş: Ücretsiz</p>
-            </div>
-
-            <div class="card gold-border">
-                <h3>ZİYARET KURALLARI</h3>
-                <ul>
-                    <li>Evcil Hayvan Kabul Edilmez</li>
-                    <li>Sessiz Olunuz</li>
-                </ul>
-            </div>
-
-            <div class="card gold-border">
-                <h3>ERİŞEBİLİRLİK</h3>
-                <p>Külliye, tekerlekli sandalye dostudur ve engelli ziyaretçilere uygundur.</p>
-            </div>
-
-        </aside>
-
+<!-- NAV -->
+<div class="nav">
+    <div class="logo">Sultan II. Bayezid Külliyesi</div>
+    <div class="menu">
+        <a href="#">ANA SAYFA</a>
+        <a href="#">TARİHÇE</a>
+        <a href="#">KÜLLİYE</a>
+        <a href="#">İLETİŞİM</a>
     </div>
 </div>
 
-<script>
-function playVideo() {
-    document.getElementById('video-thumb').style.display = 'none';
-    document.querySelector('.play-btn').style.display = 'none';
-    document.getElementById('video-player').style.display = 'block';
-}
+<!-- HERO -->
+<div class="hero">
+    <div>
+        <h1>SULTAN II. BAYEZID KÜLLİYESİ</h1>
+        <h2>SAĞLIK MÜZESİ - 1484</h2>
+    </div>
+</div>
 
-// Mobil dokunmatik başlık efekti
-document.querySelectorAll('.card h2, .card h3').forEach(function(header) {
-    header.addEventListener('touchstart', function() {
-        this.classList.add('active');
-    });
-    header.addEventListener('touchend', function() {
-        let el = this;
-        setTimeout(function() { el.classList.remove('active'); }, 500);
-    });
-});
-</script>
+<!-- CONTENT -->
+<div class="container">
+
+<!-- SOL -->
+<div>
+
+<div class="card">
+<h3>EVLİYA ÇELEBİ</h3>
+<div class="card-content">
+"Edirne'de Bayezid Darüşşifası..."
+</div>
+</div>
+
+<div class="card">
+<h3>TARİHÇE</h3>
+<div class="card-content">
+1484 yılında inşa edilmiştir.
+</div>
+</div>
+
+<div class="card">
+<h3>KÜLLİYE BÖLÜMLERİ</h3>
+<div class="card-content">
+<ul>
+<li>Medrese</li>
+<li>Darüşşifa</li>
+<li>İmarethane</li>
+<li>Camii</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h3>İDARİ BİRİM</h3>
+<div class="card-content">
+<ul>
+<li>Personel</li>
+<li>Telefon Rehberi</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h3>ÖDÜLLER</h3>
+<div class="card-content">
+Avrupa Müze Ödülü
+</div>
+</div>
+
+</div>
+
+<!-- ORTA -->
+<div>
+
+<div class="card video">
+<h2>VİDEO: KÜLLİYE'NİN KALBİNE YOLCULUK</h2>
+<img src="assets/header.jpg">
+</div>
+
+<div class="double">
+
+<div class="card">
+<h3>DARÜŞŞİFA TANITIMI</h3>
+<img src="assets/header.jpg">
+</div>
+
+<div class="card">
+<h3>MEDRESE HAYATI</h3>
+<img src="assets/header.jpg">
+</div>
+
+</div>
+
+<div class="card">
+<h3>HABERLER</h3>
+<div class="card-content">
+<ul>
+<li>Yeni sergi açıldı <small>12 Nisan</small></li>
+<li>Restorasyon tamamlandı <small>2 Mart</small></li>
+<li>Panel düzenlendi <small>18 Şubat</small></li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h3>DUYURULAR</h3>
+<div class="card-content">
+Ziyaret saatleri değişmiştir.
+</div>
+</div>
+
+<div class="card">
+<h3>BASINDA BİZ</h3>
+<div class="card-content">
+Tarih Dergisi
+</div>
+</div>
+
+</div>
+
+<!-- SAĞ -->
+<div class="right">
+
+<div class="card">
+<h3>AÇILIŞ SAATLERİ</h3>
+<div class="card-content">
+09:00 - 19:00
+</div>
+</div>
+
+<div class="card">
+<h3>ÜCRETLER</h3>
+<div class="card-content">
+Tam: 50 TL<br>
+Öğrenci: 25 TL<br>
+0-7 yaş: Ücretsiz
+</div>
+</div>
+
+<div class="card">
+<h3>ZİYARET KURALLARI</h3>
+<div class="card-content">
+<ul>
+<li>Evcil hayvan yasak</li>
+<li>Sessiz olunuz</li>
+</ul>
+</div>
+</div>
+
+<div class="card">
+<h3>ERİŞEBİLİRLİK</h3>
+<div class="card-content">
+Engelli erişimine uygundur.
+</div>
+</div>
+
+</div>
+
+</div>
 
 </body>
 </html>
