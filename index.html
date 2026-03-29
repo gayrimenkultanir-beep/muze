@@ -73,7 +73,7 @@
         .banner img {
             width: 100%;
             height: 350px;
-            object-fit: fill;
+            object-fit: cover;
             border-radius: 12px;
             border: 2px solid var(--gold-soft);
         }
@@ -99,48 +99,48 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 20px;
-            overflow: hidden; /* Çerçeveler içeride, taşma olmamalı */
+            overflow: hidden; /* Çerçeveler içe alındı */
+            transition: 0.3s ease;
         }
-        .card:hover { transform: translateY(-5px); transition: 0.3s ease; }
+        .card:hover { transform: translateY(-5px); }
 
-        /* KÖŞE ÇERÇEVELERİ SİSTEMİ - İÇERİYE ALMA GÜNCELLEMESİ */
+        /* KÖŞE ÇERÇEVELERİ (İÇERİDE) */
         .c-frame {
             position: absolute;
-            width: 40px; /* Çok az küçültüldü */
-            height: 40px;
+            width: 35px;
+            height: 35px;
             background-size: contain;
             background-repeat: no-repeat;
-            z-index: 50; /* En üstte, başlığın üzerinde */
+            z-index: 20;
             pointer-events: none;
         }
 
-        /* Üst Köşeler (H3/H2 içine ve üzerine biner) */
-        .card .t-l { top: 3px; left: 3px; background-image: url("assets/cornerleftup.png"); }
-        .card .t-r { top: 3px; right: 3px; background-image: url("assets/cornerrightup.png"); }
+        /* Üst Köşeler */
+        .t-l { top: 4px; left: 4px; background-image: url("assets/cornerleftup.png"); }
+        .t-r { top: 4px; right: 4px; background-image: url("assets/cornerrightup.png"); }
 
-        /* Alt Köşeler (Kutunun içine alınır) */
-        .card .b-l { bottom: 3px; left: 3px; background-image: url("assets/cornerleft.png"); }
-        .card .b-r { bottom: 3px; right: 3px; background-image: url("assets/cornerright.png"); }
+        /* Alt Köşeler */
+        .b-l { bottom: 4px; left: 4px; background-image: url("assets/cornerleft.png"); }
+        .b-r { bottom: 4px; right: 4px; background-image: url("assets/cornerright.png"); }
 
         .card h3, .card h2 {
-            padding: 18px 50px; /* Padding çerçevelerin iç hizada olması için artırıldı */
+            padding: 15px 45px;
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
             font-size: 14px;
             text-align: center;
             border-bottom: 2px solid var(--gold-soft);
-            border-radius: 10px 10px 0 0;
             position: relative;
-            z-index: 5; /* Çerçevelerin (50) altında */
+            z-index: 10;
         }
 
         .card-content { 
-            padding: 25px 25px 35px 25px; /* Alt padding çerçeveler için artırıldı */
+            padding: 20px 25px 30px 25px; 
             font-size: 14px; 
             line-height: 1.6; 
             position: relative;
-            z-index: 5;
+            z-index: 10;
         }
         .card ul { list-style: none; }
         .card ul li { padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); }
@@ -169,6 +169,7 @@
 
 <div class="container">
 
+    <!-- BANNER -->
     <div class="banner">
         <img src="assets/header.jpg" alt="Külliye Header">
         <div class="banner-text">
@@ -177,6 +178,7 @@
         </div>
     </div>
 
+    <!-- SOL KOLON -->
     <div class="left">
         <div class="card">
             <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
@@ -220,6 +222,7 @@
         </div>
     </div>
 
+    <!-- ORTA KOLON -->
     <div class="center">
         <div class="card">
             <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
@@ -253,6 +256,7 @@
         </div>
     </div>
 
+    <!-- SAĞ KOLON -->
     <div class="right">
         <div class="card">
             <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
