@@ -24,7 +24,8 @@
         body {
             font-family: 'Playfair Display', serif;
             font-size: 16px;
-            background: url("assets/background.jpg");
+            background: #fdf5e6; /* Görsel yüklenmezse diye alternatif renk */
+            background-image: url("assets/background.jpg");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -70,7 +71,7 @@
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
             column-gap: 40px;
-            row-gap: 60px; /* Kartlar arası dikey boşluk */
+            row-gap: 60px;
             padding: 0 20px;
         }
 
@@ -191,6 +192,23 @@
             justify-content: space-between;
         }
 
+        /* VIDEO ALANI GÜNCELLEME */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Oranı */
+            height: 0;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         /* HAVA DURUMU TABLOSU */
         .weather-table {
             width: 100%;
@@ -202,8 +220,6 @@
             text-align: center;
         }
         .temp { font-weight: bold; color: #b22222; }
-
-        .video img { width: 100%; height: auto; display: block; }
 
         @media(max-width: 900px){
             .container { grid-template-columns: 1fr; row-gap: 40px; }
@@ -227,7 +243,6 @@
 
 <div class="container">
 
-    <!-- BANNER -->
     <div class="banner">
         <img src="assets/header.jpg" alt="Külliye Header">
         <div class="banner-text">
@@ -236,9 +251,7 @@
         </div>
     </div>
 
-    <!-- SOL KOLON -->
     <div class="left">
-        <!-- EVLİYA ÇELEBİ (Sol Üst) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>EVLİYA ÇELEBİ</h3>
@@ -278,15 +291,20 @@
         </div>
     </div>
 
-    <!-- ORTA KOLON -->
     <div class="center">
-        <div class="card video">
+        <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h2>KÜLLİYE TANITIM VİDEOSU</h2>
-            <img src="assets/header.jpg" alt="Video Kapak">
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" 
+                        title="Sultan II. Bayezid Külliyesi Tanıtım Videosu" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+            </div>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-top: 40px;">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>GÜNCEL HABERLER</h3>
             <div class="card-content">
@@ -298,7 +316,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-top: 40px;">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>MÜZE HAKKINDA</h3>
             <div class="card-content">
@@ -307,7 +325,6 @@
         </div>
     </div>
 
-    <!-- SAĞ KOLON -->
     <div class="right">
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
@@ -320,7 +337,6 @@
             </div>
         </div>
 
-        <!-- ZİYARET KURALLARI (Sağ 2. Sıra) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ZİYARET KURALLARI</h3>
@@ -347,17 +363,6 @@
 
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>İDARİ BİRİM</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Yönetim: 0284 235 10 21</li>
-                    <li>Personel Rehberi</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>HAVA DURUMU</h3>
             <div class="card-content">
                 <table class="weather-table">
@@ -368,7 +373,6 @@
             </div>
         </div>
 
-        <!-- ERİŞEBİLİRLİK (Sağ En Alt) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ERİŞEBİLİRLİK</h3>
