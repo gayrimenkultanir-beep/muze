@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>T.C Trakya Üniversitesi</title>
+<title>Sultan II. Bayezid Külliyesi</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
@@ -40,44 +40,40 @@ body {
     font-family:'Cinzel';
 }
 
-/* HERO */
-.hero {
-    background:url('assets/header.jpg') center/cover;
-    height:220px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+/* BANNER */
+.banner {
+    position: relative;
+}
+
+.banner img {
+    width:100%;
+    height:260px;
+    object-fit:cover;
+}
+
+.banner-text {
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
     text-align:center;
     color:#fff;
-    position:relative;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
-.hero::after {
-    content:'';
-    position:absolute;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.5);
-}
-
-.hero h1, .hero h2 {
-    position:relative;
-    z-index:2;
-}
-
-.hero h1 {
+.banner-text h1 {
     font-family:'Cinzel';
     font-size:32px;
 }
 
-.hero h2 {
+.banner-text h2 {
     color:#d4af37;
 }
 
 /* LAYOUT */
 .container {
     max-width:1200px;
-    margin:-40px auto 40px;
+    margin:20px auto;
     display:grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap:15px;
@@ -92,7 +88,7 @@ body {
     overflow:hidden;
 }
 
-/* BAŞLIK BAR */
+/* BAŞLIK */
 .card h3, .card h2 {
     margin:0;
     padding:10px;
@@ -102,7 +98,6 @@ body {
     font-size:14px;
 }
 
-/* İÇERİK */
 .card-content {
     padding:10px;
     font-size:14px;
@@ -125,28 +120,11 @@ body {
     display:block;
 }
 
-.play {
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    font-size:40px;
-    color:white;
-}
-
-/* GRID ALT */
-.double {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-}
-
-/* SAĞ BLOKLAR */
+/* SAĞ */
 .right .card-content {
     text-align:center;
 }
 
-/* FOOTER FEEL */
 .card small {
     float:right;
     color:#777;
@@ -168,9 +146,10 @@ body {
     </div>
 </div>
 
-<!-- HERO -->
-<div class="hero">
-    <div>
+<!-- BANNER -->
+<div class="banner">
+    <img src="assets/header.jpg">
+    <div class="banner-text">
         <h1>SULTAN II. BAYEZID KÜLLİYESİ</h1>
         <h2>SAĞLIK MÜZESİ - 1484</h2>
     </div>
@@ -233,20 +212,6 @@ Avrupa Müze Ödülü
 <div class="card video">
 <h2>VİDEO: KÜLLİYE'NİN KALBİNE YOLCULUK</h2>
 <img src="assets/header.jpg">
-</div>
-
-<div class="double">
-
-<div class="card">
-<h3>DARÜŞŞİFA TANITIMI</h3>
-<img src="assets/header.jpg">
-</div>
-
-<div class="card">
-<h3>MEDRESE HAYATI</h3>
-<img src="assets/header.jpg">
-</div>
-
 </div>
 
 <div class="card">
