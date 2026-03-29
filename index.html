@@ -1,363 +1,286 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan II. Bayezid Külliyesi | Sağlık Müzesi</title>
 
-<title>Sultan II. Bayezid Külliyesi</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+    <style>
+        /* =====================
+           RESET & ROOT
+        ===================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
+        :root {
+            --gold: #d4af37;
+            --gold-soft: #caa64b;
+            --dark: #0f1a24;
+            --text: #2b2b2b;
+            --parchment: #f4e4bc; /* Parşömen Arka Plan Rengi */
+            --parchment-dark: #e8d5a7;
+        }
 
-/* RESET */ 
-* {
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
+        /* =====================
+           BODY (SADE ARKA PLAN)
+        ===================== */
+        body {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            color: var(--text);
+            /* Arka planda efekt yok, sadece görsel */
+            background: url("assets/background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
 
-/* BODY */
-body {
-    font-family:'Playfair Display', serif;
-    font-size:16px;
+        /* =====================
+           HEADER
+        ===================== */
+        header {
+            background: var(--dark);
+            color: var(--gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            border-bottom: 3px solid var(--gold-soft);
+        }
 
-    background:
-        linear-gradient(rgba(245,235,210,0.95), rgba(235,220,185,0.95)),
-        url("assets/background.jpg");
+        .logo {
+            font-family: 'Cinzel';
+            font-size: 22px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
 
-    background-size:cover;
-    background-attachment:fixed;
-    color:#2b2b2b;
-}
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: var(--gold);
+            font-family: 'Cinzel';
+            font-size: 14px;
+            transition: 0.3s;
+        }
 
-/* HEADER */
-header {
-    background:#0f1a24;
-    color:#d4af37;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:15px 40px;
-    border-bottom:3px solid #caa64b;
-}
+        nav a:hover {
+            color: #fff;
+        }
 
-.logo {
-    font-family:'Cinzel';
-    font-size:22px;
-}
+        /* =====================
+           GRID YAPI
+        ===================== */
+        main {
+            max-width: 1240px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 30px;
+            padding: 0 20px;
+        }
 
-nav a {
-    margin-left:30px;
-    color:#d4af37;
-    text-decoration:none;
-    font-family:'Cinzel';
-    font-size:15px;
-}
+        /* =====================
+           BANNER
+        ===================== */
+        .banner {
+            grid-column: 1 / -1;
+            position: relative;
+            margin-bottom: 10px;
+        }
 
-/* GRID */
-main {
-    max-width:1200px;
-    margin:40px auto;
-    display:grid;
-    grid-template-columns:1fr 2fr 1fr;
-    gap:35px;
-    padding:0 20px;
-}
+        .banner img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
-/* BANNER */
-.banner {
-    grid-column:1 / -1;
-    position:relative;
-}
+        .banner-text {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #fff;
+            text-shadow: 3px 3px 15px rgba(0,0,0,0.9);
+            width: 100%;
+        }
 
-.banner img {
-    width:100%;
-    height:320px;
-    object-fit:cover;
-    border-radius:12px;
-}
+        .banner-text h1 {
+            font-family: 'Cinzel';
+            font-size: 42px;
+            letter-spacing: 2px;
+        }
 
-.banner-text {
-    position:absolute;
-    bottom:25px;
-    left:50%;
-    transform:translateX(-50%);
-    text-align:center;
-    color:#fff;
-    text-shadow:2px 2px 10px rgba(0,0,0,0.8);
-}
+        .banner-text h2 {
+            font-size: 22px;
+            color: var(--gold);
+            margin-top: 5px;
+        }
 
-.banner-text h1 {
-    font-family:'Cinzel';
-    font-size:36px;
-}
+        /* =====================
+           CARD (DÜZ PARŞÖMEN)
+        ===================== */
+        .card {
+            position: relative;
+            background-color: var(--parchment); /* Görsel yerine renk kullanıldı */
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--parchment-dark);
+            overflow: hidden;
+        }
 
-.banner-text h2 {
-    color:#d4af37;
-    font-size:20px;
-}
+        /* Hafif Eskitme Efekti (CSS Gradyan ile) */
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            box-shadow: inset 0 0 50px rgba(139, 69, 19, 0.1);
+            pointer-events: none;
+        }
 
-/* CARD - YANMIŞ PARŞÖMEN */
-.card {
-    position:relative;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+        }
 
-    background:url("assets/texture.jpg");
-    background-size:cover;
+        /* =====================
+           CARD HEADERS
+        ===================== */
+        .card h2, .card h3 {
+            background: var(--dark); /* Texture görseli kaldırıldı */
+            color: var(--gold);
+            padding: 15px;
+            font-family: 'Cinzel';
+            font-size: 16px;
+            letter-spacing: 1px;
+            border-bottom: 2px solid var(--gold);
+        }
 
-    border-radius:14px;
-    box-shadow:0 8px 25px rgba(0,0,0,0.35);
+        /* =====================
+           CONTENT & LISTS
+        ===================== */
+        .card-content {
+            padding: 20px;
+            line-height: 1.7;
+            font-size: 15px;
+        }
 
-    overflow:hidden;
-    transition:0.3s;
-    margin-bottom:25px;
-}
+        .card ul {
+            list-style: none;
+        }
 
-/* YANIK KENAR */
-.card::before {
-    content:"";
-    position:absolute;
-    inset:0;
+        .card ul li {
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    background:
-        radial-gradient(circle at 5% 5%, rgba(0,0,0,0.5), transparent 40%),
-        radial-gradient(circle at 95% 5%, rgba(0,0,0,0.5), transparent 40%),
-        radial-gradient(circle at 5% 95%, rgba(0,0,0,0.5), transparent 40%),
-        radial-gradient(circle at 95% 95%, rgba(0,0,0,0.5), transparent 40%),
-        radial-gradient(circle, transparent 60%, rgba(0,0,0,0.65) 100%);
+        .date-tag {
+            font-size: 12px;
+            color: #777;
+            font-style: italic;
+        }
 
-    mix-blend-mode:multiply;
-    pointer-events:none;
-}
+        /* =====================
+           VIDEO
+        ===================== */
+        iframe {
+            width: 100%;
+            height: 250px;
+            border: none;
+            display: block;
+        }
 
-/* DOKU */
-.card::after {
-    content:"";
-    position:absolute;
-    inset:0;
+        /* =====================
+           RESPONSIVE
+        ===================== */
+        @media (max-width: 1000px) {
+            main {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
 
-    background:url("assets/texture.jpg");
-    opacity:0.15;
-    mix-blend-mode:overlay;
-    pointer-events:none;
-}
-
-.card:hover {
-    transform:translateY(-8px) scale(1.02);
-    box-shadow:0 18px 40px rgba(0,0,0,0.5);
-}
-
-/* HEADERS */
-.card h2,
-.card h3 {
-    padding:14px;
-    font-family:'Cinzel';
-    font-size:16px;
-    color:#d4af37;
-
-    background:url("assets/kartbluetextur.png");
-    background-size:cover;
-
-    border-bottom:1px solid rgba(212,175,55,0.5);
-}
-
-/* CONTENT */
-.card-content {
-    padding:18px;
-    line-height:1.8;
-}
-
-/* LIST */
-.card ul {
-    list-style:none;
-}
-
-.card ul li {
-    padding:10px 0;
-    border-bottom:1px dashed #bfa046;
-    display:flex;
-    justify-content:space-between;
-}
-
-/* VIDEO */
-iframe {
-    width:100%;
-    height:260px;
-    border:none;
-}
-
-/* RIGHT */
-aside .card-content {
-    text-align:center;
-}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-    main {
-        grid-template-columns:1fr;
-        gap:25px;
-    }
-
-    header {
-        flex-direction:column;
-        text-align:center;
-    }
-
-    nav a {
-        display:block;
-        margin:10px 0;
-    }
-}
-
-</style>
+        @media (max-width: 768px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+            header {
+                flex-direction: column;
+                padding: 20px;
+            }
+            nav {
+                margin-top: 15px;
+            }
+            nav a {
+                margin: 0 10px;
+            }
+            .banner-text h1 {
+                font-size: 28px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">Sultan II. Bayezid Külliyesi</div>
-    <nav>
-        <a href="#">ANA SAYFA</a>
-        <a href="#">TARİHÇE</a>
-        <a href="#">KÜLLİYE</a>
-        <a href="#">İLETİŞİM</a>
-    </nav>
-</header>
+    <header>
+        <div class="logo">SULTAN II. BAYEZİD KÜLLİYESİ</div>
+        <nav>
+            <a href="#">ANA SAYFA</a>
+            <a href="#">TARİHÇE</a>
+            <a href="#">GALERİ</a>
+            <a href="#">İLETİŞİM</a>
+        </nav>
+    </header>
 
-<main>
+    <main>
+        <!-- BANNER (TAM GENİŞLİK) -->
+        <section class="banner">
+            <img src="assets/header.jpg" alt="Külliye Görünümü">
+            <div class="banner-text">
+                <h1>DARÜŞŞİFA VE TIP MEDRESESİ</h1>
+                <h2>Edirne Sağlık Müzesi - 1488</h2>
+            </div>
+        </section>
 
-<!-- BANNER -->
-<section class="banner">
-    <img src="assets/header.jpg">
-    <div class="banner-text">
-        <h1>SULTAN II. BAYEZID KÜLLİYESİ</h1>
-        <h2>SAĞLIK MÜZESİ - 1484</h2>
-    </div>
-</section>
+        <!-- SOL KOLON -->
+        <aside>
+            <section class="card">
+                <h3>TARİHÇE</h3>
+                <div class="card-content">
+                    Sultan II. Bayezid tarafından 1484-1488 yılları arasında yaptırılan külliye, dönemin en önemli tıp ve sosyal yardım merkezlerinden biriydi.
+                </div>
+            </section>
 
-<!-- LEFT -->
-<aside>
+            <section class="card">
+                <h3>KÜLLİYE BÖLÜMLERİ</h3>
+                <div class="card-content">
+                    <ul>
+                        <li>Darüşşifa (Hastane)</li>
+                        <li>Tıp Medresesi</li>
+                        <li>Camii ve İmaret</li>
+                        <li>Tabhane</li>
+                    </ul>
+                </div>
+            </section>
 
-<section class="card">
-<h3>EVLİYA ÇELEBİ</h3>
-<div class="card-content">
-"Edirne'de Bayezid Darüşşifası..."
-</div>
-</section>
-
-<section class="card">
-<h3>TARİHÇE</h3>
-<div class="card-content">
-1484 yılında inşa edilmiştir.
-</div>
-</section>
-
-<section class="card">
-<h3>KÜLLİYE BÖLÜMLERİ</h3>
-<div class="card-content">
-<ul>
-<li>Medrese</li>
-<li>Darüşşifa</li>
-<li>İmarethane</li>
-<li>Camii</li>
-</ul>
-</div>
-</section>
-
-<section class="card">
-<h3>İDARİ BİRİM</h3>
-<div class="card-content">
-<ul>
-<li>Personel</li>
-<li>Telefon Rehberi</li>
-</ul>
-</div>
-</section>
-
-<section class="card">
-<h3>ÖDÜLLER</h3>
-<div class="card-content">
-Avrupa Müze Ödülü
-</div>
-</section>
-
-</aside>
-
-<!-- CENTER -->
-<section>
-
-<section class="card">
-<h2>KÜLLİYE TANITIM VİDEOSU</h2>
-<iframe src="https://www.youtube.com/embed/6x0K6F0xH9Y" allowfullscreen></iframe>
-</section>
-
-<section class="card">
-<h3>HABERLER</h3>
-<div class="card-content">
-<ul>
-<li>Yeni sergi açıldı <span>12 Nisan</span></li>
-<li>Restorasyon tamamlandı <span>2 Mart</span></li>
-<li>Panel düzenlendi <span>18 Şubat</span></li>
-</ul>
-</div>
-</section>
-
-<section class="card">
-<h3>DUYURULAR</h3>
-<div class="card-content">
-Ziyaret saatleri değişmiştir.
-</div>
-</section>
-
-<section class="card">
-<h3>BASINDA BİZ</h3>
-<div class="card-content">
-Tarih Dergisi
-</div>
-</section>
-
-</section>
-
-<!-- RIGHT -->
-<aside>
-
-<section class="card">
-<h3>AÇILIŞ SAATLERİ</h3>
-<div class="card-content">
-Yaz: 09:00 - 19:00<br>
-Kış: 09:00 - 17:00
-</div>
-</section>
-
-<section class="card">
-<h3>ÜCRETLER</h3>
-<div class="card-content">
-Tam: 50 TL<br>
-Öğrenci: 25 TL<br>
-0-7 yaş: Ücretsiz
-</div>
-</section>
-
-<section class="card">
-<h3>ZİYARET KURALLARI</h3>
-<div class="card-content">
-<ul>
-<li>Evcil hayvan yasak</li>
-<li>Sessiz olunuz</li>
-</ul>
-</div>
-</section>
-
-<section class="card">
-<h3>ERİŞEBİLİRLİK</h3>
-<div class="card-content">
-Engelli erişimine uygundur.
-</div>
-</section>
-
-</aside>
-
-</main>
-
-</body>
-</html>
+            <section class="card">
+                <h3>ÖDÜLLERİMİZ</h3>
+                <div class="card-content">
+                    <strong>2004</strong> - Avrupa Konseyi Müze Ödülü <br>
+                    <strong>2016</strong> - UNESCO Dünya Mirası Geçici Listesi
+                </div>
+            </section
