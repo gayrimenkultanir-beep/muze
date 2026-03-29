@@ -17,12 +17,18 @@
     box-sizing:border-box;
 }
 
+/* BODY */
 body {
     font-family:'Playfair Display', serif;
     font-size:16px;
-    background: url("assets/texture.jpg");
+
+    background:
+        linear-gradient(rgba(245,235,210,0.95), rgba(235,220,185,0.95)),
+        url("assets/texture.jpg");
+
     background-size:cover;
     background-attachment:fixed;
+    color:#2b2b2b;
 }
 
 /* HEADER */
@@ -52,11 +58,11 @@ nav a {
 /* GRID */
 main {
     max-width:1200px;
-    margin:20px auto;
+    margin:40px auto;
     display:grid;
     grid-template-columns:1fr 2fr 1fr;
-    gap:20px;
-    padding:0 15px;
+    gap:35px;
+    padding:0 20px;
 }
 
 /* BANNER */
@@ -67,7 +73,7 @@ main {
 
 .banner img {
     width:100%;
-    height:300px;
+    height:320px;
     object-fit:cover;
     border-radius:12px;
 }
@@ -92,37 +98,73 @@ main {
     font-size:20px;
 }
 
-/* CARD */
+/* CARD - YANMIŞ PARŞÖMEN */
 .card {
-    background: url("assets/texture.jpg");
-    border:2px solid #caa64b;
-    border-radius:12px;
-    box-shadow:0 6px 15px rgba(0,0,0,0.3);
+    position:relative;
+
+    background:url("assets/texture.jpg");
+    background-size:cover;
+
+    border-radius:14px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.35);
+
     overflow:hidden;
-    transition:all 0.3s ease;
+    transition:0.3s;
+    margin-bottom:25px;
+}
+
+/* YANIK KENAR */
+.card::before {
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(circle at 5% 5%, rgba(0,0,0,0.5), transparent 40%),
+        radial-gradient(circle at 95% 5%, rgba(0,0,0,0.5), transparent 40%),
+        radial-gradient(circle at 5% 95%, rgba(0,0,0,0.5), transparent 40%),
+        radial-gradient(circle at 95% 95%, rgba(0,0,0,0.5), transparent 40%),
+        radial-gradient(circle, transparent 60%, rgba(0,0,0,0.65) 100%);
+
+    mix-blend-mode:multiply;
+    pointer-events:none;
+}
+
+/* DOKU */
+.card::after {
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:url("assets/texture.jpg");
+    opacity:0.15;
+    mix-blend-mode:overlay;
+    pointer-events:none;
 }
 
 .card:hover {
-    transform:translateY(-6px) scale(1.02);
-    box-shadow:0 12px 30px rgba(0,0,0,0.5);
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 18px 40px rgba(0,0,0,0.5);
 }
 
-/* CARD HEADERS */
+/* HEADERS */
 .card h2,
 .card h3 {
-    padding:12px;
+    padding:14px;
     font-family:'Cinzel';
     font-size:16px;
     color:#d4af37;
-    background: url("assets/kartbluetexture.png");
+
+    background:url("assets/kartbluetextur.png");
     background-size:cover;
+
+    border-bottom:1px solid rgba(212,175,55,0.5);
 }
 
 /* CONTENT */
 .card-content {
-    padding:15px;
-    font-size:16px;
-    line-height:1.7;
+    padding:18px;
+    line-height:1.8;
 }
 
 /* LIST */
@@ -153,6 +195,7 @@ aside .card-content {
 @media(max-width:900px){
     main {
         grid-template-columns:1fr;
+        gap:25px;
     }
 
     header {
@@ -183,136 +226,136 @@ aside .card-content {
 
 <main>
 
-    <!-- BANNER -->
-    <section class="banner">
-        <img src="assets/header.jpg" alt="Külliye görseli">
-        <div class="banner-text">
-            <h1>SULTAN II. BAYEZID KÜLLİYESİ</h1>
-            <h2>SAĞLIK MÜZESİ - 1484</h2>
-        </div>
-    </section>
+<!-- BANNER -->
+<section class="banner">
+    <img src="assets/header.jpg">
+    <div class="banner-text">
+        <h1>SULTAN II. BAYEZID KÜLLİYESİ</h1>
+        <h2>SAĞLIK MÜZESİ - 1484</h2>
+    </div>
+</section>
 
-    <!-- LEFT -->
-    <aside>
+<!-- LEFT -->
+<aside>
 
-        <section class="card">
-            <h3>EVLİYA ÇELEBİ</h3>
-            <div class="card-content">
-                "Edirne'de Bayezid Darüşşifası..."
-            </div>
-        </section>
+<section class="card">
+<h3>EVLİYA ÇELEBİ</h3>
+<div class="card-content">
+"Edirne'de Bayezid Darüşşifası..."
+</div>
+</section>
 
-        <section class="card">
-            <h3>TARİHÇE</h3>
-            <div class="card-content">
-                1484 yılında inşa edilmiştir.
-            </div>
-        </section>
+<section class="card">
+<h3>TARİHÇE</h3>
+<div class="card-content">
+1484 yılında inşa edilmiştir.
+</div>
+</section>
 
-        <section class="card">
-            <h3>KÜLLİYE BÖLÜMLERİ</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Medrese</li>
-                    <li>Darüşşifa</li>
-                    <li>İmarethane</li>
-                    <li>Camii</li>
-                </ul>
-            </div>
-        </section>
+<section class="card">
+<h3>KÜLLİYE BÖLÜMLERİ</h3>
+<div class="card-content">
+<ul>
+<li>Medrese</li>
+<li>Darüşşifa</li>
+<li>İmarethane</li>
+<li>Camii</li>
+</ul>
+</div>
+</section>
 
-        <section class="card">
-            <h3>İDARİ BİRİM</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Personel</li>
-                    <li>Telefon Rehberi</li>
-                </ul>
-            </div>
-        </section>
+<section class="card">
+<h3>İDARİ BİRİM</h3>
+<div class="card-content">
+<ul>
+<li>Personel</li>
+<li>Telefon Rehberi</li>
+</ul>
+</div>
+</section>
 
-        <section class="card">
-            <h3>ÖDÜLLER</h3>
-            <div class="card-content">
-                Avrupa Müze Ödülü
-            </div>
-        </section>
+<section class="card">
+<h3>ÖDÜLLER</h3>
+<div class="card-content">
+Avrupa Müze Ödülü
+</div>
+</section>
 
-    </aside>
+</aside>
 
-    <!-- CENTER -->
-    <section>
+<!-- CENTER -->
+<section>
 
-        <section class="card">
-            <h2>KÜLLİYE TANITIM VİDEOSU</h2>
-            <iframe src="https://www.youtube.com/embed/6x0K6F0xH9Y" allowfullscreen></iframe>
-        </section>
+<section class="card">
+<h2>KÜLLİYE TANITIM VİDEOSU</h2>
+<iframe src="https://www.youtube.com/embed/6x0K6F0xH9Y" allowfullscreen></iframe>
+</section>
 
-        <section class="card">
-            <h3>HABERLER</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Yeni sergi açıldı <span>12 Nisan</span></li>
-                    <li>Restorasyon tamamlandı <span>2 Mart</span></li>
-                    <li>Panel düzenlendi <span>18 Şubat</span></li>
-                </ul>
-            </div>
-        </section>
+<section class="card">
+<h3>HABERLER</h3>
+<div class="card-content">
+<ul>
+<li>Yeni sergi açıldı <span>12 Nisan</span></li>
+<li>Restorasyon tamamlandı <span>2 Mart</span></li>
+<li>Panel düzenlendi <span>18 Şubat</span></li>
+</ul>
+</div>
+</section>
 
-        <section class="card">
-            <h3>DUYURULAR</h3>
-            <div class="card-content">
-                Ziyaret saatleri değişmiştir.
-            </div>
-        </section>
+<section class="card">
+<h3>DUYURULAR</h3>
+<div class="card-content">
+Ziyaret saatleri değişmiştir.
+</div>
+</section>
 
-        <section class="card">
-            <h3>BASINDA BİZ</h3>
-            <div class="card-content">
-                Tarih Dergisi
-            </div>
-        </section>
+<section class="card">
+<h3>BASINDA BİZ</h3>
+<div class="card-content">
+Tarih Dergisi
+</div>
+</section>
 
-    </section>
+</section>
 
-    <!-- RIGHT -->
-    <aside>
+<!-- RIGHT -->
+<aside>
 
-        <section class="card">
-            <h3>AÇILIŞ SAATLERİ</h3>
-            <div class="card-content">
-                Yaz: 09:00 - 19:00<br>
-                Kış: 09:00 - 17:00
-            </div>
-        </section>
+<section class="card">
+<h3>AÇILIŞ SAATLERİ</h3>
+<div class="card-content">
+Yaz: 09:00 - 19:00<br>
+Kış: 09:00 - 17:00
+</div>
+</section>
 
-        <section class="card">
-            <h3>ÜCRETLER</h3>
-            <div class="card-content">
-                Tam: 50 TL<br>
-                Öğrenci: 25 TL<br>
-                0-7 yaş: Ücretsiz
-            </div>
-        </section>
+<section class="card">
+<h3>ÜCRETLER</h3>
+<div class="card-content">
+Tam: 50 TL<br>
+Öğrenci: 25 TL<br>
+0-7 yaş: Ücretsiz
+</div>
+</section>
 
-        <section class="card">
-            <h3>ZİYARET KURALLARI</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Evcil hayvan yasak</li>
-                    <li>Sessiz olunuz</li>
-                </ul>
-            </div>
-        </section>
+<section class="card">
+<h3>ZİYARET KURALLARI</h3>
+<div class="card-content">
+<ul>
+<li>Evcil hayvan yasak</li>
+<li>Sessiz olunuz</li>
+</ul>
+</div>
+</section>
 
-        <section class="card">
-            <h3>ERİŞEBİLİRLİK</h3>
-            <div class="card-content">
-                Engelli erişimine uygundur.
-            </div>
-        </section>
+<section class="card">
+<h3>ERİŞEBİLİRLİK</h3>
+<div class="card-content">
+Engelli erişimine uygundur.
+</div>
+</section>
 
-    </aside>
+</aside>
 
 </main>
 
