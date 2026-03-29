@@ -70,7 +70,7 @@
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
             column-gap: 40px;
-            row-gap: 60px; /* Dikey boşluk arttırıldı */
+            row-gap: 60px; /* Kartlar arası dikey boşluk */
             padding: 0 20px;
         }
 
@@ -117,7 +117,6 @@
             transition: 0.3s ease;
             display: flex;
             flex-direction: column;
-            margin-bottom: 20px;
         }
 
         .card:hover {
@@ -125,7 +124,7 @@
             box-shadow: 0 12px 35px rgba(0,0,0,0.35);
         }
 
-        /* KÖŞE GÖRSELLERİ */
+        /* KÖŞE GÖRSELLERİ SİSTEMİ */
         .t-corner-l, .t-corner-r {
             position: absolute;
             top: 0;
@@ -164,7 +163,7 @@
             z-index: 5;
         }
 
-        .card h2, .card h3 {
+        .card h3, .card h2 {
             padding: 15px;
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
@@ -196,19 +195,18 @@
         .weather-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
         }
         .weather-table td {
-            padding: 10px 5px;
+            padding: 8px 5px;
+            border-bottom: 1px solid rgba(202, 166, 75, 0.2);
             text-align: center;
-            border-bottom: 1px solid rgba(202, 166, 75, 0.3);
         }
         .temp { font-weight: bold; color: #b22222; }
 
         .video img { width: 100%; height: auto; display: block; }
 
         @media(max-width: 900px){
-            .container { grid-template-columns: 1fr; gap: 30px; }
+            .container { grid-template-columns: 1fr; row-gap: 40px; }
             .nav { flex-direction: column; text-align: center; }
             .menu a { display: inline-block; margin: 10px; }
         }
@@ -240,6 +238,15 @@
 
     <!-- SOL KOLON -->
     <div class="left">
+        <!-- EVLİYA ÇELEBİ (Sol Üst) -->
+        <div class="card">
+            <div class="t-corner-l"></div><div class="t-corner-r"></div>
+            <h3>EVLİYA ÇELEBİ</h3>
+            <div class="card-content">
+                "Edirne'de Bayezid Darüşşifası'nın pencerelerinden akan suların sesiyle hastalar şifa bulur..."
+            </div>
+        </div>
+
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>KÜLLİYE BÖLÜMLERİ</h3>
@@ -257,7 +264,7 @@
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>TARİHÇE</h3>
             <div class="card-content">
-                1484-1488 yılları arasında Mimar Hayrettin tarafından inşa edilen yapı, 400 yıl boyunca hastalara şifa dağıtmıştır.
+                1484-1488 yılları arasında inşa edilen yapı, 400 yıl boyunca tıbbi hizmet vermiştir.
             </div>
         </div>
 
@@ -266,7 +273,7 @@
             <h3>ÖDÜLLER</h3>
             <div class="card-content">
                 <strong>Avrupa Konseyi Müze Ödülü</strong><br>
-                2004 yılında "Yılın Müzesi" seçilerek uluslararası alanda büyük başarı kazanmıştır.
+                2004 yılında "Yılın Müzesi" seçilerek başarısını kanıtlamıştır.
             </div>
         </div>
     </div>
@@ -295,7 +302,7 @@
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>MÜZE HAKKINDA</h3>
             <div class="card-content">
-                Eskiden akıl hastalarının su sesi, müzik ve güzel kokularla tedavi edildiği bu darüşşifa bugün modern bir müze olarak hizmet vermektedir.
+                Su sesi, müzik ve güzel kokularla tedavi yöntemlerinin sergilendiği benzersiz bir müze deneyimi.
             </div>
         </div>
     </div>
@@ -306,9 +313,35 @@
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ZİYARET BİLGİLERİ</h3>
             <div class="card-content">
-                Hergün: 09:00 - 18:00<br>
-                Giriş Ücreti: 50 TL<br>
-                <em>Müzekart Geçerlidir.</em>
+                <ul>
+                    <li>Haftaiçi: 09:00 - 18:00</li>
+                    <li>Haftasonu: 09:00 - 19:00</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ZİYARET KURALLARI (Sağ 2. Sıra) -->
+        <div class="card">
+            <div class="t-corner-l"></div><div class="t-corner-r"></div>
+            <h3>ZİYARET KURALLARI</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Evcil hayvan yasak</li>
+                    <li>Sessiz olunuz</li>
+                    <li>Fotoğraf flaşsız çekilmelidir</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="t-corner-l"></div><div class="t-corner-r"></div>
+            <h3>GİRİŞ ÜCRETLERİ</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Tam Bilet: 50 TL</li>
+                    <li>Öğrenci: 25 TL</li>
+                    <li>Müzekart: Ücretsiz</li>
+                </ul>
             </div>
         </div>
 
@@ -317,34 +350,30 @@
             <h3>İDARİ BİRİM</h3>
             <div class="card-content">
                 <ul>
-                    <li>Yönetim Birimi</li>
-                    <li>Personel Listesi</li>
-                    <li>Telefon Rehberi</li>
+                    <li>Yönetim: 0284 235 10 21</li>
+                    <li>Personel Rehberi</li>
                 </ul>
             </div>
         </div>
 
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>EDİRNE HAVA DURUMU</h3>
+            <h3>HAVA DURUMU</h3>
             <div class="card-content">
                 <table class="weather-table">
-                    <tr>
-                        <td>Bugün</td>
-                        <td>☀️</td>
-                        <td class="temp">18°C</td>
-                    </tr>
-                    <tr>
-                        <td>Yarın</td>
-                        <td>⛅</td>
-                        <td class="temp">16°C</td>
-                    </tr>
-                    <tr>
-                        <td>Salı</td>
-                        <td>🌧️</td>
-                        <td class="temp">12°C</td>
-                    </tr>
+                    <tr><td>Bugün</td><td>☀️</td><td class="temp">18°C</td></tr>
+                    <tr><td>Yarın</td><td>⛅</td><td class="temp">16°C</td></tr>
+                    <tr><td>Salı</td><td>🌧️</td><td class="temp">12°C</td></tr>
                 </table>
+            </div>
+        </div>
+
+        <!-- ERİŞEBİLİRLİK (Sağ En Alt) -->
+        <div class="card">
+            <div class="t-corner-l"></div><div class="t-corner-r"></div>
+            <h3>ERİŞEBİLİRLİK</h3>
+            <div class="card-content">
+                Müzemiz engelli erişimine uygundur. Tekerlekli sandalye ve rampa mevcuttur.
             </div>
         </div>
     </div>
