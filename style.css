@@ -7,10 +7,19 @@
     box-sizing: border-box;
 }
 
+/* =====================
+   BODY - ARKA PLAN
+===================== */
 body {
-    background: #e6d8b8;
     font-family: 'Playfair Display', serif;
-    color: #2b2b2b;
+    font-size: 16px;
+    color: var(--text);
+
+    /* Efektler kaldırıldı, sadece düz resim */
+    background: url("assets/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
 }
 
 /* =====================
