@@ -96,16 +96,16 @@
             border-radius: 12px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.25);
             position: relative;
+            overflow: hidden;
+            transition: 0.3s ease;
             display: flex;
             flex-direction: column;
             margin-bottom: 20px;
-            overflow: hidden; /* Çerçeveler içe alındı */
-            transition: 0.3s ease;
         }
         .card:hover { transform: translateY(-5px); }
 
-        /* KÖŞE ÇERÇEVELERİ (İÇERİDE) */
-        .c-frame {
+        /* KÖŞE ÇERÇEVELERİ (CSS İLE YÖNETİM) */
+        .c-f {
             position: absolute;
             width: 35px;
             height: 35px;
@@ -114,17 +114,15 @@
             z-index: 20;
             pointer-events: none;
         }
-
         /* Üst Köşeler */
-        .t-l { top: 4px; left: 4px; background-image: url("assets/cornerleftup.png"); }
-        .t-r { top: 4px; right: 4px; background-image: url("assets/cornerrightup.png"); }
-
+        .t-l { top: 5px; left: 5px; background-image: url("assets/cornerleftup.png"); }
+        .t-r { top: 5px; right: 5px; background-image: url("assets/cornerrightup.png"); }
         /* Alt Köşeler */
-        .b-l { bottom: 4px; left: 4px; background-image: url("assets/cornerleft.png"); }
-        .b-r { bottom: 4px; right: 4px; background-image: url("assets/cornerright.png"); }
+        .b-l { bottom: 5px; left: 5px; background-image: url("assets/cornerleft.png"); }
+        .b-r { bottom: 5px; right: 5px; background-image: url("assets/cornerright.png"); }
 
         .card h3, .card h2 {
-            padding: 15px 45px;
+            padding: 15px 45px; /* Çerçeveler için boşluk */
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
@@ -181,8 +179,8 @@
     <!-- SOL KOLON -->
     <div class="left">
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>SULTAN II. BAYEZİD</h3>
             <div class="card-content" style="text-align: center; font-style: italic;">
                 "İnsan, seyahat ettikçe olgunlaşır, yeni kültürler gördükçe aklı genişler. Dünyayı görmek, insana ilim kazandırır."
@@ -190,8 +188,8 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>EVLİYA ÇELEBİ</h3>
             <div class="card-content">
                 "Edirne'de Bayezid Darüşşifası'nın pencerelerinden akan suların sesiyle hastalar şifa bulur..."
@@ -199,8 +197,8 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>KÜLLİYE BÖLÜMLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -213,11 +211,23 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>TARİHÇE</h3>
             <div class="card-content">
                 1484-1488 yılları arasında inşa edilen yapı, 400 yıl boyunca tıbbi hizmet vermiştir.
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>MÜZE GEZİ PLANI</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Gezi Planı</li>
+                    <li>Görsel Galerisi</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -225,8 +235,8 @@
     <!-- ORTA KOLON -->
     <div class="center">
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h2>KÜLLİYE TANITIM VİDEOSU</h2>
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
@@ -234,8 +244,8 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>GÜNCEL HABERLER</h3>
             <div class="card-content">
                 <ul>
@@ -247,8 +257,17 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>DUYURULAR</h3>
+            <div class="card-content">
+                Müze Ziyaret Saatleri Hk. (Ramazan Bayramı)
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>BASINDA MÜZEMİZ</h3>
             <div class="card-content" style="text-align: center; font-weight: bold; color: #1b2b3a;">
                 OSMANLI DÖNEMİ TEDAVİ YÖNTEMLERİNİN ANLATILDIĞI ÖDÜLLÜ MÜZE YOĞUN İLGİ GÖRMEYE DEVAM EDİYOR
@@ -259,8 +278,8 @@
     <!-- SAĞ KOLON -->
     <div class="right">
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>ZİYARET BİLGİLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -271,8 +290,21 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>ZİYARET KURALLARI</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Evcil hayvan yasak</li>
+                    <li>Sessiz olunuz</li>
+                    <li>Fotoğraf flaşsız çekilmelidir</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>GİRİŞ ÜCRETLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -284,16 +316,29 @@
         </div>
 
         <div class="card">
-            <div class="c-frame t-l"></div><div class="c-frame t-r"></div>
-            <div class="c-frame b-l"></div><div class="c-frame b-r"></div>
-            <h3>İLETİŞİM</h3>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>İDARİ BİRİM</h3>
             <div class="card-content">
-                Edirne, Yeniimaret, 22000 Edirne Merkez<br>
-                Tel: 0 (284) 235 59 35
+                <ul>
+                    <li>Personelimiz</li>
+                    <li>Telefon Rehberi</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>KÜTÜPHANE</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Kitaplar</li>
+                    <li>Logolar</li>
+                </ul>
             </div>
         </div>
     </div>
-
 </div>
 
 </body>
