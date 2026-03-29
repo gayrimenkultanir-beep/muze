@@ -24,7 +24,7 @@
         body {
             font-family: 'Playfair Display', serif;
             font-size: 16px;
-            background: #fdf5e6; /* Görsel yüklenmezse diye alternatif renk */
+            background: #fdf5e6;
             background-image: url("assets/background.jpg");
             background-size: cover;
             background-position: center;
@@ -46,11 +46,7 @@
             z-index: 100;
         }
 
-        .logo {
-            font-family: 'Cinzel';
-            font-size: 20px;
-        }
-
+        .logo { font-family: 'Cinzel'; font-size: 20px; }
         .menu a {
             margin-left: 30px;
             color: var(--gold);
@@ -59,10 +55,7 @@
             font-size: 14px;
             transition: 0.3s;
         }
-
-        .menu a:hover {
-            color: #fff;
-        }
+        .menu a:hover { color: #fff; }
 
         /* CONTAINER GRID */
         .container {
@@ -71,17 +64,12 @@
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
             column-gap: 40px;
-            row-gap: 60px;
+            row-gap: 40px;
             padding: 0 20px;
         }
 
         /* BANNER */
-        .banner {
-            grid-column: 1 / -1;
-            position: relative;
-            margin-bottom: 10px;
-        }
-
+        .banner { grid-column: 1 / -1; position: relative; }
         .banner img {
             width: 100%;
             height: 350px;
@@ -89,7 +77,6 @@
             border-radius: 12px;
             border: 2px solid var(--gold-soft);
         }
-
         .banner-text {
             position: absolute;
             bottom: 30px;
@@ -100,12 +87,7 @@
             text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
             width: 100%;
         }
-
-        .banner-text h1 {
-            font-family: 'Cinzel';
-            font-size: 38px;
-            letter-spacing: 2px;
-        }
+        .banner-text h1 { font-family: 'Cinzel'; font-size: 38px; }
 
         /* KART GENEL */
         .card {
@@ -118,19 +100,16 @@
             transition: 0.3s ease;
             display: flex;
             flex-direction: column;
+            margin-bottom: 25px;
         }
+        .card:hover { transform: translateY(-5px); }
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.35);
-        }
-
-        /* KÖŞE GÖRSELLERİ SİSTEMİ */
+        /* KÜÇÜLTÜLMÜŞ KÖŞE SÜSLEMELERİ (30px) */
         .t-corner-l, .t-corner-r {
             position: absolute;
             top: 0;
-            width: 50px;
-            height: 50px;
+            width: 30px; /* 50px'den düşürüldü */
+            height: 30px;
             background-image: url("assets/top corner.png");
             background-size: contain;
             background-repeat: no-repeat;
@@ -140,91 +119,41 @@
         .t-corner-l { left: 0; }
         .t-corner-r { right: 0; transform: scaleX(-1); }
 
-        .card::before {
+        .card::before, .card::after {
             content: "";
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 60px;
-            background: url("assets/cornerleft.png") no-repeat bottom left;
-            background-size: contain;
+            width: 40px; /* Alt köşeler de orantılı küçültüldü */
+            height: 40px;
             z-index: 5;
         }
-
-        .card::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 60px;
-            height: 60px;
-            background: url("assets/cornerright.png") no-repeat bottom right;
-            background-size: contain;
-            z-index: 5;
-        }
+        .card::before { left: 0; background: url("assets/cornerleft.png") no-repeat bottom left; background-size: contain; }
+        .card::after { right: 0; background: url("assets/cornerright.png") no-repeat bottom right; background-size: contain; }
 
         .card h3, .card h2 {
-            padding: 15px;
+            padding: 12px;
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
-            font-size: 15px;
+            font-size: 14px;
             text-align: center;
-            position: relative;
-            z-index: 4;
             border-bottom: 2px solid var(--gold-soft);
         }
 
-        .card-content {
-            padding: 30px 25px;
-            font-size: 15px;
-            line-height: 1.7;
-            position: relative;
-            z-index: 3;
-        }
-
+        .card-content { padding: 20px 25px; font-size: 14px; line-height: 1.6; }
         .card ul { list-style: none; }
-        .card ul li {
-            padding: 10px 0;
-            border-bottom: 1px dashed var(--gold-soft);
-            display: flex;
-            justify-content: space-between;
-        }
+        .card ul li { padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); }
 
-        /* VIDEO ALANI GÜNCELLEME */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Oranı */
-            height: 0;
-        }
+        /* VIDEO */
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        /* HAVA DURUMU TABLOSU */
-        .weather-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .weather-table td {
-            padding: 8px 5px;
-            border-bottom: 1px solid rgba(202, 166, 75, 0.2);
-            text-align: center;
-        }
-        .temp { font-weight: bold; color: #b22222; }
+        /* LOGO ALANI */
+        .logo-row { display: flex; justify-content: space-around; align-items: center; margin-top: 15px; opacity: 0.8; }
+        .logo-row img { max-width: 60px; height: auto; }
 
         @media(max-width: 900px){
-            .container { grid-template-columns: 1fr; row-gap: 40px; }
-            .nav { flex-direction: column; text-align: center; }
-            .menu a { display: inline-block; margin: 10px; }
+            .container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -243,6 +172,7 @@
 
 <div class="container">
 
+    <!-- BANNER -->
     <div class="banner">
         <img src="assets/header.jpg" alt="Külliye Header">
         <div class="banner-text">
@@ -251,6 +181,7 @@
         </div>
     </div>
 
+    <!-- SOL KOLON -->
     <div class="left">
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
@@ -273,58 +204,50 @@
             </div>
         </div>
 
+        <!-- YENİ KART: MÜZE GEZİ PLANI -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>TARİHÇE</h3>
+            <h3>MÜZE GEZİ PLANI</h3>
             <div class="card-content">
-                1484-1488 yılları arasında inşa edilen yapı, 400 yıl boyunca tıbbi hizmet vermiştir.
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>ÖDÜLLER</h3>
-            <div class="card-content">
-                <strong>Avrupa Konseyi Müze Ödülü</strong><br>
-                2004 yılında "Yılın Müzesi" seçilerek başarısını kanıtlamıştır.
+                <p><strong>Gezi Planı:</strong> Darüşşifa iç avlu, tıp medresesi ve şifhane bölümlerini kapsayan rehberli tur rotası.</p>
+                <br>
+                <p><strong>Görsel Galeri:</strong> Tarihi objeler ve minyatür canlandırmaların sergilendiği salonlar.</p>
             </div>
         </div>
     </div>
 
+    <!-- ORTA KOLON -->
     <div class="center">
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h2>KÜLLİYE TANITIM VİDEOSU</h2>
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" 
-                        title="Sultan II. Bayezid Külliyesi Tanıtım Videosu" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                </iframe>
+                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
             </div>
         </div>
 
-        <div class="card" style="margin-top: 40px;">
+        <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>GÜNCEL HABERLER</h3>
             <div class="card-content">
                 <ul>
-                    <li>Müzik Terapi Konseri <span>12 Nisan</span></li>
-                    <li>Sema Gösterisi <span>02 Mayıs</span></li>
-                    <li>Yeni Sergi Salonu <span>18 Şubat</span></li>
+                    <li>Müzik Terapi Konseri <span style="float:right">12 Nisan</span></li>
+                    <li>Sema Gösterisi <span style="float:right">02 Mayıs</span></li>
+                    <li>Yeni Sergi Salonu <span style="float:right">18 Şubat</span></li>
                 </ul>
             </div>
         </div>
 
-        <div class="card" style="margin-top: 40px;">
+        <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>MÜZE HAKKINDA</h3>
             <div class="card-content">
-                Su sesi, müzik ve güzel kokularla tedavi yöntemlerinin sergilendiği benzersiz bir müze deneyimi.
+                Su sesi, müzik ve güzel kokularla tedavi yöntemlerinin sergilendiği benzersiz bir müze deneyimi. 15. yüzyılın tıp dehasını keşfedin.
             </div>
         </div>
     </div>
 
+    <!-- SAĞ KOLON -->
     <div class="right">
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
@@ -333,18 +256,6 @@
                 <ul>
                     <li>Haftaiçi: 09:00 - 18:00</li>
                     <li>Haftasonu: 09:00 - 19:00</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>ZİYARET KURALLARI</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Evcil hayvan yasak</li>
-                    <li>Sessiz olunuz</li>
-                    <li>Fotoğraf flaşsız çekilmelidir</li>
                 </ul>
             </div>
         </div>
@@ -361,23 +272,17 @@
             </div>
         </div>
 
+        <!-- YENİ KART: KÜTÜPHANE (EN ALTTA) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>HAVA DURUMU</h3>
+            <h3>KÜTÜPHANE</h3>
             <div class="card-content">
-                <table class="weather-table">
-                    <tr><td>Bugün</td><td>☀️</td><td class="temp">18°C</td></tr>
-                    <tr><td>Yarın</td><td>⛅</td><td class="temp">16°C</td></tr>
-                    <tr><td>Salı</td><td>🌧️</td><td class="temp">12°C</td></tr>
-                </table>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
-            <h3>ERİŞEBİLİRLİK</h3>
-            <div class="card-content">
-                Müzemiz engelli erişimine uygundur. Tekerlekli sandalye ve rampa mevcuttur.
+                <p><strong>Kitaplar:</strong> Tıp tarihi, Osmanlı mimarisi ve Edirne üzerine nadir eserler koleksiyonu.</p>
+                <div class="logo-row">
+                    <!-- Buradaki görsel yolları senin assets klasöründeki logolar olmalı -->
+                    <img src="assets/logo1.png" alt="Logo 1">
+                    <img src="assets/logo2.png" alt="Logo 2">
+                </div>
             </div>
         </div>
     </div>
