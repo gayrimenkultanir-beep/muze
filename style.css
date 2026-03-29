@@ -70,7 +70,8 @@ body {
     margin: 40px auto; /* Üst-alt boşluk artırıldı */
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap: 20px; /* Kartlar arasındaki boşluk artırıldı */
+   column-gap: 40px; /* Sütunlar arası (yatay) mesafe */
+    row-gap: 80px;    /* Satırlar arası (dikey) mesafe - Burayı artırın */
     padding: 0 20px;
 }
 
