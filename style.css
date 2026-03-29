@@ -12,7 +12,7 @@ body {
     color: #2b2b2b;
 
     /* TEXTURE BACKGROUND */
-    background: url("assets/texture.png");
+    background: url("assets/texture.jpg");
     background-size: cover;
     background-attachment: fixed;
 }
