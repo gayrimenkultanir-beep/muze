@@ -70,7 +70,7 @@ body {
     margin: 40px auto; /* Üst-alt boşluk artırıldı */
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap: 40px; /* Kartlar arasındaki boşluk artırıldı */
+    gap: 20px; /* Kartlar arasındaki boşluk artırıldı */
     padding: 0 20px;
 }
 
