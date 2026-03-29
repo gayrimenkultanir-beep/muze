@@ -23,7 +23,7 @@
 
         body {
             font-family: 'Playfair Display', serif;
-            font-size: 16px;
+            font-size: 15px;
             background: url("assets/background.jpg");
             background-size: cover;
             background-position: center;
@@ -38,7 +38,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 40px;
+            padding: 12px 40px;
             border-bottom: 3px solid var(--gold-soft);
             position: sticky;
             top: 0;
@@ -47,30 +47,26 @@
 
         .logo {
             font-family: 'Cinzel';
-            font-size: 20px;
+            font-size: 18px;
         }
 
         .menu a {
-            margin-left: 30px;
+            margin-left: 25px;
             color: var(--gold);
             text-decoration: none;
             font-family: 'Cinzel';
-            font-size: 14px;
+            font-size: 13px;
             transition: 0.3s;
-        }
-
-        .menu a:hover {
-            color: #fff;
         }
 
         /* CONTAINER GRID */
         .container {
-            max-width: 1240px;
-            margin: 40px auto;
+            max-width: 1200px;
+            margin: 20px auto;
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
-            column-gap: 40px;
-            row-gap: 60px; /* Kartlar arası dikey boşluk */
+            column-gap: 30px;
+            row-gap: 25px; /* Dikey boşluk daraltıldı */
             padding: 0 20px;
         }
 
@@ -78,137 +74,103 @@
         .banner {
             grid-column: 1 / -1;
             position: relative;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .banner img {
             width: 100%;
-            height: 350px;
+            height: 300px;
             object-fit: cover;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 2px solid var(--gold-soft);
         }
 
         .banner-text {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
             color: #fff;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
             width: 100%;
         }
 
-        .banner-text h1 {
-            font-family: 'Cinzel';
-            font-size: 38px;
-            letter-spacing: 2px;
-        }
-
-        /* KART GENEL */
+        /* KART TASARIMI */
         .card {
             background: var(--parchment);
-            border: 2px solid var(--gold-soft);
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            border: 1px solid var(--gold-soft);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             position: relative;
             overflow: hidden;
-            transition: 0.3s ease;
             display: flex;
             flex-direction: column;
+            margin-bottom: 0; /* Gap zaten boşluk veriyor */
         }
 
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.35);
-        }
-
-        /* KÖŞE GÖRSELLERİ SİSTEMİ */
+        /* KÖŞE GÖRSELLERİ */
         .t-corner-l, .t-corner-r {
             position: absolute;
             top: 0;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background-image: url("assets/top corner.png");
             background-size: contain;
             background-repeat: no-repeat;
             z-index: 5;
-            pointer-events: none;
         }
         .t-corner-l { left: 0; }
         .t-corner-r { right: 0; transform: scaleX(-1); }
 
-        .card::before {
+        .card::before, .card::after {
             content: "";
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 60px;
-            background: url("assets/cornerleft.png") no-repeat bottom left;
+            width: 50px;
+            height: 50px;
             background-size: contain;
             z-index: 5;
         }
-
-        .card::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 60px;
-            height: 60px;
-            background: url("assets/cornerright.png") no-repeat bottom right;
-            background-size: contain;
-            z-index: 5;
-        }
+        .card::before { left: 0; background: url("assets/cornerleft.png") no-repeat bottom left; }
+        .card::after { right: 0; background: url("assets/cornerright.png") no-repeat bottom right; }
 
         .card h3, .card h2 {
-            padding: 15px;
+            padding: 10px;
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
-            font-size: 15px;
+            font-size: 14px;
             text-align: center;
             position: relative;
             z-index: 4;
-            border-bottom: 2px solid var(--gold-soft);
+            border-bottom: 1px solid var(--gold-soft);
         }
 
         .card-content {
-            padding: 30px 25px;
-            font-size: 15px;
-            line-height: 1.7;
+            padding: 20px 20px;
+            font-size: 14px;
+            line-height: 1.5;
             position: relative;
             z-index: 3;
         }
 
         .card ul { list-style: none; }
         .card ul li {
-            padding: 10px 0;
-            border-bottom: 1px dashed var(--gold-soft);
+            padding: 6px 0;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.4);
             display: flex;
             justify-content: space-between;
         }
 
-        /* HAVA DURUMU TABLOSU */
-        .weather-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .weather-table td {
-            padding: 8px 5px;
-            border-bottom: 1px solid rgba(202, 166, 75, 0.2);
-            text-align: center;
-        }
+        .weather-table { width: 100%; border-collapse: collapse; }
+        .weather-table td { padding: 5px; border-bottom: 1px solid rgba(202, 166, 75, 0.1); text-align: center; }
         .temp { font-weight: bold; color: #b22222; }
 
         .video img { width: 100%; height: auto; display: block; }
 
         @media(max-width: 900px){
-            .container { grid-template-columns: 1fr; row-gap: 40px; }
-            .nav { flex-direction: column; text-align: center; }
-            .menu a { display: inline-block; margin: 10px; }
+            .container { grid-template-columns: 1fr; row-gap: 20px; }
         }
     </style>
 </head>
@@ -238,7 +200,6 @@
 
     <!-- SOL KOLON -->
     <div class="left">
-        <!-- EVLİYA ÇELEBİ (Sol Üst) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>EVLİYA ÇELEBİ</h3>
@@ -264,7 +225,7 @@
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>TARİHÇE</h3>
             <div class="card-content">
-                1484-1488 yılları arasında inşa edilen yapı, 400 yıl boyunca tıbbi hizmet vermiştir.
+                1484-1488 yılları arasında inşa edilen yapı, yüzyıllar boyu hizmet vermiştir.
             </div>
         </div>
 
@@ -273,7 +234,7 @@
             <h3>ÖDÜLLER</h3>
             <div class="card-content">
                 <strong>Avrupa Konseyi Müze Ödülü</strong><br>
-                2004 yılında "Yılın Müzesi" seçilerek başarısını kanıtlamıştır.
+                2004 yılında "Yılın Müzesi" seçilmiştir.
             </div>
         </div>
     </div>
@@ -283,7 +244,7 @@
         <div class="card video">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h2>KÜLLİYE TANITIM VİDEOSU</h2>
-            <img src="assets/header.jpg" alt="Video Kapak">
+            <img src="assets/header.jpg" alt="Video">
         </div>
 
         <div class="card">
@@ -302,7 +263,7 @@
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>MÜZE HAKKINDA</h3>
             <div class="card-content">
-                Su sesi, müzik ve güzel kokularla tedavi yöntemlerinin sergilendiği benzersiz bir müze deneyimi.
+                Su sesi, müzik ve güzel kokularla tedavi yöntemlerinin sergilendiği benzersiz bir müze.
             </div>
         </div>
     </div>
@@ -320,7 +281,6 @@
             </div>
         </div>
 
-        <!-- ZİYARET KURALLARI (Sağ 2. Sıra) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ZİYARET KURALLARI</h3>
@@ -328,7 +288,7 @@
                 <ul>
                     <li>Evcil hayvan yasak</li>
                     <li>Sessiz olunuz</li>
-                    <li>Fotoğraf flaşsız çekilmelidir</li>
+                    <li>Flaşsız çekim yapınız</li>
                 </ul>
             </div>
         </div>
@@ -368,16 +328,14 @@
             </div>
         </div>
 
-        <!-- ERİŞEBİLİRLİK (Sağ En Alt) -->
         <div class="card">
             <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ERİŞEBİLİRLİK</h3>
             <div class="card-content">
-                Müzemiz engelli erişimine uygundur. Tekerlekli sandalye ve rampa mevcuttur.
+                Müzemiz engelli erişimine uygundur.
             </div>
         </div>
     </div>
-
 </div>
 
 </body>
