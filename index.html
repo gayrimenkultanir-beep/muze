@@ -73,7 +73,7 @@
         .banner img {
             width: 100%;
             height: 350px;
-            object-fit: cover;
+            object-fit: fill; /* GÖRSELİ TAM SIĞDIRMA AYARI */
             border-radius: 12px;
             border: 2px solid var(--gold-soft);
         }
@@ -104,34 +104,31 @@
         }
         .card:hover { transform: translateY(-5px); }
 
-        /* KÖŞE SÜSLEMELERİ (30px) */
-        .t-corner-l, .t-corner-r {
-            position: absolute;
-            top: 0;
-            width: 30px;
-            height: 30px;
-            background-image: url("assets/top corner.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            z-index: 5;
-            pointer-events: none;
-        }
-        .t-corner-l { left: 0; }
-        .t-corner-r { right: 0; transform: scaleX(-1); }
-
+        /* KÖŞE SÜSLEMELERİ (ÜST) */
         .card::before, .card::after {
             content: "";
             position: absolute;
-            bottom: 0;
-            width: 35px;
-            height: 35px;
-            z-index: 5;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            z-index: 10;
+            pointer-events: none;
         }
-        .card::before { left: 0; background: url("assets/cornerleft.png") no-repeat bottom left; background-size: contain; }
-        .card::after { right: 0; background: url("assets/cornerright.png") no-repeat bottom right; background-size: contain; }
+        /* Sol Üst Köşe */
+        .card::before {
+            left: 0;
+            background: url("assets/cornerleftup.png") no-repeat top left;
+            background-size: contain;
+        }
+        /* Sağ Üst Köşe */
+        .card::after {
+            right: 0;
+            background: url("assets/cornerrightup.png") no-repeat top right;
+            background-size: contain;
+        }
 
         .card h3, .card h2 {
-            padding: 12px;
+            padding: 15px 45px; /* Köşe görsellerine çarpmaması için padding artırıldı */
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
@@ -180,7 +177,6 @@
     <!-- SOL KOLON -->
     <div class="left">
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>SULTAN II. BAYEZİD</h3>
             <div class="card-content" style="text-align: center; font-style: italic;">
                 "İnsan, seyahat ettikçe olgunlaşır, yeni kültürler gördükçe aklı genişler. Dünyayı görmek, insana ilim kazandırır."
@@ -188,7 +184,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>EVLİYA ÇELEBİ</h3>
             <div class="card-content">
                 "Edirne'de Bayezid Darüşşifası'nın pencerelerinden akan suların sesiyle hastalar şifa bulur..."
@@ -196,7 +191,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>KÜLLİYE BÖLÜMLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -209,7 +203,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>TARİHÇE</h3>
             <div class="card-content">
                 1484-1488 yılları arasında inşa edilen yapı, 400 yıl boyunca tıbbi hizmet vermiştir.
@@ -217,7 +210,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>MÜZE GEZİ PLANI</h3>
             <div class="card-content">
                 <ul>
@@ -231,7 +223,6 @@
     <!-- ORTA KOLON -->
     <div class="center">
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h2>KÜLLİYE TANITIM VİDEOSU</h2>
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
@@ -239,7 +230,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>GÜNCEL HABERLER</h3>
             <div class="card-content">
                 <ul>
@@ -251,19 +241,16 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>DUYURULAR</h3>
             <div class="card-content">
                 Müze Ziyaret Saatleri Hk. (Ramazan Bayramı)
             </div>
         </div>
 
-        <!-- YENİ KART: BASINDA MÜZEMİZ -->
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>BASINDA MÜZEMİZ</h3>
-            <div class="card-content" style="text-align: center; font-weight: bold; color: #1b2b3a;">
-               <li>OSMANLI DÖNEMİ TEDAVİ YÖNTEMLERİNİN ANLATILDIĞI ÖDÜLLÜ MÜZE YOĞUN İLGİ GÖRMEYE DEVAM EDİYOR</li>
+            <div class="card-content" style="text-align: center; font-weight: bold; color: #1b2b3a; list-style-type: none;">
+                OSMANLI DÖNEMİ TEDAVİ YÖNTEMLERİNİN ANLATILDIĞI ÖDÜLLÜ MÜZE YOĞUN İLGİ GÖRMEYE DEVAM EDİYOR
             </div>
         </div>
     </div>
@@ -271,7 +258,6 @@
     <!-- SAĞ KOLON -->
     <div class="right">
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ZİYARET BİLGİLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -282,7 +268,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>ZİYARET KURALLARI</h3>
             <div class="card-content">
                 <ul>
@@ -294,7 +279,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>GİRİŞ ÜCRETLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -306,7 +290,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>İDARİ BİRİM</h3>
             <div class="card-content">
                 <ul>
@@ -317,7 +300,6 @@
         </div>
 
         <div class="card">
-            <div class="t-corner-l"></div><div class="t-corner-r"></div>
             <h3>KÜTÜPHANE</h3>
             <div class="card-content">
                 <ul>
