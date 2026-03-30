@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
     <style>
-        /* ANA SAYFADAKİ TÜM STİLLERİN AYNISI (Görsel bütünlük için) */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --gold: #d4af37;
@@ -41,14 +40,14 @@
         .logo { font-family: 'Cinzel'; font-size: 20px; }
         .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; }
 
-        /* CONTAINER (TEK KOLON - TAM GENİŞLİK) */
+        /* CONTAINER */
         .container {
             max-width: 1240px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* BANNER (AYNI TASARIM) */
+        /* BANNER */
         .banner { position: relative; margin-bottom: 40px; }
         .banner img {
             width: 100%;
@@ -69,7 +68,7 @@
         }
         .banner-text h1 { font-family: 'Cinzel'; font-size: 38px; }
 
-        /* KART (TAM GENİŞLİK) */
+        /* KART */
         .full-card {
             background: var(--parchment);
             border: 2px solid var(--gold-soft);
@@ -102,7 +101,7 @@
             line-height: 1.8;
             font-size: 18px;
             display: flex;
-            gap: 30px;
+            gap: 40px;
             align-items: flex-start;
         }
 
@@ -111,13 +110,22 @@
             border: 2px solid var(--gold-soft);
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 100px;
         }
 
         .text-part { flex: 1; }
+        .section-title { 
+            font-family: 'Cinzel'; 
+            color: #1b2b3a; 
+            border-bottom: 1px solid var(--gold-soft); 
+            margin: 25px 0 10px 0;
+            display: inline-block;
+        }
         
         @media(max-width: 900px){
             .content-area { flex-direction: column; align-items: center; }
-            .content-area img { width: 100%; }
+            .content-area img { width: 80%; position: static; }
         }
     </style>
 </head>
@@ -133,7 +141,6 @@
 
 <div class="container">
 
-    <!-- AYNI BANNER -->
     <div class="banner">
         <img src="assets/header3.gif" alt="Külliye Header">
         <div class="banner-text">
@@ -142,25 +149,41 @@
         </div>
     </div>
 
-    <!-- TAM SAYFA GENİŞ KART -->
     <div class="full-card">
-        <!-- Köşeler -->
         <div class="c-f t-l"></div><div class="c-f t-r"></div>
         <div class="c-f b-l"></div><div class="c-f b-r"></div>
 
-        <!-- Kart Başlığı -->
         <h2>SULTAN II. BAYEZİD (1447 - 1512)</h2>
 
-        <!-- Kart İçeriği -->
         <div class="content-area">
-            <img src="assets/bayezid.jpg" alt="Sultan II. Bayezid">
+            <div class="image-box">
+                <img src="assets/bayezid.jpg" alt="Sultan II. Bayezid">
+            </div>
             
             <div class="text-part">
-                <p><strong>Sultan II. Bayezid</strong>, Osmanlı İmparatorluğu'nun sekizinci padişahıdır. Fatih Sultan Mehmet'in oğlu olan II. Bayezid, saltanatı boyunca imparatorlukta huzur ve istikrarı sağlamaya odaklanmıştır.</p>
-                <br>
-                <p>Edirne'deki bu muazzam külliye, onun döneminde 1484-1488 yılları arasında inşa edilmiştir. Külliye; cami, tıp medresesi, şifahane, imaret, hamam ve mutfak gibi bölümlerden oluşarak dönemin en ileri sağlık merkezi haline gelmiştir.</p>
-                <br>
-                <p>Özellikle <strong>Darüşşifa</strong> kısmında uygulanan müzik, su sesi ve güzel kokularla tedavi yöntemleri, Osmanlı tıp tarihinin en parlak sayfalarından birini oluşturur. Sultan II. Bayezid'in sanata ve bilime verdiği önem, bu yapının her taşında hissedilmektedir.</p>
+                <p><strong>Sultan II. Bayezid</strong>, Osmanlı İmparatorluğu'nun sekizinci padişahıdır. Fatih Sultan Mehmet’in oğlu ve Yavuz Sultan Selim’in babasıdır. Saltanatı (1481-1512), babasının dönemindeki yoğun fetih hareketlerinden sonra imparatorluğun iç yapısını sağlamlaştırdığı ve sükunetin hakim olduğu bir <strong>"olgunlaşma dönemi"</strong> olarak kabul edilir.</p>
+
+                <h3 class="section-title">1. Taht Mücadelesi ve Cem Sultan Olayı</h3>
+                <p>II. Bayezid’in saltanatının ilk yılları, kardeşi Cem Sultan ile girdiği taht mücadelesiyle geçmiştir. Cem Sultan’ın önce Rodos Şövalyeleri’ne, ardından Papalık’a sığınması, bu meseleyi bir iç sorundan uluslararası bir krize dönüştürmüştür. Bu durum, Bayezid’in Batı’ya karşı daha temkinli ve barışçıl bir politika izlemesine neden olmuştur.</p>
+
+                <h3 class="section-title">2. "Veli" ve "Adli" Sıfatları</h3>
+                <p>Dindarlığı, sanata olan düşkünlüğü ve hayırseverliği nedeniyle halk arasında <strong>"Sultan Bayezid-i Veli"</strong> olarak anılmıştır. Aynı zamanda şiirlerinde <strong>"Adli"</strong> mahlasını kullanan yetenekli bir şair ve hattattır.</p>
+
+                <h3 class="section-title">3. Bilim, Mimari ve Sosyal Hizmetler</h3>
+                <p>II. Bayezid dönemi, özellikle sosyal belediyecilik ve mimari açıdan çok parlaktır:</p>
+                <ul>
+                    <li><strong>Sultan II. Bayezid Külliyesi (Edirne):</strong> 1488 yılında açılan bu kompleks, dönemin en ileri tıp merkeziydi. Özellikle akıl hastalıklarının müzik, su sesi ve güzel kokularla tedavi edildiği Şifahane bölümü, tıp tarihi açısından devrim niteliğindedir.</li>
+                    <li><strong>İstanbul Bayezid Camii:</strong> İstanbul’daki klasik Osmanlı mimarisinin erken dönem en önemli eserlerinden biridir.</li>
+                    <li><strong>Belediye Kanunnamesi:</strong> Dünyadaki ilk standartlar kanunu sayılan "Kanunname-i İhtisab-ı Bursa" onun döneminde yürürlüğe girmiştir.</li>
+                </ul>
+
+                <h3 class="section-title">4. Önemli Tarihi Olaylar</h3>
+                <p><strong>Endülüs Müslümanları ve Yahudileri:</strong> 1492 yılında İspanya’da baskı gören Müslüman ve Yahudileri (Sefaradlar) Osmanlı topraklarına kabul ederek onlara güvenli bir liman sağlamıştır.</p>
+                <p><strong>Küçük Kıyamet (1509):</strong> İstanbul'da meydana gelen ve şehri yerle bir eden büyük deprem onun döneminde yaşanmıştır. Deprem sonrası İstanbul'u hızla yeniden inşa ettirmiştir.</p>
+                <p><strong>Şahkulu İsyanı:</strong> Saltanatının son yıllarında Safevi destekli bu isyan ve oğulları arasındaki taht kavgasıyla uğraşmak zorunda kalmıştır.</p>
+
+                <h3 class="section-title">5. Saltanatın Sonu</h3>
+                <p>Oğlu Selim (Yavuz Sultan Selim), yeniçerilerin de desteğini alarak babasını tahtan feragat etmeye zorlamıştır. II. Bayezid, Osmanlı tarihinde kendi isteğiyle tahtı bırakan nadir padişahlardan biridir. Tahtı bıraktıktan kısa bir süre sonra Edirne yolunda vefat etmiştir.</p>
             </div>
         </div>
     </div>
