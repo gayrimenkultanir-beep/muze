@@ -101,20 +101,29 @@
             line-height: 1.8;
             font-size: 18px;
             display: flex;
+            flex-direction: column; /* Görsel ve metni dikey hizala */
+            align-items: center; /* Yatayda ortala */
             gap: 40px;
-            align-items: flex-start;
+        }
+
+        .image-box {
+            display: flex;
+            justify-content: center; /* Görseli kapsayıcı içinde ortala */
+            width: 100%;
         }
 
         .content-area img {
-            width: 350px;
+            max-width: 600px; /* Maksimum genişlik ayarla */
+            width: 100%; /* Mobil uyumluluk için genişliği %100 yap */
+            height: auto; /* Yüksekliği otomatik ayarla */
             border: 2px solid var(--gold-soft);
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            position: sticky;
-            top: 100px;
+            position: static; /* Sticky özelliğini kaldır */
+            top: auto; /* Sticky özelliğini kaldır */
         }
 
-        .text-part { flex: 1; }
+        .text-part { width: 100%; } /* Metin bölümünü tam genişlik yap */
         .section-title { 
             font-family: 'Cinzel'; 
             color: #1b2b3a; 
@@ -124,8 +133,8 @@
         }
         
         @media(max-width: 900px){
-            .content-area { flex-direction: column; align-items: center; }
-            .content-area img { width: 80%; position: static; }
+            .content-area { padding: 20px; } /* Mobil için iç boşluğu azalt */
+            .content-area img { max-width: 100%; } /* Mobil için görsel genişliğini tam yap */
         }
     </style>
 </head>
@@ -157,7 +166,7 @@
 
         <div class="content-area">
             <div class="image-box">
-                <img src="assets/bayezid.jpg" alt="Sultan II. Bayezid">
+                <img src="assets/bayezid2.jpg" alt="Sultan II. Bayezid">
             </div>
             
             <div class="text-part">
