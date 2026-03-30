@@ -22,11 +22,23 @@
 body {
     font-family: 'Playfair Display', serif;
     font-size: 16px;
-    color: var(--text);
-    background: url("assets/background.jpg");
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: #fdf5e6; /* Görselin bitiş noktaları için yedek renk */
+    background-image: url("assets/background4.jpg");
+    
+    /* ÖNEMLİ DEĞİŞİKLİKLER: */
+    background-size: 100% auto; /* Sağ ve solu ekrana tam sığdırır */
+    background-position: top center; /* Görseli üstten ve ortadan hizalar */
+    background-repeat: no-repeat; /* Görselin tekrarlanmasını önler */
+    background-attachment: fixed; /* İçerik kayarken arka plan sabit kalır */
+    
+    color: #2b2b2b;
+}
+
+/* Mobil cihazlar için özel ayar (Dikey görsel olduğu için) */
+@media (max-width: 768px) {
+    body {
+        background-size: cover; /* Mobilde dikey olduğu için tam doldurması daha iyidir */
+    }
 }
 
 /* =====================
