@@ -23,7 +23,7 @@ body {
     font-family: 'Playfair Display', serif;
     font-size: 16px;
     background-color: #fdf5e6; /* Görselin bitiş noktaları için yedek renk */
-    background-image: url("assets/background4.jpg");
+    background-image: url("assets/background3.jpg");
     
     /* ÖNEMLİ DEĞİŞİKLİKLER: */
     background-size: 80% auto; /* Sağ ve solu ekrana tam sığdırır */
