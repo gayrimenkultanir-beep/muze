@@ -26,7 +26,7 @@ body {
     background-image: url("assets/background4.jpg");
     
     /* ÖNEMLİ DEĞİŞİKLİKLER: */
-    background-size: 100% auto; /* Sağ ve solu ekrana tam sığdırır */
+    background-size: 80% auto; /* Sağ ve solu ekrana tam sığdırır */
     background-position: top center; /* Görseli üstten ve ortadan hizalar */
     background-repeat: no-repeat; /* Görselin tekrarlanmasını önler */
     background-attachment: fixed; /* İçerik kayarken arka plan sabit kalır */
