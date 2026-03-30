@@ -26,8 +26,8 @@ body {
     background-image: url("assets/background3.jpg");
     
     /* ÖNEMLİ DEĞİŞİKLİKLER: */
-    background-size: 80% auto; /* Sağ ve solu ekrana tam sığdırır */
-    background-position: top center; /* Görseli üstten ve ortadan hizalar */
+    background-size: 100% auto; /* Sağ ve solu ekrana tam sığdırır */
+    background-position: center bottom; /* Görseli üstten ve ortadan hizalar */
     background-repeat: no-repeat; /* Görselin tekrarlanmasını önler */
     background-attachment: fixed; /* İçerik kayarken arka plan sabit kalır */
     
