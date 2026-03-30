@@ -88,8 +88,8 @@ body {
 }
 
 .banner img {
-    width: 100%;
-    height: 350px; /* Bu yüksekliği istersen 400px veya 500px yapabilirsin */
+    width: 1280px;
+    height: 320px; /* Bu yüksekliği istersen 400px veya 500px yapabilirsin */
     object-fit: fill; /* Görseli belirtilen alana yayar ve tam sığdırır */
     border-radius: 12px;
     border: 2px solid var(--gold-soft);
