@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
     <style>
-        /* RESET */
+        /* GENEL SIFIRLAMA */
         * {
             margin: 0;
             padding: 0;
@@ -23,18 +23,14 @@
 
         body {
             font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            background: #fdf5e6;
-            background-image: url("assets/background.jpg");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            background: #fdf5e6 url("assets/background.jpg") fixed center/cover;
             color: #2b2b2b;
+            line-height: 1.6;
         }
 
-        /* NAV */
+        /* NAVİGASYON */
         .nav {
-            background: #0f1a24;
+            background: var(--dark);
             color: var(--gold);
             display: flex;
             justify-content: space-between;
@@ -46,37 +42,52 @@
             z-index: 100;
         }
 
-        .logo { font-family: 'Cinzel'; font-size: 20px; }
+        .logo { font-family: 'Cinzel'; font-size: clamp(16px, 2vw, 20px); }
         .menu a {
-            margin-left: 30px;
+            margin-left: 20px;
             color: var(--gold);
             text-decoration: none;
             font-family: 'Cinzel';
-            font-size: 14px;
+            font-size: 13px;
             transition: 0.3s;
         }
         .menu a:hover { color: #fff; }
 
-        /* CONTAINER GRID */
+        /* ANA KONTEYNER */
         .container {
             max-width: 1240px;
-            margin: 40px auto;
+            margin: 20px auto;
             display: grid;
             grid-template-columns: 1fr 2fr 1fr;
-            column-gap: 40px;
-            row-gap: 25px;
-            padding: 0 20px;
+            gap: 20px;
+            padding: 0 15px;
         }
 
-        /* BANNER */
-        .banner { grid-column: 1 / -1; position: relative; margin-bottom: 20px; }
+        /* --- MOBİL UYUMLU BANNER --- */
+        .banner {
+            grid-column: 1 / -1;
+            position: relative;
+            height: clamp(250px, 40vh, 450px); /* Ekran boyuna göre otomatik ayarlanır */
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--gold-soft);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
         .banner img {
             width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid var(--gold-soft);
+            height: 100%;
+            object-fit: cover; /* Resmi bozmadan doldurur */
+            object-position: center;
         }
+
+        /* Yazının okunması için görsel üzerine hafif karartma */
+        .banner-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.7));
+        }
+
         .banner-text {
             position: absolute;
             bottom: 30px;
@@ -84,121 +95,108 @@
             transform: translateX(-50%);
             text-align: center;
             color: #fff;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-            width: 100%;
+            width: 90%;
+            z-index: 2;
         }
-        .banner-text h1 { font-family: 'Cinzel'; font-size: 38px; }
 
-        /* KART GENEL */
+        .banner-text h1 { 
+            font-family: 'Cinzel'; 
+            font-size: clamp(22px, 5vw, 42px); 
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+        }
+        
+        .banner-text h2 {
+            font-size: clamp(14px, 3vw, 18px);
+            font-weight: 400;
+            color: var(--gold);
+        }
+
+        /* KART TASARIMI */
         .card {
             background: var(--parchment);
             border: 2px solid var(--gold-soft);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
             position: relative;
-            overflow: hidden;
-            transition: 0.3s ease;
+            margin-bottom: 10px;
             display: flex;
             flex-direction: column;
-            margin-bottom: 20px;
         }
-        .card:hover { transform: translateY(-5px); }
 
-        /* KÖŞE ÇERÇEVELERİ (CSS İLE YÖNETİM) */
+        /* Köşe Çerçeveleri */
         .c-f {
-            position: absolute;
-            width: 35px;
-            height: 35px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            z-index: 20;
-            pointer-events: none;
+            position: absolute; width: 30px; height: 30px;
+            background-size: contain; background-repeat: no-repeat;
+            z-index: 5; pointer-events: none;
         }
-        /* Üst Köşeler */
         .t-l { top: 5px; left: 5px; background-image: url("assets/cornerleftup.png"); }
         .t-r { top: 5px; right: 5px; background-image: url("assets/cornerrightup.png"); }
-        /* Alt Köşeler */
         .b-l { bottom: 5px; left: 5px; background-image: url("assets/cornerleft.png"); }
         .b-r { bottom: 5px; right: 5px; background-image: url("assets/cornerright.png"); }
 
         .card h3, .card h2 {
-            padding: 15px 45px; /* Çerçeveler için boşluk */
+            padding: 12px 35px;
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
             font-size: 14px;
             text-align: center;
             border-bottom: 2px solid var(--gold-soft);
-            position: relative;
-            z-index: 10;
         }
 
-        .card-content { 
-            padding: 20px 25px 30px 25px; 
-            font-size: 14px; 
-            line-height: 1.6; 
-            position: relative;
-            z-index: 10;
-        }
+        .card-content { padding: 20px; font-size: 14px; }
         .card ul { list-style: none; }
-        .card ul li { padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); }
+        .card ul li { padding: 6px 0; border-bottom: 1px dashed #caa64b66; }
 
-        /* VIDEO */
-        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
+        /* RESPONSIVE (MOBİL) AYARLARI */
         @media(max-width: 900px){
             .container { grid-template-columns: 1fr; }
+            .nav { flex-direction: column; gap: 10px; padding: 10px; text-align: center; }
+            .menu a { margin: 0 10px; font-size: 11px; }
+            .banner { height: 300px; }
         }
     </style>
 </head>
 
 <body>
 
-<div class="nav">
-    <div class="logo">T.C. Trakya Üniversitesi</div>
+<nav class="nav">
+    <div class="logo">T.C. TRAKYA ÜNİVERSİTESİ</div>
     <div class="menu">
         <a href="#">ANA SAYFA</a>
         <a href="#">TARİHÇE</a>
         <a href="#">KÜLLİYE</a>
         <a href="#">İLETİŞİM</a>
     </div>
-</div>
+</nav>
 
 <div class="container">
 
-    <!-- BANNER -->
-    <div class="banner">
-        <img src="assets/header.jpg" alt="Külliye Header">
+    <!-- GÜNCELLENMİŞ BANNER -->
+    <header class="banner">
+        <div class="banner-overlay"></div>
+        <img src="assets/header.jpg" alt="Sultan II. Bayezid Külliyesi">
         <div class="banner-text">
             <h1>SULTAN II. BAYEZİD KÜLLİYESİ</h1>
             <h2>SAĞLIK MÜZESİ - 1488</h2>
         </div>
-    </div>
+    </header>
 
     <!-- SOL KOLON -->
-    <div class="left">
+    <aside class="left">
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>SULTAN II. BAYEZİD</h3>
             <div class="card-content" style="text-align: center; font-style: italic;">
-               "Burada öyle bir nizam kurulsun ki; fakir ile zengin, sağlıklı ile hasta aynı kapıdan şifa bulup çıksın."
+                "Burada öyle bir nizam kurulsun ki; fakir ile zengin aynı kapıdan şifa bulsun."
             </div>
         </div>
 
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>EVLİYA ÇELEBİ</h3>
-            <div class="card-content">
-                "Fıskiyelerden sıçrayan su damlaları, mermer havuzun içine düşerken sanki cennet nehirlerinin şarkısını söyler."
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>KÜLLİYE BÖLÜMLERİ</h3>
             <div class="card-content">
                 <ul>
@@ -211,17 +209,7 @@
         </div>
 
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>TARİHÇE</h3>
-            <div class="card-content">
-                1484-1488 yılları arasında inşa edilen yapı, 400 yıl boyunca tıbbi hizmet vermiştir.
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>MÜZE GEZİ PLANI</h3>
             <div class="card-content">
                 <ul>
@@ -230,22 +218,20 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </aside>
 
     <!-- ORTA KOLON -->
-    <div class="center">
+    <main class="center">
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h2>KÜLLİYE TANITIM VİDEOSU</h2>
             <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
+                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow" allowfullscreen></iframe>
             </div>
         </div>
 
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>GÜNCEL HABERLER</h3>
             <div class="card-content">
                 <ul>
@@ -257,93 +243,51 @@
         </div>
 
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>DUYURULAR</h3>
-            <div class="card-content">
-                <ul>
-                <li>Müze Ziyaret Saatleri Hk. (Ramazan Bayramı)<li>
-                   <li> 8 Mart Dünya Kadınlar Günü Hk.<li>
-                </ul>    
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>BASINDA MÜZEMİZ</h3>
             <div class="card-content">
-                <ul>
-                <li>OSMANLI DÖNEMİ TEDAVİ YÖNTEMLERİNİN ANLATILDIĞI ÖDÜLLÜ MÜZE YOĞUN İLGİ GÖRMEYE DEVAM EDİYOR<li>
-                 </ul>
+                <p>Osmanlı dönemi tedavi yöntemlerinin anlatıldığı ödüllü müzemiz yoğun ilgi görmeye devam ediyor.</p>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- SAĞ KOLON -->
-    <div class="right">
+    <aside class="right">
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>ZİYARET BİLGİLERİ</h3>
             <div class="card-content">
                 <ul>
-                    <li>Haftaiçi: <span style="float:right">09:00 - 18:00</span></li>
-                    <li>Haftasonu: <span style="float:right">09:00 - 18:00</span></li>
+                    <li>Haftaiçi: <span style="float:right">09:00-18:00</span></li>
+                    <li>Haftasonu: <span style="float:right">09:00-18:00</span></li>
                 </ul>
             </div>
         </div>
 
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>ZİYARET KURALLARI</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Evcil hayvan yasak</li>
-                    <li>Sessiz olunuz</li>
-                    <li>Fotoğraf flaşsız çekilmelidir</li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
             <h3>GİRİŞ ÜCRETLERİ</h3>
             <div class="card-content">
                 <ul>
-                    <li>Tam Bilet: <span style="float:right">50 TL.</span></li>
-                    <li>Öğrenci: <span style="float:right">25 TL.</span></li>
-                    <li>Müzekart: <span style="float:right">Ücretsiz.</span></li>
+                    <li>Tam Bilet: <span style="float:right">50 TL</span></li>
+                    <li>Öğrenci: <span style="float:right">25 TL</span></li>
+                    <li>Müzekart: <span style="float:right">Ücretsiz</span></li>
                 </ul>
             </div>
         </div>
 
         <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>İDARİ BİRİM</h3>
+            <div class="c-f t-l"></div><div class="c-f t-r"></div><div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>İLETİŞİM</h3>
             <div class="card-content">
                 <ul>
-                    <li>Personelimiz</li>
                     <li>Telefon Rehberi</li>
+                    <li>Ziyaret Kuralları</li>
                 </ul>
             </div>
         </div>
+    </aside>
 
-        <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>KÜTÜPHANE</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Kitaplar</li>
-                    <li>Logolar</li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 
 </body>
