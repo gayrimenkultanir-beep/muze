@@ -85,35 +85,56 @@ body {
     border: 3px solid var(--gold-soft);
     box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     margin-bottom: 10px;
+    
+    /* YENİ: Yüksekliği burada sabitlemek, object-fit'in 
+       daha iyi çalışmasını sağlar. */
+    height: 400px; 
 }
 
 .banner img {
-    width: 1280px;
-    height: 320px; /* Bu yüksekliği istersen 400px veya 500px yapabilirsin */
-    object-fit: fill; /* Görseli belirtilen alana yayar ve tam sığdırır */
-    border-radius: 12px;
-    border: 2px solid var(--gold-soft);
+    /* DEĞİŞTİ: 1280px sabit genişlik yerine 100% yaptık. 
+       Böylece her ekrana sığar. */
+    width: 100%; 
+    
+    /* DEĞİŞTİ: height: 320px; sildik. 
+       Artık yüksekliği parent (.banner) belirliyor. */
+    height: 100%; 
+
+    /* ÇOK ÖNEMLİ DEĞİŞİKLİK: 'fill' (çekiştirme) yerine 'cover' yaptık. 
+       Görsel orantılı kalır, alanı doldurmak için gerekirse kenarlardan kırpılır. */
+    object-fit: cover; 
+
+    /* DEĞİŞTİ: 'center' ekleyerek görselin daima ortalanmasını sağladık. 
+       Kırpma olursa merkezden yapar. */
+    object-position: center; 
+
+    border-radius: 9px; /* Konteyner border'ından biraz daha küçük */
+    /* border: 2px solid var(--gold-soft); // Bu border'ı silebilirsin, .banner'da zaten var. */
+    
+    transition: transform 0.5s ease; /* Hover efekti için daha yumuşak geçiş */
 }
 
+/* Hover efekti aynı kalabilir */
 .banner:hover img {
-    transform: scale(1.05);
+    transform: scale(1.03); /* Çok fazla büyütmek kaliteyi bozabilir, 1.05'i 1.03 yaptık. */
 }
 
 .banner-text {
     position: absolute;
-    bottom: 25px;
+    bottom: 40px; /* DEĞİŞTİ: Yazıyı 25px'den 40px'e yükselttik, daha ferah durur. */
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     color: #fff;
-    text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-    width: 100%;
+    text-shadow: 2px 2px 15px rgba(0,0,0,1); /* Gölgeyi biraz daha güçlendirdik, okunurluk için. */
+    width: 90%; /* DEĞİŞTİ: Mobilde kenarlara yapışmaması için 100% yerine 90% yaptık. */
 }
 
 .banner-text h1 {
     font-family: 'Cinzel', serif;
-    font-size: 38px;
-    letter-spacing: 2px;
+    font-size: 42px; /* DEĞİŞTİ: 38px'den 42px'e çıkardık, banner büyüdüğü için. */
+    letter-spacing: 3px; /* Biraz daha açtık. */
+    text-transform: uppercase; /* Tümünü büyük harf yapabilirsin, Cinzel fontuna çok yakışır. */
 }
 
 /* =====================
