@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evliya Çelebi - Seyyah-ı Alem</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #d4af37;
+            --gold-soft: #caa64b;
+            --dark: #0f1a24;
+            --parchment: #f4e7c8;
+        }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: #fdf5e6;
+            background-image: url("assets/background5.jpg");
+            background-attachment: fixed;
+            background-size: cover;
+            color: #2b2b2b;
+        }
+
+        /* NAV */
+        .nav {
+            background: #0f1a24;
+            color: var(--gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            border-bottom: 3px solid var(--gold-soft);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-family: 'Cinzel'; font-size: 20px; }
+        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1240px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* BANNER */
+        .banner { position: relative; margin-bottom: 40px; }
+        .banner img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--gold-soft);
+        }
+        .banner-text {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            width: 100%;
+        }
+        .banner-text h1 { font-family: 'Cinzel'; font-size: 38px; }
+
+        /* KART */
+        .full-card {
+            background: var(--parchment);
+            border: 2px solid var(--gold-soft);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        /* KÖŞE ÇERÇEVELERİ */
+        .c-f { position: absolute; width: 45px; height: 45px; background-size: contain; background-repeat: no-repeat; z-index: 20; pointer-events: none; }
+        .t-l { top: 10px; left: 10px; background-image: url("assets/cornerleftup.png"); }
+        .t-r { top: 10px; right: 10px; background-image: url("assets/cornerrightup.png"); }
+        .b-l { bottom: 10px; left: 10px; background-image: url("assets/cornerleft.png"); }
+        .b-r { bottom: 10px; right: 10px; background-image: url("assets/cornerright.png"); }
+
+        .full-card h2 {
+            padding: 25px;
+            background: linear-gradient(#1b2b3a,#0e1922);
+            color: var(--gold);
+            font-family: 'Cinzel';
+            font-size: 24px;
+            text-align: center;
+            border-bottom: 2px solid var(--gold-soft);
+        }
+
+        .content-area {
+            padding: 40px;
+            line-height: 1.8;
+            font-size: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .image-box {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .content-area img {
+            max-width: 500px;
+            width: 100%;
+            height: auto;
+            border: 2px solid var(--gold-soft);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .text-part { width: 100%; }
+        .section-title { 
+            font-family: 'Cinzel'; 
+            color: #1b2b3a; 
+            border-bottom: 1px solid var(--gold-soft); 
+            margin: 25px 0 15px 0;
+            display: block;
+            font-weight: 600;
+        }
+
+        .quote-box {
+            font-style: italic;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 20px;
+            border-left: 4px solid var(--gold);
+            margin: 20px 0;
+        }
+
+        ul { margin-left: 25px; margin-top: 10px; }
+        
+        @media(max-width: 900px){
+            .content-area { padding: 20px; }
+            .banner-text h1 { font-size: 28px; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="nav">
+    <div class="logo">T.C. Trakya Üniversitesi</div>
+    <div class="menu">
+        <a href="index.html">← ANA SAYFAYA DÖN</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="banner">
+        <img src="assets/header3.gif" alt="Seyyah-ı Alem Header">
+        <div class="banner-text">
+            <h1>EVLİYA ÇELEBİ</h1>
+            <h2>ZAMANIN VE MEKÂNIN ÖTESİNDE BİR GEZGİN</h2>
+        </div>
+    </div>
+
+    <div class="full-card">
+        <div class="c-f t-l"></div><div class="c-f t-r"></div>
+        <div class="c-f b-l"></div><div class="c-f b-r"></div>
+
+        <h2>🌍 SEYYAH-I ÂLEM: EVLİYA ÇELEBİ (1611 - 1682)</h2>
+
+        <div class="content-area">
+            <div class="image-box">
+                <img src="assets/evliya2.jpg" alt="Evliya Çelebi Portresi">
+            </div>
+            
+            <div class="text-part">
+                <h3 class="section-title">Yolculuğun Başlangıcı: Kimlik ve Kişilik</h3>
+                <p>17. yüzyılın en büyük seyyahı ve dünya kültür tarihinin en renkli kalemlerinden biri olan <strong>Evliya Çelebi</strong>, 25 Mart 1611 tarihinde İstanbul Unkapanı’nda doğdu. Saray çevresinde yetişmiş, iyi bir eğitim almış, hattatlık ve hafızlık mertebesine erişmiş seçkin bir "İstanbul Efendisi"ydi. Ancak onun ruhu, tek bir şehre sığmayacak kadar büyüktü.</p>
+
+                <p>1682 yılında, ardında on ciltlik devasa bir hazine olan <strong>Seyahatnâme</strong>’yi bırakarak hayata gözlerini yumdu. O, sadece gördüklerini yazan bir tarihçi değil; aynı zamanda nükteyi seven, detaylara aşık ve insan ruhunu çözümleyen bir gözlemciydi. Kendi anlatımıyla; bir rüyada dilinin sürçüp Peygamberimizden <em>"şefaat"</em> yerine <em>"seyahat"</em> dilemesiyle başlayan bu serüven, onu Osmanlı coğrafyasının her köşesine taşıdı.</p>
+
+                <h3 class="section-title">🏛️ Evliya’nın Gözüyle Sultan II. Bayezid Külliyesi</h3>
+                <p>Evliya Çelebi’nin yolu Edirne’ye düştüğünde, Tunca Nehri kıyısındaki bu muazzam külliye onu büyülemiştir. Onun satırlarında burası, taşın ve suyun insan ruhuna dokunduğu bir şifa merkezidir.</p>
+
+                <h3 class="section-title">"Müziğin Ruhu İyileştirdiği Yer"</h3>
+                <p>Çelebi, külliyenin özellikle Darüşşifa (hastane) bölümündeki tedavi yöntemlerini büyük bir hayranlıkla anlatır. Dönemin dünyasında akıl hastaları zincirlere vurulurken, burada hastaların ney, santur, kanun ve çeng sesleriyle tedavi edildiğini not düşer:</p>
+
+                <div class="quote-box">
+                    "Haftada üç gün, on adet seçkin hanende ve sazende gelerek; Rast, Neva ve Segâh makamlarında konserler verirler. Müziğin bu sihirli tınısı altında dertli gönüller ferahlar, hastaların acıları hafifler."
+                </div>
+
+                <h3 class="section-title">Su Sesi ve Çiçek Kokuları</h3>
+                <p>Onun anlatımında külliyenin ortasındaki o meşhur fıskiye, sadece bir mimari detay değildir. Suyun mermer havuzdaki ritmi, hastaların zihnini boşaltan doğal bir "ses terapisi"dir. Bahçedeki gül, sümbül ve şebboy kokularının odalara doluşunu anlatırken; Osmanlı’nın insanı merkeze alan estetik anlayışını bir tablo gibi çizer.</p>
+
+                <h3 class="section-title">Sofradaki Bereket: İmaret</h3>
+                <p>Evliya, külliyenin mutfağından bahsetmeden geçemez. Vakfiyenin cömertliğini, "ballı zerdenin ve nefis etli pilavın" her gün ayrım gözetmeksizin fakir fukaraya ve yolculara nasıl sunulduğunu, bu sosyal adaletin toplumun ruhunu nasıl doyurduğunu büyük bir övgüyle dile getirir.</p>
+
+                <div class="quote-box" style="border-left: 4px solid #1b2b3a; background: rgba(15, 26, 36, 0.05);">
+                    <strong>🖋️ Ziyaretçinin Notu:</strong><br>
+                    Evliya Çelebi için bu külliye, sadece bir hastane veya cami değil; suyun sesiyle, müziğin tınısıyla ve insanın şefkatiyle harmanlanmış bir <strong>"yeryüzü cenneti"</strong>dir. Bugün burada gezerken duyduğunuz her su sesi, aslında dört asır önce Evliya’nın duyduğu o şifa sesinin aynısıdır.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
