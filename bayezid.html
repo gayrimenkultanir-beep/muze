@@ -38,7 +38,19 @@
             z-index: 100;
         }
         .logo { font-family: 'Cinzel'; font-size: 20px; }
-        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; }
+        .menu a, .print-btn { 
+            margin-left: 20px; 
+            color: var(--gold); 
+            text-decoration: none; 
+            font-family: 'Cinzel'; 
+            font-size: 14px; 
+            background: transparent;
+            border: 1px solid var(--gold);
+            padding: 5px 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .print-btn:hover { background: var(--gold); color: #000; }
 
         /* CONTAINER */
         .container {
@@ -101,40 +113,44 @@
             line-height: 1.8;
             font-size: 18px;
             display: flex;
-            flex-direction: column; /* Görsel ve metni dikey hizala */
-            align-items: center; /* Yatayda ortala */
-            gap: 40px;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
         }
 
         .image-box {
             display: flex;
-            justify-content: center; /* Görseli kapsayıcı içinde ortala */
+            justify-content: center;
             width: 100%;
         }
 
         .content-area img {
-            max-width: 600px; /* Maksimum genişlik ayarla */
-            width: 100%; /* Mobil uyumluluk için genişliği %100 yap */
-            height: auto; /* Yüksekliği otomatik ayarla */
+            max-width: 500px;
+            width: 100%;
+            height: auto;
             border: 2px solid var(--gold-soft);
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            position: static; /* Sticky özelliğini kaldır */
-            top: auto; /* Sticky özelliğini kaldır */
         }
 
-        .text-part { width: 100%; } /* Metin bölümünü tam genişlik yap */
+        .text-part { width: 100%; }
         .section-title { 
             font-family: 'Cinzel'; 
             color: #1b2b3a; 
             border-bottom: 1px solid var(--gold-soft); 
             margin: 25px 0 10px 0;
-            display: inline-block;
+            display: block;
+            font-weight: 600;
+        }
+
+        @media print {
+            .nav, .print-btn, .menu { display: none; }
+            body { background: white; }
+            .full-card { box-shadow: none; border: none; }
         }
         
         @media(max-width: 900px){
-            .content-area { padding: 20px; } /* Mobil için iç boşluğu azalt */
-            .content-area img { max-width: 100%; } /* Mobil için görsel genişliğini tam yap */
+            .content-area { padding: 20px; }
         }
     </style>
 </head>
@@ -144,6 +160,7 @@
 <div class="nav">
     <div class="logo">T.C. Trakya Üniversitesi</div>
     <div class="menu">
+        <button class="print-btn" onclick="window.print()">Sayfayı Yazdır</button>
         <a href="index.html">← ANA SAYFAYA DÖN</a>
     </div>
 </div>
@@ -154,7 +171,6 @@
         <img src="assets/header3.gif" alt="Külliye Header">
         <div class="banner-text">
             <h1>SULTAN II. BAYEZİD</h1>
-            <h2>"Burada öyle bir nizam kurulsun ki; fakir ile zengin, sağlıklı ile hasta aynı kapıdan şifa bulup çıksın."</h2>
         </div>
     </div>
 
@@ -170,29 +186,23 @@
             </div>
             
             <div class="text-part">
-                <p><strong>Sultan II. Bayezid</strong>, Osmanlı İmparatorluğu'nun sekizinci padişahıdır. Fatih Sultan Mehmet’in oğlu ve Yavuz Sultan Selim’in babasıdır. Saltanatı (1481-1512), babasının dönemindeki yoğun fetih hareketlerinden sonra imparatorluğun iç yapısını sağlamlaştırdığı ve sükunetin hakim olduğu bir <strong>"olgunlaşma dönemi"</strong> olarak kabul edilir.</p>
+                <p>Sekizinci Osmanlı padişahıdır ve Fatih Sultan Mehmet'in iki oğlundan büyüğüdür. 1447'de Dimetoka’da doğdu. Henüz 7 yaşındayken Hadım Ali Paşa nezaretinde Amasya valisi oldu.</p>
+                
+                <p>Babası Fatih, 1481 yılında vefat edince 20 Mayıs 1481'de tahta çıktı.</p>
 
-                <h3 class="section-title">1. Taht Mücadelesi ve Cem Sultan Olayı</h3>
-                <p>II. Bayezid’in saltanatının ilk yılları, kardeşi Cem Sultan ile girdiği taht mücadelesiyle geçmiştir. Cem Sultan’ın önce Rodos Şövalyeleri’ne, ardından Papalık’a sığınması, bu meseleyi bir iç sorundan uluslararası bir krize dönüştürmüştür. Bu durum, Bayezid’in Batı’ya karşı daha temkinli ve barışçıl bir politika izlemesine neden olmuştur.</p>
+                <h3 class="section-title">Saltanat ve Yönetim Anlayışı</h3>
+                <p>Döneminde imparatorluğun sınırlarını daha da genişletti. Hem batıda hem doğuda seferlere katıldı. Barışçıl yanı daha ön plandaydı. 30 yılı aşan saltanatı süresince barışı ve sakinliği daha çok tercih etti.</p>
 
-                <h3 class="section-title">2. "Veli" ve "Adli" Sıfatları</h3>
-                <p>Dindarlığı, sanata olan düşkünlüğü ve hayırseverliği nedeniyle halk arasında <strong>"Sultan Bayezid-i Veli"</strong> olarak anılmıştır. Aynı zamanda şiirlerinde <strong>"Adli"</strong> mahlasını kullanan yetenekli bir şair ve hattattır.</p>
+                <h3 class="section-title">Kültür, Sanat ve Kişiliği</h3>
+                <p>Ülkenin her tarafında imar çalışmalarına büyük önem verdi. Amasya, Edirne ve İstanbul’a önemli eserler kazandırdı. İyi bir eğitim gördü. Arapça ve Farsça’yı iyi bilirdi. İslami ilimlerin yanında matematik, edebiyat ve felsefe eğitimi gördü. Bestekardı ve iyi şiir yazardı. Hat sanatı ile uğraştığı bilinmektedir.</p>
 
-                <h3 class="section-title">3. Bilim, Mimari ve Sosyal Hizmetler</h3>
-                <p>II. Bayezid dönemi, özellikle sosyal belediyecilik ve mimari açıdan çok parlaktır:</p>
-                <ul>
-                    <li><strong>Sultan II. Bayezid Külliyesi (Edirne):</strong> 1488 yılında açılan bu kompleks, dönemin en ileri tıp merkeziydi. Özellikle akıl hastalıklarının müzik, su sesi ve güzel kokularla tedavi edildiği Şifahane bölümü, tıp tarihi açısından devrim niteliğindedir.</li>
-                    <li><strong>İstanbul Bayezid Camii:</strong> İstanbul’daki klasik Osmanlı mimarisinin erken dönem en önemli eserlerinden biridir.</li>
-                    <li><strong>Belediye Kanunnamesi:</strong> Dünyadaki ilk standartlar kanunu sayılan "Kanunname-i İhtisab-ı Bursa" onun döneminde yürürlüğe girmiştir.</li>
-                </ul>
+                <p>Dindardı ve son yıllarını hayır ve din işlerine ayırdığı için kendisine <strong>“Bayezid Veli”</strong> denilirdi. Türkiye ve Avrupa’daki kütüphanelerde onun mührünü taşıyan sayısız yazma eserin bulunması kültüre verdiği önemin bir göstergesidir.</p>
 
-                <h3 class="section-title">4. Önemli Tarihi Olaylar</h3>
-                <p><strong>Endülüs Müslümanları ve Yahudileri:</strong> 1492 yılında İspanya’da baskı gören Müslüman ve Yahudileri (Sefaradlar) Osmanlı topraklarına kabul ederek onlara güvenli bir liman sağlamıştır.</p>
-                <p><strong>Küçük Kıyamet (1509):</strong> İstanbul'da meydana gelen ve şehri yerle bir eden büyük deprem onun döneminde yaşanmıştır. Deprem sonrası İstanbul'u hızla yeniden inşa ettirmiştir.</p>
-                <p><strong>Şahkulu İsyanı:</strong> Saltanatının son yıllarında Safevi destekli bu isyan ve oğulları arasındaki taht kavgasıyla uğraşmak zorunda kalmıştır.</p>
+                <h3 class="section-title">Edirne ve Sultan II. Bayezid Külliyesi</h3>
+                <p>1484 yılında Edirne’ye geldiğinde, şehrin ileri gelenlerinin kendisine bir Darüşşifa (hastane) ihtiyacından söz etmeleri üzerine, bu isteği haklı bularak büyük şehir ve gelen gidenin çok olduğu Edirne’ye, içinde Darüşşifa’nın da olacağı bir külliye yapılmasını emretti. Bu bağlamda sağladığı maddi ve manevi imkanlarla bu külliye 4 yılda tamamlanarak hizmete girdi.</p>
 
-                <h3 class="section-title">5. Saltanatın Sonu</h3>
-                <p>Oğlu Selim (Yavuz Sultan Selim), yeniçerilerin de desteğini alarak babasını tahtan feragat etmeye zorlamıştır. II. Bayezid, Osmanlı tarihinde kendi isteğiyle tahtı bırakan nadir padişahlardan biridir. Tahtı bıraktıktan kısa bir süre sonra Edirne yolunda vefat etmiştir.</p>
+                <h3 class="section-title">Vefatı</h3>
+                <p>62 yaşındayken padişahlığı bırakıp doğduğu yer olan Dimetoka’ya giderken Edirne’nin Havsa ilçesinin Sazlıdere köyü yakınlarında 1512 yılında vefat etti. Mezarı İstanbul’da kendi adını taşıyan camiinin yanındaki türbededir.</p>
             </div>
         </div>
     </div>
