@@ -331,16 +331,16 @@ I<!DOCTYPE html>
             </div>
         </div>
 
-        <div class="card">
+      <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
     <div class="c-f b-l"></div><div class="c-f b-r"></div>
     <h3>GİRİŞ ÜCRETLERİ</h3>
     <div class="card-content">
-        <ul style="list-style: none; padding: 0;">
+        <!-- Rakam çıkmaması için list-style-type: none kullanıyoruz -->
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
             <li style="margin-bottom: 10px;">Yerli Ziyaretçi <span style="float:right">60 TL.</span></li>
             <li style="margin-bottom: 10px;">Yabancı Ziyaretçi <span style="float:right">120 TL.</span></li>
             
-            <!-- Açılır Kapanır Bölüm -->
             <details style="border-top: 1px solid #eee; padding-top: 10px;">
                 <summary style="
                     display: flex; 
@@ -348,20 +348,15 @@ I<!DOCTYPE html>
                     align-items: center; 
                     cursor: pointer; 
                     font-weight: bold; 
-                    list-style: none; 
-                    outline: none;">
-                    
-                    <span>Ücretsiz Giriş Listesi İçin Tıklayınız.</span>
+                    list-style: none; /* Standart ok işaretini ve numarayı kaldırır */
+                    outline: none;
+                    -webkit-details-marker: none; /* Safari için numarayı/oku kaldırır */
+                ">
+                    <span>Ücretsiz Giriş Listesi İçin Tıklayınız</span>
                     <span style="font-size: 12px;">▼</span>
-                    
-                    <!-- Tarayıcıların varsayılan okunu gizlemek için (Chrome/Safari/Firefox) -->
-                    <style>
-                        summary::-webkit-details-marker { display: none; }
-                        summary { list-style: none; }
-                    </style>
                 </summary>
 
-                <ul style="margin-top: 10px; padding-left: 15px; list-style-type: disc;">
+                <ul style="margin-top: 10px; padding-left: 20px; list-style-type: disc;">
                     <li>17 Yaş Altı</li>
                     <li>65 Yaş Üzeri</li>
                     <li>Akademisyenler</li>
@@ -379,6 +374,16 @@ I<!DOCTYPE html>
         </ul>
     </div>
 </div>
+
+<style>
+    /* Bazı tarayıcılarda summary başındaki marker'ı kesin olarak gizlemek için */
+    summary::-webkit-details-marker {
+        display: none;
+    }
+    summary {
+        list-style: none;
+    }
+</style>
 
         <div class="card">
             <div class="c-f t-l"></div><div class="c-f t-r"></div>
