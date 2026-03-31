@@ -340,12 +340,28 @@ I<!DOCTYPE html>
             <li style="margin-bottom: 10px;">Yerli Ziyaretçi <span style="float:right">60 TL.</span></li>
             <li style="margin-bottom: 10px;">Yabancı Ziyaretçi <span style="float:right">120 TL.</span></li>
             
-            <!-- Açılır Kapanır Bölüm Başlangıcı -->
-            <details>
-                <summary style="cursor: pointer; font-weight: bold; list-style: auto; outline: none; padding: 5px 0; border-top: 1px solid #eee;">
-                    Ücretsiz Giriş Listesi İçin Tıklayınız.
+            <!-- Açılır Kapanır Bölüm -->
+            <details style="border-top: 1px solid #eee; padding-top: 10px;">
+                <summary style="
+                    display: flex; 
+                    justify-content: space-between; 
+                    align-items: center; 
+                    cursor: pointer; 
+                    font-weight: bold; 
+                    list-style: none; 
+                    outline: none;">
+                    
+                    <span>Ücretsiz Giriş Listesi İçin Tıklayınız.</span>
+                    <span style="font-size: 12px;">▼</span>
+                    
+                    <!-- Tarayıcıların varsayılan okunu gizlemek için (Chrome/Safari/Firefox) -->
+                    <style>
+                        summary::-webkit-details-marker { display: none; }
+                        summary { list-style: none; }
+                    </style>
                 </summary>
-                <ul style="margin-top: 10px; padding-left: 20px;">
+
+                <ul style="margin-top: 10px; padding-left: 15px; list-style-type: disc;">
                     <li>17 Yaş Altı</li>
                     <li>65 Yaş Üzeri</li>
                     <li>Akademisyenler</li>
@@ -360,8 +376,6 @@ I<!DOCTYPE html>
                     <li>TÜ Genel Sekreterlik İzni Olanlar</li>
                 </ul>
             </details>
-            <!-- Açılır Kapanır Bölüm Bitişi -->
-            
         </ul>
     </div>
 </div>
