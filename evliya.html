@@ -38,7 +38,18 @@
             z-index: 100;
         }
         .logo { font-family: 'Cinzel'; font-size: 20px; }
-        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; }
+        .menu { display: flex; align-items: center; }
+        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; cursor: pointer; }
+        .print-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            padding: 5px 15px;
+            transition: all 0.3s;
+        }
+        .print-btn:hover {
+            background: var(--gold);
+            color: var(--dark);
+        }
 
         /* CONTAINER */
         .container {
@@ -139,8 +150,17 @@
             margin: 20px 0;
         }
 
-        ul { margin-left: 25px; margin-top: 10px; }
-        
+        .highlight-text {
+            color: #1b2b3a;
+            font-weight: 600;
+        }
+
+        @media print {
+            .nav, .menu, .print-btn { display: none !important; }
+            body { background: white; }
+            .full-card { border: none; box-shadow: none; }
+        }
+
         @media(max-width: 900px){
             .content-area { padding: 20px; }
             .banner-text h1 { font-size: 28px; }
@@ -153,6 +173,7 @@
 <div class="nav">
     <div class="logo">T.C. Trakya Üniversitesi</div>
     <div class="menu">
+        <a href="#" class="print-btn" onclick="window.print()">SAYFAYI YAZDIR</a>
         <a href="index.html">← ANA SAYFAYA DÖN</a>
     </div>
 </div>
@@ -171,38 +192,40 @@
         <div class="c-f t-l"></div><div class="c-f t-r"></div>
         <div class="c-f b-l"></div><div class="c-f b-r"></div>
 
-        <h2>🌍 SEYYAH-I ÂLEM: EVLİYA ÇELEBİ (1611 - 1682)</h2>
+        <h2>🌍 SEYYAH-I ÂLEM'İN İZİNDE: EDİRNE II. BAYEZİD KÜLLİYESİ</h2>
 
         <div class="content-area">
             <div class="image-box">
-                <img src="assets/evliya2.jpg" alt="Evliya Çelebi Portresi">
+                <img src="assets/evliya2.jpg" alt="Evliya Çelebi Tasviri">
             </div>
             
             <div class="text-part">
-                <h3 class="section-title">Yolculuğun Başlangıcı: Kimlik ve Kişilik</h3>
-                <p>17. yüzyılın en büyük seyyahı ve dünya kültür tarihinin en renkli kalemlerinden biri olan <strong>Evliya Çelebi</strong>, 25 Mart 1611 tarihinde İstanbul Unkapanı’nda doğdu. Saray çevresinde yetişmiş, iyi bir eğitim almış, hattatlık ve hafızlık mertebesine erişmiş seçkin bir "İstanbul Efendisi"ydi. Ancak onun ruhu, tek bir şehre sığmayacak kadar büyüktü.</p>
+                <p>Türk tarihinin en büyük gezgini <strong>Evliya Çelebi</strong>, 17. yüzyılda Osmanlı coğrafyasını karış karış gezmiş ve gördüğü güzellikleri on ciltlik devasa eseri <em>Seyahatnâme</em>’de ölümsüzleştirmiştir. 1652 yılında Edirne’ye yolu düştüğünde, onu en çok etkileyen yerlerden biri de II. Bayezid Külliyesi olmuştur. Ünlü seyyah, bu mekân için <span class="highlight-text">"Orada bir Darüşşifa vardır ki dil ile tarif edilmez, kalemler ile yazılmaz"</span> diyerek hayranlığını dile getirmiştir.</p>
 
-                <p>1682 yılında, ardında on ciltlik devasa bir hazine olan <strong>Seyahatnâme</strong>’yi bırakarak hayata gözlerini yumdu. O, sadece gördüklerini yazan bir tarihçi değil; aynı zamanda nükteyi seven, detaylara aşık ve insan ruhunu çözümleyen bir gözlemciydi. Kendi anlatımıyla; bir rüyada dilinin sürçüp Peygamberimizden <em>"şefaat"</em> yerine <em>"seyahat"</em> dilemesiyle başlayan bu serüven, onu Osmanlı coğrafyasının her köşesine taşıdı.</p>
+                <h3 class="section-title">Mimari Bir Şaheser: Göğe Uzanan Kubbe</h3>
+                <p>Evliya Çelebi, külliyenin mimarisini bir sanat tarihçisi titizliğiyle tasvir eder. Onun anlatımında yapı, sadece taştan değil, adeta yaşayan bir organizma gibidir:</p>
 
-                <h3 class="section-title">🏛️ Evliya’nın Gözüyle Sultan II. Bayezid Külliyesi</h3>
-                <p>Evliya Çelebi’nin yolu Edirne’ye düştüğünde, Tunca Nehri kıyısındaki bu muazzam külliye onu büyülemiştir. Onun satırlarında burası, taşın ve suyun insan ruhuna dokunduğu bir şifa merkezidir.</p>
+                <p><strong>Rüzgârın Yönü:</strong> Kubbenin en tepesinde, altın yaldızlı bir mil üzerinde rüzgâr hangi yönden eserse o yöne dönen zarif bir bayrak bulunur. Çelebi bunu, <em>"Ne taraftan rüzgâr eserse, o bayrak o tarafa döner. Garip görünüşlüdür"</em> sözleriyle anlatır.</p>
 
-                <h3 class="section-title">"Müziğin Ruhu İyileştirdiği Yer"</h3>
-                <p>Çelebi, külliyenin özellikle Darüşşifa (hastane) bölümündeki tedavi yöntemlerini büyük bir hayranlıkla anlatır. Dönemin dünyasında akıl hastaları zincirlere vurulurken, burada hastaların ney, santur, kanun ve çeng sesleriyle tedavi edildiğini not düşer:</p>
+                <p><strong>Sekiz Köşeli Düzen:</strong> Büyük ana kubbe sekiz köşelidir. Çelebi, kubbenin içindeki nizamı şu sözlerle betimler: <em>"Bu kemerli kubbe içinde dahi sekiz kemer vardır. Her kemerin altında bir kış odası vardır... Bu sekiz adet kış odalarının önünde, yine büyük kubbe içinde sekiz adet yazlık odalar vardır."</em></p>
 
-                <div class="quote-box">
-                    "Haftada üç gün, on adet seçkin hanende ve sazende gelerek; Rast, Neva ve Segâh makamlarında konserler verirler. Müziğin bu sihirli tınısı altında dertli gönüller ferahlar, hastaların acıları hafifler."
-                </div>
+                <p><strong>Doğa ile İç İçe Tasarım:</strong> Odaların bir penceresi dışarıdaki ağaçlığa bakarken, diğeri iç kısımdaki büyük fıskiyeli havuza bakar.</p>
 
-                <h3 class="section-title">Su Sesi ve Çiçek Kokuları</h3>
-                <p>Onun anlatımında külliyenin ortasındaki o meşhur fıskiye, sadece bir mimari detay değildir. Suyun mermer havuzdaki ritmi, hastaların zihnini boşaltan doğal bir "ses terapisi"dir. Bahçedeki gül, sümbül ve şebboy kokularının odalara doluşunu anlatırken; Osmanlı’nın insanı merkeze alan estetik anlayışını bir tablo gibi çizer.</p>
+                <h3 class="section-title">Musiki, Su ve Ruhun Şifası</h3>
+                <p>Evliya Çelebi, hastanede uygulanan tedavi yöntemlerini anlatırken suyun ve müziğin birleşimine dikkat çeker:</p>
 
-                <h3 class="section-title">Sofradaki Bereket: İmaret</h3>
-                <p>Evliya, külliyenin mutfağından bahsetmeden geçemez. Vakfiyenin cömertliğini, "ballı zerdenin ve nefis etli pilavın" her gün ayrım gözetmeksizin fakir fukaraya ve yolculara nasıl sunulduğunu, bu sosyal adaletin toplumun ruhunu nasıl doyurduğunu büyük bir övgüyle dile getirir.</p>
+                <p><strong>Makamsal Tedavi:</strong> Haftada üç gün gelen on adet seçkin müzisyen; Rast, Neva ve Segâh makamlarında konserler vererek dertli gönülleri ferahlatırdı.</p>
+
+                <p><strong>Su Sesi Terapisi:</strong> Çelebi, merkezdeki havuzu şöyle tarif eder: <em>"Büyük havuzun çevresindeki sel sebillerden berrak su çağlayıp havuza girince, fıskiyelerden berrak su, kemerli kubbenin göbeğinde nihayet bulur."</em></p>
+
+                <p><strong>Aromaterapi:</strong> Bahar aylarında hastalara yasemin, şebboy, karanfil, lale ve sümbül gibi çiçekler sunulurdu. Çelebi, akıl hastalarının bu çiçeklere tepkisini nükteyle aktarır: <em>"Fakat delilere bu çiçekleri verince kimini yerler, kimini ayakları altında çiğnerler."</em></p>
+
+                <h3 class="section-title">Toplumsal Bereket: İmaret ve Sosyal Adalet</h3>
+                <p>Külliye, toplumun her kesimini kucaklayan sosyal bir vakıf alanıydı. Çelebi'ye göre burası, "çeşitli hastalıklara tutulmuş zengin ve fakir, ihtiyar ve genç" ile doludur. Ayrım gözetmeksizin herkese sunulan hizmet, Osmanlı'nın vakıf kültürünün en yüksek mertebesini temsil eder.</p>
 
                 <div class="quote-box" style="border-left: 4px solid #1b2b3a; background: rgba(15, 26, 36, 0.05);">
                     <strong>🖋️ Ziyaretçinin Notu:</strong><br>
-                    Evliya Çelebi için bu külliye, sadece bir hastane veya cami değil; suyun sesiyle, müziğin tınısıyla ve insanın şefkatiyle harmanlanmış bir <strong>"yeryüzü cenneti"</strong>dir. Bugün burada gezerken duyduğunuz her su sesi, aslında dört asır önce Evliya’nın duyduğu o şifa sesinin aynısıdır.
+                    Evliya Çelebi’nin satırlarında hayat bulan bu muazzam külliye, bugün Edirne'de bir <strong>"Sağlık Müzesi"</strong> olarak ziyaretçilerini ağırlamaya devam ediyor. Yapının sessiz koridorlarında yürürken, dört asır önce hastaların ruhunu dinlendiren su sesine kulak verebilir; Osmanlı'nın insana ve sağlığa verdiği derin önemi bizzat yerinde hissedebilirsiniz. Eğer yolunuz Edirne'ye düşerse, mermerin suyla, hastalığın musikiyle şifa bulduğu bu yeryüzü cennetini görmeden şehirden ayrılmayın.
                 </div>
             </div>
         </div>
