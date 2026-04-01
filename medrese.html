@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medresetü’l-Etibba | Bilim ve Şifanın Estetik Buluşması</title>
+    <title>Medresetü’l-Etibba | Seyahatnâme Işığında Şifa Merkezi</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;1,400&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 
@@ -40,7 +40,7 @@
         }
         .logo { font-family: 'Cinzel'; color: var(--gold); letter-spacing: 2px; font-weight: 700; font-size: 1rem; }
         .nav-links a { color: var(--gold); margin-left: 25px; text-decoration: none; font-family: 'Cinzel'; font-size: 0.8rem; transition: .3s; }
-        .nav-links a:hover { color: white; }
+        .nav-links a:hover { color: white; text-shadow: 0 0 8px var(--gold); }
 
         /* HERO */
         .hero {
@@ -52,9 +52,9 @@
             text-align: center;
             color: white;
         }
-        .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(40%); }
-        .hero h1 { font-family: 'Cinzel'; font-size: 4rem; letter-spacing: 4px; margin-bottom: 10px; animation: fadeInUp 1.5s; }
-        .hero p { font-family: 'Playfair Display'; font-style: italic; font-size: 1.5rem; color: var(--gold); animation: fadeInUp 2s; }
+        .hero img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(35%); }
+        .hero h1 { font-family: 'Cinzel'; font-size: 4.5rem; letter-spacing: 5px; margin-bottom: 10px; animation: fadeInUp 1.5s; }
+        .hero p { font-family: 'Playfair Display'; font-style: italic; font-size: 1.6rem; color: var(--gold); animation: fadeInUp 2s; }
 
         /* MAIN MANUSCRIPT CARD */
         .container { max-width: 1150px; margin: -100px auto 100px; padding: 0 20px; position: relative; z-index: 10; }
@@ -66,37 +66,59 @@
             position: relative;
         }
 
-        /* FADE IN ANIMATION */
-        .fade { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+        .fade { opacity: 0; transform: translateY(30px); transition: 1.2s ease-out; }
         .fade.show { opacity: 1; transform: translateY(0); }
 
         /* SECTION STYLES */
         h2 { font-family: 'Cinzel'; font-size: 2.2rem; color: var(--dark); text-align: center; margin: 60px 0 30px; border-bottom: 2px double var(--gold); padding-bottom: 15px; }
         h3 { font-family: 'Cinzel'; font-size: 1.4rem; color: var(--deep-red); margin: 40px 0 15px; border-left: 4px solid var(--gold); padding-left: 15px; }
         p { font-size: 1.15rem; margin-bottom: 25px; text-align: justify; line-height: 1.9; }
-        .dropcap { float: left; font-family: 'Cinzel'; font-size: 80px; line-height: 60px; padding-right: 15px; color: var(--dark); }
+        
+        /* QUOTE SECTION (EVLİYA ÇELEBİ) */
+        .celebi-quote {
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px dashed var(--gold-dark);
+            padding: 40px;
+            margin: 50px 0;
+            position: relative;
+            font-style: italic;
+            font-size: 1.25rem;
+            color: #443a24;
+            line-height: 2.1;
+        }
+        .celebi-quote::before {
+            content: '“';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 100px;
+            color: var(--gold);
+            font-family: 'Cinzel';
+            opacity: 0.4;
+        }
 
         /* IMAGE BLOCKS */
-        .img-container { margin: 50px 0; border: 10px solid white; box-shadow: 0 15px 35px rgba(0,0,0,0.15); overflow: hidden; }
-        .img-container img { width: 100%; display: block; transition: 0.6s; }
-        .img-container:hover img { transform: scale(1.03); }
-        .caption { font-family: 'Cinzel'; font-size: 0.8rem; background: white; padding: 15px; text-align: center; color: #666; }
+        .img-container { margin: 50px 0; border: 12px solid white; box-shadow: 0 15px 35px rgba(0,0,0,0.15); overflow: hidden; position: relative; }
+        .img-container img { width: 100%; display: block; transition: 0.8s ease; }
+        .img-container:hover img { transform: scale(1.05); }
+        .caption { font-family: 'Cinzel'; font-size: 0.85rem; background: white; padding: 15px; text-align: center; color: #555; }
 
-        /* INFO & TABLE */
-        .highlight-box { background: rgba(212, 175, 55, 0.1); border-left: 6px solid var(--gold); padding: 35px; margin: 40px 0; font-style: italic; font-size: 1.2rem; }
-        
+        /* STAT TABLE */
         .data-table { width: 100%; border-collapse: collapse; margin: 40px 0; background: white; }
         .data-table th { background: var(--dark); color: var(--gold); font-family: 'Cinzel'; padding: 20px; text-align: left; }
         .data-table td { border: 1px solid var(--gold-dark); padding: 18px; font-size: 1rem; }
 
-        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 50px 0; }
-        .feature-item { background: white; padding: 30px; border: 1px solid var(--gold); transition: .3s; }
-        .feature-item:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        /* VAKFİYE UYARI KUTUSU */
+        .curse-box {
+            background: #fdf2f2;
+            border: 2px solid var(--deep-red);
+            padding: 30px;
+            margin: 50px 0;
+            border-radius: 5px;
+        }
+        .curse-box h4 { font-family: 'Cinzel'; color: var(--deep-red); margin-bottom: 15px; text-align: center; }
 
-        /* INTERACTIVE MAP PLACEHOLDER */
-        .interactive-map { height: 450px; background: #e0d5b8; border: 2px dashed var(--gold-dark); display: flex; align-items: center; justify-content: center; flex-direction: column; margin: 60px 0; }
-
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 850px) { .manuscript { padding: 40px 25px; } .hero h1 { font-size: 2.5rem; } .nav { padding: 15px 20px; } }
     </style>
@@ -107,17 +129,17 @@
         <div class="logo">SULTAN II. BAYEZID KÜLLİYESİ | MEDRESETÜ’L-ETİBBA</div>
         <div class="nav-links">
             <a href="#tarihce">TARİHÇE</a>
-            <a href="#mimari">MİMARİ</a>
-            <a href="#egitim">EĞİTİM SİSTEMİ</a>
-            <a href="#muze">MÜZE DENEYİMİ</a>
+            <a href="#celebi">EVLİYA ÇELEBİ</a>
+            <a href="#egitim">KLİNİK EĞİTİM</a>
+            <a href="#muze">MÜZE</a>
         </div>
     </nav>
 
     <header class="hero">
-        <img src="assets/medrese_hero.jpg" alt="Medrese">
+        <img src="assets/medrese_hero.jpg" alt="Medrese Header">
         <div class="hero-overlay">
             <h1>Medresetü’l-Etibba</h1>
-            <p>15. Yüzyılın Modern Tıp Fakültesi</p>
+            <p>"Bilim ve Şifanın Estetik Buluşması"</p>
         </div>
     </header>
 
@@ -125,116 +147,82 @@
         <article class="manuscript fade">
             
             <section id="tarihce">
-                <span class="dropcap">1</span>
                 <p>
-                    484-1488 yılları arasında <strong>Mimar Hayrettin</strong> tarafından inşa edilen Sultan II. Bayezid Külliyesi, Osmanlı İmparatorluğu’nun "sosyal devlet" anlayışının zirve noktalarından biridir. Bu muazzam yapının en özgün parçalarından biri olan <strong>Medresetü’l-Etibba (Tıp Medresesi)</strong>, açıldığı dönemde Osmanlı coğrafyasının en saygın ihtisas kurumlarından biri olarak tarihe geçmiştir.
+                    1484-1488 yılları arasında <strong>Mimar Hayrettin</strong> tarafından inşa edilen bu şifa ve bilim kompleksi, Osmanlı’nın insana verdiği değerin taştan bir abidesidir. "Medresetü’l-Etibba", sadece bir derslik dizisi değil; teorik tıp bilgisinin klinik uygulamayla buluştuğu 15. yüzyılın en ileri bilim üssüdür.
                 </p>
-                <div class="highlight-box">
-                    "Orada bir Darüşşifa vardır ki dil ile tarif edilmez... Bahar geldiğinde hücrelerine yasemin ve sümbül kokuları dolardı." <br>
-                    <small>— Evliya Çelebi, Seyahatnâme</small>
-                </div>
             </section>
 
-            <section id="mimari">
-                <h2>I. MİMARİ MİRAS: TASARIMIN PEDAGOJİK GÜCÜ</h2>
-                <p>
-                    Klasik Osmanlı mimarisinin en yalın ve işlevsel örneklerinden biri olan medrese, öğrencinin dış dünyadan izole olup tamamen ilme odaklanmasını sağlayacak bir <strong>"odaklanma geometrisi"</strong> üzerine kurulmuştur.
-                </p>
-
-                <div class="img-container">
-                    <img src="assets/medrese_avlu.jpg" alt="Medrese Avlusu">
-                    <div class="caption">Medrese Avlusu: Kareye yakın bir formda, revaklı yürüyüş yolları ve merkezi huzur alanı.</div>
+            <section id="celebi">
+                <h2>EVLİYA ÇELEBİ’NİN GÖZÜNDEN MEDRESE</h2>
+                <p>Ünlü seyyahımız Evliya Çelebi, 17. yüzyılda bu külliyeyi ziyaret ettiğinde hayranlığını gizleyememiş ve seyahatnâmesinde burayı şu büyüleyici kelimelerle betimlemiştir:</p>
+                
+                <div class="celebi-quote">
+                    "Orada bir Darüşşifa ve Medrese vardır ki, dil ile tarif edilmez, kalemler ile yazılmaz. Her kemerin altında bir kış odası, önünde ise fıskiyeli havuza bakan yazlık odalar vardır. Ne taraftan rüzgâr eserse, o yöne dönen altın yaldızlı bir bayrak bulunur kubbesinde... Hastalara keklik, sülün ve güvercin gibi en seçkin yemekler sunulur; bahar geldiğinde hücrelerine yasemin ve sümbül kokuları dolardı."
                 </div>
 
-                <div class="feature-grid">
-                    <div class="feature-item">
-                        <h3>Dershane (Kutup Yıldızı)</h3>
-                        <p>Kuzeydoğuda yer alan devasa kubbeli alan. Diğer odalardan yüksek ve geniş tasarlanmış olması, bilginin hiyerarşik üstünlüğünü simgeler. Akustiği, müderrisin sesini en doğal şekilde dağıtacak şekilde hesaplanmıştır.</p>
-                    </div>
-                    <div class="feature-item">
-                        <h3>18 Talebe Hücresi</h3>
-                        <p>Her öğrencinin kendine ait ocağı, dolap nişi ve kitap rafı olan özel odası. Bu alanlar, bireysel derinleşme (tefekkür) için tasarlanmış sessizlik hücreleridir.</p>
-                    </div>
-                </div>
-
-                <div class="interactive-map">
-                    <h3 style="border:none; color:var(--dark);">[ İNTERAKTİF KAT PLANI ]</h3>
-                    <p style="font-size: 0.9rem; font-style: italic;">(Oda üzerine tıklandığında: "Öğrenci Hücresi", "Dershane" detayları açılır)</p>
-                </div>
+                <p>Çelebi’nin anlatımında medrese, sadece bir bina değil, doğanın huzuruyla ilmin vakarının birleştiği, hastaların su sesiyle, öğrencilerin ise kuş cıvıltılarıyla huzur bulduğu manevi bir mekândır.</p>
             </section>
 
             <section id="egitim">
-                <h2>II. EĞİTİM FELSEFESİ: TEORİDEN PRATİĞE</h2>
-                <p>
-                    Medresetü’l-Etibba’nın dünya eğitim tarihindeki asıl farkı, hemen bitişiğindeki <strong>Darüşşifa (Hastane)</strong> ile olan organik bağıdır. Bu sistem, günümüzdeki "Üniversite Hastanesi" modelinin 500 yıl önceki kusursuz bir örneğidir.
-                </p>
+                <h2>TEORİDEN PRATİĞE: KLİNİK EĞİTİM MODELİ</h2>
+                <p>Medresetü’l-Etibba’yı eşsiz kılan, hemen bitişiğindeki Darüşşifa ile olan organik bağıdır. Bu sistem, günümüzdeki <strong>"Üniversite Hastanesi"</strong> modelinin 500 yıl önceki karşılığıdır.</p>
 
                 <div class="img-container">
-                    <img src="assets/tip_kitabi.jpg" alt="Tıp Kitabı">
-                    <div class="caption">Eğitimin Temeli: İbn-i Sina’nın "El-Kanun fi’t-Tıbb" ve Ebubekir Er-Razi’nin eserleri.</div>
+                    <img src="assets/medrese_avlu.jpg" alt="Medrese Avlusu">
+                    <div class="caption">Şema: 18 Talebe Hücresi ve Bilginin Merkezi "Dershane-i Kübra"</div>
                 </div>
 
-                <h3>Klinik Eğitim Modeli</h3>
-                <p>Öğrenciler sabah dershanede teorik metinleri mütalaa ederken; öğleden sonra Darüşşifa koridorlarında usta hekimlerin gözetiminde hasta muayene eder ve cerrahi operasyonları izlerlerdi. Müfredat sadece cerrahi değil; <strong>Eczacılık (ispençiyari), Bitkisel Tedavi (fitoterapi) ve Musiki ile Tedavi</strong> derslerini de kapsıyordu.</p>
+                <p>Öğrenciler sabah dershanede İbn-i Sina’nın <em>"El-Kanun fi’t-Tıbb"</em> eserini mütalaa ederken; öğleden sonra hastane koridorlarında usta hekimlerin gözetiminde bizzat hasta muayene ederlerdi. Bu medresede sadece cerrahi değil; <strong>Eczacılık, Astronomi ve Musiki ile Tedavi</strong> de ders programının ayrılmaz bir parçasıydı.</p>
 
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Kategori</th>
-                            <th>Vakıf Şartnamesi / Detay</th>
+                            <th>Akademik Kadro</th>
+                            <th>Müderris Maaşı</th>
+                            <th>Öğrenci Hakları</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Müderris Maaşı</td>
-                            <td>Günlük 30 Akçe (Dönemin en yüksek akademik baremi).</td>
-                        </tr>
-                        <tr>
-                            <td>Sosyal Güvence</td>
-                            <td>Barınma, ısınma, aydınlatma (mum) ve yemek vakıfça karşılanırdı.</td>
-                        </tr>
-                        <tr>
-                            <td>Ekonomik Destek</td>
-                            <td>Öğrenciler ilim yolculukları boyunca düzenli burs alırlardı.</td>
-                        </tr>
-                        <tr>
-                            <td>Mezuniyet Hedefi</td>
-                            <td>Saray hekimliğine (Hekimbaşılığa) kadar yükselebilme imkânı.</td>
+                            <td>Dönemin en seçkin hekimleri.</td>
+                            <td>Günlük 30 Akçe (Prestij maaşı).</td>
+                            <td>Ücretsiz barınma, yemek ve aylık burs.</td>
                         </tr>
                     </tbody>
                 </table>
             </section>
 
-            <section id="muze">
-                <h2>III. GÜNÜMÜZDE MEDRESE: BİR MÜZE DENEYİMİ</h2>
-                <p>
-                    yüzyılın sonlarına kadar eğitim işlevini sürdüren yapı, bugün <strong>Trakya Üniversitesi Sağlık Müzesi</strong> bünyesinde ödüllü bir müze kompleksidir. Yapı, özgün işlevine sadık kalınarak modern müzecilik teknikleriyle donatılmıştır.
-                </p>
+            <section id="etik">
+                <h3>VAKIF TİTİZLİĞİ VE ETİK SORUMLULUK</h3>
+                <p>Osmanlı vakıf sistemi, bilimin ve şifanın istismar edilmemesi için çok sıkı kurallar koymuştur. II. Bayezid’in vakfiyesinde yer alan şu uyarı, tıp etiğinin o dönem ne kadar ciddiye alındığını gösterir:</p>
 
-                <div class="img-container">
-                    <img src="assets/muze_canlandirma.jpg" alt="Müze Canlandırma">
-                    <div class="caption">Canlandırma Odaları: Dioramalar aracılığıyla 15. yüzyıl eğitim atmosferi.</div>
-                </div>
-
-                <div class="feature-item" style="border-left: 6px solid var(--deep-red); background: #f9f9f9;">
-                    <h3 style="color:var(--deep-red); border:none;">Biliyor muydunuz?</h3>
-                    <ul style="margin-left: 20px; font-size: 1.1rem;">
-                        <li>Vakfiyeye göre; sağlıklı bir bireyin buradaki ilaçlardan haksız yere alması "büyük bir vebal" olarak görülürdü.</li>
-                        <li>Dershane kubbesi, sesin en arkadaki öğrenciye bile fısıltı netliğinde ulaşmasını sağlayacak bir akustiğe sahiptir.</li>
-                        <li>Sergilenen eserler arasında nadir cerrahi aletler ve orijinal el yazması tıp kitapları bulunmaktadır.</li>
-                    </ul>
+                <div class="curse-box">
+                    <h4>VAKFİYE UYARISI</h4>
+                    <p style="text-align: center; margin-bottom: 0;">
+                        "Her kim ki sağlıklı olduğu halde bu medresenin ilaçlarını ve imkanlarını haksız yere kullanırsa, Allah'ın, meleklerin ve tüm insanların laneti onun üzerine olsun. O kişi, Firavun ve Karun ile bir tutulsun."
+                    </p>
                 </div>
             </section>
 
+            <section id="muze">
+                <h2>GÜNÜMÜZDE SAĞLIK MÜZESİ</h2>
+                <div class="img-container">
+                    <img src="assets/muze_canlandirma.jpg" alt="Müze Canlandırma">
+                    <div class="caption">Bugün Trakya Üniversitesi bünyesinde, geçmişin şifa atmosferini canlandıran ödüllü müze.</div>
+                </div>
+                <p>
+                    Bugün Medrese bölümü, Trakya Üniversitesi Sağlık Müzesi olarak hizmet vermektedir. Odalardaki mankenli canlandırmalar, 15. yüzyıldaki tıp eğitimini, cerrahi aletleri ve eczacılık faaliyetlerini ziyaretçilere birebir deneyimletmektedir.
+                </p>
+            </section>
+
             <p style="text-align: center; font-family: 'Cinzel'; margin-top: 60px; color: var(--gold-dark); letter-spacing: 2px;">
-                "OSMANLI'NIN BİLİME, İNSANA VE SAĞLIĞA VERDİĞİ DEĞERİN SİMGESİ"
+                "BİLİMİN VE ŞİFANIN BULUŞTUĞU NOKTA - SEYAHATNÂME'DEN GÜNÜMÜZE"
             </p>
 
         </article>
     </div>
 
     <script>
-        // Sayfa kaydırıldığında animasyonları tetikle
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
