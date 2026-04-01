@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medresetü’l-Etibba | Dijital Arşiv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c5a028;
+            --gold-dark: #a38520;
+            --deep-blue: #0a192f;
+            --parchment: #fcf8ed;
+            --text-main: #2c3e50;
+            --accent-red: #8b0000;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { background-color: #f4eee1; color: var(--text-main); font-family: 'Lato', sans-serif; line-height: 1.8; }
+        
+        h1, h2, h3, .cinzel { font-family: 'Cinzel', serif; text-transform: uppercase; letter-spacing: 1px; }
+        p { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 20px; text-align: justify; }
+
+        /* Navigation */
+        .nav {
+            background: var(--deep-blue);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav .brand { color: var(--gold); font-weight: 700; font-size: 1rem; font-family: 'Cinzel'; }
+        .nav-links a { color: #fff; text-decoration: none; margin-left: 15px; font-size: 0.8rem; border: 1px solid var(--gold); padding: 5px 12px; transition: 0.3s; text-transform: uppercase; }
+        .nav-links a:hover { background: var(--gold); color: var(--deep-blue); }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 120px 10%;
+            background: linear-gradient(rgba(10, 25, 47, 0.8), rgba(10, 25, 47, 0.8)), url('assets/medrese_hero.jpg');
+            background-size: cover;
+            background-position: center;
+            color: var(--gold);
+            border-bottom: 8px double var(--gold);
+        }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 10px; }
+        .hero p { color: #fff; font-style: italic; font-size: 1.4rem; text-align: center; font-family: 'Playfair Display'; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+        /* Card System */
+        .card {
+            background: var(--parchment);
+            border: 1px solid #dcd3bc;
+            padding: 50px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .card::before { content: ""; position: absolute; top: 12px; left: 12px; right: 12px; bottom: 12px; border: 1px solid rgba(197, 160, 40, 0.15); pointer-events: none; }
+
+        .section-title { color: var(--accent-red); border-bottom: 2px solid var(--gold); display: inline-block; margin-bottom: 30px; font-size: 1.8rem; }
+
+        /* Grids */
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin: 25px 0; }
+        .info-item { background: #fff; padding: 25px; border-top: 4px solid var(--gold); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
+        .info-item h4 { font-family: 'Cinzel'; margin-bottom: 15px; color: var(--deep-blue); font-size: 1.1rem; }
+
+        /* Tables */
+        .table-container { overflow-x: auto; margin: 25px 0; }
+        table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--gold); }
+        th { background: var(--deep-blue); color: var(--gold); padding: 15px; text-align: left; font-family: 'Cinzel'; font-size: 0.9rem; }
+        td { border: 1px solid #eee; padding: 12px; font-size: 0.95rem; }
+        tr:nth-child(even) { background: #faf8f2; }
+
+        /* Quote */
+        .quote-block {
+            background: var(--deep-blue);
+            color: #fff;
+            padding: 60px;
+            margin: 40px 0;
+            border-left: 8px solid var(--gold);
+            font-style: italic;
+            position: relative;
+            font-size: 1.2rem;
+            line-height: 2;
+        }
+        .quote-block cite { display: block; margin-top: 20px; color: var(--gold); font-family: 'Cinzel'; font-style: normal; font-size: 1rem; }
+
+        /* List Columns */
+        .muderis-list { column-count: 2; column-gap: 40px; list-style: none; padding: 20px; background: #fff; border: 1px solid #eee; }
+        .muderis-list li { padding: 5px 0; border-bottom: 1px dashed #ddd; font-size: 0.9rem; }
+
+        /* Visual Areas */
+        .img-area { width: 100%; background: #eee; border: 1px solid var(--gold); height: 400px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; flex-direction: column; color: #777; }
+        .caption { text-align: center; font-size: 0.85rem; font-style: italic; margin-bottom: 30px; color: #666; }
+
+        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        .gallery-item { height: 200px; background: #fdfaf2; border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center; text-align: center; padding: 15px; font-family: 'Cinzel'; font-size: 0.8rem; }
+
+        footer { background: var(--deep-blue); color: var(--gold); padding: 40px; text-align: center; border-top: 4px solid var(--gold); font-family: 'Cinzel'; font-size: 0.9rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .muderis-list { column-count: 1; }
+            .gallery { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+    <div class="brand">MEDRESETÜ’L-ETİBBA DİJİTAL KAYITLARI</div>
+    <div class="nav-links">
+        <a href="#mimari">MİMARİ</a>
+        <a href="#akademik">AKADEMİK</a>
+        <a href="#kutuphane">KÜTÜPHANE</a>
+        <a href="javascript:window.print()">PDF OLARAK KAYDET</a>
+    </div>
+</nav>
+
+<header class="hero">
+    <h1>Medresetü’l-Etibba</h1>
+    <p>Bilim, Şifa ve İnsanlık Hizmetinin 15. Yüzyıldaki Zirvesi</p>
+</header>
+
+<div class="container">
+
+    <div class="card">
+        <h2 class="section-title">Genel Bakış</h2>
+        <p>Sultan II. Bayezid Külliyesi bünyesinde 1488 yılında inşa edilen <strong>Medresetü’l-Etibba</strong>, Osmanlı İmparatorluğu'nun en seçkin tıp okuludur. Dönemin en prestijli eğitim kurumu olan bu medrese, teorik bilgiyi bitişiğindeki Darüşşifa'da klinik uygulama ile birleştiren modern tıp fakültesi modelinin öncüsüdür.</p>
+        <div style="background: var(--gold); color: var(--deep-blue); padding: 20px; text-align: center; font-weight: bold; font-family: 'Cinzel'; border: 2px solid var(--deep-blue);">
+            BU YAPI, AVRUPA KONSEYİ MÜZE ÖDÜLÜ SAHİBİDİR.
+        </div>
+    </div>
+
+    <div id="mimari" class="card">
+        <h2 class="section-title">1. Mimari Yapı ve Mekânsal Kurgu</h2>
+        <p>Darüşşifanın doğu ucuna bitişik inşa edilen yapı, işlevsel bütünlük esasına dayanır. Klasik Osmanlı medrese planının en dengeli örneklerinden biridir.</p>
+        
+        <div class="img-area">
+            <strong>GÖRSEL: MEDRESE PLAN ŞEMASI VE HÜCRE YERLEŞİMİ</strong>
+            <small>Kubbelerin dizilimi ve 17 sütunlu revak detayı</small>
+        </div>
+        <p class="caption">Görsel: Medrese avlusu ve mimari yerleşim planı.</p>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <h4>Plan Detayları</h4>
+                <ul style="padding-left: 15px; font-size: 0.9rem;">
+                    <li>Ortada dörtgen taş avlu ve şadırvan temeli.</li>
+                    <li>Avluyu çevreleyen 17 sütunlu revaklı yapı.</li>
+                    <li>Üç cephede toplam 18 adet öğrenci odası (hücre).</li>
+                    <li>Giriş aksının tam karşısında ana dershane.</li>
+                </ul>
+            </div>
+            <div class="info-item">
+                <h4>Teknik Özellikler</h4>
+                <ul style="padding-left: 15px; font-size: 0.9rem;">
+                    <li><strong>Dershane:</strong> En büyük ve en yüksek kubbeli alan.</li>
+                    <li><strong>Bağlantı:</strong> Darüşşifaya açılan özel geçiş kapısı.</li>
+                    <li><strong>Isınma:</strong> Her öğrenci odasında niş ve ocak sistemi.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="akademik" class="card">
+        <h2 class="section-title">2. Akademik Statü ve Kadro Sistemi</h2>
+        <p>Medrese, statü olarak Ayasofya Medresesi ile eşdeğer tutulmuş ve <strong>"60'lı"</strong> (en üst seviye) dereceye sahip olmuştur.</p>
+
+        <div class="quote-block">
+            “Medresetü’l-etibba odalarında öyle talebeler vardır ki, her biri Eflatun, Sokrat, Aristotalis ve Calinos hikmetinden bahseden olgun tabiplerdir… İnsanların derdine deva bulmak için çalışırlar.”
+            <cite>— Evliya Çelebi, 1652</cite>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Unvan</th>
+                        <th>Günlük Maaş</th>
+                        <th>Vakfiye Görev Tanımı</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Müderris (Profesör)</strong></td><td>60 Akçe</td><td>Aklî ve naklî ilimlerde uzman. Ders kesmek yasaktır.</td></tr>
+                    <tr><td><strong>Mu’îd (Doçent)</strong></td><td>7 Akçe</td><td>Talebelere dersleri tekrarlatan ve kitapları öğreten yardımcı.</td></tr>
+                    <tr><td><strong>18 Talebe</strong></td><td>2 Akçe (Burs)</td><td>Tam burslu, konaklamalı hekim adayları.</td></tr>
+                    <tr><td><strong>Hafız-ı Kütüp</strong></td><td>2 Akçe</td><td>Kütüphane sayımı ve kitap korumasından sorumlu.</td></tr>
+                    <tr><td><strong>Ferraş ve Bevvab</strong></td><td>2'şer Akçe</td><td>Temizlik, güvenlik ve kandillerin her gece yakılması.</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 style="margin: 30px 0 15px; color: var(--gold-dark);">Tarihi Müderris Kayıtları (XVI. Yüzyıl)</h3>
+        <ul class="muderis-list">
+            <li>• Şeyh Lûtfullah zâde Bahaüddin (1489)</li>
+            <li>• İbn Kemal (1513)</li>
+            <li>• Şücâeddin İlyas Rûmî (1517)</li>
+            <li>• Kara Haydar Efendi (1519)</li>
+            <li>• Yakup Bin Seydi Ali Efendi (1524)</li>
+            <li>• Pamuk Kadi (1532)</li>
+            <li>• Muhaşşî Sinan Efendi (1538)</li>
+            <li>• Celalzade Salih Efendi (1542)</li>
+            <li>• Taşköprülüzade Ahmet Efendi (1545)</li>
+            <li>• Samsunlu Zâde Mehmet (1566)</li>
+            <li>• Küçük Mahmud Efendi (1581)</li>
+            <li>• Baba Cafer Efendi (1598)</li>
+        </ul>
+    </div>
+
+    <div id="kutuphane" class="card">
+        <h2 class="section-title">3. Tıp Kütüphanesi ve Bilgi Disiplini</h2>
+        <p>Vakfiyeye göre başlangıçta 42 ciltlik ana koleksiyona sahip olan kütüphane, son derece katı kurallarla yönetilirdi: Kitaplar dışarı çıkarılamaz ve her yıl düzenli sayım yapılırdı.</p>
+
+        <div class="gallery">
+            <div class="gallery-item"><strong>ZAHİRE-İ HARZEMŞAHİ</strong><br>(XII. yy - El-Cürcânî)</div>
+            <div class="gallery-item"><strong>ŞİFA-ÜL ESKAM</strong><br>(Hacı Paşa - 402 Yaprak)</div>
+            <div class="gallery-item"><strong>SULTAN II. BAYEZID MÜHRÜ</strong><br>(Kitap Şahsi Kaydı)</div>
+            <div class="gallery-item"><strong>CERRAHİ ALETLER</strong><br>(15. yy Replikaları)</div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Eser Adı</th>
+                        <th>Yazar / Detay</th>
+                        <th>Bilimsel İçerik</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Zahire-i Harzemşahî</strong></td>
+                        <td>El-Cürcânî</td>
+                        <td>Farsça tıp ansiklopedisi. Cilt kapağında çift yılan motifi.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kitab el-Cami</strong></td>
+                        <td>İbn-i Baytar</td>
+                        <td>Alfabetik ilaç rehberi. Üzerinde Sultan II. Bayezid’in mührü bulunur.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kitab-u Edebü’t-Tabîb</strong></td>
+                        <td>İshâk er-Ruhâvî</td>
+                        <td>Hekimlik etiği ve deontoloji üzerine temel Arapça eser.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Mâlâ Yasa’u’t-Tabîba</strong></td>
+                        <td>Yusuf bin İsmail</td>
+                        <td>783 yaprak. İlaç hazırlama ve kullanımının dev rehberi.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card" style="background-color: var(--deep-blue); color: #fff;">
+        <h2 class="section-title" style="color: var(--gold); border-bottom-color: #fff;">Günümüzde Medresetü’l-Etibba</h2>
+        <p style="color: #ddd;">Bugün bu tarihi yapı, Trakya Üniversitesi bünyesinde modern bir Sağlık Müzesi olarak hizmet vermektedir. Öğrenci odalarında bulunan canlandırmalar ve dijital arşivler, 500 yıl önceki eğitim atmosferini geleceğe taşımaktadır.</p>
+        <div class="info-grid">
+            <div class="info-item" style="color: var(--text-main);">
+                <h4>Biliyor muydunuz?</h4>
+                <p style="font-size: 0.9rem;">Öğrenciler burada sadece tıp değil, felsefe ve astronomi gibi temel bilimleri de öğrenerek <strong>"Hakim-Hekim"</strong> unvanıyla mezun olurlardı.</p>
+            </div>
+            <div class="info-item" style="color: var(--text-main);">
+                <h4>Erişim</h4>
+                <p style="font-size: 0.9rem;">Koleksiyondaki yazma eserlerin tamamı dijital ortama aktarılmış ve araştırmacılar için Selimiye Yazma Eser Kütüphanesi'nde korumaya alınmıştır.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    Trakya Üniversitesi Sultan II. Bayezid Külliyesi Sağlık Müzesi<br>
+    Dijital Bilgi ve Arşiv Sistemi © 2026
+</footer>
+
+</body>
+</html>
