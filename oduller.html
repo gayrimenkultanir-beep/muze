@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ödüllerimiz ve Basında Biz - T.C. Trakya Üniversitesi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+    <title>Ödüllerimiz - T.C. Trakya Üniversitesi Sağlık Müzesi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,6 +23,7 @@
             background-attachment: fixed;
             background-size: cover;
             color: #2b2b2b;
+            line-height: 1.8;
         }
 
         /* NAV */
@@ -48,104 +49,114 @@
             padding: 5px 15px;
             transition: all 0.3s;
         }
-        .print-btn:hover {
-            background: var(--gold);
-            color: var(--dark);
-        }
+        .print-btn:hover { background: var(--gold); color: var(--dark); }
 
-        /* CONTAINER */
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 40px auto;
             padding: 0 20px;
         }
 
-        /* HEADER SECTION */
+        /* HEADER */
         .page-header {
             text-align: center;
             margin-bottom: 50px;
-            padding: 40px;
-            background: rgba(15, 26, 36, 0.9);
+            padding: 50px 20px;
+            background: linear-gradient(rgba(15, 26, 36, 0.95), rgba(27, 43, 58, 0.9));
             border: 2px solid var(--gold);
-            border-radius: 12px;
+            border-radius: 15px;
             color: var(--gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
-        .page-header h1 { font-family: 'Cinzel'; font-size: 36px; margin-bottom: 10px; }
-        .page-header p { font-style: italic; font-size: 18px; color: #fff; }
+        .page-header h1 { font-family: 'Cinzel'; font-size: 42px; letter-spacing: 2px; }
+        .page-header .subtitle { font-style: italic; color: #fff; margin-top: 10px; font-size: 18px; }
 
-        /* AWARDS GRID */
-        .section-title { 
-            font-family: 'Cinzel'; 
-            color: var(--deep-blue); 
-            border-bottom: 2px solid var(--gold-soft); 
-            margin: 40px 0 25px 0;
-            padding-bottom: 10px;
-            text-align: center;
-            font-size: 28px;
-        }
-
-        .awards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 60px;
-        }
-
-        .award-card {
+        /* AWARD SECTION */
+        .award-section {
             background: var(--parchment);
             border: 1px solid var(--gold-soft);
-            padding: 30px;
-            text-align: center;
-            border-radius: 8px;
-            transition: transform 0.3s;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            position: relative;
-        }
-        .award-card:hover { transform: translateY(-5px); }
-        .award-card i { font-size: 40px; color: var(--gold); margin-bottom: 15px; display: block; }
-        .award-card h3 { font-family: 'Cinzel'; margin-bottom: 15px; color: var(--deep-blue); }
-        .award-card p { font-size: 16px; line-height: 1.6; }
-
-        /* PRESS LINKS */
-        .press-list {
-            background: rgba(255, 255, 255, 0.7);
             border-radius: 12px;
-            padding: 30px;
-            border: 1px solid var(--gold-soft);
+            padding: 40px;
+            margin-bottom: 50px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        .press-item {
+        .award-title {
+            font-family: 'Cinzel';
+            color: var(--deep-blue);
+            font-size: 28px;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
             display: flex;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px dashed var(--gold-soft);
-            transition: background 0.2s;
+            gap: 15px;
         }
-        .press-item:last-child { border-bottom: none; }
-        .press-item:hover { background: rgba(212, 175, 55, 0.1); }
 
-        .press-date {
-            font-family: 'Cinzel';
-            font-weight: bold;
-            color: var(--deep-blue);
-            width: 120px;
+        .award-text {
+            font-size: 19px;
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+
+        /* IMAGE STYLES */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .img-container {
+            text-align: center;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border: 3px solid #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .img-container img:hover { transform: scale(1.02); }
+
+        .img-caption {
             font-size: 14px;
+            font-family: 'Cinzel';
+            color: #555;
+            margin-top: 10px;
+            font-weight: 600;
         }
 
-        .press-content a {
-            color: #b22222; /* Koyu kırmızı haber linkleri için */
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 18px;
+        .highlight-box {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 5px solid var(--gold);
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
         }
-        .press-content a:hover { text-decoration: underline; }
-        .press-source { display: block; font-size: 14px; color: #555; font-style: italic; }
+
+        /* PRESS SECTION TITLE */
+        .section-divider {
+            text-align: center;
+            margin: 60px 0 40px;
+        }
+        .section-divider h2 {
+            font-family: 'Cinzel';
+            background: var(--deep-blue);
+            color: var(--gold);
+            display: inline-block;
+            padding: 10px 40px;
+            border-radius: 50px;
+        }
 
         @media (max-width: 768px) {
-            .nav { flex-direction: column; gap: 15px; }
-            .menu a { margin: 0 10px; }
-            .press-item { flex-direction: column; align-items: flex-start; }
-            .press-date { margin-bottom: 5px; }
+            .image-gallery { grid-template-columns: 1fr; }
+            .page-header h1 { font-size: 28px; }
         }
     </style>
 </head>
@@ -162,71 +173,65 @@
 <div class="container">
 
     <header class="page-header">
-        <h1>BAŞARILARIMIZ VE ÖDÜLLERİMİZ</h1>
-        <p>"Emeğin, bilimin ve tarihin takdirle buluştuğu nokta."</p>
+        <h1>MÜZE ÖDÜLLERİMİZ</h1>
+        <p class="subtitle">"Uluslararası Arenada Bir Kültür Elçisi"</p>
     </header>
 
-    <h2 class="section-title">ULUSAL VE ULUSLARARASI ÖDÜLLER</h2>
-    
-    <div class="awards-container">
-        <div class="award-card">
-            <div class="award-icon">🏆</div>
-            <h3>Avrupa Müze Ödülü</h3>
-            <p>Sultan II. Bayezid Külliyesi Sağlık Müzesi, 2004 yılında Avrupa Konseyi tarafından düzenlenen "Avrupa Müze Ödülü"ne layık görülmüştür.</p>
+    <section class="award-section">
+        <h2 class="award-title"><span>🏆</span> Avrupa Müze Ödülü</h2>
+        <p class="award-text">
+            Müzemiz, dünyanın en prestijli müzecilik ödüllerinden biri olan <strong>Avrupa Konseyi 2004 Yılı Avrupa Müze Ödülü’nü</strong> kazanmıştır. Strasbourg, Fransa’da düzenlenen törende takdim edilen bu ödül ile birlikte, Avrupa Parlamenterler Meclisi tarafından geleneksel olarak ödül kazanan müzelere bir yıl süreyle sergilenmek üzere verilen ve müze ödüllerinin sembolü olarak kabul edilen heykeltıraş <strong>Joan Miró'nun bronz heykelini</strong> de elde etmiştir.
+        </p>
+
+        <div class="image-gallery">
+            <div class="img-container">
+                <img src="assets/odul_toren_1.jpg" alt="Avrupa Müze Ödül Töreni">
+                <p class="img-caption">Avrupa Müze Ödül Töreni 2004 Strasbourg/Fransa</p>
+            </div>
+            <div class="img-container">
+                <img src="assets/heykel_teslim.jpg" alt="Heykel Devir Teslim">
+                <p class="img-caption">2005, Heykel Devir Teslim Töreni</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="award-section">
+        <h2 class="award-title"><span>🎖️</span> Mükemmellik Kulübü</h2>
+        <p class="award-text">
+            2005 yılında Hırvatistan’ın Dubrovnik kentinde düzenlenen <strong>‘Dünya Ödüllü Müzeler Buluşması’nda</strong>, 21 proje arasında en iyi ikinci sunumu gerçekleştirerek kültürümüzün tanıtımına büyük bir katkı sağlayan müzemiz ayrıca, Avrupa Kültür Mirası Birliği tarafından <strong>'Mükemmellik Kulübü'ne</strong> kabul edilmiştir.
+        </p>
+        
+        <div class="highlight-box">
+            "Kültürel Mirastaki En Iyiler" ve "Mükemmellik Kulübü" En İyi Sunum Ödülü
         </div>
 
-        <div class="award-card">
-            <div class="award-icon">🎖️</div>
-            <h3>Kültürel Miras Başarı Ödülü</h3>
-            <p>Osmanlı darüşşifasını aslına uygun şekilde yaşatan sergileme düzeni ile uluslararası platformlarda büyük beğeni toplamıştır.</p>
-        </div>
+        <p class="award-text">
+            31 Ekim - 3 Kasım 2007 tarihleri arasında Almanya'nın Köln kentinde düzenlenen ödüllü müzeler buluşmasında, müzemiz üstün performansıyla yeniden en iyi sunum ödülünü kazanma başarısı göstermiştir.
+        </p>
 
-        <div class="award-card">
-            <div class="award-icon">📜</div>
-            <h3>UNESCO Dünya Mirası</h3>
-            <p>Külliyemiz, evrensel değeri ve tarihi dokusuyla dünya kültürel mirasının en nadide parçalarından biri olarak tescillenmiştir.</p>
+        <div class="image-gallery">
+            <div class="img-container">
+                <img src="assets/mukemmellik_odulu.jpg" alt="Mükemmellik Kulübü Ödülü">
+                <p class="img-caption">Avrupa Kültürel Miras Birliği ve Mükemmellik Kulübü En İyi Sunum Ödülü 2007 Köln/ Almanya</p>
+            </div>
+            <div class="img-container">
+                <img src="assets/ek_resim_1.jpg" alt="Ek Resim">
+                <p class="img-caption">Müze Diploması ve Sertifikalar</p>
+            </div>
         </div>
+    </section>
+
+    <div class="section-divider">
+        <h2>BASINDA BİZ</h2>
     </div>
 
-    <h2 class="section-title">BASINDA BİZ</h2>
-
-    <div class="press-list">
-        <div class="press-item">
-            <div class="press-date">22 MART 2024</div>
-            <div class="press-content">
-                <a href="https://example.com/haber1" target="_blank">Trakya Üniversitesi Sağlık Müzesi Ziyaretçi Rekoru Kırdı</a>
-                <span class="press-source">Anadolu Ajansı</span>
-            </div>
+    <div style="background: rgba(255,255,255,0.6); padding: 30px; border-radius: 12px; border: 1px solid var(--gold-soft);">
+        <p style="text-align: center; font-style: italic;">Müzemizin ulusal ve uluslararası basındaki yansımaları burada listelenmektedir.</p>
         </div>
 
-        <div class="press-item">
-            <div class="press-date">10 OCAK 2024</div>
-            <div class="press-content">
-                <a href="https://example.com/haber2" target="_blank">Tarihi Darüşşifada Musiki ile Tedavi Günü Yeniden Hayat Buluyor</a>
-                <span class="press-source">TRT Haber</span>
-            </div>
-        </div>
-
-        <div class="press-item">
-            <div class="press-date">05 ARALIK 2023</div>
-            <div class="press-content">
-                <a href="https://example.com/haber3" target="_blank">Edirne'nin Gururu: Avrupa'dan Ödüllü Tek Müze</a>
-                <span class="press-source">Milliyet Gazetesi</span>
-            </div>
-        </div>
-
-        <div class="press-item">
-            <div class="press-date">15 KASIM 2023</div>
-            <div class="press-content">
-                <a href="https://example.com/haber4" target="_blank">Evliya Çelebi'nin İzinde Edirne Külliyesi Rehberi</a>
-                <span class="press-source">Hürriyet Seyahat</span>
-            </div>
-        </div>
-    </div>
-
-    <div style="margin-top: 50px; text-align: center; font-family: 'Cinzel'; color: var(--deep-blue); font-size: 14px; border-top: 1px solid var(--gold-soft); padding-top: 20px;">
-        © 2026 Trakya Üniversitesi - Tüm Hakları Saklıdır.
-    </div>
+    <footer style="margin-top: 60px; text-align: center; font-family: 'Cinzel'; padding: 20px; color: var(--deep-blue); border-top: 1px solid var(--gold-soft);">
+        T.C. Trakya Üniversitesi Sağlık Müzesi &copy; 2026
+    </footer>
 
 </div>
 
