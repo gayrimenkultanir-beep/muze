@@ -52,7 +52,7 @@
         .print-btn:hover { background: var(--gold); color: var(--dark); }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 40px auto;
             padding: 0 20px;
         }
@@ -79,7 +79,7 @@
             padding: 40px;
             margin-bottom: 50px;
             position: relative;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
 
         .award-title {
@@ -98,65 +98,120 @@
             font-size: 19px;
             text-align: justify;
             margin-bottom: 30px;
+            color: #333;
         }
 
         /* IMAGE STYLES */
         .image-gallery {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
             margin-top: 20px;
         }
 
         .img-container {
             text-align: center;
+            background: #fff;
+            padding: 10px;
+            border: 1px solid var(--gold-soft);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .img-container img {
             width: 100%;
-            height: 250px;
+            height: 280px;
             object-fit: cover;
-            border: 3px solid #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            border-radius: 4px;
             transition: transform 0.3s;
         }
 
-        .img-container img:hover { transform: scale(1.02); }
+        .img-container img:hover { transform: scale(1.03); }
 
         .img-caption {
             font-size: 14px;
             font-family: 'Cinzel';
-            color: #555;
-            margin-top: 10px;
+            color: var(--deep-blue);
+            margin-top: 12px;
             font-weight: 600;
         }
 
         .highlight-box {
-            background: rgba(212, 175, 55, 0.1);
-            border-left: 5px solid var(--gold);
-            padding: 20px;
-            margin: 20px 0;
+            background: rgba(212, 175, 55, 0.15);
+            border-left: 6px solid var(--gold);
+            padding: 25px;
+            margin: 25px 0;
             font-style: italic;
+            font-weight: bold;
+            color: var(--deep-blue);
+            font-size: 20px;
+            text-align: center;
         }
 
-        /* PRESS SECTION TITLE */
+        /* PRESS TABLE STYLES */
         .section-divider {
             text-align: center;
-            margin: 60px 0 40px;
+            margin: 60px 0 30px;
         }
         .section-divider h2 {
             font-family: 'Cinzel';
             background: var(--deep-blue);
             color: var(--gold);
             display: inline-block;
-            padding: 10px 40px;
+            padding: 12px 50px;
             border-radius: 50px;
+            border: 2px solid var(--gold);
         }
 
-        @media (max-width: 768px) {
+        .press-container {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 35px;
+            border-radius: 12px;
+            border: 1px solid var(--gold-soft);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .press-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .press-table th {
+            background-color: var(--deep-blue);
+            color: var(--gold);
+            padding: 18px;
+            text-align: left;
+            font-family: 'Cinzel';
+            border: 1px solid var(--gold-soft);
+        }
+        .press-table td {
+            padding: 15px;
+            border: 1px solid var(--gold-soft);
+            font-size: 16px;
+        }
+        .press-table tr:nth-child(even) { background: rgba(212, 175, 55, 0.05); }
+        .press-table tr:hover { background: rgba(212, 175, 55, 0.15); }
+
+        .source-tag {
+            font-family: 'Cinzel';
+            font-size: 11px;
+            background: var(--dark);
+            color: var(--gold);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .news-link {
+            color: #b22222;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .news-link:hover { text-decoration: underline; }
+
+        @media (max-width: 850px) {
             .image-gallery { grid-template-columns: 1fr; }
-            .page-header h1 { font-size: 28px; }
+            .press-table th:nth-child(1), .press-table td:nth-child(1) { display: none; }
         }
     </style>
 </head>
@@ -174,7 +229,7 @@
 
     <header class="page-header">
         <h1>MÜZE ÖDÜLLERİMİZ</h1>
-        <p class="subtitle">"Uluslararası Arenada Bir Kültür Elçisi"</p>
+        <p class="subtitle">"Emeğin ve Tarihin Uluslararası Takdiri"</p>
     </header>
 
     <section class="award-section">
@@ -196,13 +251,13 @@
     </section>
 
     <section class="award-section">
-        <h2 class="award-title"><span>🎖️</span> Mükemmellik Kulübü</h2>
+        <h2 class="award-title"><span>🎖️</span> Mükemmellik Kulübü ve Sunum Başarıları</h2>
         <p class="award-text">
             2005 yılında Hırvatistan’ın Dubrovnik kentinde düzenlenen <strong>‘Dünya Ödüllü Müzeler Buluşması’nda</strong>, 21 proje arasında en iyi ikinci sunumu gerçekleştirerek kültürümüzün tanıtımına büyük bir katkı sağlayan müzemiz ayrıca, Avrupa Kültür Mirası Birliği tarafından <strong>'Mükemmellik Kulübü'ne</strong> kabul edilmiştir.
         </p>
         
         <div class="highlight-box">
-            "Kültürel Mirastaki En Iyiler" ve "Mükemmellik Kulübü" En İyi Sunum Ödülü
+            "Kültürel Mirastaki En İyiler" ve "Mükemmellik Kulübü" En İyi Sunum Ödülü
         </div>
 
         <p class="award-text">
@@ -212,86 +267,70 @@
         <div class="image-gallery">
             <div class="img-container">
                 <img src="assets/mukemmellik_odulu.jpg" alt="Mükemmellik Kulübü Ödülü">
-                <p class="img-caption">Avrupa Kültürel Miras Birliği ve Mükemmellik Kulübü En İyi Sunum Ödülü 2007 Köln/ Almanya</p>
+                <p class="img-caption">Ödüllü Müzeler Buluşması 2007 Köln/Almanya</p>
             </div>
             <div class="img-container">
                 <img src="assets/ek_resim_1.jpg" alt="Ek Resim">
-                <p class="img-caption">Müze Diploması ve Sertifikalar</p>
+                <p class="img-caption">Uluslararası Başarı Sertifikaları</p>
             </div>
         </div>
     </section>
 
     <div class="section-divider">
-        </div>
-
-
-
-    <h2 class="section-title">BASINDA BİZ</h2>
-
-
-
-    <div class="press-list">
-
-        <div class="press-item">
-
-            <div class="press-date">22 MART 2024</div>
-
-            <div class="press-content">
-
-                <a href="https://example.com/haber1" target="_blank">Trakya Üniversitesi Sağlık Müzesi Ziyaretçi Rekoru Kırdı</a>
-
-                <span class="press-source">Anadolu Ajansı</span>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="press-item">
-
-            <div class="press-date">10 OCAK 2024</div>
-
-            <div class="press-content">
-
-                <a href="https://example.com/haber2" target="_blank">Tarihi Darüşşifada Musiki ile Tedavi Günü Yeniden Hayat Buluyor</a>
-
-                <span class="press-source">TRT Haber</span>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="press-item">
-
-            <div class="press-date">05 ARALIK 2023</div>
-
-            <div class="press-content">
-
-                <a href="https://example.com/haber3" target="_blank">Edirne'nin Gururu: Avrupa'dan Ödüllü Tek Müze</a>
-
-                <span class="press-source">Milliyet Gazetesi</span>
-
-            </div>
-
-        </div>
-
-
-
-        <div class="press-item">
-
-            <div class="press-date">15 KASIM 2023</div>
-
-            <div class="press-content">
-
-                <a href="https://example.com/haber4" target="_blank">Evliya Çelebi'nin İzinde Edirne Külliyesi Rehberi</a>
-
-                <span class="press-source">Hürriyet Seyahat</span>
-
-            </div>
-
-        </div>
-
+        <h2>BASINDA BİZ</h2>
     </div>
+
+    <div class="press-container">
+        <table class="press-table">
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Tarih</th>
+                    <th style="width: 20%;">Kaynak</th>
+                    <th style="width: 50%;">Haber Başlığı</th>
+                    <th style="width: 15%;">Link</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>12.05.2024</td>
+                    <td><span class="source-tag">Anadolu Ajansı</span></td>
+                    <td>Trakya Üniversitesi Sağlık Müzesi Ziyaretçi Rekoru Kırdı</td>
+                    <td><a href="#" class="news-link">Haberi Oku ↗</a></td>
+                </tr>
+                <tr>
+                    <td>20.02.2024</td>
+                    <td><span class="source-tag">TRT Haber</span></td>
+                    <td>Darüşşifada Musiki ile Şifa Geleneği Yaşatılıyor</td>
+                    <td><a href="#" class="news-link">Haberi Oku ↗</a></td>
+                </tr>
+                <tr>
+                    <td>15.11.2023</td>
+                    <td><span class="source-tag">Hürriyet</span></td>
+                    <td>Edirne'nin Gururu: Avrupa'nın En İyi Müzesi Seçilen Tek Türk Müzesi</td>
+                    <td><a href="#" class="news-link">Haberi Oku ↗</a></td>
+                </tr>
+                <tr>
+                    <td>08.09.2023</td>
+                    <td><span class="source-tag">NTV Haber</span></td>
+                    <td>UNESCO Mirası Külliyede Tarihi Yolculuk</td>
+                    <td><a href="#" class="news-link">Haberi Oku ↗</a></td>
+                </tr>
+                <tr>
+                    <td>02.06.2023</td>
+                    <td><span class="source-tag">Milliyet</span></td>
+                    <td>Joan Miró Heykeli Yeniden Edirne'de</td>
+                    <td><a href="#" class="news-link">Haberi Oku ↗</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer style="margin-top: 80px; text-align: center; font-family: 'Cinzel'; padding: 30px; color: var(--deep-blue); border-top: 2px solid var(--gold-soft);">
+        T.C. Trakya Üniversitesi Sağlık Müzesi &copy; 2026 <br>
+        <small style="font-size: 11px; color: #777;">Tarih ve Kültürün Buluşma Noktası</small>
+    </footer>
+
+</div>
+
+</body>
+</html>
