@@ -1,153 +1,239 @@
-<div class="text-part">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tıp Medresesi - Medresetü’l-Etibba</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
-<h3 class="section-title">ZAMANIN ÖTESİNDE BİR TIP OKULU: MEDRESETÜ’L-ETİBBA</h3>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #d4af37;
+            --gold-soft: #caa64b;
+            --dark: #0f1a24;
+            --parchment: #f4e7c8;
+        }
 
-<p>
-Edirne’de bulunan Sultan II. Bayezid Külliyesi’nin Medrese bölümü, Osmanlı eğitim sisteminin en ileri örneklerinden biri olarak öne çıkar. 
-<span class="highlight-text">“Medresetü’l-Etibba”</span> olarak bilinen bu yapı, yalnızca bir medrese değil; 
-teorik bilginin uygulamayla birleştiği, dönemin modern anlamdaki bir <strong>tıp fakültesidir</strong>.
-</p>
+        body {
+            font-family: 'Playfair Display', serif;
+            background: #fdf5e6;
+            background-image: url("assets/background5.jpg");
+            background-attachment: fixed;
+            background-size: cover;
+            color: #2b2b2b;
+        }
 
-<div class="quote-box">
-“Bu ilim yuvasında bilgi yalnızca okunmaz; hastaya dokunarak öğrenilir.”
+        /* NAV */
+        .nav {
+            background: #0f1a24;
+            color: var(--gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            border-bottom: 3px solid var(--gold-soft);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-family: 'Cinzel'; font-size: 20px; }
+        .menu { display: flex; align-items: center; }
+        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; cursor: pointer; }
+        .print-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            padding: 5px 15px;
+            transition: all 0.3s;
+        }
+        .print-btn:hover { background: var(--gold); color: var(--dark); }
+
+        /* CONTAINER */
+        .container { max-width: 1240px; margin: 40px auto; padding: 0 20px; }
+
+        /* BANNER */
+        .banner { position: relative; margin-bottom: 40px; }
+        .banner img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--gold-soft);
+        }
+        .banner-text {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #fff;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            width: 100%;
+        }
+        .banner-text h1 { font-family: 'Cinzel'; font-size: 32px; letter-spacing: 2px; }
+
+        /* KART YAPISI */
+        .full-card {
+            background: var(--parchment);
+            border: 2px solid var(--gold-soft);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .c-f { position: absolute; width: 45px; height: 45px; background-size: contain; background-repeat: no-repeat; z-index: 20; pointer-events: none; }
+        .t-l { top: 10px; left: 10px; background-image: url("assets/cornerleftup.png"); }
+        .t-r { top: 10px; right: 10px; background-image: url("assets/cornerrightup.png"); }
+        .b-l { bottom: 10px; left: 10px; background-image: url("assets/cornerleft.png"); }
+        .b-r { bottom: 10px; right: 10px; background-image: url("assets/cornerright.png"); }
+
+        .full-card h2 {
+            padding: 25px;
+            background: linear-gradient(#1b2b3a,#0e1922);
+            color: var(--gold);
+            font-family: 'Cinzel';
+            font-size: 24px;
+            text-align: center;
+            border-bottom: 2px solid var(--gold-soft);
+        }
+
+        .content-area { padding: 40px; line-height: 1.8; font-size: 18px; }
+        
+        /* GÖRSEL GALERİ */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .image-box {
+            border: 2px solid var(--gold-soft);
+            border-radius: 8px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 26, 36, 0.05);
+            font-family: 'Cinzel';
+            font-size: 14px;
+            color: var(--dark);
+            text-align: center;
+            padding: 10px;
+        }
+
+        .section-title { 
+            font-family: 'Cinzel'; 
+            color: #1b2b3a; 
+            border-bottom: 1px solid var(--gold-soft); 
+            margin: 40px 0 20px 0;
+            padding-bottom: 5px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .quote-box {
+            font-style: italic;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 25px;
+            border-left: 4px solid var(--gold);
+            margin: 30px 0;
+        }
+
+        .hero h1 { font-family: 'Cinzel'; color: #1b2b3a; margin-bottom: 15px; }
+        .subtitle { font-size: 20px; font-weight: 600; color: #8b0000; margin-bottom: 20px; }
+
+        @media print {
+            .nav, .menu, .print-btn { display: none !important; }
+            body { background: white; }
+            .full-card { border: none; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="nav">
+    <div class="logo">T.C. Trakya Üniversitesi</div>
+    <div class="menu">
+        <a href="#" class="print-btn" onclick="window.print()">SAYFAYI YAZDIR</a>
+        <a href="index.html">← ANA SAYFAYA DÖN</a>
+    </div>
 </div>
 
-<h3 class="section-title">MİMARİ MİRAS: DENGENİN VE HUZURUN MEKÂNI</h3>
+<div class="container">
 
-<p>
-Medrese, klasik Osmanlı mimarisinin en dengeli planlarından birine sahiptir. Yapının merkezinde geniş bir avlu yer alır; bu avlunun etrafı revaklarla çevrilidir. 
-Bu düzen, öğrencilerin hem bireysel hem de toplu öğrenme süreçlerini destekleyen bir yaşam alanı oluşturur.
-</p>
+    <div class="banner">
+        <img src="assets/medrese_header.jpg" alt="Medresetü’l-Etibba">
+        <div class="banner-text">
+            <h1>MEDRESETÜ’L-ETİBBA</h1>
+            <h2>Zamanın Ötesinde Bir Tıp Okulu</h2>
+        </div>
+    </div>
 
-<p>
-Avlunun bir kenarında yer alan <strong>kubbeli dershane</strong>, eğitimin kalbidir. Diğer üç kenarda ise öğrencilerin kaldığı 
-<span class="highlight-text">18 adet hücre (oda)</span> bulunmaktadır. Bu odalar ocaklı ve nişli yapılarıyla hem barınma hem de çalışma alanı olarak kullanılmıştır.
-</p>
+    <div class="full-card">
+        <div class="c-f t-l"></div><div class="c-f t-r"></div>
+        <div class="c-f b-l"></div><div class="c-f b-r"></div>
 
-<p>
-Kesme taş işçiliği, kubbelerin ritmik dizilimi ve sade mimari anlayış, yapıya huzurlu bir atmosfer kazandırır. 
-Bu sadelik, eğitimin özüne uygun bir dinginlik sunar.
-</p>
+        <h2>TIP MEDRESESİ (TIP FAKÜLTESİ)</h2>
 
-<div class="quote-box">
-Avluya açılan her kapı, bir ilim yolculuğunun başlangıcıdır.
+        <div class="content-area">
+            
+            <section class="hero">
+                <p class="subtitle">
+                    Osmanlı’nın en seçkin hekimlerinin yetiştiği, teorik bilginin uygulamayla buluştuğu 15. yüzyıl bilim merkezi.
+                </p>
+                <p>
+                    Edirne’de yer alan <strong>Sultan II. Bayezid Külliyesi</strong>’nin önemli bir parçası olan Medrese bölümü,
+                    Osmanlı eğitim sisteminin en gelişmiş örneklerinden biri olarak öne çıkar. 
+                    <em>“Medresetü’l-Etibba”</em> olarak bilinen bu yapı, yalnızca bir eğitim kurumu değil; 
+                    aynı zamanda modern anlamda bir <strong>tıp fakültesi</strong> niteliği taşıyan ileri bir bilim merkezidir.
+                </p>
+            </section>
+
+            <h3 class="section-title">Görseller</h3>
+            <div class="image-grid">
+                <div class="image-box">Medrese Avlusu Görseli</div>
+                <div class="image-box">Revak Detayları</div>
+                <div class="image-box">Dershane Kubbesi</div>
+                <div class="image-box">Öğrenci Odaları</div>
+            </div>
+
+            <div class="text-part">
+                <h3 class="section-title">Mimari Miras: Tasarımın Gücü</h3>
+                
+                <p><strong>Klasik Plan Anlayışı:</strong> Medrese, klasik Osmanlı mimarisinin en yalın ve işlevsel örneklerinden biridir. Ortada geniş bir avlu, bu avluyu çevreleyen revaklar ve bu revakların arkasında sıralanan öğrenci hücreleri ile planlanmıştır. Avlunun bir kenarında yer alan kubbeli dershane, eğitim faaliyetlerinin merkezi konumundadır.</p>
+
+                <p><strong>Dershane ve Öğrenci Hücreleri:</strong> Yapıda toplam 18 öğrenci odası bulunmaktadır. Bu odalar, ocaklı ve nişli yapılarıyla öğrencilerin hem barınma hem de bireysel çalışma ihtiyaçlarını karşılayacak şekilde düzenlenmiştir. Dershane ise büyük kubbesiyle hem akustik hem de görsel bir odak noktası oluşturur.</p>
+
+                <p><strong>Huzur Veren Atmosfer:</strong> Darüşşifa ile komşu konumda bulunan medrese, sessiz ve odaklanmış bir eğitim ortamı sunar. Kesme taş işçiliği ve kubbelerin ritmik dizilimi, eğitimin özüne uygun, dikkat dağıtıcı unsurlardan arınmış bir atmosfer oluşturur.</p>
+
+                <h3 class="section-title">Eğitim Sistemi: Geleceğin Hekimleri</h3>
+
+                <p><strong>Teori ve Pratik Bir Arada:</strong> Medresetü’l-Etibba’nın en dikkat çekici özelliği, teorik eğitim ile uygulamalı tıbbın aynı kompleks içinde bütünleşmesidir. Öğrenciler medresede öğrendikleri bilgileri, hemen yanındaki darüşşifada uygulama imkânı bulmuşlardır. Bu sistem, günümüz tıp fakültelerinin temelini oluşturan <strong>klinik eğitim modelinin</strong> erken bir örneğidir.</p>
+
+                <p><strong>Müfredat ve Bilimsel Yaklaşım:</strong> Eğitim yalnızca tıp bilgisiyle sınırlı kalmamış; felsefe, matematik ve astronomi gibi disiplinlerle desteklenmiştir. İbn-i Sina’nın <em>“El-Kanun fi’t-Tıbb”</em> gibi temel eserleri bu eğitimin ana kaynakları arasında yer olmuştur.</p>
+
+                <div class="quote-box">
+                    <strong>Müderrisler ve Etik:</strong> Dönemin önde gelen hekimleri ve âlimleri, bu medresede müderris olarak görev yapmış, öğrencilerini yalnızca bilgiyle değil; etik, sorumluluk ve meslek ahlakıyla da yetiştirmiştir.
+                </div>
+
+                <h3 class="section-title">Günümüzde Medrese: Bir Müze Deneyimi</h3>
+                <p>Günümüzde medrese bölümü, Trakya Üniversitesi bünyesinde faaliyet gösteren Sultan II. Bayezid Külliyesi Sağlık Müzesi’nin önemli bir parçasıdır. Yapı, özgün işlevine sadık kalınarak müze düzenlemesiyle ziyaretçilere sunulmaktadır.</p>
+                
+                <p>Medrese odalarında yer alan <strong>canlandırmalar</strong>, 15. yüzyıldaki eğitim atmosferini ziyaretçilere birebir deneyimleme imkânı sunar. Sergilenen eserler arasında cerrahi aletler, el yazması tıp kitapları ve eczacılık malzemeleri yer almaktadır.</p>
+
+                <div class="quote-box" style="border-left: 4px solid #1b2b3a; background: rgba(15, 26, 36, 0.05);">
+                    <strong>Biliyor muydunuz?</strong><br>
+                    Medresetü’l-Etibba’da eğitim gören öğrenciler, Osmanlı vakıf sistemi sayesinde tamamen sosyal güvence altındaydı. Barınma, yemek ve eğitim giderleri karşılanır, öğrenciler aynı zamanda burs alarak ilim yolculuklarını sürdürürdü.
+                </div>
+
+                <h3 class="section-title">Bilimin ve Şifanın Buluştuğu Yer</h3>
+                <p>Sultan II. Bayezid Külliyesi Medrese bölümü, yalnızca bir eğitim yapısı değil; Osmanlı’nın bilime, insana ve sağlığa verdiği değerin güçlü bir simgesidir. Teorik bilgi ile uygulamayı birleştiren bu sistem, yüzyıllar öncesinden günümüze ulaşan bir bilim mirası olarak varlığını sürdürmektedir.</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<h3 class="section-title">EĞİTİM SİSTEMİ: TEORİ VE PRATİĞİN BULUŞMASI</h3>
-
-<p>
-Medresetü’l-Etibba’nın en dikkat çekici yönü, eğitim sistemidir. Öğrenciler burada yalnızca kitaplardan öğrenmekle kalmaz; 
-hemen yanında bulunan darüşşifada öğrendiklerini uygulama fırsatı bulurlardı.
-</p>
-
-<p>
-Bu sistem sayesinde:
-</p>
-
-<p>
-• Hastalar gözlemlenir<br>
-• Tedavi süreçlerine katılım sağlanır<br>
-• Bilgi doğrudan deneyime dönüşürdü
-</p>
-
-<p>
-Bu yaklaşım, günümüz modern tıp fakültelerinde uygulanan klinik eğitimin erken bir örneğidir.
-</p>
-
-<h3 class="section-title">MÜFREDAT VE İLİM GELENEĞİ</h3>
-
-<p>
-Eğitim yalnızca tıpla sınırlı değildi. Öğrenciler aynı zamanda:
-</p>
-
-<p>
-• Felsefe<br>
-• Matematik<br>
-• Astronomi<br>
-</p>
-
-<p>
-gibi bilimlerle yetiştirilirdi. İbn-i Sina’nın <em>El-Kanun fi’t-Tıbb</em> eseri, bu eğitimin temel kaynaklarından biri olarak okutulurdu.
-</p>
-
-<p>
-Müderrisler, öğrencilerini sadece bilgiyle değil; aynı zamanda etik, sorumluluk ve meslek ahlakıyla da yetiştirirdi.
-</p>
-
-<div class="quote-box">
-“Hekimlik yalnızca bedenin değil, ruhun da ilmini bilmektir.”
-</div>
-
-<h3 class="section-title">DARÜŞŞİFA İLE BÜTÜNLEŞEN EĞİTİM</h3>
-
-<p>
-Medrese ile darüşşifa arasındaki ilişki, külliyenin en özgün yönlerinden biridir. 
-Bu iki yapı birlikte çalışarak tam anlamıyla bir sağlık kompleksi oluşturur.
-</p>
-
-<p>
-Öğrenciler burada yalnızca tıbbi müdahaleleri değil, aynı zamanda:
-</p>
-
-<p>
-• Musiki ile tedavi<br>
-• Su sesi terapisi<br>
-• Doğa ve koku kullanımı<br>
-</p>
-
-<p>
-gibi bütüncül tedavi yöntemlerini de öğrenmişlerdir.
-</p>
-
-<div class="quote-box">
-Su sesi, musiki ve ilim… Bu üç unsur, şifanın anahtarı olarak kabul edilirdi.
-</div>
-
-<h3 class="section-title">GÜNÜMÜZDE MEDRESE: BİR MÜZE DENEYİMİ</h3>
-
-<p>
-Bugün Medresetü’l-Etibba, Trakya Üniversitesi bünyesinde yer alan 
-<strong>Sağlık Müzesi</strong>nin önemli bir parçası olarak ziyaretçilere açıktır.
-</p>
-
-<p>
-Müze içerisinde:
-</p>
-
-<p>
-• 15. yüzyıl eğitim sahnelerini canlandıran figürler<br>
-• Hekim ve öğrenci odaları<br>
-• Cerrahi aletler ve tıbbi eserler<br>
-</p>
-
-<p>
-sergilenmektedir.
-</p>
-
-<p>
-Ziyaretçiler, bu mekânda yalnızca tarihi görmez; aynı zamanda geçmişin bilim dünyasını deneyimler.
-</p>
-
-<div class="quote-box">
-Bu odalarda yalnızca dersler verilmedi; insanlığa şifa olacak bilgiler üretildi.
-</div>
-
-<h3 class="section-title">BİLİYOR MUYDUNUZ?</h3>
-
-<div class="quote-box">
-Medresede eğitim gören öğrenciler, Osmanlı vakıf sistemi sayesinde sosyal güvence altındaydı. 
-Barınma, yemek ve eğitim giderleri karşılanır, ayrıca burs alırlardı.
-</div>
-
-<h3 class="section-title">BİLİMİN VE ŞİFANIN BULUŞTUĞU YER</h3>
-
-<p>
-Sultan II. Bayezid Külliyesi Medresesi, Osmanlı’nın bilime, eğitime ve insan sağlığına verdiği önemin en güçlü simgelerinden biridir.
-</p>
-
-<p>
-Bugün bu yapıyı ziyaret etmek, yalnızca bir tarihi mekânı görmek değil; 
-<span class="highlight-text">yüzyıllar öncesinin bilim dünyasına adım atmak</span> anlamına gelir.
-</p>
-
-</div>
+</body>
+</html>
