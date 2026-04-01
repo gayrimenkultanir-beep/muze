@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tıp Medresesi - Medresetü’l-Etibba | Sağlık Müzesi</title>
+    <title>Medresetü’l-Etibba - Bilim ve Şifanın Merkezi</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
@@ -70,10 +70,10 @@
             text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
             width: 100%;
         }
-        .banner-text h1 { font-family: 'Cinzel'; font-size: 36px; letter-spacing: 3px; }
-        .banner-text p { font-size: 18px; margin-top: 10px; font-style: italic; }
+        .banner-text h1 { font-family: 'Cinzel'; font-size: 38px; letter-spacing: 2px; }
+        .banner-text h2 { font-family: 'Playfair Display'; font-weight: 400; font-style: italic; font-size: 20px; }
 
-        /* KART YAPISI */
+        /* KART */
         .full-card {
             background: var(--parchment);
             border: 2px solid var(--gold-soft);
@@ -84,6 +84,7 @@
             margin-bottom: 40px;
         }
 
+        /* KÖŞE ÇERÇEVELERİ */
         .c-f { position: absolute; width: 45px; height: 45px; background-size: contain; background-repeat: no-repeat; z-index: 20; pointer-events: none; }
         .t-l { top: 10px; left: 10px; background-image: url("assets/cornerleftup.png"); }
         .t-r { top: 10px; right: 10px; background-image: url("assets/cornerrightup.png"); }
@@ -95,60 +96,82 @@
             background: linear-gradient(#1b2b3a,#0e1922);
             color: var(--gold);
             font-family: 'Cinzel';
-            font-size: 26px;
+            font-size: 24px;
             text-align: center;
             border-bottom: 2px solid var(--gold-soft);
         }
 
-        .content-area { padding: 50px; line-height: 1.8; font-size: 18px; }
-        
-        /* GÖRSEL GALERİ */
-        .image-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin: 35px 0;
+        .content-area {
+            padding: 50px;
+            line-height: 1.8;
+            font-size: 18px;
         }
-        .image-box {
+
+        /* GÖRSEL ALANLARI */
+        .image-placeholder {
+            width: 100%;
+            height: auto;
+            min-height: 300px;
+            background: rgba(15, 26, 36, 0.05);
             border: 2px solid var(--gold-soft);
             border-radius: 8px;
-            height: 250px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(15, 26, 36, 0.05);
-            font-family: 'Cinzel';
-            font-size: 15px;
+            margin: 25px 0;
+            flex-direction: column;
             color: var(--dark);
+            font-family: 'Cinzel';
             text-align: center;
-            padding: 15px;
-            transition: transform 0.3s ease;
-            position: relative;
             overflow: hidden;
         }
-        .image-box:hover { transform: scale(1.02); background: rgba(212, 175, 55, 0.1); }
+
+        .image-placeholder img { width: 100%; height: auto; display: block; }
 
         .section-title { 
             font-family: 'Cinzel'; 
             color: #1b2b3a; 
             border-bottom: 2px solid var(--gold-soft); 
-            margin: 50px 0 25px 0;
-            padding-bottom: 8px;
+            margin: 45px 0 20px 0;
+            padding-bottom: 5px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .quote-box {
             font-style: italic;
             background: rgba(212, 175, 55, 0.1);
-            padding: 30px;
-            border-left: 5px solid var(--gold);
-            margin: 35px 0;
-            border-radius: 0 8px 8px 0;
+            padding: 25px;
+            border-left: 4px solid var(--gold);
+            margin: 30px 0;
         }
 
-        .highlight-title { color: #8b0000; font-weight: 700; margin-bottom: 10px; display: block; }
+        /* AKADEMİK TABLO */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: rgba(255,255,255,0.3);
+        }
+        .data-table th, .data-table td {
+            border: 1px solid var(--gold-soft);
+            padding: 15px;
+            text-align: left;
+        }
+        .data-table th { background: var(--dark); color: var(--gold); font-family: 'Cinzel'; }
+
+        /* INTERAKTIF KAT PLANI ALANI */
+        .interactive-map {
+            background: #e6dcc3;
+            border: 3px solid var(--gold);
+            padding: 40px;
+            text-align: center;
+            border-radius: 12px;
+            margin: 40px 0;
+            cursor: crosshair;
+        }
+
+        .highlight-text { color: #1b2b3a; font-weight: 600; }
 
         @media print {
             .nav, .menu, .print-btn { display: none !important; }
@@ -170,10 +193,10 @@
 <div class="container">
 
     <div class="banner">
-        <img src="assets/medrese_header.jpg" alt="Medresetü’l-Etibba">
+        <img src="assets/medrese_header.jpg" alt="Medresetü’l-Etibba Header">
         <div class="banner-text">
             <h1>MEDRESETÜ’L-ETİBBA</h1>
-            <p>Zamanın Ötesinde Bir Tıp Okulu</p>
+            <h2>BİLİM VE ŞİFANIN ESTETİK BULUŞMASI</h2>
         </div>
     </div>
 
@@ -181,62 +204,101 @@
         <div class="c-f t-l"></div><div class="c-f t-r"></div>
         <div class="c-f b-l"></div><div class="c-f b-r"></div>
 
-        <h2>TIP MEDRESESİ (TIP FAKÜLTESİ)</h2>
+        <h2>ZAMANIN ÖTESİNDE BİR YÜKSEK İHTİSAS MERKEZİ</h2>
 
         <div class="content-area">
             
             <div class="text-part">
-                <p style="font-size: 22px; color: #1b2b3a; font-weight: 600; margin-bottom: 25px;">
-                    Osmanlı’nın en seçkin hekimlerinin yetiştiği, teorik bilginin uygulamayla buluştuğu 15. yüzyıl bilim merkezi.
-                </p>
-                <p>
-                    Edirne’de yer alan <strong>Sultan II. Bayezid Külliyesi</strong>’nin önemli bir parçası olan Medrese bölümü,
-                    Osmanlı eğitim sisteminin en gelişmiş örneklerinden biri olarak öne çıkar. Caminin kuzeybatısında yer alan ve 
-                    <em>“Medresetü’l-Etibba”</em> (Tıp Medresesi) olarak bilinen bu yapı, yalnızca bir eğitim kurumu değil; 
-                    aynı zamanda modern anlamda bir <strong>tıp fakültesi</strong> niteliği taşıyan ileri bir bilim merkezidir.
-                </p>
+                <p><strong>Medresetü’l-Etibba</strong>, 1484-1488 yılları arasında Mimar Hayrettin tarafından inşa edilen Sultan II. Bayezid Külliyesi’nin entelektüel kalbidir. Osmanlı İmparatorluğu’nun "sosyal devlet" anlayışının zirve noktalarını temsil eden bu yapı, sadece bir derslik dizisi değil; teorik tıp bilgisinin klinik uygulamayla buluştuğu, 15. yüzyılın en ileri <span class="highlight-text">"Tıp Fakültesi"</span> ve bilim üssüdür.</p>
             </div>
 
-            <h3 class="section-title">Görsel Galeri: Mimari Detaylar</h3>
-            <div class="image-grid">
-                <div class="image-box">Medrese Avlusu Görseli</div>
-                <div class="image-box">Revak Detayları</div>
-                <div class="image-box">Dershane Kubbesi</div>
-                <div class="image-box">Öğrenci Odaları</div>
-            </div>
-
+            <h3 class="section-title">1. MİMARİ ANALİZ: MEKÂNIN PEDAGOJİK GÜCÜ</h3>
             <div class="text-part">
-                <h3 class="section-title">Mimari Miras: Tasarımın Gücü</h3>
+                <p>Klasik Osmanlı eğitim mimarisinin en rafine örneklerinden biri olan medrese, öğrencinin dış dünyadan izole olup tamamen ilme odaklanmasını sağlayacak bir <strong>"odaklanma geometrisi"</strong> üzerine kurulmuştur.</p>
                 
-                <p><span class="highlight-title">Klasik Plan Anlayışı:</span> Medrese, klasik Osmanlı mimarisinin en yalın ve işlevsel örneklerinden biridir. Ortada geniş bir avlu, bu avluyu çevreleyen revaklar ve bu revakların arkasında sıralanan öğrenci hücreleri ile planlanmıştır. Avlunun bir kenarında yer alan kubbeli dershane, eğitim faaliyetlerinin merkezi konumundadır.</p>
-
-                <p><span class="highlight-title">Dershane ve Öğrenci Hücreleri:</span> Yapıda toplam 18 öğrenci odası bulunmaktadır. Bu odalar, ocaklı ve nişli yapılarıyla öğrencilerin hem barınma hem de bireysel çalışma ihtiyaçlarını karşılayacak şekilde düzenlenmiştir. Dershane ise büyük kubbesiyle hem akustik hem de görsel bir odak noktası oluşturur.</p>
-
-                <p><span class="highlight-title">Huzur Veren Atmosfer:</span> Darüşşifa ile komşu konumda bulunan medrese, sessiz ve odaklanmış bir eğitim ortamı sunar. Kesme taş işçiliği ve kubbelerin ritmik dizilimi, eğitimin özüne uygun, dikkat dağıtıcı unsurlardan arınmış bir atmosfer oluşturur. Bu mimari dinginlik, öğrencinin zihnini tıp ilmine odaklaması için özel olarak tasarlanmıştır.</p>
-
-                <h3 class="section-title">Eğitim Sistemi: Geleceğin Hekimleri</h3>
-
-                <p><span class="highlight-title">Teori ve Pratik Bir Arada:</span> Medresetü’l-Etibba’nın en dikkat çekici özelliği, teorik eğitim ile uygulamalı tıbbın aynı kompleks içinde bütünleşmesidir. Öğrenciler medresede öğrendikleri bilgileri, hemen yanındaki darüşşifada (hastane) uygulama imkânı bulmuşlardır. Bu sistem, günümüz tıp fakültelerinin temelini oluşturan <strong>klinik eğitim modelinin</strong> tarihteki en erken ve en başarılı örneklerinden biridir.</p>
-
-                <p><span class="highlight-title">Müfredat ve Bilimsel Yaklaşım:</span> Eğitim yalnızca tıp bilgisiyle sınırlı kalmamış; felsefe, matematik ve astronomi gibi disiplinlerle desteklenmiştir. İbn-i Sina’nın <em>“El-Kanun fi’t-Tıbb”</em> gibi temel eserleri bu eğitimin ana kaynakları arasında yer almış, bilimsel düşünce her zaman ön planda tutulmuştur.</p>
-
-                <div class="quote-box">
-                    <strong>Müderrisler ve Meslek Etiği:</strong> Dönemin önde gelen hekimleri ve âlimleri, bu medresede müderris olarak görev yapmışlardır. Öğrenciler sadece tıbbi bilgiyle değil; aynı zamanda etik, sorumluluk, hasta hakları ve meslek ahlakıyla donatılarak mezun edilmişlerdir.
+                <div class="image-placeholder">
+                    [ MEDRESE GENEL MİMARİ GÖRSELİ BURAYA GELECEK ]
+                    <p style="font-size: 14px; margin-top: 10px;">Klasik Plan: 18 Hücre ve Merkezi Avlu</p>
                 </div>
 
-                <h3 class="section-title">Günümüzde Medrese: Bir Müze Deneyimi</h3>
-                <p>Bugün bu tarihi yapı, <strong>Trakya Üniversitesi Sağlık Müzesi</strong> bünyesinde ziyaretçilerini ağırlamaktadır. Özgün işlevine sadık kalınarak düzenlenen müze, ziyaretçileri 15. yüzyıla götüren büyüleyici bir atmosfere sahiptir.</p>
-                
-                <p>Medrese odalarında yer alan <strong>canlandırmalar</strong>, dönemin eğitim hayatını, hekim-öğrenci ilişkisini ve ders çalışma ortamlarını birebir yansıtmaktadır. Sergilenen eserler arasında; nadide cerrahi aletler, el yazması tıp kitapları, eczacılık malzemeleri ve dönemin tedavi yöntemlerini anlatan belgeler yer almaktadır.</p>
-
-                <div class="quote-box" style="border-left: 5px solid #1b2b3a; background: rgba(15, 26, 36, 0.05);">
-                    <span class="highlight-title" style="color:#1b2b3a">Biliyor muydunuz?</span>
-                    Medresetü’l-Etibba’da eğitim gören öğrenciler, Osmanlı vakıf sistemi sayesinde tam kapsamlı bir sosyal güvence altındaydı. Barınma, yemek ve eğitim giderleri tamamen vakıf tarafından karşılanır, ayrıca öğrencilere eğitimlerini sürdürebilmeleri için düzenli burs verilirdi.
-                </div>
-
-                <h3 class="section-title">Bilimin ve Şifanın Buluştuğu Yer</h3>
-                <p>Sultan II. Bayezid Külliyesi Medrese bölümü, yalnızca bir taş yapı değil; Osmanlı’nın bilime, insana ve sağlığa verdiği derin değerin somut bir sembolüdür. Teorik bilgi ile uygulamayı harmanlayan bu kadim sistem, yüzyıllar öncesinden günümüze uzanan, her köşesi tarih kokan bir bilim mirasıdır.</p>
+                <p><strong>Plan Şeması:</strong> Kareye yakın geniş bir avlu etrafında yükselen revaklar, 18 öğrenci hücresi ve bir büyük dershaneden oluşur.</p>
+                <p><strong>Dershane (Kutup Yıldızı):</strong> Yapının kuzeydoğusunda yer alan, diğer odalardan daha yüksek ve geniş tasarlanmış devasa kubbeli alan, bilginin hiyerarşik üstünlüğünü simgeler. Kubbenin akustik yapısı, müderrisin sesinin her noktaya en doğal şekilde ulaşmasını sağlar.</p>
+                <p><strong>Hücre Hayatı (Öğrenci Odaları):</strong> Her talebenin kendine ait ocağı, dolap nişi ve çalışma alanı olan müstakil bir odası vardı. Bu odalar, bireysel derinleşme (tefekkür) için tasarlanmış sessizlik alanlarıdır.</p>
             </div>
+
+            <h3 class="section-title">İNTERAKTİF KAT PLANI</h3>
+            <div class="interactive-map">
+                <p style="font-family: 'Cinzel'; font-weight: 600;">[ İNTERAKTİF KAT PLANI GÖRSELİ / ÇİZİMİ ]</p>
+                <p style="font-size: 14px; color: #555; font-style: italic;">(Odaların üzerine tıklandığında işlevlerini gösteren pop-up yapısı buraya entegre edilecek)</p>
+            </div>
+
+            <h3 class="section-title">2. EĞİTİM FELSEFESİ: TEORİDEN PRATİĞE</h3>
+            <div class="text-part">
+                <p>Bu medreseyi dünya eğitim tarihindeki benzerlerinden ayıran asıl fark, hemen bitişiğindeki <strong>Darüşşifa (Hastane)</strong> ile olan organik ve işlevsel bağıdır.</p>
+                
+                <div class="quote-box">
+                    <strong>Klinik Eğitim:</strong> Öğrenciler sabah dershanede İbn-i Sina’nın "El-Kanun fi’t-Tıbb" veya Ebubekir Er-Razi’nin eserlerini mütalaa ederken; öğleden sonra Darüşşifa koridorlarında usta hekimlerin gözetiminde hasta muayene ederlerdi.
+                </div>
+
+                <div class="image-placeholder">
+                    [ TARİHİ TIP EL YAZMALARI VE MÜFREDAT GÖRSELİ ]
+                </div>
+
+                <p><strong>Geniş Müfredat:</strong> Eğitim sadece cerrahi ile sınırlı kalmamış; eczacılık (ispençiyari), bitkisel tedavi (fitoterapi), felsefe, matematik ve ruh sağlığı için musiki eğitimi ders programının ayrılmaz bir parçası olmuştur.</p>
+            </div>
+
+            <h3 class="section-title">3. SOSYAL VE EKONOMİK YAPI: VAKIF GÜVENCESİ</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Özellik</th>
+                        <th>Detay</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Akademik Kadro</td>
+                        <td>Dönemin en seçkin müderrisleri ve usta hekimleri.</td>
+                    </tr>
+                    <tr>
+                        <td>Müderris Maaşı</td>
+                        <td>Günlük 30 Akçe (Dönemine göre oldukça yüksek bir prestij maaşı).</td>
+                    </tr>
+                    <tr>
+                        <td>Öğrenci Sayısı</td>
+                        <td>18 oda, her odada genellikle 1 veya 2 kıdemli talebe.</td>
+                    </tr>
+                    <tr>
+                        <td>Sosyal Haklar</td>
+                        <td>Barınma, aydınlatma, ısınma ve yemek vakıf tarafından ücretsiz karşılanırdı.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 class="section-title">4. GÜNÜMÜZDE MEDRESE: YAŞAYAN TARİH</h3>
+            <div class="text-part">
+                <p>19. yüzyılın sonlarına kadar asli görevini sürdüren yapı, bugün <strong>Trakya Üniversitesi Sağlık Müzesi</strong> bünyesinde ödüllü bir müze kompleksi olarak yaşamaktadır.</p>
+                
+                <div class="image-placeholder">
+                    [ MÜZE CANLANDIRMALARI VE DİORAMALAR GÖRSELİ ]
+                </div>
+
+                <p><strong>Canlandırma Odaları:</strong> Dioramalar ve gerçekçi mankenler aracılığıyla 15. yüzyılın ders ortamı, cerrahi müdahaleler ve eczacılık faaliyetleri birebir deneyimlenebilir.</p>
+            </div>
+
+            <div class="quote-box" style="border-left: 4px solid #1b2b3a; background: rgba(15, 26, 36, 0.05);">
+                <h4 style="font-family: 'Cinzel'; margin-bottom: 10px;">BİLİYOR MUYDUNUZ?</h4>
+                <ul>
+                    <li><strong>Ruhun Şifası:</strong> Medresede sadece ilaçlarla değil, musiki makamları ve su sesiyle tedavi yöntemlerinin de teorik altyapısı öğretiliyordu.</li>
+                    <li><strong>Seçkinlik:</strong> Buradan mezun olan hekimler, Osmanlı sarayına (Hekimbaşılığa) kadar yükselebilecek en üst düzey tıp eğitimine sahip olurlardı.</li>
+                    <li><strong>Vakıf Titizliği:</strong> Vakfiyeye göre, sağlıklı bir bireyin buradaki ilaçlardan haksız yere alması "Firavun ve Karun'un laneti" ile anılacak kadar ağır bir ahlaki sorumluluk olarak görülürdü.</li>
+                </ul>
+            </div>
+
+            <div class="image-placeholder" style="min-height: 200px;">
+                [ ZAMAN TÜNELİ GALERİSİ: ESKİ GRAVÜRLER VE GÜNCEL FOTOĞRAFLAR ]
+            </div>
+
         </div>
     </div>
 </div>
