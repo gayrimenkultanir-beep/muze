@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Külliye Yönetim Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Cinzel:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #0f1a24;
+            --gold: #d4af37;
+            --bg-light: #f4f7f6;
+            --white: #ffffff;
+            --text-dark: #2b2b2b;
+            --accent: #1e3a53;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: var(--sidebar-bg);
+            color: white;
+            position: fixed;
+            padding: 20px;
+        }
+
+        .sidebar h2 {
+            font-family: 'Cinzel';
+            font-size: 18px;
+            color: var(--gold);
+            margin-bottom: 30px;
+            text-align: center;
+            border-bottom: 1px solid #222;
+            padding-bottom: 20px;
+        }
+
+        .nav-menu { list-style: none; }
+        .nav-menu li { margin-bottom: 10px; }
+        .nav-menu a {
+            color: #bdc3c7;
+            text-decoration: none;
+            display: block;
+            padding: 12px 15px;
+            border-radius: 8px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .nav-menu a:hover, .nav-menu a.active {
+            background: var(--accent);
+            color: var(--gold);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .header h1 { font-size: 22px; color: var(--text-dark); }
+
+        /* CARDS GRID */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--gold);
+        }
+
+        .card h3 { margin-bottom: 20px; font-size: 16px; color: var(--sidebar-bg); border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; margin-bottom: 5px; font-weight: 600; color: #555; }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: var(--sidebar-bg);
+            color: var(--gold);
+            border: 1px solid var(--gold);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+            width: 100%;
+        }
+
+        .btn:hover {
+            background: var(--gold);
+            color: var(--sidebar-bg);
+        }
+
+        .status-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: #e1f5fe;
+            color: #039be5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>KÜLLİYE PANEL</h2>
+        <ul class="nav-menu">
+            <li><a href="#" class="active">📊 Dashboard</a></li>
+            <li><a href="#">📢 Duyuru Yönetimi</a></li>
+            <li><a href="#">📰 Haber Güncelle</a></li>
+            <li><a href="#">💰 Fiyat Listesi</a></li>
+            <li><a href="#">⏰ Ziyaret Saatleri</a></li>
+            <li><a href="#">🖼️ Galeri Yönetimi</a></li>
+            <li><a href="#" style="margin-top: 50px; color: #e74c3c;">🚪 Çıkış Yap</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h1>İçerik Yönetim Sistemi</h1>
+            <div class="user-info">Hoş geldiniz, <strong>Admin</strong></div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>💰 Giriş Ücretlerini Güncelle</h3>
+                <div class="form-group">
+                    <label>Yerli Ziyaretçi (TL)</label>
+                    <input type="number" value="60">
+                </div>
+                <div class="form-group">
+                    <label>Yabancı Ziyaretçi (TL)</label>
+                    <input type="number" value="120">
+                </div>
+                <button class="btn">Fiyatları Kaydet</button>
+            </div>
+
+            <div class="card">
+                <h3>📢 Yeni Duyuru Yayınla</h3>
+                <div class="form-group">
+                    <label>Duyuru Başlığı</label>
+                    <input type="text" placeholder="Örn: Bayram Çalışma Saatleri">
+                </div>
+                <div class="form-group">
+                    <label>Durum</label>
+                    <select>
+                        <option>Aktif</option>
+                        <option>Taslak</option>
+                    </select>
+                </div>
+                <button class="btn">Duyuruyu Paylaş</button>
+            </div>
+
+            <div class="card">
+                <h3>📰 Son Haberler</h3>
+                <ul style="list-style: none; font-size: 13px;">
+                    <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                        Müzik Terapi Konseri <span class="status-badge">Yayında</span>
+                    </li>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                        Sema Gösterisi <span class="status-badge">Yayında</span>
+                    </li>
+                    <li style="padding: 8px 0;">
+                        Yeni Sergi Salonu <span class="status-badge">Beklemede</span>
+                    </li>
+                </ul>
+                <button class="btn" style="margin-top: 15px;">Tüm Haberleri Düzenle</button>
+            </div>
+
+            <div class="card">
+                <h3>⏰ Çalışma Saatleri</h3>
+                <div class="form-group">
+                    <label>Yaz Dönemi (Açılış-Kapanış)</label>
+                    <input type="text" value="09:30-20:00">
+                </div>
+                <div class="form-group">
+                    <label>Kış Dönemi (Açılış-Kapanış)</label>
+                    <input type="text" value="09:30-18:00">
+                </div>
+                <button class="btn">Saatleri Güncelle</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
