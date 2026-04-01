@@ -1,304 +1,269 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Medresetü’l-Etibba | Premium Müze Deneyimi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medresetü’l-Etibba | Entelektüel Şifa Merkezi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display&family=Lora&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --gold: #d4af37;
+            --gold-dark: #b8860b;
+            --dark-blue: #0f1a24;
+            --parchment: #f4e7c8;
+            --deep-red: #8b0000;
+        }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
+        body {
+            font-family: 'Lora', serif;
+            background: #fdf5e6 url("assets/background5.jpg") fixed center/cover;
+            color: #1a1a1a;
+            line-height: 1.8;
+        }
 
-:root{
---gold:#d4af37;
---gold-glow:#f6d365;
---dark:#0b1620;
---parchment:#f4e7c8;
-}
+        /* NAVIGATION */
+        .nav {
+            background: var(--dark-blue);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo-text { font-family: 'Cinzel'; color: var(--gold); font-size: 1.2rem; letter-spacing: 2px; }
+        .nav-links a { color: var(--gold); text-decoration: none; font-family: 'Cinzel'; margin-left: 25px; font-size: 0.8rem; border: 1px solid transparent; padding: 5px 12px; transition: 0.4s; }
+        .nav-links a:hover { background: var(--gold); color: var(--dark-blue); }
 
-/* BODY */
-body{
-font-family:'Lora',serif;
-background:url("assets/background5.jpg") fixed center/cover;
-color:#1a1a1a;
-overflow-x:hidden;
-}
+        .container { max-width: 1150px; margin: 50px auto; padding: 0 25px; }
 
-/* NAV */
-.nav{
-position:fixed;
-top:0;
-width:100%;
-background:rgba(11,22,32,0.9);
-backdrop-filter:blur(8px);
-display:flex;
-justify-content:space-between;
-padding:20px 60px;
-z-index:999;
-border-bottom:1px solid var(--gold);
-}
-.logo{
-font-family:'Cinzel';
-color:var(--gold);
-letter-spacing:2px;
-}
-.nav a{
-color:var(--gold);
-margin-left:25px;
-text-decoration:none;
-transition:.3s;
-}
-.nav a:hover{
-color:white;
-}
+        /* HERO BANNER */
+        .hero {
+            position: relative;
+            height: 550px;
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            margin-bottom: 60px;
+        }
+        .hero img { width: 100%; height: 100%; object-fit: cover; filter: sepia(20%) brightness(70%); }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            background: rgba(15, 26, 36, 0.4);
+        }
+        .hero-overlay h1 { font-family: 'Cinzel'; font-size: 3.5rem; text-shadow: 3px 3px 15px black; }
+        .hero-overlay p { font-family: 'Playfair Display'; font-style: italic; font-size: 1.4rem; color: var(--gold); }
 
-/* HERO */
-.hero{
-height:100vh;
-position:relative;
-overflow:hidden;
-}
-.hero img{
-width:100%;
-height:100%;
-object-fit:cover;
-transform:scale(1.1);
-filter:brightness(60%);
-}
-.hero-overlay{
-position:absolute;
-inset:0;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-color:white;
-}
-.hero-overlay h1{
-font-family:'Cinzel';
-font-size:4rem;
-text-shadow:0 0 25px rgba(0,0,0,0.8);
-animation:fadeUp 1.5s ease;
-}
-.hero-overlay p{
-color:var(--gold);
-font-style:italic;
-margin-top:10px;
-font-size:1.3rem;
-animation:fadeUp 2s ease;
-}
+        /* MAIN CARD */
+        .manuscript-card {
+            background: var(--parchment);
+            border: 1px solid var(--gold-dark);
+            padding: 80px 60px;
+            position: relative;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
+        }
 
-/* SCROLL ANIM */
-.fade{
-opacity:0;
-transform:translateY(40px);
-transition:all 1s ease;
-}
-.fade.show{
-opacity:1;
-transform:translateY(0);
-}
+        /* ORNAMENTAL ELEMENTS */
+        .corner { position: absolute; width: 80px; height: 80px; opacity: 0.8; pointer-events: none; }
+        .top-left { top: 15px; left: 15px; background: url("assets/cornerleftup.png") no-repeat; }
+        .top-right { top: 15px; right: 15px; background: url("assets/cornerrightup.png") no-repeat; }
+        .bot-left { bottom: 15px; left: 15px; background: url("assets/cornerleft.png") no-repeat; }
+        .bot-right { bottom: 15px; right: 15px; background: url("assets/cornerright.png") no-repeat; }
 
-/* CARD */
-.container{
-max-width:1200px;
-margin:auto;
-padding:100px 20px;
-}
-.card{
-background:var(--parchment);
-padding:80px;
-border-radius:10px;
-box-shadow:0 30px 80px rgba(0,0,0,0.3);
-position:relative;
-}
+        /* CONTENT STYLES */
+        .section-header {
+            font-family: 'Cinzel';
+            text-align: center;
+            color: var(--dark-blue);
+            margin: 60px 0 30px;
+            font-size: 2rem;
+            border-bottom: 2px double var(--gold);
+            padding-bottom: 15px;
+        }
 
-/* HEADINGS */
-h2{
-font-family:'Cinzel';
-margin:50px 0 20px;
-border-bottom:2px solid var(--gold);
-padding-bottom:10px;
-}
+        .dropcap { float: left; font-family: 'Cinzel'; font-size: 80px; line-height: 60px; padding: 10px 10px 0 0; color: var(--dark-blue); }
 
-/* GOLD LINE */
-.gold-line{
-width:100px;
-height:3px;
-background:linear-gradient(to right,transparent,var(--gold),transparent);
-margin:20px auto;
-}
+        /* TABLOLAR VE KUTULAR */
+        .academic-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 40px 0;
+            background: rgba(255,255,255,0.4);
+            font-size: 1.1rem;
+        }
+        .academic-table th { background: var(--dark-blue); color: var(--gold); font-family: 'Cinzel'; padding: 18px; }
+        .academic-table td { padding: 18px; border: 1px solid var(--gold-dark); }
 
-/* IMAGE */
-.image{
-margin:50px 0;
-overflow:hidden;
-border-radius:10px;
-}
-.image img{
-width:100%;
-transition:0.6s;
-}
-.image:hover img{
-transform:scale(1.08);
-}
+        .highlight-box {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 5px solid var(--gold-dark);
+            padding: 30px;
+            margin: 40px 0;
+            font-style: italic;
+        }
 
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
-margin:40px 0;
-}
-.box{
-background:white;
-padding:25px;
-border:1px solid var(--gold);
-transition:.4s;
-}
-.box:hover{
-transform:translateY(-10px);
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-}
+        .visual-frame { margin: 50px 0; text-align: center; }
+        .visual-frame img { max-width: 100%; border: 12px solid #fff; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .caption { font-family: 'Cinzel'; font-size: 0.9rem; margin-top: 15px; color: #444; }
 
-/* QUOTE */
-.quote{
-margin:40px 0;
-padding:25px;
-background:rgba(212,175,55,0.1);
-border-left:5px solid var(--gold);
-font-style:italic;
-}
+        /* ROOM GRID */
+        .room-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        .room-card {
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--gold);
+            padding: 25px;
+            transition: 0.3s;
+        }
+        .room-card:hover { transform: translateY(-5px); background: #fff; }
 
-/* TABLE */
-table{
-width:100%;
-border-collapse:collapse;
-margin:40px 0;
-}
-td,th{
-border:1px solid var(--gold);
-padding:15px;
-}
-th{
-background:var(--dark);
-color:var(--gold);
-}
-
-/* FOOTER NOTE */
-.note{
-margin-top:50px;
-padding:30px;
-background:#eee;
-border-left:5px solid var(--gold);
-}
-
-/* ANIMATION */
-@keyframes fadeUp{
-from{opacity:0;transform:translateY(40px)}
-to{opacity:1;transform:translateY(0)}
-}
-</style>
+        @media (max-width: 800px) {
+            .manuscript-card { padding: 40px 20px; }
+            .hero-overlay h1 { font-size: 2rem; }
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="nav">
-<div class="logo">SULTAN II. BAYEZID KÜLLİYESİ</div>
-<div>
-<a href="#mimari">Mimari</a>
-<a href="#egitim">Eğitim</a>
-<a href="#muze">Müze</a>
-</div>
-</div>
-
-<!-- HERO -->
-<div class="hero">
-<img src="assets/medrese_hero.jpg">
-<div class="hero-overlay">
-<h1>Medresetü’l-Etibba</h1>
-<p>Bilimin ve Şifanın Altın Çağı</p>
-</div>
+    <div class="logo-text">T.C. TRAKYA ÜNİVERSİTESİ | Sultan II. Bayezid Külliyesi</div>
+    <div class="nav-links">
+        <a href="#tarihce">TARİHÇE</a>
+        <a href="#mimari">MİMARİ</a>
+        <a href="#egitim">EĞİTİM</a>
+        <a href="#" onclick="window.print()">YAZDIR</a>
+    </div>
 </div>
 
 <div class="container">
-<div class="card fade">
 
-<p>
-Medresetü’l-Etibba, Osmanlı’nın en ileri eğitim kurumlarından biri olup,
-teorik tıp eğitiminin uygulama ile birleştiği ilk merkezlerden biridir.
-</p>
+    <div class="hero">
+        <img src="assets/medrese_hero.jpg" alt="Medresetü'l-Etibba">
+        <div class="hero-overlay">
+            <h1>Medresetü’l-Etibba</h1>
+            <p>15. Yüzyılın Bilim ve Sanat Pınarı</p>
+        </div>
+    </div>
 
-<div class="quote">
-“Orada bir darüşşifa vardır ki tarif edilmez.” — Evliya Çelebi
+    <div class="manuscript-card">
+        <div class="corner top-left"></div><div class="corner top-right"></div>
+        <div class="corner bot-left"></div><div class="corner bot-right"></div>
+
+        <div class="content-section">
+            <span class="dropcap">M</span>
+            <p>edresetü’l-Etibba (Tıp Medresesi), 1484-1488 yılları arasında <strong>Mimar Hayrettin</strong> tarafından Sultan II. Bayezid adına inşa edilen devasa külliyenin bilimsel otoritesini temsil eder. Sadece bir eğitim yapısı değil, Osmanlı İmparatorluğu'nun insan sağlığına ve bilimsel gelişime verdiği önemin mimari bir tezahürüdür. Döneminde "modern anlamda bir tıp fakültesi" niteliği taşıyan bu merkez, teorik bilginin klinik uygulama ile birleştiği dünyadaki nadir örneklerden biridir.</p>
+        </div>
+
+        <div class="highlight-box">
+            "Hastalara keklik, sülün ve güvercin gibi özel yemekler sunulur; bahar geldiğinde hücrelerine yasemin ve sümbül kokuları dolardı. Bu medrese, dil ile tarif edilemeyecek bir şifa yurdudur." <br>
+            <strong>— Evliya Çelebi, Seyahatnâme</strong>
+        </div>
+
+        <h2 class="section-header" id="mimari">I. MİMARİ ANALİZ VE TASARIMIN GÜCÜ</h2>
+        
+        <p>Klasik Osmanlı mimarisinin en rafine örneklerinden biri olan Medrese, öğrencinin dış dünyadan izole olup tamamen ilme odaklanmasını sağlayacak bir <strong>"odaklanma geometrisi"</strong> üzerine kurulmuştur.</p>
+
+        <div class="visual-frame">
+            <img src="assets/medrese_avlu.jpg" alt="Medrese Avlusu">
+            <div class="caption">Görsel 1: Medrese Avlusu, Revaklar ve Ritmik Kubbe Dizilimi</div>
+        </div>
+
+        <div class="room-grid">
+            <div class="room-card">
+                <h3 style="font-family:'Cinzel'; margin-bottom:10px;">Dershane-i Kübra</h3>
+                <p style="font-size: 0.95rem;">Kuzeydoğuda yer alan, 18 öğrenci odasından daha yüksek ve geniş tasarlanmış merkezi alan. Akustik harikası kubbesi ile eğitimin kalbidir.</p>
+            </div>
+            <div class="room-card">
+                <h3 style="font-family:'Cinzel'; margin-bottom:10px;">Talebe Hücreleri</h3>
+                <p style="font-size: 0.95rem;">Ocaklı, kitap nişli ve özel çalışma alanlı 18 bağımsız oda. Öğrencinin bireysel tefekkürü için tasarlanmıştır.</p>
+            </div>
+            <div class="room-card">
+                <h3 style="font-family:'Cinzel'; margin-bottom:10px;">Klasik Plan</h3>
+                <p style="font-size: 0.95rem;">Geniş bir avlu, revaklı yürüyüş yolları ve küfeki taşının soğuk ama vakur disipliniyle şekillenmiş bir nizam.</p>
+            </div>
+        </div>
+
+        <h2 class="section-header" id="egitim">II. EĞİTİM SİSTEMİ: TEORİ VE PRATİĞİN BÜTÜNLÜĞÜ</h2>
+        
+        <p>Medresetü’l-Etibba’nın dünya tıp tarihindeki eşsizliği, hemen bitişiğindeki <strong>Darüşşifa (Hastane)</strong> ile olan organik bağıdır. Bu, bugünkü "Üniversite Hastanesi" modelinin 500 yıl önceki kusursuz bir uygulamasıdır.</p>
+
+        <div class="visual-frame">
+            <img src="assets/tip_kitabi.jpg" alt="Tıp Müfredatı">
+            <div class="caption">Görsel 2: İbn-i Sina'nın "El-Kanun fi’t-Tıbb" Eserinden Bir Kesit</div>
+        </div>
+
+        <p><strong>Uygulamalı Tıp (Klinik Model):</strong> Öğrenciler sabah dershanede teorik metinleri okur, öğleden sonra ise usta hekimlerin yanında Darüşşifa koridorlarında hasta muayene eder ve cerrahi operasyonları izlerlerdi. Müfredat sadece anatomi ile sınırlı kalmamış; <strong>İspençiyari (Eczacılık), Fitoterapi (Bitkisel Tedavi)</strong> ve <strong>Musiki ile Tedavi</strong> gibi ileri branşları kapsamıştır.</p>
+
+        <h2 class="section-header">III. VAKIF GÜVENCESİ VE AKADEMİK VERİLER</h2>
+        
+        <table class="academic-table">
+            <thead>
+                <tr>
+                    <th>Statü/Alan</th>
+                    <th>Vakıf Şartnamesi ve Sosyal Haklar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Müderris (Profesör)</strong></td>
+                    <td>Günlük 30 Akçe maaş. Dönemin en yüksek akademik derecesi.</td>
+                </tr>
+                <tr>
+                    <td><strong>Eğitim Ücreti</strong></td>
+                    <td>Tamamen ücretsiz. Ayrıca talebelere günlük burs verilirdi.</td>
+                </tr>
+                <tr>
+                    <td><strong>Sosyal Haklar</strong></td>
+                    <td>Barınma, ısınma (odun), aydınlatma (mum) ve imaretten iki öğün sıcak yemek.</td>
+                </tr>
+                <tr>
+                    <td><strong>Kütüphane</strong></td>
+                    <td>Sadece tıp değil; felsefe, matematik ve astronomi eserlerine erişim.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 class="section-header" id="muze">IV. GÜNÜMÜZDE MÜZE DENEYİMİ</h2>
+        
+        <p>Yapı, günümüzde <strong>Trakya Üniversitesi Sağlık Müzesi</strong> bünyesinde ödüllü bir sergileme alanı olarak yaşamaktadır. Medrese odalarında yer alan mankenli canlandırmalar ve interaktif ekranlar, ziyaretçileri 15. yüzyılın bilimsel atmosferine götürür.</p>
+
+        <div class="visual-frame">
+            <img src="assets/muze_canlandirma.jpg" alt="Müze Canlandırma">
+            <div class="caption">Görsel 3: Medrese Hücresinde Bir Talebenin Günlük Çalışma Canlandırması</div>
+        </div>
+
+        <div class="highlight-box" style="border-color: var(--deep-red); background: rgba(139, 0, 0, 0.05);">
+            <h4 style="font-family:'Cinzel'; color:var(--deep-red); margin-bottom:10px;">BİLİYOR MUYDUNUZ?</h4>
+            <ul style="margin-left: 20px;">
+                <li>Medreseden mezun olan hekimler, doğrudan Osmanlı Sarayı'na (Hekimbaşılığa) kadar yükselebilirdi.</li>
+                <li>Vakfiyedeki ağır bir uyarıya göre; hak etmeyen birinin bu medresenin ilaçlarını kullanması "büyük bir vebal" olarak nitelenirdi.</li>
+                <li>Dershanenin akustik tasarımı, müderrisin en kısık sesinin bile arka sıradaki talebe tarafından duyulmasını sağlardı.</li>
+            </ul>
+        </div>
+
+        <div style="background: #e6dcc3; border: 2px dashed var(--gold-dark); padding: 60px; text-align: center; margin-top: 50px;">
+            <p style="font-family: 'Cinzel'; letter-spacing: 1px;">[ ETKİLEŞİMLİ MEDRESE KAT PLANI BURAYA GELECEK ]</p>
+            <p style="font-size: 0.9rem; font-style: italic;">(Kullanıcı oda üzerine tıkladığında işlevi belirten Pop-Up açılır)</p>
+        </div>
+
+    </div>
 </div>
-
-<h2 id="mimari">Mimari Yapı</h2>
-<div class="gold-line"></div>
-
-<p>
-Medrese, avlu merkezli planıyla ilmi odaklanmayı destekleyen bir mimariye sahiptir.
-</p>
-
-<div class="image">
-<img src="assets/medrese_avlu.jpg">
-</div>
-
-<div class="grid">
-<div class="box"><h3>Dershane</h3><p>Kubbeli ana eğitim alanı</p></div>
-<div class="box"><h3>Hücreler</h3><p>18 öğrenci odası</p></div>
-<div class="box"><h3>Avlu</h3><p>Ortak yaşam alanı</p></div>
-</div>
-
-<h2 id="egitim">Eğitim Sistemi</h2>
-<div class="gold-line"></div>
-
-<p>
-Medrese ile darüşşifa birlikte çalışarak klinik eğitim modelini oluşturmuştur.
-</p>
-
-<div class="image">
-<img src="assets/tip_kitabi.jpg">
-</div>
-
-<table>
-<tr><th>Alan</th><th>Bilgi</th></tr>
-<tr><td>Eğitim</td><td>Ücretsiz</td></tr>
-<tr><td>Burs</td><td>Var</td></tr>
-<tr><td>Barınma</td><td>Ücretsiz</td></tr>
-</table>
-
-<h2 id="muze">Müze Deneyimi</h2>
-<div class="gold-line"></div>
-
-<div class="image">
-<img src="assets/muze_canlandirma.jpg">
-</div>
-
-<p>
-Bugün bu yapı, ziyaretçilerine geçmişin bilim dünyasını deneyimleme fırsatı sunmaktadır.
-</p>
-
-<div class="note">
-Bu yapı sadece bir medrese değil; insanlık tarihinin en ileri sağlık sistemlerinden biridir.
-</div>
-
-</div>
-</div>
-
-<script>
-const elements=document.querySelectorAll('.fade');
-window.addEventListener('scroll',()=>{
-elements.forEach(el=>{
-const top=el.getBoundingClientRect().top;
-if(top<window.innerHeight-100){
-el.classList.add('show');
-}
-});
-});
-</script>
 
 </body>
 </html>
