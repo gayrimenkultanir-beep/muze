@@ -157,11 +157,25 @@ I<!DOCTYPE html>
 
 <div class="nav">
     <div class="logo">T.C. TRAKYA ÜNİVERSİTESİ Sultan II.Bayezid Külliyesi Sağlık Müzesi</div>
-    <div class="menu">
-       
-        <a href="../index.html">ANA SAYFA</a>
+    
+    <div style="display: flex; align-items: center;">
+        <div class="menu">
+            <a href="../index.html">ANA SAYFA</a>
+        </div>
+
+        <div style="display: inline-block; position: relative; margin-left: 20px;">
+            <button onclick="toggleGlobalMenu()" style="background: none; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 5px 10px; font-family: 'Cinzel';">KARTLAR ☰</button>
+            <div id="globalDropdown" style="display: none; position: absolute; right: 0; top: 40px; background: var(--dark); border: 1px solid var(--gold-soft); min-width: 200px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                <a href="#bayezid" style="display: block; padding: 12px; color: var(--gold); text-decoration: none; font-size: 13px; border-bottom: 1px solid #222;">Sultan II. Bayezid</a>
+                <a href="#bolumler" style="display: block; padding: 12px; color: var(--gold); text-decoration: none; font-size: 13px; border-bottom: 1px solid #222;">Külliye Bölümleri</a>
+                <a href="#ziyaret" style="display: block; padding: 12px; color: var(--gold); text-decoration: none; font-size: 13px; border-bottom: 1px solid #222;">Ziyaret Bilgileri</a>
+                <a href="#ucretler" style="display: block; padding: 12px; color: var(--gold); text-decoration: none; font-size: 13px;">Giriş Ücretleri</a>
+            </div>
+        </div>
     </div>
 </div>
+
+<div class="container">
    
         
         <!-- GENEL MENÜ GÜNCELLENDİ -->
