@@ -96,8 +96,10 @@ body {
     height: 400px;
     overflow: hidden;
     border-radius: 12px;
-    background: none; /* Arka plan rengini ve varsa resmini tamamen kaldırır */
+    background: transparent; /* "none" yerine transparent daha güvenlidir */
     margin-bottom: 20px;
+    /* Eğer çerçeve hala görünüyorsa alttaki satırı ekle: */
+    -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safarideki render hataları için */
 }
 
 /* 1. KATMAN: Arkadaki Hareketli WebP */
@@ -105,14 +107,14 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;       /* 90%'dan 100%'e çektik */
-    height: 100%;      /* 80%'den 100%'e çektik */
-    object-fit: cover; /* Kenarlarda boşluk kalmasını önler */
+    transform: translate(-50%, -50%); /* Merkeze oturtur */
+    width: 100.5%;  /* %100 yerine 100.5 yaparak o ince çizgiyi dışarıda bırakıyoruz */
+    height: 100.5%; /* %100 yerine 100.5 yaparak o ince çizgiyi dışarıda bırakıyoruz */
+    object-fit: cover;
     z-index: 1;
-    border: none;      /* Olası tarayıcı çerçevelerini kaldırır */
-    outline: none;     /* Odak çerçevesini kaldırır */
-    background: transparent; /* Arka planın siyah olmadığından emin oluruz */
+    border: none;      /* Olası borderları kaldırır */
+    outline: none;     /* Fokus veya render çerçevesini kaldırır */
+    mix-blend-mode: normal; /* Eğer bir karışım modu varsa sıfırlar */
 }
 
 /* 2. KATMAN: Sizin Gönderdiğiniz Çerçeve (frame1.jpg) */
