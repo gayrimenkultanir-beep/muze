@@ -241,64 +241,45 @@
 
 
 
-<nav class="nav" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--dark);">
-
-    
-
-    <div class="logo" style="font-family: 'Cinzel', serif; color: var(--gold); font-weight: bold;">
-
-        T.C. TRAKYA ÜNİVERSİTESİ <br>
-
-        <span style="font-size: 0.9em;">Sultan II. Bayezid Külliyesi Sağlık Müzesi</span>
-
-    </div>
-<div class="menu-container" style="position: relative; display: flex; align-items: center;">
-        
-        <div class="global-menu" style="position: relative; margin-left: 20px;">
-            <button onclick="toggleGlobalMenu()" class="menu-btn">
-                MENÜ ☰
-            </button>
-
-            <div id="globalDropdown" 
-                 style="display: none; position: absolute; right: 0; top: 45px; background: var(--dark); border: 1px solid var(--gold-soft); min-width: 220px; z-index: 1000; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
-                
-                <a href="index.html" class="dropdown-link">Ana Sayfa</a>
-                
-                <a href="tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
-                
-                <a href="bayezid/bayezid.html" class="dropdown-link">Sultan II.Bayezid</a>
-                
-                 <a href="celebi/celebi.html" class="dropdown-link">Evliya Çelebi</a>
-                
-                 <a href="medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
-
-                <a href="hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
-
-                 <a href="imaret/imaret.html" class="dropdown-link">İmarethane</a>
-
-                 <a href="music/music.html" class="dropdown-link">Müzikle Tedavi</a>
-
-                <a href="plan/plan.html" class="dropdown-link">Gezi Planı</a>
-
-                 <a href="galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
-
-                 <a href="haberler/haberler.html" class="dropdown-link">Haberler</a>
-
-                 <a href="haberler/haberler.html" class="dropdown-link">Duyurular</a>
-
-                 <a href="oduller/oduller.html" class="dropdown-link">Ödüller</a>
-
-                <a href="personel/personel.html" class="dropdown-link">Personelimiz</a>
-
-                <a href="universite/universite.html" class="dropdown-link">Trakya Üniversitesi</a>
-
-               
-               
+<div class="nav-wrapper">
+    <nav class="nav">
+        <div class="logo">
+            <div style="font-weight: bold; font-size: 16px; letter-spacing: 1px;">
+                T.C. TRAKYA ÜNİVERSİTESİ
+            </div>
+            <div style="font-size: 0.85em; opacity: 0.9;">
+                Sultan II. Bayezid Külliyesi Sağlık Müzesi
             </div>
         </div>
-    </div>
-</nav>
-<div style="margin-top: 130px;"></div>
+
+        <div class="menu-container">
+            <div class="global-menu">
+                <button onclick="toggleGlobalMenu()" class="menu-btn">
+                    MENÜ ☰
+                </button>
+
+                <div id="globalDropdown" style="display: none; position: absolute; right: 0; top: 50px; background: var(--dark); border: 1px solid var(--gold-soft); min-width: 220px; z-index: 1000; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+                    <a href="index.html" class="dropdown-link">Ana Sayfa</a>
+                    <a href="tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
+                    <a href="bayezid/bayezid.html" class="dropdown-link">Sultan II.Bayezid</a>
+                    <a href="celebi/celebi.html" class="dropdown-link">Evliya Çelebi</a>
+                    <a href="medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
+                    <a href="hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
+                    <a href="imaret/imaret.html" class="dropdown-link">İmarethane</a>
+                    <a href="music/music.html" class="dropdown-link">Müzikle Tedavi</a>
+                    <a href="plan/plan.html" class="dropdown-link">Gezi Planı</a>
+                    <a href="galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
+                    <a href="haberler/haberler.html" class="dropdown-link">Haberler</a>
+                    <a href="oduller/oduller.html" class="dropdown-link">Ödüller</a>
+                    <a href="personel/personel.html" class="dropdown-link">Personelimiz</a>
+                    <a href="universite/universite.html" class="dropdown-link">Trakya Üniversitesi</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+<div style="margin-top: 30px;"></div>
+
 <script>
 function toggleGlobalMenu() {
     var x = document.getElementById("globalDropdown");
