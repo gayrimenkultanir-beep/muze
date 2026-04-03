@@ -69,16 +69,13 @@ I<!DOCTYPE html>
         }
 
         /* BANNER */
-        .banner {
-    grid-column: 1 / -1;
-    position: relative; /* İçindekilerin üst üste binmesi için şart */
-    width: 100%;
-    height: 400px; /* Sabit yükseklik veya oranınıza göre ayarlayın */
-    overflow: hidden;
-    border-radius: 12px;
-    background-color: transparent; /* Buradaki #000 silindi */
-    margin-bottom: 20px;
-}
+        .banner { position: relative; margin-bottom: 40px; }
+        .banner img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid var(--gold-soft);
 
 /* 1. KATMAN: Arkadaki Hareketli WebP */
 .banner .banner-media {
