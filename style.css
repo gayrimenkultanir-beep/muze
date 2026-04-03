@@ -105,11 +105,14 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Tam merkeze oturtur */
-    width: 90%;  /* Çerçevenin içindeki boşluğa göre genişlik */
-    height: 80%; /* Çerçevenin içindeki boşluğa göre yükseklik */
-    object-fit: cover;
-    z-index: 1; /* En alt katman */
+    transform: translate(-50%, -50%);
+    width: 100%;       /* 90%'dan 100%'e çektik */
+    height: 100%;      /* 80%'den 100%'e çektik */
+    object-fit: cover; /* Kenarlarda boşluk kalmasını önler */
+    z-index: 1;
+    border: none;      /* Olası tarayıcı çerçevelerini kaldırır */
+    outline: none;     /* Odak çerçevesini kaldırır */
+    background: transparent; /* Arka planın siyah olmadığından emin oluruz */
 }
 
 /* 2. KATMAN: Sizin Gönderdiğiniz Çerçeve (frame1.jpg) */
