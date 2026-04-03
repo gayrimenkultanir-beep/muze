@@ -182,7 +182,53 @@ I<!DOCTYPE html>
 
 <body>
 
+<style>
+    /* KARTLAR Butonu Parlama Efekti */
+    .menu-btn {
+        background: transparent;
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        cursor: pointer;
+        padding: 8px 15px;
+        font-family: 'Cinzel', serif;
+        transition: all 0.3s ease-in-out;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .menu-btn:hover {
+        background-color: var(--gold);
+        color: #fff;
+        box-shadow: 0 0 15px var(--gold); /* Altın parlama */
+        transform: translateY(-1px);
+    }
+
+    /* Menü Linkleri Parlama Efekti */
+    .dropdown-link {
+        display: block;
+        padding: 12px 20px;
+        color: var(--gold);
+        text-decoration: none;
+        font-size: 14px;
+        border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        transition: all 0.2s ease;
+    }
+
+    .dropdown-link:hover {
+        background: rgba(212, 175, 55, 0.1); /* Hafif altın arka plan */
+        color: #fff;
+        padding-left: 25px; /* Sağa doğru hafif kayma efekti */
+        text-shadow: 0 0 8px var(--gold); /* Yazıda parlama */
+    }
+
+    /* Son linkin çizgisini kaldır */
+    .dropdown-link:last-child {
+        border-bottom: none;
+    }
+</style>
+
 <nav class="nav" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--dark);">
+    
     <div class="logo" style="font-family: 'Cinzel', serif; color: var(--gold); font-weight: bold;">
         T.C. TRAKYA ÜNİVERSİTESİ <br>
         <span style="font-size: 0.9em;">Sultan II. Bayezid Külliyesi Sağlık Müzesi</span>
@@ -191,30 +237,28 @@ I<!DOCTYPE html>
     <div class="menu-container" style="position: relative; display: flex; align-items: center;">
         
         <div class="global-menu" style="position: relative; margin-left: 20px;">
-            <button onclick="toggleGlobalMenu()" 
-                    style="background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 8px 15px; font-family: 'Cinzel'; transition: 0.3s;">
+            <button onclick="toggleGlobalMenu()" class="menu-btn">
                 KARTLAR ☰
             </button>
 
             <div id="globalDropdown" 
                  style="display: none; position: absolute; right: 0; top: 45px; background: var(--dark); border: 1px solid var(--gold-soft); min-width: 220px; z-index: 1000; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
                 
-                <a href="bayezid/bayezid.html" style="display: block; padding: 12px 20px; color: var(--gold); text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,215,0,0.1);">Sultan II. Bayezid</a>
+                <a href="bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
                 
-                <a href="#evliya-celebi" style="display: block; padding: 12px 20px; color: var(--gold); text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,215,0,0.1);">Evliya Çelebi</a>
+                <a href="#evliya-celebi" class="dropdown-link">Evliya Çelebi</a>
                 
-                <a href="#bolumler" style="display: block; padding: 12px 20px; color: var(--gold); text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,215,0,0.1);">Külliye Bölümleri</a>
+                <a href="#bolumler" class="dropdown-link">Külliye Bölümleri</a>
                 
-                <a href="#ziyaret" style="display: block; padding: 12px 20px; color: var(--gold); text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,215,0,0.1);">Ziyaret Bilgileri</a>
+                <a href="#ziyaret" class="dropdown-link">Ziyaret Bilgileri</a>
                 
-                <a href="#ucretler" style="display: block; padding: 12px 20px; color: var(--gold); text-decoration: none; font-size: 14px;">Giriş Ücretleri</a>
+                <a href="#ucretler" class="dropdown-link">Giriş Ücretleri</a>
             </div>
         </div>
     </div>
 </nav>
 
 <script>
-// Menü açma/kapama fonksiyonu
 function toggleGlobalMenu() {
     var x = document.getElementById("globalDropdown");
     if (x.style.display === "none" || x.style.display === "") {
@@ -224,21 +268,16 @@ function toggleGlobalMenu() {
     }
 }
 
-// Dışarı tıklandığında menüyü kapatma (Opsiyonel ama kullanışlı)
+// Menü dışına tıklandığında otomatik kapatma
 window.onclick = function(event) {
-    if (!event.target.matches('button')) {
-        var dropdowns = document.getElementsByClassName("globalDropdown");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.style.display === "block") {
-                openDropdown.style.display = "none";
-            }
+    if (!event.target.matches('.menu-btn')) {
+        var dropdown = document.getElementById("globalDropdown");
+        if (dropdown && dropdown.style.display === "block") {
+            dropdown.style.display = "none";
         }
     }
 }
 </script>
-
 
 
 
