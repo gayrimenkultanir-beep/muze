@@ -69,13 +69,21 @@ I<!DOCTYPE html>
         }
 
         /* BANNER */
-        .banner { position: relative; margin-bottom: 40px; }
-        .banner img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid var(--gold-soft);
+        .banner {
+    grid-column: 1 / -1;
+    position: relative;
+    width: 100%; /* Container'ın içindeki mevcut 1240px'e tam oturur */
+    height: 400px;
+    overflow: hidden;
+    border-radius: 12px;
+    
+    /* İSTEDİĞİNİZ ALTIN ÇERÇEVE BURADA: */
+    border: 2px solid var(--gold-soft); 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* Kartlarla uyumlu olması için gölge */
+    
+    background-color: transparent; 
+    margin-bottom: 20px;
+}
 
 /* 1. KATMAN: Arkadaki Hareketli WebP */
 .banner .banner-media {
