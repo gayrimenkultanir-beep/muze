@@ -106,7 +106,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%); /* Tam merkeze oturtur */
-    width: 100%;  /* Çerçevenin içindeki boşluğa göre genişlik */
+    width: 90%;  /* Çerçevenin içindeki boşluğa göre genişlik */
     height: 80%; /* Çerçevenin içindeki boşluğa göre yükseklik */
     object-fit: cover;
     z-index: 1; /* En alt katman */
