@@ -87,19 +87,22 @@ body {
 }
 
 /* =====================
-   BANNER
+   BANNER GÜNCEL
 ===================== */
 .banner {
     grid-column: 1 / -1;
     position: relative;
-    width: 100%;
+    width: 100%; /* Container'ın içindeki mevcut 1240px'e tam oturur */
     height: 400px;
     overflow: hidden;
     border-radius: 12px;
-    background: transparent; /* "none" yerine transparent daha güvenlidir */
+    
+    /* İSTEDİĞİNİZ ALTIN ÇERÇEVE BURADA: */
+    border: 2px solid var(--gold-soft); 
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* Kartlarla uyumlu olması için gölge */
+    
+    background-color: transparent; 
     margin-bottom: 20px;
-    /* Eğer çerçeve hala görünüyorsa alttaki satırı ekle: */
-    -webkit-mask-image: -webkit-radial-gradient(white, black); /* Safarideki render hataları için */
 }
 
 /* 1. KATMAN: Arkadaki Hareketli WebP */
@@ -107,38 +110,38 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Merkeze oturtur */
-    width: 100.5%;  /* %100 yerine 100.5 yaparak o ince çizgiyi dışarıda bırakıyoruz */
-    height: 100.5%; /* %100 yerine 100.5 yaparak o ince çizgiyi dışarıda bırakıyoruz */
+    /* scale(1.02) ile siyah pikselleri çerçevenin dışına itiyoruz */
+    transform: translate(-50%, -50%) scale(1.02); 
+    width: 100%;  /* Artık banner tam kaplandığı için 100% yapabiliriz */
+    height: 100%; 
     object-fit: cover;
     z-index: 1;
-    border: none;      /* Olası borderları kaldırır */
-    outline: none;     /* Fokus veya render çerçevesini kaldırır */
-    mix-blend-mode: normal; /* Eğer bir karışım modu varsa sıfırlar */
 }
 
-/* 2. KATMAN: Sizin Gönderdiğiniz Çerçeve (frame1.jpg) */
+/* 2. KATMAN: Görsel Çerçeve (frame1.jpg) */
 .banner .banner-frame {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill; /* Çerçevenin tüm banner alanını kaplaması için */
-    z-index: 5; /* Resmin (WebP) ÜSTÜNE biner */
-    pointer-events: none; /* Çerçeveye tıklanmasın, altı hissedilsin */
+    object-fit: fill; 
+    z-index: 5; 
+    pointer-events: none;
+    /* Eğer frame1.jpg zaten bir çerçeve ise, bazen border ile üst üste biner. 
+       Gerekirse frame'i 1-2px küçültebiliriz ama şu an tam oturacaktır. */
 }
 
 /* 3. KATMAN: Metinler */
 .banner-text {
     position: absolute;
-    bottom: 45px; /* Çerçevenin altındaki bronz kabartmanın üzerine denk gelir */
+    bottom: 45px; 
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     color: #fff;
     text-shadow: 2px 2px 10px rgba(0,0,0,1);
-    z-index: 10; /* En üst katman */
+    z-index: 10; 
     width: 100%;
 }
 /* =====================
