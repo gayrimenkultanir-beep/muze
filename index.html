@@ -238,7 +238,22 @@
         border-bottom: none;
     }
 </style>
-
+position: fixed;    /* Sayfanın en üstüne sabitler */
+    top: 20px;          /* Üstten hafif boşluk bırakır */
+    left: 50%;          /* Sayfayı ortalamak için sola %50 it */
+    transform: translateX(-50%); /* Kendi genişliğinin yarısı kadar geri çek (Tam ortalar) */
+    width: 95%;         /* Mobilde kenarlara yapışmaması için */
+    max-width: 1240px;  /* Container genişliği */
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 15px 30px; 
+    background: linear-gradient(#1b2b3a,#0e1922); 
+    border-bottom: 3px solid var(--gold-soft);
+    border-radius: 8px; 
+    z-index: 9999;      /* Diğer tüm kartların üstünde görünmesi için */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+">
 <nav class="nav" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--dark);">
     
     <div class="logo" style="font-family: 'Cinzel', serif; color: var(--gold); font-weight: bold;">
