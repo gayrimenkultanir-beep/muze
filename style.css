@@ -87,21 +87,21 @@ body {
 }
 
 /* =====================
-   BANNER GÜNCEL
+   BANNER - 2560x800 UYUMLU
 ===================== */
 .banner {
     grid-column: 1 / -1;
     position: relative;
-    width: 100%; /* Container'ın içindeki mevcut 1240px'e tam oturur */
-    height: 400px;
+    width: 100%;           /* Container (1240px) genişliğine tam oturur */
+    height: 388px;          /* 2560x800 oranını (3.2:1) korumak için 1240px genişlikte bu yükseklik idealdir */
     overflow: hidden;
     border-radius: 12px;
     
-    /* İSTEDİĞİNİZ ALTIN ÇERÇEVE BURADA: */
-    border: 2px solid var(--gold-soft); 
-    box-shadow: 0 8px 25px rgba(0,0,0,0.25); /* Kartlarla uyumlu olması için gölge */
+    /* İSTEDİĞİNİZ İNCE ALTIN ÇİZGİ */
+    border: 2px solid var(--gold-soft);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     
-    background-color: transparent; 
+    background-color: transparent;
     margin-bottom: 20px;
 }
 
@@ -110,39 +110,45 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    /* scale(1.02) ile siyah pikselleri çerçevenin dışına itiyoruz */
-    transform: translate(-50%, -50%) scale(1.02); 
-    width: 100%;  /* Artık banner tam kaplandığı için 100% yapabiliriz */
-    height: 100%; 
-    object-fit: cover;
+    /* scale(1.02) siyah çizgiyi yok eder, object-fit görselin bozulmasını engeller */
+    transform: translate(-50%, -50%) scale(1.02);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    /* 2560px'lik görseli alanı dolduracak şekilde kırpar */
     z-index: 1;
 }
 
-/* 2. KATMAN: Görsel Çerçeve (frame1.jpg) */
+/* 2. KATMAN: Çerçeve (frame1.jpg) */
 .banner .banner-frame {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: fill; 
-    z-index: 5; 
+    object-fit: fill;     /* Çerçeve altın border'ın hemen içine tam oturur */
+    z-index: 5;
     pointer-events: none;
-    /* Eğer frame1.jpg zaten bir çerçeve ise, bazen border ile üst üste biner. 
-       Gerekirse frame'i 1-2px küçültebiliriz ama şu an tam oturacaktır. */
 }
 
 /* 3. KATMAN: Metinler */
 .banner-text {
     position: absolute;
-    bottom: 45px; 
+    bottom: 40px; 
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
     color: #fff;
-    text-shadow: 2px 2px 10px rgba(0,0,0,1);
-    z-index: 10; 
+    text-shadow: 2px 2px 12px rgba(0,0,0,1);
+    z-index: 10;
     width: 100%;
+    padding: 0 20px;      /* Mobilde metnin kenarlara yapışmaması için */
+}
+
+/* Mobil için Yükseklik Ayarı */
+@media (max-width: 768px) {
+    .banner {
+        height: 250px;    /* Mobilde çok ince kalmaması için yüksekliği biraz artırıyoruz */
+    }
 }
 /* =====================
    CARD SYSTEM (WITH CORNERS)
