@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Darüşşifa | Sultan II. Bayezid Külliyesi Sağlık Müzesi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -13,7 +13,7 @@
             --gold-soft: #caa64b;
             --dark: #0f1a24;
             --parchment: #f4e7c8;
-            --healing-blue: #1b2b3a;
+            --deep-red: #8b0000;
         }
 
         body {
@@ -25,7 +25,7 @@
             color: #2b2b2b;
         }
 
-        /* NAV - Medrese ile Aynı */
+        /* NAV */
         .nav {
             background: #0f1a24;
             color: var(--gold);
@@ -38,7 +38,7 @@
             top: 0;
             z-index: 100;
         }
-        .logo { font-family: 'Cinzel'; font-size: 20px; }
+        .logo { font-family: 'Cinzel'; font-size: 18px; }
         .menu a { 
             margin-left: 20px; 
             color: var(--gold); 
@@ -51,235 +51,148 @@
         }
         .menu a:hover { background: var(--gold); color: #000; }
 
-        /* CONTAINER */
-        .container {
-            max-width: 1240px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
 
         /* BANNER */
-        .banner { position: relative; margin-bottom: 40px; }
-        .banner img {
-            width: 100%;
-            height: 380px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid var(--gold-soft);
-            filter: brightness(0.8);
-        }
+        .banner { position: relative; margin-bottom: 40px; border-radius: 12px; overflow: hidden; border: 2px solid var(--gold-soft); }
+        .banner img { width: 100%; height: 450px; object-fit: cover; filter: brightness(0.7); }
         .banner-text {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-            width: 100%;
+            position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+            text-align: center; color: #fff; text-shadow: 2px 2px 10px rgba(0,0,0,0.9); width: 90%;
         }
-        .banner-text h1 { font-family: 'Cinzel'; font-size: 42px; letter-spacing: 2px; }
+        .banner-text h1 { font-family: 'Cinzel'; font-size: 48px; letter-spacing: 3px; }
 
-        /* KART SİSTEMİ */
+        /* KART YAPISI */
         .full-card {
             background: var(--parchment);
             border: 2px solid var(--gold-soft);
             border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             position: relative;
+            margin-bottom: 50px;
             overflow: hidden;
-            margin-bottom: 40px;
         }
 
-        /* KÖŞE SÜSLERİ */
-        .c-f { position: absolute; width: 45px; height: 45px; background-size: contain; background-repeat: no-repeat; z-index: 20; pointer-events: none; }
-        .t-l { top: 10px; left: 10px; background-image: url("../assets/cornerleftup.png"); }
-        .t-r { top: 10px; right: 10px; background-image: url("../assets/cornerrightup.png"); }
-        .b-l { bottom: 10px; left: 10px; background-image: url("../assets/cornerleft.png"); }
-        .b-r { bottom: 10px; right: 10px; background-image: url("../assets/cornerright.png"); }
-
-        .full-card h2 {
-            padding: 25px;
-            background: linear-gradient(#1b2b3a,#0e1922);
-            color: var(--gold);
-            font-family: 'Cinzel';
-            font-size: 26px;
-            text-align: center;
-            border-bottom: 2px solid var(--gold-soft);
+        h2.main-title {
+            padding: 30px; background: linear-gradient(#1b2b3a,#0e1922);
+            color: var(--gold); font-family: 'Cinzel'; font-size: 28px; text-align: center; border-bottom: 2px solid var(--gold-soft);
         }
 
-        .content-area {
-            padding: 40px;
-            line-height: 1.8;
-            font-size: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 30px;
-        }
+        .content-area { padding: 40px 60px; line-height: 1.8; font-size: 18px; }
 
-        /* GÖRSEL KUTULARI */
-        .image-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            text-align: center;
-        }
-        .content-area img {
-            max-width: 800px;
-            width: 100%;
-            height: auto;
-            border: 2px solid var(--gold-soft);
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .img-caption { font-size: 14px; font-style: italic; color: #555; font-family: 'Cinzel'; }
-
-        /* BAŞLIKLAR */
         .section-title { 
-            font-family: 'Cinzel'; 
-            color: #1b2b3a; 
-            border-bottom: 2px solid var(--gold-soft); 
-            margin: 35px 0 15px 0;
-            font-weight: 600;
-            font-size: 22px;
+            font-family: 'Cinzel'; color: #1b2b3a; border-bottom: 2px solid var(--gold-soft); 
+            margin: 40px 0 20px 0; font-weight: 600; font-size: 24px;
         }
 
+        /* GÖRSEL ALANLARI */
+        .image-box { margin: 30px 0; text-align: center; }
+        .image-box img { 
+            max-width: 100%; height: auto; border: 3px solid #fff; 
+            outline: 1px solid var(--gold-soft); border-radius: 4px; 
+        }
+        .img-caption { margin-top: 10px; font-size: 14px; font-style: italic; color: #555; font-family: 'Cinzel'; }
+
+        /* ALINTI VE TABLOLAR */
         .quote-box {
-            background: rgba(212, 175, 55, 0.1);
-            border-left: 5px solid var(--gold);
-            padding: 25px;
-            margin: 20px 0;
-            font-style: italic;
-            font-size: 19px;
-            color: #2c3e50;
+            background: rgba(212, 175, 55, 0.1); border-left: 6px solid var(--gold);
+            padding: 25px; margin: 30px 0; font-style: italic; font-size: 20px; color: #2c3e50;
+        }
+        .data-table { width: 100%; border-collapse: collapse; margin: 25px 0; background: #fff; }
+        .data-table th { background: #1b2b3a; color: var(--gold); font-family: 'Cinzel'; padding: 12px; text-align: left; }
+        .data-table td { border: 1px solid #dee2e6; padding: 12px; }
+
+        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0; }
+        .info-card { padding: 20px; border-radius: 8px; border: 1px solid var(--gold-soft); background: rgba(255,255,255,0.4); }
+
+        .who-badge {
+            text-align: center; color: var(--deep-red); font-weight: bold; 
+            margin: 20px 0; border: 2px dashed var(--deep-red); padding: 15px; font-family: 'Cinzel';
         }
 
-        /* TABLOLAR */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .data-table th, .data-table td {
-            border: 1px solid #dcdcdc;
-            padding: 14px;
-            text-align: left;
-        }
-        .data-table th { background: #1b2b3a; color: var(--gold); font-family: 'Cinzel'; }
-        .data-table tr:nth-child(even) { background: #fdfaf2; }
-
-        /* BİLGİ PANELLERİ */
-        .info-panels {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .info-card {
-            flex: 1;
-            padding: 25px;
-            border-radius: 8px;
-        }
-        .therapy-box { background: #e3ebf2; border: 1px solid #cbd9e6; border-left: 5px solid #2c3e50; }
-        .charity-box { background: #1b2b3a; color: var(--gold); border: 1px solid var(--gold); }
-
-        @media (max-width: 768px) {
-            .info-panels { flex-direction: column; }
-            .banner-text h1 { font-size: 28px; }
+        .lanet-yazisi {
+            border: 2px solid var(--deep-red); background: #fff5f5; padding: 20px;
+            color: var(--deep-red); text-align: center; font-weight: bold; margin-top: 40px;
         }
     </style>
 </head>
-
 <body>
 
-<div class="nav">
-    <div class="logo">T.C. TRAKYA ÜNİVERSİTESİ Sultan II.Bayezid Külliyesi Sağlık Müzesi</div>
-    <div class="menu">
-        <a href="../index.html">ANA SAYFA</a>
-    </div>
-</div>
+<nav class="nav">
+    <div class="logo">SULTAN II. BAYEZID KÜLLİYESİ SAĞLIK MÜZESİ</div>
+    <div class="menu"><a href="../index.html">ANA SAYFA</a></div>
+</nav>
 
 <div class="container">
-
     <div class="banner">
-        <img src="hastane_banner.jpg" alt="Darüşşifa Genel Görünüm">
+        <img src="hastane_banner.jpg" alt="Darüşşifa Genel">
         <div class="banner-text">
             <h1>DARÜŞŞİFA</h1>
-            <p style="font-family: 'Cinzel'; font-size: 18px; color: var(--gold);">Su Sesi ve Müzikle Gelen Şifanın 500 Yıllık Merkezi</p>
+            <p>Su Sesi ve Müzikle Gelen Şifanın 500 Yıllık Merkezi</p>
         </div>
     </div>
 
     <div class="full-card">
-        <div class="c-f t-l"></div><div class="c-f t-r"></div>
-        <div class="c-f b-l"></div><div class="c-f b-r"></div>
-        <h2>DÂRÜŞŞİFA (HASTANE ÜNİTESİ)</h2>
+        <h2 class="main-title">DÂRÜŞŞİFA (HASTANE ÜNİTESİ)</h2>
         
         <div class="content-area">
-            
-            <div class="text-part">
-                <p><strong>Darüşşifa</strong>, 1488 yılında Sultan II. Bayezid tarafından inşa ettirilen külliyenin temel taşını oluşturur. Burası, döneminin tıp anlayışını kökten değiştiren, hastaya sadece bir beden değil, ruh taşıyan bir varlık olarak bakan insancıl tedavi yöntemlerinin uygulandığı eşsiz bir sağlık kompleksidir.</p>
-                <p style="text-align: center; color: #8b0000; font-weight: bold; margin-top: 15px; border: 1px dashed #8b0000; padding: 10px;">
-                    DÜNYA SAĞLIK ÖRGÜTÜ TARAFINDAN ÖRNEK GÖSTERİLEN TARİHİ TEDAVİ MERKEZİ
-                </p>
-            </div>
+            <p>1488 yılında Sultan II. Bayezid tarafından inşa ettirilen külliye, döneminin tıp anlayışını kökten değiştiren eşsiz bir sağlık kompleksidir[cite: 2]. Evliya Çelebi, 1682 yılındaki ziyaretinde burayı <strong>“Dil ile tarif ve kalemler ile yazılmaz bir Darüşşifa”</strong> olarak nitelendirmiştir[cite: 2].</p>
+
+            <div class="who-badge">DÜNYA SAĞLIK ÖRGÜTÜ TARAFINDAN ÖRNEK GÖSTERİLEN TARİHİ TEDAVİ MERKEZİ</div>
 
             <h3 class="section-title">1. Akustik Mimari ve Şadırvan</h3>
+            <p>Merkezi plan esasına göre tasarlanan yapı, sekiz köşeli yüksek bir kâgir kubbe ile örtülüdür[cite: 4, 5]. Kubbenin tepesi, aydınlık bir hamam camekânı gibi açıktır ve üzerinde rüzgârın yönüne göre dönen altın yaldızlı bir bayrak bulunur[cite: 4].</p>
+            
             <div class="image-box">
                 <img src="sadirvan.jpg" alt="Merkezi Şadırvan">
-                <div class="img-caption">ŞİFA KAYNAĞI: Merkezi planda yer alan ve sesi tüm odalara dağıtan şadırvan</div>
+                <div class="img-caption">ŞİFA KAYNAĞI: Sesi tüm odalara dağıtan merkezi şadırvan ve fıskiye sistemi [cite: 6]</div>
             </div>
 
-            <div class="text-part">
-                <p>Hastanenin ana bölümü, merkezi bir kubbe altında toplanan yataklı tedavi ünitesidir. Mimarisi, hastaların kendilerini izole hissetmemesi ve sürekli kontrol altında tutulabilmesi için <strong>"merkezi plan"</strong> esasına göre tasarlanmıştır.</p>
-                <ul style="margin-left: 25px; margin-top: 10px; list-style-position: inside;">
-                    <li><strong>Ses Akustiği:</strong> Ortadaki şadırvandan akan suyun sesi, kubbenin özel geometrisi sayesinde tüm odalara huzur verici bir tınıyla ulaşır.</li>
-                    <li><strong>Havalandırma:</strong> Yüksek kubbeler ve geniş pencereler sayesinde içerideki hava sürekli temiz tutulur.</li>
-                    <li><strong>Mutfak ve Eczane:</strong> Hastanenin hemen girişinde, özel diyetlerin hazırlandığı mutfak ve ilaçların üretildiği eczane (şerbet-hane) bölümleri yer alır.</li>
-                </ul>
+            <div class="grid-info">
+                <div class="info-card">
+                    <strong>Mimari Detaylar:</strong>
+                    <ul style="font-size: 16px; margin-top:10px;">
+                        <li>8 adet kış odası ve önlerinde 8 adet yazlık oda[cite: 4, 5].</li>
+                        <li>Pencerelerin biri dışarıdaki gülistana, diğeri içteki havuza bakar[cite: 4, 5].</li>
+                        <li>Şerbet-hane (Eczane) ve özel diyet mutfağı giriştedir.</li>
+                    </ul>
+                </div>
+                <div class="info-card">
+                    <strong>Ses Akustiği:</strong>
+                    <p style="font-size: 16px; margin-top:10px;">Şadırvandan fışkıran suların sesi, kubbenin geometrisi sayesinde yankılanarak hastaların ruhuna huzur verir[cite: 6].</p>
+                </div>
             </div>
 
             <h3 class="section-title">2. Musiki ve Ses ile Tedavi</h3>
             <div class="quote-box">
-                “Burada her sabah on bir adet hanende ve sazeden oluşan bir heyet gelir, neva, rast, dügah ve segah gibi makamlarla hastaların ruhuna ferahlık verirlerdi.” <br>
-                <span style="font-size: 16px; float: right; margin-top: 10px;">— <strong>Evliya Çelebi</strong> (1652)</span>
+                “Merhum Bayezid Veli Vakfiyesinde; hastalara deva, dertlere şifa, divanelerin ruhuna gıda olmak üzere 10 adet hanende ve sazende tayin etmiştir. Haftada 3 kez gelerek musiki faslı ederler.” [cite: 13]
+                <br><span style="font-size: 16px; float: right; font-style: normal; margin-top: 10px;">— <strong>Evliya Çelebi</strong></span>
             </div>
 
-            <div class="text-part">
-                <p>Avrupa'da akıl hastalarının dışlandığı bir dönemde, Edirne Darüşşifası'nda musiki bir tedavi aracı olarak kullanılıyordu. Her makamın farklı bir hastalığa iyi geldiği kabul edilirdi:</p>
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Makam Adı</th>
-                            <th>Etkili Olduğu Hastalıklar / Haller</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Neva Makamı</strong></td>
-                            <td>Gönül sıkıntısını giderir, böbrek ağrılarına iyi gelir.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Rast Makamı</strong></td>
-                            <td>Felç ve kemik ağrılarının tedavisinde kullanılır.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Rehavi Makamı</strong></td>
-                            <td>Baş ağrılarını dindirir ve uyku problemlerini çözer.</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Zengüle Makamı</strong></td>
-                            <td>Kalp hastalıkları ve ruhsal bunalımları yatıştırır.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Makam Adı</th>
+                        <th>Etkili Olduğu Alanlar [cite: 14, 15]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Neva Makamı</strong></td><td>Gönül sıkıntısını giderir, böbrek ağrılarına iyi gelir.</td></tr>
+                    <tr><td><strong>Rast Makamı</strong></td><td>Felç ve kemik ağrılarının tedavisinde kullanılır.</td></tr>
+                    <tr><td><strong>Zengule & Buselik</strong></td><td>İnsana hayat verir, ruha gıda olur.</td></tr>
+                    <tr><td><strong>Dügah & Segah</strong></td><td>Hastalara mahsus huzur verici makamlardır.</td></tr>
+                </tbody>
+            </table>
 
-            <h3 class="section-title">3. Personel ve İdari Kadro</h3>
-            <p>Vakfiyeye göre hastanede görev yapan personel, sadece mesleki becerisine göre değil, ahlakı ve merhametine göre seçilirdi:</p>
+            <h3 class="section-title">3. Çiçeklerin Şifası ve Sevdalı Aşıklar</h3>
+            <p>Bahar mevsiminde hastalar, meyveli ağaçları seyredip kuş cıvıltılarını dinleyerek "çimenlik temaşası" yaparlardı[cite: 8, 11]. Evliya Çelebi, Edirne'nin aşk denizi derinliğine düşmüş sevdalıların dahi burada çiçek kokularıyla iyileştirildiğini anlatır[cite: 8, 9].</p>
             
+            <div class="info-card" style="background: #eef7ee; margin-top: 15px;">
+                <strong>Tedavide Kullanılan Çiçekler[cite: 9]:</strong>
+                <p>Müşkü rumi, Yasemin, Gülnesrin, Şebboy, Karanfil, Reyhan, Lale ve Sümbül.</p>
+            </div>
+
+            <h3 class="section-title">4. Personel ve İdari Kadro</h3>
             <table class="data-table">
                 <thead>
                     <tr>
@@ -289,49 +202,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><strong>Baştabib</strong></td>
-                        <td>1</td>
-                        <td>Tıp ilminde mahir, nazik ve şefkatli.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Kehhâl (Göz Hekimi)</strong></td>
-                        <td>2</td>
-                        <td>Göz cerrahisinde ve ilaçlarında uzman.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Cerrâh</strong></td>
-                        <td>2</td>
-                        <td>Dış yaralar ve operasyonlarda deneyimli.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Eczacı (Saydelâni)</strong></td>
-                        <td>2</td>
-                        <td>Bitkilerin özlerini ve etkilerini bilen.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Aşçı ve Kilerci</strong></td>
-                        <td>4</td>
-                        <td>Hastaların diyetine uygun gıda hazırlayan.</td>
-                    </tr>
+                    <tr><td><strong>Baştabib</strong></td><td>1</td><td>Tıp ilminde mahir, nazik ve şefkatli.</td></tr>
+                    <tr><td><strong>Kehhâl (Göz Hekimi)</strong></td><td>2</td><td>Göz cerrahisinde ve ilaçlarında uzman.</td></tr>
+                    <tr><td><strong>Cerrâh</strong></td><td>2</td><td>Dış yaralar ve operasyonlarda deneyimli.</td></tr>
+                    <tr><td><strong>Eczacı (Saydelâni)</strong></td><td>2</td><td>Bitkilerin özlerini ve etkilerini bilen.</td></tr>
                 </tbody>
             </table>
 
-            <div class="info-panels">
-                <div class="info-card therapy-box">
-                    <strong style="display: block; font-family: 'Cinzel'; border-bottom: 1px solid #2c3e50; margin-bottom: 10px;">Koku Terapisi</strong>
-                    <p style="font-size: 16px;">Odaların ortasında bulunan buhurdanlıklarda yakılan öd ağacı ve amber kokuları ile bahçede yetiştirilen çiçeklerin kokusu tedavinin bir parçasıydı.</p>
-                </div>
-                
-                <div class="info-card charity-box">
-                    <strong style="display: block; font-family: 'Cinzel'; border-bottom: 1px solid var(--gold-soft); margin-bottom: 10px;">Vakıf Şartı</strong>
-                    <p style="font-size: 16px;">"Dini, dili ve ırkı ne olursa olsun; kapıya gelen her muhtaç ücretsiz tedavi edilecek, ilaçları hiçbir bedel alınmadan verilecektir."</p>
-                </div>
+            <h3 class="section-title">5. Macunlar ve Vakıf Laneti</h3>
+            <p>Haftada 2 gün açılan eczanede (macun işyeri), binlerce çeşit ilaç halka bolca dağıtılırdı[cite: 16]. Zencefil, kaküle ve murabba gibi şifalı maddeler bu tedavilerin temelidir[cite: 16].</p>
+
+            <div class="lanet-yazisi">
+                <strong>VAKIF LANETİ:</strong> <br>
+                “Sağlıklı olan adam bu ilaçlardan bir kırat alırsa hastalanıp Firavun ve Karun’un laneti üzerine ola!” [cite: 16]
             </div>
 
-            <div class="image-box" style="margin-top: 30px;">
-                <img src="muzik_tedavi.jpg" alt="Müzik Tedavi Canlandırması">
-                <div class="img-caption">Sağlık Müzesi'nde müzik ve su sesi ile tedavi canlandırması</div>
+            <div class="image-box">
+                <img src="muzik_tedavi.jpg" alt="Müzik Tedavi">
+                <div class="img-caption">Sağlık Müzesi'nde müzik ve su sesi ile tedavi canlandırması [cite: 13]</div>
             </div>
 
         </div>
