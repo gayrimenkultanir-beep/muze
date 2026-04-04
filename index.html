@@ -460,15 +460,14 @@ window.onclick = function(event) {
 </div>
 
 <script>
-    // Sayfa tamamen yüklenince çalışması için DOMContentLoaded içine aldık
     document.addEventListener("DOMContentLoaded", function() {
+        // GitHub'da sorunsuz çalışması için dosya yolu
         fetch('./duyurular.json')
             .then(res => {
                 if (!res.ok) throw new Error("JSON dosyası bulunamadı");
                 return res.json();
             })
             .then(data => {
-                // Senin HTML'indeki doğru ID'yi seçiyoruz
                 const liste = document.getElementById('ana-sayfa-duyurular');
                 
                 if (!liste) {
@@ -490,16 +489,22 @@ window.onclick = function(event) {
                 }
 
                 sonUc.forEach(d => {
+                    // TARİH FORMATI: Gün Ay Yıl (Örn: 4 Nisan 2026)
                     const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { 
                         day: 'numeric', 
-                        month: 'long' 
+                        month: 'long',
+                        year: 'numeric' 
                     });
 
-                    // Ana sayfa için daha sade bir liste yapısı (Görselsiz, sadece başlık ve tarih)
+                    // Listeye ekle
                     liste.innerHTML += `
-                        <li style="margin-bottom: 10px; border-bottom: 1px dotted #ccc; padding-bottom: 5px;">
-                            <span style="font-size: 0.75rem; color: #8b4513; font-weight: bold; display: block;">${tarihStr}</span>
-                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.9rem;">${d.baslik}</a>
+                        <li style="margin-bottom: 12px; border-bottom: 1px dotted #d4af37; padding-bottom: 8px; list-style: none;">
+                            <span style="font-size: 0.75rem; color: #8b4513; font-weight: bold; display: block; margin-bottom: 2px;">
+                                ${tarihStr}
+                            </span>
+                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.95rem; font-family: 'Georgia', serif;">
+                                ${d.baslik}
+                            </a>
                         </li>
                     `;
                 });
@@ -507,7 +512,7 @@ window.onclick = function(event) {
             .catch(err => {
                 console.error("Yükleme hatası:", err);
                 const liste = document.getElementById('ana-sayfa-duyurular');
-                if (liste) liste.innerHTML = "<li>Duyurular yüklenemedi.</li>";
+                if (liste) liste.innerHTML = "<li>Duyurular şu an yüklenemedi.</li>";
             });
     });
 </script>
