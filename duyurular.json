@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "baslik": "Müze Ziyaret Saatleri Hakkında (Ramazan Bayramı)",
+    "tarih": "2026-04-01",
+    "ozet": "Ramazan Bayramı süresince ziyaret saatlerimizde düzenleme yapılmıştır.",
+    "metin": "Sultan II. Bayezid Külliyesi Sağlık Müzesi, Ramazan Bayramı'nın birinci günü saat 13:00'e kadar kapalı olup, diğer günler normal ziyaret saatlerinde (09:00 - 18:00) hizmet vermeye devam edecektir. Tüm ziyaretçilerimize hayırlı bayramlar dileriz.",
+    "gorsel": "img/duyuru-bayram.jpg"
+  },
+  {
+    "id": 2,
+    "baslik": "8 Mart Dünya Kadınlar Günü Etkinliği",
+    "tarih": "2026-03-08",
+    "ozet": "Kadın hekimlerimiz ve tıp tarihindeki kadın izleri üzerine söyleşi.",
+    "metin": "Tıp tarihimizde önemli izler bırakmış kadın şifacıların ve hekimlerin anılacağı özel sergimiz ve panelimiz, külliye konferans salonunda gerçekleştirilecektir. Katılım ücretsizdir.",
+    "gorsel": "img/duyuru-8mart.jpg"
+  },
+  {
+    "id": 3,
+    "baslik": "Osmanlı Tıbbında Bitkisel Tedavi Konferansı",
+    "tarih": "2026-02-25",
+    "ozet": "15. yüzyıl Darüşşifası'nda kullanılan tıbbi bitkiler anlatılacak.",
+    "metin": "Dr. Rıfat Osman Salonu'nda düzenlenecek olan konferansta, Sultan II. Bayezid dönemi reçetelerinde yer alan bitkisel karışımlar ve uygulama yöntemleri detaylı olarak ele alınacaktır.",
+    "gorsel": "img/duyuru-konferans.jpg"
+  },
+  {
+    "id": 4,
+    "baslik": "Restorasyon ve Konservasyon Çalışmaları",
+    "tarih": "2026-02-10",
+    "ozet": "Müzemizin el yazmaları bölümünde periyodik bakım yapılmaktadır.",
+    "metin": "Kütüphanemizde bulunan nadir eserlerin korunması amacıyla başlatılan konservasyon çalışmaları nedeniyle el yazmaları salonu geçici olarak ziyarete kapatılmıştır. Diğer bölümlerimiz ziyarete açıktır.",
+    "gorsel": "img/duyuru-restorasyon.jpg"
+  }
+]
