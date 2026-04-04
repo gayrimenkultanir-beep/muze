@@ -458,43 +458,58 @@ window.onclick = function(event) {
         </div>
     </div>
 </div>
+
 <script>
-    fetch('./duyurular.json')
-        .then(res => res.json())
-        .then(data => {
-            const liste = document.getElementById('arsiv-liste');
-            liste.innerHTML = '';
-            
-            // Tarihe göre sırala
-            data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih)).forEach(d => {
-                const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { day:'numeric', month:'long', year:'numeric' });
+    // Sayfa tamamen yüklenince çalışması için DOMContentLoaded içine aldık
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('./duyurular.json')
+            .then(res => {
+                if (!res.ok) throw new Error("JSON dosyası bulunamadı");
+                return res.json();
+            })
+            .then(data => {
+                // Senin HTML'indeki doğru ID'yi seçiyoruz
+                const liste = document.getElementById('ana-sayfa-duyurular');
                 
-                // GÖRSEL KONTROLÜ: Eğer gorseller dizisi varsa ilkini al, yoksa gorsel'i kullan
-                let gorselYolu = "";
-                if (d.gorseller && d.gorseller.length > 0) {
-                    gorselYolu = d.gorseller[0]; // İlk resmi göster
-                } else {
-                    gorselYolu = d.gorsel || "img/varsayilan.jpg"; // Tek resmi veya varsayılanı göster
+                if (!liste) {
+                    console.error("HATA: 'ana-sayfa-duyurular' bulunamadı.");
+                    return;
                 }
 
-                liste.innerHTML += `
-                    <div class="duyuru-item">
-                        <div class="duyuru-gorsel">
-                            <img src="${gorselYolu}" alt="${d.baslik}">
-                        </div>
-                        <div class="duyuru-detay">
-                            <span class="tarih">${tarihStr}</span>
-                            <h2>${d.baslik}</h2>
-                            <p>${d.metin}</p>
-                        </div>
-                    </div>
-                `;
+                liste.innerHTML = ''; // "Yükleniyor..." yazısını sil
+
+                // Tarihe göre sırala (En yeni en üstte)
+                const siraliData = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
+                
+                // Ana sayfada sadece İLK 3 duyuruyu göster
+                const sonUc = siraliData.slice(0, 3);
+
+                if (sonUc.length === 0) {
+                    liste.innerHTML = "<li>Henüz duyuru eklenmemiş.</li>";
+                    return;
+                }
+
+                sonUc.forEach(d => {
+                    const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { 
+                        day: 'numeric', 
+                        month: 'long' 
+                    });
+
+                    // Ana sayfa için daha sade bir liste yapısı (Görselsiz, sadece başlık ve tarih)
+                    liste.innerHTML += `
+                        <li style="margin-bottom: 10px; border-bottom: 1px dotted #ccc; padding-bottom: 5px;">
+                            <span style="font-size: 0.75rem; color: #8b4513; font-weight: bold; display: block;">${tarihStr}</span>
+                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.9rem;">${d.baslik}</a>
+                        </li>
+                    `;
+                });
+            })
+            .catch(err => {
+                console.error("Yükleme hatası:", err);
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                if (liste) liste.innerHTML = "<li>Duyurular yüklenemedi.</li>";
             });
-        })
-        .catch(err => {
-            console.error("Yükleme hatası:", err);
-            document.getElementById('arsiv-liste').innerHTML = "Duyurular şu an listelenemiyor.";
-        });
+    });
 </script>
 
 
