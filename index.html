@@ -463,26 +463,22 @@ window.onclick = function(event) {
     document.addEventListener("DOMContentLoaded", function() {
         fetch('./duyurular.json')
             .then(res => {
-                if (!res.ok) throw new Error("JSON dosyası bulunamadı");
+                if (!res.ok) throw new Error("JSON bulunamadı");
                 return res.json();
             })
             .then(data => {
                 const liste = document.getElementById('ana-sayfa-duyurular');
-                
-                if (!liste) {
-                    console.error("HATA: 'ana-sayfa-duyurular' bulunamadı.");
-                    return;
-                }
+                if (!liste) return;
 
                 liste.innerHTML = ''; 
 
-                // Tarihe göre sırala ve ilk 3'ü al
+                // En yeni 3 duyuruyu al
                 const sonUc = data
                     .sort((a, b) => new Date(b.tarih) - new Date(a.tarih))
                     .slice(0, 3);
 
                 if (sonUc.length === 0) {
-                    liste.innerHTML = "<li style='list-style:none; font-size:0.85rem;'>Henüz duyuru eklenmemiş.</li>";
+                    liste.innerHTML = "<li style='border:none;'>Henüz duyuru eklenmemiş.</li>";
                     return;
                 }
 
@@ -493,24 +489,27 @@ window.onclick = function(event) {
                         year: 'numeric' 
                     });
 
-                    // YAN YANA VE KOMPAKT DÜZEN
+                    // TASARIMINA TAM UYUMLU SATIR YAPISI
                     liste.innerHTML += `
-                        <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; border-bottom: 0.5px solid #eee; padding-bottom: 5px; list-style: none;">
-                            <span style="font-size: 0.72rem; color: #8b4513; font-weight: bold; white-space: nowrap; min-width: 90px;">
+                        <li style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); list-style: none;">
+                            <span style="font-size: 11px; color: var(--gold-soft); font-weight: bold; white-space: nowrap; min-width: 95px; opacity: 0.9;">
                                 ${tarihStr}
                             </span>
                             
-                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.9rem; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">
+                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 13px; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">
                                 - ${d.baslik}
                             </a>
                         </li>
                     `;
                 });
+                
+                // En son satırın çizgisini kaldırmak istersen (opsiyonel)
+                if(liste.lastElementChild) liste.lastElementChild.style.borderBottom = "none";
             })
             .catch(err => {
-                console.error("Yükleme hatası:", err);
+                console.error("Hata:", err);
                 const liste = document.getElementById('ana-sayfa-duyurular');
-                if (liste) liste.innerHTML = "<li style='list-style:none; font-size:0.85rem;'>Duyurular yüklenemedi.</li>";
+                if (liste) liste.innerHTML = "<li style='border:none;'>Duyurular yüklenemedi.</li>";
             });
     });
 </script>
