@@ -1,4 +1,16 @@
 [
+   {
+    "id": 7,
+    "baslik": "Saatleri Güncellendi",
+    "tarih": "2026-04-04",
+    "ozet": "düzenleme yapılmıştır.",
+    "metin": "Sultan II. Bayezid Külliyesi Sağlık Müzesi, bahar dönemi boyunca sabah 09:00 ile akşam 19:00 saatleri arasında ziyarete açık olacaktır. Hafta sonları da aynı saatler geçerlidir.",
+    "gorseller": [
+      "img/muze-bahce.jpg",
+      "img/muze-giris.jpg"
+    ]
+  }, 
+  
   {
     "id": 6,
     "baslik": "Ziyaret Saatleri Güncellendi",
@@ -9,7 +21,9 @@
       "img/muze-bahce.jpg",
       "img/muze-giris.jpg"
     ]
-  }, {
+  }, 
+  
+  {
     "id": 5,
     "baslik": "Müze Ziyaret Saatleri Güncellendi",
     "tarih": "2026-04-04",
@@ -20,6 +34,7 @@
       "img/muze-giris.jpg"
     ]
   },
+  
   {
     "id": 4,
     "baslik": "Osmanlı Tıbbı Seminerleri Başlıyor",
