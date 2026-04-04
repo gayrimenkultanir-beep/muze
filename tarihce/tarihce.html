@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarihçe - Sultan II. Bayezid Külliyesi Sağlık Müzesi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <title>Sultan II. Bayezid Külliyesi - Sağlık Müzesi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* RESET */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         :root {
             --gold: #d4af37;
             --gold-soft: #caa64b;
@@ -17,12 +23,15 @@
 
         body {
             font-family: 'Playfair Display', serif;
+            font-size: 16px;
             background: #fdf5e6;
-            background-image: url("../assets/background.jpg");
-            background-attachment: fixed;
+            background-image: url("assets/background.jpg");
             background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             color: #2b2b2b;
         }
+
 
         /* NAV */
         .nav {
@@ -37,28 +46,32 @@
             top: 0;
             z-index: 100;
         }
-        .logo { font-family: 'Cinzel'; font-size: 20px; font-weight: 600; }
-        .menu { display: flex; align-items: center; }
-        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; cursor: pointer; transition: 0.3s; }
-        .menu a:hover { color: #fff; }
-        
-        .print-btn {
-            background: transparent;
-            border: 1px solid var(--gold);
-            padding: 5px 15px;
-            transition: all 0.3s;
-        }
-        .print-btn:hover {
-            background: var(--gold);
-            color: var(--dark);
-        }
 
-        /* CONTAINER */
+        .logo { font-family: 'Cinzel'; font-size: 20px; }
+        .menu a {
+            margin-left: 30px;
+            color: var(--gold);
+            text-decoration: none;
+            font-family: 'Cinzel';
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .menu a:hover { color: #fff; }
+
+        
+      
+
+        /* CONTAINER GRID */
         .container {
             max-width: 1240px;
             margin: 40px auto;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            column-gap: 40px;
+            row-gap: 25px;
             padding: 0 20px;
         }
+
 
         /* BANNER */
         .banner { position: relative; margin-bottom: 40px; overflow: hidden; border-radius: 12px; border: 2px solid var(--gold-soft); }
@@ -196,13 +209,66 @@
 
 <body>
 
-<div class="nav">
-    <div class="logo">T.C. TRAKYA ÜNİVERSİTESİ Sultan II.Bayezid Külliyesi Sağlık Müzesi</div>
-    <div class="menu">
-       
-        <a href="../index.html">ANA SAYFA</a>
-    </div>
+<div class="nav-wrapper">
+    <nav class="nav">
+        <div class="logo">
+            <div style="font-weight: bold; font-size: 16px; letter-spacing: 1px;">
+                T.C. TRAKYA ÜNİVERSİTESİ
+            </div>
+            <div style="font-size: 0.85em; opacity: 0.9;">
+                Sultan II. Bayezid Külliyesi Sağlık Müzesi
+            </div>
+        </div>
+
+        <div class="menu-container">
+            <div class="global-menu">
+                <button onclick="toggleGlobalMenu()" class="menu-btn">
+                    MENÜ ☰
+                </button>
+
+                <div id="globalDropdown" style="display: none; position: absolute; right: 0; top: 50px; background: var(--dark); border: 1px solid var(--gold-soft); min-width: 220px; z-index: 1000; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+                    <a href="index.html" class="dropdown-link">Ana Sayfa</a>
+                    <a href="tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
+                    <a href="bayezid/bayezid.html" class="dropdown-link">Sultan II.Bayezid</a>
+                    <a href="celebi/celebi.html" class="dropdown-link">Evliya Çelebi</a>
+                    <a href="medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
+                    <a href="hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
+                    <a href="imaret/imaret.html" class="dropdown-link">İmarethane</a>
+                    <a href="music/music.html" class="dropdown-link">Müzikle Tedavi</a>
+                    <a href="plan/plan.html" class="dropdown-link">Gezi Planı</a>
+                    <a href="galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
+                    <a href="haberler/haberler.html" class="dropdown-link">Haberler</a>
+                    <a href="oduller/oduller.html" class="dropdown-link">Ödüller</a>
+                    <a href="personel/personel.html" class="dropdown-link">Personelimiz</a>
+                    <a href="universite/universite.html" class="dropdown-link">Trakya Üniversitesi</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 </div>
+<div style="margin-top: 30px;"></div>
+
+<script>
+function toggleGlobalMenu() {
+    var x = document.getElementById("globalDropdown");
+    if (x.style.display === "none" || x.style.display === "") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+// Menü dışına tıklandığında otomatik kapatma
+window.onclick = function(event) {
+    if (!event.target.matches('.menu-btn')) {
+        var dropdown = document.getElementById("globalDropdown");
+        if (dropdown && dropdown.style.display === "block") {
+            dropdown.style.display = "none";
+        }
+    }
+}
+</script>
+
 
 <div class="container">
 
