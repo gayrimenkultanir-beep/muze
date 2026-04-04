@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bütün Duyurular</title>
+    <style>
+        /* Arşiv Sayfası İçin Temel Stiller */
+        .arsiv-konteyner { max-width: 900px; margin: 50px auto; padding: 20px; font-family: sans-serif; }
+        .duyuru-item { 
+            display: flex; 
+            gap: 20px; 
+            border-bottom: 1px dotted #ccc; 
+            padding: 30px 0; 
+            align-items: flex-start;
+        }
+        .duyuru-gorsel img { 
+            width: 250px; 
+            height: 160px; 
+            object-fit: cover; 
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .duyuru-detay { flex: 1; }
+        .duyuru-detay span { color: #8b4513; font-size: 0.9rem; font-weight: bold; }
+        .duyuru-detay h2 { margin: 10px 0; color: #333; }
+        .duyuru-detay p { line-height: 1.6; color: #555; }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 600px) {
+            .duyuru-item { flex-direction: column; }
+            .duyuru-gorsel img { width: 100%; height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="arsiv-konteyner">
+        <h1>Bütün Duyurular</h1>
+        <hr>
+        <div id="tum-duyurular-listesi">
+            <p>Duyurular yükleniyor...</p>
+        </div>
+    </div>
+
+    <script>
+        fetch('duyurular.json')
+            .then(response => response.json())
+            .then(data => {
+                // Tarihe göre sırala (En yeni en üstte)
+                const siraliData = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
+                
+                const listeDiv = document.getElementById('tum-duyurular-listesi');
+                listeDiv.innerHTML = ''; // Yükleniyor yazısını sil
+
+                siraliData.forEach(duyuru => {
+                    listeDiv.innerHTML += `
+                        <div class="duyuru-item">
+                            <div class="duyuru-gorsel">
+                                <img src="${duyuru.gorsel}" alt="${duyuru.baslik}">
+                            </div>
+                            <div class="duyuru-detay">
+                                <span>${new Date(duyuru.tarih).toLocaleDateString('tr-TR')}</span>
+                                <h2>${duyuru.baslik}</h2>
+                                <p>${duyuru.metin}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            })
+            .catch(err => {
+                console.error("Hata:", err);
+                document.getElementById('tum-duyurular-listesi').innerHTML = "Duyurular yüklenirken bir sorun oluştu.";
+            });
+    </script>
+
+</body>
+</html>
