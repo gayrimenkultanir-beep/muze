@@ -271,7 +271,22 @@
         </div>
     </nav>
 </div>
-<div class="container">
+<script>
+        function toggleGlobalMenu(event) {
+            event.stopPropagation();
+            var x = document.getElementById("globalDropdown");
+            x.style.display = (x.style.display === "block") ? "none" : "block";
+        }
+
+        window.onclick = function(event) {
+            var dropdown = document.getElementById("globalDropdown");
+            if (dropdown && !event.target.matches('.menu-btn')) {
+                dropdown.style.display = "none";
+            }
+        }
+    </script>
+
+    <div class="container">
 
     <div class="banner">
         <img src="../assets/banner.webp" alt="Seyyah-ı Alem Header">
