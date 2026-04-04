@@ -458,7 +458,44 @@ window.onclick = function(event) {
         </div>
     </div>
 </div>
+<script>
+        // GitHub'da sorun çıkmaması için './' ile başlıyoruz
+        fetch('./duyurular.json')
+            .then(response => {
+                if (!response.ok) throw new Error("JSON bulunamadı");
+                return response.json();
+            })
+            .then(data => {
+                // Tarihe göre sırala (En yeni en üstte)
+                const siraliData = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
+                
+                // Sadece ilk 3 tanesini al
+                const sonUc = siraliData.slice(0, 3);
+                
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                liste.innerHTML = ''; // "Yükleniyor" yazısını temizle
 
+                sonUc.forEach(duyuru => {
+                    const li = document.createElement('li');
+                    
+                    // Tarihi formatla (Örn: 15 Nisan 2026)
+                    const tarihObj = new Date(duyuru.tarih);
+                    const formatliTarih = tarihObj.toLocaleDateString('tr-TR', { 
+                        day: 'numeric', month: 'long', year: 'numeric' 
+                    });
+
+                    li.innerHTML = `
+                        <span class="tarih-etiket">${formatliTarih}</span>
+                        ${duyuru.baslik}
+                    `;
+                    liste.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error("Hata:", error);
+                document.getElementById('ana-sayfa-duyurular').innerHTML = "<li>Duyurular şu an gösterilemiyor.</li>";
+            });
+    </script>
 
 
         
