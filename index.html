@@ -459,43 +459,43 @@ window.onclick = function(event) {
     </div>
 </div>
 <script>
-        // GitHub'da sorun çıkmaması için './' ile başlıyoruz
-        fetch('./duyurular.json')
-            .then(response => {
-                if (!response.ok) throw new Error("JSON bulunamadı");
-                return response.json();
-            })
-            .then(data => {
-                // Tarihe göre sırala (En yeni en üstte)
-                const siraliData = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
+    fetch('./duyurular.json')
+        .then(res => res.json())
+        .then(data => {
+            const liste = document.getElementById('arsiv-liste');
+            liste.innerHTML = '';
+            
+            // Tarihe göre sırala
+            data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih)).forEach(d => {
+                const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { day:'numeric', month:'long', year:'numeric' });
                 
-                // Sadece ilk 3 tanesini al
-                const sonUc = siraliData.slice(0, 3);
-                
-                const liste = document.getElementById('ana-sayfa-duyurular');
-                liste.innerHTML = ''; // "Yükleniyor" yazısını temizle
+                // GÖRSEL KONTROLÜ: Eğer gorseller dizisi varsa ilkini al, yoksa gorsel'i kullan
+                let gorselYolu = "";
+                if (d.gorseller && d.gorseller.length > 0) {
+                    gorselYolu = d.gorseller[0]; // İlk resmi göster
+                } else {
+                    gorselYolu = d.gorsel || "img/varsayilan.jpg"; // Tek resmi veya varsayılanı göster
+                }
 
-                sonUc.forEach(duyuru => {
-                    const li = document.createElement('li');
-                    
-                    // Tarihi formatla (Örn: 15 Nisan 2026)
-                    const tarihObj = new Date(duyuru.tarih);
-                    const formatliTarih = tarihObj.toLocaleDateString('tr-TR', { 
-                        day: 'numeric', month: 'long', year: 'numeric' 
-                    });
-
-                    li.innerHTML = `
-                        <span class="tarih-etiket">${formatliTarih}</span>
-                        ${duyuru.baslik}
-                    `;
-                    liste.appendChild(li);
-                });
-            })
-            .catch(error => {
-                console.error("Hata:", error);
-                document.getElementById('ana-sayfa-duyurular').innerHTML = "<li>Duyurular şu an gösterilemiyor.</li>";
+                liste.innerHTML += `
+                    <div class="duyuru-item">
+                        <div class="duyuru-gorsel">
+                            <img src="${gorselYolu}" alt="${d.baslik}">
+                        </div>
+                        <div class="duyuru-detay">
+                            <span class="tarih">${tarihStr}</span>
+                            <h2>${d.baslik}</h2>
+                            <p>${d.metin}</p>
+                        </div>
+                    </div>
+                `;
             });
-    </script>
+        })
+        .catch(err => {
+            console.error("Yükleme hatası:", err);
+            document.getElementById('arsiv-liste').innerHTML = "Duyurular şu an listelenemiyor.";
+        });
+</script>
 
 
         
