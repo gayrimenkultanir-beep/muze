@@ -1,50 +1,55 @@
 [
   {
-    "id": 1,
-    "baslik": "Müze Ziyaret Saatleri (Ramazan Bayramı.....)",
-    "tarih": "2026-04-01",
-    "ozet": "Bayram süresince ziyaret saatlerimizde düzenleme yapılmıştır.",
-    "metin": "Sultan II. Bayezid Külliyesi Sağlık Müzesi, Ramazan Bayramı'nın birinci günü saat 13:00'e kadar kapalı olup, diğer günler normal ziyaret saatlerinde (09:00 - 18:00) hizmet vermeye devam edecektir.",
-    "gorsel": "img/duyuru-bayram.jpg"
-  },
-  {
-    "id": 2,
-    "baslik": "8 Mart Dünya Kadınlar Günü Etkinliği",
-    "tarih": "2026-03-08",
-    "ozet": "Tıp tarihindeki kadın izleri üzerine söyleşi ve panel.",
-    "metin": "Tıp tarihimizde önemli izler bırakmış kadın şifacıların ve hekimlerin anılacağı özel sergimiz ve panelimiz, külliye konferans salonunda gerçekleştirilecektir.",
-    "gorsel": "img/duyuru-8mart.jpg"
-  },
-  {
-    "id": 3,
-    "baslik": "Osmanlı Tıbbında Bitkisel Tedavi Konferansı",
-    "tarih": "2026-02-25",
-    "ozet": "15. yüzyıl Darüşşifası'nda kullanılan tıbbi bitkiler.",
-    "metin": "Dr. Rıfat Osman Salonu'nda düzenlenecek olan konferansta, dönem reçetelerinde yer alan bitkisel karışımlar ele alınacaktır.",
-    "gorsel": "img/duyuru-konferans.jpg"
+    "id": 6,
+    "baslik": "Ziyaret Saatleri Güncellendi",
+    "tarih": "2026-04-04",
+    "ozet": "Bsaatlerimizde düzenleme yapılmıştır.",
+    "metin": "Sultan II. Bayezid Külliyesi Sağlık Müzesi, bahar dönemi boyunca sabah 09:00 ile akşam 19:00 saatleri arasında ziyarete açık olacaktır. Hafta sonları da aynı saatler geçerlidir.",
+    "gorseller": [
+      "img/muze-bahce.jpg",
+      "img/muze-giris.jpg"
+    ]
+  }, {
+    "id": 5,
+    "baslik": "Müze Ziyaret Saatleri Güncellendi",
+    "tarih": "2026-04-04",
+    "ozet": "Bahar dönemi ile birlikte ziyaret saatlerimizde düzenleme yapılmıştır.",
+    "metin": "Sultan II. Bayezid Külliyesi Sağlık Müzesi, bahar dönemi boyunca sabah 09:00 ile akşam 19:00 saatleri arasında ziyarete açık olacaktır. Hafta sonları da aynı saatler geçerlidir.",
+    "gorseller": [
+      "img/muze-bahce.jpg",
+      "img/muze-giris.jpg"
+    ]
   },
   {
     "id": 4,
-    "baslik": "Restorasyon ve Bakım Çalışmaları",
-    "tarih": "2026-02-10",
-    "ozet": "El yazmaları bölümünde periyodik bakım yapılmaktadır.",
-    "metin": "Kütüphanemizde bulunan nadir eserlerin korunması amacıyla başlatılan konservasyon çalışmaları devam etmektedir.",
-    "gorsel": "img/duyuru-restorasyon.jpg"
+    "baslik": "Osmanlı Tıbbı Seminerleri Başlıyor",
+    "tarih": "2026-03-28",
+    "ozet": "15. yüzyıl tedavi yöntemleri üzerine ücretsiz seminerler.",
+    "metin": "Külliyemizin konferans salonunda düzenlenecek seminerlerde, Darüşşifa döneminde uygulanan müzikle tedavi ve su sesiyle terapi yöntemleri uzmanlarca anlatılacaktır.",
+    "gorsel": "img/seminer.jpg"
   },
-   {
-    "id": 5,
-    "baslik": "Bakım Çalışmaları",
-    "tarih": "2026-02-10",
-    "ozet": "bakım yapılmaktadır.",
-    "metin": "konservasyon çalışmaları devam etmektedir.",
-    "gorsel": "img/duyuru-restorasyon.jpg"
+  {
+    "id": 3,
+    "baslik": "Restorasyon Çalışmaları Hakkında",
+    "tarih": "2026-03-15",
+    "ozet": "Güney cephesinde temizlik ve bakım çalışmaları yürütülmektedir.",
+    "metin": "Müzemizin dış cephe konservasyon çalışmaları nedeniyle bazı bölümlerde iskeleler kurulmuştur. Ziyaretçi rotasında herhangi bir değişiklik yoktur.",
+    "gorsel": "img/restorasyon.jpg"
   },
-   {
-    "id": 6,
-    "baslik": "Restorasyon ",
-    "tarih": "2026-02-10",
-    "ozet": "El yazmaları bölümünde periyodik bakım yapılmaktadır.",
-    "metin": "macıyla başlatılan konservasyon çalışmaları devam etmektedir.",
-    "gorsel": "img/duyuru-restorasyon.jpg"
+  {
+    "id": 2,
+    "baslik": "8 Mart Dünya Kadınlar Günü Özel Sergisi",
+    "tarih": "2026-03-08",
+    "ozet": "Tıp tarihinde iz bırakan kadınlar sergisi ziyarete açıldı.",
+    "metin": "Selçuklu ve Osmanlı döneminde şifacı kadınların rollerini ve tıp ilmine katkılarını ele alan geçici sergimiz bir ay boyunca gezilebilir.",
+    "gorsel": "img/sergi.jpg"
+  },
+  {
+    "id": 1,
+    "baslik": "Dijital Arşiv Projesi Tamamlandı",
+    "tarih": "2026-02-20",
+    "ozet": "Müzemizin nadir eserleri artık dijital ortamda.",
+    "metin": "Kütüphanemizde bulunan el yazması eserlerin yüksek çözünürlüklü dijital kopyaları araştırmacıların hizmetine sunulmuştur.",
+    "gorsel": "img/arsiv.jpg"
   }
 ]
