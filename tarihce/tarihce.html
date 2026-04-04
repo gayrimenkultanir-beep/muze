@@ -7,7 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* GENEL AYARLAR */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         :root {
             --gold: #d4af37;
             --gold-soft: #caa64b;
@@ -22,52 +24,74 @@
             background-attachment: fixed;
             background-size: cover;
             color: #2b2b2b;
+            padding-top: 80px; /* Fixed nav için üst boşluk */
         }
 
-        /* NAV */
+        /* SABİT NAVİGASYON */
+        .nav-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
         .nav {
-            background: #0f1a24;
+            background: var(--dark);
             color: var(--gold);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 40px;
             border-bottom: 3px solid var(--gold-soft);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
-        .logo { font-family: 'Cinzel'; font-size: 20px; font-weight: 600; }
-        .menu { display: flex; align-items: center; }
-        .menu a { margin-left: 30px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 14px; cursor: pointer; transition: 0.3s; }
-        .menu a:hover { color: #fff; }
-        
-        .print-btn {
+
+        .logo-title { font-family: 'Cinzel'; font-size: 16px; font-weight: bold; letter-spacing: 1px; }
+        .logo-subtitle { font-family: 'Cinzel'; font-size: 0.85em; opacity: 0.9; }
+
+        /* MENÜ BUTONU VE DROPDOWN */
+        .menu-container { position: relative; }
+        .menu-btn {
             background: transparent;
             border: 1px solid var(--gold);
-            padding: 5px 15px;
+            color: var(--gold);
+            cursor: pointer;
+            padding: 8px 15px;
+            font-family: 'Cinzel';
             transition: all 0.3s;
+            text-transform: uppercase;
         }
-        .print-btn:hover {
-            background: var(--gold);
-            color: var(--dark);
+        .menu-btn:hover { background: var(--gold); color: #fff; box-shadow: 0 0 15px var(--gold); }
+
+        #globalDropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 55px;
+            background: var(--dark);
+            border: 1px solid var(--gold-soft);
+            min-width: 220px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
         }
+
+        .dropdown-link {
+            display: block;
+            padding: 12px 20px;
+            color: var(--gold);
+            text-decoration: none;
+            font-family: 'Cinzel';
+            font-size: 13px;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+            transition: all 0.2s;
+        }
+        .dropdown-link:hover { background: rgba(212, 175, 55, 0.1); color: #fff; padding-left: 25px; }
 
         /* CONTAINER */
-        .container {
-            max-width: 1240px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
+        .container { max-width: 1240px; margin: 40px auto; padding: 0 20px; }
 
         /* BANNER */
-        .banner { position: relative; margin-bottom: 40px; overflow: hidden; border-radius: 12px; border: 2px solid var(--gold-soft); }
-        .banner img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            filter: brightness(0.7);
-        }
+        .banner { position: relative; margin-bottom: 40px; overflow: hidden; border-radius: 12px; border: 2px solid var(--gold-soft); height: 350px; }
+        .banner img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); }
         .banner-text {
             position: absolute;
             bottom: 30px;
@@ -109,202 +133,27 @@
             border-bottom: 2px solid var(--gold-soft);
         }
 
-        .content-area {
-            padding: 50px;
-            line-height: 1.8;
-            font-size: 18px;
-            position: relative;
-            z-index: 5;
-        }
+        .content-area { padding: 50px; line-height: 1.8; font-size: 18px; position: relative; z-index: 5; }
+        .image-box { display: flex; justify-content: center; width: 100%; margin-bottom: 40px; }
+        .content-area img { max-width: 800px; width: 100%; border: 2px solid var(--gold-soft); border-radius: 8px; }
 
-        .image-box {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 40px;
-        }
-
-        .content-area img {
-            max-width: 800px;
-            width: 100%;
-            height: auto;
-            border: 2px solid var(--gold-soft);
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .section-title { 
-            font-family: 'Cinzel'; 
-            color: #1b2b3a; 
-            border-bottom: 1px solid var(--gold-soft); 
-            margin: 40px 0 20px 0;
-            display: block;
-            font-weight: 700;
-            font-size: 22px;
-            letter-spacing: 1px;
-        }
-
+        .section-title { font-family: 'Cinzel'; color: #1b2b3a; border-bottom: 1px solid var(--gold-soft); margin: 40px 0 20px 0; font-weight: 700; font-size: 22px; }
         .text-part p { margin-bottom: 20px; text-align: justify; }
-
         .text-part ul { margin: 20px 0; padding-left: 30px; list-style: none; }
         .text-part li { margin-bottom: 15px; position: relative; }
         .text-part li::before { content: "◈"; color: var(--gold); position: absolute; left: -25px; }
 
         /* TABLO */
-        .history-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 35px 0;
-            background: rgba(255, 255, 255, 0.4);
-        }
-        .history-table th, .history-table td {
-            border: 1px solid var(--gold-soft);
-            padding: 18px;
-            text-align: left;
-        }
-        .history-table th {
-            background: var(--dark);
-            color: var(--gold);
-            font-family: 'Cinzel';
-            font-size: 16px;
-        }
+        .history-table { width: 100%; border-collapse: collapse; margin: 35px 0; background: rgba(255, 255, 255, 0.4); }
+        .history-table th, .history-table td { border: 1px solid var(--gold-soft); padding: 18px; text-align: left; }
+        .history-table th { background: var(--dark); color: var(--gold); font-family: 'Cinzel'; }
 
-        .quote-box {
-            font-style: italic;
-            background: rgba(15, 26, 36, 0.05);
-            padding: 25px;
-            border-left: 5px solid var(--gold);
-            margin: 35px 0;
-            font-size: 19px;
-        }
-
-        @media print {
-            .nav, .menu, .print-btn { display: none !important; }
-            body { background: white; }
-            .full-card { border: none; box-shadow: none; }
-        }
+        .quote-box { font-style: italic; background: rgba(15, 26, 36, 0.05); padding: 25px; border-left: 5px solid var(--gold); margin: 35px 0; font-size: 19px; }
 
         @media(max-width: 900px){
             .content-area { padding: 25px; }
             .banner-text h1 { font-size: 30px; }
-            .banner-text h2 { font-size: 14px; }
             .nav { padding: 15px; }
-            .logo { font-size: 16px; }
-        }
-    </style>
-</head>
-
-<body>
-
-<style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --gold: #d4af37;
-            --gold-soft: #caa64b;
-            --dark: #0f1a24;
-        }
-
-        body {
-            font-family: 'Playfair Display', serif;
-            background-color: #fdf5e6;
-            /* Navigasyon fixed (sabit) olduğu için içeriğin üstte kalmaması için padding ekliyoruz */
-            padding-top: 80px; 
-        }
-
-        /* SABİT NAVİGASYON ÇUBUĞU */
-        .nav-wrapper {
-            position: fixed; /* Sayfa kaysa da en üstte sabit kalır */
-            top: 0;
-            left: 0;
-            width: 100%; /* Tüm ekranı kaplar */
-            z-index: 1000; /* Her şeyin üstünde görünür */
-        }
-
-        .nav {
-            background: var(--dark);
-            color: var(--gold);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            border-bottom: 3px solid var(--gold-soft);
-        }
-
-        /* LOGO ALANI */
-        .logo-title {
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 16px;
-            letter-spacing: 1px;
-        }
-
-        .logo-subtitle {
-            font-family: 'Cinzel', serif;
-            font-size: 0.85em;
-            opacity: 0.9;
-        }
-
-        /* MENÜ BUTONU VE DROPDOWN */
-        .menu-container {
-            position: relative;
-        }
-
-        .menu-btn {
-            background: transparent;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            cursor: pointer;
-            padding: 8px 15px;
-            font-family: 'Cinzel', serif;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-        }
-
-        .menu-btn:hover {
-            background-color: var(--gold);
-            color: #fff;
-            box-shadow: 0 0 15px var(--gold);
-        }
-
-        #globalDropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 55px;
-            background: var(--dark);
-            border: 1px solid var(--gold-soft);
-            min-width: 220px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-        }
-
-        .dropdown-link {
-            display: block;
-            padding: 12px 20px;
-            color: var(--gold);
-            text-decoration: none;
-            font-family: 'Cinzel', serif;
-            font-size: 13px;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .dropdown-link:hover {
-            background: rgba(212, 175, 55, 0.1);
-            color: #fff;
-            padding-left: 25px;
-        }
-
-        /* Deneme amaçlı uzun içerik (Kaydırmayı görmek için) */
-        .content-demo {
-            padding: 50px;
-            line-height: 2;
-            color: #333;
-            height: 2000px; /* Sayfayı kaydırabilmen için suni yükseklik */
         }
     </style>
 </head>
@@ -318,11 +167,8 @@
             </div>
 
             <div class="menu-container">
-                <button onclick="toggleGlobalMenu(event)" class="menu-btn" id="menuBtn">
-                    MENÜ ☰
-                </button>
-
-                <div id="globalDropdown" style="display: none; position: absolute; right: 0; top: 50px; background: var(--dark); border: 1px solid var(--gold-soft); min-width: 220px; z-index: 1000; box-shadow: 0 8px 16px rgba(0,0,0,0.6);">
+                <button onclick="toggleGlobalMenu(event)" class="menu-btn" id="menuBtn">MENÜ ☰</button>
+                <div id="globalDropdown">
                     <a href="index.html" class="dropdown-link">Ana Sayfa</a>
                     <a href="tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
                     <a href="bayezid/bayezid.html" class="dropdown-link">Sultan II.Bayezid</a>
@@ -341,45 +187,30 @@
             </div>
         </nav>
     </div>
-
-    <div class="content-demo">
-        <h1>Sayfayı Aşağı Kaydırın</h1>
-        <p>Gördüğünüz gibi, üstteki altın çerçeveli menü çubuğu hep sabit kalacaktır.</p>
-    </div>
-
-    <script>
+<script>
         function toggleGlobalMenu(event) {
-            event.stopPropagation(); // Butona tıklandığında window.onclick'in çalışmasını engeller
+            event.stopPropagation();
             var x = document.getElementById("globalDropdown");
-            if (x.style.display === "none" || x.style.display === "") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
+            x.style.display = (x.style.display === "block") ? "none" : "block";
         }
 
-        // Menü dışına tıklandığında kapat
         window.onclick = function(event) {
             var dropdown = document.getElementById("globalDropdown");
-            if (dropdown.style.display === "block") {
+            if (dropdown && !event.target.matches('.menu-btn')) {
                 dropdown.style.display = "none";
             }
         }
     </script>
-
-
-
-<div class="container">
-
-    <div class="banner">
-        <img src="../assets/banner.webp" alt="Külliye Tarihçesi">
-        <div class="banner-text">
-            <h1>TARİHÇE</h1>
-            <h2>KÜLLİYENİN GEÇMİŞİNDEN GÜNÜMÜZE YOLCULUK</h2>
+    <div class="container">
+        <div class="banner">
+            <img src="../assets/banner.webp" alt="Külliye Tarihçesi">
+            <div class="banner-text">
+                <h1>TARİHÇE</h1>
+                <h2>KÜLLİYENİN GEÇMİŞİNDEN GÜNÜMÜZE YOLCULUK</h2>
+            </div>
         </div>
-    </div>
 
-    <div class="full-card">
+        <div class="full-card">
         <div class="c-f t-l"></div><div class="c-f t-r"></div>
         <div class="c-f b-l"></div><div class="c-f b-r"></div>
 
