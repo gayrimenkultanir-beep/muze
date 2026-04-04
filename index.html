@@ -476,11 +476,13 @@ window.onclick = function(event) {
 
                 liste.innerHTML = ''; 
 
-                const siraliData = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
-                const sonUc = siraliData.slice(0, 3);
+                // Tarihe göre sırala ve ilk 3'ü al
+                const sonUc = data
+                    .sort((a, b) => new Date(b.tarih) - new Date(a.tarih))
+                    .slice(0, 3);
 
                 if (sonUc.length === 0) {
-                    liste.innerHTML = "<li>Henüz duyuru eklenmemiş.</li>";
+                    liste.innerHTML = "<li style='list-style:none; font-size:0.85rem;'>Henüz duyuru eklenmemiş.</li>";
                     return;
                 }
 
@@ -491,13 +493,14 @@ window.onclick = function(event) {
                         year: 'numeric' 
                     });
 
-                    // YAN YANA DÜZEN İÇİN DEĞİŞİKLİK BURADA
+                    // YAN YANA VE KOMPAKT DÜZEN
                     liste.innerHTML += `
-                        <li style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px dotted #d4af37; padding-bottom: 8px; list-style: none;">
-                            <span style="font-size: 0.75rem; color: #8b4513; font-weight: bold; white-space: nowrap; min-width: 100px;">
+                        <li style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; border-bottom: 0.5px solid #eee; padding-bottom: 5px; list-style: none;">
+                            <span style="font-size: 0.72rem; color: #8b4513; font-weight: bold; white-space: nowrap; min-width: 90px;">
                                 ${tarihStr}
                             </span>
-                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.95rem; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            
+                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.9rem; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">
                                 - ${d.baslik}
                             </a>
                         </li>
@@ -507,11 +510,10 @@ window.onclick = function(event) {
             .catch(err => {
                 console.error("Yükleme hatası:", err);
                 const liste = document.getElementById('ana-sayfa-duyurular');
-                if (liste) liste.innerHTML = "<li>Duyurular şu an yüklenemedi.</li>";
+                if (liste) liste.innerHTML = "<li style='list-style:none; font-size:0.85rem;'>Duyurular yüklenemedi.</li>";
             });
     });
 </script>
-
         
  
 <div class="card">
