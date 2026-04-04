@@ -461,7 +461,6 @@ window.onclick = function(event) {
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // GitHub'da sorunsuz çalışması için dosya yolu
         fetch('./duyurular.json')
             .then(res => {
                 if (!res.ok) throw new Error("JSON dosyası bulunamadı");
@@ -475,12 +474,9 @@ window.onclick = function(event) {
                     return;
                 }
 
-                liste.innerHTML = ''; // "Yükleniyor..." yazısını sil
+                liste.innerHTML = ''; 
 
-                // Tarihe göre sırala (En yeni en üstte)
                 const siraliData = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih));
-                
-                // Ana sayfada sadece İLK 3 duyuruyu göster
                 const sonUc = siraliData.slice(0, 3);
 
                 if (sonUc.length === 0) {
@@ -489,21 +485,20 @@ window.onclick = function(event) {
                 }
 
                 sonUc.forEach(d => {
-                    // TARİH FORMATI: Gün Ay Yıl (Örn: 4 Nisan 2026)
                     const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { 
                         day: 'numeric', 
                         month: 'long',
                         year: 'numeric' 
                     });
 
-                    // Listeye ekle
+                    // YAN YANA DÜZEN İÇİN DEĞİŞİKLİK BURADA
                     liste.innerHTML += `
-                        <li style="margin-bottom: 12px; border-bottom: 1px dotted #d4af37; padding-bottom: 8px; list-style: none;">
-                            <span style="font-size: 0.75rem; color: #8b4513; font-weight: bold; display: block; margin-bottom: 2px;">
+                        <li style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 1px dotted #d4af37; padding-bottom: 8px; list-style: none;">
+                            <span style="font-size: 0.75rem; color: #8b4513; font-weight: bold; white-space: nowrap; min-width: 100px;">
                                 ${tarihStr}
                             </span>
-                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.95rem; font-family: 'Georgia', serif;">
-                                ${d.baslik}
+                            <a href="tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 0.95rem; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                - ${d.baslik}
                             </a>
                         </li>
                     `;
@@ -516,7 +511,6 @@ window.onclick = function(event) {
             });
     });
 </script>
-
 
         
  
