@@ -170,14 +170,48 @@
 
 <body>
 
-<div class="nav">
-    <div class="logo">T.C. TRAKYA ÜNİVERSİTESİ Sultan II.Bayezid Külliyesi Sağlık Müzesi</div>
-    <div class="menu">
-       
-        <a href="../index.html">ANA SAYFA</a>
-    </div>
-</div>
+    <div class="nav-wrapper">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+                <div class="logo-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            </div>
 
+            <div class="menu-container">
+                <button onclick="toggleGlobalMenu(event)" class="menu-btn" id="menuBtn">MENÜ ☰</button>
+                <div id="globalDropdown">
+                    <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                    <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
+                    <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II.Bayezid</a>
+                    <a href="../celebi.html" class="dropdown-link">Evliya Çelebi</a>
+                    <a href="../medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
+                    <a href="../hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
+                    <a href="../imaret/imaret.html" class="dropdown-link">İmarethane</a>
+                    <a href="../music/music.html" class="dropdown-link">Müzikle Tedavi</a>
+                    <a href="../plan/plan.html" class="dropdown-link">Gezi Planı</a>
+                    <a href="../galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
+                    <a href="../haberler/haberler.html" class="dropdown-link">Haberler</a>
+                    <a href="../oduller/oduller.html" class="dropdown-link">Ödüller</a>
+                    <a href="../personel/personel.html" class="dropdown-link">Personelimiz</a>
+                    <a href="../universite/universite.html" class="dropdown-link">Trakya Üniversitesi</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+<script>
+        function toggleGlobalMenu(event) {
+            event.stopPropagation();
+            var x = document.getElementById("globalDropdown");
+            x.style.display = (x.style.display === "block") ? "none" : "block";
+        }
+
+        window.onclick = function(event) {
+            var dropdown = document.getElementById("globalDropdown");
+            if (dropdown && !event.target.matches('.menu-btn')) {
+                dropdown.style.display = "none";
+            }
+        }
+    </script>
 <div class="container">
 
     <div class="banner">
