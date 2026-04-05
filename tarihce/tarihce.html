@@ -83,18 +83,38 @@
         }
         .banner-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); }
 
-        .banner-text {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-            width: 100%;
-        }
-        .banner-text h1 { font-family: 'Cinzel'; font-size: 42px; letter-spacing: 5px; }
-        .banner-text h2 { font-family: 'Cinzel'; font-size: 18px; letter-spacing: 3px; color: var(--gold); margin-top: 10px; }
+        .banner-text-overlay {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    /* İçeriği hem dikeyde hem yatayda ortalar */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center; 
+    text-align: center;
+}
+
+.banner-text-overlay h1 { 
+    font-family: 'Cinzel'; 
+    font-size: 40px; /* 60px'den 40px'e düşürüldü */
+    color: #ffffff; 
+    letter-spacing: 10px; 
+    text-shadow: 4px 4px 15px #000; 
+    margin: 0; /* Gereksiz boşlukları önlemek için */
+}
+
+.banner-text-overlay h2 { 
+    font-family: 'Cinzel'; 
+    font-size: 18px; /* 22px'den 18px'e düşürüldü */
+    color: var(--gold); 
+    letter-spacing: 4px; 
+    text-shadow: 2px 2px 10px #000; 
+    text-transform: uppercase; 
+    margin-top: 10px; 
+}
 
         /* --- 4. İÇERİK KARTI VE KÜÇÜLTÜLMÜŞ GÖRSEL --- */
         .full-card {
