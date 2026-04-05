@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sultan II. Bayezid - Özel Sayfa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
+    <title>Tarihçe - Sultan II. Bayezid Külliyesi Sağlık Müzesi</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* --- 1. TEMEL AYARLAR --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --gold: #d4af37;
-            --gold-soft: #caa64b;
-            --dark: #0f1a24;
-            --parchment: #f4e7c8;
-        }
+        :root { --gold: #d4af37; --dark: #0f1a24; --parchment: #f4e7c8; --v-red: #8b0000; }
 
         body {
             font-family: 'Playfair Display', serif;
@@ -21,199 +18,235 @@
             background-image: url("../assets/background.jpg");
             background-attachment: fixed;
             background-size: cover;
-            color: #2b2b2b;
+            padding-top: 110px;
         }
 
-        /* NAV */
+        /* --- 2. NAVİGASYON --- */
+        .nav-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; position: fixed; top: 0; left: 0; z-index: 2000; }
         .nav {
-            background: #0f1a24;
-            color: var(--gold);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            border-bottom: 3px solid var(--gold-soft);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo { font-family: 'Cinzel'; font-size: 20px; }
-        .menu a, .print-btn { 
-            margin-left: 20px; 
-            color: var(--gold); 
-            text-decoration: none; 
-            font-family: 'Cinzel'; 
-            font-size: 14px; 
-            background: transparent;
-            border: 1px solid var(--gold);
-            padding: 5px 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .print-btn:hover { background: var(--gold); color: #000; }
-
-        /* CONTAINER */
-        .container {
-            max-width: 1240px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        /* BANNER */
-        .banner { position: relative; margin-bottom: 40px; }
-        .banner img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 2px solid var(--gold-soft);
-        }
-        .banner-text {
-            position: absolute;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-            color: #fff;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
-            width: 100%;
-        }
-        .banner-text h1 { font-family: 'Cinzel'; font-size: 38px; }
-
-        /* KART */
-        .full-card {
-            background: var(--parchment);
-            border: 2px solid var(--gold-soft);
-            border-radius: 12px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            width: 100%; max-width: 1240px; background-color: var(--dark);
+            border: 2px solid var(--gold); border-top: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: var(--gold);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 30px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
             position: relative;
-            overflow: hidden;
-            margin-bottom: 40px;
+        }
+        .logo-subtitle { font-family: 'Cinzel'; font-size: 16px; font-weight: 700; }
+        .menu-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 8px 18px; font-family: 'Cinzel'; border-radius: 4px; }
+
+        /* DROPDOWN (14 MADDELİK TAM LİSTE) */
+        #globalDropdown {
+            display: none; position: absolute; right: 30px; top: calc(100% + 10px);
+            background: var(--dark); border: 2px solid var(--gold);
+            min-width: 280px; max-height: 75vh; overflow-y: auto; 
+            border-radius: 8px; z-index: 3000; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        #globalDropdown.active { display: block; }
+        .dropdown-link { display: block; padding: 12px 25px; color: var(--gold) !important; text-decoration: none; font-family: 'Cinzel'; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: 0.3s; }
+        .dropdown-link:hover { background: rgba(212, 175, 55, 0.15); padding-left: 30px; }
+
+        /* --- 3. BANNER ALANI --- */
+        .banner-container { max-width: 1240px; margin: 0 auto 40px; padding: 0 20px; }
+        .banner-box { 
+            position: relative; width: 100%; height: 400px; 
+            border: 2px solid var(--gold); border-radius: 12px; overflow: hidden; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .banner-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); }
+        .banner-overlay { 
+            position: absolute; inset: 0; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; color: #fff;
+        }
+        .banner-overlay h1 { font-family: 'Cinzel'; font-size: 55px; letter-spacing: 12px; text-shadow: 3px 3px 15px #000; }
+        .banner-overlay p { font-family: 'Cinzel'; font-size: 18px; color: var(--gold); margin-top: 15px; letter-spacing: 4px; }
+
+        /* --- 4. İÇERİK KARTI VE KÖŞE FRAME --- */
+        .container { max-width: 1240px; margin: 0 auto 40px; padding: 0 20px; }
+        .full-card {
+            background: var(--parchment); border: 2px solid var(--gold);
+            border-radius: 12px; position: relative; margin-bottom: 40px; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
         }
 
-        /* KÖŞE ÇERÇEVELERİ */
-        .c-f { position: absolute; width: 45px; height: 45px; background-size: contain; background-repeat: no-repeat; z-index: 20; pointer-events: none; }
-        .t-l { top: 10px; left: 10px; background-image: url("../assets/cornerleftup.png"); }
-        .t-r { top: 10px; right: 10px; background-image: url("../assets/cornerrightup.png"); }
-        .b-l { bottom: 10px; left: 10px; background-image: url("../assets/cornerleft.png"); }
-        .b-r { bottom: 10px; right: 10px; background-image: url("../assets/cornerright.png"); }
+        /* Köşe Süslemeleri */
+        .corner-frame { position: absolute; width: 75px; height: 75px; z-index: 10; pointer-events: none; }
+        .t-l { top: 0; left: 0; }
+        .t-r { top: 0; right: 0; }
+        .b-l { bottom: 0; left: 0; }
+        .b-r { bottom: 0; right: 0; }
 
-        .full-card h2 {
-            padding: 25px;
-            background: linear-gradient(#1b2b3a,#0e1922);
-            color: var(--gold);
-            font-family: 'Cinzel';
-            font-size: 24px;
-            text-align: center;
-            border-bottom: 2px solid var(--gold-soft);
-        }
+        .main-title { padding: 45px 20px; text-align: center; font-family: 'Cinzel'; background: var(--dark); color: var(--gold); border-bottom: 2px solid var(--gold); position: relative; z-index: 2; }
 
-        .content-area {
-            padding: 40px;
-            line-height: 1.8;
-            font-size: 18px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
+        .content-area { padding: 30px 20px; line-height: 1.8; font-size: 18px; color: #2b2b2b; position: relative; z-index: 2; }
+        @media (min-width: 768px) { .content-area { padding: 50px 100px; } }
 
-        .image-box {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+        .content-area h3 { font-family: 'Cinzel'; color: var(--dark); margin: 40px 0 15px; border-bottom: 2px solid var(--gold); display: inline-block; font-weight: 700; }
+        .red-line { color: var(--v-red); font-weight: bold; border-left: 5px solid var(--v-red); padding-left: 20px; margin: 35px 0; font-style: italic; background: rgba(139,0,0,0.03); padding: 25px; border-radius: 4px; }
 
-        .content-area img {
-            max-width: 500px;
-            width: 100%;
-            height: auto;
-            border: 2px solid var(--gold-soft);
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+        .small-img-wrapper { padding: 30px 15px; text-align: center; }
+        .small-img-wrapper img { width: 100%; max-width: 600px; max-height: 400px; height: auto; border-radius: 8px; border: 1px solid var(--gold); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
-        .text-part { width: 100%; }
-        .section-title { 
-            font-family: 'Cinzel'; 
-            color: #1b2b3a; 
-            border-bottom: 1px solid var(--gold-soft); 
-            margin: 25px 0 10px 0;
-            display: block;
-            font-weight: 600;
-        }
+        .table-wrap { overflow-x: auto; margin: 35px 0; border: 1px solid var(--gold); border-radius: 8px; background: #fff; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: var(--dark); color: var(--gold); padding: 18px; text-align: left; font-family: 'Cinzel'; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
 
-        @media print {
-            .nav, .print-btn, .menu { display: none; }
-            body { background: white; }
-            .full-card { box-shadow: none; border: none; }
-        }
-        
-        @media(max-width: 900px){
-            .content-area { padding: 20px; }
+        .card-footer { padding: 40px; background: var(--dark); color: var(--gold); text-align: center; font-family: 'Cinzel'; border-top: 2px solid var(--gold); }
+
+        /* --- 5. FOOTER --- */
+        .site-footer-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; }
+        .site-footer { 
+            width: 100%; max-width: 1240px; background: var(--dark); 
+            border: 2px solid var(--gold); border-radius: 15px; 
+            padding: 30px; text-align: center; color: var(--gold); margin-bottom: 40px;
         }
     </style>
 </head>
-
 <body>
 
-<div class="nav">
-    <div class="logo">T.C. TRAKYA ÜNİVERSİTESİ Sultan II.Bayezid Külliyesi Sağlık Müzesi</div>
-    <div class="menu">
-       
-        <a href="../index.html">ANA SAYFA</a>
+    <div class="nav-wrapper">
+        <nav class="nav">
+            <div class="logo">
+                <div class="logo-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            </div>
+            <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
+            <div id="globalDropdown">
+                <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
+                <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
+                <a href="../celebi/celebi.html" class="dropdown-link">Evliya Çelebi</a>
+                <a href="../medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
+                <a href="../hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
+                <a href="../imaret/imaret.html" class="dropdown-link">İmarethane</a>
+                <a href="../music/music.html" class="dropdown-link">Müzikle Tedavi</a>
+                <a href="../plan/plan.html" class="dropdown-link">Gezi Planı</a>
+                <a href="../galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
+                <a href="../haberler/haberler.html" class="dropdown-link">Haberler</a>
+                <a href="../oduller/oduller.html" class="dropdown-link">Ödüller</a>
+                <a href="../personel/personel.html" class="dropdown-link">Personelimiz</a>
+                <a href="../universite/universite.html" class="dropdown-link">Trakya Üniversitesi</a>
+            </div>
+        </nav>
     </div>
-</div>
-    <div class="menu">
-      
-        <a href="index.html">← ANA SAYFA</a>
-    </div>
-</div>
 
-<div class="container">
-
-    <div class="banner">
-        <img src="../assets/banner.webp" alt="Külliye Header">
-        <div class="banner-text">
-            <h1>SULTAN II. BAYEZİD</h1>
+    <div class="banner-container">
+        <div class="banner-box">
+            <img src="../assets/banner.webp" alt="Külliye Manzarası">
+            <div class="banner-overlay">
+                <h1>SULTAN II. BAYEZİD</h1>
+                <p>“Adaletle hükmeden bir padişah, halkının duasında yaşar.”</p>
+            </div>
         </div>
     </div>
 
+    <div class="container">
     <div class="full-card">
-        <div class="c-f t-l"></div><div class="c-f t-r"></div>
-        <div class="c-f b-l"></div><div class="c-f b-r"></div>
+        <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Frame">
+        <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Frame">
+        <img src="../assets/cornerleft.png" class="corner-frame b-l" alt="Frame">
+        <img src="../assets/cornerright.png" class="corner-frame b-r" alt="Frame">
 
-        <h2>SULTAN II. BAYEZİD (1447 - 1512)</h2>
+        <h2 class="main-title">SULTAN II. BAYEZİD (1447 – 1512)</h2>
 
         <div class="content-area">
-            <div class="image-box">
-                <img src="bayezid.jpg" alt="Sultan II. Bayezid">
+            <p style="text-align: center; font-weight: bold; color: var(--v-red); margin-bottom: 25px; font-size: 20px;">
+                "Osmanlı’da Sükûnetin, İlim ve Merhametin Padişahı"
+            </p>
+
+            <p>Osmanlı Devleti’nin sekizinci padişahı olan <strong>Sultan II. Bayezid</strong>, 1447 yılında Dimetoka’da dünyaya gelmiştir. Fatih Sultan Mehmed’in büyük oğlu olan Bayezid, küçük yaşlardan itibaren devlet yönetimine hazırlanmış; henüz 7 yaşındayken <strong>Hadım Ali Paşa</strong> nezaretinde Amasya Sancak Beyliği’ne atanmıştır. Bu görev, onun hem idari tecrübe kazanmasını hem de ilim ve kültürle yoğrulmasını sağlamıştır.</p>
+
+            <div class="small-img-wrapper">
+                <img src="../bayezid/bayezid_portre.jpg" alt="Sultan II. Bayezid Portresi">
             </div>
 
-            <h3 class="section-title">SULTAN II.BAYEZİD</h3>
-            <div class="text-part">
-                <p>    Sekizinci Osmanlı padişahıdır ve Fatih Sultan Mehmet'in iki oğlundan büyüğüdür. 1447'de Dimetoka’da doğdu. Henüz 7 yaşındayken Hadım Ali Paşa nezaretinde Amasya valisi oldu.</p>
-                
-                <p>    Babası Fatih, 1481 yılında vefat edince 20 Mayıs 1481'de tahta çıktı.</p>
+            <h3>TAHTA ÇIKIŞI VE DEVLET YÖNETİMİ</h3>
+            <p>Fatih Sultan Mehmed’in 1481 yılında vefat etmesi üzerine, Sultan II. Bayezid <strong>20 Mayıs 1481</strong> tarihinde Osmanlı tahtına çıkmıştır. Yaklaşık 31 yıl süren saltanatı boyunca devletin istikrarını korumaya büyük önem vermiştir.</p>
+            <p>Onun yönetim anlayışı, fetih kadar düzen ve huzuru da önceleyen bir çizgide ilerlemiştir. Batıda ve doğuda çeşitli seferler düzenlemiş, Osmanlı topraklarını genişletmiş; ancak savaşçı kimliğinden çok barışçı ve dengeci yönüyle öne çıkmıştır. Bu nedenle onun dönemi, Osmanlı tarihinde görece bir sükûnet ve istikrar devri olarak kabul edilir.</p>
 
-                <h3 class="section-title">Saltanat ve Yönetim Anlayışı</h3>
-                <p>    Döneminde imparatorluğun sınırlarını daha da genişletti. Hem batıda hem doğuda seferlere katıldı. Barışçıl yanı daha ön plandaydı. 30 yılı aşan saltanatı süresince barışı ve sakinliği daha çok tercih etti.</p>
+            <h3>KÜLTÜR, SANAT VE İLME VERDİĞİ ÖNEM</h3>
+            <p>Sultan II. Bayezid yalnızca bir hükümdar değil, aynı zamanda bir ilim ve sanat hamisidir. İyi bir eğitim almış; Arapça ve Farsça’yı ileri düzeyde öğrenmiş, İslami ilimlerin yanı sıra matematik, edebiyat ve felsefe alanlarında kendini geliştirmiştir. Sanata olan ilgisi ise oldukça derindir:</p>
+            
+            <ul>
+                <li>◈ <strong>Bestekâr</strong> kimliğiyle klasik eserler vermiş,</li>
+                <li>◈ <strong>Adlî</strong> mahlasıyla şiirler kaleme almış,</li>
+                <li>◈ <strong>Hat sanatıyla</strong> profesyonel düzeyde ilgilenmiştir.</li>
+            </ul>
 
-                <h3 class="section-title">Kültür, Sanat ve Kişiliği</h3>
-                <p>    Ülkenin her tarafında imar çalışmalarına büyük önem verdi. Amasya, Edirne ve İstanbul’a önemli eserler kazandırdı. İyi bir eğitim gördü. Arapça ve Farsça’yı iyi bilirdi. İslami ilimlerin yanında matematik, edebiyat ve felsefe eğitimi gördü. Bestekardı ve iyi şiir yazardı. Hat sanatı ile uğraştığı bilinmektedir.</p>
-
-                <p>    Dindardı ve son yıllarını hayır ve din işlerine ayırdığı için kendisine <strong>“Bayezid Veli”</strong> denilirdi. Türkiye ve Avrupa’daki kütüphanelerde onun mührünü taşıyan sayısız yazma eserin bulunması kültüre verdiği önemin bir göstergesidir.</p>
-
-                <h3 class="section-title">Edirne ve Sultan II. Bayezid Külliyesi</h3>
-                <p>    1484 yılında Edirne’ye geldiğinde, şehrin ileri gelenlerinin kendisine bir Darüşşifa (hastane) ihtiyacından söz etmeleri üzerine, bu isteği haklı bularak büyük şehir ve gelen gidenin çok olduğu Edirne’ye, içinde Darüşşifa’nın da olacağı bir külliye yapılmasını emretti. Bu bağlamda sağladığı maddi ve manevi imkanlarla bu külliye 4 yılda tamamlanarak hizmete girdi.</p>
-
-                <h3 class="section-title">Vefatı</h3>
-                <p>    62 yaşındayken padişahlığı bırakıp doğduğu yer olan Dimetoka’ya giderken Edirne’nin Havsa ilçesinin Sazlıdere köyü yakınlarında 1512 yılında vefat etti. Mezarı İstanbul’da kendi adını taşıyan camiinin yanındaki türbededir.</p>
+            <div class="red-line">
+                "Dindar kişiliği ve hayır işlerine verdiği önem nedeniyle halk arasında 'Bayezid Veli' olarak anılmıştır. Türkiye ve Avrupa’daki birçok kütüphanede onun mührünü taşıyan yazma eserlerin bulunması, ilme verdiği değerin en somut göstergesidir."
             </div>
+
+            <p>Döneminde ülkenin dört bir yanında camiler, medreseler, imaretler ve hastaneler yaptırarak büyük bir imar faaliyeti yürütmüştür. Özellikle Amasya, Edirne ve İstanbul onun eserleriyle zenginleşmiştir.</p>
+
+            <h3>EDİRNE VE KÜLLİYE VİZYONU</h3>
+            <p>Sultan II. Bayezid’in en önemli eserlerinden biri, kendi adını taşıyan <strong>Edirne Sultan II. Bayezid Külliyesi</strong>’dir. 1484 yılında Edirne’ye geldiğinde, şehirde bir darüşşifa (hastane) ihtiyacı olduğu kendisine iletilmiş; bu ihtiyacı son derece yerinde bularak büyük bir külliye inşa edilmesini emretmiştir.</p>
+
+            <div class="small-img-wrapper">
+                <img src="../bayezid/kulliye_vizyon.jpg" alt="Sultan II. Bayezid Külliye Vizyonu">
+            </div>
+
+            <p>Kısa sürede tamamlanan bu külliye; <strong>Darüşşifa (hastane), Tıp Medresesi, İmaret (aşevi), Cami ve sosyal yapılar</strong> gibi bölümlerden oluşarak hem sağlık, hem eğitim hem de sosyal yardımlaşma hizmetlerini bir arada sunan örnek bir merkez haline gelmiştir. Bu külliye, Osmanlı’nın insanı merkeze alan medeniyet anlayışının en güçlü temsilcilerinden biri olarak günümüze ulaşmıştır.</p>
+
+            <h3>SON YILLARI VE VEFATI</h3>
+            <p>62 yaşına geldiğinde tahtı oğlu Yavuz Sultan Selim’e bırakan Sultan II. Bayezid, hayatının son dönemini ibadet ve inziva ile geçirmek istemiştir. Doğduğu yer olan Dimetoka’ya gitmek üzere yola çıktığı sırada, <strong>Havsa</strong> yakınlarında <strong>1512</strong> yılında vefat etmiştir. Naaşı, İstanbul Beyazıt Camii’nin yanında bulunan türbesine defnedilmiştir.</p>
+
+            <h3>GENEL DEĞERLENDİRME</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Öne Çıkan Özellik</th>
+                            <th>Açıklama</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Barış ve İstikrar</strong></td>
+                            <td>Saltanatı boyunca devletin iç ve dış dengelerini ustalıkla korumuştur.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>İlim ve Sanat</strong></td>
+                            <td>Felsefe, matematik ve hat sanatı gibi alanlarda derin bilgi sahibidir.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sosyal Devlet</strong></td>
+                            <td>Sağlık ve yardımlaşmayı "Külliye" modeliyle kurumsallaştırmıştır.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p>Sultan II. Bayezid'in kurduğu eserler ve geliştirdiği anlayış, yalnızca kendi dönemine değil, sonraki yüzyıllara da yön vermiş; özellikle sağlık, eğitim ve sosyal hizmet alanlarında Osmanlı medeniyetinin zirve örneklerinden biri olmuştur.</p>
+        </div>
+
+        <div class="card-footer">
+            <p style="font-weight: bold; letter-spacing: 2px;">ŞİFAYI SANAT VE BİLİMLE BULUŞTURAN PADİŞAH: BAYEZİD-İ VELİ</p>
         </div>
     </div>
-
 </div>
 
+    <div class="site-footer-wrapper">
+        <footer class="site-footer">
+            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
+        </footer>
+    </div>
+
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdown = document.getElementById('globalDropdown');
+
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        };
+
+        window.onclick = function(e) {
+            if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        };
+    </script>
 </body>
 </html>
