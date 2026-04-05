@@ -90,10 +90,12 @@
 .video-container {
     position: relative;
     width: 100%;           /* Kartın tam genişliğini kullanır */
-    padding-bottom: 56.25%; /* 16:9 oranını korur (9 / 16 = 0.5625) */
+    padding-bottom: 56.25%; /* 16:9 oranını korur */
     height: 0;
     overflow: hidden;
-    border-radius: 4px;    /* İsteğe bağlı: Köşeleri hafif yuvarlar */
+    /* Kartın alt yuvarlak köşelerine uyması için */
+    border-bottom-left-radius: 10px; 
+    border-bottom-right-radius: 10px;
 }
 
 /* Kutu içindeki iframe (YouTube videosu) */
@@ -101,8 +103,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;           /* Genişliği kapsayıcıya göre %100 yapar */
-    height: 100%;          /* Yüksekliği kapsayıcıya göre %100 yapar */
+    width: 100%;           /* Genişliği tam kaplar */
+    height: 100%;          /* Yüksekliği tam kaplar */
     border: 0;             /* Kenarlıkları kaldırır */
 }
 
@@ -230,16 +232,16 @@
     <!-- ORTA KOLON -->
     <div class="center">
         <div class="column">
+   <div class="column">
     <div class="card">
         <div class="c-f t-l"></div><div class="c-f t-r"></div>
         <div class="c-f b-l"></div><div class="c-f b-r"></div>
         <h2>KÜLLİYE TANITIM VİDEOSU</h2>
         
-        <div class="card-content"> <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
-            </div>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
         </div>
-    </div>
+        </div>
 </div>
 
         <div class="card">
