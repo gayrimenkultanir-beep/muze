@@ -32,7 +32,41 @@
             position: relative;
         }
         .logo-subtitle { font-family: 'Cinzel'; font-size: 16px; font-weight: 700; }
-        .menu-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 8px 18px; font-family: 'Cinzel'; border-radius: 4px; }
+     /* --- MENÜ BUTONU VE PARLAMA EFEKTİ --- */
+.menu-btn { 
+    background: transparent; 
+    border: 1px solid var(--gold); 
+    color: var(--gold); 
+    cursor: pointer; 
+    padding: 8px 18px; 
+    font-family: 'Cinzel'; 
+    border-radius: 4px; 
+    transition: all 0.3s ease; /* Yumuşak geçiş için */
+    outline: none;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Üzerine gelince parlama ve dolgu efekti */
+.menu-btn:hover { 
+    background: var(--gold); 
+    color: var(--dark); 
+    box-shadow: 0 0 15px var(--gold); /* Parlama efekti (Glow) */
+    transform: scale(1.05); /* Çok hafif büyüme */
+}
+
+/* Menü aktifken (açıkken) butonun durumu */
+.menu-btn:active {
+    transform: scale(0.95);
+}
+
+/* Navigasyon içindeki linklerin parlaması için (Opsiyonel) */
+.dropdown-link:hover { 
+    background: rgba(212, 175, 55, 0.15); 
+    padding-left: 30px; 
+    color: #fff !important; 
+    text-shadow: 0 0 8px var(--gold); /* Yazı parlaması */
+}
 
         /* DROPDOWN (14 MADDELİK TAM LİSTE) */
         #globalDropdown {
