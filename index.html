@@ -107,11 +107,38 @@
     height: 100%;          /* Yüksekliği tam kaplar */
     border: 0;             /* Kenarlıkları kaldırır */
 }
-
+/* --- INTRO TASARIMI --- */
+#splash-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: var(--dark);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 9999;
+    transition: opacity 1.2s ease, visibility 1.2s;
+}
+.splash-intro-img {
+    max-width: 70%;
+    height: auto;
+    border: 1px solid var(--gold);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.2);
+}
+.splash-text {
+    color: var(--gold);
+    font-family: 'Cinzel', serif;
+    margin-top: 20px;
+    letter-spacing: 2px;
+    text-align: center;
+}
+.splash-hidden { opacity: 0; visibility: hidden; }
     </style>
 </head>
 <body>
-
+<div id="splash-screen">
+    <div class="splash-content">
+        <img src="assets/intro.webp" alt="Müze Intro" class="splash-intro-img">
+        <p class="splash-text">Sultan II. Bayezid Külliyesi Dijital Arşivi</p>
+    </div>
+</div>
     <div class="nav-wrapper">
         <nav class="nav">
             <div class="logo">
@@ -329,8 +356,17 @@
                 if (liste) liste.innerHTML = "<li style='border:none;'>Duyurular yüklenemedi.</li>";
             });
     });
+   
 </script>
-        
+   <script>
+    window.addEventListener('load', function() {
+        const splash = document.getElementById('splash-screen');
+        // 3500ms (3.5 saniye) sonra ekran kaybolur
+        setTimeout(() => {
+            if(splash) splash.classList.add('splash-hidden');
+        }, 3500); 
+    });
+</script>      
  
 <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
