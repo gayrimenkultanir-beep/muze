@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan II. Bayezid Külliyesi - Sağlık Müzesi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 1. TEMEL AYARLAR --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --gold: #d4af37; --gold-soft: #caa64b; --dark: #0f1a24; --parchment: #f4e7c8; --v-red: #8b0000; }
+
+        body {
+            font-family: 'Playfair Display', serif;
+            background: #fdf5e6 url("assets/background.jpg") fixed center/cover;
+            color: #2b2b2b;
+            padding-top: 110px; /* Navigasyon için boşluk */
+        }
+
+        /* --- 2. NAVİGASYON (Haberler Sayfasıyla Aynı) --- */
+        .nav-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; position: fixed; top: 0; left: 0; z-index: 2000; }
+        .nav {
+            width: 100%; max-width: 1240px; background-color: var(--dark);
+            border: 2px solid var(--gold); border-top: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: var(--gold);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 30px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
+        }
+        .logo-subtitle { font-family: 'Cinzel'; font-size: 14px; font-weight: 700; }
+        .menu-btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); cursor: pointer; padding: 8px 18px; font-family: 'Cinzel'; border-radius: 4px; transition: 0.3s; }
+        .menu-btn:hover { background: var(--gold); color: #fff; }
+
+        #globalDropdown {
+            display: none; position: absolute; right: 30px; top: calc(100% + 10px);
+            background: var(--dark); border: 2px solid var(--gold);
+            min-width: 280px; max-height: 75vh; overflow-y: auto; 
+            border-radius: 8px; z-index: 3000; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+        }
+        #globalDropdown.active { display: block; }
+        .dropdown-link { display: block; padding: 12px 25px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: 0.3s; }
+        .dropdown-link:hover { background: rgba(212, 175, 55, 0.15); padding-left: 30px; color: #fff; }
+
+        /* --- 3. LAYOUT & BANNER --- */
+        .container { max-width: 1240px; margin: 0 auto 40px; display: grid; grid-template-columns: 1fr 2fr 1fr; gap: 25px; padding: 0 20px; }
+        
+        .banner {
+            grid-column: 1 / -1; position: relative; height: 388px; border-radius: 12px;
+            border: 2px solid var(--gold); overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+        }
+        .banner img.media { width: 100%; height: 100%; object-fit: cover; }
+        .banner img.frame { position: absolute; top:0; left:0; width:100%; height:100%; object-fit:fill; pointer-events:none; z-index:5; }
+
+        /* --- 4. KARTLAR --- */
+        .card {
+            background: var(--parchment); border: 2px solid var(--gold);
+            border-radius: 12px; position: relative; margin-bottom: 20px; overflow: hidden;
+            transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .card h3, .card h2 {
+            background: linear-gradient(#1b2b3a,#0e1922); color: var(--gold);
+            font-family: 'Cinzel'; font-size: 14px; padding: 15px; text-align: center;
+            border-bottom: 2px solid var(--gold);
+        }
+        .card-content { padding: 15px 20px; font-size: 14px; line-height: 1.6; }
+        .card ul { list-style: none; }
+        .card ul li { padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); }
+        .card a { text-decoration: none; color: inherit; transition: 0.2s; }
+        .card a:hover { color: var(--v-red); }
+
+        /* KÖŞE SÜSLERİ */
+        .c-f { position: absolute; width: 35px; height: 35px; background-size: contain; z-index: 20; pointer-events: none; }
+        .t-l { top: 5px; left: 5px; background-image: url("assets/cornerleftup.png"); }
+        .t-r { top: 5px; right: 5px; background-image: url("assets/cornerrightup.png"); }
+        .b-l { bottom: 5px; left: 5px; background-image: url("assets/cornerleft.png"); }
+        .b-r { bottom: 5px; right: 5px; background-image: url("assets/cornerright.png"); }
+
+        /* --- 5. FOOTER (Haberler Sayfasıyla Aynı) --- */
+        .site-footer-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; margin-top: 50px; }
+        .site-footer { 
+            width: 100%; max-width: 1240px; background: var(--dark); 
+            border: 2px solid var(--gold); border-radius: 15px; 
+            padding: 30px; text-align: center; color: var(--gold); margin-bottom: 40px;
+            font-family: 'Cinzel';
+        }
+
+        @media(max-width: 900px){ .container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav class="nav">
+            <div class="logo">
+                <div style="font-weight: bold; font-size: 15px; letter-spacing: 1px;">T.C. TRAKYA ÜNİVERSİTESİ</div>
+                <div class="logo-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            </div>
+            <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
+            <div id="globalDropdown">
+                <a href="index.html" class="dropdown-link">Ana Sayfa</a>
+                <a href="tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
+                <a href="bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
+                <a href="evliya/evliya.html" class="dropdown-link">Evliya Çelebi</a>
+                <a href="medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
+                <a href="hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
+                <a href="imaret/imaret.html" class="dropdown-link">İmarethane</a>
+                <a href="music/music.html" class="dropdown-link">Müzikle Tedavi</a>
+                <a href="geziplani/geziplani.html" class="dropdown-link">Gezi Planı</a>
+                <a href="galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
+                <a href="haberler/haberler.html" class="dropdown-link">Haberler</a>
+                <a href="oduller/oduller.html" class="dropdown-link">Ödüller</a>
+                <a href="personel/personel.html" class="dropdown-link">Personelimiz</a>
+                <a href="universite/universite.html" class="dropdown-link">Trakya Üniversitesi</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="banner">
+            <img src="assets/banner.webp" class="media" alt="Külliye">
+            <img src="assets/cerceve1.png" class="frame" alt="Frame">
+        </div>
+
+          <!-- SOL KOLON -->
+    <div class="left">
+       <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>TARİHÇE</h3>
+    <div class="card-content" style="padding: 0;"> <!-- Padding'i sıfırladık ki resim tam otursun -->
+       <a href="tarihce/tarihce.html" style="display: block; text-decoration: none;">
+        <img src="assets/tarihce.jpg" alt="TARİHÇE" style="width: 100%; display: block; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; object-fit: cover;">
+   </a>
+    </div>
+</div>
+        <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>SULTAN II.BAYEZİD</h3>
+    <div class="card-content" style="padding: 0;"> <!-- Padding'i sıfırladık ki resim tam otursun -->
+       <a href="bayezid/bayezid.html" style="display: block; text-decoration: none;">
+        <img src="assets/bayezid.jpg" alt="SULTAN II.BAYEZİD" style="width: 100%; display: block; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; object-fit: cover;">
+   </a>
+    </div>
+</div>
+
+
+        <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>EVLİYA ÇELEBİ (Siyahat-nâme) </h3>
+    <div class="card-content" style="padding: 0;"> <!-- Padding'i sıfırladık ki resim tam otursun -->
+       <a href="evliya/evliya.html" style="display: block; text-decoration: none;">
+        <img src="assets/evliya.jpg" alt="Evliya Çelebi" style="width: 100%; display: block; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; object-fit: cover;">
+   </a>
+    </div>
+</div>
+
+       <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>MÜZE BÖLÜMLERİ</h3>
+    <div class="card-content">
+        <ul>
+        <li><a href="medrese/medrese.html" style="text-decoration: none; color: inherit;">Tıp Medresesi</a></li>
+         <li><a href="hastane/hastane.html" style="text-decoration: none; color: inherit;">Darüşşifa (Hastane)</a></li>   
+          <li><a href="imaret/imaret.html" style="text-decoration: none; color: inherit;">İmarethane</a></li>
+        
+          </ul>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+        
+        <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>MÜZİKLE TEDAVİ</h3>
+    <div class="card-content" style="padding: 0;"> <!-- Padding'i sıfırladık ki resim tam otursun -->
+       <a href="music/music.html" style="display: block; text-decoration: none;">
+        <img src="assets/music.jpg" alt="Müzikle Tedavi" style="width: 100%; display: block; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; object-fit: cover;">
+   </a>
+    </div>
+</div>
+       
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>MÜZE GEZİ PLANI</h3>
+            <div class="card-content">
+                <ul>
+                    <li><a href="geziplani/geziplani.html" style="text-decoration: none; color: inherit;">Gezi Planı</a></li>
+                    <li><a href="galeri/galeri.html" style="text-decoration: none; color: inherit;">Görsel Galeri</a></li>
+                </ul>
+            </div>
+        </div>
+ 
+    </div>
+
+    <!-- ORTA KOLON -->
+    <div class="center">
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h2>KÜLLİYE TANITIM VİDEOSU</h2>
+            <div class="video-container">
+                <iframe src="https://www.youtube.com/embed/YUw2S2MrHow?start=1" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>HABERLER</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Müzik Terapi Konseri <span style="float:right">12 Nisan</span></li>
+                    <li>Sema Gösterisi <span style="float:right">02 Mayıs</span></li>
+                    <li>Yeni Sergi Salonu <span style="float:right">18 Şubat</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>DUYURULAR</h3>
+    <div class="card-content">
+        <ul>
+            <li>Müze Ziyaret Saatleri Hk. (Ramazan Bayramı)</li> <!-- Kapatıldı -->
+            <li>8 Mart Dünya Kadınlar Günü Hk.</li> <!-- Kapatıldı -->
+        </ul>    
+    </div>
+</div>
+
+<div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>DUYURULAR</h3>
+    <div class="card-content">
+        <ul id="ana-sayfa-duyurular">
+            <li>Yükleniyor...</li>
+        </ul>    
+        
+        <div style="text-align: right; margin-top: 15px;">
+            <a href="duyurular/tum-duyurular.html" style="font-size: 0.85rem; color: #8b4513; text-decoration: none; font-style: italic;">
+                Tümünü Gör →
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('duyurular/duyurular.json')
+            .then(res => {
+                if (!res.ok) throw new Error("JSON bulunamadı");
+                return res.json();
+            })
+            .then(data => {
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                if (!liste) return;
+
+                liste.innerHTML = ''; 
+
+                // En yeni 3 duyuruyu al
+                const sonUc = data
+                    .sort((a, b) => new Date(b.tarih) - new Date(a.tarih))
+                    .slice(0, 3);
+
+                if (sonUc.length === 0) {
+                    liste.innerHTML = "<li style='border:none;'>Henüz duyuru eklenmemiş.</li>";
+                    return;
+                }
+
+                sonUc.forEach(d => {
+                    const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { 
+                        day: 'numeric', 
+                        month: 'long',
+                        year: 'numeric' 
+                    });
+
+                    // TASARIMINA TAM UYUMLU SATIR YAPISI
+                    liste.innerHTML += `
+                        <li style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); list-style: none;">
+                            <span style="font-size: 11px; color: var(--gold-soft); font-weight: bold; white-space: nowrap; min-width: 95px; opacity: 0.9;">
+                                ${tarihStr}
+                            </span>
+                            
+                            <a href="duyurular/tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 13px; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">
+                                - ${d.baslik}
+                            </a>
+                        </li>
+                    `;
+                });
+                
+                // En son satırın çizgisini kaldırmak istersen (opsiyonel)
+                if(liste.lastElementChild) liste.lastElementChild.style.borderBottom = "none";
+            })
+            .catch(err => {
+                console.error("Hata:", err);
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                if (liste) liste.innerHTML = "<li style='border:none;'>Duyurular yüklenemedi.</li>";
+            });
+    });
+</script>
+        
+ 
+<div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    
+    <h3 style="font-weight: bold; text-align: center; color: #D4AF37;">MÜZE ÖDÜLLERİ</h3>
+    
+    <div class="card-content">
+        <ul style="list-style: none; padding: 0;">
+                     
+            <li class="award-text" style="background-color: #001f3f; color: #D4AF37; padding: 0; border-radius: 8px; margin-bottom: 15px; text-align: center; border: 1px solid #D4AF37; overflow: hidden;">
+                <a href="oduller/oduller.html" style="text-decoration: none; color: inherit; display: block; padding: 15px;">
+                    <strong>🏆🏆🏆 Avrupa Konseyi Müze Ödülü 2004 🏆🏆🏆</strong> <br>
+                    <strong style="display: block; margin-top: 5px;"><span>(The Museum Prize of the Council of Europe)</span></strong>
+                </a>
+            </li>
+           
+            <li class="award-text" style="background-color: #001f3f; color: #D4AF37; padding: 0; border-radius: 8px; text-align: center; border: 1px solid #D4AF37; overflow: hidden;">
+                <a href="oduller/oduller.html" style="text-decoration: none; color: inherit; display: block; padding: 15px;">
+                    <strong>🎖️🎖️🎖️ Kültürel Mirastaki En İyiler 🎖️🎖️🎖️</strong> <br>
+                    <strong style="display: block; margin-top: 5px;"><span>"Mükemmellik Kulübü" (Excellence Club)</span></strong>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+   <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>ULAŞIM VE KONUM</h3>
+    <div class="card-content">
+        <ul>
+            <li><a href="https://www.google.com/maps/search/?api=1&query=Beyazıt+II+Külliyesi&query_place_id=ChIJBb4KWhMvsxQRUK6XRHp8xS4" target="_blank" style="text-decoration: none; color: inherit;">Haritada Görüntüle ve Yol Tarifi Al</a></li>
+            <li>Adres: Sultan II. Bayezid Külliyesi Sağlık Müzesi,Yeniimaret/EDİRNE</li>
+           <li>Telefon: <a href="tel:02842240922" style="text-decoration: none; color: inherit;">0 284 224 0922</a></li>
+            <li>ETUS 3A hat numaralı şehir içi midibüsler ile müzemize ulaşabilir.</li>
+        </ul>
+        
+        </div>
+    </div>
+        <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>ZİYARETÇİ İSTATİSTİĞİ</h3>
+    <div class="card-content" style="text-align: center;">
+        <div style="font-size: 12px; opacity: 0.8; margin-bottom: 5px;">Toplam Ziyaretçi Sayısı</div>
+        <div id="visitor-count">
+            <img src="https://hitwebcounter.com/counter/counter.php?page=kulliye_muze_2026_ozel&style=0005&nbdigits=6&type=page&initCount=1" 
+                 title="Ziyaretçi Sayacı" 
+                 alt="web counter" 
+                 border="0" 
+                 style="filter: sepia(1) hue-rotate(15deg) saturate(1.5); height: 32px;">
+        </div>
+        <div style="font-size: 10px; margin-top: 8px; font-style: italic;">Nisan 2026 itibarıyla</div>
+    </div>
+</div>
+</div>
+ 
+    <!-- SAĞ KOLON -->
+    <div class="right">
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>ZİYARET BİLGİLERİ</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Pazartesi: <span style="float:right">Kapalı</span></li>
+                    <li>Diğer Günler Yaz <span style="float:right">09:30-20:00</span></li>
+                    <li>Diğer Günler Kış <span style="float:right">09:30-18:00</span></li>
+                </ul>
+            </div>
+        </div>
+
+           <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>GİRİŞ ÜCRETLERİ</h3>
+    <div class="card-content">
+        <!-- Rakam çıkmaması için list-style-type: none kullanıyoruz -->
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: 10px;">Yerli Ziyaretçi <span style="float:right">60 TL.</span></li>
+            <li style="margin-bottom: 10px;">Yabancı Ziyaretçi <span style="float:right">120 TL.</span></li>
+            <li>Ücretsiz Giriş Listesi</li>
+                    <li>17 Yaş Altı</li>
+                    <li>65 Yaş Üzeri</li>
+                    <li>Akademisyenler</li>
+                    <li>Basın Kart Sahipleri</li>
+                    <li>Gaziler, Gazi ve Şehit Yakınları</li>
+                    <li>Er ve Erbaşlar</li>
+                    <li>Engelliler ve Bir Refakatçisi</li>
+                    <li>Kokart Sahibi Rehberler</li>
+                    <li>Kültür Bakanlığı Personelleri</li>
+                    <li>ICOM, ICOMOS ve UNESCO Kartı Sahipleri</li>
+                    <li>Trakya Üniversitesi Öğrenci, Personel ve Emeklileri</li>
+                    <li>TÜ Genel Sekreterlik İzni Olanlar</li>
+                </ul>
+               </div>
+</div>
+
+
+        <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>İLETİŞİM BİLGİLERİ</h3>
+    <div class="card-content">
+        <ul>
+            <li>
+                <a href="personel/personel.html" style="text-decoration: none; color: inherit;">
+                    Personelimiz
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+        <div class="card">
+            <div class="c-f t-l"></div><div class="c-f t-r"></div>
+            <div class="c-f b-l"></div><div class="c-f b-r"></div>
+            <h3>KÜTÜPHANE</h3>
+            <div class="card-content">
+                <ul>
+                    <li>Bilgi Bankası</li>
+                   
+                </ul>
+            </div>
+        </div>
+   <div class="card">
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>TRAKYA ÜNİVERSİTESİ</h3>
+    <div class="card-content">
+        <ul>
+            <li>
+                <a href="https://www.trakya.edu.tr" target="_blank" style="text-decoration: none; color: inherit;">
+                    Üniversite Web Sayfası
+                    <li>
+             <a href="admin.html" style="text-decoration: none; color: inherit;">
+                    Panel
+                </a>
+            </li>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+    </div>
+</div>
+
+    <div class="site-footer-wrapper">
+        <footer class="site-footer">
+            <div style="font-weight: bold; letter-spacing: 1px;">T.C. TRAKYA ÜNİVERSİTESİ</div>
+            <div style="font-size: 14px; margin-top: 5px;">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
+        </footer>
+    </div>
+
+    <script>
+        // Menü Aç/Kapat
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdown = document.getElementById('globalDropdown');
+
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('active');
+        };
+
+        window.onclick = function(e) {
+            if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        };
+
+        // Dinamik Duyuru Çekme
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('duyurular/duyurular.json')
+                .then(res => res.json())
+                .then(data => {
+                    const liste = document.getElementById('ana-sayfa-duyurular');
+                    liste.innerHTML = '';
+                    data.sort((a,b) => new Date(b.tarih) - new Date(a.tarih)).slice(0,3).forEach(d => {
+                        liste.innerHTML += `<li><a href="duyurular/tum-duyurular.html">${d.baslik}</a></li>`;
+                    });
+                }).catch(() => {
+                    document.getElementById('ana-sayfa-duyurular').innerHTML = "<li>Duyurular şu an yüklenemiyor.</li>";
+                });
+        });
+    </script>
+</body>
+</html>
