@@ -528,5 +528,24 @@
             });
     });
 </script>
+    <script>
+    // Menü Açma/Kapatma Fonksiyonu
+    const menuBtn = document.getElementById('menuBtn');
+    const globalDropdown = document.getElementById('globalDropdown');
+
+    if (menuBtn && globalDropdown) {
+        menuBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Tıklamanın dışarı yayılmasını engeller
+            globalDropdown.classList.toggle('active');
+        });
+
+        // Menü açıkken dışarıya tıklandığında kapanması için
+        document.addEventListener('click', function(e) {
+            if (!globalDropdown.contains(e.target) && e.target !== menuBtn) {
+                globalDropdown.classList.remove('active');
+            }
+        });
+    }
+</script>
 </body>
 </html>
