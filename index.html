@@ -250,7 +250,7 @@
         <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
     <div class="c-f b-l"></div><div class="c-f b-r"></div>
-    <h3>DUYURULAR</h3>
+    <h3>BASINDA BİZ </h3>
     <div class="card-content">
         <ul>
             <li>Müze Ziyaret Saatleri Hk. (Ramazan Bayramı)</li> <!-- Kapatıldı -->
@@ -487,36 +487,74 @@
         </footer>
     </div>
 
-    <script>
-        // Menü Aç/Kapat
-        const menuBtn = document.getElementById('menuBtn');
-        const dropdown = document.getElementById('globalDropdown');
+   <script>
+    // Menü Aç/Kapat
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdown = document.getElementById('globalDropdown');
 
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            dropdown.classList.toggle('active');
-        };
+    menuBtn.onclick = function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    };
 
-        window.onclick = function(e) {
-            if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        };
+    window.onclick = function(e) {
+        if (!menuBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    };
 
-        // Dinamik Duyuru Çekme
-        document.addEventListener("DOMContentLoaded", function() {
-            fetch('duyurular/duyurular.json')
-                .then(res => res.json())
-                .then(data => {
-                    const liste = document.getElementById('ana-sayfa-duyurular');
-                    liste.innerHTML = '';
-                    data.sort((a,b) => new Date(b.tarih) - new Date(a.tarih)).slice(0,3).forEach(d => {
-                        liste.innerHTML += `<li><a href="duyurular/tum-duyurular.html">${d.baslik}</a></li>`;
-                    });
-                }).catch(() => {
-                    document.getElementById('ana-sayfa-duyurular').innerHTML = "<li>Duyurular şu an yüklenemiyor.</li>";
+    // Dinamik Duyuru Çekme (Tarih Dahil)
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('duyurular/duyurular.json')
+            .then(res => {
+                if (!res.ok) throw new Error("JSON bulunamadı");
+                return res.json();
+            })
+            .then(data => {
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                if (!liste) return;
+
+                liste.innerHTML = ''; 
+
+                // Tarihe göre sırala ve en yeni 3 duyuruyu al
+                const sonUc = data
+                    .sort((a, b) => new Date(b.tarih) - new Date(a.tarih))
+                    .slice(0, 3);
+
+                if (sonUc.length === 0) {
+                    liste.innerHTML = "<li style='border:none;'>Henüz duyuru eklenmemiş.</li>";
+                    return;
+                }
+
+                sonUc.forEach(d => {
+                    // Tarihi formatla (Örn: 6 Nisan 2026)
+                    const tarihObj = new Date(d.tarih);
+                    const gun = tarihObj.getDate();
+                    const ay = tarihObj.toLocaleDateString('tr-TR', { month: 'long' });
+                    const yil = tarihObj.getFullYear();
+                    const formatliTarih = `${gun} ${ay} ${yil}`;
+
+                    liste.innerHTML += `
+                        <li style="display: flex; flex-direction: column; padding: 10px 0; border-bottom: 1px dashed var(--gold-soft);">
+                            <span style="font-size: 11px; color: var(--v-red); font-weight: bold; margin-bottom: 3px;">
+                                ${formatliTarih}
+                            </span>
+                            <a href="duyurular/tum-duyurular.html" style="text-decoration: none; color: #2b2b2b; font-size: 14px;">
+                                ${d.baslik}
+                            </a>
+                        </li>
+                    `;
                 });
-        });
-    </script>
+                
+                // Son satırın çizgisini temizle
+                if(liste.lastElementChild) liste.lastElementChild.style.borderBottom = "none";
+
+            }).catch(err => {
+                console.error("Hata:", err);
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                if (liste) liste.innerHTML = "<li>Duyurular yüklenemedi.</li>";
+            });
+    });
+</script>
 </body>
 </html>
