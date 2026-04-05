@@ -286,7 +286,7 @@
     document.addEventListener("DOMContentLoaded", function() {
         const liste = document.getElementById('arsiv-liste');
 
-        fetch('duyurular.json')
+        fetch('../duyurular/duyurular.json')
             .then(res => {
                 if (!res.ok) throw new Error("Veri dosyası (duyurular.json) bulunamadı.");
                 return res.json();
