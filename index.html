@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="tr">
-<head>
+<div id="splash-screen">
+    <div class="splash-content">
+        <img src="assets/intro.webp" alt="Müze Intro" class="splash-intro-img">
+        <p class="splash-text">Sultan II. Bayezid Külliyesi Dijital Arşivi</p>
+    </div>
+</div>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sultan II. Bayezid Külliyesi - Sağlık Müzesi</title>
@@ -381,12 +387,12 @@
    <script>
     window.addEventListener('load', function() {
         const splash = document.getElementById('splash-screen');
-        // 3500ms (3.5 saniye) sonra ekran kaybolur
+        // 3.5 saniye sonra ekran kaybolur
         setTimeout(() => {
             if(splash) splash.classList.add('splash-hidden');
         }, 3500); 
     });
-</script>      
+</script>
  
 <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
