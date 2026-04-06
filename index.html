@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="tr">
-<div id="splash-screen">
-    <div class="splash-content">
-        <img src="assets/intro.webp" alt="Müze Intro" class="splash-intro-img">
-        <p class="splash-text">Sultan II. Bayezid Külliyesi Dijital Arşivi</p>
-    </div>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan II. Bayezid Külliyesi - Sağlık Müzesi</title>
+    ```
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -164,13 +163,13 @@
     visibility: hidden; 
 }
    <body>
+   </style> </head> <body>
     <div id="splash-screen">
         <div class="splash-content">
-            <img src="assets/banner.webp" alt="Müze Intro" class="splash-intro-img">
+            <img src="assets/intro.webp" alt="Müze Intro" class="splash-intro-img">
             <p class="splash-text">Sultan II. Bayezid Külliyesi Dijital Arşivi</p>
         </div>
     </div>
-    <div class="nav-wrapper">
         <nav class="nav">
             <div class="logo">
                 <div style="font-weight: bold; font-size: 15px; letter-spacing: 1px;">T.C. TRAKYA ÜNİVERSİTESİ</div>
@@ -335,77 +334,55 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        fetch('duyurular/duyurular.json')
-            .then(res => {
-                if (!res.ok) throw new Error("JSON bulunamadı");
-                return res.json();
-            })
-            .then(data => {
-                const liste = document.getElementById('ana-sayfa-duyurular');
-                if (!liste) return;
-
-                liste.innerHTML = ''; 
-
-                // En yeni 3 duyuruyu al
-                const sonUc = data
-                    .sort((a, b) => new Date(b.tarih) - new Date(a.tarih))
-                    .slice(0, 3);
-
-                if (sonUc.length === 0) {
-                    liste.innerHTML = "<li style='border:none;'>Henüz duyuru eklenmemiş.</li>";
-                    return;
-                }
-
-                sonUc.forEach(d => {
-                    const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { 
-                        day: 'numeric', 
-                        month: 'long',
-                        year: 'numeric' 
-                    });
-
-                    // TASARIMINA TAM UYUMLU SATIR YAPISI
-                    liste.innerHTML += `
-                        <li style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--gold-soft); list-style: none;">
-                            <span style="font-size: 11px; color: var(--gold-soft); font-weight: bold; white-space: nowrap; min-width: 95px; opacity: 0.9;">
-                                ${tarihStr}
-                            </span>
-                            
-                            <a href="duyurular/tum-duyurular.html" style="text-decoration: none; color: #333; font-size: 13px; font-family: 'Georgia', serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-grow: 1;">
-                                - ${d.baslik}
-                            </a>
-                        </li>
-                    `;
-                });
-                
-                // En son satırın çizgisini kaldırmak istersen (opsiyonel)
-                if(liste.lastElementChild) liste.lastElementChild.style.borderBottom = "none";
-            })
-            .catch(err => {
-                console.error("Hata:", err);
-                const liste = document.getElementById('ana-sayfa-duyurular');
-                if (liste) liste.innerHTML = "<li style='border:none;'>Duyurular yüklenemedi.</li>";
-            });
-    });
-   
-</script>
-   <script>
+    // Tüm fonksiyonları tek bir yerden yönetelim
     window.addEventListener('load', function() {
+        
+        // 1. INTRO KAYBETME (KESİN ÇÖZÜM)
         const splash = document.getElementById('splash-screen');
         if (splash) {
             setTimeout(() => {
-                // Opaklığı sıfırla (Yumuşak geçiş başlar)
                 splash.style.opacity = '0';
                 splash.style.visibility = 'hidden';
-                
-                // 1.5 saniye sonra (geçiş bitince) ekrandan tamamen kaldır
                 setTimeout(() => {
                     splash.style.display = 'none';
                 }, 1500);
-            }, 3500); // 3.5 saniye bekleme süresi
+            }, 3500); 
         }
+
+        // 2. MENÜ KONTROLÜ
+        const menuBtn = document.getElementById('menuBtn');
+        const globalDropdown = document.getElementById('globalDropdown');
+        if (menuBtn && globalDropdown) {
+            menuBtn.onclick = function(e) {
+                e.stopPropagation();
+                globalDropdown.classList.toggle('active');
+            };
+            document.onclick = function(e) {
+                if (!globalDropdown.contains(e.target) && e.target !== menuBtn) {
+                    globalDropdown.classList.remove('active');
+                }
+            };
+        }
+
+        // 3. DUYURULARI ÇEKME
+        fetch('duyurular/duyurular.json')
+            .then(res => res.json())
+            .then(data => {
+                const liste = document.getElementById('ana-sayfa-duyurular');
+                if (!liste) return;
+                liste.innerHTML = '';
+                const sonUc = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih)).slice(0, 3);
+                sonUc.forEach(d => {
+                    const tarihStr = new Date(d.tarih).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+                    liste.innerHTML += `<li style="display: flex; align-items: baseline; padding: 10px 0; border-bottom: 1px dashed var(--gold-soft); list-style: none;">
+                        <span style="font-size: 11px; color: var(--gold); font-weight: bold; min-width: 100px; flex-shrink: 0;">${tarihStr}</span>
+                        <a href="duyurular/tum-duyurular.html" style="text-decoration: none; color: #2b2b2b; font-size: 13px;">${d.baslik}</a></li>`;
+                });
+                if(liste.lastElementChild) liste.lastElementChild.style.borderBottom = "none";
+            }).catch(err => console.log("Duyuru hatası:", err));
     });
 </script>
+
  
 <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
