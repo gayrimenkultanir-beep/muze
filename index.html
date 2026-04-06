@@ -163,8 +163,13 @@
     opacity: 0; 
     visibility: hidden; 
 }
+   <body>
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="assets/banner.webp" alt="Müze Intro" class="splash-intro-img">
+            <p class="splash-text">Sultan II. Bayezid Külliyesi Dijital Arşivi</p>
+        </div>
     </div>
-</div>
     <div class="nav-wrapper">
         <nav class="nav">
             <div class="logo">
@@ -387,10 +392,18 @@
    <script>
     window.addEventListener('load', function() {
         const splash = document.getElementById('splash-screen');
-        // 3.5 saniye sonra ekran kaybolur
-        setTimeout(() => {
-            if(splash) splash.classList.add('splash-hidden');
-        }, 3500); 
+        if (splash) {
+            setTimeout(() => {
+                // Opaklığı sıfırla (Yumuşak geçiş başlar)
+                splash.style.opacity = '0';
+                splash.style.visibility = 'hidden';
+                
+                // 1.5 saniye sonra (geçiş bitince) ekrandan tamamen kaldır
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 1500);
+            }, 3500); // 3.5 saniye bekleme süresi
+        }
     });
 </script>
  
