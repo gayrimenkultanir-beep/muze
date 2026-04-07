@@ -2,155 +2,137 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Gülcesu K. | Gelişmiş Yönetim Paneli</title>
+    <title>Külliye | Yönetim Paneli</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background: #0f1a24; color: #f4e7c8; font-family: 'Montserrat', sans-serif; padding: 40px; display: flex; justify-content: center; }
-        .admin-container { width: 100%; max-width: 900px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
-        .box { background: #1b2b3a; border: 1.5px solid #d4af37; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
-        h2, h3 { font-family: 'Cinzel'; color: #d4af37; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; margin-top: 0; }
+        :root { --gold: #d4af37; --dark: #0f1a24; --box-bg: #1b2b3a; }
+        body { background: var(--dark); color: #f4e7c8; font-family: 'Montserrat', sans-serif; margin: 0; padding: 40px; }
+        .admin-wrapper { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 400px 1fr; gap: 30px; }
         
-        /* Form Elemanları */
+        .panel-box { background: var(--box-bg); border: 2px solid var(--gold); border-radius: 12px; padding: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); position: sticky; top: 40px; height: fit-content; }
+        h2 { font-family: 'Cinzel'; color: var(--gold); margin-top: 0; border-bottom: 1px solid rgba(212,175,55,0.2); padding-bottom: 10px; font-size: 1.2rem; }
+        
+        /* Form Stil */
         .form-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; color: #d4af37; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        input { width: 100%; padding: 10px; background: #0f1a24; border: 1px solid #d4af37; color: white; border-radius: 4px; }
+        label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--gold); margin-bottom: 5px; }
+        input[type="text"], input[type="date"], input[type="file"] { width: 100%; padding: 10px; background: #0a1219; border: 1px solid var(--gold); color: white; border-radius: 4px; box-sizing: border-box; }
         
-        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
-        button { flex: 1; padding: 12px; cursor: pointer; border-radius: 4px; font-family: 'Cinzel'; font-weight: bold; transition: 0.3s; border: none; }
-        .btn-save { background: #d4af37; color: #0f1a24; }
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-family: 'Cinzel'; font-weight: bold; transition: 0.3s; margin-top: 10px; }
+        .btn-save { background: var(--gold); color: var(--dark); }
         .btn-save:hover { background: #fff; }
-        .btn-cancel { background: #2a3a4a; color: #fff; }
+        .btn-cancel { background: transparent; color: #888; border: 1px solid #444; }
 
-        /* Liste Alanı */
-        .announcement-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #d4af37; }
-        .item-info { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
-        .item-thumb { width: 60px; height: 60px; object-fit: cover; border: 1px solid #d4af37; border-radius: 4px; }
-        .item-actions { display: flex; gap: 10px; }
-        .action-btn { font-size: 11px; padding: 5px 12px; cursor: pointer; border-radius: 3px; border: 1px solid; background: transparent; }
-        .edit-btn { color: #d4af37; border-color: #d4af37; }
+        /* Liste Stil (Tüm Duyurular) */
+        .list-container { background: var(--box-bg); border: 2px solid var(--gold); border-radius: 12px; padding: 25px; }
+        .announcement-card { display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid transparent; transition: 0.3s; }
+        .announcement-card:hover { border-color: var(--gold); background: rgba(212,175,55,0.05); }
+        
+        .info-group { display: flex; align-items: center; gap: 15px; }
+        .thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 4px; border: 1px solid var(--gold); }
+        .meta h4 { margin: 0; font-size: 14px; }
+        .meta span { font-size: 12px; color: var(--gold); opacity: 0.8; }
+
+        .actions { display: flex; gap: 10px; }
+        .action-btn { background: none; border: 1px solid; padding: 5px 10px; cursor: pointer; border-radius: 3px; font-size: 10px; text-transform: uppercase; }
+        .edit-btn { color: var(--gold); border-color: var(--gold); }
         .delete-btn { color: #ff4d4d; border-color: #ff4d4d; }
     </style>
 </head>
 <body>
 
-<div class="admin-container">
-    <div class="box">
-        <h2 id="formTitle">YENİ DUYURU</h2>
-        <input type="hidden" id="editIndex" value="-1">
-        
-        <div class="form-group">
-            <label>Başlık</label>
-            <input type="text" id="title" placeholder="Haber veya Duyuru Başlığı">
-        </div>
-        
-        <div class="form-group">
-            <label>Tarih</label>
-            <input type="date" id="date">
-        </div>
+<div class="admin-wrapper">
+    <div class="panel-box">
+        <h2 id="titleHeader">DUYURU YÖNETİMİ</h2>
+        <form id="announcementForm" action="upload.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" id="formAction" value="new">
+            <input type="hidden" name="index" id="editIndex" value="">
 
-        <div class="form-group">
-            <label>Görsel URL (assets/...) </label>
-            <input type="text" id="imgUrl" placeholder="Örn: assets/haber1.jpg">
-            <small style="font-size: 10px; opacity: 0.7;">*Görseli önce assets klasörüne yüklemelisiniz.</small>
-        </div>
+            <div class="form-group">
+                <label>Duyuru Başlığı</label>
+                <input type="text" name="title" id="titleInput" required placeholder="Başlık giriniz...">
+            </div>
 
-        <div class="btn-row">
-            <button class="btn-save" onclick="handleSave()">KAYDET</button>
-            <button class="btn-cancel" onclick="resetForm()">İPTAL</button>
-        </div>
+            <div class="form-group">
+                <label>Tarih</label>
+                <input type="date" name="date" id="dateInput" required>
+            </div>
+
+            <div class="form-group">
+                <label>Görsel Seç (Afiş/Fotoğraf)</label>
+                <input type="file" name="image" id="fileInput" accept="image/*">
+                <small style="font-size: 9px; color: #888;">*Yeni görsel yüklemek için dosya seçin.</small>
+            </div>
+
+            <button type="submit" class="btn btn-save">VERİYİ KAYDET / GÜNCELLE</button>
+            <button type="button" class="btn btn-cancel" onclick="resetForm()">TEMİZLE</button>
+        </form>
     </div>
 
-    <div class="box">
-        <h3>MEVCUT DUYURULAR</h3>
+    <div class="list-container">
+        <h2>TÜM DUYURULAR ARŞİVİ</h2>
         <div id="announcementList">
             </div>
     </div>
 </div>
 
 <script>
-    let announcements = [];
+    let allData = [];
 
-    // Verileri Yükle
-    function loadData() {
-        fetch('duyurular/duyurular.json')
-            .then(res => res.json())
-            .then(data => {
-                announcements = data;
-                renderList();
-            });
+    async function loadAnnouncements() {
+        const res = await fetch('duyurular/duyurular.json');
+        allData = await res.json();
+        renderList();
     }
 
     function renderList() {
         const listDiv = document.getElementById('announcementList');
         listDiv.innerHTML = '';
         
-        announcements.forEach((item, index) => {
+        // Tarihe göre yeniden eskiye sırala
+        allData.sort((a,b) => new Date(b.tarih) - new Date(a.tarih));
+
+        allData.forEach((item, index) => {
             listDiv.innerHTML += `
-                <div class="announcement-item">
-                    <div class="item-info">
-                        <img src="${item.gorsel || 'assets/default.jpg'}" class="item-thumb">
-                        <div>
-                            <div style="font-weight:bold; font-size:14px;">${item.baslik}</div>
-                            <div style="font-size:12px; color:#d4af37;">${item.tarih}</div>
+                <div class="announcement-card">
+                    <div class="info-group">
+                        <img src="${item.gorsel || 'assets/default.jpg'}" class="thumb">
+                        <div class="meta">
+                            <h4>${item.baslik}</h4>
+                            <span>${new Date(item.tarih).toLocaleDateString('tr-TR')}</span>
                         </div>
                     </div>
-                    <div class="item-actions">
-                        <button class="action-btn edit-btn" onclick="editItem(${index})">DÜZENLE</button>
+                    <div class="actions">
+                        <button class="action-btn edit-btn" onclick="prepareEdit(${index})">DÜZENLE</button>
                         <button class="action-btn delete-btn" onclick="deleteItem(${index})">SİL</button>
                     </div>
                 </div>`;
         });
     }
 
-    // Düzenleme Moduna Geç
-    function editItem(index) {
-        const item = announcements[index];
-        document.getElementById('title').value = item.baslik;
-        document.getElementById('date').value = item.tarih;
-        document.getElementById('imgUrl').value = item.gorsel || '';
+    function prepareEdit(index) {
+        const item = allData[index];
+        document.getElementById('titleInput').value = item.baslik;
+        document.getElementById('dateInput').value = item.tarih;
         document.getElementById('editIndex').value = index;
-        document.getElementById('formTitle').innerText = "DUYURUYU DÜZENLE";
+        document.getElementById('formAction').value = "update";
+        document.getElementById('titleHeader').innerText = "DÜZENLEME MODU";
         window.scrollTo(0,0);
     }
 
-    // Kaydet (Yeni veya Düzenle)
-    function handleSave() {
-        const index = parseInt(document.getElementById('editIndex').value);
-        const newData = {
-            baslik: document.getElementById('title').value,
-            tarih: document.getElementById('date').value,
-            gorsel: document.getElementById('imgUrl').value
-        };
-
-        if(index === -1) {
-            announcements.unshift(newData); // Yeni ekle
-        } else {
-            announcements[index] = newData; // Düzenle
-        }
-
-        console.log("Sunucuya gönderilecek veri:", announcements);
-        alert("JSON dosyasına yazma işlemi için sunucu (PHP) desteği gereklidir. Veri konsola yazdırıldı.");
-        
-        resetForm();
-        renderList();
-    }
-
     function resetForm() {
-        document.getElementById('title').value = '';
-        document.getElementById('date').value = '';
-        document.getElementById('imgUrl').value = '';
-        document.getElementById('editIndex').value = '-1';
-        document.getElementById('formTitle').innerText = "YENİ DUYURU";
+        document.getElementById('announcementForm').reset();
+        document.getElementById('formAction').value = "new";
+        document.getElementById('titleHeader').innerText = "DUYURU YÖNETİMİ";
     }
 
     function deleteItem(index) {
-        if(confirm("Bu duyuruyu silmek istediğinize emin misiniz?")) {
-            announcements.splice(index, 1);
-            renderList();
+        if(confirm("Bu duyuru tamamen silinecek. Emin misiniz?")) {
+            // Silme işlemi için de PHP'ye istek atılması gerekir
+            alert("Silme işlemi için PHP dosyası tetiklenmeli.");
         }
     }
 
-    window.onload = loadData;
+    window.onload = loadAnnouncements;
 </script>
 
 </body>
