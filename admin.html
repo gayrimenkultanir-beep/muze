@@ -2,87 +2,155 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Müze Veri Yönetim Paneli</title>
+    <title>Gülcesu K. | Gelişmiş Yönetim Paneli</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { background: #0f1a24; color: #f4e7c8; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; padding: 50px; }
-        .admin-box { width: 100%; max-width: 600px; background: #1b2b3a; border: 2px solid #d4af37; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
-        h2 { font-family: 'Cinzel'; text-align: center; color: #d4af37; margin-bottom: 30px; border-bottom: 1px solid #d4af37; padding-bottom: 10px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #d4af37; }
-        input, textarea { width: 100%; padding: 12px; background: #0f1a24; border: 1px solid #d4af37; color: white; border-radius: 4px; font-family: inherit; }
-        button { width: 100%; padding: 15px; background: #d4af37; border: none; color: #0f1a24; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s; font-family: 'Cinzel'; }
-        button:hover { background: #fff; }
-        .announcement-list { margin-top: 40px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 20px; }
-        .announcement-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; margin-bottom: 10px; border-radius: 4px; font-size: 13px; }
-        .delete-btn { background: #8b0000; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px; width: auto; font-size: 11px; }
+        body { background: #0f1a24; color: #f4e7c8; font-family: 'Montserrat', sans-serif; padding: 40px; display: flex; justify-content: center; }
+        .admin-container { width: 100%; max-width: 900px; display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; }
+        .box { background: #1b2b3a; border: 1.5px solid #d4af37; padding: 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        h2, h3 { font-family: 'Cinzel'; color: #d4af37; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; margin-top: 0; }
+        
+        /* Form Elemanları */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: #d4af37; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        input { width: 100%; padding: 10px; background: #0f1a24; border: 1px solid #d4af37; color: white; border-radius: 4px; }
+        
+        .btn-row { display: flex; gap: 10px; margin-top: 20px; }
+        button { flex: 1; padding: 12px; cursor: pointer; border-radius: 4px; font-family: 'Cinzel'; font-weight: bold; transition: 0.3s; border: none; }
+        .btn-save { background: #d4af37; color: #0f1a24; }
+        .btn-save:hover { background: #fff; }
+        .btn-cancel { background: #2a3a4a; color: #fff; }
+
+        /* Liste Alanı */
+        .announcement-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 3px solid #d4af37; }
+        .item-info { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+        .item-thumb { width: 60px; height: 60px; object-fit: cover; border: 1px solid #d4af37; border-radius: 4px; }
+        .item-actions { display: flex; gap: 10px; }
+        .action-btn { font-size: 11px; padding: 5px 12px; cursor: pointer; border-radius: 3px; border: 1px solid; background: transparent; }
+        .edit-btn { color: #d4af37; border-color: #d4af37; }
+        .delete-btn { color: #ff4d4d; border-color: #ff4d4d; }
     </style>
 </head>
 <body>
 
-<div class="admin-box" id="loginBox">
-    <h2>PANEL GİRİŞİ</h2>
-    <input type="password" id="adminPass" placeholder="Yönetici Şifresi">
-    <button onclick="checkAuth()" style="margin-top: 15px;">GİRİŞ YAP</button>
-</div>
-
-<div class="admin-box" id="adminPanel" style="display: none;">
-    <h2>DUYURU YÖNETİMİ</h2>
-    
-    <div class="form-group">
-        <label>Duyuru Başlığı</label>
-        <input type="text" id="title" placeholder="Örn: Müzik Terapi Konseri">
-    </div>
-    
-    <div class="form-group">
-        <label>Tarih</label>
-        <input type="date" id="date">
-    </div>
-
-    <button onclick="saveAnnouncement()">DUYURU YAYINLA</button>
-
-    <div class="announcement-list" id="list">
-        <h3>Mevcut Duyurular</h3>
+<div class="admin-container">
+    <div class="box">
+        <h2 id="formTitle">YENİ DUYURU</h2>
+        <input type="hidden" id="editIndex" value="-1">
+        
+        <div class="form-group">
+            <label>Başlık</label>
+            <input type="text" id="title" placeholder="Haber veya Duyuru Başlığı">
         </div>
+        
+        <div class="form-group">
+            <label>Tarih</label>
+            <input type="date" id="date">
+        </div>
+
+        <div class="form-group">
+            <label>Görsel URL (assets/...) </label>
+            <input type="text" id="imgUrl" placeholder="Örn: assets/haber1.jpg">
+            <small style="font-size: 10px; opacity: 0.7;">*Görseli önce assets klasörüne yüklemelisiniz.</small>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn-save" onclick="handleSave()">KAYDET</button>
+            <button class="btn-cancel" onclick="resetForm()">İPTAL</button>
+        </div>
+    </div>
+
+    <div class="box">
+        <h3>MEVCUT DUYURULAR</h3>
+        <div id="announcementList">
+            </div>
+    </div>
 </div>
 
 <script>
-    const PASS = "Edirne2026"; // Panel şifren
+    let announcements = [];
 
-    function checkAuth() {
-        if(document.getElementById('adminPass').value === PASS) {
-            document.getElementById('loginBox').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            loadList();
-        } else { alert("Hatalı Şifre!"); }
-    }
-
-    function loadList() {
+    // Verileri Yükle
+    function loadData() {
         fetch('duyurular/duyurular.json')
             .then(res => res.json())
             .then(data => {
-                const listDiv = document.getElementById('list');
-                listDiv.innerHTML = '<h3>Mevcut Duyurular</h3>';
-                data.sort((a,b) => new Date(b.tarih) - new Date(a.tarih)).forEach((d, index) => {
-                    listDiv.innerHTML += `
-                        <div class="announcement-item">
-                            <span><b>${d.tarih}</b> - ${d.baslik}</span>
-                            <button class="delete-btn" onclick="deleteItem(${index})">SİL</button>
-                        </div>`;
-                });
+                announcements = data;
+                renderList();
             });
     }
 
-    // ÖNEMLİ NOT: Sadece tarayıcı üzerinden JSON dosyasına kalıcı veri yazılamaz. 
-    // Bu işlem için arka planda küçük bir PHP dosyası veya Firebase gibi bir servis gerekir.
-    function saveAnnouncement() {
-        const baslik = document.getElementById('title').value;
-        const tarih = document.getElementById('date').value;
-        if(!baslik || !tarih) return alert("Boş alan bırakmayın!");
+    function renderList() {
+        const listDiv = document.getElementById('announcementList');
+        listDiv.innerHTML = '';
         
-        console.log("Yeni Duyuru Hazır:", { baslik, tarih });
-        alert("Statik yapıda veri kaydı için bir sunucu servisi (PHP/NodeJS) gereklidir. Detayları aşağıda bulabilirsiniz.");
+        announcements.forEach((item, index) => {
+            listDiv.innerHTML += `
+                <div class="announcement-item">
+                    <div class="item-info">
+                        <img src="${item.gorsel || 'assets/default.jpg'}" class="item-thumb">
+                        <div>
+                            <div style="font-weight:bold; font-size:14px;">${item.baslik}</div>
+                            <div style="font-size:12px; color:#d4af37;">${item.tarih}</div>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button class="action-btn edit-btn" onclick="editItem(${index})">DÜZENLE</button>
+                        <button class="action-btn delete-btn" onclick="deleteItem(${index})">SİL</button>
+                    </div>
+                </div>`;
+        });
     }
+
+    // Düzenleme Moduna Geç
+    function editItem(index) {
+        const item = announcements[index];
+        document.getElementById('title').value = item.baslik;
+        document.getElementById('date').value = item.tarih;
+        document.getElementById('imgUrl').value = item.gorsel || '';
+        document.getElementById('editIndex').value = index;
+        document.getElementById('formTitle').innerText = "DUYURUYU DÜZENLE";
+        window.scrollTo(0,0);
+    }
+
+    // Kaydet (Yeni veya Düzenle)
+    function handleSave() {
+        const index = parseInt(document.getElementById('editIndex').value);
+        const newData = {
+            baslik: document.getElementById('title').value,
+            tarih: document.getElementById('date').value,
+            gorsel: document.getElementById('imgUrl').value
+        };
+
+        if(index === -1) {
+            announcements.unshift(newData); // Yeni ekle
+        } else {
+            announcements[index] = newData; // Düzenle
+        }
+
+        console.log("Sunucuya gönderilecek veri:", announcements);
+        alert("JSON dosyasına yazma işlemi için sunucu (PHP) desteği gereklidir. Veri konsola yazdırıldı.");
+        
+        resetForm();
+        renderList();
+    }
+
+    function resetForm() {
+        document.getElementById('title').value = '';
+        document.getElementById('date').value = '';
+        document.getElementById('imgUrl').value = '';
+        document.getElementById('editIndex').value = '-1';
+        document.getElementById('formTitle').innerText = "YENİ DUYURU";
+    }
+
+    function deleteItem(index) {
+        if(confirm("Bu duyuruyu silmek istediğinize emin misiniz?")) {
+            announcements.splice(index, 1);
+            renderList();
+        }
+    }
+
+    window.onload = loadData;
 </script>
 
 </body>
