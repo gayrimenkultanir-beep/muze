@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Müze Veri Yönetim Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0f1a24; color: #f4e7c8; font-family: 'Montserrat', sans-serif; display: flex; justify-content: center; padding: 50px; }
+        .admin-box { width: 100%; max-width: 600px; background: #1b2b3a; border: 2px solid #d4af37; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        h2 { font-family: 'Cinzel'; text-align: center; color: #d4af37; margin-bottom: 30px; border-bottom: 1px solid #d4af37; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; color: #d4af37; }
+        input, textarea { width: 100%; padding: 12px; background: #0f1a24; border: 1px solid #d4af37; color: white; border-radius: 4px; font-family: inherit; }
+        button { width: 100%; padding: 15px; background: #d4af37; border: none; color: #0f1a24; font-weight: bold; cursor: pointer; border-radius: 4px; transition: 0.3s; font-family: 'Cinzel'; }
+        button:hover { background: #fff; }
+        .announcement-list { margin-top: 40px; border-top: 1px solid rgba(212,175,55,0.3); padding-top: 20px; }
+        .announcement-item { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; margin-bottom: 10px; border-radius: 4px; font-size: 13px; }
+        .delete-btn { background: #8b0000; color: white; padding: 5px 10px; border: none; cursor: pointer; border-radius: 3px; width: auto; font-size: 11px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-box" id="loginBox">
+    <h2>PANEL GİRİŞİ</h2>
+    <input type="password" id="adminPass" placeholder="Yönetici Şifresi">
+    <button onclick="checkAuth()" style="margin-top: 15px;">GİRİŞ YAP</button>
+</div>
+
+<div class="admin-box" id="adminPanel" style="display: none;">
+    <h2>DUYURU YÖNETİMİ</h2>
+    
+    <div class="form-group">
+        <label>Duyuru Başlığı</label>
+        <input type="text" id="title" placeholder="Örn: Müzik Terapi Konseri">
+    </div>
+    
+    <div class="form-group">
+        <label>Tarih</label>
+        <input type="date" id="date">
+    </div>
+
+    <button onclick="saveAnnouncement()">DUYURU YAYINLA</button>
+
+    <div class="announcement-list" id="list">
+        <h3>Mevcut Duyurular</h3>
+        </div>
+</div>
+
+<script>
+    const PASS = "Edirne2026"; // Panel şifren
+
+    function checkAuth() {
+        if(document.getElementById('adminPass').value === PASS) {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadList();
+        } else { alert("Hatalı Şifre!"); }
+    }
+
+    function loadList() {
+        fetch('duyurular/duyurular.json')
+            .then(res => res.json())
+            .then(data => {
+                const listDiv = document.getElementById('list');
+                listDiv.innerHTML = '<h3>Mevcut Duyurular</h3>';
+                data.sort((a,b) => new Date(b.tarih) - new Date(a.tarih)).forEach((d, index) => {
+                    listDiv.innerHTML += `
+                        <div class="announcement-item">
+                            <span><b>${d.tarih}</b> - ${d.baslik}</span>
+                            <button class="delete-btn" onclick="deleteItem(${index})">SİL</button>
+                        </div>`;
+                });
+            });
+    }
+
+    // ÖNEMLİ NOT: Sadece tarayıcı üzerinden JSON dosyasına kalıcı veri yazılamaz. 
+    // Bu işlem için arka planda küçük bir PHP dosyası veya Firebase gibi bir servis gerekir.
+    function saveAnnouncement() {
+        const baslik = document.getElementById('title').value;
+        const tarih = document.getElementById('date').value;
+        if(!baslik || !tarih) return alert("Boş alan bırakmayın!");
+        
+        console.log("Yeni Duyuru Hazır:", { baslik, tarih });
+        alert("Statik yapıda veri kaydı için bir sunucu servisi (PHP/NodeJS) gereklidir. Detayları aşağıda bulabilirsiniz.");
+    }
+</script>
+
+</body>
+</html>
