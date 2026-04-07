@@ -1,20 +1,25 @@
 <?php
-session_start();
-$ayar_dosyasi = __DIR__ . '/ayarlar.json';
+// Hata raporlamayı açalım (Sorun varsa ekranda görelim)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-// Dosya yoksa varsayılan oluştur: admin / 123456
-if (!file_exists($ayar_dosyasi)) {
-    $varsayilan = [
+session_start();
+
+$dosya = __DIR__ . '/ayarlar.json';
+
+// Eğer ayarlar.json yoksa, otomatik olarak oluştur
+if (!file_exists($dosya)) {
+    $ilk_kurulum = [
         "kullanici" => "admin",
         "sifre" => password_hash("123456", PASSWORD_DEFAULT)
     ];
-    file_put_contents($ayar_dosyasi, json_encode($varsavilan));
+    file_put_contents($dosya, json_encode($ilk_kurulum, JSON_PRETTY_PRINT));
 }
 
-$ayarlar = json_decode(file_get_contents($ayar_dosyasi), true);
+$ayarlar = json_decode(file_get_contents($dosya), true);
 
 function oturumKontrol() {
-    if (!isset($_SESSION['yonetici_login'])) {
+    if (!isset($_SESSION['giris_yapildi'])) {
         header("Location: login.php");
         exit;
     }
