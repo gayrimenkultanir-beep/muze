@@ -187,8 +187,7 @@
                 <p style="text-align:center; font-family: 'Cinzel'; color: var(--v-red);">Duyurular yükleniyor...</p>
             </div>
 
-            <div id="pagination-nav" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;">
-                </div>
+            <div id="pagination-nav" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;"></div>
         </div>
 
         <div class="card-footer">
@@ -288,7 +287,6 @@
             const bId = start + index; 
             let images = [];
             
-            // YENİ BAŞLIKLARA GÖRE DÖNGÜ (GÖRSEL 1 - GÖRSEL 10)
             for (let i = 1; i <= 10; i++) {
                 let img = parseDriveImage(row['GÖRSEL ' + i]);
                 if (img) images.push(img);
@@ -319,7 +317,6 @@
 
         renderPagination();
         info.innerText = `Toplam ${allData.length} haberden ${start + 1}-${Math.min(end, allData.length)} arası gösteriliyor.`;
-        // Sayfa geçişinde duyuruların başına kaydır
         const rect = document.getElementById('announcement-feed').getBoundingClientRect();
         window.scrollTo({ top: window.scrollY + rect.top - 150, behavior: 'smooth' });
     }
@@ -358,7 +355,8 @@
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            allData = results.data;
+            // VERİYİ TERSİNE ÇEVİR (Yeni eklenen en üstte çıksın)
+            allData = results.data.reverse(); 
             renderPage(1);
         }
     });
