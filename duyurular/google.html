@@ -9,124 +9,148 @@
         
         body { 
             font-family: 'Poppins', sans-serif; 
-            background-color: #f0f2f5; 
+            background-color: #f4f7f6; 
             margin: 0; 
             padding: 20px; 
             color: #333; 
         }
         
-        .container { max-width: 850px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; }
         
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { color: #2c3e50; font-size: 2.5rem; margin: 0; }
+
+        /* Duyuru Kart Yapısı */
         .announcement-card { 
             background: #fff; 
-            border-radius: 12px; 
+            border-radius: 15px; 
             overflow: hidden; 
-            margin-bottom: 35px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
-            border: 1px solid #e0e0e0; 
+            margin-bottom: 40px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            border: 1px solid #e1e4e8;
         }
 
-        /* Görsel Alanı: Tıklama özelliği kaldırıldı */
-        .image-box { 
+        /* Görsel Galerisi */
+        .image-gallery { 
             display: flex; 
             flex-wrap: wrap; 
-            background: #fafafa; 
-            gap: 2px; 
+            background: #f8f9fa; 
+            gap: 4px;
+            padding: 4px;
         }
         
-        .image-box img { 
-            flex: 1 1 300px; 
+        .image-gallery img { 
+            flex: 1 1 250px; 
             height: 400px; 
             object-fit: cover; 
-            border: 1px solid #f0f0f0;
-            pointer-events: none; /* Tıklamayı tamamen devre dışı bırakır */
+            border-radius: 8px;
+            pointer-events: none; /* Tıklama kapalı */
         }
 
-        .content-box { padding: 25px; }
+        /* İçerik Alanı */
+        .content-area { padding: 30px; }
         
-        .date-badge { 
+        .date-tag { 
             background: #4a6cf7; 
             color: #fff; 
-            padding: 4px 12px; 
-            border-radius: 4px; 
-            font-size: 0.8rem; 
-            font-weight: 600; 
+            padding: 5px 15px; 
+            border-radius: 50px; 
+            font-size: 0.85rem; 
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
         }
         
-        .title { 
-            font-size: 1.6rem; 
+        .announcement-title { 
+            font-size: 1.8rem; 
             font-weight: 600; 
-            margin: 15px 0; 
+            margin: 0 0 15px 0; 
             color: #1a1a1a; 
+            line-height: 1.2;
         }
         
-        .details { 
+        .announcement-details { 
             color: #555; 
             line-height: 1.8; 
             white-space: pre-line; 
-            border-top: 1px solid #eee; 
-            padding-top: 15px; 
-            margin-top: 15px; 
+            font-size: 1.05rem;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
         }
 
-        header h1 { text-align: center; margin-bottom: 40px; color: #2c3e50; }
+        #loading { text-align: center; font-size: 1.2rem; color: #666; margin-top: 50px; }
+        
+        /* Mobil Uyumluluk */
+        @media (max-width: 600px) {
+            .image-gallery img { height: 250px; flex: 1 1 100%; }
+            .announcement-title { font-size: 1.4rem; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1>Güncel Duyurular</h1>
+        <h1>Duyurular</h1>
     </header>
-    <div id="main-feed">
-        <p style="text-align:center;">Yükleniyor...</p>
-    </div>
+    
+    <div id="loading">Veriler güncelleniyor, lütfen bekleyin...</div>
+    <div id="news-feed"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+    // Senin paylaştığın linkin CSV formatı
+    const googleSheetLink = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    function createDriveImg(url) {
-        if (!url || url.trim() === "") return null;
-        let id = "";
+    // Google Drive Linklerini Resme Çeviren Fonksiyon
+    function formatDriveUrl(url) {
+        if (!url || url.trim() === "" || !url.startsWith('http')) return null;
+        let fileId = "";
         try {
-            if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
-            else if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
-            return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
+            if (url.includes('id=')) {
+                fileId = url.split('id=')[1].split('&')[0];
+            } else if (url.includes('/d/')) {
+                fileId = url.split('/d/')[1].split('/')[0];
+            }
+            return fileId ? `https://drive.google.com/uc?export=view&id=${fileId}` : url;
         } catch (e) {
             return url;
         }
     }
 
-    Papa.parse(csvUrl, {
+    Papa.parse(googleSheetLink, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            const feed = document.getElementById('main-feed');
-            feed.innerHTML = ''; // Yükleniyor yazısını temizle
+            const feed = document.getElementById('news-feed');
+            const loader = document.getElementById('loading');
+            loader.style.display = 'none';
 
             results.data.forEach(row => {
-                const img1 = createDriveImg(row['görsel1']);
-                const img2 = createDriveImg(row['görsel2']);
+                // Görsel sütunlarını kontrol et (Link varsa al)
+                const g1 = formatDriveUrl(row['görsel1']);
+                const g2 = formatDriveUrl(row['görsel2']);
+                const g3 = formatDriveUrl(row['görsel3']);
 
-                let imgHtml = '';
-                if (img1) imgHtml += `<img src="${img1}">`;
-                if (img2) imgHtml += `<img src="${img2}">`;
+                let imagesHtml = '';
+                if (g1) imagesHtml += `<img src="${g1}" alt="Görsel 1">`;
+                if (g2) imagesHtml += `<img src="${g2}" alt="Görsel 2">`;
+                if (g3) imagesHtml += `<img src="${g3}" alt="Görsel 3">`;
 
-                const card = `
+                const cardHtml = `
                     <div class="announcement-card">
-                        ${imgHtml ? `<div class="image-box">${imgHtml}</div>` : ''}
-                        <div class="content-box">
-                            <span class="date-badge">${row['tarih'] || ''}</span>
-                            <h2 class="title">${row['duyuru metni'] || ''}</h2>
-                            <div class="details">${row['detaylar'] || ''}</div>
+                        ${imagesHtml ? `<div class="image-gallery">${imagesHtml}</div>` : ''}
+                        <div class="content-area">
+                            <span class="date-tag">${row['tarih'] || ''}</span>
+                            <h2 class="announcement-title">${row['duyuru metni'] || ''}</h2>
+                            <div class="announcement-details">${row['detaylar'] || ''}</div>
                         </div>
                     </div>
                 `;
-                feed.innerHTML += card;
+                feed.innerHTML += cardHtml;
             });
         }
     });
