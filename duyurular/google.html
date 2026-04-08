@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duyuru Panosu - Kesin Slider</title>
+    <title>Duyuru Panosu - Ok Tuşlu Slider</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         
@@ -19,30 +19,54 @@
             border: 1px solid #e1e4e8;
         }
 
-        /* SLIDER ALANI - KESİN AYARLAR */
+        /* SLIDER ALANI */
         .slider-container {
             width: 100%;
             height: 450px;
             position: relative;
-            overflow: hidden; /* Dışarı taşan görselleri gizler */
+            overflow: hidden;
             background-color: #000;
         }
 
         .slider-wrapper {
-            display: flex; /* Görselleri yan yana dizer */
+            display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s ease-in-out;
-            will-change: transform;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider-wrapper img {
-            min-width: 100%; /* Her resim kutu kadar yer kaplar */
+            min-width: 100%;
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
+
+        /* OK TUŞLARI */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover { background: rgba(0, 0, 0, 0.7); }
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
 
         /* Noktalar */
         .slider-dots {
@@ -56,18 +80,15 @@
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             background: rgba(255, 255, 255, 0.5);
             border-radius: 50%;
             cursor: pointer;
             border: 1px solid rgba(0,0,0,0.3);
         }
 
-        .dot.active {
-            background: #1a73e8;
-            transform: scale(1.2);
-        }
+        .dot.active { background: #1a73e8; transform: scale(1.2); }
 
         .text-container { padding: 30px; }
         .date-text { color: #1a73e8; font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; display: block; }
@@ -89,8 +110,10 @@
 
 <script>
     const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+    
+    // Her bloğun o anki görsel indeksini tutan obje
+    const sliderStates = {};
 
-    // Google Thumbnail ID Ayıklama
     function getThumbId(url) {
         if (!url || !url.includes('drive.google.com')) return null;
         let id = "";
@@ -101,18 +124,23 @@
         } catch (e) { return null; }
     }
 
-    // Kaydırma Fonksiyonu
-    function moveSlider(blockId, index) {
+    // Gelişmiş Kaydırma Fonksiyonu
+    function moveSlider(blockId, index, total) {
+        // İndeksi sınırlar içinde tut (döngüsel slider)
+        if (index >= total) index = 0;
+        if (index < 0) index = total - 1;
+
+        sliderStates[blockId] = index;
+        
         const block = document.getElementById(`block-${blockId}`);
         const wrapper = block.querySelector('.slider-wrapper');
         const dots = block.querySelectorAll('.dot');
         
-        // Genişlik kadar sola kaydır
         wrapper.style.transform = `translateX(-${index * 100}%)`;
         
-        // Noktaları güncelle
-        dots.forEach(d => d.classList.remove('active'));
-        dots[index].classList.add('active');
+        dots.forEach((d, i) => {
+            d.classList.toggle('active', i === index);
+        });
     }
 
     Papa.parse(sheetCsvUrl, {
@@ -130,20 +158,32 @@
                     getThumbId(row['görsel3'])
                 ].filter(u => u !== null);
 
+                sliderStates[bId] = 0; // Başlangıç indeksi
                 let sliderHtml = '';
+                
                 if (imgUrls.length > 0) {
                     let images = '';
                     let dots = '';
-                    
+                    let navButtons = '';
+
                     imgUrls.forEach((src, i) => {
                         images += `<img src="${src}">`;
                         if (imgUrls.length > 1) {
-                            dots += `<div class="dot ${i===0?'active':''}" onclick="moveSlider(${bId}, ${i})"></div>`;
+                            dots += `<div class="dot ${i===0?'active':''}" onclick="moveSlider(${bId}, ${i}, ${imgUrls.length})"></div>`;
                         }
                     });
 
+                    // Eğer birden fazla görsel varsa butonları ekle
+                    if (imgUrls.length > 1) {
+                        navButtons = `
+                            <button class="nav-btn prev-btn" onclick="moveSlider(${bId}, sliderStates[${bId}] - 1, ${imgUrls.length})">&#10094;</button>
+                            <button class="nav-btn next-btn" onclick="moveSlider(${bId}, sliderStates[${bId}] + 1, ${imgUrls.length})">&#10095;</button>
+                        `;
+                    }
+
                     sliderHtml = `
                         <div class="slider-container">
+                            ${navButtons}
                             <div class="slider-wrapper">${images}</div>
                             <div class="slider-dots">${dots}</div>
                         </div>`;
