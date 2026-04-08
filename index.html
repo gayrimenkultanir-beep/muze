@@ -248,14 +248,82 @@
         <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
     <div class="c-f b-l"></div><div class="c-f b-r"></div>
-    <h3>BASINDA BİZ </h3>
+    
+    <h3>DUYURULAR</h3>
+    
     <div class="card-content">
-        <ul>
-            <li>Müze Ziyaret Saatleri Hk. (Ramazan Bayramı)</li> <!-- Kapatıldı -->
-            <li>8 Mart Dünya Kadınlar Günü Hk.</li> <!-- Kapatıldı -->
-        </ul>    
+        <ul id="dynamic-announcements">
+            <li style="font-size: 13px; opacity: 0.7;">Yükleniyor...</li>
+        </ul> 
+        
+        <div style="margin-top: 15px; border-top: 1px dashed rgba(212, 175, 55, 0.3); padding-top: 10px;">
+            <a href="duyurular/duyurular.html" style="color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 12px; font-weight: bold; display: block; text-align: center;">
+                TÜM DUYURULAR İÇİN TIKLAYINIZ →
+            </a>
+        </div>
     </div>
 </div>
+
+<style>
+    /* Kart içindeki liste tasarımı */
+    #dynamic-announcements {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    #dynamic-announcements li {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        font-family: 'Playfair Display', serif; /* Detaylar için kullandığın font */
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    #dynamic-announcements li:last-child {
+        border-bottom: none;
+    }
+    #dynamic-announcements .ann-date-small {
+        display: block;
+        font-family: 'Cinzel', serif;
+        font-size: 10px;
+        color: var(--v-red); /* Tarih rengi */
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+    #dynamic-announcements .ann-text-small {
+        color: #444;
+        font-weight: 600; /* Kalınlaştırdık */
+    }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+<script>
+    (function() {
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                const listContainer = document.getElementById('dynamic-announcements');
+                listContainer.innerHTML = ''; // "Yükleniyor" yazısını temizle
+                
+                // Veriyi ters çevir (en güncel üstte) ve ilk 3 tanesini al
+                const latestData = results.data.reverse().slice(0, 3);
+
+                latestData.forEach(row => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="ann-date-small">${row['TARİH'] || ''}</span>
+                        <span class="ann-text-small">${row['DUYURU METNİ'] || ''}</span>
+                    `;
+                    listContainer.appendChild(li);
+                });
+            }
+        });
+    })();
+</script>
 
 <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
