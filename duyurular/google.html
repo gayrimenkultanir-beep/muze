@@ -7,125 +7,98 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .announcement-block { background: #ffffff; border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #ddd; position: relative; }
+        .container { max-width: 850px; margin: 0 auto; }
         
-        .slider-container { width: 100%; height: 400px; position: relative; overflow: hidden; background-color: #f8f9fa; }
-        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; }
-        .slider-wrapper img { min-width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
-        
-        .slider-dots { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 10; }
-        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.6); border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.2); }
-        .dot.active { background: #4a6cf7; }
-        
-        .content-group { padding: 25px; }
-        .date-label { background: #e1e7ff; color: #4a6cf7; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .announcement-title { font-size: 1.5rem; font-weight: 600; margin: 15px 0 10px; }
-        .details-text { color: #666; line-height: 1.7; white-space: pre-line; }
-        
-        #imgModal { display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid white; border-radius: 4px; }
+        /* Her duyuru bir kart/tablo gibi */
+        .announcement-card { 
+            background: #fff; border-radius: 12px; overflow: hidden; 
+            margin-bottom: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+            border: 1px solid #e0e0e0; 
+        }
+
+        /* Görsel Alanı */
+        .image-box { display: flex; flex-wrap: wrap; background: #fafafa; gap: 2px; }
+        .image-box img { 
+            flex: 1 1 300px; /* Görseller yan yana sığmazsa alt alta geçer */
+            height: 400px; object-fit: cover; cursor: zoom-in;
+            border: 1px solid #f0f0f0;
+        }
+
+        .content-box { padding: 25px; }
+        .date-badge { 
+            background: #4a6cf7; color: #fff; padding: 4px 12px; 
+            border-radius: 4px; font-size: 0.8rem; font-weight: 600; 
+        }
+        .title { font-size: 1.6rem; font-weight: 600; margin: 15px 0; color: #1a1a1a; }
+        .details { color: #555; line-height: 1.8; white-space: pre-line; border-top: 1px solid #eee; pt: 15px; margin-top: 15px; }
+
+        /* Zoom Modal */
+        #zoomModal { 
+            display: none; position: fixed; z-index: 9999; 
+            left: 0; top: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); justify-content: center; align-items: center; 
+        }
+        #zoomModal img { max-width: 90%; max-height: 90%; border: 3px solid #fff; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header style="text-align:center; margin-bottom:30px;">
-        <h1>Duyuru Panosu</h1>
+    <header style="text-align:center; margin-bottom:40px;">
+        <h1>Güncel Duyurular</h1>
     </header>
-    <div id="loading" style="text-align: center;">Duyurular ve görseller yükleniyor...</div>
-    <div id="feed"></div>
+    <div id="main-feed"></div>
 </div>
 
-<div id="imgModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
+<div id="zoomModal" onclick="this.style.display='none'"><img id="zoomImg"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // DRIVE GÖRSELLERİ İÇİN EN KARARLI YÖNTEM (Thumbnail API)
-    function fixDriveLink(url) {
-        if (!url || typeof url !== 'string' || url.trim() === "") return null;
-        let fileId = "";
-        try {
-            if (url.includes('id=')) {
-                fileId = url.split('id=')[1].split('&')[0];
-            } else if (url.includes('/d/')) {
-                fileId = url.split('/d/')[1].split('/')[0];
-            }
-            if (fileId) {
-                // thumbnail.googleusercontent.com bazen kısıtlıdır, bu yüzden alternatif:
-                return `https://lh3.googleusercontent.com/u/0/d/${fileId}`;
-            }
-        } catch (e) { console.error("Link dönüştürülemedi:", url); }
-        return url;
-    }
-
-    function slideTo(blockId, index) {
-        const block = document.getElementById(`block-${blockId}`);
-        if (!block) return;
-        const wrapper = block.querySelector('.slider-wrapper');
-        const dots = block.querySelectorAll('.dot');
-        if(wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
-        dots.forEach(d => d.classList.remove('active'));
-        if(dots[index]) dots[index].classList.add('active');
+    // Drive ID Ayıklama ve Temizleme
+    function createDriveImg(url) {
+        if (!url || url.trim() === "") return null;
+        let id = "";
+        if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+        else if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
+        
+        return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
     }
 
     Papa.parse(csvUrl, {
         download: true,
         header: true,
-        skipEmptyLines: true,
         complete: function(results) {
-            document.getElementById('loading').style.display = 'none';
-            const feed = document.getElementById('feed');
-            
-            results.data.forEach((row, index) => {
-                // Görsel başlıklarınızın Sheets ile uyumlu olduğundan emin olun
-                const imgLinks = [
-                    fixDriveLink(row['görsel1']),
-                    fixDriveLink(row['görsel2']),
-                    fixDriveLink(row['görsel3'])
-                ].filter(url => url !== null);
+            const feed = document.getElementById('main-feed');
+            results.data.forEach(row => {
+                const img1 = createDriveImg(row['görsel1']);
+                const img2 = createDriveImg(row['görsel2']);
 
-                let sliderHTML = '';
-                let dotsHTML = '';
+                let imgHtml = '';
+                if (img1) imgHtml += `<img src="${img1}" onclick="openZoom('${img1}')">`;
+                if (img2) imgHtml += `<img src="${img2}" onclick="openZoom('${img2}')">`;
 
-                if (imgLinks.length > 0) {
-                    sliderHTML = `<div class="slider-wrapper">`;
-                    imgLinks.forEach(img => {
-                        sliderHTML += `<img src="${img}" loading="lazy" onclick="event.stopPropagation(); document.getElementById('imgModal').style.display='flex'; document.getElementById('modalImg').src='${img}'" onerror="this.src='https://via.placeholder.com/600x400?text=Görsel+Yüklenemedi'">`;
-                    });
-                    sliderHTML += `</div>`;
-
-                    if (imgLinks.length > 1) {
-                        dotsHTML = `<div class="slider-dots">`;
-                        imgLinks.forEach((_, i) => {
-                            dotsHTML += `<div class="dot ${i===0?'active':''}" onclick="event.stopPropagation(); slideTo(${index}, ${i})"></div>`;
-                        });
-                        dotsHTML += `</div>`;
-                    }
-                } else {
-                    sliderHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999; background:#eee;">Görsel Bulunamadı</div>`;
-                }
-
-                const block = `
-                    <div class="announcement-block" id="block-${index}">
-                        <div class="slider-container">
-                            ${sliderHTML}
-                            ${dotsHTML}
-                        </div>
-                        <div class="content-group">
-                            <span class="date-label">${row['tarih'] || ''}</span>
-                            <h2 class="announcement-title">${row['duyuru metni'] || ''}</h2>
-                            <p class="details-text">${row['detaylar'] || ''}</p>
+                const card = `
+                    <div class="announcement-card">
+                        <div class="image-box">${imgHtml}</div>
+                        <div class="content-box">
+                            <span class="date-badge">${row['tarih'] || ''}</span>
+                            <h2 class="title">${row['duyuru metni'] || ''}</h2>
+                            <div class="details">${row['detaylar'] || ''}</div>
                         </div>
                     </div>
                 `;
-                feed.innerHTML += block;
+                feed.innerHTML += card;
             });
         }
     });
+
+    function openZoom(src) {
+        document.getElementById('zoomModal').style.display = 'flex';
+        document.getElementById('zoomImg').src = src;
+    }
 </script>
 
 </body>
