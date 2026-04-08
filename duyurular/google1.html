@@ -213,26 +213,66 @@
     .page-btn.active { background: var(--gold); color: var(--dark); font-weight: bold; }
     .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    /* Duyuru Kartı ve Slider */
-    .announcement-item { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--gold); border-radius: 8px; margin-bottom: 40px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-    .sl-container { width: 100%; max-width: 600px; height: 400px; position: relative; overflow: hidden; background-color: #000; margin: 0 auto; border-bottom: 1px solid var(--gold); }
-    .sl-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-    .sl-wrapper img { min-width: 100%; width: 100%; height: 100%; object-fit: contain; display: block; }
+    /* Duyuru Kartı ve Slider (DİKEY FORMAT AYARI) */
+    .announcement-item { 
+        background: rgba(255, 255, 255, 0.4); 
+        border: 1px solid var(--gold); 
+        border-radius: 8px; 
+        margin-bottom: 40px; 
+        overflow: hidden; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+    }
+
+    /* Slider Alanı - 1080x1920 Dikey Oranı (Masaüstü için sınırlandı) */
+    .sl-container {
+        width: 100%;
+        max-width: 350px; /* Masaüstünde çok uzun olmaması için genişliği sınırladık */
+        position: relative;
+        overflow: hidden;
+        background-color: #000;
+        margin: 0 auto; /* Ortala */
+        border-bottom: 1px solid var(--gold);
+        /* 1080x1920 oranını korumak için aspect-ratio (yükseklik/genişlik) */
+        aspect-ratio: 1080 / 1920; 
+    }
+
+    .sl-wrapper {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sl-wrapper img {
+        min-width: 100%;
+        width: 100%;
+        height: 100%;
+        /*object-fit: contain;*/ /* Resmi bozmadan, kesmeden kutuya sığdırır, kenarda boşluk kalabilir */
+        object-fit: cover; /* Resmi kutuya sığdırmak için gerekirse hafifçe keser (daha estetik durur) */
+        display: block;
+    }
     
+    /* Navigasyon Butonları */
     .sl-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 26, 36, 0.8); color: var(--gold); border: 1px solid var(--gold); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
     .sl-nav:hover { background: var(--gold); color: var(--dark); }
     
+    /* Noktalar */
     .sl-dots { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; gap: 6px; z-index: 20; }
     .sl-dot { width: 8px; height: 8px; background: rgba(212, 175, 55, 0.4); border: 1px solid var(--gold); border-radius: 50%; cursor: pointer; }
     .sl-dot.active { background: var(--gold); transform: scale(1.3); }
 
     /* Metin Alanları */
-    .ann-body { padding: 20px 25px; background: rgba(244, 231, 200, 0.2); }
+    .ann-body { padding: 20px 25px; background: rgba(244, 231, 200, 0.2); text-align: center; }
     .ann-date { font-family: 'Cinzel'; color: var(--v-red); font-weight: bold; font-size: 11px; display: block; margin-bottom: 5px; }
     .ann-title { font-family: 'Cinzel'; color: var(--dark); font-size: 17px; font-weight: 800; margin-bottom: 10px; line-height: 1.4; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 5px; }
     .ann-text { font-family: 'Playfair Display'; color: #444; font-size: 14px; line-height: 1.6; font-style: italic; }
 
-    @media (max-width: 600px) { .sl-container { height: auto; aspect-ratio: 600 / 400; } }
+    /* Mobil Ayarlar */
+    @media (max-width: 600px) { 
+        .sl-container { 
+            max-width: 100%; /* Mobilde ekran genişliğini tam kapla */
+        } 
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -250,7 +290,8 @@
             let id = "";
             if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
             else id = url.split('/d/')[1].split('/')[0];
-            return `https://lh3.googleusercontent.com/u/0/d/${id}=w600-h400-p-k-no`;
+            // Google'dan dikey formata uygun, daha yüksek çözünürlüklü thumbnail iste
+            return `https://lh3.googleusercontent.com/u/0/d/${id}=w720-h1280-p-k-no`;
         } catch (e) { return null; }
     }
 
@@ -355,7 +396,6 @@
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            // VERİYİ TERSİNE ÇEVİR (Yeni eklenen en üstte çıksın)
             allData = results.data.reverse(); 
             renderPage(1);
         }
