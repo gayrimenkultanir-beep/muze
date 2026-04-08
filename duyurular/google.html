@@ -3,84 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duyuru Panosu</title>
+    <title>Duyuru Panosu - Slider</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            padding: 20px; 
+            font-family: 'Poppins', sans-serif; 
             background-color: #f0f2f5; 
+            margin: 0; 
+            padding: 20px; 
             color: #333; 
-            line-height: 1.6;
         }
         .container { max-width: 800px; margin: auto; }
-        
-        .btn-back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
-        h2 { text-align: center; color: #2c3e50; }
+        .btn-back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #1a73e8; font-weight: 600; }
 
-        /* Duyuru Blok Tasarımı */
+        /* Kart Yapısı */
         .announcement-block {
             background: white;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             overflow: hidden;
-            border: 1px solid #ddd;
+            border: 1px solid #e1e4e8;
         }
 
-        /* Görsel Alanı (Büyük Tasarım) */
-        .img-container {
+        /* Slider Alanı */
+        .slider-container {
             width: 100%;
-            height: 400px; /* 600x400 oranına uygun yükseklik */
-            background-color: #eee;
+            height: 450px;
+            position: relative;
             overflow: hidden;
+            background-color: #f8f9fa;
         }
 
-        .img-container img {
+        .slider-wrapper {
+            display: flex;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Resmi kutuya tam sığdırır ve şık gösterir */
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slider-wrapper img {
+            min-width: 100%;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
 
-        /* Metin Alanı */
-        .text-container {
-            padding: 25px;
+        /* Kaydırma Noktaları */
+        .slider-dots {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 5;
         }
 
-        .date-text {
-            font-size: 0.9rem;
-            color: #007bff;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
+        .dot {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.2);
+            transition: 0.3s;
         }
 
-        .title-text {
-            font-size: 1.6rem;
-            color: #1a1a1a;
-            margin-bottom: 15px;
-            font-weight: 600;
+        .dot.active {
+            background: #1a73e8;
+            transform: scale(1.2);
         }
 
-        .details-text {
-            font-size: 1.1rem;
-            color: #444;
-            white-space: pre-line; /* Sheets'teki alt satırları korur */
-        }
+        /* İçerik */
+        .text-container { padding: 30px; }
+        .date-text { color: #1a73e8; font-weight: 600; font-size: 0.9rem; display: block; margin-bottom: 10px; }
+        .title-text { font-size: 1.7rem; font-weight: 600; margin-bottom: 15px; color: #1a1a1a; }
+        .details-text { color: #555; line-height: 1.8; white-space: pre-line; }
 
-        @media (max-width: 600px) {
-            .img-container { height: 250px; }
-        }
+        @media (max-width: 600px) { .slider-container { height: 300px; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <a href="index.html" class="btn-back">← Geri Dön</a>
-    <h2>Güncel Duyurular</h2>
-    
     <div id="feed-container">
-        <p style="text-align:center;">Veriler yükleniyor...</p>
+        <p style="text-align:center;">Duyurular hazırlanıyor...</p>
     </div>
 </div>
 
@@ -89,59 +99,70 @@
 <script>
     const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // Senin çalışan kodundaki görsel çekme mantığı
-    function getDriveThumbnail(url) {
-        if (!url || !url.includes('drive.google.com')) return url;
+    // Çalışan Thumbnail Mantığı
+    function getThumb(url) {
+        if (!url || !url.includes('drive.google.com')) return null;
         let id = "";
         try {
-            if (url.includes('id=')) {
-                id = url.split('id=')[1].split('&')[0];
-            } else {
-                id = url.split('/d/')[1].split('/')[0];
-            }
-            // En garantili görsel sunucusu
-            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
-        } catch (e) {
-            return url;
-        }
+            if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+            else id = url.split('/d/')[1].split('/')[0];
+            return `https://lh3.googleusercontent.com/u/0/d/$${id}`;
+        } catch (e) { return null; }
+    }
+
+    // Kaydırma İşlemi
+    function moveSlider(blockId, index) {
+        const block = document.getElementById(`block-${blockId}`);
+        const wrapper = block.querySelector('.slider-wrapper');
+        const dots = block.querySelectorAll('.dot');
+        
+        wrapper.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach(d => d.classList.remove('active'));
+        dots[index].classList.add('active');
     }
 
     Papa.parse(sheetCsvUrl, {
         download: true,
         header: true,
-        skipEmptyLines: true,
         complete: function(results) {
-            const data = results.data;
             const container = document.getElementById('feed-container');
             container.innerHTML = '';
 
-            data.forEach(row => {
-                // Sütun başlıklarının Sheets ile tam eşleşmesi gerekir
-                const tarih = row['tarih'] || '';
-                const baslik = row['duyuru metni'] || '';
-                const detay = row['detaylar'] || '';
-                const g1 = (row['görsel1'] || "").trim();
+            results.data.forEach((row, bId) => {
+                const images = [
+                    getThumb(row['görsel1']),
+                    getThumb(row['görsel2']),
+                    getThumb(row['görsel3'])
+                ].filter(img => img !== null);
 
-                let imgHtml = '';
-                if (g1.startsWith('http')) {
-                    const finalImg = getDriveThumbnail(g1);
-                    imgHtml = `
-                        <div class="img-container">
-                            <img src="${finalImg}" onerror="this.parentElement.style.display='none'">
+                let sliderHtml = '';
+                if (images.length > 0) {
+                    let imgTags = '';
+                    let dotsTags = '';
+                    
+                    images.forEach((src, i) => {
+                        imgTags += `<img src="${src}" onerror="this.style.display='none'">`;
+                        if (images.length > 1) {
+                            dotsTags += `<div class="dot ${i===0?'active':''}" onclick="moveSlider(${bId}, ${i})"></div>`;
+                        }
+                    });
+
+                    sliderHtml = `
+                        <div class="slider-container">
+                            <div class="slider-wrapper">${imgTags}</div>
+                            <div class="slider-dots">${dotsTags}</div>
                         </div>`;
                 }
 
-                const blockHtml = `
-                    <div class="announcement-block">
-                        ${imgHtml}
+                container.innerHTML += `
+                    <div class="announcement-block" id="block-${bId}">
+                        ${sliderHtml}
                         <div class="text-container">
-                            <span class="date-text">${tarih}</span>
-                            <div class="title-text">${baslik}</div>
-                            <div class="details-text">${detay}</div>
+                            <span class="date-text">${row['tarih'] || ''}</span>
+                            <div class="title-text">${row['duyuru metni'] || ''}</div>
+                            <div class="details-text">${row['detaylar'] || ''}</div>
                         </div>
                     </div>`;
-                
-                container.innerHTML += blockHtml;
             });
         }
     });
