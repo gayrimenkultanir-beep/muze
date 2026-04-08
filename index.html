@@ -245,7 +245,7 @@
             </div>
         </div>
 
-        <div class="card">
+       <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
     <div class="c-f b-l"></div><div class="c-f b-r"></div>
     
@@ -253,7 +253,7 @@
     
     <div class="card-content">
         <ul id="dynamic-announcements">
-            <li style="font-size: 12px; opacity: 0.7;">Yükleniyor...</li>
+            <li style="font-size: 12px; opacity: 0.7; list-style: none;">Yükleniyor...</li>
         </ul> 
         
         <div style="margin-top: 15px; border-top: 1px dashed rgba(212, 175, 55, 0.3); padding-top: 10px;">
@@ -265,35 +265,36 @@
 </div>
 
 <style>
-    /* Kart içindeki liste tasarımı */
     #dynamic-announcements {
         list-style: none;
         padding: 0;
         margin: 0;
     }
     #dynamic-announcements li {
-        padding: 6px 0;
+        padding: 8px 0;
         border-bottom: 1px solid rgba(212, 175, 55, 0.1);
-        font-family: 'Playfair Display', serif;
-        font-size: 13px; /* Yazı tipi küçültüldü */
-        line-height: 1.4;
-        font-weight: 400; /* Bold kaldırıldı */
-        display: flex; /* Yanyana dizilim için */
-        gap: 8px; /* Tarih ve metin arası boşluk */
+        /* Hizalamayı sağlayan kritik kısım */
+        display: grid;
+        grid-template-columns: 85px 1fr; /* Tarih için sabit alan, metin için kalan alan */
+        align-items: baseline; /* Metinlerin taban çizgisini hizalar */
+        gap: 10px;
     }
     #dynamic-announcements li:last-child {
         border-bottom: none;
     }
     #dynamic-announcements .ann-date-small {
         font-family: 'Cinzel', serif;
-        font-size: 11px; /* Tarih boyutu ayarlandı */
+        font-size: 11px;
         color: var(--v-red); 
-        white-space: nowrap; /* Tarihin alt satıra geçmesini engeller */
-        font-weight: 400; /* Bold kaldırıldı */
+        font-weight: 400;
+        letter-spacing: 0.5px;
     }
     #dynamic-announcements .ann-text-small {
+        font-family: 'Playfair Display', serif;
+        font-size: 12.5px;
         color: #555;
-        font-weight: 400; /* Bold kaldırıldı */
+        font-weight: 400;
+        line-height: 1.3;
     }
 </style>
 
@@ -310,7 +311,6 @@
                 const listContainer = document.getElementById('dynamic-announcements');
                 listContainer.innerHTML = '';
                 
-                // En güncel 3 duyuruyu al
                 const latestData = results.data.reverse().slice(0, 3);
 
                 latestData.forEach(row => {
