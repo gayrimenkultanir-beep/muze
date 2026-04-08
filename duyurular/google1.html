@@ -173,7 +173,7 @@
         </div>
     </div>
 
-    <div class="container" style="margin-top: 50px;">
+   <div class="container" style="margin-top: 50px;">
     <div class="full-card">
         <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Frame">
         <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Frame">
@@ -205,13 +205,16 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
-    /* Slider Alanı */
+    /* Slider Alanı - Kesin 600x400 Oranı */
     .sl-container {
         width: 100%;
-        height: 450px;
+        max-width: 600px; /* Maksimum genişlik 600px */
+        height: 400px; /* Sabit yükseklik 400px */
         position: relative;
         overflow: hidden;
-        background-color: var(--dark);
+        background-color: #000; /* Resim sığmazsa kenarlar siyah kalır */
+        margin: 0 auto; /* Masaüstünde ortalar */
+        border-bottom: 1px solid var(--gold);
     }
 
     .sl-wrapper {
@@ -225,7 +228,9 @@
         min-width: 100%;
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        /* KESİN SIĞDIRMA AYARI */
+        object-fit: contain; /* Resmi bozmadan, kesmeden kutuya sığdırır */
+        display: block;
     }
 
     /* Navigasyon Butonları */
@@ -236,11 +241,11 @@
         background: rgba(15, 26, 36, 0.8);
         color: var(--gold);
         border: 1px solid var(--gold);
-        width: 44px;
-        height: 44px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         cursor: pointer;
-        font-size: 20px;
+        font-size: 18px;
         z-index: 20;
         display: flex;
         align-items: center;
@@ -249,24 +254,24 @@
     }
 
     .sl-nav:hover { background: var(--gold); color: var(--dark); }
-    .sl-prev { left: 15px; }
-    .sl-next { right: 15px; }
+    .sl-prev { left: 10px; }
+    .sl-next { right: 10px; }
 
     /* Noktalar */
     .sl-dots {
         position: absolute;
-        bottom: 15px;
+        bottom: 10px;
         width: 100%;
         display: flex;
         justify-content: center;
-        gap: 8px;
+        gap: 6px;
         z-index: 20;
         flex-wrap: wrap;
     }
 
     .sl-dot {
-        width: 9px;
-        height: 9px;
+        width: 8px;
+        height: 8px;
         background: rgba(212, 175, 55, 0.4);
         border: 1px solid var(--gold);
         border-radius: 50%;
@@ -282,7 +287,13 @@
     .ann-title { font-family: 'Cinzel'; color: var(--dark); font-size: 22px; margin-bottom: 15px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; }
     .ann-text { font-family: 'Playfair Display'; color: #333; line-height: 1.7; font-size: 17px; }
 
-    @media (max-width: 768px) { .sl-container { height: 300px; } }
+    /* Mobil Ayarlar */
+    @media (max-width: 600px) { 
+        .sl-container { 
+            height: auto; /* Mobilde yüksekliği genişliğe göre ayarla */
+            aspect-ratio: 600 / 400; /* 600x400 oranını koru */
+        }
+    }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
@@ -294,7 +305,8 @@
         if (!url || !url.includes('drive.google.com')) return null;
         try {
             let id = url.includes('id=') ? url.split('id=')[1].split('&')[0] : url.split('/d/')[1].split('/')[0];
-            return `https://lh3.googleusercontent.com/d/${id}`;
+            // Google'dan 600x400 boyutunda thumbnail iste
+            return `https://lh3.googleusercontent.com/d/${id}=w600-h400-p-k-no`;
         } catch (e) { return null; }
     }
 
@@ -304,7 +316,9 @@
         states[blockId] = idx;
         const wrapper = document.querySelector(`#block-${blockId} .sl-wrapper`);
         const dots = document.querySelectorAll(`#block-${blockId} .sl-dot`);
-        wrapper.style.transform = `translateX(-${idx * 100}%)`;
+        if(wrapper) {
+            wrapper.style.transform = `translateX(-${idx * 100}%)`;
+        }
         dots.forEach((d, i) => d.classList.toggle('active', i === idx));
     }
 
@@ -324,7 +338,7 @@
                 states[bId] = 0;
                 let sliderPart = '';
                 if (images.length > 0) {
-                    let imgHtml = images.map(src => `<img src="${src}" loading="lazy">`).join('');
+                    let imgHtml = images.map(src => `<img src="${src}" loading="lazy" alt="Duyuru Görseli">`).join('');
                     let dotsHtml = images.length > 1 ? images.map((_, i) => `<div class="sl-dot ${i===0?'active':''}" onclick="changeImg(${bId}, ${i}, ${images.length})"></div>`).join('') : '';
                     let navsHtml = images.length > 1 ? `
                         <button class="sl-nav sl-prev" onclick="changeImg(${bId}, states[${bId}] - 1, ${images.length})">❮</button>
