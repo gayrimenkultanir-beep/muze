@@ -3,155 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duyuru Panosu</title>
+    <title>Tablo ve Görsel Listesi</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        
+        /* Genel Tasarım */
         body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: #f4f7f6; 
-            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: 20px; 
+            background-color: #f8f9fa; 
             color: #333; 
         }
-        
-        .container { max-width: 900px; margin: 0 auto; }
-        
-        header { text-align: center; margin-bottom: 40px; }
-        header h1 { color: #2c3e50; font-size: 2.5rem; margin: 0; }
-
-        /* Duyuru Kart Yapısı */
-        .announcement-card { 
-            background: #fff; 
-            border-radius: 15px; 
-            overflow: hidden; 
-            margin-bottom: 40px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
-            border: 1px solid #e1e4e8;
+        .container { 
+            max-width: 1200px; 
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
         }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
 
-        /* Görsel Galerisi */
-        .image-gallery { 
-            display: flex; 
-            flex-wrap: wrap; 
-            background: #f8f9fa; 
-            gap: 4px;
-            padding: 4px;
-        }
-        
-        .image-gallery img { 
-            flex: 1 1 250px; 
-            height: 400px; 
+        /* Tablo Stili */
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f1f3f5; color: #495057; text-transform: uppercase; font-size: 12px; }
+        tr:hover { background-color: #fdfdfd; }
+
+        /* Resim Ayarı */
+        .cell-img { 
+            width: 70px; 
+            height: 70px; 
             object-fit: cover; 
-            border-radius: 8px;
-            pointer-events: none; /* Tıklama kapalı */
+            border-radius: 8px; 
+            border: 1px solid #ddd;
+            display: block;
         }
 
-        /* İçerik Alanı */
-        .content-area { padding: 30px; }
-        
-        .date-tag { 
-            background: #4a6cf7; 
-            color: #fff; 
-            padding: 5px 15px; 
-            border-radius: 50px; 
-            font-size: 0.85rem; 
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-        
-        .announcement-title { 
-            font-size: 1.8rem; 
-            font-weight: 600; 
-            margin: 0 0 15px 0; 
-            color: #1a1a1a; 
-            line-height: 1.2;
-        }
-        
-        .announcement-details { 
-            color: #555; 
-            line-height: 1.8; 
-            white-space: pre-line; 
-            font-size: 1.05rem;
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-
-        #loading { text-align: center; font-size: 1.2rem; color: #666; margin-top: 50px; }
-        
-        /* Mobil Uyumluluk */
-        @media (max-width: 600px) {
-            .image-gallery img { height: 250px; flex: 1 1 100%; }
-            .announcement-title { font-size: 1.4rem; }
+        /* Navigasyon */
+        .btn-back { 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            text-decoration: none; 
+            color: #007bff; 
+            font-weight: bold; 
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Duyurular</h1>
-    </header>
+    <a href="index.html" class="btn-back">← Geri Dön</a>
+    <h2>Dinamik Veri Paneli</h2>
     
-    <div id="loading">Veriler güncelleniyor, lütfen bekleyin...</div>
-    <div id="news-feed"></div>
+    <div class="table-wrapper">
+        <table id="google-table">
+            <thead>
+                <tr id="header-row"></tr>
+            </thead>
+            <tbody id="body-rows">
+                <tr><td colspan="100%" style="text-align:center;">Veriler yükleniyor...</td></tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
-    // Senin paylaştığın linkin CSV formatı
-    const googleSheetLink = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+    // Link senin verdiğin linkin CSV formatına dönüştürülmüş halidir
+    const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // Google Drive Linklerini Resme Çeviren Fonksiyon
-    function formatDriveUrl(url) {
-        if (!url || url.trim() === "" || !url.startsWith('http')) return null;
-        let fileId = "";
-        try {
+    function getDriveThumbnail(url) {
+        if (url.includes('drive.google.com')) {
+            let id = "";
             if (url.includes('id=')) {
-                fileId = url.split('id=')[1].split('&')[0];
-            } else if (url.includes('/d/')) {
-                fileId = url.split('/d/')[1].split('/')[0];
+                id = url.split('id=')[1].split('&')[0];
+            } else {
+                id = url.split('/d/')[1].split('/')[0];
             }
-            return fileId ? `https://drive.google.com/uc?export=view&id=${fileId}` : url;
-        } catch (e) {
-            return url;
+            // En hızlı yüklenen Drive thumbnail linki
+            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
         }
+        return url;
     }
 
-    Papa.parse(googleSheetLink, {
+    Papa.parse(sheetCsvUrl, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: function(results) {
-            const feed = document.getElementById('news-feed');
-            const loader = document.getElementById('loading');
-            loader.style.display = 'none';
+            const data = results.data;
+            const headerRow = document.getElementById('header-row');
+            const bodyRows = document.getElementById('body-rows');
+            
+            headerRow.innerHTML = '';
+            bodyRows.innerHTML = '';
 
-            results.data.forEach(row => {
-                // Görsel sütunlarını kontrol et (Link varsa al)
-                const g1 = formatDriveUrl(row['görsel1']);
-                const g2 = formatDriveUrl(row['görsel2']);
-                const g3 = formatDriveUrl(row['görsel3']);
+            if (data.length > 0) {
+                const cols = Object.keys(data[0]);
+                
+                // Başlıklar
+                cols.forEach(c => {
+                    let th = document.createElement('th');
+                    th.textContent = c;
+                    headerRow.appendChild(th);
+                });
 
-                let imagesHtml = '';
-                if (g1) imagesHtml += `<img src="${g1}" alt="Görsel 1">`;
-                if (g2) imagesHtml += `<img src="${g2}" alt="Görsel 2">`;
-                if (g3) imagesHtml += `<img src="${g3}" alt="Görsel 3">`;
+                // Satırlar
+                data.forEach(row => {
+                    let tr = document.createElement('tr');
+                    cols.forEach(c => {
+                        let td = document.createElement('td');
+                        let val = (row[c] || "").trim();
 
-                const cardHtml = `
-                    <div class="announcement-card">
-                        ${imagesHtml ? `<div class="image-gallery">${imagesHtml}</div>` : ''}
-                        <div class="content-area">
-                            <span class="date-tag">${row['tarih'] || ''}</span>
-                            <h2 class="announcement-title">${row['duyuru metni'] || ''}</h2>
-                            <div class="announcement-details">${row['detaylar'] || ''}</div>
-                        </div>
-                    </div>
-                `;
-                feed.innerHTML += cardHtml;
-            });
+                        if (val.startsWith('http') && (val.includes('drive.google.com') || val.match(/\.(jpg|jpeg|png|gif|webp)/i))) {
+                            let img = document.createElement('img');
+                            img.src = getDriveThumbnail(val);
+                            img.className = 'cell-img';
+                            img.onerror = function() { 
+                                this.parentElement.textContent = "Resim bulunamadı"; 
+                            };
+                            td.appendChild(img);
+                        } else {
+                            td.textContent = val;
+                        }
+                        tr.appendChild(td);
+                    });
+                    bodyRows.appendChild(tr);
+                });
+            }
         }
     });
 </script>
