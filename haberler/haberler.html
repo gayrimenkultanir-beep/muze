@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haberler - Sultan II. Bayezid Külliyesi Sağlık Müzesi</title>
+    <title>Sultan II. Bayezid - Sultan II. Bayezid Külliyesi Sağlık Müzesi</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
@@ -140,7 +140,7 @@
     <div class="nav-wrapper">
         <nav class="nav">
             <div class="logo">
-                <div class="logo-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+               <div class="logo-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
                 <div class="logo-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
             </div>
             <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
@@ -167,30 +167,184 @@
         <div class="banner-box">
             <img src="../assets/banner.webp" alt="Külliye Manzarası">
             <div class="banner-overlay">
-                <h1>HABERLER</h1>
-                <p>"Müzemizden Haberler"</p>
+                <h1>GEÇMİŞİN SESİ, GÜNÜN HABERİ</h1>
+                <p>“Tarihin Kalbinden Son Gelişmeler.”</p>
             </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="full-card">
-            <img src="../assets/cornerleftup.png" class="corner-frame t-l">
-            <img src="../assets/cornerrightup.png" class="corner-frame t-r">
-            <img src="../assets/cornerleft.png" class="corner-frame b-l">
-            <img src="../assets/cornerright.png" class="corner-frame b-r">
+ <div class="container" style="margin-top: 50px;">
+    <div class="full-card">
+        <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Frame">
+        <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Frame">
+        <img src="../assets/cornerleft.png" class="corner-frame b-l" alt="Frame">
+        <img src="../assets/cornerright.png" class="corner-frame b-r" alt="Frame">
 
-              <h2 class="main-title">HABERLER</h2>
+        <h2 class="main-title">HABERLER</h2>
 
-          
-
-              
-<div class="card-footer">
-                <p style="font-weight: bold; letter-spacing: 2px;">ŞİFAYI SANAT VE BİLİMLE BULUŞTURAN ASIRLIK MİRAS</p>
+        <div class="content-area" style="padding: 20px 30px;">
+            <div id="announcement-feed">
+                <p style="text-align:center; font-family: 'Cinzel'; color: var(--v-red);">Duyurular yükleniyor...</p>
             </div>
+            <div id="pagination-nav" style="display: flex; justify-content: center; gap: 10px; margin-top: 30px;"></div>
+        </div>
+
+        <div class="card-footer">
+            <p id="page-info" style="font-size: 14px; letter-spacing: 1px;">Yükleniyor...</p>
         </div>
     </div>
+</div>
 
+<style>
+    .page-btn { background: var(--dark); color: var(--gold); border: 1px solid var(--gold); padding: 8px 15px; font-family: 'Cinzel'; cursor: pointer; border-radius: 4px; transition: 0.3s; font-size: 13px; }
+    .page-btn:hover:not(:disabled) { background: var(--gold); color: var(--dark); box-shadow: 0 0 10px var(--gold); }
+    .page-btn.active { background: var(--gold); color: var(--dark); font-weight: bold; }
+    .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .announcement-item { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--gold); border-radius: 8px; margin-bottom: 40px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+    .sl-container { width: 100%; max-width: 450px; position: relative; overflow: hidden; background-color: #000; margin: 0 auto; border-bottom: 1px solid var(--gold); aspect-ratio: 4 / 5; }
+    .sl-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    .sl-wrapper img { min-width: 100%; width: 100%; height: 100%; object-fit: cover; display: block; }
+    
+    .sl-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 26, 36, 0.8); color: var(--gold); border: 1px solid var(--gold); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; }
+    .sl-dots { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; gap: 6px; z-index: 20; }
+    .sl-dot { width: 8px; height: 8px; background: rgba(212, 175, 55, 0.4); border: 1px solid var(--gold); border-radius: 50%; cursor: pointer; }
+    .sl-dot.active { background: var(--gold); transform: scale(1.3); }
+
+    .ann-body { padding: 20px 25px; background: rgba(244, 231, 200, 0.2); text-align: center; }
+    .ann-date { font-family: 'Cinzel'; color: var(--v-red); font-weight: bold; font-size: 11px; display: block; margin-bottom: 5px; }
+    .ann-title { font-family: 'Cinzel'; color: var(--dark); font-size: 17px; font-weight: 800; margin-bottom: 10px; line-height: 1.4; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 5px; }
+    .ann-text { font-family: 'Playfair Display'; color: #444; font-size: 14px; line-height: 1.6; font-style: italic; }
+
+    @media (max-width: 600px) { .sl-container { max-width: 100%; } }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script>
+    const csvSourceUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+    
+    let allData = []; 
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    const sliderStates = {};
+
+    // GÜNCELLENMİŞ GÖRSEL ÇEKME FONKSİYONU
+    function parseDriveImage(url) {
+        if (!url || !url.includes('drive.google.com')) return null;
+        try {
+            let id = "";
+            if (url.includes('id=')) {
+                id = url.split('id=')[1].split('&')[0];
+            } else {
+                id = url.split('/d/')[1].split('/')[0];
+            }
+            // En güvenilir doğrudan indirme linki yapısı
+            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
+        } catch (e) { return null; }
+    }
+
+    window.runSlider = function(id, direction, total) {
+        if (sliderStates[id] === undefined) sliderStates[id] = 0;
+        let newIndex = sliderStates[id] + direction;
+        if (newIndex >= total) newIndex = 0;
+        if (newIndex < 0) newIndex = total - 1;
+        sliderStates[id] = newIndex;
+        const wrapper = document.querySelector(`#block-${id} .sl-wrapper`);
+        const dots = document.querySelectorAll(`#block-${id} .sl-dot`);
+        if (wrapper) wrapper.style.transform = `translateX(-${newIndex * 100}%)`;
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === newIndex));
+    }
+
+    window.jumpToImg = function(id, index, total) {
+        sliderStates[id] = index;
+        const wrapper = document.querySelector(`#block-${id} .sl-wrapper`);
+        const dots = document.querySelectorAll(`#block-${id} .sl-dot`);
+        if (wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    function renderPage(page) {
+        const feed = document.getElementById('announcement-feed');
+        const info = document.getElementById('page-info');
+        feed.innerHTML = '';
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageItems = allData.slice(start, end);
+
+        pageItems.forEach((row, index) => {
+            const bId = start + index; 
+            let images = [];
+            for (let i = 1; i <= 10; i++) {
+                let img = parseDriveImage(row['GÖRSEL ' + i]);
+                if (img) images.push(img);
+            }
+
+            sliderStates[bId] = 0;
+            let sliderHtml = '';
+            if (images.length > 0) {
+                // referrerpolicy="no-referrer" Google Drive erişim sorunlarını aşmaya yardımcı olur
+                let imgTags = images.map(src => `<img src="${src}" loading="lazy" referrerpolicy="no-referrer" alt="Haber Görseli">`).join('');
+                let dotsTags = images.length > 1 ? images.map((_, i) => `<div class="sl-dot ${i===0?'active':''}" onclick="jumpToImg(${bId}, ${i}, ${images.length})"></div>`).join('') : '';
+                let navsTags = images.length > 1 ? `
+                    <button class="sl-nav sl-prev" style="left:10px" onclick="runSlider(${bId}, -1, ${images.length})">❮</button>
+                    <button class="sl-nav sl-next" style="right:10px" onclick="runSlider(${bId}, 1, ${images.length})">❯</button>
+                ` : '';
+                sliderHtml = `<div class="sl-container">${navsTags}<div class="sl-wrapper">${imgTags}</div><div class="sl-dots">${dotsTags}</div></div>`;
+            }
+
+            feed.innerHTML += `
+                <div class="announcement-item" id="block-${bId}">
+                    ${sliderHtml}
+                    <div class="ann-body">
+                        <span class="ann-date">${row['TARİH'] || ''}</span>
+                        <div class="ann-title">${row['DUYURU METNİ'] || ''}</div>
+                        <div class="ann-text">${row['DETAYLAR'] || ''}</div>
+                    </div>
+                </div>`;
+        });
+        renderPagination();
+        info.innerText = `Toplam ${allData.length} haberden ${start + 1}-${Math.min(end, allData.length)} arası gösteriliyor.`;
+    }
+
+    function renderPagination() {
+        const nav = document.getElementById('pagination-nav');
+        nav.innerHTML = '';
+        const totalPages = Math.ceil(allData.length / itemsPerPage);
+        if(totalPages <= 1) return;
+        
+        let prevBtn = document.createElement('button');
+        prevBtn.innerText = 'Önceki';
+        prevBtn.className = 'page-btn';
+        prevBtn.disabled = currentPage === 1;
+        prevBtn.onclick = () => { currentPage--; renderPage(currentPage); };
+        nav.appendChild(prevBtn);
+
+        for (let i = 1; i <= totalPages; i++) {
+            let btn = document.createElement('button');
+            btn.innerText = i;
+            btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+            btn.onclick = () => { currentPage = i; renderPage(i); };
+            nav.appendChild(btn);
+        }
+
+        let nextBtn = document.createElement('button');
+        nextBtn.innerText = 'Sonraki';
+        nextBtn.className = 'page-btn';
+        nextBtn.disabled = currentPage === totalPages;
+        nextBtn.onclick = () => { currentPage++; renderPage(currentPage); };
+        nav.appendChild(nextBtn);
+    }
+
+    Papa.parse(csvSourceUrl, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            allData = results.data.reverse(); 
+            renderPage(1);
+        }
+    });
+</script>
     <div class="site-footer-wrapper">
         <footer class="site-footer">
             <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
