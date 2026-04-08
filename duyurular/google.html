@@ -6,83 +6,119 @@
     <title>Duyuru Panosu</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background-color: #f0f2f5; 
+            margin: 0; 
+            padding: 20px; 
+            color: #333; 
+        }
+        
         .container { max-width: 850px; margin: 0 auto; }
         
-        /* Her duyuru bir kart/tablo gibi */
         .announcement-card { 
-            background: #fff; border-radius: 12px; overflow: hidden; 
-            margin-bottom: 35px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
+            background: #fff; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            margin-bottom: 35px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08); 
             border: 1px solid #e0e0e0; 
         }
 
-        /* Görsel Alanı */
-        .image-box { display: flex; flex-wrap: wrap; background: #fafafa; gap: 2px; }
+        /* Görsel Alanı: Tıklama özelliği kaldırıldı */
+        .image-box { 
+            display: flex; 
+            flex-wrap: wrap; 
+            background: #fafafa; 
+            gap: 2px; 
+        }
+        
         .image-box img { 
-            flex: 1 1 300px; /* Görseller yan yana sığmazsa alt alta geçer */
-            height: 400px; object-fit: cover; cursor: zoom-in;
+            flex: 1 1 300px; 
+            height: 400px; 
+            object-fit: cover; 
             border: 1px solid #f0f0f0;
+            pointer-events: none; /* Tıklamayı tamamen devre dışı bırakır */
         }
 
         .content-box { padding: 25px; }
+        
         .date-badge { 
-            background: #4a6cf7; color: #fff; padding: 4px 12px; 
-            border-radius: 4px; font-size: 0.8rem; font-weight: 600; 
+            background: #4a6cf7; 
+            color: #fff; 
+            padding: 4px 12px; 
+            border-radius: 4px; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
         }
-        .title { font-size: 1.6rem; font-weight: 600; margin: 15px 0; color: #1a1a1a; }
-        .details { color: #555; line-height: 1.8; white-space: pre-line; border-top: 1px solid #eee; pt: 15px; margin-top: 15px; }
+        
+        .title { 
+            font-size: 1.6rem; 
+            font-weight: 600; 
+            margin: 15px 0; 
+            color: #1a1a1a; 
+        }
+        
+        .details { 
+            color: #555; 
+            line-height: 1.8; 
+            white-space: pre-line; 
+            border-top: 1px solid #eee; 
+            padding-top: 15px; 
+            margin-top: 15px; 
+        }
 
-        /* Zoom Modal */
-        #zoomModal { 
-            display: none; position: fixed; z-index: 9999; 
-            left: 0; top: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); justify-content: center; align-items: center; 
-        }
-        #zoomModal img { max-width: 90%; max-height: 90%; border: 3px solid #fff; }
+        header h1 { text-align: center; margin-bottom: 40px; color: #2c3e50; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header style="text-align:center; margin-bottom:40px;">
+    <header>
         <h1>Güncel Duyurular</h1>
     </header>
-    <div id="main-feed"></div>
+    <div id="main-feed">
+        <p style="text-align:center;">Yükleniyor...</p>
+    </div>
 </div>
-
-<div id="zoomModal" onclick="this.style.display='none'"><img id="zoomImg"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // Drive ID Ayıklama ve Temizleme
     function createDriveImg(url) {
         if (!url || url.trim() === "") return null;
         let id = "";
-        if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
-        else if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
-        
-        return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
+        try {
+            if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+            else if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
+            return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
+        } catch (e) {
+            return url;
+        }
     }
 
     Papa.parse(csvUrl, {
         download: true,
         header: true,
+        skipEmptyLines: true,
         complete: function(results) {
             const feed = document.getElementById('main-feed');
+            feed.innerHTML = ''; // Yükleniyor yazısını temizle
+
             results.data.forEach(row => {
                 const img1 = createDriveImg(row['görsel1']);
                 const img2 = createDriveImg(row['görsel2']);
 
                 let imgHtml = '';
-                if (img1) imgHtml += `<img src="${img1}" onclick="openZoom('${img1}')">`;
-                if (img2) imgHtml += `<img src="${img2}" onclick="openZoom('${img2}')">`;
+                if (img1) imgHtml += `<img src="${img1}">`;
+                if (img2) imgHtml += `<img src="${img2}">`;
 
                 const card = `
                     <div class="announcement-card">
-                        <div class="image-box">${imgHtml}</div>
+                        ${imgHtml ? `<div class="image-box">${imgHtml}</div>` : ''}
                         <div class="content-box">
                             <span class="date-badge">${row['tarih'] || ''}</span>
                             <h2 class="title">${row['duyuru metni'] || ''}</h2>
@@ -94,11 +130,6 @@
             });
         }
     });
-
-    function openZoom(src) {
-        document.getElementById('zoomModal').style.display = 'flex';
-        document.getElementById('zoomImg').src = src;
-    }
 </script>
 
 </body>
