@@ -3,40 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablo ve Görsel Listesi</title>
+    <title>Duyuru Panosu</title>
     <style>
-        /* Genel Tasarım */
+        /* Genel Stil */
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            background-color: #f0f2f5; 
+            margin: 0; 
             padding: 20px; 
-            background-color: #f8f9fa; 
-            color: #333; 
+            color: #1c1e21;
         }
         .container { 
-            max-width: 1200px; 
+            max-width: 800px; 
             margin: auto; 
-            background: white; 
-            padding: 30px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
         }
-        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
+        h2 { text-align: center; color: #1a73e8; margin-bottom: 30px; }
 
-        /* Tablo Stili */
-        .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background-color: #f1f3f5; color: #495057; text-transform: uppercase; font-size: 12px; }
-        tr:hover { background-color: #fdfdfd; }
-
-        /* Resim Ayarı */
-        .cell-img { 
-            width: 70px; 
-            height: 70px; 
-            object-fit: cover; 
-            border-radius: 8px; 
+        /* Duyuru Blok (Kart) Yapısı */
+        .announcement-card {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
             border: 1px solid #ddd;
+        }
+
+        /* Görsel Alanı (600x400 Sabit Oran) */
+        .img-wrapper {
+            width: 100%;
+            height: 400px; /* Görsel yüksekliği */
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Resmi kutuya sığdırır ve keser */
             display: block;
+        }
+
+        /* İçerik Alanı */
+        .content-wrapper {
+            padding: 20px;
+        }
+        .date {
+            color: #65676b;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #050505;
+            margin: 0 0 12px 0;
+            line-height: 1.2;
+        }
+        .details {
+            font-size: 1.05rem;
+            color: #4b4b4b;
+            line-height: 1.6;
+            white-space: pre-line; /* Alt satırları korur */
         }
 
         /* Navigasyon */
@@ -44,8 +74,14 @@
             display: inline-block; 
             margin-bottom: 20px; 
             text-decoration: none; 
-            color: #007bff; 
+            color: #1a73e8; 
             font-weight: bold; 
+        }
+
+        /* Mobil Ayar */
+        @media (max-width: 600px) {
+            .img-wrapper { height: 250px; }
+            .title { font-size: 1.25rem; }
         }
     </style>
 </head>
@@ -53,38 +89,28 @@
 
 <div class="container">
     <a href="index.html" class="btn-back">← Geri Dön</a>
-    <h2>Dinamik Veri Paneli</h2>
+    <h2>Güncel Duyurular</h2>
     
-    <div class="table-wrapper">
-        <table id="google-table">
-            <thead>
-                <tr id="header-row"></tr>
-            </thead>
-            <tbody id="body-rows">
-                <tr><td colspan="100%" style="text-align:center;">Veriler yükleniyor...</td></tr>
-            </tbody>
-        </table>
+    <div id="announcement-feed">
+        <p style="text-align:center;">Veriler yükleniyor...</p>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
-    // Link senin verdiğin linkin CSV formatına dönüştürülmüş halidir
     const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    function getDriveThumbnail(url) {
-        if (url.includes('drive.google.com')) {
-            let id = "";
-            if (url.includes('id=')) {
-                id = url.split('id=')[1].split('&')[0];
-            } else {
-                id = url.split('/d/')[1].split('/')[0];
-            }
-            // En hızlı yüklenen Drive thumbnail linki
-            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
+    // Drive ID'sini temizleme fonksiyonu
+    function getCleanId(url) {
+        if (!url.includes('drive.google.com')) return url;
+        let id = "";
+        if (url.includes('id=')) {
+            id = url.split('id=')[1].split('&')[0];
+        } else {
+            id = url.split('/d/')[1].split('/')[0];
         }
-        return url;
+        return `https://drive.google.com/uc?export=view&id=${id}`;
     }
 
     Papa.parse(sheetCsvUrl, {
@@ -93,44 +119,41 @@
         skipEmptyLines: true,
         complete: function(results) {
             const data = results.data;
-            const headerRow = document.getElementById('header-row');
-            const bodyRows = document.getElementById('body-rows');
-            
-            headerRow.innerHTML = '';
-            bodyRows.innerHTML = '';
+            const feed = document.getElementById('announcement-feed');
+            feed.innerHTML = ''; // Yükleniyor yazısını temizle
 
             if (data.length > 0) {
-                const cols = Object.keys(data[0]);
-                
-                // Başlıklar
-                cols.forEach(c => {
-                    let th = document.createElement('th');
-                    th.textContent = c;
-                    headerRow.appendChild(th);
-                });
-
-                // Satırlar
                 data.forEach(row => {
-                    let tr = document.createElement('tr');
-                    cols.forEach(c => {
-                        let td = document.createElement('td');
-                        let val = (row[c] || "").trim();
+                    // Sütun isimlerini Sheets dosyanıza göre kontrol edin (tarih, duyuru metni, detaylar, görsel1)
+                    const tarih = row['tarih'] || '';
+                    const baslik = row['duyuru metni'] || '';
+                    const detay = row['detaylar'] || '';
+                    const g1 = (row['görsel1'] || "").trim();
 
-                        if (val.startsWith('http') && (val.includes('drive.google.com') || val.match(/\.(jpg|jpeg|png|gif|webp)/i))) {
-                            let img = document.createElement('img');
-                            img.src = getDriveThumbnail(val);
-                            img.className = 'cell-img';
-                            img.onerror = function() { 
-                                this.parentElement.textContent = "Resim bulunamadı"; 
-                            };
-                            td.appendChild(img);
-                        } else {
-                            td.textContent = val;
-                        }
-                        tr.appendChild(td);
-                    });
-                    bodyRows.appendChild(tr);
+                    // Kart HTML yapısı
+                    let cardHTML = `<div class="announcement-card">`;
+                    
+                    // Görsel varsa ekle
+                    if (g1.startsWith('http')) {
+                        const imgSrc = getCleanId(g1);
+                        cardHTML += `
+                            <div class="img-wrapper">
+                                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/600x400?text=Görsel+Yüklenemedi'">
+                            </div>`;
+                    }
+
+                    cardHTML += `
+                        <div class="content-wrapper">
+                            <span class="date">${tarih}</span>
+                            <div class="title">${baslik}</div>
+                            <div class="details">${detay}</div>
+                        </div>
+                    </div>`;
+                    
+                    feed.innerHTML += cardHTML;
                 });
+            } else {
+                feed.innerHTML = '<p style="text-align:center;">Henüz duyuru bulunmuyor.</p>';
             }
         }
     });
