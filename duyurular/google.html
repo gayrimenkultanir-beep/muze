@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duyuru Panosu - Ok Tuşlu Slider</title>
+    <title>Duyuru Panosu - 10 Görsel Destekli</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         
@@ -11,18 +11,18 @@
         .container { max-width: 800px; margin: auto; }
 
         .announcement-block {
-            background: white;
-            border-radius: 16px;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
+            background: white; 
+            border-radius: 16px; 
+            margin-bottom: 40px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+            overflow: hidden; 
             border: 1px solid #e1e4e8;
         }
 
         /* SLIDER ALANI */
         .slider-container {
             width: 100%;
-            height: 450px;
+            height: 480px; /* Biraz daha geniş alan */
             position: relative;
             overflow: hidden;
             background-color: #000;
@@ -32,7 +32,7 @@
             display: flex;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider-wrapper img {
@@ -48,61 +48,62 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             color: white;
             border: none;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 24px;
+            z-index: 15;
+            transition: 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 15;
-            transition: 0.3s;
         }
 
-        .nav-btn:hover { background: rgba(0, 0, 0, 0.7); }
+        .nav-btn:hover { background: rgba(0, 0, 0, 0.8); }
         .prev-btn { left: 15px; }
         .next-btn { right: 15px; }
 
-        /* Noktalar */
+        /* Noktalar - Çok görsel olduğunda taşmaması için flex-wrap ekledim */
         .slider-dots {
             position: absolute;
-            bottom: 20px;
+            bottom: 15px;
             width: 100%;
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             z-index: 10;
+            flex-wrap: wrap;
+            padding: 0 10px;
         }
 
         .dot {
-            width: 10px;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.5);
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 50%;
             cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.3);
+            transition: 0.3s;
         }
 
-        .dot.active { background: #1a73e8; transform: scale(1.2); }
+        .dot.active { background: #1a73e8; transform: scale(1.3); }
 
         .text-container { padding: 30px; }
         .date-text { color: #1a73e8; font-weight: 600; font-size: 0.9rem; margin-bottom: 10px; display: block; }
         .title-text { font-size: 1.7rem; font-weight: 600; margin-bottom: 15px; color: #1a1a1a; }
         .details-text { color: #555; line-height: 1.8; white-space: pre-line; }
 
-        @media (max-width: 600px) { .slider-container { height: 300px; } }
+        @media (max-width: 600px) { .slider-container { height: 320px; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div id="feed-container">
-        <p style="text-align:center;">Duyurular yükleniyor...</p>
+        <p style="text-align:center;">Duyurular ve görseller yükleniyor...</p>
     </div>
 </div>
 
@@ -111,22 +112,19 @@
 <script>
     const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
     
-    // Her bloğun o anki görsel indeksini tutan obje
     const sliderStates = {};
 
     function getThumbId(url) {
-        if (!url || !url.includes('drive.google.com')) return null;
+        if (!url || !url.trim().startsWith('http')) return null;
         let id = "";
         try {
             if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
-            else id = url.split('/d/')[1].split('/')[0];
-            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
+            else if (url.includes('/d/')) id = url.split('/d/')[1].split('/')[0];
+            return id ? `https://lh3.googleusercontent.com/u/0/d/$${id}` : url;
         } catch (e) { return null; }
     }
 
-    // Gelişmiş Kaydırma Fonksiyonu
-    function moveSlider(blockId, index, total) {
-        // İndeksi sınırlar içinde tut (döngüsel slider)
+    window.moveSlider = function(blockId, index, total) {
         if (index >= total) index = 0;
         if (index < 0) index = total - 1;
 
@@ -152,13 +150,15 @@
             container.innerHTML = '';
 
             results.data.forEach((row, bId) => {
-                const imgUrls = [
-                    getThumbId(row['görsel1']),
-                    getThumbId(row['görsel2']),
-                    getThumbId(row['görsel3'])
-                ].filter(u => u !== null);
+                // 1'den 10'a kadar olan görselleri otomatik döngü ile topla
+                let imgUrls = [];
+                for (let i = 1; i <= 10; i++) {
+                    let colName = 'görsel' + i;
+                    let val = getThumbId(row[colName]);
+                    if (val) imgUrls.push(val);
+                }
 
-                sliderStates[bId] = 0; // Başlangıç indeksi
+                sliderStates[bId] = 0;
                 let sliderHtml = '';
                 
                 if (imgUrls.length > 0) {
@@ -167,17 +167,16 @@
                     let navButtons = '';
 
                     imgUrls.forEach((src, i) => {
-                        images += `<img src="${src}">`;
+                        images += `<img src="${src}" alt="Görsel ${i+1}">`;
                         if (imgUrls.length > 1) {
                             dots += `<div class="dot ${i===0?'active':''}" onclick="moveSlider(${bId}, ${i}, ${imgUrls.length})"></div>`;
                         }
                     });
 
-                    // Eğer birden fazla görsel varsa butonları ekle
                     if (imgUrls.length > 1) {
                         navButtons = `
-                            <button class="nav-btn prev-btn" onclick="moveSlider(${bId}, sliderStates[${bId}] - 1, ${imgUrls.length})">&#10094;</button>
-                            <button class="nav-btn next-btn" onclick="moveSlider(${bId}, sliderStates[${bId}] + 1, ${imgUrls.length})">&#10095;</button>
+                            <button class="nav-btn prev-btn" onclick="moveSlider(${bId}, sliderStates[${bId}] - 1, ${imgUrls.length})">❮</button>
+                            <button class="nav-btn next-btn" onclick="moveSlider(${bId}, sliderStates[${bId}] + 1, ${imgUrls.length})">❯</button>
                         `;
                     }
 
