@@ -31,8 +31,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-    // Sizin tablonuzun CSV yayın linki:
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=0&single=true&output=tsv;
+    // Link DÜZELTİLDİ: Tırnak içine alındı ve sonu output=csv yapıldı.
+    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
     Papa.parse(csvUrl, {
         download: true,
@@ -42,36 +42,35 @@
             const headerRow = document.getElementById('table-header');
             const bodyContainer = document.getElementById('table-body');
             
-            // Mevcut içeriği temizle
             headerRow.innerHTML = '';
             bodyContainer.innerHTML = '';
 
             if (data.length > 0) {
                 const columns = Object.keys(data[0]);
                 
-                // Başlıkları oluştur
                 columns.forEach(col => {
                     let th = document.createElement('th');
                     th.textContent = col;
                     headerRow.appendChild(th);
                 });
 
-                // Satırları oluştur
                 data.forEach(row => {
-                    if(Object.values(row).some(x => x !== "")) { // Boş satır kontrolü
+                    if(Object.values(row).some(x => x !== "" && x !== null)) {
                         let tr = document.createElement('tr');
                         columns.forEach(col => {
                             let td = document.createElement('td');
-                            td.textContent = row[col];
+                            td.textContent = row[col] || "";
                             tr.appendChild(td);
                         });
                         bodyContainer.appendChild(tr);
                     }
                 });
+            } else {
+                bodyContainer.innerHTML = '<tr><td colspan="100%" style="text-align:center;">Tabloda veri bulunamadı.</td></tr>';
             }
         },
         error: function(err) {
-            document.getElementById('table-body').innerHTML = '<tr><td colspan="100%" style="text-align:center; color:red;">Veri yüklenemedi. Lütfen tablonun "Web\'de Yayınla" ayarını kontrol edin.</td></tr>';
+            document.getElementById('table-body').innerHTML = '<tr><td colspan="100%" style="text-align:center; color:red;">Veri yüklenemedi. Linki veya internetinizi kontrol edin.</td></tr>';
         }
     });
 </script>
