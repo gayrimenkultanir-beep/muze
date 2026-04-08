@@ -5,83 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duyuru Panosu</title>
     <style>
-        /* Genel Stil */
         body { 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            background-color: #f0f2f5; 
-            margin: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: 20px; 
-            color: #1c1e21;
+            background-color: #f0f2f5; 
+            color: #333; 
+            line-height: 1.6;
         }
-        .container { 
-            max-width: 800px; 
-            margin: auto; 
-        }
-        h2 { text-align: center; color: #1a73e8; margin-bottom: 30px; }
+        .container { max-width: 800px; margin: auto; }
+        
+        .btn-back { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #007bff; font-weight: bold; }
+        h2 { text-align: center; color: #2c3e50; }
 
-        /* Duyuru Blok (Kart) Yapısı */
-        .announcement-card {
+        /* Duyuru Blok Tasarımı */
+        .announcement-block {
             background: white;
             border-radius: 12px;
             margin-bottom: 30px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             overflow: hidden;
             border: 1px solid #ddd;
         }
 
-        /* Görsel Alanı (600x400 Sabit Oran) */
-        .img-wrapper {
+        /* Görsel Alanı (Büyük Tasarım) */
+        .img-container {
             width: 100%;
-            height: 400px; /* Görsel yüksekliği */
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #eee;
+            height: 400px; /* 600x400 oranına uygun yükseklik */
+            background-color: #eee;
+            overflow: hidden;
         }
-        .img-wrapper img {
+
+        .img-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Resmi kutuya sığdırır ve keser */
+            object-fit: cover; /* Resmi kutuya tam sığdırır ve şık gösterir */
             display: block;
         }
 
-        /* İçerik Alanı */
-        .content-wrapper {
-            padding: 20px;
+        /* Metin Alanı */
+        .text-container {
+            padding: 25px;
         }
-        .date {
-            color: #65676b;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            display: block;
-        }
-        .title {
-            font-size: 1.5rem;
+
+        .date-text {
+            font-size: 0.9rem;
+            color: #007bff;
             font-weight: bold;
-            color: #050505;
-            margin: 0 0 12px 0;
-            line-height: 1.2;
-        }
-        .details {
-            font-size: 1.05rem;
-            color: #4b4b4b;
-            line-height: 1.6;
-            white-space: pre-line; /* Alt satırları korur */
+            display: block;
+            margin-bottom: 10px;
         }
 
-        /* Navigasyon */
-        .btn-back { 
-            display: inline-block; 
-            margin-bottom: 20px; 
-            text-decoration: none; 
-            color: #1a73e8; 
-            font-weight: bold; 
+        .title-text {
+            font-size: 1.6rem;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+            font-weight: 600;
         }
 
-        /* Mobil Ayar */
+        .details-text {
+            font-size: 1.1rem;
+            color: #444;
+            white-space: pre-line; /* Sheets'teki alt satırları korur */
+        }
+
         @media (max-width: 600px) {
-            .img-wrapper { height: 250px; }
-            .title { font-size: 1.25rem; }
+            .img-container { height: 250px; }
         }
     </style>
 </head>
@@ -91,7 +79,7 @@
     <a href="index.html" class="btn-back">← Geri Dön</a>
     <h2>Güncel Duyurular</h2>
     
-    <div id="announcement-feed">
+    <div id="feed-container">
         <p style="text-align:center;">Veriler yükleniyor...</p>
     </div>
 </div>
@@ -101,16 +89,21 @@
 <script>
     const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // Drive ID'sini temizleme fonksiyonu
-    function getCleanId(url) {
-        if (!url.includes('drive.google.com')) return url;
+    // Senin çalışan kodundaki görsel çekme mantığı
+    function getDriveThumbnail(url) {
+        if (!url || !url.includes('drive.google.com')) return url;
         let id = "";
-        if (url.includes('id=')) {
-            id = url.split('id=')[1].split('&')[0];
-        } else {
-            id = url.split('/d/')[1].split('/')[0];
+        try {
+            if (url.includes('id=')) {
+                id = url.split('id=')[1].split('&')[0];
+            } else {
+                id = url.split('/d/')[1].split('/')[0];
+            }
+            // En garantili görsel sunucusu
+            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
+        } catch (e) {
+            return url;
         }
-        return `https://drive.google.com/uc?export=view&id=${id}`;
     }
 
     Papa.parse(sheetCsvUrl, {
@@ -119,42 +112,37 @@
         skipEmptyLines: true,
         complete: function(results) {
             const data = results.data;
-            const feed = document.getElementById('announcement-feed');
-            feed.innerHTML = ''; // Yükleniyor yazısını temizle
+            const container = document.getElementById('feed-container');
+            container.innerHTML = '';
 
-            if (data.length > 0) {
-                data.forEach(row => {
-                    // Sütun isimlerini Sheets dosyanıza göre kontrol edin (tarih, duyuru metni, detaylar, görsel1)
-                    const tarih = row['tarih'] || '';
-                    const baslik = row['duyuru metni'] || '';
-                    const detay = row['detaylar'] || '';
-                    const g1 = (row['görsel1'] || "").trim();
+            data.forEach(row => {
+                // Sütun başlıklarının Sheets ile tam eşleşmesi gerekir
+                const tarih = row['tarih'] || '';
+                const baslik = row['duyuru metni'] || '';
+                const detay = row['detaylar'] || '';
+                const g1 = (row['görsel1'] || "").trim();
 
-                    // Kart HTML yapısı
-                    let cardHTML = `<div class="announcement-card">`;
-                    
-                    // Görsel varsa ekle
-                    if (g1.startsWith('http')) {
-                        const imgSrc = getCleanId(g1);
-                        cardHTML += `
-                            <div class="img-wrapper">
-                                <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/600x400?text=Görsel+Yüklenemedi'">
-                            </div>`;
-                    }
+                let imgHtml = '';
+                if (g1.startsWith('http')) {
+                    const finalImg = getDriveThumbnail(g1);
+                    imgHtml = `
+                        <div class="img-container">
+                            <img src="${finalImg}" onerror="this.parentElement.style.display='none'">
+                        </div>`;
+                }
 
-                    cardHTML += `
-                        <div class="content-wrapper">
-                            <span class="date">${tarih}</span>
-                            <div class="title">${baslik}</div>
-                            <div class="details">${detay}</div>
+                const blockHtml = `
+                    <div class="announcement-block">
+                        ${imgHtml}
+                        <div class="text-container">
+                            <span class="date-text">${tarih}</span>
+                            <div class="title-text">${baslik}</div>
+                            <div class="details-text">${detay}</div>
                         </div>
                     </div>`;
-                    
-                    feed.innerHTML += cardHTML;
-                });
-            } else {
-                feed.innerHTML = '<p style="text-align:center;">Henüz duyuru bulunmuyor.</p>';
-            }
+                
+                container.innerHTML += blockHtml;
+            });
         }
     });
 </script>
