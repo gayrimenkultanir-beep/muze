@@ -184,18 +184,18 @@
 
         <div class="content-area" style="padding: 20px 30px;">
             <div id="announcement-feed">
-                <p style="text-align:center; font-family: 'Cinzel'; color: var(--v-red);">Veriler yükleniyor...</p>
+                <p style="text-align:center; font-family: 'Cinzel'; color: var(--v-red);">Duyurular yükleniyor...</p>
             </div>
         </div>
 
         <div class="card-footer">
-            <p style="font-size: 14px;">Külliyemizle ilgili en güncel haberler ve etkinlikler</p>
+            <p style="font-size: 14px; letter-spacing: 1px;">Külliyemizden Haberler ve Duyurular</p>
         </div>
     </div>
 </div>
 
 <style>
-    /* Duyuru Blok Tasarımı */
+    /* Duyuru Blok Yapısı */
     .announcement-item {
         background: rgba(255, 255, 255, 0.4);
         border: 1px solid var(--gold);
@@ -205,15 +205,15 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
-    /* Slider Alanı - Kesin 600x400 Oranı */
+    /* Slider Alanı - Kesin 600x400 */
     .sl-container {
         width: 100%;
-        max-width: 600px; /* Maksimum genişlik 600px */
-        height: 400px; /* Sabit yükseklik 400px */
+        max-width: 600px;
+        height: 400px;
         position: relative;
         overflow: hidden;
-        background-color: #000; /* Resim sığmazsa kenarlar siyah kalır */
-        margin: 0 auto; /* Masaüstünde ortalar */
+        background-color: #000;
+        margin: 0 auto;
         border-bottom: 1px solid var(--gold);
     }
 
@@ -228,8 +228,7 @@
         min-width: 100%;
         width: 100%;
         height: 100%;
-        /* KESİN SIĞDIRMA AYARI */
-        object-fit: contain; /* Resmi bozmadan, kesmeden kutuya sığdırır */
+        object-fit: contain; /* Görseli bozmadan sığdırır */
         display: block;
     }
 
@@ -266,7 +265,6 @@
         justify-content: center;
         gap: 6px;
         z-index: 20;
-        flex-wrap: wrap;
     }
 
     .sl-dot {
@@ -276,82 +274,118 @@
         border: 1px solid var(--gold);
         border-radius: 50%;
         cursor: pointer;
-        transition: 0.3s;
     }
 
     .sl-dot.active { background: var(--gold); transform: scale(1.3); }
 
-    /* Metin Alanı */
-    .ann-body { padding: 25px; background: rgba(244, 231, 200, 0.3); }
-    .ann-date { font-family: 'Cinzel'; color: var(--v-red); font-weight: bold; font-size: 14px; margin-bottom: 10px; }
-    .ann-title { font-family: 'Cinzel'; color: var(--dark); font-size: 22px; margin-bottom: 15px; border-bottom: 1px solid rgba(212,175,55,0.3); padding-bottom: 10px; }
-    .ann-text { font-family: 'Playfair Display'; color: #333; line-height: 1.7; font-size: 17px; }
+    /* Metin Alanı - Yeni Düzenleme */
+    .ann-body { 
+        padding: 20px 25px; 
+        background: rgba(244, 231, 200, 0.2); 
+    }
 
-    /* Mobil Ayarlar */
+    .ann-date { 
+        font-family: 'Cinzel'; 
+        color: var(--v-red); 
+        font-weight: bold; 
+        font-size: 11px; 
+        margin-bottom: 5px; 
+        display: block;
+    }
+
+    .ann-title { 
+        font-family: 'Cinzel'; 
+        color: var(--dark); 
+        font-size: 17px; /* Küçültüldü */
+        font-weight: 800; /* Kalın yapıldı */
+        margin-bottom: 10px; 
+        line-height: 1.4;
+        border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        padding-bottom: 5px;
+    }
+
+    .ann-text { 
+        font-family: 'Playfair Display'; 
+        color: #444; 
+        font-size: 14px; /* Küçültüldü */
+        line-height: 1.6; 
+        font-style: italic; /* Yatay yazıldı */
+    }
+
     @media (max-width: 600px) { 
-        .sl-container { 
-            height: auto; /* Mobilde yüksekliği genişliğe göre ayarla */
-            aspect-ratio: 600 / 400; /* 600x400 oranını koru */
-        }
+        .sl-container { height: auto; aspect-ratio: 600 / 400; } 
     }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-    const csvSource = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
-    const states = {};
+    const csvSourceUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+    const sliderData = {};
 
-    function formatDriveUrl(url) {
+    function parseDriveImage(url) {
         if (!url || !url.includes('drive.google.com')) return null;
         try {
             let id = url.includes('id=') ? url.split('id=')[1].split('&')[0] : url.split('/d/')[1].split('/')[0];
-            // Google'dan 600x400 boyutunda thumbnail iste
-            return `https://lh3.googleusercontent.com/d/${id}=w600-h400-p-k-no`;
+            return `https://lh3.googleusercontent.com/u/0/d/${id}=w600-h400-p-k-no`;
         } catch (e) { return null; }
     }
 
-    window.changeImg = function(blockId, idx, total) {
-        if (idx >= total) idx = 0;
-        if (idx < 0) idx = total - 1;
-        states[blockId] = idx;
-        const wrapper = document.querySelector(`#block-${blockId} .sl-wrapper`);
-        const dots = document.querySelectorAll(`#block-${blockId} .sl-dot`);
-        if(wrapper) {
-            wrapper.style.transform = `translateX(-${idx * 100}%)`;
-        }
-        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+    window.runSlider = function(id, direction, total) {
+        if (!sliderData[id]) sliderData[id] = 0;
+        
+        let newIndex = sliderData[id] + direction;
+        if (newIndex >= total) newIndex = 0;
+        if (newIndex < 0) newIndex = total - 1;
+        
+        sliderData[id] = newIndex;
+        
+        const wrapper = document.querySelector(`#block-${id} .sl-wrapper`);
+        const dots = document.querySelectorAll(`#block-${id} .sl-dot`);
+        
+        if (wrapper) wrapper.style.transform = `translateX(-${newIndex * 100}%)`;
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === newIndex));
     }
 
-    Papa.parse(csvSource, {
+    window.jumpToImg = function(id, index, total) {
+        sliderData[id] = index;
+        const wrapper = document.querySelector(`#block-${id} .sl-wrapper`);
+        const dots = document.querySelectorAll(`#block-${id} .sl-dot`);
+        if (wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+    }
+
+    Papa.parse(csvSourceUrl, {
         download: true,
         header: true,
-        complete: function(res) {
+        skipEmptyLines: true,
+        complete: function(results) {
             const feed = document.getElementById('announcement-feed');
             feed.innerHTML = '';
-            res.data.forEach((row, bId) => {
+
+            results.data.forEach((row, bId) => {
                 let images = [];
                 for (let i = 1; i <= 10; i++) {
-                    let img = formatDriveUrl(row['görsel' + i] || row['GÖRSEL' + i]);
+                    let img = parseDriveImage(row['görsel' + i] || row['GÖRSEL' + i]);
                     if (img) images.push(img);
                 }
 
-                states[bId] = 0;
-                let sliderPart = '';
+                sliderData[bId] = 0;
+                let sliderHtml = '';
                 if (images.length > 0) {
-                    let imgHtml = images.map(src => `<img src="${src}" loading="lazy" alt="Duyuru Görseli">`).join('');
-                    let dotsHtml = images.length > 1 ? images.map((_, i) => `<div class="sl-dot ${i===0?'active':''}" onclick="changeImg(${bId}, ${i}, ${images.length})"></div>`).join('') : '';
-                    let navsHtml = images.length > 1 ? `
-                        <button class="sl-nav sl-prev" onclick="changeImg(${bId}, states[${bId}] - 1, ${images.length})">❮</button>
-                        <button class="sl-nav sl-next" onclick="changeImg(${bId}, states[${bId}] + 1, ${images.length})">❯</button>
+                    let imgTags = images.map(src => `<img src="${src}" loading="lazy">`).join('');
+                    let dotsTags = images.length > 1 ? images.map((_, i) => `<div class="sl-dot ${i===0?'active':''}" onclick="jumpToImg(${bId}, ${i}, ${images.length})"></div>`).join('') : '';
+                    let navsTags = images.length > 1 ? `
+                        <button class="sl-nav sl-prev" onclick="runSlider(${bId}, -1, ${images.length})">❮</button>
+                        <button class="sl-nav sl-next" onclick="runSlider(${bId}, 1, ${images.length})">❯</button>
                     ` : '';
-                    sliderPart = `<div class="sl-container">${navsHtml}<div class="sl-wrapper">${imgHtml}</div><div class="sl-dots">${dotsHtml}</div></div>`;
+                    sliderHtml = `<div class="sl-container">${navsTags}<div class="sl-wrapper">${imgTags}</div><div class="sl-dots">${dotsTags}</div></div>`;
                 }
 
                 feed.innerHTML += `
                     <div class="announcement-item" id="block-${bId}">
-                        ${sliderPart}
+                        ${sliderHtml}
                         <div class="ann-body">
-                            <div class="ann-date">${row['tarih'] || ''}</div>
+                            <span class="ann-date">${row['tarih'] || ''}</span>
                             <div class="ann-title">${row['duyuru metni'] || ''}</div>
                             <div class="ann-text">${row['detaylar'] || ''}</div>
                         </div>
