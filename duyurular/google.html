@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dinamik Veri ve Görsel Tablosu</title>
+    <title>Tablo ve Görsel Listesi</title>
     <style>
-        /* Genel Stil */
+        /* Genel Tasarım */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             padding: 20px; 
-            background-color: #f0f2f5; 
+            background-color: #f8f9fa; 
             color: #333; 
         }
         .container { 
@@ -17,22 +17,22 @@
             margin: auto; 
             background: white; 
             padding: 30px; 
-            border-radius: 15px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border-radius: 12px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
         }
-        h2 { text-align: center; color: #1a73e8; margin-bottom: 30px; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 25px; }
 
-        /* Tablo Tasarımı */
-        .table-responsive { overflow-x: auto; }
+        /* Tablo Stili */
+        .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #edf2f7; }
-        th { background-color: #f8f9fa; color: #4a5568; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f1f3f5; color: #495057; text-transform: uppercase; font-size: 12px; }
         tr:hover { background-color: #fdfdfd; }
 
-        /* Resim Ayarları */
-        .cell-image { 
-            width: 80px; 
-            height: 80px; 
+        /* Resim Ayarı */
+        .cell-img { 
+            width: 70px; 
+            height: 70px; 
             object-fit: cover; 
             border-radius: 8px; 
             border: 1px solid #ddd;
@@ -40,28 +40,28 @@
         }
 
         /* Navigasyon */
-        .back-btn { 
+        .btn-back { 
             display: inline-block; 
             margin-bottom: 20px; 
             text-decoration: none; 
-            color: #1a73e8; 
-            font-weight: 600; 
+            color: #007bff; 
+            font-weight: bold; 
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="index.html" class="back-btn">← Ana Sayfaya Dön</a>
-    <h2>Güncel Veri Listesi</h2>
+    <a href="index.html" class="btn-back">← Geri Dön</a>
+    <h2>Dinamik Veri Paneli</h2>
     
-    <div class="table-responsive">
-        <table id="data-table">
+    <div class="table-wrapper">
+        <table id="google-table">
             <thead>
-                <tr id="table-header"></tr>
+                <tr id="header-row"></tr>
             </thead>
-            <tbody id="table-body">
-                <tr><td colspan="100%" style="text-align:center;">Veriler hazırlanıyor...</td></tr>
+            <tbody id="body-rows">
+                <tr><td colspan="100%" style="text-align:center;">Veriler yükleniyor...</td></tr>
             </tbody>
         </table>
     </div>
@@ -70,8 +70,71 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
-    // 1. Kendi Google Sheets CSV linkini tırnak içine yapıştır:
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
+    // Link senin verdiğin linkin CSV formatına dönüştürülmüş halidir
+    const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // 2. Drive linkini resim linkine çeviren fonksiyon
-    function formatDriveLink(link
+    function getDriveThumbnail(url) {
+        if (url.includes('drive.google.com')) {
+            let id = "";
+            if (url.includes('id=')) {
+                id = url.split('id=')[1].split('&')[0];
+            } else {
+                id = url.split('/d/')[1].split('/')[0];
+            }
+            // En hızlı yüklenen Drive thumbnail linki
+            return `https://lh3.googleusercontent.com/u/0/d/${id}`;
+        }
+        return url;
+    }
+
+    Papa.parse(sheetCsvUrl, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: function(results) {
+            const data = results.data;
+            const headerRow = document.getElementById('header-row');
+            const bodyRows = document.getElementById('body-rows');
+            
+            headerRow.innerHTML = '';
+            bodyRows.innerHTML = '';
+
+            if (data.length > 0) {
+                const cols = Object.keys(data[0]);
+                
+                // Başlıklar
+                cols.forEach(c => {
+                    let th = document.createElement('th');
+                    th.textContent = c;
+                    headerRow.appendChild(th);
+                });
+
+                // Satırlar
+                data.forEach(row => {
+                    let tr = document.createElement('tr');
+                    cols.forEach(c => {
+                        let td = document.createElement('td');
+                        let val = (row[c] || "").trim();
+
+                        if (val.startsWith('http') && (val.includes('drive.google.com') || val.match(/\.(jpg|jpeg|png|gif|webp)/i))) {
+                            let img = document.createElement('img');
+                            img.src = getDriveThumbnail(val);
+                            img.className = 'cell-img';
+                            img.onerror = function() { 
+                                this.parentElement.textContent = "Resim bulunamadı"; 
+                            };
+                            td.appendChild(img);
+                        } else {
+                            td.textContent = val;
+                        }
+                        tr.appendChild(td);
+                    });
+                    bodyRows.appendChild(tr);
+                });
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
