@@ -3,77 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablo Verileri</title>
+    <title>Dinamik Veri ve Görsel Tablosu</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f9f9f9; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h2 { color: #333; text-align: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #eee; padding: 12px; text-align: left; }
-        th { background-color: #2c3e50; color: white; }
-        tr:nth-child(even) { background-color: #f2f2f2; }
-        tr:hover { background-color: #e9ecef; }
+        /* Genel Stil */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            padding: 20px; 
+            background-color: #f0f2f5; 
+            color: #333; 
+        }
+        .container { 
+            max-width: 1200px; 
+            margin: auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+        }
+        h2 { text-align: center; color: #1a73e8; margin-bottom: 30px; }
+
+        /* Tablo Tasarımı */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #edf2f7; }
+        th { background-color: #f8f9fa; color: #4a5568; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+        tr:hover { background-color: #fdfdfd; }
+
+        /* Resim Ayarları */
+        .cell-image { 
+            width: 80px; 
+            height: 80px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            border: 1px solid #ddd;
+            display: block;
+        }
+
+        /* Navigasyon */
+        .back-btn { 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            text-decoration: none; 
+            color: #1a73e8; 
+            font-weight: 600; 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Dinamik Veri Tablosu</h2>
-    <table id="data-table">
-        <thead>
-            <tr id="table-header"></tr>
-        </thead>
-        <tbody id="table-body">
-            <tr><td colspan="100%" style="text-align:center;">Veriler yükleniyor...</td></tr>
-        </tbody>
-    </table>
+    <a href="index.html" class="back-btn">← Ana Sayfaya Dön</a>
+    <h2>Güncel Veri Listesi</h2>
+    
+    <div class="table-responsive">
+        <table id="data-table">
+            <thead>
+                <tr id="table-header"></tr>
+            </thead>
+            <tbody id="table-body">
+                <tr><td colspan="100%" style="text-align:center;">Veriler hazırlanıyor...</td></tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
 <script>
-    // Link DÜZELTİLDİ: Tırnak içine alındı ve sonu output=csv yapıldı.
+    // 1. Kendi Google Sheets CSV linkini tırnak içine yapıştır:
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    Papa.parse(csvUrl, {
-        download: true,
-        header: true,
-        complete: function(results) {
-            const data = results.data;
-            const headerRow = document.getElementById('table-header');
-            const bodyContainer = document.getElementById('table-body');
-            
-            headerRow.innerHTML = '';
-            bodyContainer.innerHTML = '';
-
-            if (data.length > 0) {
-                const columns = Object.keys(data[0]);
-                
-                columns.forEach(col => {
-                    let th = document.createElement('th');
-                    th.textContent = col;
-                    headerRow.appendChild(th);
-                });
-
-                data.forEach(row => {
-                    if(Object.values(row).some(x => x !== "" && x !== null)) {
-                        let tr = document.createElement('tr');
-                        columns.forEach(col => {
-                            let td = document.createElement('td');
-                            td.textContent = row[col] || "";
-                            tr.appendChild(td);
-                        });
-                        bodyContainer.appendChild(tr);
-                    }
-                });
-            } else {
-                bodyContainer.innerHTML = '<tr><td colspan="100%" style="text-align:center;">Tabloda veri bulunamadı.</td></tr>';
-            }
-        },
-        error: function(err) {
-            document.getElementById('table-body').innerHTML = '<tr><td colspan="100%" style="text-align:center; color:red;">Veri yüklenemedi. Linki veya internetinizi kontrol edin.</td></tr>';
-        }
-    });
-</script>
-
-</body>
-</html>
+    // 2. Drive linkini resim linkine çeviren fonksiyon
+    function formatDriveLink(link
