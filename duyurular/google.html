@@ -8,19 +8,40 @@
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
         body { font-family: 'Poppins', sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 800px; margin: 0 auto; }
-        .announcement-block { background: #ffffff; border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        .announcement-block { background: #ffffff; border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #ddd; position: relative; }
+        
+        /* Slider Alanı */
         .slider-container { width: 100%; height: 400px; position: relative; overflow: hidden; background-color: #f8f9fa; }
-        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; }
+        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; will-change: transform; }
         .slider-wrapper img { min-width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
-        .slider-dots { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; gap: 8px; }
-        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.2); }
-        .dot.active { background: #4a6cf7; }
+        
+        /* Slider Noktaları */
+        .slider-dots { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 10; /* Üstte kalmasını sağlar */ }
+        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.2); transition: background 0.3s; }
+        .dot.active { background: #4a6cf7; box-shadow: 0 0 5px rgba(74, 108, 247, 0.5); }
+        
+        /* İçerik Alanı */
         .content-group { padding: 25px; }
         .date-label { background: #e1e7ff; color: #4a6cf7; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .announcement-title { font-size: 1.5rem; font-weight: 600; margin: 15px 0 10px; }
+        .announcement-title { font-size: 1.5rem; font-weight: 600; margin: 15px 0 10px; line-height: 1.3; }
         .details-text { color: #666; line-height: 1.7; white-space: pre-line; }
-        #imgModal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        #imgModal img { max-width: 90%; max-height: 90%; border: 3px solid white; border-radius: 4px; }
+        
+        /* MODAL (Büyük Görsel Penceresi) */
+        #imgModal { 
+            display: none; 
+            position: fixed; 
+            z-index: 99999; /* En üstte olmalı */
+            left: 0; top: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9); 
+            justify-content: center; align-items: center; 
+            cursor: pointer; /* Arka plana tıklayınca kapanacağını belirtir */
+        }
+        #imgModal img { 
+            max-width: 90%; max-height: 90%; 
+            border: 3px solid white; border-radius: 4px; 
+            box-shadow: 0 0 25px rgba(255,255,255,0.2);
+            cursor: default; /* Resme tıklayınca kapanmasın */
+        }
     </style>
 </head>
 <body>
@@ -29,46 +50,53 @@
     <header style="text-align:center; margin-bottom:30px;">
         <h1>Duyuru Panosu</h1>
     </header>
-    <div id="loading" style="text-align: center;">Görseller ve içerik yükleniyor...</div>
+    <div id="loading" style="text-align: center;">Yükleniyor...</div>
     <div id="feed"></div>
 </div>
 
-<div id="imgModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
+<div id="imgModal">
+    <img id="modalImg" src="">
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // DRIVE LINKINI DOĞRUDAN RESİM OLARAK GÖRÜNTÜLEMEK İÇİN EN GÜVENLİ FORMAT
+    // Drive Linkini Dönüştürme
     function getDriveDirectLink(url) {
         if (!url || typeof url !== 'string' || url.trim() === "") return null;
-        
         let fileId = "";
         try {
-            if (url.includes('id=')) {
-                fileId = url.split('id=')[1].split('&')[0];
-            } else if (url.includes('/d/')) {
-                fileId = url.split('/d/')[1].split('/')[0];
-            }
-            
-            if (fileId) {
-                // Bu format doğrudan görseli indirmeye zorlamadan tarayıcıda açar
-                return `https://drive.google.com/uc?export=view&id=${fileId}`;
-            }
-        } catch (e) {
-            console.error("Link dönüştürme hatası:", url);
-        }
-        return url; // Eğer drive linki değilse orijinal linki dön
+            if (url.includes('id=')) fileId = url.split('id=')[1].split('&')[0];
+            else if (url.includes('/d/')) fileId = url.split('/d/')[1].split('/')[0];
+            if (fileId) return `https://drive.google.com/uc?export=view&id=${fileId}`;
+        } catch (e) { console.error("Link hatası:", url); }
+        return url;
     }
 
+    // Slider'ı Kaydıran Fonksiyon
     function slideTo(blockId, index) {
-        const wrapper = document.querySelector(`#block-${blockId} .slider-wrapper`);
-        const dots = document.querySelectorAll(`#block-${blockId} .dot`);
+        const block = document.getElementById(`block-${blockId}`);
+        if (!block) return;
+        const wrapper = block.querySelector('.slider-wrapper');
+        const dots = block.querySelectorAll('.dot');
+        
         if(wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
         dots.forEach(d => d.classList.remove('active'));
         if(dots[index]) dots[index].classList.add('active');
     }
+
+    // Modal Kapatma Mantığı
+    const modal = document.getElementById('imgModal');
+    const modalImg = document.getElementById('modalImg');
+
+    // Modal'ın arka planına tıklayınca kapat
+    modal.addEventListener('click', function(e) {
+        if (e.target !== modalImg) { // Eğer tıklanan resim değilse (yani arka plansa)
+            modal.style.display = 'none';
+        }
+    });
 
     Papa.parse(csvUrl, {
         download: true,
@@ -79,7 +107,6 @@
             const feed = document.getElementById('feed');
             
             results.data.forEach((row, index) => {
-                // Görsel isimlerinin tam eşleştiğinden emin olun (Sheets'teki başlıklarla aynı olmalı)
                 const imgLinks = [
                     getDriveDirectLink(row['görsel1']),
                     getDriveDirectLink(row['görsel2']),
@@ -92,6 +119,7 @@
                 if (imgLinks.length > 0) {
                     sliderContent = `<div class="slider-wrapper">`;
                     imgLinks.forEach(img => {
+                        // Tıklama olayını modal'ı açacak şekilde ayarla ve sızmayı engelle
                         sliderContent += `<img src="${img}" loading="lazy" onclick="event.stopPropagation(); document.getElementById('imgModal').style.display='flex'; document.getElementById('modalImg').src='${img}'">`;
                     });
                     sliderContent += `</div>`;
@@ -99,12 +127,12 @@
                     if (imgLinks.length > 1) {
                         dotsContent = `<div class="slider-dots">`;
                         imgLinks.forEach((_, i) => {
-                            dotsContent += `<div class="dot ${i===0?'active':''}" onclick="slideTo(${index}, ${i})"></div>`;
+                            dotsContent += `<div class="dot ${i===0?'active':''}" onclick="event.stopPropagation(); slideTo(${index}, ${i})"></div>`;
                         });
                         dotsContent += `</div>`;
                     }
                 } else {
-                    sliderContent = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999;">Görsel Mevcut Değil</div>`;
+                    sliderContent = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999; background:#eee; font-size:0.9rem;">Görsel Mevcut Değil</div>`;
                 }
 
                 const block = `
