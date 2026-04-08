@@ -232,18 +232,17 @@
         </div>
 </div>
 
-        <div class="cards-wrapper" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px;">
-    
+        <div class="dynamic-cards-container">
     <div class="card">
         <div class="c-f t-l"></div><div class="c-f t-r"></div>
         <div class="c-f b-l"></div><div class="c-f b-r"></div>
         <h3>DUYURULAR</h3>
         <div class="card-content">
             <ul id="list-duyurular" class="dynamic-feed">
-                <li class="loading">Veriler güncelleniyor...</li>
+                <li class="loading">Yükleniyor...</li>
             </ul> 
             <div class="more-link-box">
-                <a href="duyurular/duyurular.html">TÜM DUYURULAR İÇİN TIKLAYINIZ →</a>
+                <a href="duyurular/duyurular.html">TÜMÜ →</a>
             </div>
         </div>
     </div>
@@ -254,10 +253,10 @@
         <h3>HABERLER</h3>
         <div class="card-content">
             <ul id="list-haberler" class="dynamic-feed">
-                <li class="loading">Veriler güncelleniyor...</li>
+                <li class="loading">Yükleniyor...</li>
             </ul> 
             <div class="more-link-box">
-                <a href="haberler/haberler.html">TÜM HABERLER İÇİN TIKLAYINIZ →</a>
+                <a href="haberler/haberler.html">TÜMÜ →</a>
             </div>
         </div>
     </div>
@@ -268,137 +267,121 @@
         <h3>BASINDA BİZ</h3>
         <div class="card-content">
             <ul id="list-basinda" class="dynamic-feed">
-                <li class="loading">Veriler güncelleniyor...</li>
+                <li class="loading">Yükleniyor...</li>
             </ul> 
             <div class="more-link-box">
-                <a href="basinda/basinda.html">TÜM BASIN HABERLERİ İÇİN TIKLAYINIZ →</a>
+                <a href="basinda/basinda.html">TÜMÜ →</a>
             </div>
         </div>
     </div>
-
 </div>
 
 <style>
-    /* Dinamik Liste Tasarımı */
-    .dynamic-feed {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        min-height: 120px;
-    }
-    .dynamic-feed li {
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    /* Orta Kolon Yerleşimi */
+    .dynamic-cards-container {
         display: grid;
-        grid-template-columns: 85px 1fr; /* Tarih alanı sabit, metin esnek */
-        align-items: baseline;
-        gap: 12px;
+        grid-template-columns: repeat(3, 1fr); /* Orta kolonu 3 eşit parçaya böler */
+        gap: 15px;
+        width: 100%;
+        margin-bottom: 25px;
     }
-    .dynamic-feed li:last-child { border-bottom: none; }
+
+    /* Kart İçeriği Düzenlemesi */
+    .dynamic-feed {
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 100px;
+    }
     
-    /* Font ve Renk Ayarları */
+    .dynamic-feed li {
+        padding: 6px 0 !important;
+        border-bottom: 1px dashed rgba(212, 175, 55, 0.3) !important;
+        display: flex;
+        flex-direction: column; /* Dar alan olduğu için tarih üstte metin altta */
+        gap: 2px;
+    }
+
     .ann-date-small {
         font-family: 'Cinzel', serif;
-        font-size: 10.5px;
-        color: var(--v-red); /* CSS değişkeninizden alır */
-        font-weight: 400;
-        white-space: nowrap;
+        font-size: 9px;
+        color: var(--v-red);
+        font-weight: bold;
     }
+
     .ann-text-small {
         font-family: 'Playfair Display', serif;
-        font-size: 12.5px;
-        color: #555;
-        font-weight: 400;
-        line-height: 1.4;
-    }
-    
-    /* Yükleniyor Yazısı */
-    .loading {
-        font-size: 11px;
-        opacity: 0.6;
-        display: block !important;
-        border: none !important;
-        text-align: center;
+        font-size: 11.5px;
+        color: #333;
+        line-height: 1.2;
     }
 
-    /* Alt Link Alanı */
     .more-link-box {
-        margin-top: 15px;
-        border-top: 1px dashed rgba(212, 175, 55, 0.3);
-        padding-top: 10px;
-    }
-    .more-link-box a {
-        color: var(--gold);
-        text-decoration: none;
-        font-family: 'Cinzel';
-        font-size: 11px;
-        font-weight: bold;
-        display: block;
+        margin-top: 10px;
         text-align: center;
-        letter-spacing: 1px;
-        transition: 0.3s;
+        border-top: 1px solid rgba(212, 175, 55, 0.1);
+        padding-top: 5px;
     }
-    .more-link-box a:hover { opacity: 0.8; }
-</style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    .more-link-box a {
+        font-family: 'Cinzel';
+        font-size: 10px;
+        font-weight: bold;
+        color: var(--gold) !important;
+    }
+
+    /* Tablet ve Mobil Uyumluluk */
+    @media (max-width: 1100px) {
+        .dynamic-cards-container {
+            grid-template-columns: 1fr; /* Genişlik daralınca kartlar alt alta geçer */
+        }
+    }
+</style>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
-    const config = [
+    const sheetSettings = [
         {
-            name: 'DUYURULAR',
-            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=0&single=true&output=csv',
-            target: 'list-duyurular'
+            id: 'list-duyurular',
+            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=0&single=true&output=csv'
         },
         {
-            name: 'HABERLER',
-            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=995325209&single=true&output=csv',
-            target: 'list-haberler'
+            id: 'list-haberler',
+            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=995325209&single=true&output=csv'
         },
         {
-            name: 'BASINDA BİZ',
-            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=1712536451&single=true&output=csv',
-            target: 'list-basinda'
+            id: 'list-basinda',
+            url: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?gid=1712536451&single=true&output=csv'
         }
     ];
 
-    function updateHomePage() {
-        config.forEach(item => {
-            Papa.parse(item.url, {
+    function loadSheets() {
+        sheetSettings.forEach(sheet => {
+            Papa.parse(sheet.url, {
                 download: true,
                 header: true,
                 skipEmptyLines: true,
                 complete: function(results) {
-                    const container = document.getElementById(item.target);
-                    if (!container) return;
-                    
-                    container.innerHTML = ''; // Yükleniyor'u temizle
-                    
-                    // En yeni 3 kaydı al (Ters çevirerek)
-                    const data = results.data.reverse().slice(0, 3);
+                    const listElement = document.getElementById(sheet.id);
+                    if (!listElement) return;
 
-                    if (data.length === 0) {
-                        container.innerHTML = '<li class="loading">Henüz kayıt bulunmuyor.</li>';
-                        return;
-                    }
+                    listElement.innerHTML = '';
+                    // En güncel 3 kaydı al
+                    const rows = results.data.reverse().slice(0, 3);
 
-                    data.forEach(row => {
+                    rows.forEach(row => {
                         const li = document.createElement('li');
                         li.innerHTML = `
-                            <span class="ann-date-small">${row['TARİH'] || '-'}</span>
+                            <span class="ann-date-small">${row['TARİH'] || ''}</span>
                             <span class="ann-text-small">${row['DUYURU METNİ'] || ''}</span>
                         `;
-                        container.appendChild(li);
+                        listElement.appendChild(li);
                     });
-                },
-                error: function() {
-                    document.getElementById(item.target).innerHTML = '<li class="loading">Veri alınamadı.</li>';
                 }
             });
         });
     }
 
-    // Sayfa yüklendiğinde otomatik başlat
-    document.addEventListener('DOMContentLoaded', updateHomePage);
+    document.addEventListener('DOMContentLoaded', loadSheets);
 </script>
         
  
