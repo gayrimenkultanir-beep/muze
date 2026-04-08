@@ -173,7 +173,7 @@
         </div>
     </div>
 
-   <div class="container" style="margin-top: 50px;">
+  <div class="container" style="margin-top: 50px;">
     <div class="full-card">
         <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Frame">
         <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Frame">
@@ -192,13 +192,13 @@
         </div>
 
         <div class="card-footer">
-            <p id="page-info" style="font-size: 14px; letter-spacing: 1px;">Haberler yükleniyor...</p>
+            <p id="page-info" style="font-size: 14px; letter-spacing: 1px;">Yükleniyor...</p>
         </div>
     </div>
 </div>
 
 <style>
-    /* Mevcut stillerine ek olarak sayfalama butonları için: */
+    /* Sayfalama Butonları */
     .page-btn {
         background: var(--dark);
         color: var(--gold);
@@ -208,50 +208,59 @@
         cursor: pointer;
         border-radius: 4px;
         transition: 0.3s;
+        font-size: 13px;
     }
-    .page-btn:hover { background: var(--gold); color: var(--dark); box-shadow: 0 0 10px var(--gold); }
+    .page-btn:hover:not(:disabled) { background: var(--gold); color: var(--dark); box-shadow: 0 0 10px var(--gold); }
     .page-btn.active { background: var(--gold); color: var(--dark); font-weight: bold; }
     .page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-    /* Slider ve Kart Stilleri (Önceki kodundakilerle aynı kalacak) */
-    .announcement-item { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--gold); border-radius: 8px; margin-bottom: 40px; overflow: hidden; }
+    /* Duyuru Kartı ve Slider */
+    .announcement-item { background: rgba(255, 255, 255, 0.4); border: 1px solid var(--gold); border-radius: 8px; margin-bottom: 40px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
     .sl-container { width: 100%; max-width: 600px; height: 400px; position: relative; overflow: hidden; background-color: #000; margin: 0 auto; border-bottom: 1px solid var(--gold); }
-    .sl-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.6s ease; }
-    .sl-wrapper img { min-width: 100%; width: 100%; height: 100%; object-fit: contain; }
-    .sl-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 26, 36, 0.8); color: var(--gold); border: 1px solid var(--gold); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 20; }
-    .sl-dots { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; gap: 6px; }
+    .sl-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+    .sl-wrapper img { min-width: 100%; width: 100%; height: 100%; object-fit: contain; display: block; }
+    
+    .sl-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(15, 26, 36, 0.8); color: var(--gold); border: 1px solid var(--gold); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; transition: 0.3s; }
+    .sl-nav:hover { background: var(--gold); color: var(--dark); }
+    
+    .sl-dots { position: absolute; bottom: 10px; width: 100%; display: flex; justify-content: center; gap: 6px; z-index: 20; }
     .sl-dot { width: 8px; height: 8px; background: rgba(212, 175, 55, 0.4); border: 1px solid var(--gold); border-radius: 50%; cursor: pointer; }
-    .sl-dot.active { background: var(--gold); }
+    .sl-dot.active { background: var(--gold); transform: scale(1.3); }
+
+    /* Metin Alanları */
     .ann-body { padding: 20px 25px; background: rgba(244, 231, 200, 0.2); }
-    .ann-date { font-family: 'Cinzel'; color: var(--v-red); font-weight: bold; font-size: 11px; }
-    .ann-title { font-family: 'Cinzel'; color: var(--dark); font-size: 17px; font-weight: 800; margin: 10px 0; border-bottom: 1px solid rgba(212,175,55,0.2); }
-    .ann-text { font-family: 'Playfair Display'; color: #444; font-size: 14px; font-style: italic; line-height: 1.6; }
+    .ann-date { font-family: 'Cinzel'; color: var(--v-red); font-weight: bold; font-size: 11px; display: block; margin-bottom: 5px; }
+    .ann-title { font-family: 'Cinzel'; color: var(--dark); font-size: 17px; font-weight: 800; margin-bottom: 10px; line-height: 1.4; border-bottom: 1px solid rgba(212, 175, 55, 0.2); padding-bottom: 5px; }
+    .ann-text { font-family: 'Playfair Display'; color: #444; font-size: 14px; line-height: 1.6; font-style: italic; }
+
+    @media (max-width: 600px) { .sl-container { height: auto; aspect-ratio: 600 / 400; } }
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 <script>
     const csvSourceUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
     
-    let allData = []; // Tüm haberleri tutacak
+    let allData = []; 
     let currentPage = 1;
     const itemsPerPage = 10;
-    const sliderData = {};
+    const sliderStates = {};
 
     function parseDriveImage(url) {
         if (!url || !url.includes('drive.google.com')) return null;
         try {
-            let id = url.includes('id=') ? url.split('id=')[1].split('&')[0] : url.split('/d/')[1].split('/')[0];
+            let id = "";
+            if (url.includes('id=')) id = url.split('id=')[1].split('&')[0];
+            else id = url.split('/d/')[1].split('/')[0];
             return `https://lh3.googleusercontent.com/u/0/d/${id}=w600-h400-p-k-no`;
         } catch (e) { return null; }
     }
 
-    // Slider Fonksiyonları
     window.runSlider = function(id, direction, total) {
-        if (!sliderData[id]) sliderData[id] = 0;
-        let newIndex = sliderData[id] + direction;
+        if (sliderStates[id] === undefined) sliderStates[id] = 0;
+        let newIndex = sliderStates[id] + direction;
         if (newIndex >= total) newIndex = 0;
         if (newIndex < 0) newIndex = total - 1;
-        sliderData[id] = newIndex;
+        sliderStates[id] = newIndex;
         const wrapper = document.querySelector(`#block-${id} .sl-wrapper`);
         const dots = document.querySelectorAll(`#block-${id} .sl-dot`);
         if (wrapper) wrapper.style.transform = `translateX(-${newIndex * 100}%)`;
@@ -259,14 +268,13 @@
     }
 
     window.jumpToImg = function(id, index, total) {
-        sliderData[id] = index;
+        sliderStates[id] = index;
         const wrapper = document.querySelector(`#block-${id} .sl-wrapper`);
         const dots = document.querySelectorAll(`#block-${id} .sl-dot`);
         if (wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
         dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
     }
 
-    // Veriyi Görüntüleme Fonksiyonu
     function renderPage(page) {
         const feed = document.getElementById('announcement-feed');
         const info = document.getElementById('page-info');
@@ -277,17 +285,19 @@
         const pageItems = allData.slice(start, end);
 
         pageItems.forEach((row, index) => {
-            const bId = start + index; // Global ID
+            const bId = start + index; 
             let images = [];
+            
+            // YENİ BAŞLIKLARA GÖRE DÖNGÜ (GÖRSEL 1 - GÖRSEL 10)
             for (let i = 1; i <= 10; i++) {
-                let img = parseDriveImage(row['görsel' + i] || row['GÖRSEL' + i]);
+                let img = parseDriveImage(row['GÖRSEL ' + i]);
                 if (img) images.push(img);
             }
 
-            sliderData[bId] = 0;
+            sliderStates[bId] = 0;
             let sliderHtml = '';
             if (images.length > 0) {
-                let imgTags = images.map(src => `<img src="${src}" loading="lazy">`).join('');
+                let imgTags = images.map(src => `<img src="${src}" loading="lazy" alt="Haber Görseli">`).join('');
                 let dotsTags = images.length > 1 ? images.map((_, i) => `<div class="sl-dot ${i===0?'active':''}" onclick="jumpToImg(${bId}, ${i}, ${images.length})"></div>`).join('') : '';
                 let navsTags = images.length > 1 ? `
                     <button class="sl-nav sl-prev" style="left:10px" onclick="runSlider(${bId}, -1, ${images.length})">❮</button>
@@ -300,25 +310,26 @@
                 <div class="announcement-item" id="block-${bId}">
                     ${sliderHtml}
                     <div class="ann-body">
-                        <span class="ann-date">${row['tarih'] || ''}</span>
-                        <div class="ann-title"><strong>${row['duyuru metni'] || ''}</strong></div>
-                        <div class="ann-text">${row['detaylar'] || ''}</div>
+                        <span class="ann-date">${row['TARİH'] || ''}</span>
+                        <div class="ann-title">${row['DUYURU METNİ'] || ''}</div>
+                        <div class="ann-text">${row['DETAYLAR'] || ''}</div>
                     </div>
                 </div>`;
         });
 
         renderPagination();
         info.innerText = `Toplam ${allData.length} haberden ${start + 1}-${Math.min(end, allData.length)} arası gösteriliyor.`;
-        window.scrollTo({ top: document.querySelector('#announcement-feed').offsetTop - 150, behavior: 'smooth' });
+        // Sayfa geçişinde duyuruların başına kaydır
+        const rect = document.getElementById('announcement-feed').getBoundingClientRect();
+        window.scrollTo({ top: window.scrollY + rect.top - 150, behavior: 'smooth' });
     }
 
-    // Sayfalama Butonlarını Oluşturma
     function renderPagination() {
         const nav = document.getElementById('pagination-nav');
         nav.innerHTML = '';
         const totalPages = Math.ceil(allData.length / itemsPerPage);
+        if(totalPages <= 1) return;
 
-        // "Önceki" Butonu
         let prevBtn = document.createElement('button');
         prevBtn.innerText = 'Önceki';
         prevBtn.className = 'page-btn';
@@ -326,7 +337,6 @@
         prevBtn.onclick = () => { currentPage--; renderPage(currentPage); };
         nav.appendChild(prevBtn);
 
-        // Sayfa Numaraları
         for (let i = 1; i <= totalPages; i++) {
             let btn = document.createElement('button');
             btn.innerText = i;
@@ -335,7 +345,6 @@
             nav.appendChild(btn);
         }
 
-        // "Sonraki" Butonu
         let nextBtn = document.createElement('button');
         nextBtn.innerText = 'Sonraki';
         nextBtn.className = 'page-btn';
@@ -344,7 +353,6 @@
         nav.appendChild(nextBtn);
     }
 
-    // Veriyi Çek
     Papa.parse(csvSourceUrl, {
         download: true,
         header: true,
