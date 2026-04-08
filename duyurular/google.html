@@ -10,38 +10,21 @@
         .container { max-width: 800px; margin: 0 auto; }
         .announcement-block { background: #ffffff; border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #ddd; position: relative; }
         
-        /* Slider Alanı */
         .slider-container { width: 100%; height: 400px; position: relative; overflow: hidden; background-color: #f8f9fa; }
-        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; will-change: transform; }
+        .slider-wrapper { display: flex; width: 100%; height: 100%; transition: transform 0.4s ease-in-out; }
         .slider-wrapper img { min-width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
         
-        /* Slider Noktaları */
-        .slider-dots { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 10; /* Üstte kalmasını sağlar */ }
-        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.5); border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.2); transition: background 0.3s; }
-        .dot.active { background: #4a6cf7; box-shadow: 0 0 5px rgba(74, 108, 247, 0.5); }
+        .slider-dots { position: absolute; bottom: 15px; width: 100%; display: flex; justify-content: center; gap: 8px; z-index: 10; }
+        .dot { width: 10px; height: 10px; background: rgba(255,255,255,0.6); border-radius: 50%; cursor: pointer; border: 1px solid rgba(0,0,0,0.2); }
+        .dot.active { background: #4a6cf7; }
         
-        /* İçerik Alanı */
         .content-group { padding: 25px; }
         .date-label { background: #e1e7ff; color: #4a6cf7; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
-        .announcement-title { font-size: 1.5rem; font-weight: 600; margin: 15px 0 10px; line-height: 1.3; }
+        .announcement-title { font-size: 1.5rem; font-weight: 600; margin: 15px 0 10px; }
         .details-text { color: #666; line-height: 1.7; white-space: pre-line; }
         
-        /* MODAL (Büyük Görsel Penceresi) */
-        #imgModal { 
-            display: none; 
-            position: fixed; 
-            z-index: 99999; /* En üstte olmalı */
-            left: 0; top: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); 
-            justify-content: center; align-items: center; 
-            cursor: pointer; /* Arka plana tıklayınca kapanacağını belirtir */
-        }
-        #imgModal img { 
-            max-width: 90%; max-height: 90%; 
-            border: 3px solid white; border-radius: 4px; 
-            box-shadow: 0 0 25px rgba(255,255,255,0.2);
-            cursor: default; /* Resme tıklayınca kapanmasın */
-        }
+        #imgModal { display: none; position: fixed; z-index: 99999; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
+        #imgModal img { max-width: 90%; max-height: 90%; border: 2px solid white; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -50,53 +33,44 @@
     <header style="text-align:center; margin-bottom:30px;">
         <h1>Duyuru Panosu</h1>
     </header>
-    <div id="loading" style="text-align: center;">Yükleniyor...</div>
+    <div id="loading" style="text-align: center;">Duyurular ve görseller yükleniyor...</div>
     <div id="feed"></div>
 </div>
 
-<div id="imgModal">
-    <img id="modalImg" src="">
-</div>
+<div id="imgModal" onclick="this.style.display='none'"><img id="modalImg" src=""></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
 <script>
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQQERf8SWNyArJj-5FUlJgcfaMWqNkiQpa0Zuzgx3gTxUb1afXeA9Lw45RUB1yN5uOfUdkMK44C12HM/pub?output=csv';
 
-    // Drive Linkini Dönüştürme
-    function getDriveDirectLink(url) {
+    // DRIVE GÖRSELLERİ İÇİN EN KARARLI YÖNTEM (Thumbnail API)
+    function fixDriveLink(url) {
         if (!url || typeof url !== 'string' || url.trim() === "") return null;
         let fileId = "";
         try {
-            if (url.includes('id=')) fileId = url.split('id=')[1].split('&')[0];
-            else if (url.includes('/d/')) fileId = url.split('/d/')[1].split('/')[0];
-            if (fileId) return `https://drive.google.com/uc?export=view&id=${fileId}`;
-        } catch (e) { console.error("Link hatası:", url); }
+            if (url.includes('id=')) {
+                fileId = url.split('id=')[1].split('&')[0];
+            } else if (url.includes('/d/')) {
+                fileId = url.split('/d/')[1].split('/')[0];
+            }
+            if (fileId) {
+                // thumbnail.googleusercontent.com bazen kısıtlıdır, bu yüzden alternatif:
+                return `https://lh3.googleusercontent.com/u/0/d/${fileId}`;
+            }
+        } catch (e) { console.error("Link dönüştürülemedi:", url); }
         return url;
     }
 
-    // Slider'ı Kaydıran Fonksiyon
     function slideTo(blockId, index) {
         const block = document.getElementById(`block-${blockId}`);
         if (!block) return;
         const wrapper = block.querySelector('.slider-wrapper');
         const dots = block.querySelectorAll('.dot');
-        
         if(wrapper) wrapper.style.transform = `translateX(-${index * 100}%)`;
         dots.forEach(d => d.classList.remove('active'));
         if(dots[index]) dots[index].classList.add('active');
     }
-
-    // Modal Kapatma Mantığı
-    const modal = document.getElementById('imgModal');
-    const modalImg = document.getElementById('modalImg');
-
-    // Modal'ın arka planına tıklayınca kapat
-    modal.addEventListener('click', function(e) {
-        if (e.target !== modalImg) { // Eğer tıklanan resim değilse (yani arka plansa)
-            modal.style.display = 'none';
-        }
-    });
 
     Papa.parse(csvUrl, {
         download: true,
@@ -107,39 +81,39 @@
             const feed = document.getElementById('feed');
             
             results.data.forEach((row, index) => {
+                // Görsel başlıklarınızın Sheets ile uyumlu olduğundan emin olun
                 const imgLinks = [
-                    getDriveDirectLink(row['görsel1']),
-                    getDriveDirectLink(row['görsel2']),
-                    getDriveDirectLink(row['görsel3'])
+                    fixDriveLink(row['görsel1']),
+                    fixDriveLink(row['görsel2']),
+                    fixDriveLink(row['görsel3'])
                 ].filter(url => url !== null);
 
-                let sliderContent = '';
-                let dotsContent = '';
+                let sliderHTML = '';
+                let dotsHTML = '';
 
                 if (imgLinks.length > 0) {
-                    sliderContent = `<div class="slider-wrapper">`;
+                    sliderHTML = `<div class="slider-wrapper">`;
                     imgLinks.forEach(img => {
-                        // Tıklama olayını modal'ı açacak şekilde ayarla ve sızmayı engelle
-                        sliderContent += `<img src="${img}" loading="lazy" onclick="event.stopPropagation(); document.getElementById('imgModal').style.display='flex'; document.getElementById('modalImg').src='${img}'">`;
+                        sliderHTML += `<img src="${img}" loading="lazy" onclick="event.stopPropagation(); document.getElementById('imgModal').style.display='flex'; document.getElementById('modalImg').src='${img}'" onerror="this.src='https://via.placeholder.com/600x400?text=Görsel+Yüklenemedi'">`;
                     });
-                    sliderContent += `</div>`;
+                    sliderHTML += `</div>`;
 
                     if (imgLinks.length > 1) {
-                        dotsContent = `<div class="slider-dots">`;
+                        dotsHTML = `<div class="slider-dots">`;
                         imgLinks.forEach((_, i) => {
-                            dotsContent += `<div class="dot ${i===0?'active':''}" onclick="event.stopPropagation(); slideTo(${index}, ${i})"></div>`;
+                            dotsHTML += `<div class="dot ${i===0?'active':''}" onclick="event.stopPropagation(); slideTo(${index}, ${i})"></div>`;
                         });
-                        dotsContent += `</div>`;
+                        dotsHTML += `</div>`;
                     }
                 } else {
-                    sliderContent = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999; background:#eee; font-size:0.9rem;">Görsel Mevcut Değil</div>`;
+                    sliderHTML = `<div style="display:flex; align-items:center; justify-content:center; height:100%; color:#999; background:#eee;">Görsel Bulunamadı</div>`;
                 }
 
                 const block = `
                     <div class="announcement-block" id="block-${index}">
                         <div class="slider-container">
-                            ${sliderContent}
-                            ${dotsContent}
+                            ${sliderHTML}
+                            ${dotsHTML}
                         </div>
                         <div class="content-group">
                             <span class="date-label">${row['tarih'] || ''}</span>
