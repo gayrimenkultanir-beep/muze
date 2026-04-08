@@ -1,0 +1,17 @@
+<table id="google-table"></table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<script>
+  const public_spreadsheet_url = 'https://docs.google.com/spreadsheets/d/1aMkkG5TFtt1WcbPmMqlwvGLfCGryTT_6u9rqWtLydDo/edit?usp=sharing';
+
+  Papa.parse(public_spreadsheet_url, {
+    download: true,
+    header: true,
+    complete: function(results) {
+      let data = results.data;
+      let table = document.getElementById('google-table');
+      // Burada veriyi tabloya döken basit bir döngü yazabilirsiniz
+      console.log(data); 
+    }
+  });
+</script>
