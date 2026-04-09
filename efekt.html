@@ -13,22 +13,22 @@
 
         body {
             font-family: 'Playfair Display', serif;
-            /* Arka plan resminiz yerinde duruyor */
-            background: #fdf5e6 url("assets/background.jpg") fixed center/cover;
+            /* Arka plan rengi, su efekti yüklenene kadar görünür */
+            background-color: #081119; 
             color: #2b2b2b;
             padding-top: 110px;
-            /* Su efekti için gerekli */
+            /* Yatay kaydırma çubuğunu engelle */
             overflow-x: hidden; 
         }
 
-        /* Su Efekti Tuvali (Canvas) */
+        /* Hareketli Su Efekti İçin Tuval (Canvas) */
         #water-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Arka planın hemen üzerinde */
+            z-index: -1; /* Tüm içeriğin arkasında kalması için */
             pointer-events: none; /* Mouse tıklamalarını engellemez */
         }
 
@@ -76,13 +76,13 @@
 
         /* --- 4. KARTLAR --- */
         .card {
-            /* Su efektinin arkadan hafifçe görünmesi için kartlara saydamlık eklendi */
-            background: rgba(244, 231, 200, 0.92); 
+            /* Su efektinin arkadan görünmesi için kartlara hafif saydamlık eklendi */
+            background: rgba(244, 231, 200, 0.9); 
             border: 2px solid var(--gold);
             border-radius: 12px; position: relative; margin-bottom: 20px; overflow: hidden;
             transition: 0.3s; display: flex; flex-direction: column;
             /* Hafif bir buzlu cam etkisi */
-            backdrop-filter: blur(3px); 
+            backdrop-filter: blur(2px); 
         }
         .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
         .card h3, .card h2 {
@@ -494,7 +494,7 @@
                 });
             });
 
-            // --- 4. GERÇEK SU EFEKTİ (WebGL - PixiJS) ---
+            // --- 4. HAREKETLİ SU EFEKTİ (WebGL - PixiJS) ---
             
             // Ayarlar
             const waterCanvas = document.getElementById('water-canvas');
@@ -502,59 +502,56 @@
                 view: waterCanvas,
                 width: window.innerWidth,
                 height: window.innerHeight,
-                transparent: true, // Arka plan resminin görünmesi için
+                transparent: false, // Saydam değil, kendi rengi var
                 resolution: window.devicePixelRatio || 1,
-                autoResize: true
+                autoResize: true,
+                backgroundColor: 0x081119 // Koyu mavi su rengi
             });
 
-            // Su dalgası dokusu (Displacement Map)
-            // Bu doku, kırılma efektini oluşturmak için kullanılır.
+            // Temel Su Doku Katmanı
+            const baseTexture = PIXI.Texture.from('https://res.cloudinary.com/dgksx9vls/image/upload/v1503753384/displacement_map_repeat_m6bo7z.jpg');
+            const waterSprite = new PIXI.TilingSprite(
+                baseTexture,
+                app.screen.width,
+                app.screen.height
+            );
+
+            // Su dokusunu renklendir ve hafif saydam yap
+            waterSprite.tint = 0x1a4a6e; // Mavi tonu
+            waterSprite.alpha = 0.5; // Arka plan rengiyle karışması için
+            waterSprite.tileScale.set(0.5); // Dalga boyutu (küçük = daha çok dalga)
+
+            app.stage.addChild(waterSprite);
+
+            // Hareket İçin Displacement Map (Kırılma Efekti)
             const displacementSprite = PIXI.Sprite.from('https://res.cloudinary.com/dgksx9vls/image/upload/v1503753384/displacement_map_repeat_m6bo7z.jpg');
             const displacementFilter = new PIXI.filters.DisplacementFilter(displacementSprite);
 
             // Dokuyu tekrar et ve ölçeklendir
             displacementSprite.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
-            displacementSprite.scale.set(0.6); // Dalgacık boyutu
+            displacementSprite.scale.set(0.8); // Kırılma şiddeti
 
             app.stage.addChild(displacementSprite);
 
-            // Filtreyi sahneye uygula (Tüm tuval etkilenecek)
-            app.stage.filters = [displacementFilter];
-
-            // Mouse etkileşimi için değişkenler
-            let mouseX = 0;
-            let mouseY = 0;
-            let targetFrequency = 0.01; // Hedef otomatik dalga hızı
-
-            window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                // Mouse hareket ettiğinde otomatik dalgalanmayı geçici olarak artır
-                targetFrequency = 0.03; 
-            });
+            // Filtreyi temel su katmanına uygula
+            waterSprite.filters = [displacementFilter];
 
             // Animasyon Döngüsü
             app.ticker.add(() => {
-                // 1. Otomatik sürekli dalgalanma (Doku kaydırılarak)
-                displacementSprite.x += 1 * displacementSprite.scale.x;
-                displacementSprite.y += 0.5 * displacementSprite.scale.y;
+                // 1. Temel su dokusunu yavaşça kaydır (Akıntı hissi)
+                waterSprite.tilePosition.x -= 0.5;
+                waterSprite.tilePosition.y += 0.3;
 
-                // 2. Mouse konumuna göre kırılma (Perspektif etkisi)
-                // Mouse merkeze ne kadar uzaksa kırılma o kadar artar
-                const shiftX = (mouseX - window.innerWidth / 2) / 15;
-                const shiftY = (mouseY - window.innerHeight / 2) / 15;
-
-                // Yumuşak geçiş
-                displacementFilter.scale.x = PIXI.utils.lerp(displacementFilter.scale.x, shiftX, 0.05);
-                displacementFilter.scale.y = PIXI.utils.lerp(displacementFilter.scale.y, shiftY, 0.05);
-                
-                // Mouse durduğunda hızı yavaşça normale döndür
-                targetFrequency = PIXI.utils.lerp(targetFrequency, 0.01, 0.01);
+                // 2. Kırılma dokusunu farklı hızda kaydır (Dalgalanma hissi)
+                displacementSprite.x += 1;
+                displacementSprite.y += 0.8;
             });
 
             // Ekran boyutu değiştiğinde tuvali güncelle
             window.addEventListener('resize', () => {
                 app.renderer.resize(window.innerWidth, window.innerHeight);
+                waterSprite.width = app.screen.width;
+                waterSprite.height = app.screen.height;
             });
         });
     </script>
