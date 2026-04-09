@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çağla Enginer Tarzı Portfolyo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9f9; color: #1a1a1a; }
+        .hero-image { height: 80vh; object-fit: cover; }
+    </style>
+</head>
+<body>
+
+    <nav class="flex justify-between items-center px-10 py-6 sticky top-0 bg-white/80 backdrop-blur-md z-50">
+        <div class="text-xl font-semibold tracking-tighter uppercase">caglaenginer</div>
+        <div class="space-x-8 text-sm uppercase tracking-widest">
+            <a href="#" class="hover:opacity-50 transition">Projeler</a>
+            <a href="#" class="hover:opacity-50 transition">Hakkımda</a>
+            <a href="#" class="hover:opacity-50 transition">İletişim</a>
+        </div>
+    </nav>
+
+    <header class="px-10 mt-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+            <h1 class="text-6xl md:text-8xl font-light leading-none tracking-tighter">Industrial <br> Designer</h1>
+            <p class="text-gray-500 max-w-sm pb-2">Netlik, işlev ve duygu ile yönlendirilen bir tasarımcı. Ürünler, mekanlar ve görseller aracılığıyla hikayeler anlatıyorum.</p>
+        </div>
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Hero" class="w-full mt-10 hero-image grayscale hover:grayscale-0 transition duration-700">
+    </header>
+
+    <section class="px-10 py-24">
+        <h2 class="text-xs uppercase tracking-[0.3em] mb-12 text-gray-400">Seçili Projeler</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+            
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden bg-gray-200">
+                    <img src="https://images.unsplash.com/photo-1581417478175-a9ef18f20941?auto=format&fit=crop&w=800&q=80" class="w-full transform group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <h3 class="text-2xl font-light">Hopefloats</h3>
+                    <span class="text-sm text-gray-400">İstanbul, TR</span>
+                </div>
+            </div>
+
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden bg-gray-200">
+                    <img src="https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&w=800&q=80" class="w-full transform group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="mt-4 flex justify-between items-center">
+                    <h3 class="text-2xl font-light">Flusso</h3>
+                    <span class="text-sm text-gray-400">Milan, IT</span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="px-10 py-20 border-t border-gray-200 flex justify-between items-end">
+        <div>
+            <p class="text-sm text-gray-400">© 2025 Çağla Enginer</p>
+        </div>
+        <div class="text-right">
+            <a href="#" class="block text-4xl font-light hover:italic transition-all">Instagram</a>
+            <a href="#" class="block text-4xl font-light hover:italic transition-all">Behance</a>
+        </div>
+    </footer>
+
+</body>
+</html>
