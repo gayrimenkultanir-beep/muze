@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ağaçla Sarmaşık Efsanesi - Sultan II. Bayezid Külliyesi</title>
+    <title>Ağaçla Sarmaşık Efsanesi | Sultan II. Bayezid Külliyesi Sağlık Müzesi</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. TEMEL AYARLAR (Darüşşifa Sayfası ile Uyumlu) --- */
+        /* --- 1. GLOBAL DEĞİŞKENLER & RESET --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root { --gold: #d4af37; --dark: #0f1a24; --parchment: #f4e7c8; --v-red: #8b0000; }
+        :root { 
+            --gold: #d4af37; 
+            --dark: #0f1a24; 
+            --parchment: #f4e7c8; 
+            --v-red: #8b0000; 
+            --shadow: rgba(0,0,0,0.4);
+        }
 
         body {
             font-family: 'Playfair Display', serif;
@@ -18,83 +24,108 @@
             background-image: url("../assets/background.jpg");
             background-attachment: fixed;
             background-size: cover;
-            padding-top: 110px;
+            padding-top: 120px;
         }
 
-        /* --- 2. NAVİGASYON --- */
-        .nav-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; position: fixed; top: 0; left: 0; z-index: 2000; }
+        /* --- 2. NAVİGASYON (14 LİNK VE FULL TASARIM) --- */
+        .nav-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; position: fixed; top: 0; left: 0; z-index: 5000; }
         .nav {
             width: 100%; max-width: 1240px; background-color: var(--dark);
             border: 2px solid var(--gold); border-top: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: var(--gold);
+            box-shadow: 0 10px 40px var(--shadow); color: var(--gold);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 30px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
-            position: relative;
+            padding: 18px 35px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
         }
-        .logo-subtitle { font-family: 'Cinzel'; font-size: 16px; font-weight: 700; }
+        .logo-title { font-size: 13px; font-weight: bold; letter-spacing: 2px; color: #fff; }
+        .logo-subtitle { font-family: 'Cinzel'; font-size: 17px; font-weight: 700; margin-top: 3px; }
 
         .menu-btn { 
-            background: transparent; border: 1px solid var(--gold); color: var(--gold); 
-            cursor: pointer; padding: 8px 18px; font-family: 'Cinzel'; border-radius: 4px; 
-            transition: all 0.3s ease; outline: none; position: relative; overflow: hidden;
+            background: transparent; border: 1.5px solid var(--gold); color: var(--gold); 
+            cursor: pointer; padding: 10px 22px; font-family: 'Cinzel'; font-weight: 700;
+            border-radius: 6px; transition: 0.3s;
         }
-        .menu-btn:hover { 
-            background: var(--gold); color: var(--dark); 
-            box-shadow: 0 0 15px var(--gold); transform: scale(1.05);
-        }
+        .menu-btn:hover { background: var(--gold); color: var(--dark); box-shadow: 0 0 20px var(--gold); }
 
         #globalDropdown {
-            display: none; position: absolute; right: 30px; top: calc(100% + 10px);
+            display: none; position: absolute; right: 35px; top: calc(100% + 15px);
             background: var(--dark); border: 2px solid var(--gold);
-            min-width: 280px; max-height: 75vh; overflow-y: auto; 
-            border-radius: 8px; z-index: 3000; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            min-width: 300px; max-height: 80vh; overflow-y: auto; 
+            border-radius: 12px; z-index: 6000; box-shadow: 0 20px 60px rgba(0,0,0,0.9);
         }
-        #globalDropdown.active { display: block; }
-        .dropdown-link { display: block; padding: 12px 25px; color: var(--gold) !important; text-decoration: none; font-family: 'Cinzel'; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.1); transition: 0.3s; }
-        .dropdown-link:hover { background: rgba(212, 175, 55, 0.15); padding-left: 30px; text-shadow: 0 0 8px var(--gold); }
+        #globalDropdown.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- 3. İÇERİK KARTI --- */
-        .container { max-width: 1240px; margin: 0 auto 40px; padding: 0 20px; }
+        .dropdown-link { 
+            display: block; padding: 14px 25px; color: var(--gold) !important; 
+            text-decoration: none; font-family: 'Cinzel'; font-size: 13.5px; 
+            border-bottom: 1px solid rgba(212,175,55,0.15); transition: 0.3s; 
+        }
+        .dropdown-link:hover { background: rgba(212, 175, 55, 0.2); padding-left: 35px; color: #fff !important; }
+
+        /* --- 3. BANNER ALANI --- */
+        .banner-container { max-width: 1240px; margin: 0 auto 50px; padding: 0 20px; }
+        .banner-box { 
+            position: relative; width: 100%; height: 450px; 
+            border: 2px solid var(--gold); border-radius: 15px; overflow: hidden; 
+            box-shadow: 0 15px 40px var(--shadow);
+        }
+        .banner-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45) contrast(1.1); }
+        .banner-overlay { 
+            position: absolute; inset: 0; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; color: #fff;
+        }
+        .banner-overlay h1 { font-family: 'Cinzel'; font-size: 42px; letter-spacing: 15px; text-shadow: 4px 4px 20px #000; }
+        .banner-overlay p { font-family: 'Cinzel'; font-size: 20px; color: var(--gold); margin-top: 20px; letter-spacing: 5px; opacity: 0.9; }
+
+        /* --- 4. ANA İÇERİK KARTI (PARŞÖMEN) --- */
+        .container { max-width: 1240px; margin: 0 auto 60px; padding: 0 20px; }
         .full-card {
-            background: var(--parchment); border: 2px solid var(--gold);
-            border-radius: 12px; position: relative; margin-bottom: 40px; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            background: var(--parchment); border: 2.5px solid var(--gold);
+            border-radius: 15px; position: relative; overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.25);
         }
 
-        .corner-frame { position: absolute; width: 75px; height: 75px; z-index: 10; pointer-events: none; }
+        .corner-frame { position: absolute; width: 85px; height: 85px; z-index: 10; pointer-events: none; opacity: 0.8; }
         .t-l { top: 0; left: 0; } .t-r { top: 0; right: 0; }
         .b-l { bottom: 0; left: 0; } .b-r { bottom: 0; right: 0; }
 
-        .main-title { padding: 45px 20px; text-align: center; font-family: 'Cinzel'; background: var(--dark); color: var(--gold); border-bottom: 2px solid var(--gold); }
+        .main-title-box { padding: 50px 20px; text-align: center; font-family: 'Cinzel'; background: var(--dark); color: var(--gold); border-bottom: 2px solid var(--gold); }
+        .main-title-box h2 { font-size: 32px; letter-spacing: 8px; }
 
-        /* --- 4. ŞİİR VE GÖRSEL ALANI --- */
-        .poem-section { padding: 50px 20px; text-align: center; }
+        /* --- 5. ŞİİR VE GÖRSEL DÜZENİ (ALT ALTA) --- */
+        .content-body { padding: 70px 40px; text-align: center; }
         
-        .small-img-wrapper { margin-bottom: 40px; text-align: center; }
-        .small-img-wrapper img { 
-            width: 100%; max-width: 700px; border-radius: 8px; 
-            border: 2px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-        }
-        .img-caption { font-size: 14px; color: #666; margin-top: 12px; font-style: italic; }
+        .image-frame { margin-bottom: 60px; display: inline-block; position: relative; padding: 10px; background: #fff; border: 1px solid var(--gold); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .image-frame img { max-width: 100%; width: 800px; display: block; filter: sepia(10%); }
+        .image-label { margin-top: 15px; font-style: italic; color: #666; font-size: 15px; }
 
-        .poem-container {
-            max-width: 700px; margin: 0 auto;
-            padding: 40px; background: rgba(255, 250, 240, 0.6);
-            border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px;
+        .poem-wrapper { max-width: 700px; margin: 0 auto; text-align: center; }
+        .poem-title-small { font-family: 'Cinzel'; color: var(--v-red); font-size: 28px; margin-bottom: 10px; }
+        .poem-author { font-size: 19px; color: #555; font-style: italic; margin-bottom: 50px; }
+
+        .stanza { 
+            margin-bottom: 45px; font-size: 21px; line-height: 2.2; 
+            color: #2c3e50; font-family: 'Playfair Display', serif; 
             position: relative;
         }
-        .poem-title { font-family: 'Cinzel'; color: var(--v-red); font-size: 28px; margin-bottom: 5px; letter-spacing: 3px; }
-        .poem-author { font-style: italic; color: #555; margin-bottom: 25px; font-size: 18px; }
-        .poem-line { font-size: 19px; line-height: 2; color: #2c3e50; margin-bottom: 20px; }
-        .poem-date { font-weight: bold; margin-top: 40px; color: var(--v-red); letter-spacing: 2px; }
+        .stanza::after { content: '◈'; display: block; color: var(--gold); margin-top: 25px; font-size: 14px; opacity: 0.5; }
+        .stanza:last-of-type::after { content: ''; }
 
-        /* --- 5. FOOTER --- */
+        .final-date { 
+            margin-top: 60px; font-family: 'Cinzel'; font-weight: bold; 
+            font-size: 20px; color: var(--v-red); letter-spacing: 6px; 
+            border-top: 1px double var(--gold); padding-top: 30px; display: inline-block;
+        }
+
+        /* --- 6. FOOTER --- */
         .site-footer-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; }
         .site-footer { 
             width: 100%; max-width: 1240px; background: var(--dark); 
-            border: 2px solid var(--gold); border-radius: 15px; 
-            padding: 30px; text-align: center; color: var(--gold); margin-bottom: 40px;
+            border: 2px solid var(--gold); border-radius: 20px; 
+            padding: 40px; text-align: center; color: var(--gold); margin-bottom: 50px;
         }
+        .footer-nav-title { font-size: 14px; letter-spacing: 2px; color: #fff; opacity: 0.9; }
+        .footer-nav-subtitle { font-family: 'Cinzel'; font-size: 18px; margin-top: 5px; }
     </style>
 </head>
 <body>
@@ -105,7 +136,7 @@
                 <div class="logo-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
                 <div class="logo-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
             </div>
-            <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
+            <button class="menu-btn" id="menuBtn">KEŞFET ☰</button>
             <div id="globalDropdown">
                 <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
                 <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
@@ -125,68 +156,80 @@
         </nav>
     </div>
 
+    <div class="banner-container">
+        <div class="banner-box">
+            <img src="../assets/banner.webp" alt="Edirne Külliyesi">
+            <div class="banner-overlay">
+                <h1>GÖNÜL HİKAYELERİ</h1>
+                <p>Darüşşifa Bahçesinde Bir Aşk Efsanesi</p>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="full-card">
-            <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Frame">
-            <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Frame">
-            <img src="../assets/cornerleft.png" class="corner-frame b-l" alt="Frame">
-            <img src="../assets/cornerright.png" class="corner-frame b-r" alt="Frame">
+            <img src="../assets/cornerleftup.png" class="corner-frame t-l">
+            <img src="../assets/cornerrightup.png" class="corner-frame t-r">
+            <img src="../assets/cornerleft.png" class="corner-frame b-l">
+            <img src="../assets/cornerright.png" class="corner-frame b-r">
 
-            <h2 class="main-title">EFSANELER VE ŞİİRLER</h2>
+            <div class="main-title-box">
+                <h2>AĞAÇLA SARMAŞIK EFSANESİ</h2>
+            </div>
 
-            <div class="poem-section">
-                <div class="small-img-wrapper">
-                    <img src="../hastane/sarmasik.jpeg" alt="Darüşşifa Bahçesi">
-                    <p class="img-caption">Görsel 1: Efsaneye Konu Olan Darüşşifa Bahçesi</p>
+            <div class="content-body">
+                <div class="image-frame">
+                    <img src="../hastane/sarmasik.jpeg" alt="Efsanevi Bahçe">
+                    <p class="image-label">Darüşşifa Bahçesi'ndeki Tarihi Sarmaşık ve Ağaç</p>
                 </div>
 
-                <div class="poem-container">
-                    <h3 class="poem-title">AĞAÇLA SARMAŞIK</h3>
+                <div class="poem-wrapper">
+                    <h3 class="poem-title-small">AĞAÇLA SARMAŞIK</h3>
                     <p class="poem-author">Ahmet Kutsi Tecer</p>
-                    
-                    <div class="poem-line">
+
+                    <div class="stanza">
                         Burada, bu eski Darüşşifa’da,<br>
                         Birbirine aşık iki genç varmış.<br>
                         Kızın bulunduğu yer loş bir oda,<br>
                         Oğlanın kaldığı yer daha darmış.
                     </div>
 
-                    <div class="poem-line">
+                    <div class="stanza">
                         Her sabah avluda buluşurlarmış,<br>
                         Doluncaya kadar bir kum saati.<br>
                         Kızın etrafını periler sarmış,<br>
                         Oğlanın altında bir sihir atı.
                     </div>
 
-                    <div class="poem-line">
+                    <div class="stanza">
                         Nihayet bir zaman gelmiş, sıhhati<br>
                         Düzelmiş bu iki sevdalı gencin.<br>
                         Bir anda kaybolmuş hayatın tadı,<br>
                         Meğer saadetmiş bu onlar için.
                     </div>
 
-                    <div class="poem-line">
+                    <div class="stanza">
                         Son defa yan yana gelmiş ikisi,<br>
                         And içmiş bir daha ayrılmamaya;<br>
                         Kandırıp bu iki aşık herkesi,<br>
                         Yeniden girmişler Darüşşifa’ya.
                     </div>
 
-                    <div class="poem-line">
+                    <div class="stanza">
                         En sonda acımış onlara Hızır,<br>
                         Yaptığı bir iksir varmış kendinin,<br>
                         Uyuduğu zaman Başhekim, Nazır,<br>
                         İlacına katmış her ikisinin.
                     </div>
 
-                    <div class="poem-line">
+                    <div class="stanza">
                         İçince iksirden bu iki aşık,<br>
                         Dünyası değişmiş her iki canın,<br>
                         Kız bir ağaç olmuş, oğlan sarmaşık,<br>
                         Issız bahçesinde Darüşşifa’nın.
                     </div>
 
-                    <p class="poem-date">EDİRNE, 1957</p>
+                    <div class="final-date">EDİRNE, 1957</div>
                 </div>
             </div>
         </div>
@@ -194,9 +237,10 @@
 
     <div class="site-footer-wrapper">
         <footer class="site-footer">
-            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
-            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
-            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
+            <div class="footer-nav-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+            <div class="footer-nav-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            <div style="width: 50px; height: 1.5px; background: var(--gold); margin: 20px auto;"></div>
+            <p style="font-size: 11px; opacity: 0.6; letter-spacing: 1px;">&copy; 2026 EDİRNE - TÜM HAKLARI SAKLIDIR</p>
         </footer>
     </div>
 
