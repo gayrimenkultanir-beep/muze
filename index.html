@@ -524,35 +524,64 @@
  <!-- SAĞ KOLON -->
 </div> <div class="right">
          <div class="card">
-            <div class="c-f t-l"></div><div class="c-f t-r"></div>
-            <div class="c-f b-l"></div><div class="c-f b-r"></div>
-            <h3>ZİYARET BİLGİLERİ</h3>
-            <div class="card-content">
-                <ul>
-                    <li>Gün Ve Saatler</li>
-                    <li>Pazartesi: <span style="float:right">Kapalı</span></li>
-                    <li>Diğer Günler <span style="float:right">09:30-18:00</span></li>
-                   <li>Giriş Ücretleri</li>
-                    <li style="margin-bottom: 10px;">Yerli Ziyaretçi <span style="float:right">60 TL.</span></li>
-            <li style="margin-bottom: 10px;">Yabancı Ziyaretçi <span style="float:right">120 TL.</span></li>
-                   <li>Müze Kart Geçerli Değildir</li>
-            <li>Ücretsiz Giriş Listesi</li>
-                    <li>17 Yaş Altı</li>
-                    <li>65 Yaş Üzeri</li>
-                    <li>Akademisyenler</li>
-                    <li>Basın Kart Sahipleri</li>
-                    <li>Gaziler, Gazi ve Şehit Yakınları</li>
-                    <li>Er ve Erbaşlar</li>
-                    <li>Engelliler ve Bir Refakatçisi</li>
-                    <li>Kokart Sahibi Rehberler</li>
-                    <li>Kültür Bakanlığı Personelleri</li>
-                    <li>ICOM, ICOMOS ve UNESCO Kartı Sahipleri</li>
-                    <li>Trakya Üniversitesi Öğrenci, Personel ve Emeklileri</li>
-                    <li>TÜ Genel Sekreterlik İzni Olanlar</li>
-                </ul>
-               </div>
+    <div class="c-f t-l"></div><div class="c-f t-r"></div>
+    <div class="c-f b-l"></div><div class="c-f b-r"></div>
+    <h3>ZİYARET BİLGİLERİ</h3>
+    <div class="card-content">
+        <ul style="list-style: none; padding: 0; margin: 0; color: inherit;">
+            <li style="font-weight: bold; border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 10px; color: inherit;">Gün Ve Saatler</li>
+            <li>Pazartesi: <span style="float:right">Kapalı</span></li>
+            <li style="margin-bottom: 15px;">Diğer Günler <span style="float:right">09:30-18:00</span></li>
+            
+            <li style="font-weight: bold; border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 10px; color: inherit;">Giriş Ücretleri</li>
+            <li>Yerli Ziyaretçi <span style="float:right">60 TL.</span></li>
+            <li>Yabancı Ziyaretçi <span style="float:right">120 TL.</span></li>
+            <li style="margin-bottom: 15px; font-style: italic; font-size: 0.9em; opacity: 0.7;">*Müze Kart Geçerli Değildir</li>
+
+            <li>
+                <details style="cursor: pointer; color: inherit;">
+                    <summary style="padding: 0; font-weight: bold; outline: none; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Ücretsiz Giriş Listesi</span>
+                        <span style="font-size: 12px;">▼</span>
+                    </summary>
+                    <ul style="list-style: none; padding: 10px 0 0 10px; margin: 0; color: inherit; font-size: 0.95em; line-height: 1.6;">
+                        <li>• 17 Yaş Altı</li>
+                        <li>• 65 Yaş Üzeri</li>
+                        <li>• Akademisyenler</li>
+                        <li>• Basın Kart Sahipleri</li>
+                        <li>• Gaziler, Gazi ve Şehit Yakınları</li>
+                        <li>• Er ve Erbaşlar</li>
+                        <li>• Engelliler ve Bir Refakatçisi</li>
+                        <li>• Kokart Sahibi Rehberler</li>
+                        <li>• Kültür Bakanlığı Personelleri</li>
+                        <li>• ICOM, ICOMOS ve UNESCO Kartı Sahipleri</li>
+                        <li>• Trakya Üniversitesi Öğrenci, Personel ve Emeklileri</li>
+                        <li>• TÜ Genel Sekreterlik İzni Olanlar</li>
+                    </ul>
+                </details>
+            </li>
+        </ul>
+    </div>
 </div>
 
+<style>
+    /* Standart görünüm için summary marker'ı gizle */
+    summary::-webkit-details-marker { display: none; }
+    
+    /* Açıldığında oku döndür */
+    details[open] summary span:last-child {
+        transform: rotate(180deg);
+    }
+    
+    details ul {
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
 <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
     <div class="c-f b-l"></div><div class="c-f b-r"></div>
