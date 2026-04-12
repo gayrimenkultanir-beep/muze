@@ -169,14 +169,29 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     background: rgba(255, 255, 255, 0.8);
 }
 
-/* Görsel Alanı ve Hover Efekti */
+/* --- GÖRSEL ALANI VE HOVER EFEKTİ (3D KABARTMA UYGULANMIŞ) --- */
+
+.poem-card {
+    /* Ebeveyn konteynere perspective eklenmelidir */
+    perspective: 1000px; 
+}
+
 .card-image {
     flex: 1;
     max-width: 300px;
     min-width: 250px;
-    overflow: hidden;
+    /* overflow: hidden; kaldırıldı çünkü 3D efektini kesebilir */
     border-radius: 10px;
-    border: 1px solid rgba(212, 175, 55, 0.3);
+    /* İlk border ayarı */
+    border: 1px solid rgba(212, 175, 55, 0.4); 
+    
+    /* 3D efekti için hazırlık */
+    transform-style: preserve-3d;
+    transition: var(--transition);
+    
+    /* İlk gölge ve transform ayarları (.small-img-wrapper img'den alındı) */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.3);
+    transform: rotateX(2deg);
 }
 
 .card-image img {
@@ -184,13 +199,28 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     height: 200px;
     object-fit: cover;
     display: block;
+    border-radius: 10px; /* Kenar yarıçapı img'ye de uygulandı */
+    
+    /* Geçiş efekti ebeveyne taşındığı için buradaki transition sadeleştirildi */
     transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* GÖRSEL HOVER EFEKTİ */
-.poem-card:hover .card-image img {
-    transform: scale(1.1) rotate(1deg);
+/* --- YENİ HOVER EFEKTİ (.small-img-wrapper img:hover'dan uygulandı) --- */
+.poem-card:hover .card-image {
+    /* Ölçekleme, yukarı taşıma ve 3D rotasyonu sıfırlama */
+    transform: scale(1.04) translateY(-15px) rotateX(0deg);
+    
+    /* Daha belirgin gölge ve parlaklık */
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 20px rgba(212, 175, 55, 0.3);
+    
+    /* Kenarlık rengini değiştirme */
+    border-color: var(--gold-bright);
 }
+
+/* Eski görsel hover efekti çakışmaması için kaldırıldı veya yorum satırı yapıldı */
+/* .poem-card:hover .card-image img {
+    transform: scale(1.1) rotate(1deg);
+} */
 
 /* Metin Alanı */
 .card-text {
