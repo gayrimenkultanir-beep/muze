@@ -148,7 +148,9 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     body { padding-top: 160px; }
     .small-img-wrapper img { width: 100%; height: auto; aspect-ratio: 3/2; transform: none; }
 }
-/* Her Kıta İçin Özel Gold Kart */
+CSS
+/* --- GÖRSEL ALANI VE SIĞDIRMA EFEKTİ (3D + Tam Sığdırma) --- */
+
 .poem-card {
     display: flex;
     align-items: center;
@@ -156,19 +158,70 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     border: 1px solid var(--gold);
     border-radius: 15px;
     padding: 25px;
-    margin: 0 auto;
+    margin: 20px auto;
     max-width: 900px;
     gap: 30px;
     transition: var(--transition);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    /* 3D derinlik */
+    perspective: 1000px; 
 }
 
-.poem-card:hover {
+/* Görsel Konteynırı - Boyutu buradan kilitliyoruz (Küçültüldü) */
+.card-image {
+    /* flex: 1 yerine sabit genişlik vererek küçülmeyi zorunlu kılıyoruz */
+    flex: 0 0 280px; 
+    width: 280px;
+    height: 180px; /* Kompakt bir görünüm için yükseklik de sabitlendi */
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    
+    /* 3D Hazırlık */
+    transform-style: preserve-3d;
+    transition: var(--transition);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transform: rotateX(4deg); /* Başlangıç eğimi */
+    
+    overflow: visible; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Gerçek Resim - Konteynıra tam uyum sağlamalı */
+.card-image img {
+    /* Görsel ne boyutta olursa olsun bu alana sığar */
+    width: 100%;
+    height: 100%; 
+    
+    /* Yüklenen görselin bu alana nasıl sığacağını belirler */
+    object-fit: cover; /* Görselin en-boy oranını koruyarak kutuyu doldurur */
+    
+    display: block;
+    border-radius: 10px;
+}
+
+/* HOVER DURUMU - Önceki kabartma efekti korundu */
+.poem-card:hover .card-image {
+    /* Görseli %4 büyüt, 15px yukarı kaydır ve açıyı sıfırla */
+    transform: scale(1.04) translateY(-15px) rotateX(0deg);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.4), 0 0 15px rgba(212, 175, 55, 0.3);
     border-color: var(--gold-bright);
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-    background: rgba(255, 255, 255, 0.8);
 }
 
+/* Mobil için görseli üste al ve genişlet */
+@media (max-width: 768px) {
+    .poem-card {
+        flex-direction: column;
+        padding: 15px;
+    }
+    .card-image {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: 320px;
+        height: 200px;
+        transform: none; /* Mobilde 3D kaldırıldı, isterseniz kalabilir */
+    }
+}
 
 /* Metin Alanı */
 .card-text {
