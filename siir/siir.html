@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -147,6 +148,91 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     body { padding-top: 160px; }
     .small-img-wrapper img { width: 100%; height: auto; aspect-ratio: 3/2; transform: none; }
 }
+/* Her Kıta İçin Özel Gold Kart */
+.poem-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--gold);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 0 auto;
+    max-width: 900px;
+    gap: 30px;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.poem-card:hover {
+    border-color: var(--gold-bright);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Görsel Alanı ve Hover Efekti */
+.card-image {
+    flex: 1;
+    max-width: 300px;
+    min-width: 250px;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.card-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* GÖRSEL HOVER EFEKTİ */
+.poem-card:hover .card-image img {
+    transform: scale(1.1) rotate(1deg);
+}
+
+/* Metin Alanı */
+.card-text {
+    flex: 1;
+    min-width: 250px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #2b2b2b;
+    font-style: italic;
+}
+
+/* Kartlar Arası Ayırıcı (Sarmaşık ve Yonca) */
+.card-spacer {
+    text-align: center;
+    margin: 30px 0;
+    color: #2d5a27;
+    font-size: 24px;
+    letter-spacing: 10px;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .poem-card {
+        flex-direction: column;
+        padding: 15px;
+        text-align: center;
+    }
+    .card-image {
+        max-width: 100%;
+        width: 100%;
+    }
+    .card-text {
+        font-size: 1.1rem;
+    }
+}
+
     </style>
 </head>
 <body>
@@ -202,91 +288,104 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             <div class="poem-area">
                 
                 <div class="small-img-wrapper" style="text-align: center;">
-                 <img src="../siir/sarmasik.webp" alt="Ağaç ve Sarmaşık" style="max-width: 100%; height: auto;">
+                 <img src="../siir/kulliye.jpg" alt="Ağaç ve Sarmaşık" style="max-width: 100%; height: auto;">
             </div>
 
-<div class="content-area" style="text-align: center; padding: 20px 15px;">
-    
-    <p style="font-family: 'Cinzel', serif; color: var(--v-red); font-weight: bold; font-size: 1.1rem; margin-bottom: 40px; letter-spacing: 1px; padding: 0 10px; text-align: center;">
+<div class="content-area">
+
+    <p style="font-family: 'Cinzel', serif; color: var(--v-red); font-weight: bold; font-size: 1.1rem; margin-bottom: 50px; letter-spacing: 1px; text-align: center;">
         "Sıhhatle Başlayan, Sonsuzlukla Mühürlenen Bir Masal"
     </p>
 
-    <div style="font-family: 'Playfair Display', serif; font-size: 1.2rem; line-height: 1.8; color: #333; font-style: italic; max-width: 500px; margin: 0 auto; text-align: center;">
-        
-        <div class="poem-stanza" style="text-align: center;">
+    <div class="poem-card">
+        <div class="card-image">
+            <img src="../assets/oda.jpg" alt="Eski Oda">
+        </div>
+        <div class="card-text">
             Burada, bu eski Darüşşifa’da<br>
             Birbirine âşık iki genç varmış.<br>
             Kızın bulunduğu yer loş bir oda,<br>
             Oğlanın kaldığı yer daha darmış.
         </div>
+    </div>
 
-        <div style="color: #2d5a27; font-size: 24px; margin: 25px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <span style="opacity: 0.5;">🌿</span> ☘ <span style="opacity: 0.5;">🌿</span>
+    <div class="card-spacer">🌿 ☘ 🌿</div>
+
+    <div class="poem-card">
+        <div class="card-image">
+            <img src="../assets/perilersaat.jpg" alt="Kum Saati">
         </div>
-
-        <div class="poem-stanza" style="text-align: center;">
+        <div class="card-text">
             Her sabah avluda buluşurlarmış,<br>
             Doluncaya kadar bir kum saati,<br>
             Kızın etrafını periler sarmış,<br>
             Oğlanın altında bir sihir atı.
         </div>
+    </div>
 
-        <div style="color: #2d5a27; font-size: 24px; margin: 25px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <span style="opacity: 0.5;">🌿</span> ☘ <span style="opacity: 0.5;">🌿</span>
+    <div class="card-spacer">🌿 ☘ 🌿</div>
+
+    <div class="poem-card">
+        <div class="card-image">
+            <img src="../assets/sifa.webp" alt="Şifa">
         </div>
-
-        <div class="poem-stanza" style="text-align: center;">
+        <div class="card-text">
             Nihayet bir zaman gelmiş, sıhhati<br>
             Düzelmiş bu iki sevdalı gencin<br>
             Bir anda kaybolmuş hayatın tadı,<br>
             Meğer saadetmiş bu onlar için.
         </div>
+    </div>
 
-        <div style="color: #2d5a27; font-size: 24px; margin: 25px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <span style="opacity: 0.5;">🌿</span> ☘ <span style="opacity: 0.5;">🌿</span>
+    <div class="card-spacer">🌿 ☘ 🌿</div>
+
+    <div class="poem-card">
+        <div class="card-image">
+            <img src="../assets/bulusma.jpg" alt="Vefa">
         </div>
-
-        <div class="poem-stanza" style="text-align: center;">
+        <div class="card-text">
             Son defa yan yana gelmiş ikisi,<br>
             And içmiş bir daha ayrılmamaya;<br>
             Kandırıp bu iki âşık herkesi,<br>
             Yeniden girmişler Darüşşifa’ya.
         </div>
+    </div>
 
-        <div style="color: #2d5a27; font-size: 24px; margin: 25px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <span style="opacity: 0.5;">🌿</span> ☘ <span style="opacity: 0.5;">🌿</span>
+    <div class="card-spacer">🌿 ☘ 🌿</div>
+
+    <div class="poem-card">
+        <div class="card-image">
+            <img src="../assets/hizir.jpg" alt="Hızır">
         </div>
-
-        <div class="poem-stanza" style="text-align: center;">
+        <div class="card-text">
             En sonda acımış onlara Hızır,<br>
             Yaptığı bir iksir varmış kendinin,<br>
             Uyuduğu zaman Başhekim, Nazır<br>
             İlacına katmış her ikisinin.
         </div>
+    </div>
 
-        <div style="color: #2d5a27; font-size: 24px; margin: 25px 0; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <span style="opacity: 0.5;">🌿</span> ☘ <span style="opacity: 0.5;">🌿</span>
+    <div class="card-spacer">🌿 ☘ 🌿</div>
+
+    <div class="poem-card">
+        <div class="card-image">
+            <img src="../siir/sarmasik.jpg" alt="Ağaç ve Sarmaşık">
         </div>
-
-        <div class="poem-stanza" style="text-align: center;">
+        <div class="card-text">
             İçince iksirden bu iki âşık,<br>
             Dünyası değişmiş her iki canın,<br>
             Kız bir ağaç olmuş, oğlan sarmaşık,<br>
             Issız bahçesinde Darüşşifa’nın.
         </div>
-
-        <div style="margin: 40px auto 0 auto; font-family: 'Cinzel', serif; font-size: 1rem; color: var(--dark); font-weight: bold; padding-top: 15px; border-top: 1px solid rgba(45, 90, 39, 0.2); width: fit-content; text-align: center;">
-            AHMET KUTSİ TECER<br>
-            <span style="font-size: 0.9rem; opacity: 0.7; font-weight: normal;">1957</span>
-        </div>
     </div>
 
-    <p style="margin-top: 50px; font-family: 'Playfair Display', serif; font-size: 1.1rem; color: #2d5a27; font-style: italic; padding: 0 15px; text-align: center;">
-        "Hâlâ fısıldaşır yapraklar, eski taş duvarların gölgesinde..."
-    </p>
+    <div style="margin-top: 60px; text-align: center; font-family: 'Cinzel';">
+        <div style="width: 100px; height: 1px; background: var(--gold); margin: 20px auto;"></div>
+        <strong style="color: var(--dark); font-size: 1.2rem;">AHMET KUTSİ TECER</strong><br>
+        <span style="opacity: 0.7;">1957</span>
+    </div>
 
-</div>      
-                
+</div>                
                 <div class="card-footer" style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
             <p style="font-weight: bold; letter-spacing: 2px;">"AŞKLA YORULAN RUHLARA, SUYUN SESİNDE SAKLI ŞİFA"</p>
             <p style="font-size: 14px; margin-top: 10px;">"Taş Duvarlarda Yankılanan Aşk, Yapraklarda Yaşayan Ebedi Şifa."</p>
