@@ -169,56 +169,80 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     background: rgba(255, 255, 255, 0.8);
 }
 
-/* --- GÖRSEL ALANI VE HOVER EFEKTİ (3D VE SIĞDIRMA) --- */
+/* --- POEM CARD GÖRSEL EFEKTİ (SMALL-IMG-WRAPPER İLE AYNI) --- */
 
 .poem-card {
-    /* 3D efekti için konteyner derinliği */
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--gold);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 0 auto;
+    max-width: 900px;
+    gap: 30px;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    
+    /* 3D efekti için derinlik eklendi */
     perspective: 1000px; 
 }
 
+.poem-card:hover {
+    border-color: var(--gold-bright);
+    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+    background: rgba(255, 255, 255, 0.8);
+}
+
+/* Görsel Alanı - Small-img-wrapper efektleri uygulandı */
 .card-image {
     flex: 1;
-    /* Kartın içindeki kapladığı alan (boyutlar) */
     max-width: 300px;
     min-width: 250px;
     border-radius: 10px;
     border: 1px solid rgba(212, 175, 55, 0.4);
     
-    /* 3D hazırlık ve geçiş */
+    /* 3D Hazırlık */
     transform-style: preserve-3d;
     transition: var(--transition);
-    
-    /* 3D başlangıç duruşu */
     box-shadow: 0 15px 35px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.3);
     transform: rotateX(2deg);
     
-    /* Sığdırma için konteyner ayarları */
-    overflow: visible; /* 3D taşmaları kesmesin */
+    /* Sığdırma Ayarları */
+    overflow: visible; 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .card-image img {
-    /* Yüklenen görselin bu boyutlara sığmasını sağla */
     width: 100%;
-    height: 200px; /* Sabit yükseklik */
-    
-    /* Sığdırma Türü */
-    object-fit: cover; /* Görseli kesmeden/bozmadan sığdırır */
-    
+    height: 200px; /* Sabit yükseklik korundu */
+    object-fit: cover; /* Görseli bozmadan sığdırır */
     display: block;
     border-radius: 10px;
+    transition: var(--transition);
 }
 
-/* --- HOVER EFEKTİ (3D KABARTMA) --- */
+/* --- HOVER DURUMU: SMALL-IMG-WRAPPER EFEKTİ --- */
 .poem-card:hover .card-image {
-    /* Boyutu bozmadan yukarı kaydırma ve 3D doğrultma */
+    /* 3D Kabartma: Ölçekle, yukarı taşı ve açıyı düzelt */
     transform: scale(1.04) translateY(-15px) rotateX(0deg);
     
-    /* Parlak gold kenarlık ve derin gölge */
+    /* Parlaklık ve derin gölge */
     box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 20px rgba(212, 175, 55, 0.3);
     border-color: var(--gold-bright);
+}
+
+/* Metin Alanı */
+.card-text {
+    flex: 1;
+    min-width: 250px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #2b2b2b;
+    font-style: italic;
 }
 /* Metin Alanı */
 .card-text {
