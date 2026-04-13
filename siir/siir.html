@@ -149,144 +149,87 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     .small-img-wrapper img { width: 100%; height: auto; aspect-ratio: 3/2; transform: none; }
 }
 
-/* Her Kıta İçin Özel Gold Kart */
+/* --- POEM CARD ANA YAPI --- */
 .poem-card {
     display: flex;
     align-items: center;
+    justify-content: center;
     background: rgba(255, 255, 255, 0.5);
-    border: 1px solid var(--gold);
+    border: 2px solid var(--gold);
     border-radius: 15px;
-    padding: 25px;
-    margin: 0 auto;
-    max-width: 900px;
+    padding: 20px 40px; /* Sağa sola genişlik verildi */
+    margin: 30px auto;
+    width: 95%; /* Sayfaya yayılması için */
+    max-width: 1200px; /* Maksimum yatay genişlik */
     gap: 30px;
     transition: var(--transition);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    perspective: 1000px;
 }
 
-.poem-card:hover {
-    border-color: var(--gold-bright);
-    box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
-    background: rgba(255, 255, 255, 0.8);
-}
-
-/* --- GÖRSEL ALANI VE SIĞDIRMA EFEKTİ (3D + Tam Sığdırma) --- */
-
-.poem-card {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.5);
-    border: 1px solid var(--gold);
-    border-radius: 15px;
-    padding: 25px;
-    margin: 20px auto;
-    max-width: 900px;
-    gap: 30px;
-    transition: var(--transition);
-    /* 3D derinlik */
-    perspective: 1000px; 
-}
-
-/* Görsel Konteynırı - Boyutu buradan kilitliyoruz (Küçültüldü) */
+/* --- GÖRSEL KUTULARI (250x160 Sıkıştırma) --- */
 .card-image {
-    /* flex: 1 yerine sabit genişlik vererek küçülmeyi zorunlu kılıyoruz */
-    flex: 0 0 280px; 
-    width: 280px;
-    height: 180px; /* Kompakt bir görünüm için yükseklik de sabitlendi */
+    flex: 0 0 250px; 
+    width: 250px;
+    height: 160px;
     border-radius: 10px;
     border: 1px solid rgba(212, 175, 55, 0.4);
-    
-    /* 3D Hazırlık */
-    transform-style: preserve-3d;
+    overflow: hidden;
     transition: var(--transition);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    transform: rotateX(4deg); /* Başlangıç eğimi */
-    
-    overflow: visible; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* Gerçek Resim - Konteynıra tam uyum sağlamalı */
+.left-img { transform: rotateY(10deg); }
+.right-img { transform: rotateY(-10deg); }
+
 .card-image img {
-    /* Görsel ne boyutta olursa olsun bu alana sığar */
     width: 100%;
-    height: 100%; 
-    
-    /* Yüklenen görselin bu alana nasıl sığacağını belirler */
-    object-fit: cover; /* Görselin en-boy oranını koruyarak kutuyu doldurur */
-    
+    height: 100%;
+    object-fit: cover; /* 600x400 görseli buraya tam sığdırır */
     display: block;
-    border-radius: 10px;
 }
 
-/* HOVER DURUMU - Önceki kabartma efekti korundu */
-.poem-card:hover .card-image {
-    /* Görseli %4 büyüt, 15px yukarı kaydır ve açıyı sıfırla */
-    transform: scale(1.04) translateY(-15px) rotateX(0deg);
-    box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 20px rgba(212, 175, 55, 0.3);
-    border-color: var(--gold-bright);
-}
-
-/* Mobil için görseli üste al ve genişlet */
-@media (max-width: 768px) {
-    .poem-card {
-        flex-direction: column;
-        padding: 15px;
-    }
-    .card-image {
-        flex: 0 0 auto;
-        width: 100%;
-        max-width: 320px;
-        height: 200px;
-        transform: none; /* Mobilde 3D kaldırıldı, isterseniz kalabilir */
-    }
-}
-
-/* Metin Alanı */
+/* --- ŞİİR METNİ --- */
 .card-text {
     flex: 1;
-    min-width: 250px;
     font-family: 'Playfair Display', serif;
-    font-size: 1.2rem;
-    line-height: 1.8;
-    color: #2b2b2b;
+    font-size: 1.25rem;
+    line-height: 1.7;
+    text-align: center;
     font-style: italic;
+    color: #2b2b2b;
 }
 
-/* Kartlar Arası Ayırıcı (Sarmaşık ve Yonca) */
+/* --- SARMAŞIK / YONCA AYIRICI --- */
 .card-spacer {
-    text-align: center;
-    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
     color: #2d5a27;
     font-size: 24px;
-    letter-spacing: 10px;
-    opacity: 0.8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
+    letter-spacing: 15px;
 }
 
-/* Mobil Uyumluluk */
-@media (max-width: 768px) {
+/* --- MOBİL UYUMLULUK (Responsive) --- */
+@media (max-width: 850px) {
     .poem-card {
-        flex-direction: column;
-        padding: 15px;
-        text-align: center;
+        flex-direction: column; /* Yan yana olan yapıyı alt alta çevirir */
+        padding: 20px;
+        gap: 15px;
     }
+    
     .card-image {
-        max-width: 100%;
-        width: 100%;
+        width: 100%; /* Mobilde görsel tam genişlik olur */
+        max-width: 320px;
+        height: 180px;
+        flex: none;
+        transform: none !important; /* Mobilde 3D efekti kapatılır */
     }
+
     .card-text {
         font-size: 1.1rem;
     }
-}
-
-
-    </style>
+}}    </style>
 </head>
 <body>
 
@@ -350,8 +293,10 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
         "Sıhhatle Başlayan, Sonsuzlukla Mühürlenen Bir Masal"
     </p>
 
+  
+
     <div class="poem-card">
-        <div class="card-image">
+        <div class="card-image left-img">
             <img src="../siir/oda.jpg" alt="Eski Oda">
         </div>
         <div class="card-text">
@@ -360,12 +305,15 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             Kızın bulunduğu yer loş bir oda,<br>
             Oğlanın kaldığı yer daha darmış.
         </div>
+        <div class="card-image right-img">
+            <img src="../siir/oda.jpg" alt="Eski Oda">
+        </div>
     </div>
 
     <div class="card-spacer">🌿 ☘ 🌿</div>
 
     <div class="poem-card">
-        <div class="card-image">
+        <div class="card-image left-img">
             <img src="../assets/saat.webp" alt="Kum Saati">
         </div>
         <div class="card-text">
@@ -374,12 +322,15 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             Kızın etrafını periler sarmış,<br>
             Oğlanın altında bir sihir atı.
         </div>
+        <div class="card-image right-img">
+            <img src="../assets/saat.webp" alt="Kum Saati">
+        </div>
     </div>
 
     <div class="card-spacer">🌿 ☘ 🌿</div>
 
     <div class="poem-card">
-        <div class="card-image">
+        <div class="card-image left-img">
             <img src="../assets/sifa.webp" alt="Şifa">
         </div>
         <div class="card-text">
@@ -388,12 +339,15 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             Bir anda kaybolmuş hayatın tadı,<br>
             Meğer saadetmiş bu onlar için.
         </div>
+        <div class="card-image right-img">
+            <img src="../assets/sifa.webp" alt="Şifa">
+        </div>
     </div>
 
     <div class="card-spacer">🌿 ☘ 🌿</div>
 
     <div class="poem-card">
-        <div class="card-image">
+        <div class="card-image left-img">
             <img src="../assets/yemin.webp" alt="Vefa">
         </div>
         <div class="card-text">
@@ -402,12 +356,15 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             Kandırıp bu iki âşık herkesi,<br>
             Yeniden girmişler Darüşşifa’ya.
         </div>
+        <div class="card-image right-img">
+            <img src="../assets/yemin.webp" alt="Vefa">
+        </div>
     </div>
 
     <div class="card-spacer">🌿 ☘ 🌿</div>
 
     <div class="poem-card">
-        <div class="card-image">
+        <div class="card-image left-img">
             <img src="../assets/hizir.webp" alt="Hızır">
         </div>
         <div class="card-text">
@@ -416,12 +373,15 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             Uyuduğu zaman Başhekim, Nazır<br>
             İlacına katmış her ikisinin.
         </div>
+        <div class="card-image right-img">
+            <img src="../assets/hizir.webp" alt="Hızır">
+        </div>
     </div>
 
     <div class="card-spacer">🌿 ☘ 🌿</div>
 
     <div class="poem-card">
-        <div class="card-image">
+        <div class="card-image left-img">
             <img src="../siir/sarmasik.webp" alt="Ağaç ve Sarmaşık">
         </div>
         <div class="card-text">
@@ -430,9 +390,12 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             Kız bir ağaç olmuş, oğlan sarmaşık,<br>
             Issız bahçesinde Darüşşifa’nın.
         </div>
+        <div class="card-image right-img">
+            <img src="../siir/sarmasik.webp" alt="Ağaç ve Sarmaşık">
+        </div>
     </div>
 
-    <div style="margin-top: 60px; text-align: center; font-family: 'Cinzel';">
+     <div style="margin-top: 60px; text-align: center; font-family: 'Cinzel';">
         <div style="width: 100px; height: 1px; background: var(--gold); margin: 20px auto;"></div>
         <strong style="color: var(--dark); font-size: 1.2rem;">AHMET KUTSİ TECER</strong><br>
         <span style="opacity: 0.7;">1957</span>
