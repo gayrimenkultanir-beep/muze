@@ -230,63 +230,36 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     .card-text {
         font-size: 1.1rem;
     }
-/* Video Kapsayıcı: Metin genişliğiyle uyumlu (600px yerine %100 max-width) */
-.video-container-fixed {
-    position: relative;
-    width: 100%;
-    max-width: 800px; /* Metin alanıyla uyumlu genişlik */
-    margin: 20px auto;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+ /* --- 4. VİDEO ALANI (ORTALI VE STANDART) --- */
+       /* Video Alanı: Daha küçük ve zarif boyut */
+.video-section {
+    width: 90%;
+    max-width: 800px; /* Boyut küçültüldü (1200px -> 800px) */
+    margin: 0 auto 40px;
     border: 2px solid var(--gold);
-    line-height: 0; /* Alttaki boşluğu engeller */
+    border-radius: 12px;
+    background: #000;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 }
 
-.video-container-fixed video {
+.video-section video {
     width: 100%;
     height: auto;
     display: block;
-    cursor: pointer;
 }
 
-/* Video Üstü Kontrol Paneli */
-.video-controls-overlay {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 10px;
-    z-index: 10;
-    width: 100%;
-    justify-content: center;
-    padding: 0 15px;
+/* Mobil uyumda genişliği koru */
+@media (max-width: 768px) {
+    .video-section {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
 }
-
-.video-overlay-btn {
-    background: rgba(15, 26, 36, 0.85);
-    color: var(--gold);
-    border: 1px solid var(--gold);
-    padding: 8px 16px;
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: 0.3s;
-    backdrop-filter: blur(4px);
-    min-width: 110px;
-}
-
-.video-overlay-btn:hover {
-    background: var(--gold);
-    color: var(--dark);
-}
-
-/* Sayfadaki boşluk ayarı */
-.small-img-wrapper {
-    padding: 20px 40px; /* Kenarlara sıfır dayanmaması için yanlardan boşluk */
-}}}    </style>
+</style>
 </head>
 <body>
 
@@ -339,12 +312,13 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             <h2 class="main-title">BİR DARÜŞŞİFA EFSANESİ</h2>
 
          
-<div class="small-img-wrapper">
-    <div class="video-container-fixed" id="videoWrapper">
-        <video id="myVideo" autoplay muted loop playsinline poster="../siir/sarmasik.jpg">
-            <source src="../siir/1.webm" type="video/webm">
-            Tarayıcınız video etiketini desteklemiyor.
-        </video>
+<div class="video-section">
+    <video controls playsinline poster="../siir/sarmasik.jpg">
+        <source src="../siir/1.webm" type="video/webm">
+        Tarayıcınız video oynatmayı desteklemiyor.
+    </video>
+</div>
+
         
         <div class="video-controls-overlay">
             <button class="video-overlay-btn" id="playPauseBtn">DURDUR</button>
@@ -484,43 +458,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
         const video = document.getElementById('myVideo');
 const btn = document.getElementById('videoBtn');
 
-// Butona basınca sesi aç ve butonu güncelle
-const video = document.getElementById('myVideo');
-const playPauseBtn = document.getElementById('playPauseBtn');
-const muteBtn = document.getElementById('muteBtn');
 
-// Başlat / Durdur Fonksiyonu
-playPauseBtn.addEventListener('click', function() {
-    if (video.paused) {
-        video.play();
-        playPauseBtn.innerHTML = "DURDUR";
-    } else {
-        video.pause();
-        playPauseBtn.innerHTML = "OYNAT";
-    }
-});
-
-// Ses Aç / Kapat Fonksiyonu
-muteBtn.addEventListener('click', function() {
-    if (video.muted) {
-        video.muted = false;
-        muteBtn.innerHTML = "SESİ KAPAT";
-    } else {
-        video.muted = true;
-        muteBtn.innerHTML = "SESİ AÇ";
-    }
-});
-
-// Videonun kendisine tıklandığında da durup başlasın
-video.addEventListener('click', function() {
-    if (video.paused) {
-        video.play();
-        playPauseBtn.innerHTML = "DURDUR";
-    } else {
-        video.pause();
-        playPauseBtn.innerHTML = "OYNAT";
-    }
-});
     </script>
 </body>
 </html>
