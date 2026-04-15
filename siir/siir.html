@@ -229,6 +229,43 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     .card-text {
         font-size: 1.1rem;
     }
+/* Video için özel kapsayıcı (Görsel boyutlarıyla aynı: 600x400) */
+.video-container-fixed {
+    width: 600px;
+    height: 400px;
+    perspective: 1000px;
+    transition: var(--transition);
+}
+
+.video-container-fixed video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    transform: rotateX(2deg);
+    transition: var(--transition);
+}
+
+/* Hover Efekti (Görseldekiyle aynı) */
+.video-container-fixed:hover video {
+    transform: scale(1.04) translateY(-15px) rotateX(0deg);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 20px rgba(212, 175, 55, 0.3);
+    border-color: var(--gold-bright);
+}
+
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .video-container-fixed {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 3/2;
+    }
+    .video-container-fixed video {
+        transform: none !important;
+    }
+}
 }}    </style>
 </head>
 <body>
@@ -281,11 +318,20 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
 
             <h2 class="main-title">BİR DARÜŞŞİFA EFSANESİ</h2>
 
-            <div class="poem-area">
-                
-                <div class="small-img-wrapper" style="text-align: center;">
-                 <img src="../siir/1.webm" alt="Ağaç ve Sarmaşık" style="max-width: 100%; height: auto;">
-            </div>
+          <div class="poem-area">
+    
+    <div class="small-img-wrapper" style="text-align: center; padding-bottom: 25px;">
+        <img src="../siir/1.webm" alt="Ağaç ve Sarmaşık">
+    </div>
+
+    <div class="small-img-wrapper" style="text-align: center; padding-top: 0;">
+        <div class="video-container-fixed">
+            <video controls poster="../assets/video-kapak.jpg">
+                <source src="../siir/1.webm" type="video/webm">
+                Tarayıcınız video etiketini desteklemiyor.
+            </video>
+        </div>
+    </div>
 
 <div class="content-area">
 
