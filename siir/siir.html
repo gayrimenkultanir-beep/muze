@@ -231,33 +231,23 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
         font-size: 1.1rem;
     }
  /* --- 4. VİDEO ALANI (ORTALI VE STANDART) --- */
-       /* Video Alanı: Daha küçük ve zarif boyut */
+ /* Video Alanı: Tam Ortalı ve Şık Görünüm */
 .video-section {
     width: 90%;
-    max-width: 800px; /* Boyut küçültüldü (1200px -> 800px) */
-    margin: 0 auto 40px;
-    border: 2px solid var(--gold);
-    border-radius: 12px;
+    max-width: 600px;
+    margin: 40px auto; /* Üstten ve alttan 40px boşluk, sağ-sol otomatik (ortalama) */
+    border: 3px solid var(--gold); /* Çerçeveyi biraz belirginleştirdik */
+    border-radius: 15px;
     background: #000;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    display: block; /* Blok element olduğunu garanti et */
 }
 
 .video-section video {
     width: 100%;
     height: auto;
-    display: block;
-}
-
-/* Mobil uyumda genişliği koru */
-@media (max-width: 768px) {
-    .video-section {
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-    }
+    display: block; /* Alttaki boşlukları siler ve ortalamaya yardımcı olur */
 }
 </style>
 </head>
@@ -387,11 +377,13 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     </div>
 </div>
 
-    <footer class="site-footer">
-        <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
-        <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
-        <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
-    </footer>
+    <div class="site-footer-wrapper">
+        <footer class="site-footer">
+            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
+        </footer>
+    </div>
 
     <script>
         const menuBtn = document.getElementById('menuBtn');
