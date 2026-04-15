@@ -233,27 +233,36 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
  /* --- 4. VİDEO ALANI (ORTALI VE STANDART) --- */
 
 .video-section {
-    width: 95%;
-    max-width: 640px; /* Standart video genişliği */
-    margin: 40px auto; /* Üst-alt 40px, sağ-sol otomatik (Tam ortalar) */
+    width: 90%;
+    max-width: 640px; 
+    aspect-ratio: 16 / 9; /* Boyutun değişmesini engeller */
+    
+    /* Kart içinde ortalamayı sağlayan kısım */
+    margin: 40px auto; 
+    display: block; 
+    
     border: 3px solid var(--gold);
     border-radius: 15px;
     background: #000;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-    
-    /* Oynatıldığında boyutun zıplamasını engellemek için */
-    aspect-ratio: 16 / 9; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    z-index: 5; /* Diğer süslemelerin üzerinde kalması için */
 }
 
 .video-section video {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Videoyu alana tam oturtur, boşluk bırakmaz ve boyut değiştirmez */
+    object-fit: cover; /* Oynatınca boyutun zıplamasını engeller */
     display: block;
+}
+
+/* Mobilde videonun çok küçülmemesi için ek ayar */
+@media (max-width: 768px) {
+    .video-section {
+        width: 100%;
+        margin: 20px 0;
+    }
 }
 </style>
 </head>
