@@ -233,18 +233,19 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
  /* --- 4. VİDEO ALANI (ORTALI VE STANDART) --- */
 
 .video-section {
-    width: 90%;
-    max-width: 640px; 
-    /* 16:9 oranını koruyarak oynatınca boyutun değişmesini engeller */
-    aspect-ratio: 16 / 9; 
+    width: 90%;            /* Kartın genişliğinin %90'ı kadar olsun */
+    max-width: 640px;      /* Çok devasa olmaması için sınır */
+    aspect-ratio: 16 / 9;  /* Oynatınca boyutun değişmesini engeller */
     
-    /* Kart içerisinde yatay ortalama ve dikey boşluk */
-    margin: 40px auto; 
-    display: block; 
+    /* Kart içerisinde TAM ortalama */
+    margin: 40px auto;     
+    display: flex;         /* İçindeki videoyu dikey/yatay ortalamak için */
+    align-items: center;
+    justify-content: center;
     
     border: 3px solid var(--gold);
     border-radius: 15px;
-    background: #000;
+    background: #000;      /* Video yüklenene kadar siyah zemin */
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.4);
     position: relative;
@@ -254,19 +255,19 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
 .video-section video {
     width: 100%;
     height: 100%;
-    /* Videonun çerçeveye tam oturmasını sağlar */
-    object-fit: cover; 
+    object-fit: cover;    /* Videoyu çerçeveye sabitler, taşmaları önler */
     display: block;
 }
 
-/* Mobilde kart kenarlarına tam oturması için */
+/* Mobil cihazlarda boşlukların ayarlanması */
 @media (max-width: 768px) {
     .video-section {
-        width: 100%;
-        margin: 20px auto;
-        border-radius: 8px;
+        width: 100%;       /* Mobilde kartın kenarlarına tam yaslanır */
+        margin: 20px auto; 
+        border-radius: 10px;
     }
-}</style>
+}
+    </style>
 </head>
 <body>
 
