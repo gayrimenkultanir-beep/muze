@@ -584,8 +584,7 @@
     }
 </style>
  <!-- SAĞ KOLON -->
-</div>
-<div class="right">
+</div> <div class="right">
          <div class="card">
     <div class="c-f t-l"></div><div class="c-f t-r"></div>
     <div class="c-f b-l"></div><div class="c-f b-r"></div>
@@ -726,7 +725,7 @@
             setTimeout(() => {
                 splash.style.opacity = '0';
                 setTimeout(() => { splash.style.display = 'none'; }, 1500);
-            }, 2000);
+            }, 3000);
 
             // 2. Menü Kontrolü
             const menuBtn = document.getElementById('menuBtn');
@@ -739,9 +738,26 @@
                 if (!dropdown.contains(e.target) && e.target !== menuBtn) {
                     dropdown.classList.remove('active');
                 }
-            });
+            };
 
-           
+            // 3. Duyuru Çekme
+            fetch('duyurular/duyurular.json')
+                .then(res => res.json())
+                .then(data => {
+                    const liste = document.getElementById('ana-sayfa-duyurular');
+                    if (!liste) return;
+                    liste.innerHTML = '';
+                    const sonUc = data.sort((a, b) => new Date(b.tarih) - new Date(a.tarih)).slice(0, 3);
+                    sonUc.forEach(d => {
+                        const tarih = new Date(d.tarih).toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+                        liste.innerHTML += `
+                            <li style="display: flex; align-items: baseline; padding: 10px 0; border-bottom: 1px dashed var(--gold-soft);">
+                                <span style="font-size: 11px; color: var(--gold); font-weight: bold; min-width: 80px;">${tarih}</span>
+                                <a href="duyurular/tum-duyurular.html" style="font-size: 13px; color: #2b2b2b;">${d.baslik}</a>
+                            </li>`;
+                    });
+                }).catch(() => { document.getElementById('ana-sayfa-duyurular').innerHTML = "Duyurular yüklenemedi."; });
+        });
     </script>
 </body>
 </html>
