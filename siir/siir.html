@@ -231,23 +231,29 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
         font-size: 1.1rem;
     }
  /* --- 4. VİDEO ALANI (ORTALI VE STANDART) --- */
- /* Video Alanı: Tam Ortalı ve Şık Görünüm */
+
 .video-section {
-    width: 90%;
-    max-width: 600px;
-    margin: 40px auto; /* Üstten ve alttan 40px boşluk, sağ-sol otomatik (ortalama) */
-    border: 3px solid var(--gold); /* Çerçeveyi biraz belirginleştirdik */
+    width: 95%;
+    max-width: 640px; /* Standart video genişliği */
+    margin: 40px auto; /* Üst-alt 40px, sağ-sol otomatik (Tam ortalar) */
+    border: 3px solid var(--gold);
     border-radius: 15px;
     background: #000;
     overflow: hidden;
     box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-    display: block; /* Blok element olduğunu garanti et */
+    
+    /* Oynatıldığında boyutun zıplamasını engellemek için */
+    aspect-ratio: 16 / 9; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .video-section video {
     width: 100%;
-    height: auto;
-    display: block; /* Alttaki boşlukları siler ve ortalamaya yardımcı olur */
+    height: 100%;
+    object-fit: cover; /* Videoyu alana tam oturtur, boşluk bırakmaz ve boyut değiştirmez */
+    display: block;
 }
 </style>
 </head>
