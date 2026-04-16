@@ -1,1 +1,376 @@
-1
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan II. Bayezid Külliyesi | Dijital Şifa Yolculuğu</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            --brown-dark: #3e2723;
+            --brown-med: #5d4037;
+            --antique-white: #f4ece1;
+            --gold: #c5a059;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--antique-white);
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            font-family: 'Poppins', sans-serif;
+            color: var(--brown-dark);
+            overflow-x: hidden;
+        }
+
+        /* Ses Kontrolü */
+        #sound-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--brown-med);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        /* Ekranlar (Intro, Form, Teşekkür) */
+        .full-screen {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            max-width: 700px;
+            border: 1px solid #d7ccc8;
+        }
+
+        /* Ana İçerik Kartı */
+        #tour-main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #d7ccc8;
+            transition: opacity 0.4s;
+        }
+
+        h1, h2 { font-family: 'Playfair Display', serif; margin-top: 0; }
+        h3 { font-weight: 300; color: var(--gold); margin-top: 0; font-style: italic; }
+
+        /* İlerleme Çubuğu */
+        .progress-bar {
+            height: 4px;
+            background: #e0e0e0;
+            margin: 25px 0;
+        }
+        #progress-fill {
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.6s ease;
+        }
+
+        .narration-box {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin: 30px 0;
+            text-align: justify;
+        }
+
+        .question-container {
+            background: #efebe9;
+            padding: 20px;
+            border-left: 5px solid var(--gold);
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        /* Butonlar */
+        .btn {
+            background: var(--brown-med);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'Playfair Display', serif;
+            transition: 0.3s;
+        }
+        .btn:hover { background: var(--brown-dark); }
+        
+        .nav-btn {
+            background: transparent;
+            border: 2px solid var(--brown-med);
+            color: var(--brown-med);
+            font-weight: 600;
+        }
+        .nav-btn:hover { background: var(--brown-med); color: white; }
+
+        .tour-nav { display: flex; justify-content: space-between; margin-bottom: 40px; }
+
+        /* Galeri */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Form Elemanları */
+        textarea, input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d7ccc8;
+            margin-bottom: 15px;
+            background: #fafafa;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="antique-bg">
+
+    <div id="sound-control" onclick="toggleMute()">
+        <i id="sound-icon" class="fas fa-volume-up"></i>
+    </div>
+
+    <section id="intro-screen" class="full-screen">
+        <div class="content-box">
+            <h1>🏛️ EŞİĞE DAVET</h1>
+            <p>Zamanın durduğu, şifanın taşlara kazındığı o kutsal mekana hoş geldiniz. Rehberiniz sesimiz, pusulanız ruhunuz olsun.</p>
+            <button onclick="startTour()" class="btn">YOLCULUĞA BAŞLA</button>
+        </div>
+    </section>
+
+    <main id="tour-main" style="display: none;">
+        <div class="content-card" id="content-container">
+            <header>
+                <h2 id="main-title"></h2>
+                <h3 id="sub-title"></h3>
+                <div class="progress-bar"><div id="progress-fill"></div></div>
+            </header>
+            
+            <audio id="main-audio"></audio>
+            
+            <article id="narration-text" class="narration-box"></article>
+            
+            <div class="question-container">
+                <p id="question-text"></p>
+            </div>
+
+            <nav class="tour-nav">
+                <button id="prev-btn" class="btn nav-btn" onclick="changeStep(-1)">⬅ Geri</button>
+                <button id="next-btn" class="btn nav-btn" onclick="changeStep(1)">İleri ➡</button>
+            </nav>
+
+            <section>
+                <h4><i class="fas fa-images"></i> GALERİ</h4>
+                <div id="image-gallery" class="gallery-grid"></div>
+            </section>
+        </div>
+    </main>
+
+    <section id="guestbook" class="full-screen" style="display: none;">
+        <div class="content-box">
+            <h2>📝 GÖNÜL KÖPRÜSÜ</h2>
+            <p>Bu kadim mirasa ve çalışanlarımıza bir mesaj bırakın.</p>
+            <form id="comment-form">
+                <textarea id="comment" placeholder="Duygularınızı buraya yazabilirsiniz..." required></textarea>
+                <input type="text" id="username" placeholder="Ad Soyad (Opsiyonel)">
+                <input type="text" id="city" placeholder="Geldiğiniz Şehir">
+                <button type="submit" class="btn">GÖNDER</button>
+            </form>
+        </div>
+    </section>
+
+    <section id="thank-you" class="full-screen" style="display: none;">
+        <div class="content-box">
+            <i class="fas fa-heart" style="color: var(--gold); font-size: 3rem; margin-bottom: 20px;"></i>
+            <h3>Duygularınız Bu Şifalı Topraklara Emanet Edildi.</h3>
+            <p>Değerli katkılarınız için teşekkür ederiz. Şifanın izi ruhunuzdan hiç eksilmesin.</p>
+            <button onclick="location.reload()" class="btn">Başa Dön</button>
+        </div>
+    </section>
+
+    <script>
+        const tourData = [
+            {
+                baslik: "MEDENİYETİN MÜHRÜ",
+                altBaslik: "Büyük Avlu ve Külliyenin Ruhu",
+                ses: "audio/01_medeniyetin_muhru.mp3",
+                metin: "Biletlerinizi alıp o büyük ana kapıdan içeri süzüldüğünüz an, sizi Sultan II. Bayezid’in hayalindeki o kusursuz nizam karşılar. Burası sadece binalar topluluğu değil, insanın ruhuna, bedenine ve karnına hitap eden dev bir organizasyondur. 1484-1488 yılları arasında inşa edilen bu yapı, halka hizmetin hakka hizmet olduğu inancının taşa bürünmüş halidir.",
+                soru: "Darüşşifa’nın o vakur giriş kapısından geçerek girmeye hazır mısınız?",
+                galeri: ["img/avlu1.jpg", "img/plan.jpg"]
+            },
+            {
+                baslik: "ŞİFAYA AÇILAN KAPI",
+                altBaslik: "Darüşşifa 1. Avlu ve Sunum Odası",
+                ses: "audio/02_sifaya_acilan_kapi.mp3",
+                metin: "Şu an 1. Avlu’dasınız. Etrafınızı saran revaklar buraya eşsiz bir ritim katar. Sağ taraftaki Sunum Odası'nda, Avrupa’da ruh hastaları dışlanırken bu topraklarda nasıl su sesi ve müzikle tedavi edildiklerini göreceksiniz. Evliya Çelebi burayı 'dünya üzerinde benzeri olmayan bir şifahane' olarak anlatır.",
+                soru: "Poliklinik odalarını tek tek gezmeye hazır mısınız?",
+                galeri: ["img/darussifa.jpg", "img/sunum.jpg"]
+            },
+            {
+                baslik: "ESKİ TIBBIN İZİNDE",
+                altBaslik: "Poliklinikler ve Eczane",
+                ses: "audio/03_eski_tibbin_izinde.mp3",
+                metin: "Hekim ve Kehhal odalarında en ileri cerrahi yöntemlerini, Eczane bölümünde ise dev havanlarda dövülen kök bitkilerini ve hastalara sunulan şifalı şerbetlerin hazırlandığı o hummalı çalışmayı göreceksiniz.",
+                soru: "Meşhur 'Dar Kapı'dan geçerek 2. Avlu’ya süzülmeye hazır mısınız?",
+                galeri: ["img/eczane.jpg"]
+            },
+            {
+                baslik: "SÜKUNETİN EŞİĞİ",
+                altBaslik: "Dar Kapı ve İdari Merkez",
+                ses: "audio/04_sukunetin_esigi.mp3",
+                metin: "Bu kapı bir ses filtresidir; içeri girdiğiniz an dışarının uğultusu kesilir. Burası nizamın ve disiplinin kalbidir. Başhekim odası ve katiplerin çalışma alanları buradadır. Her şey sizi o büyük mucizeye hazırlar.",
+                soru: "Kapısında 'Ya Şafi' yazan Büyük Şifahane’ye girmeye hazır mısınız?",
+                galeri: ["img/darkapi.jpg"]
+            },
+            {
+                baslik: "SUYUN VE MUSİKİNİN MUCİZESİ",
+                altBaslik: "Büyük Şifahane (Sekizgen Yapı)",
+                ses: "audio/05_suyun_ve_musikinin_mucizesi.mp3",
+                metin: "İçeri girdiğiniz an devasa bir sekizgen yapı sizi karşılar. Şadırvandan yükselen su sesi, hastaların ruhlarını iyileştiren bir ilaçtır. Musiki Sekisi'nde icra edilen ney ve ud nağmelerini hayal edin. Burası huzurun adıdır.",
+                soru: "Hekimlerin yetiştiği Tıp Medresesi’ne yönelmeye hazır mısınız?",
+                galeri: ["img/sekizgen.jpg", "img/sadirvan.jpg"]
+            },
+            {
+                baslik: "HEKİMLERİN YETİŞTİĞİ OCAK",
+                altBaslik: "Medrese-i Etıbba",
+                ses: "audio/06_hekimlerin_yetistigi_ocak.mp3",
+                metin: "Burası dönemin en prestijli tıp fakültesidir. Öğrenci hücrelerine bakın; mum ışığında sabahlayan genç hekimlerin çalışma azmini hissedin. Burada teoriyi öğrenen talebe, yandaki şifahanede pişerdi.",
+                soru: "Külliyenin manevi kalbi Camii’ye yönelmeye hazır mısınız?",
+                galeri: ["img/medrese.jpg"]
+            },
+            {
+                baslik: "VAHDETİN KUBBESİ",
+                altBaslik: "Sultan II. Bayezid Camii",
+                ses: "audio/07_vahdetin_kubbesi.mp3",
+                metin: "Caminin taç kapısından içeri süzülün. Tek ve devasa bir kubbe... Bu, 'Vahdet'i simgeler. Tabhaneler ise uzak yollardan gelen misafirlerin sığındığı şefkatli bir limandır.",
+                soru: "Yahya Baba’nın manevi huzuruna uğramaya hazır mısınız?",
+                galeri: ["img/cami.jpg"]
+            },
+            {
+                baslik: "VEFA BAHÇESİ",
+                altBaslik: "Hazire ve Yahya Baba",
+                ses: "audio/08_vefa_bahcesi.mp3",
+                metin: "Yahya Baba, inşada çalışan işçilere yemek pişiren bereketiyle tanınan bir derviştir. Onun mezarı başında, yapıların derin bir inançtan yükseldiğini anlayacaksınız.",
+                soru: "Bereketli sofraların kalbi İmarethaneye geçmeye hazır mısınız?",
+                galeri: ["img/hazire.jpg"]
+            },
+            {
+                baslik: "BEREKETİN KAYNAĞI",
+                altBaslik: "İmarethane (Aşevi)",
+                ses: "audio/09_bereketin_kaynagi.mp3",
+                metin: "Mutfaktaki dev bakır kazanlarda kaynayan çorbaları hayal edin. Hiçbir ücret ödenmeden binlerce kişinin doyduğu bu yapı, külliyenin sönmeyen ocağıdır.",
+                soru: "Şifalı bir şerbet molasına hazır mısınız?",
+                galeri: ["img/imaret.jpg"]
+            },
+            {
+                baslik: "TARİHİN KOKUSU VE LEZZETİ",
+                altBaslik: "Şerbetevi ve Hatıralar",
+                ses: "audio/10_tarihin_kokusu_lezzeti.mp3",
+                metin: "Demirhindi şerbetiyle serinleyin. Edirnekari kutular ve şifalı esanslar arasında kaybolun. Külliyeden bir parça hatırayı yanınıza almanın tam vakti.",
+                soru: "Tunca nehrine inmeye hazır mısınız?",
+                galeri: ["img/serbet.jpg"]
+            },
+            {
+                baslik: "TUNCA’NIN ŞİFALI SESİ",
+                altBaslik: "Nehir Kıyısı ve Veda",
+                ses: "audio/11_tuncanin_sifali_sesi.mp3",
+                metin: "Arkanıza dönüp baktığınızda külliyeyi bir bütün olarak göreceksiniz. Nehrin akışı, su sesinin doğadaki yankısıdır. Bize eşlik ettiğiniz için teşekkür ederiz.",
+                soru: "Geleceğe bir iz bırakmaya hazır mısınız?",
+                galeri: ["img/tunca.jpg"]
+            }
+        ];
+
+        let currentStep = 0;
+        let isMuted = false;
+
+        function updateStep() {
+            const data = tourData[currentStep];
+            const container = document.getElementById("content-container");
+            container.style.opacity = "0";
+            
+            setTimeout(() => {
+                document.getElementById("main-title").innerText = data.baslik;
+                document.getElementById("sub-title").innerText = data.altBaslik;
+                document.getElementById("narration-text").innerText = data.metin;
+                document.getElementById("question-text").innerText = data.soru;
+                
+                const audio = document.getElementById("main-audio");
+                audio.src = data.ses;
+                audio.muted = isMuted;
+                audio.play().catch(e => console.log("Oynatma bekliyor..."));
+
+                document.getElementById("progress-fill").style.width = ((currentStep + 1) / tourData.length) * 100 + "%";
+                document.getElementById("image-gallery").innerHTML = data.galeri.map(img => `<div class="gallery-item"><img src="${img}"></div>`).join('');
+                
+                document.getElementById("prev-btn").style.visibility = currentStep === 0 ? "hidden" : "visible";
+                document.getElementById("next-btn").innerText = currentStep === tourData.length - 1 ? "Gönül Köprüsü" : "İleri";
+                
+                container.style.opacity = "1";
+            }, 400);
+        }
+
+        function startTour() {
+            document.getElementById("intro-screen").style.display = "none";
+            document.getElementById("tour-main").style.display = "block";
+            updateStep();
+        }
+
+        function changeStep(dir) {
+            if (dir === 1 && currentStep === tourData.length - 1) {
+                document.getElementById("tour-main").style.display = "none";
+                document.getElementById("guestbook").style.display = "flex";
+            } else {
+                currentStep += dir;
+                updateStep();
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.getElementById("main-audio").muted = isMuted;
+            document.getElementById("sound-icon").className = isMuted ? "fas fa-volume-mute" : "fas fa-volume-up";
+        }
+
+        document.getElementById("comment-form").onsubmit = (e) => {
+            e.preventDefault();
+            document.getElementById("guestbook").style.display = "none";
+            document.getElementById("thank-you").style.display = "flex";
+        };
+    </script>
+</body>
+</html>
