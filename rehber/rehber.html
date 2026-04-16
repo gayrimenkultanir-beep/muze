@@ -378,6 +378,60 @@
             document.getElementById("guestbook").style.display = "none";
             document.getElementById("thank-you").style.display = "flex";
         };
+        let allMessages = []; // Burası Firebase'den gelen verilerle dolacak
+let currentPage = 1;
+const messagesPerPage = 10;
+
+function displayMessages() {
+    const messageList = document.getElementById("message-list");
+    messageList.innerHTML = "";
+    
+    const startIndex = (currentPage - 1) * messagesPerPage;
+    const endIndex = startIndex + messagesPerPage;
+    const paginatedItems = allMessages.slice(startIndex, endIndex);
+
+    paginatedItems.forEach(msg => {
+        messageList.innerHTML += `
+            <div style="background: #fff; padding: 15px; border-radius: 4px; margin-bottom: 10px; border-left: 3px solid var(--gold); box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                <div style="font-weight: 600; color: var(--brown-med); font-size: 0.9rem;">${msg.name} - ${msg.city}</div>
+                <div style="font-style: italic; margin-top: 5px;">"${msg.text}"</div>
+            </div>`;
+    });
+    renderPagination();
+}
+
+function renderPagination() {
+    const controls = document.getElementById("pagination-controls");
+    const pageCount = Math.ceil(allMessages.length / messagesPerPage);
+    controls.innerHTML = "";
+
+    for (let i = 1; i <= pageCount; i++) {
+        controls.innerHTML += `
+            <button onclick="currentPage=${i}; displayMessages();" 
+                    style="padding: 5px 12px; cursor: pointer; border: 1px solid var(--brown-med); background: ${i === currentPage ? 'var(--brown-med)' : 'white'}; color: ${i === currentPage ? 'white' : 'var(--brown-med)'};">
+                ${i}
+            </button>`;
+    }
+}
+3. Kayıt Fonksiyonunu Güncelleme
+Mevcut document.getElementById("comment-form").onsubmit fonksiyonunu şu şekilde güncelle ki mesaj gönderildiğinde listeye anında eklensin:
+
+JavaScript
+document.getElementById("comment-form").onsubmit = (e) => {
+    e.preventDefault();
+    const newMsg = {
+        name: document.getElementById("username").value || "Anonim",
+        city: document.getElementById("city").value || "Belirtilmemiş",
+        text: document.getElementById("comment").value
+    };
+    
+    allMessages.unshift(newMsg); // Yeni mesajı listenin başına ekle
+    currentPage = 1;
+    displayMessages(); // Listeyi yenile
+    
+    document.getElementById("guestbook").style.display = "none";
+    document.getElementById("thank-you").style.display = "flex";
+};
     </script>
 </body>
 </html>
