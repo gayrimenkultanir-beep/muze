@@ -1,88 +1,76 @@
 let currentStep = 0;
 let isMuted = false;
 
-// Sayfa yüklendiğinde veya adım değiştiğinde içeriği güncelleyen ana fonksiyon
 function updateStep() {
     const data = tourData[currentStep];
-    const container = document.getElementById("tour-main");
+    const mainContent = document.getElementById("tour-main");
 
-    // Sayfa geçiş efekti (Opsiyonel: CSS ile fade-in/out eklenebilir)
-    container.style.opacity = 0;
-
+    // Sayfa geçiş efekti başlangıcı
+    mainContent.classList.remove("fade-in");
+    
     setTimeout(() => {
-        // Başlıklar ve Metinler
+        // Metin ve Başlık Güncellemeleri
         document.getElementById("main-title").innerText = data.baslik;
         document.getElementById("sub-title").innerText = data.altBaslik;
         document.getElementById("narration-text").innerText = data.metin;
         document.getElementById("question-text").innerText = data.soru;
 
-        // Ses Dosyası Yönetimi
+        // Progress Bar Güncelleme
+        const progress = ((currentStep + 1) / tourData.length) * 100;
+        document.getElementById("progress-fill").style.width = progress + "%";
+
+        // Ses Yönetimi (rehber/audio/ klasöründen çeker)
         const audio = document.getElementById("main-audio");
-        audio.src = data.ses;
+        audio.src = data.ses; // content.js içinde "audio/dosya.mp3" şeklinde olmalı
         audio.muted = isMuted;
+        audio.play().catch(e => console.log("Etkileşim bekleniyor..."));
 
-        // Otomatik Oynat (Tarayıcı iznine bağlı)
-        audio.play().catch(e => console.log("Otomatik ses için kullanıcı etkileşimi bekleniyor."));
-
-        // Galeri Güncelleme
+        // Galeri (rehber/img/ klasöründen çeker)
         const gallery = document.getElementById("image-gallery");
         gallery.innerHTML = data.galeri.map(img => `
             <div class="gallery-item">
-                <img src="${img}" alt="${data.baslik}">
+                <img src="${img}" alt="Külliye Görseli">
             </div>
         `).join('');
 
-        // Buton Durumları
-        document.getElementById("prev-btn").style.display = currentStep === 0 ? "none" : "inline-block";
-        
-        // Sonraki butonunun metnini güncelle (Son adımda "Deftere Yaz" yapabiliriz)
+        // Buton Kontrolleri
+        document.getElementById("prev-btn").style.visibility = currentStep === 0 ? "hidden" : "visible";
         const nextBtn = document.getElementById("next-btn");
-        if (currentStep === tourData.length - 1) {
-            nextBtn.innerText = "Gönül Köprüsü'ne İlerle ➡️";
-        } else {
-            nextBtn.innerText = "Sonraki Bölüm ➡️";
-        }
+        nextBtn.innerHTML = currentStep === tourData.length - 1 
+            ? 'Gönül Köprüsü <i class="fas fa-pen-fancy"></i>' 
+            : 'Sonraki Bölüm <i class="fas fa-chevron-right"></i>';
 
-        container.style.opacity = 1;
+        mainContent.classList.add("fade-in");
     }, 300);
 }
 
-// Turu Başlat (Intro ekranından sonra)
 function startTour() {
     document.getElementById("intro-screen").style.display = "none";
     document.getElementById("tour-main").style.display = "block";
     updateStep();
 }
 
-// İleri - Geri Fonksiyonu
 function changeStep(dir) {
     if (dir === 1 && currentStep === tourData.length - 1) {
-        // Eğer son duraktaysak ziyaretçi defterine geç
-        showGuestbook();
+        document.getElementById("tour-main").style.display = "none";
+        document.getElementById("guestbook").style.display = "flex";
     } else {
         currentStep += dir;
         updateStep();
     }
 }
 
-// Ses Açma / Kapatma
 function toggleMute() {
     isMuted = !isMuted;
-    const audio = document.getElementById("main-audio");
-    audio.muted = isMuted;
-    document.getElementById("sound-icon").innerText = isMuted ? "🔇" : "🔊";
+    document.getElementById("main-audio").muted = isMuted;
+    const icon = document.getElementById("sound-icon");
+    icon.className = isMuted ? "fas fa-volume-mute" : "fas fa-volume-up";
 }
 
-// Ziyaretçi Defteri Ekranı
-function showGuestbook() {
-    document.getElementById("tour-main").style.display = "none";
-    document.getElementById("guestbook").style.display = "block";
-}
-
-// Form Gönderimi (Firebase entegrasyonu buraya gelecek)
-document.getElementById("comment-form")?.addEventListener("submit", function(e) {
+// Form Gönderimi (Firebase entegrasyonu için hazır)
+document.getElementById("comment-form").addEventListener("submit", function(e) {
     e.preventDefault();
-    // Burada Firebase'e kayıt işlemi yapılacak
+    // Burada Firebase push işlemi yapılacak
     document.getElementById("guestbook").style.display = "none";
-    document.getElementById("thank-you").style.display = "block";
+    document.getElementById("thank-you").style.display = "flex";
 });
