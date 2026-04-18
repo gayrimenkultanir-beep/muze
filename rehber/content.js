@@ -225,26 +225,9 @@ const tourData = [
         a: "audio/24.mp3",
         g: ["img/24.jpg"]
     },
+   
     {
-        t: "🕌 25. DURAK: CAMİNİN GÖRKEMİNE DOĞRU (HAZIRLIK)",
-        s: "SON DURAK ÖNCESİ BAKIŞ",
-        m: "🌿 Geniş meydana çıktığınızda temiz havayı ciğerlerinize çekip rotamızı değiştiriyoruz. Külliyenin tüm yapılarını bir tespih tanesi gibi etrafında dizen o en heybetli yapıya yöneliyoruz.\n\n🏛️ **Meydanın taş yollarında yürürken:**\n👉 **Sağınızda:** Medrese ve Darüşşifa\n👈 **Solunuzda:** İmarethanenin göğe yükselen kubbeleri\n🎯 **Tam karşınızda:** Tüm ihtişamıyla caminin o devasa giriş kapısı\n\n🚪 Cami kapısına yaklaştıkça, mimarideki o muazzam dengeyi daha yakından hissedebilirsiniz. Bu kapıdan içeri girdiğinizde, şifahanedeki o sekizgen planın yerini; tek bir büyük kubbenin altında birleşen sonsuz bir boşluk ve huzur alacak.",
-        q: "✨ Bu devasa mabedin ruhani sessizliğine süzülmeye hazır mısınız?",
-        btnNext: "Cami İçine Giriş Yap ➡",
-        a: "audio/25.mp3",
-        g: ["img/25.jpg"]
-    },
-{
-        t: "🕌 26. DURAK: CAMİ AVLUSU",
-        s: "SÜKUNETİN VE IŞIĞIN BULUŞMASI",
-        m: "🏛️ Caminin o devasa taç kapısının önünde durup mermer işçiliğinin zarafetine kısa bir an tanıklık ettikten sonra, eşikten içeriye doğru hep birlikte süzülüyoruz. Şimdi Cami Avlusu’ndayız ve burası dışarıdaki o büyük meydandan çok daha farklı, daha mahrem ve huzurlu bir atmosfere sahip.\n\n🌿 İçeri girdiğiniz an kendinizi dört bir yanınızın sütunlarla çevrili olduğu, gökyüzünün ise tam ortada bir mücevher gibi parladığı **Şadırvanlı Avlu**’da bulursunuz:\n\n💧 **Tam Ortada:** Avlunun kalbinde yer alan zarif şadırvana bakabilirsiniz. Su sesi, caminin içindeki derin sessizliğe sizi hazırlar.\n\n🏛️ **Etrafınızda:** Avluyu çevreleyen mermer sütunlar ve kubbeler sizi bir koruma kalkanı gibi sarar.\n\n☀️ **Yukarı Baktığınızda:** Gökyüzü, kemerli revaklar arasından size bakar ve mimarinin doğayla uyumunu gösterir.",
-        q: "Asıl ibadet alanının o ağırbaşlı kapısına doğru ilerleyelim mi?",
-        btnNext: "İbadet Alanına İlerle ➡",
-        a: "audio/26.mp3",
-        g: ["img/26.jpg"]
-    },
-    {
-        t: "📜 27. DURAK: CAMİNİN İBADET ALANINA DOĞRU",
+        t: "📜 25. DURAK: CAMİNİN İBADET ALANINA DOĞRU",
         s: "RUHANİ ATMOSFERE HAZIRLIK",
         m: "🌿 Şimdi avlunun mermer zemininde ağır adımlarla yürüyerek asıl ibadet alanının girişine doğru yöneliyoruz:\n\n➡️ **Sağınızda ve Solunuzda:** Caminin iki yanına birer kanat gibi eklenmiş Tabhaneleri yeniden görüyorsunuz.\n\n🎯 **Tam Karşınızda:** İbadet mekanının ağırbaşlı giriş kapısı, hat yazıları ve ahşap işçiliğiyle sizi karşılıyor.\n\n🧭 İçeri girmeden önce ayakkabılarınızı çıkarıp yumuşak halıya ilk adımınızı attığınızda, başınızı kaldırdığınız an devasa tek bir kubbenin altında bulacaksınız kendinizi.",
         q: "✨ Işığın desenlerle dans ettiği bu ruhani dünyaya girmeye hazır mısınız?",
@@ -253,7 +236,7 @@ const tourData = [
         g: ["img/27.jpg"]
     },
     {
-        t: "🕌 28. DURAK: CAMİNİN İÇ MEKANI",
+        t: "🕌 26. DURAK: CAMİNİN İÇ MEKANI",
         s: "TEK KUBBE, SONSUZ HUZUR",
         m: "🌌 İçeriye ilk adımınızı attığınızda başınızı yukarı kaldırın. Sizi karşılayan şey, Edirne’nin gökyüzünü andıran tek ve devasa kubbesidir.\n\n🏛️ **Mimarideki Birlik:**\nDarüşşifa’daki çok parçalı yapının aksine burada her şey tek kubbe altında birleşir. Bu, Osmanlı mimarisinde **“Vahdet (Birlik)”** anlayışını simgeler. Işık huzmeleri adeta gökten inen sütunlar gibi mekânı aydınlatır.\n\n🔇 **Akustik ve Sessizlik:**\nŞifahanedeki su sesi burada yerini derin bir sükunete bırakır. Kubbe altındaki en küçük ses bile tüm mekâna yayılır.\n\n🕌 **Mihrap ve Minber:**\n• **Mihrap:** Kâbe yönünü gösterir.\n• **Minber:** Zarif taş işçiliğiyle yükselir.\n\n✨ **Işığın Dansı:**\nPencerelerden süzülen ışık hat yazılarını ve süslemeleri canlı bir tabloya dönüştürür.",
         q: "🌿 bu ruhani atmosferden yavaşça ayrılıp nehir kıyısına doğru süzülelim mi?",
@@ -262,7 +245,7 @@ const tourData = [
         g: ["img/28.jpg"]
     },
     {
-        t: "🌊 29. DURAK: VEDAYA DOĞRU – TUNCA’NIN KIYISI",
+        t: "🌊 27. DURAK: VEDAYA DOĞRU – TUNCA’NIN KIYISI",
         s: "ŞİFA ŞEHRİNE BAKIŞ",
         m: "🌿 Artık heybemizde hem şifalı tatlar hem de kıymetli hatıralar var. Şimdi külliyenin dış avlusundan ağır adımlarla çıkıp, nehrin serin esintisini tenimizde hissedeceğimiz o son noktaya, Tunca Nehri kıyısına doğru süzülüyoruz.\n\n🌅 Bu devasa şifa ve ilim şehrine, nehrin üzerinden batan güneşin ışıklarıyla veda etmeye hazır mısınız?\n\n🏛️ Şimdi bu devasa yapıları dışarıdan bir bütün olarak görmek ve Tunca Nehri’nin huzur veren kıyısına doğru süzülüp bu etkileyici geziyi bir vedayla taçlandırmak ister misiniz?\n\n🔥 İmaretin ocağından yükselen bereketli kokuları ve paylaşım ruhunu arkamızda bırakarak, bu muazzam yapılar topluluğunun nehirle kucaklaştığı noktaya yöneliyoruz.",
         q: "Vedanın ve huzurun adresine ulaşmaya hazır mısınız?",
@@ -271,7 +254,7 @@ const tourData = [
         g: ["img/29.jpg"]
     },
     {
-        t: "🌊 30. DURAK: TUNCA NEHRİ KIYISI",
+        t: "🌊 28. DURAK: TUNCA NEHRİ KIYISI",
         s: "VEDANIN VE HUZURUN ADRESİ",
         m: "🌿 Külliyenin o devasa dış avlusundan ağır adımlarla çıkıp, nehrin serin esintisini teninizde hissetmeye başladığınızda, bu geziyi zihninizde bir bütün haline getirebilirsiniz.\n\n🏛️ **Arkanıza dönüp baktığınızda:**\nSultan II. Bayezid Külliyesi’ni tüm ihtişamıyla bir bütün olarak görebilirsiniz:\n• 🏥 Darüşşifa’nın şifalı kubbeleri\n• 🎓 Tıp Medresesi’nin ilim yuvaları\n• 🕌 Caminin görkemli minareleri\n• 🍲 İmaretin dumanı tüten bacaları\n\n🌊 **Nehrin Sesi:**\nNehrin akışı, Darüşşifa’da duyduğunuz şadırvan sesinin doğadaki yankısıdır. Osmanlı hekimleri bu kıyıyı boşuna seçmemiştir; suyun dingin akışı yüzyıllarca burada şifa, huzur ve terapi olmuştur.\n\n🌉 **Tarihi Köprü:**\nBiraz ilerlediğinizde II. Bayezid Köprüsü’nü görebilirsiniz. Bu köprü yalnızca iki kıyıyı değil; ✨ **şifa ile hayatı**, ✨ **ilim ile toplumu** birbirine bağlayan bir geçittir.",
         q: "Bu eşsiz yolculuğu bizimle tamamladığınız için teşekkür ederiz. Şifa ile kalın.",
@@ -280,7 +263,7 @@ const tourData = [
         g: ["img/30.jpg"]
     },
 {
-        t: "🌊 31. DURAK: GÖNÜL KÖPRÜSÜNE DAVET",
+        t: "🌊 29. DURAK: GÖNÜL KÖPRÜSÜNE DAVET",
         s: "SİZİN İZLERİNİZ",
         m: "🏛️ Bu mimariyi adım adım gezip, geçmişin izlerine dokunduktan sonra; şimdi sözü size bırakmak istiyoruz.\n\n💭 **Hissettikleriniz, düşündükleriniz, sizi en çok etkileyen anlar…**\nBelki bir huzur, belki bir hayranlık, belki de derin bir sessizlik…\n\n📖 Bu yüzden sizler için bir **Ziyaretçi Defteri** hazırladık.\n\n🖋️ **Buraya bırakacağınız her bir cümle:**\n• 🤍 Hem bizim için çok kıymetli olacak\n• 🌍 Hem de müzemizi ziyaret edecek diğer misafirlerin bu yolculuğu nasıl deneyimleyeceklerini anlamalarına ışık tutacaktır.\n\n✨ Kalbinizden geçenleri birkaç satırla bizimle paylaşırsanız, bu gönül köprüsüne siz de bir iz bırakmış olursunuz…",
         q: "✍️ Sizi, Gönül Köprüsü sayfamızda duygularınızı paylaşmaya davet ediyoruz.",
