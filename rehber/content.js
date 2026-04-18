@@ -34,7 +34,7 @@ const tourData = [
         btnNext: "Süt Kuyusu ve Sunum Odasına Doğru ➡",
         a: "audio/03.mp3",
         g: ["img/03.jpg"]
-    }
+    },
 
 {
         t: "🏛️ 4. DURAK: DARÜŞŞİFA 1. AVLU ve SUNUM ODASI",
@@ -98,7 +98,7 @@ const tourData = [
         btnNext: "Büyük Şifahaneye Geç ➡",
         a: "audio/10.mp3",
         g: ["img/10.jpg"]
-    }
+    },
 {
         t: "🏛️ 11. DURAK: DARÜŞŞİFA",
         s: "TAŞIN SESSİZ DAVETİ",
@@ -125,7 +125,7 @@ const tourData = [
         btnNext: "Medreseye Giriş Yap ➡",
         a: "audio/13.mp3",
         g: ["img/13.jpg"]
-    }
+    },
 {
         t: "🎓 14. DURAK: MEDRESE-İ ETİBBA (1. BÖLÜM)",
         s: "HEKİMLERİN YETİŞTİĞİ OCAK",
@@ -161,7 +161,7 @@ const tourData = [
         btnNext: "Yemekhane ve Kilere Geç ➡",
         a: "audio/17.mp3",
         g: ["img/17.jpg"]
-    }
+    },
 {
         t: "🏛️ 18. DURAK: İMARETHANE",
         s: "SOSYAL DEVLETİN VE BEREKETİN MERKEZİ",
@@ -188,7 +188,7 @@ const tourData = [
         btnNext: "Şerbetevine İlerle ➡",
         a: "audio/20.mp3",
         g: ["img/20.jpg"]
-    }
+    },
 {
         t: "🏛️ 21. DURAK: 🥤 ŞERBETEVİ & 🎁 HEDİYELİK EŞYA",
         s: "GEÇMİŞİN TATLI HATIRASI",
@@ -233,7 +233,7 @@ const tourData = [
         btnNext: "Cami İçine Giriş Yap ➡",
         a: "audio/25.mp3",
         g: ["img/25.jpg"]
-    }
+    },
 {
         t: "🕌 26. DURAK: CAMİ AVLUSU",
         s: "SÜKUNETİN VE IŞIĞIN BULUŞMASI",
@@ -278,7 +278,7 @@ const tourData = [
         btnNext: "Yolculuğu Tamamla ✨",
         a: "audio/30.mp3",
         g: ["img/30.jpg"]
-    }
+    },
 {
         t: "🌊 31. DURAK: GÖNÜL KÖPRÜSÜNE DAVET",
         s: "SİZİN İZLERİNİZ",
