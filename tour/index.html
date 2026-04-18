@@ -15,26 +15,18 @@
   <button onclick="startTour()">Başla</button>
 </div>
 
-<audio autoplay loop>
-  <source src="assets/ambience.mp3">
-</audio>
+<script src="js/audio.js"></script>
 
 <script>
+
 function startTour(){
-  window.location.href = "home.html";
-}
-  function startTour(){
 
-  initAmbience();   // 🎧 burada başlar
+  // 🎧 ambience sadece kullanıcı etkileşimi sonrası başlar
+  initAmbience();
 
   window.location.href = "home.html";
-
 }
-  function setAmbienceVolume(v){
-  if(ambience){
-    ambience.volume = v;
-  }
-  }
+
 </script>
 
 </body>
