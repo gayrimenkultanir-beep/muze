@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+.hero {
+  padding: 100px 20px;
+  background: linear-gradient(135deg,#1e293b,#0f172a);
+}
+
+h1 {
+  font-size: 40px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  margin: 10px;
+  background: gold;
+  color: black;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.btn.secondary {
+  background: #334155;
+  color: white;
+}
+
+.section, .stop {
+  padding: 40px;
+}
+
+.nav a {
+  margin: 10px;
+  color: gold;
+  text-decoration: none;
+}
