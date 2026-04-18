@@ -1,17 +1,47 @@
 const params = new URLSearchParams(window.location.search);
-let id = parseInt(params.get("id"));
+let id = parseInt(params.get("id")) || 1;
 
-const ep = episodes.find(e => e.id === id);
+let currentIndex = episodes.findIndex(e => e.id === id);
 
-document.getElementById("title").innerText = ep.title;
-document.getElementById("story").innerText = ep.story;
+// 🎬 sahne yükleme
+function loadEpisode(){
 
-document.getElementById("bg").style.backgroundImage =
-  `url(${ep.image})`;
+  const ep = episodes[currentIndex];
 
-const audio = new Audio(ep.audio);
-audio.play();
+  document.body.style.opacity = 0;
 
-function next(){
-  window.location.href = `episode.html?id=${id+1}`;
+  setTimeout(() => {
+
+    document.getElementById("title").innerText = ep.title;
+    document.getElementById("story").innerText = ep.story;
+
+    document.getElementById("bg").style.backgroundImage =
+      `url(${ep.image})`;
+
+    // 🎧 ses
+    playAudio(ep.audio);
+
+    // 🖼️ carousel
+    loadCarousel(ep.images || [ep.image]);
+
+    document.body.style.opacity = 1;
+
+  }, 400);
 }
+
+// ▶️ sonraki
+function next(){
+  if(currentIndex < episodes.length - 1){
+    currentIndex++;
+    loadEpisode();
+  }
+}
+
+// 🧭 direkt git
+function goTo(i){
+  currentIndex = i;
+  loadEpisode();
+}
+
+// 🚀 başlat
+loadEpisode();
