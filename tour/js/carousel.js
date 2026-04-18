@@ -1,20 +1,35 @@
-let imgIndex = 0;
+let images = [];
+let index = 0;
 
-function loadImages(images){
+function loadCarousel(imgs){
 
-  window.images = images;
-  document.getElementById("img").src = images[0];
+  images = imgs;
+  index = 0;
 
+  render();
 }
 
-function nextImg(){
-  imgIndex++;
-  if(imgIndex >= images.length) imgIndex = 0;
-  document.getElementById("img").src = images[imgIndex];
+function render(){
+
+  const box = document.getElementById("gallery");
+
+  if(!box) return;
+
+  box.innerHTML = `
+    <button onclick="prev()">◀</button>
+
+    <img src="${images[index]}" style="width:60%; border-radius:12px;" />
+
+    <button onclick="next()">▶</button>
+  `;
 }
 
-function prevImg(){
-  imgIndex--;
-  if(imgIndex < 0) imgIndex = images.length - 1;
-  document.getElementById("img").src = images[imgIndex];
+function next(){
+  index = (index + 1) % images.length;
+  render();
+}
+
+function prev(){
+  index = (index - 1 + images.length) % images.length;
+  render();
 }
