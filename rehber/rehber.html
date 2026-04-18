@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sultan II. Bayezid Külliyesi Dijital Rehber</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <div id="sound-btn" onclick="toggleMute()">
+        <i id="vol-icon" class="fas fa-volume-up"></i>
+    </div>
+
+    <audio id="seal-sound" src="audio/muhur.mp3"></audio>
+
+    <section id="screen-intro" class="screen active-screen">
+        <div class="intro-bg-overlay"></div>
+        <div class="intro-content">
+            <h1 class="reveal-text">🏛️ EŞİĞE DAVET</h1>
+            <p class="reveal-text-sub">Zamanın ötesine, şifanın merkezine bir yolculuk...</p>
+            <div class="intro-line"></div>
+            <button onclick="startJourney()" class="main-btn intro-btn">YOLCULUĞA BAŞLA</button>
+        </div>
+    </section>
+
+    <section id="screen-tour" class="screen">
+        <div class="glass-panel">
+            <div class="progress-container"><div id="bar"></div></div>
+            <h2 id="title"></h2>
+            <span id="subtitle" class="sub-gold"></span>
+            
+            <audio id="audio-player"></audio>
+            
+            <div id="content" class="text-content"></div>
+            
+            <div class="interactive-box"><p id="question"></p></div>
+
+            <div class="nav-controls">
+                <button id="btn-prev" class="main-btn secondary-btn" onclick="navStep(-1)">⬅ Geri</button>
+                <button id="btn-next" class="main-btn" onclick="navStep(1)">İleri ➡</button>
+            </div>
+
+            <div id="gallery" class="gallery"></div>
+        </div>
+    </section>
+
+    <section id="screen-guestbook" class="screen">
+        <div class="glass-panel guestbook-panel">
+            <h2>🖋️ GÖNÜL KÖPRÜSÜ</h2>
+            <p class="guestbook-desc">"Geçmişin şifası, bugünün kelimeleriyle buluşuyor."<br>
+            Külliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri duymayı çok isteriz.</p>
+            
+            <form id="msg-form">
+                <input type="text" id="msg-user" placeholder="Adınız Soyadınız (Opsiyonel)">
+                <input type="text" id="msg-city" placeholder="Geldiğiniz Şehir (Örn: Edirne, Köln...)">
+                <textarea id="msg-text" placeholder="Ziyaretçi Notunuz: Duygularınızı buraya bırakın..." required></textarea>
+                <button type="submit" class="main-btn send-btn">
+                    <span>🌉 KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM</span>
+                    <div class="light-sweep"></div>
+                </button>
+            </form>
+
+            <div class="msg-list-section">
+                <h3>📜 SON MESAJLAR <small>(Gönül Köprüsü'nden Sesler)</small></h3>
+                <div id="list-target"></div>
+                <div id="page-target" class="pagination"></div>
+            </div>
+        </div>
+    </section>
+
+    <div id="success-popup" class="popup-overlay">
+        <div class="popup-content">
+            <div class="seal-icon">✨</div>
+            <p id="success-msg"></p>
+            <button onclick="location.reload()" class="main-btn">Şifanız Bol Olsun</button>
+        </div>
+    </div>
+
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
