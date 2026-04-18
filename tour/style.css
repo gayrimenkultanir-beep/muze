@@ -8,10 +8,10 @@ html{
 
 /* Ölçek değişkenleri */
 :root{
-  --h1: clamp(26px, 2.2vw + 18px, 40px);
-  --h2: clamp(20px, 1.6vw + 16px, 28px);
-  --body: clamp(15px, 0.9vw + 13px, 18px);
-  --small: clamp(13px, 0.6vw + 12px, 15px);
+  --h1: clamp(28px, 2.2vw + 18px, 40px);
+  --h2: clamp(26px, 1.6vw + 16px, 28px);
+  --body: clamp(20px, 0.9vw + 13px, 22px);
+  --small: clamp(18px, 0.6vw + 12px, 22px);
 }
 
 /* Başlık */
