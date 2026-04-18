@@ -1,10 +1,10 @@
 const tourData = [
-    {
-        t: "🏛️✨ EŞİĞE DAVET - SULTAN II.BAYEZİD KÜLLİYESİ SAĞLIK MÜZESİ",
-        s: "ŞİFA YOLCULUĞU",
-        m: "🏰 Sultan II. Bayezid Külliyesi’nin 500 yıllık şifa yolculuğuna hoş geldiniz.",
-        q: "Bu tarihi atmosferde ruhunuzu dinlendirmeye hazır mısınız?",
-        btnNext: "🚶‍♂️ YOLCULUĞA BAŞLA",
+   {
+        t: "🏛️ EŞİĞE DAVET | SULTAN II. BAYEZİD KÜLLİYESİ",
+        s: "✨ ŞİFA YOLCULUĞU",
+        m: "🏰 **MİRAS:** 500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿 **ARINIŞ:** Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?\n\n💧 **AKIŞ:** Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.",
+        q: "🔑 **EŞİK:** Günlük hayatın gürültüsünü dışarıda bırakın. Şimdi, zamanın ötesine geçmeye hazır mısınız?",
+        btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
         a: "audio/intro.mp3",
         g: ["img/intro.jpg"]
     },
