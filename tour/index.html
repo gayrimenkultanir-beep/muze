@@ -363,20 +363,15 @@ function goTo(id){
   o.classList.add('on');
 
   setTimeout(()=>{
-
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
 
     o.classList.remove('on');
 
-    // 🔥 GERÇEK RESET (garantili)
-    requestAnimationFrame(()=>{
-      window.scrollTo(0,0);
-    });
-
-    setTimeout(()=>{
-      window.scrollTo(0,0);
-    }, 50);
+    // 🔥 BURASI: SCROLL RESET (EKLE)
+    window.scrollTo(0,0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
 
   }, 280);
 }
