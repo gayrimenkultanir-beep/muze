@@ -77,10 +77,10 @@ function renderStop(idx){
   bb.style.display=idx===0?'none':'';
   if(idx===STOPS.length-1){
     bn.textContent='🖋 Gönül Köprüsüne Yaz →';
-    bn.onclick=()=>goTo('book');
+ 
   } else {
     bn.textContent=s.btn||'Devam Et →';
-    bn.onclick=nextStop;
+ 
   }
 
   const bodyHtml=(s.m||'')
