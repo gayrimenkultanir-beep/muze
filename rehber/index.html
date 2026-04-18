@@ -3,261 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Müze Deneyimi</title>
 
-<title>Eşiğe Davet</title>
-
-<!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-<!-- Icons -->
-<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display&display=swap" rel="stylesheet">
 
 <style>
+body{margin:0;font-family:'Playfair Display',serif;background:#f4efe7;color:#3a2f2a}
+.header{position:fixed;top:0;right:0;padding:15px;z-index:10}
+.audio-btn{font-size:22px;cursor:pointer;background:#fff;border-radius:50%;padding:12px;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+.container{max-width:900px;margin:100px auto 40px;padding:20px}
 
-/* GENEL */
-body {
-    margin: 0;
-    background: #F8F5F0;
-    font-family: 'Inter', sans-serif;
-    color: #3E2723;
-}
+/* Timeline */
+.timeline{position:fixed;left:20px;top:100px;font-size:12px}
+.timeline div{margin:10px 0;opacity:0.5}
+.timeline .active{font-weight:bold;opacity:1;color:#a67c52}
 
-/* CONTAINER */
-.container {
-    max-width: 480px;
-    margin: auto;
-    padding: 20px;
-}
+/* Slider */
+.image-slider{position:relative}
+.image-slider img{width:100%;border-radius:16px;transition:0.5s}
+.nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:#000;color:#fff;padding:10px;border-radius:50%;cursor:pointer;opacity:0.7}
+.prev{left:10px}
+.next{right:10px}
 
-/* HEADER */
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-}
+/* Card */
+.card{background:#fff;border-radius:20px;padding:25px;margin-top:20px;box-shadow:0 8px 20px rgba(0,0,0,0.08)}
+h2{font-family:'Cinzel',serif}
 
-.header h1 {
-    font-family: 'Cinzel', serif;
-    font-size: 26px;
-    margin: 0;
-}
+/* Progress */
+.progress{height:12px;background:#ddd;border-radius:20px;margin:20px 0}
+.progress-bar{height:12px;background:#a67c52;width:0;border-radius:20px;transition:0.5s}
 
-.header p {
-    margin-top: 5px;
-    font-size: 14px;
-    opacity: 0.7;
-}
+/* Buttons */
+.buttons{display:flex;justify-content:space-between;margin-top:20px}
+.btn{padding:12px 25px;border-radius:12px;background:#a67c52;color:#fff;cursor:pointer;transition:0.3s}
+.btn:hover{background:#8d6843}
 
-/* AUDIO BUTTON */
-.audio-btn {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    width: 55px;
-    height: 55px;
-    border-radius: 50%;
-    background: #3E2723;
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.audio-btn:hover {
-    background: #C8A96A;
-    transform: scale(1.1);
-}
-
-/* TIMELINE */
-.timeline {
-    position: relative;
-    margin-left: 20px;
-    padding-left: 20px;
-}
-
-.timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 3px;
-    height: 100%;
-    background: #C8A96A;
-}
-
-/* TIMELINE ITEM */
-.timeline-item {
-    position: relative;
-    margin-bottom: 25px;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeIn 0.6s forwards;
-}
-
-.timeline-item:nth-child(1){ animation-delay:0.2s;}
-.timeline-item:nth-child(2){ animation-delay:0.4s;}
-.timeline-item:nth-child(3){ animation-delay:0.6s;}
-.timeline-item:nth-child(4){ animation-delay:0.8s;}
-
-@keyframes fadeIn {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* DOT */
-.timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -11px;
-    top: 10px;
-    width: 14px;
-    height: 14px;
-    background: white;
-    border: 3px solid #C8A96A;
-    border-radius: 50%;
-}
-
-/* CARD */
-.card {
-    background: white;
-    padding: 16px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    transition: 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
-/* ICON */
-.icon {
-    color: #C8A96A;
-}
-
-/* TEXT */
-.card h3 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.card p {
-    margin: 5px 0 0;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-/* BUTTON */
-.button {
-    margin-top: 30px;
-    display: block;
-    text-align: center;
-    padding: 14px;
-    border-radius: 12px;
-    background: #3E2723;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    transition: 0.3s;
-}
-
-.button:hover {
-    background: #C8A96A;
-}
-
-/* SMALL LABEL */
-.label {
-    font-size: 13px;
-    opacity: 0.6;
-    margin-bottom: 5px;
-}
+/* Form */
+.form{display:none;margin-top:40px}
+input,textarea{width:100%;padding:12px;margin:10px 0;border-radius:10px;border:1px solid #ccc}
+.messages p{background:#fff;padding:10px;border-radius:10px;margin:5px 0}
+.pagination{margin-top:10px}
 
 </style>
 </head>
 
 <body>
 
-<!-- AUDIO -->
-<div class="audio-btn" onclick="playAudio()">
-<i data-lucide="volume-2"></i>
+<div class="header">
+  <div class="audio-btn" onclick="toggleAudio()">🔊</div>
 </div>
 
-<audio id="audio" src="ses.mp3"></audio>
+<div class="timeline" id="timeline"></div>
 
 <div class="container">
 
-<!-- HEADER -->
-<div class="header">
-<h1>🏛️ EŞİĞE DAVET</h1>
-<p>Sultan II. Bayezid Külliyesi</p>
+<div class="progress"><div class="progress-bar" id="progress"></div></div>
+
+<div class="image-slider">
+  <img id="sliderImg">
+  <div class="nav-btn prev" onclick="prevImage()">◀</div>
+  <div class="nav-btn next" onclick="nextImage()">▶</div>
 </div>
 
-<!-- TIMELINE -->
-<div class="timeline">
-
-<div class="timeline-item">
 <div class="card">
-<i data-lucide="landmark" class="icon"></i>
-<div>
-<div class="label">Şifa Yolculuğu</div>
-<h3>Miras</h3>
-<p>500 yıllık köklü bir geçmişe hoş geldiniz.</p>
-</div>
-</div>
+  <h2 id="title"></h2>
+  <p id="text"></p>
 </div>
 
-<div class="timeline-item">
-<div class="card">
-<i data-lucide="leaf" class="icon"></i>
-<div>
-<h3>Arınış</h3>
-<p>Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?</p>
-</div>
-</div>
+<div class="buttons">
+  <div class="btn" onclick="prevStop()">← Geri</div>
+  <div class="btn" onclick="nextStop()">İleri →</div>
 </div>
 
-<div class="timeline-item">
-<div class="card">
-<i data-lucide="droplet" class="icon"></i>
-<div>
-<h3>Akış</h3>
-<p>Suyun ritmini ve şifanın sessizliğini keşfedeceksiniz.</p>
-</div>
-</div>
-</div>
+<div class="form" id="form">
+  <h2>Ziyaretçi Formu</h2>
+  <input id="name" placeholder="Ad Soyad (isteğe bağlı)">
+  <input id="city" placeholder="Şehir (isteğe bağlı)">
+  <textarea id="note" placeholder="Ziyaretçi notu"></textarea>
+  <div class="btn" onclick="submitForm()">Gönder</div>
 
-<div class="timeline-item">
-<div class="card">
-<i data-lucide="key" class="icon"></i>
-<div>
-<h3>Eşik</h3>
-<p>Günlük hayatın gürültüsünü dışarıda bırakın.</p>
+  <div class="messages" id="messages"></div>
+  <div class="pagination" id="pagination"></div>
 </div>
-</div>
-</div>
-
-</div>
-
-<!-- BUTTON -->
-<a href="#" class="button">Geziye Başla</a>
 
 </div>
 
 <script>
-lucide.createIcons();
+const stops = Array.from({length:29},(_,i)=>( {
+  title:"Durak "+(i+1),
+  text:"Bu durak açıklaması "+(i+1),
+  images:[
+    `https://picsum.photos/800/400?random=${i}a`,
+    `https://picsum.photos/800/400?random=${i}b`
+  ],
+  audio:""
+}));
 
-function playAudio() {
-    document.getElementById("audio").play();
-}
-</script>
+let stop=0;
+let imgIndex=0;
+let audioOn=true;
+let audio=new Audio();
 
-</body>
-</html>
+function updateUI(){
+  let s=stops[stop];
+  document.getElementById("title").innerText=s.title;
+  document.getElementById("text").innerText=s.text;
+  document.getElementById("sliderImg").src=s.images[imgIndex];
+
+  document.getElementById("progress").style.width=((stop+1)/stops.length*100)+"%";
+
+  renderTimeline();
+
+  if(audioOn && s.audio){
+    audio.src=s.audio;
+    audio.p
