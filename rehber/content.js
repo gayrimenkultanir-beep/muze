@@ -243,7 +243,7 @@ const tourData = [
     btnNext: "Tunca Nehri'ne Doğru ➡",
     a: "audio/28.mp3",
     g: ["img/28.jpg"]
-}
+},
     {
         t: "🌊 27. DURAK: VEDAYA DOĞRU – TUNCA’NIN KIYISI",
         s: "ŞİFA ŞEHRİNE BAKIŞ",
