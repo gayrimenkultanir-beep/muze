@@ -1,6 +1,6 @@
 const tourData = [
     {
-        t: "🏛️✨ EŞİĞE DAVET – INTRO",
+        t: "🏛️✨ EŞİĞE DAVET - SULTAN II.BAYEZİD KÜLLİYESİ SAĞLIK MÜZESİ",
         s: "ŞİFA YOLCULUĞU",
         m: "🏰 Sultan II. Bayezid Külliyesi’nin 500 yıllık şifa yolculuğuna hoş geldiniz.",
         q: "Bu tarihi atmosferde ruhunuzu dinlendirmeye hazır mısınız?",
