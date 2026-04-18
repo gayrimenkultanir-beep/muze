@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sultan II. Bayezid Külliyesi - Akademik Rehber</title>
+    <title>Sultan II. Bayezid Külliyesi - Akademik Arşiv</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
         :root {
-            --sidebar-width: 320px;
+            --sidebar-width: 340px;
             --ana-renk: #2C2420;
             --altin: #B39359;
             --mermer: #FDFCF9;
             --kenarlik: rgba(179, 147, 89, 0.2);
+            --beyaz: #FFFFFF;
         }
 
         body {
@@ -26,39 +26,40 @@
             min-height: 100vh;
         }
 
-        /* --- SVG ARKA PLAN DOKUSU --- */
+        /* --- ARKA PLAN GEOMETRİSİ --- */
         .bg-pattern {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.04;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30L15 0H45L30 30ZM0 30L30 15V45L0 30ZM60 30L30 45V15L60 30ZM30 60L45 30H15L30 60Z' fill='%23B39359' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0l40 40-40 40L0 40z' fill='%23B39359' fill-opacity='1'/%3E%3C/svg%3E");
         }
 
-        /* --- SOL NAVİGASYON (FİHRİST) --- */
+        /* --- SIDEBAR (FİHRİST) --- */
         .sidebar {
             width: var(--sidebar-width);
-            background: white;
+            background: var(--beyaz);
             border-right: 1px solid var(--kenarlik);
             height: 100vh;
             position: fixed;
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-header {
-            padding: 30px;
-            border-bottom: 1px solid var(--kenarlik);
-            background: var(--mermer);
+            padding: 40px 30px;
+            border-bottom: 2px solid var(--altin);
+            background: var(--beyaz);
         }
 
         .sidebar-header h2 {
             font-family: 'Playfair Display', serif;
-            font-size: 20px;
+            font-size: 22px;
             margin: 0;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .nav-scroll {
@@ -68,168 +69,159 @@
         }
 
         .nav-item {
-            padding: 15px 30px;
+            padding: 20px 30px;
             font-size: 13px;
             cursor: pointer;
             transition: 0.3s;
-            border-bottom: 1px solid rgba(0,0,0,0.03);
+            border-bottom: 1px solid rgba(179, 147, 89, 0.1);
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: rgba(0,0,0,0.6);
+            gap: 15px;
+            color: var(--ana-renk);
+            opacity: 0.7;
         }
 
         .nav-item:hover, .nav-item.active {
-            background: var(--altin);
-            color: white;
+            background: var(--vurgu-soft, rgba(179, 147, 89, 0.1));
+            opacity: 1;
+            color: var(--altin);
         }
 
-        .nav-item .num {
-            font-family: 'Playfair Display', serif;
-            font-weight: bold;
-            opacity: 0.5;
+        .nav-item.active {
+            border-right: 4px solid var(--altin);
+            font-weight: 600;
         }
 
-        /* --- ANA İÇERİK --- */
+        /* --- İÇERİK ALANI --- */
         .main-content {
             margin-left: var(--sidebar-width);
             flex: 1;
-            padding: 60px;
+            padding: 80px 40px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
         }
 
-        /* --- AKADEMİK KART (SVG FRAME) --- */
-        .academic-frame {
-            background: white;
+        .academic-card {
+            background: var(--beyaz);
             width: 100%;
-            max-width: 800px;
-            padding: 60px;
+            max-width: 850px;
+            padding: 70px;
             position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.04);
             border: 1px solid var(--kenarlik);
         }
 
-        /* Köşe SVG Süslemeleri */
-        .frame-corner {
+        /* Gömülü SVG Köşe Süsleri */
+        .corner-svg {
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--altin);
+            width: 60px;
+            height: 60px;
+            fill: var(--altin);
+            opacity: 0.6;
         }
-        .top-left { top: 15px; left: 15px; border-right: 0; border-bottom: 0; }
-        .top-right { top: 15px; right: 15px; border-left: 0; border-bottom: 0; }
-        .bottom-left { bottom: 15px; left: 15px; border-right: 0; border-top: 0; }
-        .bottom-right { bottom: 15px; right: 15px; border-left: 0; border-top: 0; }
+        .top-l { top: 20px; left: 20px; }
+        .top-r { top: 20px; right: 20px; transform: rotate(90deg); }
+        .bot-l { bottom: 20px; left: 20px; transform: rotate(-90deg); }
+        .bot-r { bottom: 20px; right: 20px; transform: rotate(180deg); }
 
         .content-body h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 36px;
-            margin: 0 0 10px 0;
-            color: var(--ana-renk);
+            font-size: 38px;
+            margin: 0 0 15px 0;
+            line-height: 1.2;
         }
 
-        .content-body .subtitle {
+        .subtitle {
             font-family: 'Playfair Display', serif;
             font-style: italic;
             color: var(--altin);
-            font-size: 18px;
-            margin-bottom: 30px;
+            font-size: 20px;
+            margin-bottom: 40px;
             display: block;
+            border-bottom: 1px solid var(--kenarlik);
+            padding-bottom: 10px;
         }
 
-        .content-body p {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #444;
-            white-space: pre-line; /* Satır boşluklarını korur */
+        .text-content {
+            font-size: 17px;
+            line-height: 1.9;
+            color: #333;
+            text-align: justify;
         }
 
-        .media-placeholder {
-            width: 100%;
-            height: 300px;
-            background: var(--mermer);
-            margin-top: 30px;
-            border: 1px dashed var(--altin);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* --- MOBİL AYARLAR --- */
-        .mobile-menu-btn {
+        /* --- MOBİL --- */
+        .m-toggle {
             display: none;
             position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 2000;
+            top: 20px;
+            right: 20px;
             background: var(--ana-renk);
             color: white;
-            padding: 15px;
-            border-radius: 50%;
+            padding: 12px;
             border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 2000;
+            border-radius: 4px;
         }
 
         @media (max-width: 992px) {
-            .sidebar { transform: translateX(-100%); }
+            .sidebar { transform: translateX(-100%); width: 100%; }
             .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 40px 20px; }
-            .academic-frame { padding: 30px; }
-            .mobile-menu-btn { display: block; }
-            .content-body h1 { font-size: 24px; }
+            .main-content { margin-left: 0; padding: 60px 20px; }
+            .academic-card { padding: 40px 25px; }
+            .m-toggle { display: block; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-pattern"></div>
-
-    <button class="mobile-menu-btn" onclick="toggleMenu()">
-        <i data-lucide="menu"></i>
-    </button>
+    
+    <button class="m-toggle" onclick="toggleMenu()">MENÜ</button>
 
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h2>FİHRİST</h2>
+            <h2>DİJİTAL FİHRİST</h2>
         </div>
-        <div class="nav-scroll" id="nav-list">
-            </div>
+        <div class="nav-scroll" id="nav-list"></div>
     </nav>
 
     <main class="main-content">
-        <article class="academic-frame">
-            <div class="frame-corner top-left"></div>
-            <div class="frame-corner top-right"></div>
-            <div class="frame-corner bottom-left"></div>
-            <div class="frame-corner bottom-right"></div>
+        <article class="academic-card">
+            <svg class="corner-svg top-l" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
+            <svg class="corner-svg top-r" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
+            <svg class="corner-svg bot-l" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
+            <svg class="corner-svg bot-r" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
 
-            <div class="content-body" id="display-area">
-                <h1>Yolculuğa Hazır Mısınız?</h1>
-                <span class="subtitle">Sultan II. Bayezid Külliyesi Dijital Arşivi</span>
-                <p>Sol menüden bir durak seçerek akademik keşfinize başlayabilirsiniz.</p>
+            <div id="display-area" class="content-body">
+                <h1>Külliye Kayıtları</h1>
+                <span class="subtitle">Arşivi Görüntülemek İçin Bir Durak Seçin</span>
+                <p class="text-content">Sol paneldeki fihrist, Sultan II. Bayezid Külliyesi'nin 29 farklı noktasındaki akademik ve ruhani kayıtları içermektedir.</p>
             </div>
         </article>
     </main>
 
     <script>
-        // Senin tourData dizin (Kısaltılmış örnek, tümünü buraya ekleyebilirsin)
         const tourData = [
-            { t: "🏛️ GİRİŞ VE KARŞILAMA", s: "YOL AYRIMI", m: "🎟️ Şu an biletlerimizi aldık ve o ana kapıdan içeri süzülüyoruz.\n\n✨ Burası sadece binalar topluluğu değil; insanın ruhu, bedeni ve yaşamına hitap eden dev bir organizasyondur." },
-            { t: "🏛️ DARÜŞŞİFA GİRİŞİ", s: "VAKUR GİRİŞ", m: "🚪 Giriş kapımıza geldiğimizde sağ tarafta duvarda asılı panolar bizi karşılayacak.\n\n📌 Bu panolarda Külliyenin genel görünümü yer alır." },
-            { t: "🕌 CAMİ AVLUSU", s: "SÜKÛNETİN BULUŞMASI", m: "⛲ Avlunun kalbinde yer alan zarif şadırvan… Suyun sesi, taşın sessizliğine karışır." }
-            // ... Tüm 29 durağı buraya ekle
+            { t: "🏛️ 1. DURAK: GİRİŞ VE KARŞILAMA", s: "YOL AYRIMI", m: "🎟️ Şu an biletlerimizi aldık ve o ana kapıdan içeri süzülüyoruz.\n\n✨ Burası sadece binalar topluluğu değil; insanın ruhu, bedeni ve yaşamına hitap eden dev bir organizasyondur.\n\n🚶‍♂️ Şimdi ağır adımlarla yürürken, 500 yıl öncesinin havasını ciğerlerimize çekelim." },
+            { t: "🚪 2. DURAK: DARÜŞŞİFA GİRİŞİ", s: "VAKUR GİRİŞ", m: "Giriş kapımıza geldiğimizde sağ tarafta duvarda asılı panolar bizi karşılayacak.\n\n📌 Bu panolarda Külliyenin genel görünümü yer alır. Darüşşifa’nın o eşsiz mimarisi, yukarıdan bakıldığında bile insana bir düzen duygusu verir." },
+            // ... (3-22 arasındaki durakları buraya kendi verilerinle ekleyebilirsin)
+            { t: "🕌 23. DURAK: CAMİNİN GÖRKEMİNE DOĞRU", s: "RUHANİ DİNGİNLİĞE ADIM", m: "Külliyenin tüm yapılarını bir tespih tanesi gibi etrafında dizen o en heybetli yapıyı, Sultan II. Bayezid Camii’nin taç kapısını görebilirsiniz." },
+            { t: "🏛️ 24. DURAK: CAMİ AVLUSU", s: "SÜKÛNETİN VE IŞIĞIN BULUŞMASI", m: "Caminin devasa taç kapısından içeri süzüldüğünüzde, mermer işçiliğinin zarafeti sizi karşılar. Suyun sesi, taşın sessizliğine karışır." },
+            { t: "📜 25. DURAK: İBADET ALANINA DOĞRU", s: "RUHANİ ATMOSFERE HAZIRLIK", m: "Şimdi avlunun mermer zemininde ağır adımlarla yürüyerek asıl ibadet alanının girişine doğru yöneliyoruz. Devasa tek bir kubbenin altında bulacaksınız kendinizi." },
+            { t: "🕌 26. DURAK: CAMİNİN İÇ MEKANI", s: "TEK KUBBE, SONSUZ HUZUR", m: "Bu cami, Osmanlı mimarisinde 'Tek Kubbe' geleneğinin en saf örneklerinden biridir. Hünkâr Mahfili, mermer sütunlar üzerinde yükselerek zarafeti tamamlar." },
+            { t: "🌊 27. DURAK: VEDAYA DOĞRU", s: "ŞİFA ŞEHRİNE BAKIŞ", m: "Artık heybemizde hem şifalı tatlar hem de kıymetli hatıralar var. Tunca Nehri kıyısına doğru süzülüyoruz." },
+            { t: "🌊 28. DURAK: TUNCA NEHRİ KIYISI", s: "VEDANIN VE HUZURUN ADRESİ", m: "Nehrin akışı, Darüşşifa’da duyduğunuz su sesinin doğadaki yankısıdır. Köprü yalnızca iki kıyıyı değil; şifa ile hayatı birbirine bağlar." },
+            { t: "✍️ 29. DURAK: GÖNÜL KÖPRÜSÜ", s: "EBEDİ İZ", m: "Kalbinizden süzülenleri bizimle paylaşın, bu Gönül Köprüsü’nde sizin de bir ebedi iziniz kalsın…" }
         ];
 
-        // Navigasyonu Oluşturma
         const navList = document.getElementById('nav-list');
         const displayArea = document.getElementById('display-area');
 
+        // Navigasyon oluşturucu
         tourData.forEach((step, index) => {
             const div = document.createElement('div');
             div.className = 'nav-item';
-            div.innerHTML = `<span class="num">${index + 1}.</span> <span>${step.t}</span>`;
+            div.innerHTML = `<span>${step.t}</span>`;
             div.onclick = () => {
                 showStep(index);
                 if(window.innerWidth < 992) toggleMenu();
@@ -239,30 +231,24 @@
 
         function showStep(index) {
             const step = tourData[index];
-            
-            // Aktif sınıfını güncelle
             document.querySelectorAll('.nav-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
 
-            // İçeriği güncelle
-            displayArea.innerHTML = `
-                <h1>${step.t}</h1>
-                <span class="subtitle">${step.s}</span>
-                <p>${step.m}</p>
-                <div class="media-placeholder">
-                    <i data-lucide="image" style="color:var(--altin)"></i>
-                    <span style="margin-left:10px; color:var(--altin)">Görsel Arşivi: ${index + 1}.jpg</span>
-                </div>
-            `;
-            lucide.createIcons();
+            displayArea.style.opacity = 0;
+            setTimeout(() => {
+                displayArea.innerHTML = `
+                    <h1>${step.t}</h1>
+                    <span class="subtitle">${step.s}</span>
+                    <div class="text-content">${step.m.replace(/\n/g, '<br>')}</div>
+                `;
+                displayArea.style.opacity = 1;
+            }, 200);
         }
 
         function toggleMenu() {
             document.getElementById('sidebar').classList.toggle('open');
         }
-
-        lucide.createIcons();
     </script>
 </body>
 </html>
