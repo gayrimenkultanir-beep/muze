@@ -226,46 +226,55 @@ const tourData = [
         g: ["img/24.jpg"]
     },
    
-    {
-        t: "📜 25. DURAK: CAMİNİN İBADET ALANINA DOĞRU",
-        s: "RUHANİ ATMOSFERE HAZIRLIK",
-        m: "🌿 Şimdi avlunun mermer zemininde ağır adımlarla yürüyerek asıl ibadet alanının girişine doğru yöneliyoruz:\n\n➡️ **Sağınızda ve Solunuzda:** Caminin iki yanına birer kanat gibi eklenmiş Tabhaneleri yeniden görüyorsunuz.\n\n🎯 **Tam Karşınızda:** İbadet mekanının ağırbaşlı giriş kapısı, hat yazıları ve ahşap işçiliğiyle sizi karşılıyor.\n\n🧭 İçeri girmeden önce ayakkabılarınızı çıkarıp yumuşak halıya ilk adımınızı attığınızda, başınızı kaldırdığınız an devasa tek bir kubbenin altında bulacaksınız kendinizi.",
-        q: "✨ Işığın desenlerle dans ettiği bu ruhani dünyaya girmeye hazır mısınız?",
-        btnNext: "İç Mekana Giriş Yap ➡",
-        a: "audio/27.mp3",
-        g: ["img/27.jpg"]
-    },
-   {
+   /* 25. DURAK: Giriş Hazırlığı */
+{
+    t: "📜 25. DURAK: CAMİNİN İBADET ALANINA DOĞRU",
+    s: "RUHANİ ATMOSFERE HAZIRLIK",
+    m: "🌿 Şimdi avlunun mermer zemininde ağır adımlarla yürüyerek asıl ibadet alanının girişine doğru yöneliyoruz...\n\n🎯 **Tam Karşınızda:** İbadet mekanının ağırbaşlı giriş kapısı, hat yazıları ve ahşap işçiliğiyle sizi karşılıyor.\n\n🧭 İçeri girmeden önce hazırlığınızı yapıp yumuşak halıya ilk adımınızı attığınızda, başınızı kaldırdığınız an devasa tek bir kubbenin altında bulacaksınız kendinizi.",
+    q: "✨ Işığın desenlerle dans ettiği bu ruhani dünyaya girmeye hazır mısınız?",
+    btnNext: "İç Mekana Giriş Yap ➡",
+    a: "audio/27.mp3", // Ses dosyalarını klasöründeki sıraya göre kontrol etmelisin
+    g: ["img/27.jpg"]
+},
+
+/* 26. DURAK: Caminin İç Mekanı (Eksik olan maddeyi buraya yerleştirdik) */
+{
     t: "🕌 26. DURAK: CAMİNİN İÇ MEKANI",
     s: "TEK KUBBE, SONSUZ HUZUR",
-    m: "🌌 İçeriye ilk adımınızı attığınızda başınızı yukarı kaldırın. Sizi karşılayan şey, Edirne’nin gökyüzünü andıran tek ve devasa kubbesidir.\n\n🏛️ **Mimarideki Birlik ve Önemi:**\nDarüşşifa’daki çok parçalı yapının aksine burada her şey tek bir dev kubbe altında birleşir. Bu tasarım, hem ilahi birliği (Vahdet) simgeler hem de dönemin mühendislik dehasını kanıtlar. Işık huzmeleri, adeta gökten inen sütunlar gibi mekânı aydınlatır.\n\n🔇 **Akustik ve Sessizlik:**\nŞifahanedeki su sesi burada yerini derin bir sükunete bırakır. Mimarinin sağladığı özel akustik sayesinde, kubbe altındaki en küçük ses bile tüm mekâna kusursuz bir netlikle yayılır.\n\n🕌 **Sanat ve Protokol:**\n• **Mihrap ve Minber:** Kâbe yönünü gösteren mihrap ve zarif taş işçiliğiyle yükselen minber, sadelikle ihtişamın buluştuğu noktadır.\n• **Hünkâr Mahfili:** Osmanlı mimarisindeki en erken ve en zarif örneklerden biri kabul edilir. Caminin sol köşesinde, mermer sütunlar üzerinde yükselen bu yapı, külliyenin genelindeki **'sadelik içinde ihtişam'** felsefesini tamamlar.\n\n✨ **Işığın Dansı:**\nPencerelerden süzülen ışık, hat yazılarını ve süslemeleri canlı bir tabloya dönüştürür. Burası, ışığın mekana ruh kattığı bir aydınlık mabedidir.",
+    m: "🌌 İçeriye ilk adımınızı attığınızda sizi Edirne’nin gökyüzünü andıran devasa bir kubbe karşılar.\n\n🏛️ **Mimarideki Birlik ve Önemi:**\nBu cami, Osmanlı mimarisinde **'Tek Kubbe'** geleneğinin en saf örneklerinden biridir. Bu tasarım hem ilahi birliği simgeler hem de dönemin mühendislik dehasını kanıtlar.\n\n🕌 **Mihrap, Minber ve Hünkâr Mahfili:**\n• **Mihrap ve Minber:** Sadelikle ihtişamın buluştuğu mermer işçiliği.\n• **Hünkâr Mahfili:** Osmanlı mimarisindeki en erken ve en zarif örneklerden biridir. Caminin sol köşesinde, mermer sütunlar üzerinde yükselen bu yapı, külliyenin genelindeki **'sadelik içinde ihtişam'** felsefesini tamamlar.\n\n🔇 **Akustik ve Sessizlik:**\nŞifahanedeki su sesi burada yerini derin bir sükunete bırakır. Kubbe altındaki en küçük ses bile tüm mekâna yayılır.",
     q: "🌿 bu ruhani atmosferden yavaşça ayrılıp nehir kıyısına doğru süzülelim mi?",
     btnNext: "Tunca Nehri'ne Doğru ➡",
     a: "audio/28.mp3",
     g: ["img/28.jpg"]
 },
-    {
-        t: "🌊 27. DURAK: VEDAYA DOĞRU – TUNCA’NIN KIYISI",
-        s: "ŞİFA ŞEHRİNE BAKIŞ",
-        m: "🌿 Artık heybemizde hem şifalı tatlar hem de kıymetli hatıralar var. Şimdi külliyenin dış avlusundan ağır adımlarla çıkıp, nehrin serin esintisini tenimizde hissedeceğimiz o son noktaya, Tunca Nehri kıyısına doğru süzülüyoruz.\n\n🌅 Bu devasa şifa ve ilim şehrine, nehrin üzerinden batan güneşin ışıklarıyla veda etmeye hazır mısınız?\n\n🏛️ Şimdi bu devasa yapıları dışarıdan bir bütün olarak görmek ve Tunca Nehri’nin huzur veren kıyısına doğru süzülüp bu etkileyici geziyi bir vedayla taçlandırmak ister misiniz?\n\n🔥 İmaretin ocağından yükselen bereketli kokuları ve paylaşım ruhunu arkamızda bırakarak, bu muazzam yapılar topluluğunun nehirle kucaklaştığı noktaya yöneliyoruz.",
-        q: "Vedanın ve huzurun adresine ulaşmaya hazır mısınız?",
-        btnNext: "Nehir Kıyısına Ulaş ➡",
-        a: "audio/29.mp3",
-        g: ["img/29.jpg"]
-    },
-    {
-        t: "🌊 28. DURAK: TUNCA NEHRİ KIYISI",
-        s: "VEDANIN VE HUZURUN ADRESİ",
-        m: "🌿 Külliyenin o devasa dış avlusundan ağır adımlarla çıkıp, nehrin serin esintisini teninizde hissetmeye başladığınızda, bu geziyi zihninizde bir bütün haline getirebilirsiniz.\n\n🏛️ **Arkanıza dönüp baktığınızda:**\nSultan II. Bayezid Külliyesi’ni tüm ihtişamıyla bir bütün olarak görebilirsiniz:\n• 🏥 Darüşşifa’nın şifalı kubbeleri\n• 🎓 Tıp Medresesi’nin ilim yuvaları\n• 🕌 Caminin görkemli minareleri\n• 🍲 İmaretin dumanı tüten bacaları\n\n🌊 **Nehrin Sesi:**\nNehrin akışı, Darüşşifa’da duyduğunuz şadırvan sesinin doğadaki yankısıdır. Osmanlı hekimleri bu kıyıyı boşuna seçmemiştir; suyun dingin akışı yüzyıllarca burada şifa, huzur ve terapi olmuştur.\n\n🌉 **Tarihi Köprü:**\nBiraz ilerlediğinizde II. Bayezid Köprüsü’nü görebilirsiniz. Bu köprü yalnızca iki kıyıyı değil; ✨ **şifa ile hayatı**, ✨ **ilim ile toplumu** birbirine bağlayan bir geçittir.",
-        q: "Bu eşsiz yolculuğu bizimle tamamladığınız için teşekkür ederiz. Şifa ile kalın.",
-        btnNext: "Yolculuğu Tamamla ✨",
-        a: "audio/30.mp3",
-        g: ["img/30.jpg"]
-    },
+
+/* 27. DURAK: Vedaya Doğru */
+{
+    t: "🌊 27. DURAK: VEDAYA DOĞRU – TUNCA’NIN KIYISI",
+    s: "ŞİFA ŞEHRİNE BAKIŞ",
+    m: "🌿 Artık heybemizde hem şifalı tatlar hem de kıymetli hatıralar var. Külliyenin dış avlusundan çıkıp, nehrin serin esintisini tenimizde hissedeceğimiz Tunca Nehri kıyısına doğru süzülüyoruz.\n\n🌅 Bu devasa şifa ve ilim şehrine, nehrin üzerinden batan güneşin ışıklarıyla veda etmeye hazır mısınız?\n\n🔥 İmaretin ocağından yükselen paylaşım ruhunu arkamızda bırakarak, bu muazzam yapıların nehirle kucaklaştığı noktaya yöneliyoruz.",
+    q: "Vedanın ve huzurun adresine ulaşmaya hazır mısınız?",
+    btnNext: "Nehir Kıyısına Ulaş ➡",
+    a: "audio/29.mp3",
+    g: ["img/29.jpg"]
+},
+
+/* 28. DURAK: Nehir Kıyısı */
+{
+    t: "🌊 28. DURAK: TUNCA NEHRİ KIYISI",
+    s: "VEDANIN VE HUZURUN ADRESİ",
+    m: "🌿 Külliyenin o devasa dış avlusundan ağır adımlarla çıkıp, nehrin serin esintisini hissettiğinizde bu gezi zihninizde bir bütün haline gelir.\n\n🏛️ **Arkanıza dönüp baktığınızda:**\nKülliyeyi tüm ihtişamıyla görebilirsiniz: Darüşşifa’nın kubbeleri, Medrese’nin ilim yuvaları ve caminin minareleri...\n\n🌊 **Nehrin Sesi:**\nNehrin akışı, Darüşşifa’da duyduğunuz su sesinin doğadaki yankısıdır. Suyun dingin akışı yüzyıllarca burada şifa ve terapi olmuştur.\n\nBridge **Tarihi Köprü:**\nII. Bayezid Köprüsü yalnızca iki kıyıyı değil; ✨ **şifa ile hayatı**, ✨ **ilim ile toplumu** birbirine bağlayan bir geçittir.",
+    q: "Bu eşsiz yolculuğu bizimle tamamladığınız için teşekkür ederiz. Şifa ile kalın.",
+    btnNext: "Yolculuğu Tamamla ✨",
+    a: "audio/30.mp3",
+    g: ["img/30.jpg"]
+},
+
+/* 29. DURAK: Gönül Köprüsü */
 {
     t: "🌊 29. DURAK: GÖNÜL KÖPRÜSÜNE DAVET",
     s: "BU HİKAYEDE SİZİN DE İZİNİZ OLSUN",
-    m: "🏛️ Adım adım geçmişin izlerine dokunduk, bu muazzam mimariyi birlikte soluduk. Şimdi bu tarihi mekana kendi nefesinizi katma vakti.\n\n💭 **İçinizde Yankılananlar…**\nBir anlık huzur, derin bir hayranlık ya da kalbinizde kalan o sessiz tını…\n\n📖 Sizler için hazırladığımız **Ziyaretçi Defteri**, bu deneyimin manevi bir arşividir.\n\n🖋️ **Buraya bırakacağınız her cümle:**\n• 🤍 Bizim için paha biçilemez bir anı,\n• 🌍 Diğer misafirlerimiz için ise bu yolculuğu anlamlandıran bir ışık tutacaktır.\n\n✨ Kalbinizden süzülenleri bizimle paylaşın, bu Gönül Köprüsü’nde sizin de bir ebedi iziniz kalsın…",
+    m: "🏛️ Adım adım geçmişin izlerine dokunduk, bu muazzam mimariyi birlikte soluduk. Şimdi bu tarihi mekana kendi nefesinizi katma vakti.\n\n💭 **İçinizde Yankılananlar…**\nBir anlık huzur, derin bir hayranlık ya da kalbinizde kalan o sessiz tını…\n\n📖 Sizler için hazırladığımız **Ziyaretçi Defteri**, bu deneyimin manevi bir arşividir.\n\n✨ Kalbinizden süzülenleri bizimle paylaşın, bu Gönül Köprüsü’nde sizin de bir ebedi iziniz kalsın…",
     q: "✍️ Gönül Köprüsü sayfamızda duygularınızı paylaşmaya davet ediyoruz.",
     btnNext: "🖋️ GÖNÜL KÖPRÜSÜNE YAZ",
     a: "audio/31.mp3",
