@@ -3,33 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <title>Durak</title>
+
 <link rel="stylesheet" href="css/episode.css">
+
 </head>
 
 <body>
 
+<!-- 🎬 ARKA PLAN -->
 <div id="bg"></div>
 
+<!-- 🎭 ANA İÇERİK -->
 <div id="content">
   <h1 id="title"></h1>
   <p id="story"></p>
 
+  <!-- 🖼️ CAROUSEL -->
   <div id="gallery"></div>
 
   <button onclick="next()">Sonraki</button>
 </div>
+
+<!-- 🧠 AI PANEL -->
 <div id="aiBox">
   <input id="q" placeholder="Rehbere sor..." />
   <button onclick="ask()">Sor</button>
   <p id="a"></p>
 </div>
-  function setAmbienceVolume(v){
-  if(ambience){
-    ambience.volume = v;
-  }
-}
+
+<!-- 📦 SCRIPTLER (SIRALI OLMALI) -->
 <script src="data/episodes.js"></script>
-<script src="js/episode.js"></script>
+
+<script src="js/audio.js"></script>     <!-- 🎧 -->
+<script src="js/carousel.js"></script>  <!-- 🖼️ -->
+<script src="js/ai.js"></script>        <!-- 🧠 -->
+<script src="js/episode.js"></script>   <!-- 🎬 -->
 
 </body>
 </html>
