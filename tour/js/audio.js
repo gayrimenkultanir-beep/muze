@@ -1,44 +1,8 @@
-// 🎧 GLOBAL STATE
 let currentAudio = null;
 let ambience = null;
 let fadeInterval = null;
-let userInteracted = false;
 
-// 🟢 KULLANICI ETKİLEŞİMİ (AUTOPLAY FIX)
-function enableAudioOnFirstInteraction(){
-
-  if(userInteracted) return;
-
-  const unlock = () => {
-    userInteracted = true;
-
-    if(ambience){
-      ambience.play().catch(()=>{});
-    }
-
-    document.removeEventListener("click", unlock);
-  };
-
-  document.addEventListener("click", unlock);
-}
-
-// 🌿 AMBIENCE BAŞLAT
-function initAmbience(){
-
-  if(ambience) return;
-
-  ambience = new Audio("/tour/assets/ambience.mp3");
-  ambience.loop = true;
-  ambience.volume = 0.3;
-
-  ambience.play().catch(() => {
-    console.log("Autoplay bekleniyor...");
-  });
-
-  enableAudioOnFirstInteraction();
-}
-
-// 🎬 SAHNE SESİ (CROSSFADE)
+// 🎬 sahne sesi
 function playAudio(src){
 
   const next = new Audio(src);
@@ -48,10 +12,7 @@ function playAudio(src){
 
   let t = 0;
 
-  // eski fade varsa durdur
-  if(fadeInterval){
-    clearInterval(fadeInterval);
-  }
+  if(fadeInterval) clearInterval(fadeInterval);
 
   fadeInterval = setInterval(() => {
 
@@ -64,11 +25,7 @@ function playAudio(src){
     next.volume = Math.min(1, t);
 
     if(t >= 1){
-
-      if(currentAudio){
-        currentAudio.pause();
-      }
-
+      if(currentAudio) currentAudio.pause();
       currentAudio = next;
       clearInterval(fadeInterval);
     }
@@ -76,37 +33,14 @@ function playAudio(src){
   }, 50);
 }
 
-// 🔊 AMBIENCE SES AYARI
-function setAmbienceVolume(v){
-  if(ambience){
-    ambience.volume = v;
-  }
-}
+// 🌿 ambience
+function initAmbience(){
 
-// 🔊 SAHNE SES AYARI
-function setSceneVolume(v){
-  if(currentAudio){
-    currentAudio.volume = v;
-  }
-}
+  if(ambience) return;
 
-// 🔇 TÜM SESİ DURDUR
-function stopAllAudio(){
+  ambience = new Audio("/tour/assets/ambience.mp3");
+  ambience.loop = true;
+  ambience.volume = 0.3;
 
-  if(currentAudio){
-    currentAudio.pause();
-  }
-
-  if(ambience){
-    ambience.pause();
-  }
-}
-
-// 🔁 RESET (tur baştan başlarsa)
-function resetAudio(){
-
-  stopAllAudio();
-
-  currentAudio = null;
-  ambience = null;
+  ambience.play().catch(()=>{});
 }
