@@ -1,3 +1,4 @@
+const db = firebase.firestore();
 let currentStep = 0;
 let isMuted = false;
 
