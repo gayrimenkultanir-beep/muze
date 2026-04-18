@@ -56,21 +56,18 @@
             <h2 style="font-family: 'Playfair Display';">🖋️ GÖNÜL KÖPRÜSÜ: ZİYARETÇİ DEFTERİ</h2>
             <p class="guestbook-desc">
                 "Geçmişin şifası, bugünün kelimeleriyle buluşuyor."<br><br>
-                Külliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri duymayı çok isteriz. İster bir cümle, ister uzun bir hatıra... Kelimeleriniz bu köprünün birer taşı olacak.
+                Külliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri duymayı çok isteriz. Kelimeleriniz bu köprünün birer taşı olacak.
             </p>
             
-            <form id="msg-form" onsubmit="handleMessageSubmit(event)">
-               <input type="text" id="guest-name" placeholder="Adınız Soyadınız">
-
-<input type="text" id="guest-city" placeholder="Geldiğiniz Şehir">
-
-<textarea id="guest-text" placeholder="Duygularınızı buraya bırakın..."></textarea>
-
-<button class="send-btn" onclick="sendMessage()">KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM</button>
-
-<div id="list-target"></div>
+            <div id="msg-form">
+                <input type="text" id="guest-name" placeholder="Adınız Soyadınız">
+                <input type="text" id="guest-city" placeholder="Geldiğiniz Şehir">
+                <textarea id="guest-text" placeholder="Duygularınızı buraya bırakın..."></textarea>
+                
+                <button class="send-btn" onclick="sendMessage()">
+                    KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM
                 </button>
-            </form>
+            </div>
 
             <div class="msg-list-section">
                 <h3>📜 SON MESAJLAR <small>(Gönül Köprüsü'nden Sesler)</small></h3>
