@@ -3,198 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eşiğe Davet | Sultan II. Bayezid Külliyesi</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Sultan II. Bayezid Külliyesi Rehberi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-paper: #F2EBE1;
-            --text-dark: #3E342B;
+            --bg-paper: #F4EFE6;
+            --text-dark: #2C2420;
             --gold: #B39359;
             --gold-light: rgba(179, 147, 89, 0.2);
-            --card-bg: rgba(255, 255, 255, 0.65);
+            --accent: #4A3F35;
         }
 
         body {
             background-color: var(--bg-paper);
-            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sabit Görsel Alanı */
+        .sticky-hero {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 280px;
+            z-index: 100;
+            background-color: var(--bg-paper);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .sticky-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Ana İçerik Yapısı */
+        .main-container {
             display: flex;
-            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
             min-height: 100vh;
         }
 
-        .container {
-            width: 100%;
-            max-width: 550px;
-            padding: 40px 20px;
+        /* --- AKTİF ZAMAN ÇİZELGESİ (SOL) --- */
+        .timeline-wrapper {
+            width: 60px;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* --- ÜST HEADER --- */
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .audio-btn {
+        /* Arka plandaki sönük çizgi */
+        .timeline-bg-line {
             position: absolute;
-            top: 0; right: 0;
-            width: 55px; height: 55px;
-            background: linear-gradient(145deg, #4a3f35, #2c2420);
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            border: 2px solid var(--gold);
-            cursor: pointer;
-            transition: 0.3s;
-            z-index: 10;
+            top: 0; bottom: 0;
+            width: 4px;
+            background: var(--gold-light);
+            z-index: 1;
         }
 
-        .audio-btn.playing {
-            box-shadow: 0 0 15px var(--gold);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-        header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 26px;
-            letter-spacing: 1px;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        header p {
-            font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            margin-top: 5px;
-            opacity: 0.7;
-        }
-
-        /* --- GÖRSEL --- */
-        .hero-img-box {
-            width: 100%;
-            height: 280px;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid var(--gold);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* --- TIMELINE VE KART --- */
-        .timeline-container {
-            position: relative;
-            padding-left: 50px;
-            border-left: 2px solid var(--gold);
-            margin-left: 10px;
-        }
-
-        .timeline-marker {
+        /* İlerleyen renkli çizgi */
+        .timeline-progress-line {
             position: absolute;
-            left: -11px;
-            width: 20px; height: 20px;
+            top: 0;
+            width: 4px;
             background: var(--gold);
+            z-index: 2;
+            height: 0%; /* JS ile artacak */
+            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* SVG İkon Kutuları */
+        .icon-node {
+            width: 44px;
+            height: 44px;
+            background: var(--bg-paper);
+            border: 2px solid var(--gold-light);
             border-radius: 50%;
-            border: 4px solid var(--bg-paper);
+            margin-bottom: 25px; /* Duraklar arası mesafe */
+            z-index: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.4s;
         }
 
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--gold-light);
-            border-radius: 20px;
+        .icon-node.active {
+            border-color: var(--gold);
+            background: white;
+            box-shadow: 0 0 15px var(--gold-light);
+            transform: scale(1.1);
+        }
+
+        .icon-node svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--gold-light);
+            fill: none;
+            stroke-width: 2;
+            transition: 0.4s;
+        }
+
+        .icon-node.active svg {
+            stroke: var(--gold);
+        }
+
+        /* --- İÇERİK KARTI (SAĞ) --- */
+        .content-area {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .info-card {
+            background: white;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            margin-bottom: 20px;
+            border-radius: 15px;
+            border: 1px solid var(--gold-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 300px; /* Görselin altında durması için */
         }
 
-        .card .subtitle {
-            font-size: 13px;
-            color: var(--gold);
-            font-weight: 600;
-            letter-spacing: 2px;
-            display: block;
-            margin-bottom: 15px;
-        }
+        h2 { font-family: 'Playfair Display', serif; margin: 10px 0; font-size: 20px; }
+        .tag { color: var(--gold); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.5px; }
+        p { font-size: 14px; line-height: 1.6; color: #555; }
 
-        .card .description {
-            font-size: 15px;
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-
-        .card .question {
-            background: rgba(179, 147, 89, 0.08);
-            padding: 15px;
-            border-left: 3px solid var(--gold);
-            font-style: italic;
-            font-size: 14px;
-        }
-
-        /* --- BUTON --- */
         .btn-next {
             width: 100%;
-            background: var(--text-dark);
+            padding: 15px;
+            background: var(--accent);
             color: white;
             border: none;
-            padding: 18px;
-            border-radius: 12px;
-            font-family: 'Montserrat';
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 14px;
             cursor: pointer;
-            transition: 0.3s;
-            letter-spacing: 1px;
-        }
-
-        .btn-next:hover {
-            background: var(--gold);
-            transform: translateY(-2px);
-        }
-
-        .progress-text {
-            text-align: center;
-            font-size: 12px;
-            margin-top: 20px;
-            opacity: 0.5;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <div class="audio-btn" id="audioBtn" onclick="toggleAudio()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-        </div>
-        <h1 id="main-title">Yükleniyor...</h1>
-        <p>Sultan II. Bayezid Külliyesi</p>
-    </header>
+<div class="sticky-hero">
+    <img id="heroImg" src="img/intro.jpg" alt="Hero">
+</div>
 
-    <div class="hero-img-box">
-        <img id="step-img" src="" alt="Durak Görseli">
+<div class="main-container">
+    <div class="timeline-wrapper">
+        <div class="timeline-bg-line"></div>
+        <div class="timeline-progress-line" id="progressLine"></div>
+        <div id="iconNodesContainer"></div>
     </div>
 
-    <div class="timeline-container">
-        <div class="timeline-marker"></div>
-        <div class="card">
-            <span class="subtitle" id="step-subtitle">...</span>
-            <div class="description" id="step-desc"></div>
-            <div class="question" id="step-question"></div>
+    <div class="content-area">
+        <div class="info-card">
+            <span class="tag" id="subtitle">BAŞLIYORUZ</span>
+            <h2 id="title">Yükleniyor...</h2>
+            <div id="desc"></div>
+            <button class="btn-next" onclick="nextStep()">İLERLE ➡</button>
         </div>
-        <button class="btn-next" id="nextBtn" onclick="nextStep()"></button>
-        <div class="progress-text" id="progress"></div>
     </div>
 </div>
 
 <script>
+// 24 DURAĞIN TAMAMI (SVG İKONLARIYLA)
 const tourData = [
    {
         t: "🏛️ EŞİĞE DAVET | SULTAN II. BAYEZİD KÜLLİYESİ",
@@ -469,59 +444,47 @@ const tourData = [
     }
 ];
 
-let currentStep = 0;
-let audio = new Audio();
+let currentIdx = 0;
 
-function renderStep(index) {
-    const data = tourData[index];
-    
-    // Metinleri ve başlıkları güncelle
-    document.getElementById('main-title').innerText = data.t;
-    document.getElementById('step-subtitle').innerText = data.s;
-    
-    // Markdown (**kalın**) ve (\n satır başı) işlemesi
-    let formattedDesc = data.m
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\n/g, '<br>');
-    
-    document.getElementById('step-desc').innerHTML = formattedDesc;
-    document.getElementById('step-question').innerText = data.q;
-    document.getElementById('nextBtn').innerText = data.btnNext;
-    document.getElementById('step-img').src = data.g[0];
-    document.getElementById('progress').innerText = `${index + 1} / ${tourData.length}`;
+// İkonları Başlangıçta Oluştur
+const nodesContainer = document.getElementById('iconNodesContainer');
+tourData.forEach((item, index) => {
+    const node = document.createElement('div');
+    node.className = `icon-node ${index === 0 ? 'active' : ''}`;
+    node.id = `node-${index}`;
+    node.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">${item.icon}</svg>`;
+    nodesContainer.appendChild(node);
+});
 
-    // Sesi hazırla (çalmıyoruz, kullanıcı butona basınca çalacak)
-    audio.pause();
-    audio.src = data.a;
-    document.getElementById('audioBtn').classList.remove('playing');
+function updateDisplay() {
+    const data = tourData[currentIdx];
+    document.getElementById('title').innerText = data.t;
+    document.getElementById('subtitle').innerText = data.s;
+    document.getElementById('desc').innerText = data.m;
+    document.getElementById('heroImg').src = data.g;
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Zaman Çizelgesini Güncelle
+    const nodes = document.querySelectorAll('.icon-node');
+    nodes.forEach((n, i) => {
+        n.classList.toggle('active', i <= currentIdx);
+    });
+
+    // Renkli Çizgiyi İlerlet
+    const progress = (currentIdx / (tourData.length - 1)) * 100;
+    document.getElementById('progressLine').style.height = `${progress}%`;
 }
 
 function nextStep() {
-    if (currentStep < tourData.length - 1) {
-        currentStep++;
-        renderStep(currentStep);
+    if (currentIdx < tourData.length - 1) {
+        currentIdx++;
+        updateDisplay();
     } else {
-        alert("Şifa yolculuğumuz burada sona erdi. Teşekkürler.");
-        currentStep = 0;
-        renderStep(0);
+        alert("Yolculuk bitti!");
     }
 }
 
-function toggleAudio() {
-    const btn = document.getElementById('audioBtn');
-    if (audio.paused) {
-        audio.play();
-        btn.classList.add('playing');
-    } else {
-        audio.pause();
-        btn.classList.remove('playing');
-    }
-}
-
-// Başlangıç
-renderStep(0);
+// İlk durağı göster
+updateDisplay();
 </script>
 
 </body>
