@@ -1,122 +1,332 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Külliye Dijital Rehber</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sultan II. Bayezid Külliyesi – Gezi Rehberi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#8B6914;
+  --teal:#2E6B6B;--teal-l:#4A9B9B;
+  --bg:#0D0A05;--bg2:#1A1008;--card:#201508;
+  --cream:#F0E2C0;--muted:#9A7438;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'Crimson Pro',serif;background:var(--bg);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:
+  radial-gradient(ellipse at 15% 50%,rgba(201,168,76,.05) 0%,transparent 55%),
+  radial-gradient(ellipse at 85% 20%,rgba(46,107,107,.04) 0%,transparent 45%),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 8L72 40L40 72L8 40Z' fill='none' stroke='rgba(201,168,76,.04)' stroke-width='.5'/%3E%3Ccircle cx='40' cy='40' r='10' fill='none' stroke='rgba(201,168,76,.025)' stroke-width='.5'/%3E%3C/svg%3E");
+  background-size:auto,auto,80px 80px;pointer-events:none;z-index:0;}
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+.screen{display:none;position:relative;z-index:1;}
+.screen.active{display:flex;flex-direction:column;min-height:100vh;}
+
+/* ── OVERLAY ── */
+.ol{position:fixed;inset:0;background:var(--bg);z-index:999;pointer-events:none;opacity:0;transition:opacity .3s;}
+.ol.on{opacity:1;}
+
+/* ── AUDIO INDICATOR ── */
+.aind{position:fixed;bottom:96px;right:14px;z-index:200;background:rgba(7,5,3,.95);border:1px solid rgba(201,168,76,.25);border-radius:20px;padding:6px 12px;display:flex;align-items:center;gap:6px;font-size:10px;color:var(--gold);opacity:0;transition:opacity .4s;pointer-events:none;font-family:'Cinzel',serif;letter-spacing:.5px;}
+.aind.on{opacity:1;}
+.aw{display:flex;gap:2px;align-items:center;height:14px;}
+.aw span{display:block;width:3px;background:var(--gold);border-radius:2px;animation:aw .9s ease-in-out infinite;}
+.aw span:nth-child(2){animation-delay:.15s;}.aw span:nth-child(3){animation-delay:.3s;}
+@keyframes aw{0%,100%{height:3px;}50%{height:12px;}}
+
+/* ══════════════════════════
+   INTRO SCREEN
+══════════════════════════ */
+#intro{align-items:center;justify-content:center;text-align:center;padding:52px 28px 48px;background:linear-gradient(180deg,#060402 0%,#0D0A05 30%,#1A1008 100%);}
+
+.iorn{width:116px;height:116px;margin:0 auto 22px;animation:rotIn 2.4s cubic-bezier(.17,.67,.35,1.15);}
+@keyframes rotIn{from{opacity:0;transform:rotate(-180deg) scale(.15);}to{opacity:1;transform:rotate(0) scale(1);}}
+
+.ib{font-size:10px;letter-spacing:5px;color:var(--gold);text-transform:uppercase;margin-bottom:12px;animation:fu 1s ease-out .5s both;}
+.it{font-family:'Cinzel',serif;font-size:28px;font-weight:700;color:var(--gold-l);line-height:1.2;margin-bottom:6px;animation:fu 1s ease-out .7s both;text-shadow:0 2px 40px rgba(201,168,76,.18);}
+.is{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);letter-spacing:3px;animation:fu 1s ease-out .85s both;}
+.div{width:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:20px auto;animation:fu 1s ease-out 1s both;}
+.idesc{font-size:15.5px;line-height:1.9;color:var(--cream);max-width:320px;margin:0 auto 28px;font-style:italic;opacity:.85;animation:fu 1s ease-out 1.1s both;}
+.istats{display:flex;gap:28px;justify-content:center;margin-bottom:36px;animation:fu 1s ease-out 1.25s both;}
+.istat{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.isn{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);line-height:1;}
+.isl{font-size:9.5px;color:var(--muted);letter-spacing:1.5px;}
+.btn-s{background:linear-gradient(135deg,#7A5512,var(--gold) 50%,#7A5512);color:#060402;border:none;padding:16px 48px;font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:2.5px;border-radius:40px;cursor:pointer;box-shadow:0 4px 30px rgba(201,168,76,.22);animation:fu 1s ease-out 1.4s both;transition:transform .18s,box-shadow .18s;display:block;width:100%;max-width:290px;margin:0 auto 14px;}
+.btn-s:hover{box-shadow:0 6px 36px rgba(201,168,76,.32);transform:translateY(-1px);}
+.btn-s:active{transform:scale(.97);}
+.ilinks{display:flex;gap:24px;justify-content:center;animation:fu 1s ease-out 1.5s both;}
+.ilink{background:none;border:none;color:var(--muted);font-family:'Crimson Pro',serif;font-size:13px;cursor:pointer;padding:5px;transition:color .2s;}
+.ilink:hover{color:var(--gold);}
+
+@keyframes fu{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* ══════════════════════════
+   TOUR HEADER
+══════════════════════════ */
+.th{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(6,4,2,.97);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(201,168,76,.14);padding:11px 16px 8px;}
+.hr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.hback{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:2px 6px;line-height:1;transition:color .2s;}
+.hback:hover{color:var(--gold);}
+.htitle{font-family:'Cinzel',serif;font-size:11px;color:var(--gold);letter-spacing:1.5px;}
+.haudio{width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.22);color:var(--gold);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;}
+.haudio:hover{background:rgba(201,168,76,.15);}
+.haudio.muted{background:rgba(139,26,26,.16);border-color:rgba(139,26,26,.28);color:#bb4444;}
+.pw{height:3px;background:rgba(201,168,76,.1);border-radius:2px;overflow:hidden;margin-bottom:6px;}
+.pf{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold));border-radius:2px;transition:width .7s ease;}
+.pl{display:flex;justify-content:space-between;}
+.pl span{font-size:9px;color:var(--muted);}
+
+/* ── TIMELINE ── */
+.tls{display:flex;overflow-x:auto;gap:0;padding:9px 16px;background:rgba(6,4,2,.85);border-bottom:1px solid rgba(201,168,76,.07);scrollbar-width:none;}
+.tls::-webkit-scrollbar{display:none;}
+.tli{display:flex;flex-direction:column;align-items:center;min-width:30px;cursor:pointer;flex-shrink:0;}
+.tlc{width:13px;height:13px;border-radius:50%;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.16);transition:all .3s;}
+.tli.done .tlc{background:rgba(201,168,76,.28);border-color:rgba(201,168,76,.5);}
+.tli.cur .tlc{background:var(--gold);border-color:var(--gold-l);box-shadow:0 0 8px rgba(201,168,76,.45);}
+.tln{font-size:7px;color:var(--muted);margin-top:3px;}
+.tli.cur .tln{color:var(--gold);}
+.tlln{width:17px;height:1px;background:rgba(201,168,76,.08);flex-shrink:0;margin-top:7px;}
+
+/* ── TOUR BODY ── */
+.tb{margin-top:132px;flex:1;padding:20px 18px 144px;}
+.ta{animation:si .38s ease-out;}
+@keyframes si{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+
+.sbadge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.16);border-radius:20px;padding:4px 13px;margin-bottom:14px;}
+.sbadge span{font-size:9.5px;color:var(--gold);letter-spacing:2px;font-family:'Cinzel',serif;}
+.stitle{font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold-l);line-height:1.25;margin-bottom:5px;}
+.ssub{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:18px;letter-spacing:.5px;}
+.sbody{font-size:15.5px;line-height:1.95;color:var(--cream);margin-bottom:20px;}
+.sbody p{margin-bottom:11px;}
+.sbody p:last-child{margin-bottom:0;}
+.sbody strong{color:var(--gold-l);font-weight:600;}
+.qa{background:rgba(46,107,107,.09);border:1px solid rgba(46,107,107,.22);border-left:3px solid var(--teal-l);border-radius:10px;padding:14px 16px;margin-bottom:20px;}
+.qaq{font-size:14.5px;color:var(--teal-l);font-style:italic;line-height:1.6;}
+
+/* image placeholder */
+.gal{margin-bottom:20px;}
+.gm{background:rgba(201,168,76,.03);border:1px solid rgba(201,168,76,.08);border-radius:12px;height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:10px;}
+.gph{text-align:center;color:var(--muted);}
+.gph p{font-size:12px;margin-top:8px;font-style:italic;}
+.grow{display:flex;gap:8px;align-items:center;}
+.garr{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.14);color:var(--gold);width:34px;height:34px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:background .2s;}
+.garr:hover{background:rgba(201,168,76,.12);}
+.gth{width:50px;height:50px;border-radius:8px;flex-shrink:0;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.1);cursor:pointer;transition:border-color .2s;}
+.gth.active{border-color:var(--gold);}
+
+/* ── TOUR FOOTER ── */
+.tf{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(6,4,2,.97);border-top:1px solid rgba(201,168,76,.1);padding:11px 16px 28px;}
+.brow{display:flex;gap:10px;}
+.bback{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.16);color:var(--gold);padding:14px 18px;border-radius:40px;font-family:'Cinzel',serif;font-size:12px;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.bback:hover{background:rgba(201,168,76,.12);}
+.bnext{flex:1;background:linear-gradient(135deg,#7A5512,var(--gold));border:none;color:#060402;padding:14px 8px;border-radius:40px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:transform .15s,box-shadow .15s;}
+.bnext:hover{box-shadow:0 4px 20px rgba(201,168,76,.2);}
+.bnext:active{transform:scale(.98);}
+
+/* ══════════════════════════
+   BOOK / GÖNÜL KÖPRÜSÜ
+══════════════════════════ */
+#book{padding:42px 20px 100px;}
+.bkh{text-align:center;margin-bottom:28px;}
+.bkic{font-size:44px;margin-bottom:10px;}
+.bkt{font-family:'Cinzel',serif;font-size:22px;color:var(--gold-l);margin-bottom:6px;}
+.bks{font-size:14px;color:var(--muted);font-style:italic;}
+.bkf{background:rgba(201,168,76,.035);border:1px solid rgba(201,168,76,.1);border-radius:14px;padding:20px;margin-bottom:26px;}
+.fl{margin-bottom:14px;}
+.fl label{display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2.5px;color:var(--gold);margin-bottom:7px;}
+.fl input,.fl textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(201,168,76,.15);border-radius:9px;color:var(--cream);padding:12px 14px;font-family:'Crimson Pro',serif;font-size:15px;outline:none;transition:border-color .2s;}
+.fl input:focus,.fl textarea:focus{border-color:rgba(201,168,76,.5);}
+.fl textarea{min-height:96px;resize:vertical;}
+.bsave{width:100%;background:linear-gradient(135deg,var(--teal),var(--teal-l));border:none;color:white;padding:15px;border-radius:40px;font-family:'Cinzel',serif;font-size:13px;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;}
+.bsave:hover{opacity:.9;}
+.nsh{font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;color:var(--gold);margin-bottom:14px;}
+.nc{background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.08);border-radius:11px;padding:14px;margin-bottom:10px;transition:border-color .2s;}
+.nc:hover{border-color:rgba(201,168,76,.16);}
+.nm{display:flex;justify-content:space-between;margin-bottom:6px;align-items:baseline;}
+.nn{font-family:'Cinzel',serif;font-size:12px;color:var(--gold);}
+.ncy{font-size:10px;color:var(--muted);}
+.ntxt{font-size:14.5px;line-height:1.72;color:var(--cream);font-style:italic;}
+.ndt{font-size:10px;color:var(--muted);margin-top:6px;}
+.pg{display:flex;align-items:center;justify-content:center;gap:14px;padding:14px 0;}
+.pgb{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.16);color:var(--gold);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .2s;}
+.pgb:hover{background:rgba(201,168,76,.14);}
+.pgb:disabled{opacity:.3;cursor:default;}
+.pgi{font-size:12px;color:var(--muted);}
+.bkft{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(6,4,2,.97);border-top:1px solid rgba(201,168,76,.1);display:flex;gap:10px;padding:11px 16px 28px;}
+.bol{flex:1;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.16);color:var(--gold);padding:14px;border-radius:40px;font-family:'Cinzel',serif;font-size:12px;cursor:pointer;transition:background .2s;}
+.bol:hover{background:rgba(201,168,76,.12);}
+.bol.accent{background:linear-gradient(135deg,var(--teal),var(--teal-l));border:none;color:white;}
+
+/* ══════════════════════════
+   ADMIN PANEL
+══════════════════════════ */
+#admin{padding:22px 18px 70px;}
+.alog{max-width:340px;margin:72px auto;text-align:center;}
+.algt{font-family:'Cinzel',serif;font-size:20px;color:var(--gold);margin-bottom:20px;}
+.acon{display:none;}
+.acon.on{display:block;}
+.ahdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.atitle{font-family:'Cinzel',serif;font-size:17px;color:var(--gold-l);}
+.lpill{display:inline-flex;align-items:center;gap:5px;background:rgba(139,26,26,.15);border:1px solid rgba(139,26,26,.28);border-radius:20px;padding:4px 10px;font-size:10px;color:#ff7777;}
+.ldot{width:5px;height:5px;border-radius:50%;background:#ff4444;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:18px;}
+.sc{background:rgba(201,168,76,.045);border:1px solid rgba(201,168,76,.1);border-radius:11px;padding:14px;text-align:center;}
+.sn{font-family:'Cinzel',serif;font-size:28px;color:var(--gold);}
+.sl{font-size:9px;color:var(--muted);letter-spacing:1px;margin-top:3px;}
+.ss{font-size:9px;color:var(--teal-l);margin-top:2px;}
+.cc{background:rgba(255,255,255,.02);border:1px solid rgba(201,168,76,.08);border-radius:11px;padding:14px;margin-bottom:12px;}
+.ctt{font-family:'Cinzel',serif;font-size:9.5px;color:var(--gold);margin-bottom:11px;letter-spacing:1px;}
+.bch{display:flex;gap:5px;align-items:flex-end;height:72px;}
+.bar{flex:1;background:linear-gradient(180deg,var(--gold) 0%,var(--gold-d) 100%);border-radius:3px 3px 0 0;min-height:4px;transition:height .6s ease;}
+.bls{display:flex;gap:5px;margin-top:4px;}
+.bl{flex:1;text-align:center;font-size:8px;color:var(--muted);}
+.hrow{display:flex;gap:7px;margin-bottom:6px;align-items:center;}
+.hlbl{font-size:9px;color:var(--muted);width:84px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hbar{flex:1;height:12px;background:rgba(201,168,76,.06);border-radius:3px;overflow:hidden;}
+.hfill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold));border-radius:3px;}
+.hv{font-size:9px;color:var(--muted);width:28px;text-align:right;flex-shrink:0;}
+.cpill{display:inline-flex;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.12);border-radius:20px;padding:4px 12px;font-size:11px;gap:5px;margin:3px;}
+.cpill strong{font-family:'Cinzel',serif;color:var(--gold);font-weight:600;}
+.cpill span{color:var(--muted);}
+.nsec{margin-bottom:96px;}
+</style>
 </head>
-
 <body>
 
-<!-- OVERLAY -->
-<div id="ol"></div>
+<div class="ol" id="ol"></div>
+<div class="aind" id="aind">
+  <div class="aw"><span style="height:5px"></span><span style="height:12px"></span><span style="height:4px"></span></div>
+  Sesli anlatım
+</div>
 
-<!-- ================= INTRO ================= -->
-<section id="intro" class="screen active">
-  <div class="wrap">
-    <h1>SULTAN II. BAYEZİD KÜLLİYESİ</h1>
-    <p>Dijital Gezi Deneyimi</p>
-
-    <button data-action="startTour">YOLCULUĞA BAŞLA</button>
-    <button data-action="goToBook">Gönül Köprüsü</button>
-    <button data-action="goToAdmin">Admin</button>
+<!-- ═══════════════════════════════════
+     INTRO
+════════════════════════════════════ -->
+<div class="screen active" id="intro">
+  <svg class="iorn" viewBox="0 0 116 116" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="58" cy="58" r="56" stroke="rgba(201,168,76,.2)" stroke-width=".5" fill="none"/>
+    <circle cx="58" cy="58" r="47" stroke="rgba(201,168,76,.12)" stroke-width=".5" fill="none"/>
+    <circle cx="58" cy="58" r="38" stroke="rgba(201,168,76,.07)" stroke-width=".5" fill="none"/>
+    <path d="M58 10L68 38L97 38L74 56L82 85L58 67L34 85L42 56L19 38L48 38Z" fill="rgba(201,168,76,.11)" stroke="rgba(201,168,76,.5)" stroke-width=".7"/>
+    <circle cx="58" cy="58" r="12" fill="rgba(201,168,76,.15)" stroke="rgba(201,168,76,.4)" stroke-width=".7"/>
+    <path d="M58 22Q73 40 58 58Q43 40 58 22Z" fill="rgba(201,168,76,.07)" stroke="rgba(201,168,76,.2)" stroke-width=".5"/>
+    <path d="M58 94Q73 76 58 58Q43 76 58 94Z" fill="rgba(201,168,76,.07)" stroke="rgba(201,168,76,.2)" stroke-width=".5"/>
+    <path d="M22 58Q40 73 58 58Q40 43 22 58Z" fill="rgba(201,168,76,.07)" stroke="rgba(201,168,76,.2)" stroke-width=".5"/>
+    <path d="M94 58Q76 73 58 58Q76 43 94 58Z" fill="rgba(201,168,76,.07)" stroke="rgba(201,168,76,.2)" stroke-width=".5"/>
+    <circle cx="58" cy="58" r="5" fill="rgba(201,168,76,.65)"/>
+    <circle cx="58" cy="58" r="2.5" fill="var(--gold)"/>
+  </svg>
+  <p class="ib">Edirne · 1488</p>
+  <h1 class="it">Sultan II. Bayezid<br>Külliyesi</h1>
+  <p class="is">✦ ŞİFA YOLCULUĞU ✦</p>
+  <div class="div"></div>
+  <p class="idesc">"Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız? Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz."</p>
+  <div class="istats">
+    <div class="istat"><div class="isn">29</div><div class="isl">DURAK</div></div>
+    <div class="istat"><div class="isn">~45</div><div class="isl">DAKİKA</div></div>
+    <div class="istat"><div class="isn">1488</div><div class="isl">YILINDAN</div></div>
   </div>
-</section>
-
-<!-- ================= TOUR ================= -->
-<section id="tour" class="screen">
-
-  <!-- HEADER -->
-  <header class="hdr">
-    <div id="hTit">DURAK 1</div>
-
-    <div class="progress">
-      <div id="pf"></div>
-    </div>
-
-    <div class="pinfo">
-      <span id="ppct">%0</span>
-      <span id="peta"></span>
-    </div>
-
-    <button id="abtn" data-action="togAudio">🔊</button>
-    <div id="aind"></div>
-  </header>
-
-  <!-- CONTENT -->
-  <main id="tb"></main>
-
-  <!-- NAV -->
-  <div class="nav">
-    <button id="bbk" data-action="prevStop">← Geri</button>
-    <button id="bnxt" data-action="nextStop">İleri →</button>
+  <button class="btn-s" data-action="startTour">✦ ZAMANDA YOLCULUĞA BAŞLA ✦</button>
+  <div class="ilinks">
+    <button class="ilink" data-action="goToBook">🖋 Gönül Köprüsü</button>
+    <button class="ilink" data-action="goToAdmin">⚙ Yönetim</button>
   </div>
+</div>
 
-  <!-- TIMELINE -->
-  <div id="tls" class="timeline"></div>
+<!-- ═══════════════════════════════════
+     TOUR
+════════════════════════════════════ -->
+<div class="screen" id="tour">
+  <div class="th">
+    <div class="hr">
+      <button class="hback" data-action="goToIntro">‹</button>
+      <span class="htitle" id="hTit">DURAK 1 / 29</span>
+      <button class="haudio" id="abtn" data-action="togAudio" title="Sesli anlatımı aç/kapat">🔊</button>
+    </div>
+    <div class="pw"><div class="pf" id="pf" style="width:3.4%"></div></div>
+    <div class="pl"><span id="ppct">%3</span><span id="peta">~43 dk kaldı</span></div>
+  </div>
+  <div class="tls" id="tls"></div>
+  <div class="tb" id="tb"></div>
+  <div class="tf">
+    <div class="brow">
+      <button class="bback" id="bbk" data-action="prevStop">‹ Geri</button>
+      <button class="bnext" id="bnxt" data-action="nextStop">Devam Et →</button>
+    </div>
+  </div>
+</div>
 
-</section>
-
-<!-- ================= BOOK ================= -->
-<section id="book" class="screen">
-  <div class="wrap">
-
-    <h2>GÖNÜL KÖPRÜSÜ</h2>
-
-    <input id="bkn" placeholder="Ad Soyad">
-    <input id="bkc" placeholder="Şehir">
-    <textarea id="bkno" placeholder="Notunuz"></textarea>
-
-    <button data-action="saveNote">Gönder</button>
-
+<!-- ═══════════════════════════════════
+     BOOK – GÖNÜL KÖPRÜSÜ
+════════════════════════════════════ -->
+<div class="screen" id="book">
+  <div class="bkh">
+    <div class="bkic">🖋️</div>
+    <h2 class="bkt">Gönül Köprüsü</h2>
+    <p class="bks">Bu hikâyede sizin de iziniz olsun</p>
+  </div>
+  <div class="bkf">
+    <div class="fl"><label>ADINIZ SOYADINIZ</label><input id="bkn" type="text" placeholder="Adınız ve soyadınız"></div>
+    <div class="fl"><label>GELDİĞİNİZ ŞEHİR</label><input id="bkc" type="text" placeholder="Şehir / Ülke"></div>
+    <div class="fl"><label>NOTUNUZ</label><textarea id="bkno" placeholder="Kalbinizden süzülenleri paylaşın…"></textarea></div>
+    <button class="bsave" data-action="saveNote">✦ Gönül Köprüsü'ne Yaz</button>
+  </div>
+  <div class="nsec">
+    <div class="nsh">SON ZİYARETÇİ NOTLARI</div>
     <div id="nl"></div>
-    <div id="npg"></div>
-
-    <button data-action="goToIntro">← Geri</button>
-
+    <div class="pg" id="npg"></div>
   </div>
-</section>
-
-<!-- ================= ADMIN ================= -->
-<section id="admin" class="screen">
-
-  <!-- LOGIN -->
-  <div id="alg" class="wrap">
-    <h2>Admin Giriş</h2>
-    <input id="ap" type="password" placeholder="Şifre">
-    <button data-action="doLog">Giriş</button>
-    <p id="aerr" style="display:none;color:red;">Hatalı şifre</p>
+  <div class="bkft">
+    <button class="bol" data-action="goToIntro">‹ Ana Sayfa</button>
+    <button class="bol accent" data-action="startTour">Geziye Devam →</button>
   </div>
+</div>
 
-  <!-- PANEL -->
-  <div id="acon" class="wrap">
-
-    <h2>İstatistik</h2>
-
-    <div class="stats">
-      <div>Canlı: <span id="slv"></span></div>
-      <div>Bugün: <span id="std"></span></div>
-      <div>Hafta: <span id="swk"></span></div>
-      <div>Not: <span id="snt"></span></div>
+<!-- ═══════════════════════════════════
+     ADMIN
+════════════════════════════════════ -->
+<div class="screen" id="admin">
+  <div class="alog" id="alg">
+    <div style="font-size:44px;margin-bottom:14px;">⚙</div>
+    <h2 class="algt">Yönetim Paneli</h2>
+    <div class="fl" style="text-align:left;margin-bottom:12px;">
+      <label>ŞİFRE</label>
+      <input id="ap" type="password" placeholder="••••••" >
     </div>
-
-    <div id="dch" class="chart"></div>
-    <div id="dlb" class="labels"></div>
-
-    <div id="sht"></div>
-    <div id="cit"></div>
-
-    <button data-action="doOut">Çıkış</button>
-
+    <button class="bsave" data-action="doLog">Giriş Yap</button>
+    <p id="aerr" style="color:#bb4444;font-size:13px;margin-top:9px;display:none;">Hatalı şifre. Lütfen tekrar deneyin.</p>
+    <button data-action="goToIntro" style="background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:14px;display:block;width:100%;">‹ Geri Dön</button>
   </div>
+  <div class="acon" id="acon">
+    <div class="ahdr">
+      <h2 class="atitle">İstatistikler</h2>
+      <div class="lpill"><div class="ldot"></div>Canlı</div>
+    </div>
+    <div class="sgrid">
+      <div class="sc"><div class="sn" id="slv">-</div><div class="sl">ŞU AN MÜZEDEKİ</div><div class="ss">ziyaretçi</div></div>
+      <div class="sc"><div class="sn" id="std">-</div><div class="sl">BUGÜN TOPLAM</div><div class="ss">kullanıcı</div></div>
+      <div class="sc"><div class="sn" id="swk">-</div><div class="sl">BU HAFTA</div><div class="ss">kullanıcı</div></div>
+      <div class="sc"><div class="sn" id="snt">-</div><div class="sl">TOPLAM NOT</div><div class="ss">ziyaretçi defteri</div></div>
+    </div>
+    <div class="cc">
+      <div class="ctt">GÜNLÜK KULLANIM – SON 7 GÜN</div>
+      <div class="bch" id="dch"></div>
+      <div class="bls" id="dlb"></div>
+    </div>
+    <div class="cc">
+      <div class="ctt">EN ÇOK ZAMAN GEÇİRİLEN DURAKLAR</div>
+      <div id="sht"></div>
+    </div>
+    <div class="cc">
+      <div class="ctt">ZİYARETÇİ ŞEHİRLERİ</div>
+      <div id="cit" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+    </div>
+    <button data-action="doOut" style="background:rgba(139,26,26,.15);border:1px solid rgba(139,26,26,.25);color:#cc6666;padding:12px;border-radius:40px;font-family:'Cinzel',serif;font-size:11px;cursor:pointer;width:100%;margin-top:10px;letter-spacing:.5px;">Çıkış Yap</button>
+  </div>
+</div>
 
-</section>
-
-<!-- JS -->
 <script src="app.js"></script>
-
 </body>
 </html>
