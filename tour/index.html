@@ -358,16 +358,22 @@ const adSt={
 
 function goTo(id){
   stopAud();
-  const o=document.getElementById('ol');
+
+  const o = document.getElementById('ol');
   o.classList.add('on');
+
   setTimeout(()=>{
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+
     o.classList.remove('on');
+
+    // 🔥 BURASI: SCROLL RESET (EKLE)
     window.scrollTo(0,0);
-    if(id==='book')renderNotes();
-    if(id==='admin')rstAdm();
-  },280);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+  }, 280);
 }
 
 function startTour(){
