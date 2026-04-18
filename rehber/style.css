@@ -1,0 +1,81 @@
+:root {
+    --primary: #2c1810;
+    --accent: #d4af37;
+    --text: #4a3728;
+    --bg: #fdfaf6;
+}
+
+body {
+    margin: 0; font-family: 'Poppins', sans-serif;
+    background: #1a0f0a; /* Koyu başlangıç */
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+/* Yeni Farklı Arka Plan: Yumuşak Parşömen & Dokulu Efekt */
+.screen {
+    display: none; min-height: 100vh;
+    background: radial-gradient(circle, rgba(253,250,246,1) 0%, rgba(230,220,200,1) 100%);
+    padding: 20px; align-items: center; justify-content: center;
+}
+
+.active-screen { display: flex !important; }
+
+/* --- HAREKETLİ INTRO TASARIMI --- */
+#screen-intro {
+    background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2000') center/cover;
+    position: relative;
+}
+
+.intro-bg-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.intro-content {
+    position: relative; z-index: 2; text-align: center; color: white;
+}
+
+.reveal-text {
+    font-size: 3.5rem; font-family: 'Playfair Display';
+    animation: fadeInUp 1.5s ease;
+}
+
+.intro-line {
+    width: 0; height: 2px; background: var(--accent);
+    margin: 20px auto; animation: growLine 2s forwards 0.5s;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes growLine { to { width: 200px; } }
+
+/* --- GÖNÜL KÖPRÜSÜ & IŞIK HUZMESİ --- */
+.send-btn {
+    position: relative; overflow: hidden; width: 100%;
+}
+
+.light-sweep {
+    position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transform: skewX(-25deg);
+}
+
+.sweep-animate { animation: sweep 1.5s ease-in-out; }
+
+@keyframes sweep { 100% { left: 150%; } }
+
+/* --- POP-UP TASARIMI --- */
+.popup-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); display: none; align-items: center;
+    justify-content: center; z-index: 2000;
+}
+
+.popup-content {
+    background: white; padding: 40px; border-radius: 15px;
+    max-width: 500px; text-align: center; border: 2px solid var(--accent);
+}
