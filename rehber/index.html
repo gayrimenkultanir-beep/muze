@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Eşiğe Davet</title>
+
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+body {
+    margin: 0;
+    background: #F8F5F0;
+    font-family: 'Inter', sans-serif;
+    color: #3E2723;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+
+.title {
+    font-family: 'Cinzel', serif;
+    font-size: 28px;
+    text-align: center;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    margin-top: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    transition: 0.3s;
+}
+
+.icon {
+    color: #C8A96A;
+}
+
+h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+p {
+    margin: 5px 0 0;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title">
+🏛️ EŞİĞE DAVET <br>
+SULTAN II. BAYEZİD KÜLLİYESİ
+</div>
+
+<div class="card">
+<i data-lucide="landmark" class="icon"></i>
+<div>
+<h3>Miras</h3>
+<p>500 yıllık köklü bir geçmişe hoş geldiniz.</p>
+</div>
+</div>
+
+<div class="card">
+<i data-lucide="leaf" class="icon"></i>
+<div>
+<h3>Arınış</h3>
+<p>Ruhunuzu dinlendirmeye hazır mısınız?</p>
+</div>
+</div>
+
+<div class="card">
+<i data-lucide="droplet" class="icon"></i>
+<div>
+<h3>Akış</h3>
+<p>Suyun ritmini ve şifanın sessizliğini keşfedin.</p>
+</div>
+</div>
+
+<div class="card">
+<i data-lucide="key" class="icon"></i>
+<div>
+<h3>Eşik</h3>
+<p>Zamanın ötesine geçmeye hazır mısınız?</p>
+</div>
+</div>
+
+</div>
+
+<script>
+lucide.createIcons();
+</script>
+
+</body>
+</html>
