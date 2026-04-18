@@ -1,81 +1,96 @@
 :root {
     --primary: #2c1810;
     --accent: #d4af37;
-    --text: #4a3728;
-    --bg: #fdfaf6;
+    --antique: #fdfaf6;
+    --brown-light: #4a3728;
 }
 
 body {
-    margin: 0; font-family: 'Poppins', sans-serif;
-    background: #1a0f0a; /* Koyu başlangıç */
-    color: var(--text);
+    margin: 0; padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #1a0f0a;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* Yeni Farklı Arka Plan: Yumuşak Parşömen & Dokulu Efekt */
+/* --- Genel Ekran Yapısı --- */
 .screen {
-    display: none; min-height: 100vh;
-    background: radial-gradient(circle, rgba(253,250,246,1) 0%, rgba(230,220,200,1) 100%);
-    padding: 20px; align-items: center; justify-content: center;
+    display: none; min-height: 100vh; width: 100%;
+    background: radial-gradient(circle, #fdfaf6 0%, #e6dcc8 100%);
+    background-image: url('https://www.transparenttextures.com/patterns/papyros.png');
+    box-sizing: border-box; padding: 20px;
 }
+.active-screen { display: flex !important; flex-direction: column; align-items: center; justify-content: center; }
 
-.active-screen { display: flex !important; }
-
-/* --- HAREKETLİ INTRO TASARIMI --- */
+/* --- Hareketli Intro --- */
 #screen-intro {
-    background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=2000') center/cover;
+    background: url('img/intro-bg.jpg') center/cover no-repeat;
     position: relative;
 }
+.intro-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
+.intro-content { position: relative; z-index: 5; text-align: center; color: white; }
 
-.intro-bg-overlay {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
+.reveal-text { font-size: 3rem; font-family: 'Playfair Display'; animation: fadeInUp 1.2s forwards; margin: 0; }
+.intro-line { width: 0; height: 2px; background: var(--accent); margin: 20px auto; animation: growLine 1.5s forwards 0.6s; }
+
+/* --- Cam Panel --- */
+.glass-panel {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border-radius: 15px; border: 1px solid #d7ccc8;
+    width: 100%; max-width: 700px; padding: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    box-sizing: border-box;
 }
 
-.intro-content {
-    position: relative; z-index: 2; text-align: center; color: white;
+/* --- Galeri (Tek Görsel + Slider) --- */
+.gallery-wrapper { position: relative; width: 100%; margin-top: 25px; overflow: hidden; border-radius: 8px; }
+.gallery-container { display: flex; transition: transform 0.5s ease-in-out; }
+.gallery-container img { min-width: 100%; height: auto; object-fit: cover; }
+.gallery-nav {
+    position: absolute; top: 50%; width: 100%; display: flex;
+    justify-content: space-between; transform: translateY(-50%); pointer-events: none;
+}
+.gal-btn {
+    background: rgba(44, 24, 16, 0.6); color: white; border: none; width: 40px; height: 40px;
+    border-radius: 50%; cursor: pointer; pointer-events: auto; margin: 0 10px;
 }
 
-.reveal-text {
-    font-size: 3.5rem; font-family: 'Playfair Display';
-    animation: fadeInUp 1.5s ease;
+/* --- Ses ve Butonlar --- */
+#sound-btn {
+    position: fixed; top: 20px; right: 20px; z-index: 1000;
+    width: 45px; height: 45px; background: var(--primary);
+    color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;
 }
-
-.intro-line {
-    width: 0; height: 2px; background: var(--accent);
-    margin: 20px auto; animation: growLine 2s forwards 0.5s;
+.main-btn {
+    background: var(--primary); color: white; border: none; padding: 12px 25px;
+    border-radius: 4px; font-family: 'Playfair Display'; cursor: pointer; transition: 0.3s;
 }
+.nav-controls { display: flex; justify-content: space-between; margin-top: 20px; width: 100%; }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes growLine { to { width: 200px; } }
-
-/* --- GÖNÜL KÖPRÜSÜ & IŞIK HUZMESİ --- */
-.send-btn {
-    position: relative; overflow: hidden; width: 100%;
-}
-
+/* --- Işık Huzmesi --- */
+.send-btn { position: relative; overflow: hidden; width: 100%; margin-top: 15px; }
 .light-sweep {
-    position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transform: skewX(-25deg);
+    position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform: skewX(-20deg);
 }
+.sweep-active { animation: sweep 1.2s ease-in-out; }
 
-.sweep-animate { animation: sweep 1.5s ease-in-out; }
+/* --- Pop-up --- */
+.popup-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+}
+.popup-content { background: white; padding: 30px; border-radius: 12px; text-align: center; max-width: 450px; }
 
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes growLine { to { width: 150px; } }
 @keyframes sweep { 100% { left: 150%; } }
 
-/* --- POP-UP TASARIMI --- */
-.popup-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: none; align-items: center;
-    justify-content: center; z-index: 2000;
-}
-
-.popup-content {
-    background: white; padding: 40px; border-radius: 15px;
-    max-width: 500px; text-align: center; border: 2px solid var(--accent);
+/* --- Mobil --- */
+@media (max-width: 600px) {
+    .glass-panel { padding: 15px; }
+    .nav-controls { flex-direction: column-reverse; gap: 10px; }
+    .main-btn { width: 100%; }
 }
