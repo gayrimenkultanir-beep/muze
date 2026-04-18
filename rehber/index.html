@@ -2,15 +2,19 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Eşiğe Davet</title>
 
 <!-- Font -->
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
 <!-- Icons -->
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
+
+/* GENEL */
 body {
     margin: 0;
     background: #F8F5F0;
@@ -18,95 +22,241 @@ body {
     color: #3E2723;
 }
 
+/* CONTAINER */
 .container {
-    max-width: 500px;
+    max-width: 480px;
     margin: auto;
     padding: 20px;
 }
 
-.title {
-    font-family: 'Cinzel', serif;
-    font-size: 28px;
+/* HEADER */
+.header {
     text-align: center;
+    margin-bottom: 30px;
 }
 
+.header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    margin: 0;
+}
+
+.header p {
+    margin-top: 5px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* AUDIO BUTTON */
+.audio-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #3E2723;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.audio-btn:hover {
+    background: #C8A96A;
+    transform: scale(1.1);
+}
+
+/* TIMELINE */
+.timeline {
+    position: relative;
+    margin-left: 20px;
+    padding-left: 20px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #C8A96A;
+}
+
+/* TIMELINE ITEM */
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.6s forwards;
+}
+
+.timeline-item:nth-child(1){ animation-delay:0.2s;}
+.timeline-item:nth-child(2){ animation-delay:0.4s;}
+.timeline-item:nth-child(3){ animation-delay:0.6s;}
+.timeline-item:nth-child(4){ animation-delay:0.8s;}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* DOT */
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -11px;
+    top: 10px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border: 3px solid #C8A96A;
+    border-radius: 50%;
+}
+
+/* CARD */
 .card {
     background: white;
-    border-radius: 18px;
     padding: 16px;
-    margin-top: 15px;
+    border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     display: flex;
     gap: 12px;
     align-items: flex-start;
-}
-
-.card:hover {
-    transform: translateY(-3px);
     transition: 0.3s;
 }
 
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ICON */
 .icon {
     color: #C8A96A;
 }
 
-h3 {
+/* TEXT */
+.card h3 {
     margin: 0;
     font-size: 18px;
 }
 
-p {
+.card p {
     margin: 5px 0 0;
     font-size: 14px;
+    line-height: 1.5;
 }
+
+/* BUTTON */
+.button {
+    margin-top: 30px;
+    display: block;
+    text-align: center;
+    padding: 14px;
+    border-radius: 12px;
+    background: #3E2723;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #C8A96A;
+}
+
+/* SMALL LABEL */
+.label {
+    font-size: 13px;
+    opacity: 0.6;
+    margin-bottom: 5px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="title">
-🏛️ EŞİĞE DAVET <br>
-SULTAN II. BAYEZİD KÜLLİYESİ
+<!-- AUDIO -->
+<div class="audio-btn" onclick="playAudio()">
+<i data-lucide="volume-2"></i>
 </div>
 
+<audio id="audio" src="ses.mp3"></audio>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+<h1>🏛️ EŞİĞE DAVET</h1>
+<p>Sultan II. Bayezid Külliyesi</p>
+</div>
+
+<!-- TIMELINE -->
+<div class="timeline">
+
+<div class="timeline-item">
 <div class="card">
 <i data-lucide="landmark" class="icon"></i>
 <div>
+<div class="label">Şifa Yolculuğu</div>
 <h3>Miras</h3>
 <p>500 yıllık köklü bir geçmişe hoş geldiniz.</p>
 </div>
 </div>
+</div>
 
+<div class="timeline-item">
 <div class="card">
 <i data-lucide="leaf" class="icon"></i>
 <div>
 <h3>Arınış</h3>
-<p>Ruhunuzu dinlendirmeye hazır mısınız?</p>
+<p>Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?</p>
+</div>
 </div>
 </div>
 
+<div class="timeline-item">
 <div class="card">
 <i data-lucide="droplet" class="icon"></i>
 <div>
 <h3>Akış</h3>
-<p>Suyun ritmini ve şifanın sessizliğini keşfedin.</p>
+<p>Suyun ritmini ve şifanın sessizliğini keşfedeceksiniz.</p>
+</div>
 </div>
 </div>
 
+<div class="timeline-item">
 <div class="card">
 <i data-lucide="key" class="icon"></i>
 <div>
 <h3>Eşik</h3>
-<p>Zamanın ötesine geçmeye hazır mısınız?</p>
+<p>Günlük hayatın gürültüsünü dışarıda bırakın.</p>
 </div>
 </div>
+</div>
+
+</div>
+
+<!-- BUTTON -->
+<a href="#" class="button">Geziye Başla</a>
 
 </div>
 
 <script>
 lucide.createIcons();
+
+function playAudio() {
+    document.getElementById("audio").play();
+}
 </script>
 
 </body>
