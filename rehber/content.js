@@ -235,15 +235,15 @@ const tourData = [
         a: "audio/27.mp3",
         g: ["img/27.jpg"]
     },
-    {
-        t: "🕌 26. DURAK: CAMİNİN İÇ MEKANI",
-        s: "TEK KUBBE, SONSUZ HUZUR",
-        m: "🌌 İçeriye ilk adımınızı attığınızda başınızı yukarı kaldırın. Sizi karşılayan şey, Edirne’nin gökyüzünü andıran tek ve devasa kubbesidir.\n\n🏛️ **Mimarideki Birlik:**\nDarüşşifa’daki çok parçalı yapının aksine burada her şey tek kubbe altında birleşir. Bu, Osmanlı mimarisinde **“Vahdet (Birlik)”** anlayışını simgeler. Işık huzmeleri adeta gökten inen sütunlar gibi mekânı aydınlatır.\n\n🔇 **Akustik ve Sessizlik:**\nŞifahanedeki su sesi burada yerini derin bir sükunete bırakır. Kubbe altındaki en küçük ses bile tüm mekâna yayılır.\n\n🕌 **Mihrap ve Minber:**\n• **Mihrap:** Kâbe yönünü gösterir.\n• **Minber:** Zarif taş işçiliğiyle yükselir.\n\n✨ **Işığın Dansı:**\nPencerelerden süzülen ışık hat yazılarını ve süslemeleri canlı bir tabloya dönüştürür.",
-        q: "🌿 bu ruhani atmosferden yavaşça ayrılıp nehir kıyısına doğru süzülelim mi?",
-        btnNext: "Tunca Nehri'ne Doğru ➡",
-        a: "audio/28.mp3",
-        g: ["img/28.jpg"]
-    },
+   {
+    t: "🕌 26. DURAK: CAMİNİN İÇ MEKANI",
+    s: "TEK KUBBE, SONSUZ HUZUR",
+    m: "🌌 İçeriye ilk adımınızı attığınızda başınızı yukarı kaldırın. Sizi karşılayan şey, Edirne’nin gökyüzünü andıran tek ve devasa kubbesidir.\n\n🏛️ **Mimarideki Birlik ve Önemi:**\nDarüşşifa’daki çok parçalı yapının aksine burada her şey tek bir dev kubbe altında birleşir. Bu tasarım, hem ilahi birliği (Vahdet) simgeler hem de dönemin mühendislik dehasını kanıtlar. Işık huzmeleri, adeta gökten inen sütunlar gibi mekânı aydınlatır.\n\n🔇 **Akustik ve Sessizlik:**\nŞifahanedeki su sesi burada yerini derin bir sükunete bırakır. Mimarinin sağladığı özel akustik sayesinde, kubbe altındaki en küçük ses bile tüm mekâna kusursuz bir netlikle yayılır.\n\n🕌 **Sanat ve Protokol:**\n• **Mihrap ve Minber:** Kâbe yönünü gösteren mihrap ve zarif taş işçiliğiyle yükselen minber, sadelikle ihtişamın buluştuğu noktadır.\n• **Hünkâr Mahfili:** Osmanlı mimarisindeki en erken ve en zarif örneklerden biri kabul edilir. Caminin sol köşesinde, mermer sütunlar üzerinde yükselen bu yapı, külliyenin genelindeki **'sadelik içinde ihtişam'** felsefesini tamamlar.\n\n✨ **Işığın Dansı:**\nPencerelerden süzülen ışık, hat yazılarını ve süslemeleri canlı bir tabloya dönüştürür. Burası, ışığın mekana ruh kattığı bir aydınlık mabedidir.",
+    q: "🌿 bu ruhani atmosferden yavaşça ayrılıp nehir kıyısına doğru süzülelim mi?",
+    btnNext: "Tunca Nehri'ne Doğru ➡",
+    a: "audio/28.mp3",
+    g: ["img/28.jpg"]
+}
     {
         t: "🌊 27. DURAK: VEDAYA DOĞRU – TUNCA’NIN KIYISI",
         s: "ŞİFA ŞEHRİNE BAKIŞ",
