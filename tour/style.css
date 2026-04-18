@@ -1,0 +1,65 @@
+/* =========================
+   RESPONSIVE TIPO GRAFİ SİSTEMİ
+   ========================= */
+
+html{
+  font-size: clamp(15px, 1.1vw + 12px, 19px);
+}
+
+/* Ölçek değişkenleri */
+:root{
+  --h1: clamp(26px, 2.2vw + 18px, 40px);
+  --h2: clamp(20px, 1.6vw + 16px, 28px);
+  --body: clamp(15px, 0.9vw + 13px, 18px);
+  --small: clamp(13px, 0.6vw + 12px, 15px);
+}
+
+/* Başlık */
+.stitle{
+  font-size: var(--h1);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* Alt başlık */
+.ssub{
+  font-size: var(--h2);
+  line-height: 1.35;
+  opacity: 0.85;
+  letter-spacing: 0.1px;
+}
+
+/* Ana metin */
+.sbody{
+  font-size: var(--body);
+  line-height: 1.75;
+}
+
+/* Paragraf içi */
+.sbody p{
+  font-size: var(--body);
+  line-height: 1.75;
+}
+
+/* Soru / vurgu alanı */
+.qaq{
+  font-size: var(--body);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+/* Mobil ince ayar */
+@media (max-width: 768px){
+  html{
+    font-size: 16px;
+  }
+
+  .stitle{
+    line-height: 1.1;
+  }
+
+  .sbody{
+    line-height: 1.8;
+  }
+}
