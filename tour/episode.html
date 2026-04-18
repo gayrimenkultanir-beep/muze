@@ -23,6 +23,11 @@
   <button onclick="ask()">Sor</button>
   <p id="a"></p>
 </div>
+  function setAmbienceVolume(v){
+  if(ambience){
+    ambience.volume = v;
+  }
+}
 <script src="data/episodes.js"></script>
 <script src="js/episode.js"></script>
 
