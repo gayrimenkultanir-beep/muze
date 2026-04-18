@@ -3,19 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <title>Tur Başlangıcı</title>
+
 <link rel="stylesheet" href="css/home.css">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:black;
+  color:white;
+}
+
+/* 🎬 sinematik arka plan */
+#bg{
+  position:fixed;
+  width:100%;
+  height:100%;
+  background-size:cover;
+  background-position:center;
+  filter:blur(25px) brightness(0.4);
+  transform:scale(1.2);
+  z-index:-1;
+}
+
+/* 🧭 header */
+#header{
+  padding:30px;
+  font-size:24px;
+}
+
+/* 🎞️ kart alanı */
+#episodes{
+  display:flex;
+  gap:20px;
+  padding:30px;
+  overflow-x:auto;
+}
+
+/* 🎬 kart */
+.card{
+  min-width:260px;
+  height:160px;
+  border-radius:12px;
+  background-size:cover;
+  background-position:center;
+  position:relative;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:scale(1.1);
+}
+
+/* başlık */
+.card h3{
+  position:absolute;
+  bottom:10px;
+  left:10px;
+  margin:0;
+  font-size:16px;
+}
+</style>
+
 </head>
 
 <body>
 
+<!-- 🎬 ARKA PLAN -->
+<div id="bg"></div>
+
+<!-- 🧭 HEADER -->
 <div id="header">
   <h1>Müze Deneyimi</h1>
 </div>
 
+<!-- 🎞️ EPISODES -->
 <div id="episodes"></div>
 
+<!-- 📦 SCRIPTLER -->
 <script src="data/episodes.js"></script>
-<script src="js/home.js"></script>
+<script src="js/audio.js"></script>
+
+<script>
+const container = document.getElementById("episodes");
+const bg = document.getElementById("bg");
+
+// 🎧 ambience başlat (sayfa geçişinde tekrar kurulur)
+initAmbience();
+
+episodes.forEach(ep => {
+
+  const card = document.createElement("div");
+  card.className = "card";
+
+  card.style.backgroundImage = `url(${ep.image})`;
+  card.innerHTML = `<h3>${ep.title}</h3>`;
+
+  // 🎬 hover efekti
+  card.addEventListener("mouseenter", () => {
+    bg.style.backgroundImage = `url(${ep.image})`;
+
+    // 🎧 preview ses
+    playAudio(ep.audio);
+  });
+
+  // 🎬 tıklama → episode
+  card.addEventListener("click", () => {
+    window.location.href = `episode.html?id=${ep.id}`;
+  });
+
+  container.appendChild(card);
+
+});
+</script>
 
 </body>
 </html>
