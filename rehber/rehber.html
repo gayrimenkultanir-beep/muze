@@ -85,7 +85,25 @@
         </div>
     </div>
 
-   <script src="content.js"></script>
-<script src="script.js"></script>
+  <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSy...",
+            authDomain: "projen-adi.firebaseapp.com",
+            projectId: "projen-adi",
+            storageBucket: "projen-adi.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        // Firebase'i Başlat
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        // Veritabanı bağlantısını tanımla (Script.js bunu kullanacak)
+        const db = firebase.firestore();
+    </script>
+
+    <script src="content.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
