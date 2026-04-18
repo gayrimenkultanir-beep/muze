@@ -94,3 +94,114 @@ body {
     .nav-controls { flex-direction: column-reverse; gap: 10px; }
     .main-btn { width: 100%; }
 }
+/* Ziyaretçi Defteri Form Konteyneri */
+#guestbook-container {
+    padding: 20px;
+    max-width: 500px; /* Formun çok yayılmaması için */
+    margin: 0 auto;
+}
+
+/* Formun genel yapısı - her şeyi alt alta dizer */
+#msg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Elemanlar arasındaki boşluk */
+}
+
+/* İsim ve Şehir kutuları ile Not alanı */
+#msg-form input, 
+#msg-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0d5c1; /* Müze estetiğine uygun hafif ahşap/taş tonu */
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    background-color: #fff;
+    box-sizing: border-box; /* Kutuların dışarı taşmasını önler */
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+/* Kutuya tıklandığında renk değişimi */
+#msg-form input:focus, 
+#msg-form textarea:focus {
+    border-color: #8b5a2b; /* Odaklandığında daha belirgin kahverengi */
+}
+
+/* Geniş alanlı ziyaretçi notu kısmı */
+#msg-form textarea {
+    min-height: 150px; /* Not kısmının yüksekliği */
+    resize: vertical; /* Sadece aşağı doğru büyütülebilir */
+}
+
+/* Butonun tam genişlikte ve şık görünmesi */
+.send-btn {
+    background-color: #4a2c1a;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.send-btn:hover {
+    background-color: #633a22;
+}
+
+/* Altta listelenecek mesajların alanı */
+#list-target {
+    margin-top: 30px;
+    text-align: left;
+    max-height: 300px; /* Çok uzarsa kaydırılabilir olsun */
+    overflow-y: auto;
+}
+
+.message-item {
+    background: #fdfaf6;
+    padding: 15px;
+    border-left: 5px solid #8b5a2b;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+/* Mesaj listesi başlığı için */
+#list-target h3 {
+    font-family: 'Playfair Display', serif;
+    color: var(--primary);
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.message-item {
+    background: #fff; /* Beyaz kağıt hissi */
+    padding: 15px;
+    border-left: 5px solid #8b5a2b;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    animation: fadeInUp 0.5s ease-out; /* Yeni mesaj geldiğinde yumuşakça belirsin */
+}
+
+.message-item strong {
+    color: #4a2c1a;
+    display: block; /* İsmi ayrı satıra alır */
+    font-size: 1.1rem;
+}
+
+.message-item small {
+    color: #8b5a2b;
+    font-style: italic;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.message-item p {
+    margin: 5px 0 0 0;
+    color: #333;
+    line-height: 1.5;
+}
