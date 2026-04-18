@@ -3,40 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eşiğe Davet - Dijital Rehber</title>
+    <title>Eşiğe Davet | Sultan II. Bayezid Külliyesi</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,500&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-paper: #F2EBE1;
             --text-dark: #3E342B;
             --gold: #B39359;
-            --gold-light: #E8DCC4;
-            --border: rgba(179, 147, 89, 0.3);
-            --card-bg: rgba(255, 255, 255, 0.6);
+            --gold-light: rgba(179, 147, 89, 0.2);
+            --card-bg: rgba(255, 255, 255, 0.65);
         }
 
         body {
             background-color: var(--bg-paper);
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm66-3c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM37 7c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm61 73c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM82 7c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM92 47c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM24 52c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23b39359' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
             font-family: 'Montserrat', sans-serif;
             color: var(--text-dark);
             margin: 0;
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            padding: 40px 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
+            padding: 40px 20px;
             position: relative;
         }
 
-        /* --- ÜST BAŞLIK ALANI --- */
+        /* --- ÜST HEADER --- */
         header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             position: relative;
         }
 
@@ -47,199 +46,437 @@
             background: linear-gradient(145deg, #4a3f35, #2c2420);
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2), inset 0 2px 5px rgba(255,255,255,0.2);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             border: 2px solid var(--gold);
             cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
         }
+
+        .audio-btn.playing {
+            box-shadow: 0 0 15px var(--gold);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         header h1 {
             font-family: 'Playfair Display', serif;
-            font-size: 32px;
-            letter-spacing: 2px;
+            font-size: 26px;
+            letter-spacing: 1px;
             margin: 0;
             text-transform: uppercase;
         }
 
         header p {
             font-family: 'Playfair Display', serif;
-            font-size: 18px;
-            margin-top: 10px;
-            opacity: 0.8;
+            font-size: 16px;
+            margin-top: 5px;
+            opacity: 0.7;
         }
 
-        .shifa-title {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-size: 20px;
-            margin: 30px 0;
+        /* --- GÖRSEL --- */
+        .hero-img-box {
+            width: 100%;
+            height: 280px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
 
-        /* --- TIMELINE YAPISI --- */
-        .timeline-wrapper {
+        .hero-img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- TIMELINE VE KART --- */
+        .timeline-container {
             position: relative;
-            padding-left: 60px;
+            padding-left: 50px;
+            border-left: 2px solid var(--gold);
+            margin-left: 10px;
         }
 
-        /* Sol Çizgi */
-        .timeline-line {
-            position: absolute;
-            left: 28px; top: 0; bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--gold), var(--gold), transparent);
-        }
-
-        /* Durak Noktaları (Giriş, Darüşşifa vs) */
         .timeline-marker {
             position: absolute;
-            left: -55px;
-            display: flex; align-items: center; gap: 10px;
-            font-size: 12px; font-weight: 600;
-            color: var(--text-dark);
-        }
-
-        .dot {
-            width: 12px; height: 12px;
-            background: var(--bg-paper);
-            border: 2px solid var(--gold);
-            border-radius: 50%;
-            z-index: 2;
-        }
-
-        .dot.active {
+            left: -11px;
+            width: 20px; height: 20px;
             background: var(--gold);
-            box-shadow: 0 0 10px var(--gold);
+            border-radius: 50%;
+            border: 4px solid var(--bg-paper);
         }
 
-        /* --- KART TASARIMI --- */
         .card {
             background: var(--card-bg);
-            backdrop-filter: blur(5px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-            border: 1px solid var(--border);
-            box-shadow: 0 8px 32px rgba(179, 147, 89, 0.1);
-            display: flex; align-items: center; gap: 20px;
-            transition: transform 0.3s ease;
-            position: relative;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--gold-light);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
         }
 
-        .card:hover { transform: translateY(-5px); }
-
-        /* Kartın solundaki minik ok (Timeline bağlantısı) */
-        .card::before {
-            content: "◀";
-            position: absolute;
-            left: -15px; top: 20px;
+        .card .subtitle {
+            font-size: 13px;
             color: var(--gold);
+            font-weight: 600;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .card .description {
+            font-size: 15px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .card .question {
+            background: rgba(179, 147, 89, 0.08);
+            padding: 15px;
+            border-left: 3px solid var(--gold);
+            font-style: italic;
             font-size: 14px;
         }
 
-        .icon-box {
-            width: 60px; height: 60px;
-            flex-shrink: 0;
-            display: flex; justify-content: center; align-items: center;
+        /* --- BUTON --- */
+        .btn-next {
+            width: 100%;
+            background: var(--text-dark);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-family: 'Montserrat';
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 1px;
         }
 
-        .icon-box svg { width: 100%; height: 100%; fill: var(--gold); }
-
-        .card-content h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 18px; margin: 0 0 5px 0;
+        .btn-next:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
         }
 
-        .card-content p {
-            font-size: 13px; line-height: 1.5; margin: 0; opacity: 0.9;
+        .progress-text {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 20px;
+            opacity: 0.5;
         }
-
-        /* --- FOOTER NAV --- */
-        .footer-nav {
-            margin-top: 40px;
-            border-top: 1px solid var(--gold);
-            padding-top: 20px;
-        }
-        .footer-nav div {
-            display: flex; align-items: center; gap: 15px;
-            padding: 8px 0; font-size: 14px; opacity: 0.7;
-        }
-
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <div class="audio-btn">
+        <div class="audio-btn" id="audioBtn" onclick="toggleAudio()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
         </div>
-        <h1>🏛️ Eşiğe Davet</h1>
+        <h1 id="main-title">Yükleniyor...</h1>
         <p>Sultan II. Bayezid Külliyesi</p>
     </header>
 
-    <div class="shifa-title">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--gold)"><path d="M12 2l2.4 7.2L22 12l-7.6 2.4L12 22l-2.4-7.2L2 12l7.6-2.4z"/></svg>
-        Şifa Yolculuğu
+    <div class="hero-img-box">
+        <img id="step-img" src="" alt="Durak Görseli">
     </div>
 
-    <div class="timeline-wrapper">
-        <div class="timeline-line"></div>
-
-        <div class="timeline-marker" style="top:20px;">
-            Giriş <div class="dot active"></div>
-        </div>
+    <div class="timeline-container">
+        <div class="timeline-marker"></div>
         <div class="card">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h14v-8h3L12 3zm0 4.5l5 4.5V18h-2v-4h-6v4H7v-6l5-4.5z"/></svg>
-            </div>
-            <div class="card-content">
-                <h3>Miras</h3>
-                <p>500 yıllık köklü bir geçmişe hoş geldiniz.</p>
-            </div>
+            <span class="subtitle" id="step-subtitle">...</span>
+            <div class="description" id="step-desc"></div>
+            <div class="question" id="step-question"></div>
         </div>
-
-        <div class="card">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8.17,20C14.33,20 19,15.33 19,9.17C19,8.76 18.97,8.37 18.92,8H17M13,2C7.5,2 3.33,5.17 3,10.5C3,13.33 4.33,15.33 6.33,16.83C7.5,13.5 9.33,10.83 13,9.5V2Z"/></svg>
-            </div>
-            <div class="card-content">
-                <h3>Arınış</h3>
-                <p>Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?</p>
-            </div>
-        </div>
-
-        <div class="timeline-marker" style="top:230px;">
-            Darüşşifa <div class="dot"></div>
-        </div>
-        <div class="card">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M12,2C12,2 6,8 6,12C6,15.31 8.69,18 12,18C15.31,18 18,15.31 18,12C18,8 12,2 12,2Z"/></svg>
-            </div>
-            <div class="card-content">
-                <h3>Akış</h3>
-                <p>Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.</p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="icon-box">
-                <svg viewBox="0 0 24 24"><path d="M12.65,10C11.83,7.67 9.61,6 7,6A7,7 0 0,0 0,13A7,7 0 0,0 7,20C9.61,20 11.83,18.33 12.65,16H17V20H21V16H24V12H12.65M7,18A5,5 0 0,1 2,13A5,5 0 0,1 7,8A5,5 0 0,1 12,13A5,5 0 0,1 7,18Z"/></svg>
-            </div>
-            <div class="card-content">
-                <h3>Eşik</h3>
-                <p>Günlük hayatın gürültüsünü dışarıda bırakın. Zamanın ötesine geçmeye hazır mısınız?</p>
-            </div>
-        </div>
+        <button class="btn-next" id="nextBtn" onclick="nextStep()"></button>
+        <div class="progress-text" id="progress"></div>
     </div>
-
-    <footer class="footer-nav">
-        <div><div class="dot" style="width:8px; height:8px;"></div> Giriş</div>
-        <div><div class="dot" style="width:8px; height:8px;"></div> Darüşşifa</div>
-        <div><div class="dot" style="width:8px; height:8px;"></div> Medrese</div>
-        <div><div class="dot" style="width:8px; height:8px;"></div> Cami</div>
-        <div><div class="dot" style="width:8px; height:8px;"></div> İmarethane</div>
-    </footer>
 </div>
+
+<script>
+const tourData = [
+    {
+        t: "🏛️ EŞİĞE DAVET | SULTAN II. BAYEZİD KÜLLİYESİ",
+        s: "✨ ŞİFA YOLCULUĞU",
+        m: "🏰 **MİRAS:** 500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿 **ARINIŞ:** Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?\n\n💧 **AKIŞ:** Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.",
+        q: "🔑 **EŞİK:** Günlük hayatın gürültüsünü dışarıda bırakın. Şimdi, zamanın ötesine geçmeye hazır mısınız?",
+        btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
+        a: "audio/intro.mp3",
+        g: ["img/intro.jpg"]
+    },
+    {
+        t: "🏛️ 1. DURAK: ADALET VE ŞİFA KAPISI",
+        s: "⚖️ MİMARİ VE FONKSİYONEL BÜTÜNLÜK",
+        m: "🎟️ İhtişamlı ana kapıdan adımınızı attığınız bu nokta, Osmanlı’nın insanı merkeze alan hizmet anlayışının başlangıcıdır.\n\n✨ Sultan II. Bayezid Külliyesi, sadece bir yapılar topluluğu değil; tıp, eğitim ve sosyal yaşamın iç içe geçtiği, döneminin en ileri 'sağlık ve bilim kampüsü'dür.\n\n👀 Mevcut konumunuzdan itibaren külliye iki ana aksa ayrılmaktadır:\n\n🏛️ **Merkez Aks:** Ruhun ve bedenin şifa bulduğu Darüşşifa’ya uzanır.\n📜 **Sağ Aks:** Dönemin tıp eğitiminin kalbi olan Medrese-i Etıbba’ya açılır.\n\n🧭 Külliyenin genel yerleşim planını ve bu muazzam organizasyonun işleyişini kavramak adına şimdi sizi Sunum Odası’na davet ediyorum.",
+        q: "🗣️ “Geçmişin bilgeliğine giden bu yolda hazırsanız, Darüşşifa’nın ana girişine doğru ilerleyerek şifa yolculuğumuza başlayalım.”",
+        btnNext: "Darüşşifa Girişine İlerle ➡",
+        a: "audio/01.mp3",
+        g: ["img/01.jpg"]
+    },
+    {
+        t: "🏛️ 2. DURAK: DARÜŞŞİFA TAÇ KAPISI",
+        s: "🏛️ ESTETİK VE NİZAM",
+        m: "🚪 Şifanın giriş kapısına ulaştığınızda, sağ cephede yer alan bilgilendirme panoları sizi karşılayacaktır.\n\n📌 **Bu panolar aracılığıyla:**\n• Külliyenin muazzam **yerleşim planını**,\n• Darüşşifa’nın **mimari kurgusunu** ve işleyiş şemasını teknik detaylarıyla inceleyebilirsiniz.\n\n👁️ Bu görsel veriler, adımlayacağınız mekanın dehasını anlamlandırmanıza yardımcı olacaktır. Şimdi, Darüşşifa’nın o vakur ve ağırbaşlı kapısından geçiyoruz…\n\n🌿 Beş asırlık bir sükunetin kapılarını aralıyor ve şifanın dış dünyaya açılan ilk halkası olan **1. AVLUYA** dahil oluyoruz.",
+        q: "👣 “Tarihin ve tıbbın iç içe geçtiği bu kutsal eşikten geçerek, ilk avlunun huzuruna tanıklık etmeye hazır mısınız?”",
+        btnNext: "1. Avluya Adım At ➡",
+        a: "audio/02.mp3",
+        g: ["img/02.jpg"]
+    },
+    {
+        t: "🏛️ 3. DURAK: DARÜŞŞİFA 1. AVLU",
+        s: "ŞİFANIN İLK DURAĞI",
+        m: "🌿 Şu an Darüşşifa’nın ana avlusu olan 1. Avludayız.\n\n✨ **Eşiği geçtiğiniz an:**\n• Dış dünyanın gürültüsü kaybolur\n• Yerini taşın serinliği ve ferahlık hissi alır\n\n🏛️ **1. Avlu: Şifanın İlk Durağı**\n\n👀 Başınızı kaldırdığınızda:\n• Sağ tarafta revaklı yürüyüş yolları\n• Her revakta küçük kubbeler ve düzenli bir ritim\n\n🧱 Sağınıza ve solunuza baktığınızda:\n• Birbirinden bağımsız kapılara sahip odalar görürsünüz\n\n🏠 **Sol taraf (4 hizmet odası):**\n• Personel Odası\n• Çamaşırhane\n• Mutfak\n• Kiler\n\n🏥 **Sağ taraf (6 oda):**\n• Poliklinik hizmetlerinin verildiği odalar\n\n👨‍⚕️ **Burada:**\n• Hastalar ilk muayenelerini olurdu\n• Göz, cerrahi ve diğer hekimler görev yapardı\n\n🏛️ Bu avlu, yataklı tedaviye geçmeden önce;\n• Muayene\n• İlaç hazırlama\n• Tıbbi düzenleme\nsüreçlerinin yürütüldüğü merkezdi.",
+        q: "🔁 Bu odalara tekrar döneceğimiz için şimdi yolumuza devam edebiliriz.",
+        btnNext: "Süt Kuyusu ve Sunum Odasına Doğru ➡",
+        a: "audio/03.mp3",
+        g: ["img/03.jpg"]
+    },
+    {
+        t: "🏛️ 4. DURAK: SEMBOLLER VE SUNUM ODASI",
+        s: "🌿 ŞİFA YOLUNDA İNANÇ VE SEMBOLİZM",
+        m: "🚶‍♂️ Sunum odasına doğru ilerlerken, avlunun sessiz tanıkları olan kadim semboller yolunuza eşlik edecek.\n\n💧 **Süt Kuyusu:** Sol taraftaki hizmet birimlerinin hemen ilerisinde yer alan bu kuyu, asırlık bir halk inanışının merkezidir.\n\n🌳 **Ağaç ve Sarmaşık:** Birkaç adım ileride, gövdesine sıkıca sarılmış sarmaşığıyla yükselen o ağacı göreceksiniz.\n\n🏛️ **Bilgi Eşiği:** İkinci Avlu’ya açılan taç kemerli geçiş kapısına ulaştığınızda, sol tarafta yer alan **Sunum Odası** sizi karşılayacaktır.",
+        q: "🎬 “Görsel ve işitsel bir yolculukla bu devasa yapının sırlarını keşfetmeye hazırsanız, sunumumuzu başlatalım.”",
+        btnNext: "Sunumu Başlat ➡",
+        a: "audio/04.mp3",
+        g: ["img/04.jpg"]
+    },
+    {
+        t: "🏛️ 5. DURAK: BİLGİDEN DENEYİME",
+        s: "📜 TAŞLARIN DİLE GELDİĞİ ANLAR",
+        m: "📚 Sunum odasında edindiğimiz tarihsel perspektifle, şimdi bu muazzam yapının taşları zihnimizde yeniden canlanıyor.\n\n🚶‍♂️ Revaklı yolun gölgesinde, geçmişin ayak izlerini takip ederek sağ kanattan itibaren ağır adımlarla ilerleyelim.",
+        q: "👣 “Lojistik ve şifa birimlerinin saklı hikâyelerini dinlemeye hazır mısınız?”",
+        btnNext: "Odaları Keşfetmeye Başla ➡",
+        a: "audio/05.mp3",
+        g: ["img/05.jpg"]
+    },
+    {
+        t: "🏛️ 6. DURAK: İDARİ VE LOJİSTİK BİRİMLER",
+        s: "🧼 DARÜŞŞİFADA YAŞAM VE HİJYEN EKOLÜ",
+        m: "🚪 Giriş aksının sol kanadında sıralanan bu odalar, darüşşifanın kesintisiz hizmet veren lojistik merkezidir:\n\n🛏️ **Personel Odası**\n🧺 **Çamaşırhane**\n🍲 **Mutfak (Matbah)**\n🏺 **Kiler**",
+        q: "🏛️ “Lojistik birimleri geride bırakırken, şifanın teşhis noktalarına; revakların altındaki poliklinik odalarına doğru ilerleyelim.”",
+        btnNext: "Poliklinik Odalarına Geç ➡",
+        a: "audio/06.mp3",
+        g: ["img/06.jpg"]
+    },
+    {
+        t: "🏛️ 7. DURAK: POLİKLİNİK BİRİMLERİ",
+        s: "🩺 TEŞHİS, KARAR VE KLİNİK YÖNETİMİ",
+        m: "Bu birimler, modern tıptaki 'ilk kabul ve triyaj' merkezinin tarihsel karşılığıdır.\n\n🔍 **Klinik Değerlendirme Süreci:**\n1️⃣ İlk Muayene ve Teşhis\n2️⃣ Triyaj ve Sınıflandırma\n3️⃣ Ayakta Tedavi",
+        q: "👉 “Tıbbın bu kadim uygulama alanlarını daha yakından tanımak için muayene türlerini detaylandıralım.”",
+        btnNext: "Muayene Türlerini İncele ➡",
+        a: "audio/07.mp3",
+        g: ["img/07.jpg"]
+    },
+    {
+        t: "🏛️ 8. DURAK: POLİKLİNİK BİRİMLERİ VE İHTİSAS ALANLARI",
+        s: "🩺 KLİNİK BRANŞLAŞMANIN TARİHSEL KÖKENLERİ",
+        m: "🩺 **Darüşşifa’da İhtisas Alanları:**\n🧠 **1. Asabiye ve Ruh Sağlığı**\n🌡️ **2. Dahiliye (İç Hastalıkları)**\n⚔️ **3. Hariciye (Cerrahi)**\n👁️ **4. Kehhallik (Göz Hekimliği)**\n🌿 **5. Eczacılık ve Farmakoloji**",
+        q: "🤫 “Polikliniklerin hareketliliğinden ayrılıp, sükunetin ve derin şifanın hakim olduğu İkinci Avlu’ya geçmeye hazır mısınız?”",
+        btnNext: "İkinci Avluye İlerle ➡",
+        a: "audio/08.mp3",
+        g: ["img/08.jpg"]
+    },
+    {
+        t: "🏛️ 9. DURAK: İKİNCİ AVLU EŞİĞİ",
+        s: "🔇 AKUSTİK FİLTRE VE RUHSAL ARINMA",
+        m: "🚪 **Eşik: Seslerin Sustuğu Filtre**\nBu kapının dar ve alçak yapısı, sadece fiziksel bir geçit değil; aynı zamanda akustik bir bariyerdir. Kapıdan içeri adım attığınız an, dış dünyanın uğultusu bıçak gibi kesilir.",
+        q: "⚖️ “Hiyerarşinin ve disiplinli yönetim merkezinin sessiz dünyasına adım atmaya hazır mısınız?”",
+        btnNext: "Yönetim Merkezine Giriş ➡",
+        a: "audio/09.mp3",
+        g: ["img/09.jpg"]
+    },
+    {
+        t: "🏛️ 10. DURAK: İKİNCİ AVLU | İDARE VE NİZAM",
+        s: "⚖️ ŞİFAHANENİN OPERASYONEL MERKEZİ",
+        m: "🏢 **Yönetim Merkezi:** Sağ ve sol kanatta yer alan dört birim, şifahanenin hiyerarşik yapısını yansıtır.\n\n📜 **Kâtipler:** Her hastanın kaydı, yatış planlaması ve tedavi süreçleri burada belgelenirdi.",
+        q: "💎 “Beş asırlık sükunetin zirvesine; sekizgen plana sahip Büyük Şifahane’ye girmeye hazır mısınız?”",
+        btnNext: "Büyük Şifahaneye Adım At ➡",
+        a: "audio/10.mp3",
+        g: ["img/10.jpg"]
+    },
+    {
+        t: "🏛️ 11. DURAK: DARÜŞŞİFA EŞİĞİ",
+        s: "📜 TAŞIN MÜHÜRLENDİĞİ GEÇİT",
+        m: "🚪 **Eşik Noktası: Taşın Sessiz Daveti**\nYüksek kemerin altında durup başınızı yukarı kaldırdığınızda, taşın üzerine bir mühür gibi işlenmiş o kadim kitabeyi göreceksiniz.",
+        q: "💎 “Beş yüz yıllık bir huzur senfonisine; Büyük Şifahane’nin kalbine tanıklık etmeye hazır mısınız?”",
+        btnNext: "Büyük Şifahaneyi Keşfet ➡",
+        a: "audio/11.mp3",
+        g: ["img/11.jpg"]
+    },
+    {
+        t: "🏛️ 12. DURAK: BÜYÜK ŞİFAHANE",
+        s: "🌊 RUHUN ŞİFAYA KAVUŞTUĞU ZİRVE",
+        m: "🌊 **Şadırvan:** Suyun sesi koğuşlar arası ses izolasyonu sağlar.\n🎶 **Musiki Terapisi:** Haftada üç gün on kişilik heyet tarafından icra edilirdi.\n🛌 **10 Koğuş:** 6 kışlık ve 4 yazlık (eyvan) oda düzeni mevcuttur.",
+        q: "🌿 “Ruhunuzda bu kadim dinginliği taşıyarak, şimdi hekimlerin yetiştiği ilim yuvasına, Medreseye doğru ilerliyoruz.”",
+        btnNext: "Medrese Yoluna Dön ➡",
+        a: "audio/12.mp3",
+        g: ["img/12.jpg"]
+    },
+    {
+        t: "🏛️ 13. DURAK: İLİM YOLUNA DÖNÜŞ",
+        s: "🎓 ŞİFADAN BİLGİYE: MEDRESE EŞİĞİ",
+        m: "🌬️ **Mekânsal Yönelim:** Darüşşifa’nın ana kapısından dışarı süzüldüğünüzde, kendinizi yeniden külliyenin geniş giriş avlusunda bulursunuz.\n\n📜 **Medrese-i Etıbba:** Dönemin tıp fakültesi sizi karşılar.",
+        q: "🎓 “Şifanın bilimle harmanlandığı, geleceğin hekimlerinin yetiştiği ilim yuvasına girmeye hazır mısınız?”",
+        btnNext: "Medreseye Adım At ➡",
+        a: "audio/13.mp3",
+        g: ["img/13.jpg"]
+    },
+    {
+        t: "🎓 14. DURAK: MEDRESE-İ ETİBBA (1. BÖLÜM)",
+        s: "HEKİMLERİN YETİŞTİĞİ OCAK",
+        m: "🏠 **Eğitim Alanı:** 18 adet öğrenci hücresi bulunmaktadır.\n👨‍🏫 **Müderris Odası:** Sağ köşede yer alan idari ve eğitim planlama merkezidir.",
+        q: "Akademik kalbe, dershanelere girmeye hazır mısınız?",
+        btnNext: "Eğitim Merkezlerine İlerle ➡",
+        a: "audio/14.mp3",
+        g: ["img/14.jpg"]
+    },
+    {
+        t: "🎓 15. DURAK: MEDRESE-İ ETİBBA (2. BÖLÜM)",
+        s: "EĞİTİM MERKEZLERİ",
+        m: "📖 **Büyük Dershane:** Ana sınıftır.\n📚 **Kütüphane:** Padişah mühürlü el yazmalarının bulunduğu bölümdür.\n🧪 **Uygulama:** Teorik bilgi Darüşşifa'da pratiğe dönüşür.",
+        q: "Külliyenin kalbine, cami meydanına çıkalım mı?",
+        btnNext: "Meydana Çıkış ➡",
+        a: "audio/15.mp3",
+        g: ["img/15.jpg"]
+    },
+    {
+        t: "🎓 16. DURAK: CAMİ AVLUSUNA GEÇİŞ",
+        s: "KÜLLİYENİN KALBİNE BAKIŞ",
+        m: "🌿 **Turnike:** Meydana çıkış noktasıdır.\n🕌 **Cami:** Külliyenin merkezindeki heybetli yapı.\n🏗️ **Lojistik Birimler:** Fırın ve kiler bölümleri karşıda yer alır.",
+        q: "Bereketin ve paylaşmanın merkezine girmeye hazır mısınız?",
+        btnNext: "İmarethaneye Giriş ➡",
+        a: "audio/16.mp3",
+        g: ["img/16.jpg"]
+    },
+    {
+        t: "🍲 17. DURAK: İMARETHANE",
+        s: "BEREKETİN VE PAYLAŞMANIN KALBİ",
+        m: "🌿 **Sosyal Adalet:** Hasta, öğrenci ve yolcuların ücretsiz yemek yediği merkez.\n🔥 **Mutfak:** Dev kazanlarda gün doğmadan yemekler kaynamaya başlar.",
+        q: "Şimdi yemeklerin sunulduğu Yemekhane ve Kiler bölümlerine bakalım mı?",
+        btnNext: "Yemekhane ve Kilere Geç ➡",
+        a: "audio/17.mp3",
+        g: ["img/17.jpg"]
+    },
+    {
+        t: "🏛️ 18. DURAK: İMARETHANE (DEVAM)",
+        s: "SOSYAL DEVLETİN MERKEZİ",
+        m: "👨‍🍳 **Herkes İçin Sofra:** Kim olduğuna bakılmaksızın kapı herkese açıktır.\n🌿 **Tedavi Edici Beslenme:** Darüşşifa hastalarına özel diyetler hazırlanır.",
+        q: "İmaretin diğer temel bölümlerini ve mutfağın kalbini görmeye hazır mısınız?",
+        btnNext: "Mutfak ve Kilere İlerle ➡",
+        a: "audio/18.mp3",
+        g: ["img/18.jpg"]
+    },
+    {
+        t: "🏛️ 19. DURAK: İMARETHANE (SON)",
+        s: "İMARETİN TEMEL BÖLÜMLERİ",
+        m: "🥖 **Fırın:** Taze 'fodula' ekmeklerinin merkezi.\n🏺 **Kiler:** Serin ve korunaklı erzak depoları.\n🔥 **Odunluk:** Ocakların enerjisinin sağlandığı alan.",
+        q: "Şehre gelen yolcuların sığınağı olan Tabhanelere geçelim mi?",
+        btnNext: "Tabhanelere İlerle ➡",
+        a: "audio/19.mp3",
+        g: ["img/19.jpg"]
+    },
+    {
+        t: "🏛️ 20. DURAK: TABHANELER",
+        s: "MİSAFİRHANELER",
+        m: "🏠 **3 Günlük Ücretsiz Konaklama:** Yolcuların ve dervişlerin sığınağıdır.\n🔥 **Hücreler:** Ocaklı, samimi dinlenme odaları.",
+        q: "🥤 Şimdi bu tarihi atmosferde bir yorgunluk şerbeti içmeye ne dersiniz?",
+        btnNext: "Şerbetevine İlerle ➡",
+        a: "audio/20.mp3",
+        g: ["img/20.jpg"]
+    },
+    {
+        t: "🏛️ 21. DURAK: 🥤 ŞERBETEVİ",
+        s: "GEÇMİŞİN TATLI HATIRASI",
+        m: "🍹 **Geleneksel Lezzetler:** Demirhindi, Gül ve Reyhan şerbetleri.\n🎁 **Hediyelik:** Edirnekâri kutular ve şifalı esanslar.",
+        q: "✨ Şerbetevinde içilen bir yudum, geçmiş ile bugün arasında kurulan tatlı bir hatıradır.",
+        btnNext: "Yahya Baba'ya İlerle ➡",
+        a: "audio/21.mp3",
+        g: ["img/21.jpg"]
+    },
+    {
+        t: "🌿 22. DURAK: YAHYA BABA",
+        s: "MANEVİ BİR VEFA NOKTASI",
+        m: "🌳 **Manevi Bekçi:** Külliyenin bereketi için çalışan Yahya Baba’nın makamı.\n🤲 **İnanç ve Emek:** Yapıların ruhundaki manevi harç.",
+        q: "🤲 Şimdi Yahya Baba ile vedalaşıp yönümüzü yeniden CAMİ’ye çevirme vakti...",
+        btnNext: "Caminin Görkemine Doğru ➡",
+        a: "audio/22.mp3",
+        g: ["img/22.jpg"]
+    },
+    {
+        t: "🕌 23. DURAK: CAMİNİN GÖRKEMİ",
+        s: "RUHANİ DİNGİNLİĞE ADIM",
+        m: "🚶 **Taç Kapı:** Caminin devasa giriş kapısı sizi sessizliğe ve ibadete davet eder.",
+        q: "🤫 Sessizliğin içine adım atmaya hazır mısınız?",
+        btnNext: "Cami Avlusuna Giriş ➡",
+        a: "audio/23.mp3",
+        g: ["img/23.jpg"]
+    },
+    {
+        t: "🕌 24. DURAK: CAMİ AVLUSU (SON)",
+        s: "SÜKÛNETİN VE IŞIĞIN BULUŞMASI",
+        m: "⛲ **Şadırvan:** Suyun sesi taşın sessizliğine karışır.\n🏛️ **Mermer Sütunlar:** Osmanlı estetiğinin zarif koruma halkası.",
+        q: "Mabedin içindeki o büyük boşluğa ve huzura geçelim mi?",
+        btnNext: "Yolculuğu Tamamla",
+        a: "audio/24.mp3",
+        g: ["img/24.jpg"]
+    }
+];
+
+let currentStep = 0;
+let audio = new Audio();
+
+function renderStep(index) {
+    const data = tourData[index];
+    
+    // Metinleri ve başlıkları güncelle
+    document.getElementById('main-title').innerText = data.t;
+    document.getElementById('step-subtitle').innerText = data.s;
+    
+    // Markdown (**kalın**) ve (\n satır başı) işlemesi
+    let formattedDesc = data.m
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+    
+    document.getElementById('step-desc').innerHTML = formattedDesc;
+    document.getElementById('step-question').innerText = data.q;
+    document.getElementById('nextBtn').innerText = data.btnNext;
+    document.getElementById('step-img').src = data.g[0];
+    document.getElementById('progress').innerText = `${index + 1} / ${tourData.length}`;
+
+    // Sesi hazırla (çalmıyoruz, kullanıcı butona basınca çalacak)
+    audio.pause();
+    audio.src = data.a;
+    document.getElementById('audioBtn').classList.remove('playing');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep() {
+    if (currentStep < tourData.length - 1) {
+        currentStep++;
+        renderStep(currentStep);
+    } else {
+        alert("Şifa yolculuğumuz burada sona erdi. Teşekkürler.");
+        currentStep = 0;
+        renderStep(0);
+    }
+}
+
+function toggleAudio() {
+    const btn = document.getElementById('audioBtn');
+    if (audio.paused) {
+        audio.play();
+        btn.classList.add('playing');
+    } else {
+        audio.pause();
+        btn.classList.remove('playing');
+    }
+}
+
+// Başlangıç
+renderStep(0);
+</script>
 
 </body>
 </html>
