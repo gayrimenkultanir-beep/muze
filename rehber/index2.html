@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sultan II. Bayezid Külliyesi - Akademik Arşiv</title>
+    <title>Sultan II. Bayezid Külliyesi - Dijital Rehber</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --sidebar-width: 340px;
+            --sidebar-width: 360px;
             --ana-renk: #2C2420;
             --altin: #B39359;
             --mermer: #FDFCF9;
@@ -26,16 +26,16 @@
             min-height: 100vh;
         }
 
-        /* --- ARKA PLAN GEOMETRİSİ --- */
+        /* Saf SVG Arka Plan */
         .bg-pattern {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M40 0l40 40-40 40L0 40z' fill='%23B39359' fill-opacity='1'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l30 30-30 30L0 30z' fill='%23B39359' fill-opacity='1'/%3E%3C/svg%3E");
         }
 
-        /* --- SIDEBAR (FİHRİST) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--beyaz);
@@ -45,210 +45,216 @@
             display: flex;
             flex-direction: column;
             z-index: 1000;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: 0.4s;
         }
 
         .sidebar-header {
             padding: 40px 30px;
-            border-bottom: 2px solid var(--altin);
-            background: var(--beyaz);
+            border-bottom: 3px solid var(--altin);
         }
 
-        .sidebar-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-            margin: 0;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        .nav-scroll {
-            overflow-y: auto;
-            flex: 1;
-            padding: 10px 0;
-        }
+        .nav-scroll { overflow-y: auto; flex: 1; }
 
         .nav-item {
             padding: 20px 30px;
-            font-size: 13px;
+            font-size: 12px;
             cursor: pointer;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
             transition: 0.3s;
-            border-bottom: 1px solid rgba(179, 147, 89, 0.1);
             display: flex;
             align-items: center;
-            gap: 15px;
-            color: var(--ana-renk);
-            opacity: 0.7;
-        }
-
-        .nav-item:hover, .nav-item.active {
-            background: var(--vurgu-soft, rgba(179, 147, 89, 0.1));
-            opacity: 1;
-            color: var(--altin);
         }
 
         .nav-item.active {
-            border-right: 4px solid var(--altin);
-            font-weight: 600;
+            background: rgba(179, 147, 89, 0.1);
+            color: var(--altin);
+            border-right: 5px solid var(--altin);
         }
 
-        /* --- İÇERİK ALANI --- */
+        /* --- ANA İÇERİK --- */
         .main-content {
             margin-left: var(--sidebar-width);
             flex: 1;
-            padding: 80px 40px;
+            padding: 60px 40px;
             display: flex;
             justify-content: center;
         }
 
-        .academic-card {
+        .academic-frame {
             background: var(--beyaz);
             width: 100%;
-            max-width: 850px;
-            padding: 70px;
+            max-width: 800px;
+            padding: 80px;
             position: relative;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.04);
+            box-shadow: 0 50px 100px rgba(0,0,0,0.05);
             border: 1px solid var(--kenarlik);
         }
 
-        /* Gömülü SVG Köşe Süsleri */
-        .corner-svg {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            fill: var(--altin);
-            opacity: 0.6;
-        }
-        .top-l { top: 20px; left: 20px; }
-        .top-r { top: 20px; right: 20px; transform: rotate(90deg); }
-        .bot-l { bottom: 20px; left: 20px; transform: rotate(-90deg); }
-        .bot-r { bottom: 20px; right: 20px; transform: rotate(180deg); }
+        /* Köşe SVG'ler */
+        .corner { position: absolute; width: 45px; height: 45px; stroke: var(--altin); stroke-width: 2; fill: none; }
+        .tl { top: 20px; left: 20px; }
+        .tr { top: 20px; right: 20px; transform: rotate(90deg); }
+        .bl { bottom: 20px; left: 20px; transform: rotate(-90deg); }
+        .br { bottom: 20px; right: 20px; transform: rotate(180deg); }
 
-        .content-body h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 38px;
-            margin: 0 0 15px 0;
-            line-height: 1.2;
-        }
+        .subtitle { font-family: 'Playfair Display', serif; font-style: italic; color: var(--altin); font-size: 18px; margin-bottom: 30px; display: block; }
+        .text-box { font-size: 16px; line-height: 1.8; text-align: justify; }
 
-        .subtitle {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            color: var(--altin);
-            font-size: 20px;
-            margin-bottom: 40px;
-            display: block;
-            border-bottom: 1px solid var(--kenarlik);
-            padding-bottom: 10px;
+        /* --- BUTONLAR --- */
+        .action-area {
+            margin-top: 50px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            border-top: 1px solid var(--kenarlik);
+            padding-top: 30px;
         }
 
-        .text-content {
-            font-size: 17px;
-            line-height: 1.9;
-            color: #333;
-            text-align: justify;
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 15px 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 2px;
         }
 
-        /* --- MOBİL --- */
-        .m-toggle {
-            display: none;
-            position: fixed;
-            top: 20px;
-            right: 20px;
+        .btn-next {
             background: var(--ana-renk);
             color: white;
-            padding: 12px;
             border: none;
-            z-index: 2000;
-            border-radius: 4px;
+            flex: 1;
+            justify-content: center;
         }
+
+        .btn-next:hover { background: #453a35; transform: translateY(-2px); }
+
+        .btn-audio {
+            background: white;
+            color: var(--altin);
+            border: 1px solid var(--altin);
+            gap: 10px;
+        }
+
+        .btn-audio:hover { background: var(--altin); color: white; }
+
+        /* SVG İkonlar için basit boyutlandırma */
+        .btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+        /* --- MOBİL --- */
+        .menu-btn { display: none; position: fixed; bottom: 20px; left: 20px; background: var(--ana-renk); color: white; border: none; padding: 15px; z-index: 2000; border-radius: 50%; }
 
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); width: 100%; }
             .sidebar.open { transform: translateX(0); }
-            .main-content { margin-left: 0; padding: 60px 20px; }
-            .academic-card { padding: 40px 25px; }
-            .m-toggle { display: block; }
+            .main-content { margin-left: 0; padding: 40px 15px; }
+            .academic-frame { padding: 40px 20px; }
+            .menu-btn { display: block; }
         }
     </style>
 </head>
 <body>
 
     <div class="bg-pattern"></div>
-    
-    <button class="m-toggle" onclick="toggleMenu()">MENÜ</button>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h2>DİJİTAL FİHRİST</h2>
-        </div>
+        <div class="sidebar-header"><h2>DİJİTAL FİHRİST</h2></div>
         <div class="nav-scroll" id="nav-list"></div>
     </nav>
 
     <main class="main-content">
-        <article class="academic-card">
-            <svg class="corner-svg top-l" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
-            <svg class="corner-svg top-r" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
-            <svg class="corner-svg bot-l" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
-            <svg class="corner-svg bot-r" viewBox="0 0 100 100"><path d="M0 0 v100 h5 v-95 h95 v-5 z"/></svg>
+        <article class="academic-frame">
+            <svg class="corner tl" viewBox="0 0 100 100"><path d="M100 0 H0 V100"/></svg>
+            <svg class="corner tr" viewBox="0 0 100 100"><path d="M100 0 H0 V100"/></svg>
+            <svg class="corner bl" viewBox="0 0 100 100"><path d="M100 0 H0 V100"/></svg>
+            <svg class="corner br" viewBox="0 0 100 100"><path d="M100 0 H0 V100"/></svg>
 
-            <div id="display-area" class="content-body">
-                <h1>Külliye Kayıtları</h1>
-                <span class="subtitle">Arşivi Görüntülemek İçin Bir Durak Seçin</span>
-                <p class="text-content">Sol paneldeki fihrist, Sultan II. Bayezid Külliyesi'nin 29 farklı noktasındaki akademik ve ruhani kayıtları içermektedir.</p>
+            <div id="content-display">
+                <h1 style="font-family:'Playfair Display'">Şifa Yolculuğu</h1>
+                <span class="subtitle">Hoş Geldiniz</span>
+                <p>Başlamak için sol menüden bir nokta seçin veya ilk durağa ilerleyin.</p>
+                <div class="action-area">
+                    <button class="btn btn-next" onclick="showContent(0)">YOLCULUĞA BAŞLA</button>
+                </div>
             </div>
         </article>
     </main>
 
     <script>
+        // TourData buraya (Senin verilerin)
         const tourData = [
-            { t: "🏛️ 1. DURAK: GİRİŞ VE KARŞILAMA", s: "YOL AYRIMI", m: "🎟️ Şu an biletlerimizi aldık ve o ana kapıdan içeri süzülüyoruz.\n\n✨ Burası sadece binalar topluluğu değil; insanın ruhu, bedeni ve yaşamına hitap eden dev bir organizasyondur.\n\n🚶‍♂️ Şimdi ağır adımlarla yürürken, 500 yıl öncesinin havasını ciğerlerimize çekelim." },
-            { t: "🚪 2. DURAK: DARÜŞŞİFA GİRİŞİ", s: "VAKUR GİRİŞ", m: "Giriş kapımıza geldiğimizde sağ tarafta duvarda asılı panolar bizi karşılayacak.\n\n📌 Bu panolarda Külliyenin genel görünümü yer alır. Darüşşifa’nın o eşsiz mimarisi, yukarıdan bakıldığında bile insana bir düzen duygusu verir." },
-            // ... (3-22 arasındaki durakları buraya kendi verilerinle ekleyebilirsin)
-            { t: "🕌 23. DURAK: CAMİNİN GÖRKEMİNE DOĞRU", s: "RUHANİ DİNGİNLİĞE ADIM", m: "Külliyenin tüm yapılarını bir tespih tanesi gibi etrafında dizen o en heybetli yapıyı, Sultan II. Bayezid Camii’nin taç kapısını görebilirsiniz." },
-            { t: "🏛️ 24. DURAK: CAMİ AVLUSU", s: "SÜKÛNETİN VE IŞIĞIN BULUŞMASI", m: "Caminin devasa taç kapısından içeri süzüldüğünüzde, mermer işçiliğinin zarafeti sizi karşılar. Suyun sesi, taşın sessizliğine karışır." },
-            { t: "📜 25. DURAK: İBADET ALANINA DOĞRU", s: "RUHANİ ATMOSFERE HAZIRLIK", m: "Şimdi avlunun mermer zemininde ağır adımlarla yürüyerek asıl ibadet alanının girişine doğru yöneliyoruz. Devasa tek bir kubbenin altında bulacaksınız kendinizi." },
-            { t: "🕌 26. DURAK: CAMİNİN İÇ MEKANI", s: "TEK KUBBE, SONSUZ HUZUR", m: "Bu cami, Osmanlı mimarisinde 'Tek Kubbe' geleneğinin en saf örneklerinden biridir. Hünkâr Mahfili, mermer sütunlar üzerinde yükselerek zarafeti tamamlar." },
-            { t: "🌊 27. DURAK: VEDAYA DOĞRU", s: "ŞİFA ŞEHRİNE BAKIŞ", m: "Artık heybemizde hem şifalı tatlar hem de kıymetli hatıralar var. Tunca Nehri kıyısına doğru süzülüyoruz." },
-            { t: "🌊 28. DURAK: TUNCA NEHRİ KIYISI", s: "VEDANIN VE HUZURUN ADRESİ", m: "Nehrin akışı, Darüşşifa’da duyduğunuz su sesinin doğadaki yankısıdır. Köprü yalnızca iki kıyıyı değil; şifa ile hayatı birbirine bağlar." },
-            { t: "✍️ 29. DURAK: GÖNÜL KÖPRÜSÜ", s: "EBEDİ İZ", m: "Kalbinizden süzülenleri bizimle paylaşın, bu Gönül Köprüsü’nde sizin de bir ebedi iziniz kalsın…" }
+            {
+                t: "🏛️ EŞİĞE DAVET | SULTAN II. BAYEZİD KÜLLİYESİ",
+                s: "✨ ŞİFA YOLCULUĞU",
+                m: "🏰 **MİRAS:** 500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿 **ARINIŞ:** Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?",
+                q: "🔑 **EŞİK:** Hazır mısınız?",
+                btnNext: "ZAMANDA YOLCULUĞA BAŞLA",
+                a: "audio/intro.mp3"
+            },
+            {
+                t: "🏛️ 1. DURAK: ADALET VE ŞİFA KAPISI",
+                s: "⚖️ MİMARİ BÜTÜNLÜK",
+                m: "🎟️ İhtişamlı ana kapıdan adımınızı attınız...",
+                q: "🗣️ “Darüşşifa’nın ana girişine doğru ilerleyelim.”",
+                btnNext: "Darüşşifa Girişine İlerle ➡",
+                a: "audio/01.mp3"
+            }
+            // ... Diğer verileri buraya ekleyebilirsin
         ];
 
         const navList = document.getElementById('nav-list');
-        const displayArea = document.getElementById('display-area');
+        const displayArea = document.getElementById('content-display');
 
-        // Navigasyon oluşturucu
         tourData.forEach((step, index) => {
-            const div = document.createElement('div');
-            div.className = 'nav-item';
-            div.innerHTML = `<span>${step.t}</span>`;
-            div.onclick = () => {
-                showStep(index);
-                if(window.innerWidth < 992) toggleMenu();
-            };
-            navList.appendChild(div);
+            const item = document.createElement('div');
+            item.className = 'nav-item';
+            item.innerHTML = step.t;
+            item.onclick = () => { showContent(index); if(window.innerWidth < 992) toggleMenu(); };
+            navList.appendChild(item);
         });
 
-        function showStep(index) {
-            const step = tourData[index];
-            document.querySelectorAll('.nav-item').forEach((item, i) => {
-                item.classList.toggle('active', i === index);
-            });
+        function showContent(index) {
+            const data = tourData[index];
+            const isLast = index === tourData.length - 1;
+            
+            document.querySelectorAll('.nav-item').forEach((el, i) => el.classList.toggle('active', i === index));
 
-            displayArea.style.opacity = 0;
-            setTimeout(() => {
-                displayArea.innerHTML = `
-                    <h1>${step.t}</h1>
-                    <span class="subtitle">${step.s}</span>
-                    <div class="text-content">${step.m.replace(/\n/g, '<br>')}</div>
-                `;
-                displayArea.style.opacity = 1;
-            }, 200);
+            const formattedMsg = data.m.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+
+            displayArea.innerHTML = `
+                <h1 style="font-family:'Playfair Display'; font-size: 30px; margin-bottom:10px;">${data.t}</h1>
+                <span class="subtitle">${data.s}</span>
+                <div class="text-box">${formattedMsg}</div>
+                <div style="background:var(--mermer); padding:20px; margin-top:30px; border-left:3px solid var(--altin); font-style:italic;">
+                    ${data.q}
+                </div>
+                
+                <div class="action-area">
+                    <button class="btn btn-audio" onclick="playAudio('${data.a}')">
+                        <svg viewBox="0 0 24 24"><path d="M14 5v14l-7-5H4V10h3l7-5zM16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                        SESLİ REHBERİ DİNLE
+                    </button>
+                    
+                    ${!isLast ? `
+                    <button class="btn btn-next" onclick="showContent(${index + 1})">
+                        ${data.btnNext}
+                    </button>` : ''}
+                </div>
+            `;
         }
 
-        function toggleMenu() {
-            document.getElementById('sidebar').classList.toggle('open');
+        function playAudio(file) {
+            alert("Ses dosyası oynatılıyor: " + file);
+            // Gerçek kullanım için: 
+            // let audio = new Audio(file); audio.play();
         }
+
+        function toggleMenu() { document.getElementById('sidebar').classList.toggle('open'); }
     </script>
 </body>
 </html>
