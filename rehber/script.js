@@ -3,17 +3,34 @@ let isMuted = false;
 
 // 1. Yolculuğu Başlatan Fonksiyon
 function startJourney() {
-    document.getElementById("screen-intro").classList.remove("active-screen");
-    document.getElementById("screen-tour").classList.add("active-screen");
+    console.log("Yolculuk başlatılıyor..."); // Hata ayıklama için
     
-    renderStep();
+    // Ekran geçişleri
+    const introScreen = document.getElementById("screen-intro");
+    const tourScreen = document.getElementById("screen-tour");
     
+    if (introScreen && tourScreen) {
+        introScreen.classList.remove("active-screen");
+        tourScreen.classList.add("active-screen");
+        renderStep();
+    } else {
+        console.error("Ekranlar bulunamadı! ID'leri kontrol et.");
+    }
+    
+    // Mühür sesini hata payıyla çal
     const sealSound = document.getElementById("seal-sound");
-    if (sealSound) sealSound.play();
+    if (sealSound) {
+        sealSound.play().catch(e => console.warn("Mühür sesi çalınamadı (dosya eksik olabilir)."));
+    }
 }
 
 // 2. Durak Bilgilerini Ekrana Basan Fonksiyon
 function renderStep() {
+    if (typeof tourData === 'undefined') {
+        console.error("Hata: content.js yüklenemedi veya tourData bulunamadı!");
+        return;
+    }
+
     const data = tourData[currentStep];
     
     document.getElementById("title").innerText = data.t;
@@ -22,13 +39,18 @@ function renderStep() {
     document.getElementById("question").innerText = data.q;
     document.getElementById("btn-next").innerText = data.btnNext || "İleri ➡";
 
+    // İlerleme çubuğu
     const progress = ((currentStep + 1) / tourData.length) * 100;
     document.getElementById("bar").style.width = progress + "%";
 
+    // Ses yönetimi
     const player = document.getElementById("audio-player");
     player.src = data.a;
-    if (!isMuted) player.play().catch(e => console.log("Ses otomatik başlatılamadı"));
+    if (!isMuted) {
+        player.play().catch(e => console.log("Otomatik ses engellendi veya dosya yok."));
+    }
 
+    // Galeri yönetimi
     const gallery = document.getElementById("gallery-target");
     gallery.innerHTML = "";
     if (data.g && data.g.length > 0) {
@@ -40,10 +62,11 @@ function renderStep() {
         });
     }
 
+    // Geri butonu görünürlüğü
     document.getElementById("btn-prev").style.visibility = currentStep === 0 ? "hidden" : "visible";
 }
 
-// 3. İleri-Geri Navigasyon Fonksiyonu
+// 3. Navigasyon
 function navStep(direction) {
     if (direction === 1) {
         if (currentStep === tourData.length - 1) {
@@ -61,14 +84,14 @@ function navStep(direction) {
     window.scrollTo(0, 0);
 }
 
-// 4. Ziyaretçi Defteri Ekranını Göster
+// 4. Ziyaretçi Defterini Aç
 function showGuestbook() {
     document.getElementById("screen-tour").classList.remove("active-screen");
     document.getElementById("screen-guestbook").classList.add("active-screen");
     loadMessages();
 }
 
-// 5. Ses Aç/Kapat
+// 5. Ses Kontrol
 function toggleMute() {
     isMuted = !isMuted;
     const player = document.getElementById("audio-player");
@@ -78,7 +101,7 @@ function toggleMute() {
         player.pause();
         icon.className = "fas fa-volume-mute";
     } else {
-        player.play();
+        player.play().catch(e => {});
         icon.className = "fas fa-volume-up";
     }
 }
@@ -112,18 +135,17 @@ async function sendMessage() {
         document.getElementById("guest-city").value = "";
         document.getElementById("guest-text").value = "";
         
-        // BAŞARI POP-UP'INI GÖSTER (Yeni eklediğim kısım)
+        // Başarı Penceresini Göster
         const popup = document.getElementById("success-popup");
-        const successMsg = document.getElementById("success-msg");
-        if(popup && successMsg) {
-            successMsg.innerText = "Duygularınız Gönül Köprüsü'ne mühürlendi. Şifa olsun.";
+        if(popup) {
+            document.getElementById("success-msg").innerText = "Duygularınız Gönül Köprüsü'ne mühürlendi.";
             popup.style.display = "flex";
         }
 
         loadMessages();
     } catch (error) {
-        console.error("Hata:", error);
-        alert("Bağlantıda bir sorun oluştu, lütfen tekrar deneyin.");
+        console.error("Firebase Hatası:", error);
+        alert("Bağlantı hatası! Lütfen internetinizi veya Firebase kurallarını kontrol edin.");
     } finally {
         btn.disabled = false;
         btn.innerText = "KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM";
@@ -135,8 +157,7 @@ function loadMessages() {
     if (!listTarget) return;
 
     db.collection("messages").orderBy("timestamp", "desc").limit(10).get().then((querySnapshot) => {
-        listTarget.innerHTML = ""; // İçini temizle
-        
+        listTarget.innerHTML = "";
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             const msgHtml = `
@@ -147,5 +168,5 @@ function loadMessages() {
             `;
             listTarget.innerHTML += msgHtml;
         });
-    });
+    }).catch(err => console.error("Mesajlar yüklenemedi:", err));
 }
