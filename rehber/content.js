@@ -263,12 +263,11 @@ const tourData = [
         g: ["img/30.jpg"]
     },
 {
-        t: "🌊 29. DURAK: GÖNÜL KÖPRÜSÜNE DAVET",
-        s: "SİZİN İZLERİNİZ",
-        m: "🏛️ Bu mimariyi adım adım gezip, geçmişin izlerine dokunduktan sonra; şimdi sözü size bırakmak istiyoruz.\n\n💭 **Hissettikleriniz, düşündükleriniz, sizi en çok etkileyen anlar…**\nBelki bir huzur, belki bir hayranlık, belki de derin bir sessizlik…\n\n📖 Bu yüzden sizler için bir **Ziyaretçi Defteri** hazırladık.\n\n🖋️ **Buraya bırakacağınız her bir cümle:**\n• 🤍 Hem bizim için çok kıymetli olacak\n• 🌍 Hem de müzemizi ziyaret edecek diğer misafirlerin bu yolculuğu nasıl deneyimleyeceklerini anlamalarına ışık tutacaktır.\n\n✨ Kalbinizden geçenleri birkaç satırla bizimle paylaşırsanız, bu gönül köprüsüne siz de bir iz bırakmış olursunuz…",
-        q: "✍️ Sizi, Gönül Köprüsü sayfamızda duygularınızı paylaşmaya davet ediyoruz.",
-        btnNext: "🖋️ GÖNÜL KÖPRÜSÜNE GİT",
-        a: "audio/31.mp3",
-        g: ["img/31.jpg"]
-    }
-];
+    t: "🌊 29. DURAK: GÖNÜL KÖPRÜSÜNE DAVET",
+    s: "BU HİKAYEDE SİZİN DE İZİNİZ OLSUN",
+    m: "🏛️ Adım adım geçmişin izlerine dokunduk, bu muazzam mimariyi birlikte soluduk. Şimdi bu tarihi mekana kendi nefesinizi katma vakti.\n\n💭 **İçinizde Yankılananlar…**\nBir anlık huzur, derin bir hayranlık ya da kalbinizde kalan o sessiz tını…\n\n📖 Sizler için hazırladığımız **Ziyaretçi Defteri**, bu deneyimin manevi bir arşividir.\n\n🖋️ **Buraya bırakacağınız her cümle:**\n• 🤍 Bizim için paha biçilemez bir anı,\n• 🌍 Diğer misafirlerimiz için ise bu yolculuğu anlamlandıran bir ışık tutacaktır.\n\n✨ Kalbinizden süzülenleri bizimle paylaşın, bu Gönül Köprüsü’nde sizin de bir ebedi iziniz kalsın…",
+    q: "✍️ Gönül Köprüsü sayfamızda duygularınızı paylaşmaya davet ediyoruz.",
+    btnNext: "🖋️ GÖNÜL KÖPRÜSÜNE YAZ",
+    a: "audio/31.mp3",
+    g: ["img/31.jpg"]
+}
