@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sultan II. Bayezid Külliyesi - Dijital Rehber</title>
+<title>Dijital Rehber | Sultan II. Bayezid Külliyesi</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
 :root {
-    --ana-renk: #2C2420; /* Antrasit Kahve */
-    --altin: #B39359;    /* Eskitme Pirinç */
-    --mermer: #FDFCF9;  /* Müze Mermeri */
-    --golge: rgba(44, 36, 32, 0.05);
+    --sidebar-width: 280px;
+    --ana-renk: #2C2420;
+    --altin: #B39359;
+    --mermer: #FDFCF9;
+    --vurgu-soft: rgba(179, 147, 89, 0.1);
 }
 
 body {
@@ -21,182 +22,235 @@ body {
     background: var(--mermer);
     font-family: 'Montserrat', sans-serif;
     color: var(--ana-renk);
-    line-height: 1.6;
+    display: flex; /* Yan yana dizilim için */
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-/* Üst Header - Akademik Ağırlık */
-.museum-header {
-    padding: 60px 20px 40px;
-    text-align: center;
-    border-bottom: 1px solid rgba(179, 147, 89, 0.2);
+/* --- SOL NAVİGASYON (SIDEBAR) --- */
+.sidebar {
+    width: var(--sidebar-width);
     background: white;
-}
-
-.museum-header h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    letter-spacing: 1px;
-    margin: 0;
-    text-transform: uppercase;
-}
-
-.museum-header .subtitle {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    color: var(--altin);
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-/* Ana Konteyner */
-.content-wrapper {
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-/* Bölüm Kartları - Daha Zarif ve İnce */
-.exhibition-step {
+    border-right: 1px solid rgba(179, 147, 89, 0.2);
     display: flex;
-    gap: 25px;
-    margin-bottom: 50px;
-    position: relative;
-}
-
-/* Akış Çizgisi */
-.exhibition-step::after {
-    content: '';
-    position: absolute;
-    left: 15px;
-    top: 40px;
-    width: 1px;
-    height: calc(100% + 10px);
-    background: linear-gradient(to bottom, var(--altin), transparent);
-}
-
-.exhibition-step:last-child::after { display: none; }
-
-.step-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    color: var(--altin);
-    background: white;
-    z-index: 2;
-    min-width: 32px;
-}
-
-.step-info h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    margin: 0 0 10px 0;
-    font-weight: 600;
-}
-
-.step-info p {
-    font-size: 15px;
-    font-weight: 300;
-    color: #5D4037;
-    margin: 0;
-}
-
-/* Ses ve Kontrol Butonları */
-.floating-controls {
+    flex-direction: column;
+    padding: 40px 0;
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    height: 100vh;
     z-index: 100;
 }
 
-.circular-btn {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: var(--ana-renk);
-    color: white;
-    border: 2px solid var(--altin);
+.sidebar-logo {
+    padding: 0 30px;
+    margin-bottom: 50px;
+}
+
+.sidebar-logo h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin: 0;
+    border-bottom: 2px solid var(--altin);
+    display: inline-block;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    padding: 18px 30px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    gap: 15px;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    border-left: 4px solid transparent;
+    color: rgba(44, 36, 32, 0.6);
 }
 
-.circular-btn:hover {
-    transform: rotate(15deg) scale(1.1);
-    background: var(--altin);
+.nav-item i { width: 20px; }
+
+.nav-item:hover, .nav-item.active {
+    background: var(--vurgu-soft);
+    color: var(--ana-renk);
+    border-left-color: var(--altin);
 }
 
-/* Ana Başlatma Butonu */
-.start-tour-btn {
-    display: block;
-    width: 100%;
+.nav-item.active { font-weight: 600; }
+
+/* --- ANA İÇERİK ALANI --- */
+.main-content {
+    margin-left: var(--sidebar-width);
+    flex: 1;
+    padding: 80px 60px;
+    position: relative;
+}
+
+/* Akışkan Arkaplan SVG */
+.bg-svg {
+    position: fixed;
+    top: 10%;
+    right: -5%;
+    width: 40%;
+    opacity: 0.03;
+    z-index: -1;
+    pointer-events: none;
+    animation: float 20s infinite alternate ease-in-out;
+}
+
+@keyframes float {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(40px) rotate(5deg); }
+}
+
+.content-header {
+    max-width: 800px;
+    margin-bottom: 60px;
+}
+
+.content-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    margin: 0 0 10px 0;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+}
+
+.step-card {
+    background: white;
+    padding: 40px;
+    border: 1px solid rgba(179, 147, 89, 0.1);
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+
+.step-card:hover {
+    border-color: var(--altin);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(44, 36, 32, 0.05);
+}
+
+.step-card::before {
+    content: attr(data-number);
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 100px;
+    color: var(--vurgu-soft);
+    font-weight: 600;
+}
+
+.step-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.step-card p {
+    font-size: 14px;
+    color: #5D4037;
+    margin: 0;
+    line-height: 1.8;
+}
+
+.action-bar {
+    margin-top: 60px;
+}
+
+.start-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
     background: var(--ana-renk);
     color: white;
-    text-align: center;
-    padding: 20px;
+    padding: 20px 45px;
     text-decoration: none;
     font-family: 'Playfair Display', serif;
     font-size: 18px;
-    letter-spacing: 2px;
     border: 1px solid var(--altin);
     transition: 0.3s;
-    margin-top: 40px;
 }
 
-.start-tour-btn:hover {
+.start-btn:hover {
     background: var(--altin);
-    color: var(--ana-renk);
+    color: white;
 }
 
+/* Mobil Uyumluluk */
+@media (max-width: 992px) {
+    .sidebar { width: 80px; }
+    .sidebar-logo, .nav-item span { display: none; }
+    .main-content { margin-left: 80px; padding: 40px 20px; }
+    .content-header h1 { font-size: 32px; }
+}
 </style>
 </head>
 <body>
 
-<div class="museum-header">
-    <h1>EŞİĞE DAVET</h1>
-    <div class="subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
-</div>
+<svg class="bg-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path fill="#B39359" d="M44.7,-76.4C58.1,-69.2,69.2,-58.1,76.4,-44.7C83.7,-31.3,87.1,-15.7,85.6,-0.9C84,14,77.5,27.9,69.2,40.1C60.9,52.4,50.8,62.9,38.6,70.5C26.4,78.1,13.2,82.8,-0.7,84.1C-14.7,85.3,-29.4,83.1,-42.6,76.5C-55.8,70,-67.5,59.1,-75.4,46C-83.3,32.9,-87.4,17.6,-87.3,2.4C-87.2,-12.8,-82.9,-27.9,-74.6,-40.5C-66.3,-53.1,-54,-63.3,-40.4,-70.3C-26.8,-77.3,-13.4,-81.1,0.8,-82.5C15,-83.9,29.9,-82.9,44.7,-76.4Z" transform="translate(100 100)" />
+</svg>
 
-<div class="content-wrapper">
-    
-    <div class="exhibition-step">
-        <div class="step-number">01</div>
-        <div class="step-info">
+<nav class="sidebar">
+    <div class="sidebar-logo">
+        <h2>KÜLLİYE</h2>
+    </div>
+    <ul class="nav-links">
+        <li class="nav-item active"><i data-lucide="home"></i> <span>Giriş Sayfası</span></li>
+        <li class="nav-item"><i data-lucide="info"></i> <span>Tarihçe</span></li>
+        <li class="nav-item"><i data-lucide="map"></i> <span>Yerleşim Planı</span></li>
+        <li class="nav-item"><i data-lucide="book-open"></i> <span>Akademik Arşiv</span></li>
+        <li class="nav-item" onclick="playAudio()"><i data-lucide="volume-2"></i> <span>Sesli Rehber</span></li>
+    </ul>
+</nav>
+
+<main class="main-content">
+    <header class="content-header">
+        <h1>Eşiğe Davet</h1>
+        <p style="font-size: 18px; color: var(--altin); font-family: 'Playfair Display', serif; font-style: italic;">
+            Sultan II. Bayezid Külliyesi Sağlık Müzesi Dijital Deneyimi
+        </p>
+    </header>
+
+    <div class="steps-grid">
+        <div class="step-card" data-number="01">
             <h3>Tarihsel Miras</h3>
             <p>1488 yılından günümüze uzanan, medeniyetimizin şifahaneler zincirindeki en müstesna halkasına giriş yapıyorsunuz.</p>
         </div>
-    </div>
 
-    <div class="exhibition-step">
-        <div class="step-number 02">02</div>
-        <div class="step-info">
-            <h3>Akustik ve Mimari Arınış</h3>
+        <div class="step-card" data-number="02">
+            <h3>Mimari Arınış</h3>
             <p>Gürültüden arındırılmış bir mekanın, taşın ve suyun diliyle ruhu nasıl sakinleştirdiğine şahitlik edin.</p>
         </div>
-    </div>
 
-    <div class="exhibition-step">
-        <div class="step-number 03">03</div>
-        <div class="step-info">
-            <h3>Musiki ve Şifa</h3>
-            <p>Osmanlı hekimliğinin nota ve makamla örülmüş tedavi metodolojisini bilimsel bir derinlikle keşfedeceksiniz.</p>
+        <div class="step-card" data-number="03">
+            <h3>Musiki Metodolojisi</h3>
+            <p>Osmanlı hekimliğinin nota ve makamla örülmüş tedavi sistemini bilimsel bir derinlikle keşfedeceksiniz.</p>
         </div>
     </div>
 
-    <a href="#" class="start-tour-btn">DİJİTAL REHBERİ BAŞLAT</a>
-</div>
-
-<div class="floating-controls" onclick="playAudio()">
-    <div class="circular-btn">
-        <i data-lucide="music"></i>
+    <div class="action-bar">
+        <a href="#" class="start-btn">
+            YOLCULUĞA BAŞLA <i data-lucide="arrow-right"></i>
+        </a>
     </div>
-</div>
+</main>
 
 <audio id="audio" src="audio/intro.mp3"></audio>
 
 <script>
 lucide.createIcons();
+
 function playAudio() {
     var audio = document.getElementById("audio");
     if (audio.paused) {
