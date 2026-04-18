@@ -24,3 +24,17 @@ function playAudio(src){
   }, 50);
 
 }
+let ambience;
+
+function initAmbience(){
+
+  ambience = new Audio("/tour/audio/ambience.mp3");
+  ambience.loop = true;
+  ambience.volume = 0.3;
+
+  // ⚠️ önemli: autoplay kısıtlaması için kullanıcı etkileşimi gerekir
+  ambience.play().catch(() => {
+    console.log("Kullanıcı etkileşimi bekleniyor");
+  });
+
+}
