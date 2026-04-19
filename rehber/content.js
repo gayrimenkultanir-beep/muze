@@ -1,15 +1,15 @@
 const tourData = [
    {
-        t: "🏛️ EŞİĞE DAVET | SULTAN II. BAYEZİD KÜLLİYESİ",
+        t: "🏛️ EŞİĞE DAVET\n\nSULTAN II. BAYEZİD KÜLLİYESİ",
         s: "✨ ŞİFA YOLCULUĞU",
-        m: "🏰 **MİRAS:** 500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿 **ARINIŞ:** Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?\n\n💧 **AKIŞ:** Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.",
+        m: "🏰500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?\n\n💧Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.",
         q: "🔑 **EŞİK:** Günlük hayatın gürültüsünü dışarıda bırakın. Şimdi, zamanın ötesine geçmeye hazır mısınız?",
         btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
         a: "audio/intro.mp3",
         g: ["img/intro.jpg"]
     },
    {
-        t: "🏛️ 1. DURAK: ADALET VE ŞİFA KAPISI",
+        t: "🏛️ 1. DURAK:\n\nADALET VE ŞİFA KAPISI",
         s: "⚖️ MİMARİ VE FONKSİYONEL BÜTÜNLÜK",
         m: "🎟️ İhtişamlı ana kapıdan adımınızı attığınız bu nokta, Osmanlı’nın insanı merkeze alan hizmet anlayışının başlangıcıdır.\n\n✨ Sultan II. Bayezid Külliyesi, sadece bir yapılar topluluğu değil; tıp, eğitim ve sosyal yaşamın iç içe geçtiği, döneminin en ileri 'sağlık ve bilim kampüsü'dür.\n\n👀 Mevcut konumunuzdan itibaren külliye iki ana aksa ayrılmaktadır:\n\n🏛️ **Merkez Aks:** Ruhun ve bedenin şifa bulduğu Darüşşifa’ya uzanır.\n📜 **Sağ Aks:** Dönemin tıp eğitiminin kalbi olan Medrese-i Etıbba’ya açılır.\n\n🧭 Külliyenin genel yerleşim planını ve bu muazzam organizasyonun işleyişini kavramak adına şimdi sizi Sunum Odası’na davet ediyorum.",
         q: "🗣️ “Geçmişin bilgeliğine giden bu yolda hazırsanız, Darüşşifa’nın ana girişine doğru ilerleyerek şifa yolculuğumuza başlayalım.”",
