@@ -2,7 +2,7 @@ let currentStep = 0;
 let isMuted = false;
 
 const sealSound = document.getElementById("seal-sound");
-sealSound.volume = 0.2; // 0.0 = sessiz, 1.0 = maksimum
+sealSound.volume = 0.1; // 0.0 = sessiz, 1.0 = maksimum
 
 // 1. Yolculuğu Başlatan Fonksiyon
 function startJourney() {
