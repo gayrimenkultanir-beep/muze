@@ -11,7 +11,7 @@ const tourData = [
    {
         t: "🏛️ 1.Durak:\nADALET VE ŞİFA KAPISI",
         s: "⚖️ MİMARİ VE FONKSİYONEL BÜTÜNLÜK",
-        m: "🎟️ İhtişamlı ana kapıdan adımınızı attığınız bu nokta, Osmanlı’nın insanı merkeze alan hizmet anlayışının başlangıcıdır.\n\n✨ Sultan II. Bayezid Külliyesi, sadece bir yapılar topluluğu değil; tıp, eğitim ve sosyal yaşamın iç içe geçtiği, döneminin en ileri 'sağlık ve bilim kampüsü'dür.\n\n👀 Mevcut konumunuzdan itibaren külliye iki ana aksa ayrılmaktadır:\n\n🏛️ **Merkez Aks:** Ruhun ve bedenin şifa bulduğu Darüşşifa’ya uzanır.\n📜 **Sağ Aks:** Dönemin tıp eğitiminin kalbi olan Medrese-i Etıbba’ya açılır.\n\n🧭 Külliyenin genel yerleşim planını ve bu muazzam organizasyonun işleyişini kavramak adına şimdi sizi Sunum Odası’na davet ediyorum.",
+        m: "🎟️ İhtişamlı ana kapıdan adımınızı attığınız bu nokta, Osmanlı’nın insanı merkeze alan hizmet anlayışının başlangıcıdır.\n\n✨ Sultan II. Bayezid Külliyesi, sadece bir yapılar topluluğu değil; tıp, eğitim ve sosyal yaşamın iç içe geçtiği, döneminin en ileri 'sağlık ve bilim kampüsü'dür.\n\n👀 Mevcut konumunuzdan itibaren külliye iki ana aksa ayrılmaktadır:\n\n🏛️ Önümüzdeki Düz Yol:**Ruhun ve bedenin şifa bulduğu Darüşşifa’ya uzanır.\n📜 Sağ Yol:** Dönemin tıp eğitiminin kalbi olan Medrese-i Etıbba’ya açılır.\n\n🧭 Külliyenin genel yerleşim planını ve bu muazzam organizasyonun işleyişini kavramak adına şimdi sizi Sunum Odası’na davet ediyorum.",
         q: "🗣️ “Geçmişin bilgeliğine giden bu yolda hazırsanız, Darüşşifa’nın ana girişine doğru ilerleyerek şifa yolculuğumuza başlayalım.”",
         btnNext: "Darüşşifa Girişine İlerle ➡",
         a: "audio/01.mp3",
@@ -127,7 +127,7 @@ const tourData = [
         g: ["img/13.jpg"]
     },
 {
-        t: "🎓 14.Durak:\nMEDRESE-İ ETİBBA (1. BÖLÜM)",
+        t: "🎓 14.Durak:\nMEDRESE-İ ETİBBA (1.BÖLÜM)",
         s: "HEKİMLERİN YETİŞTİĞİ OCAK",
         m: "🏛️ **Medreseye Giriş: İlim Kapısından İçeri**\nMedresenin kapısından içeri girdiğiniz an, buranın Darüşşifa’dan farklı olarak daha akademik ve disiplinli bir atmosfere sahip olduğunu fark edebilirsiniz. Burası, dönemin en prestijli tıp fakültesidir.\n\n🌿 **Avlunun Yapısı**\nİçeri süzülüğünüzde sizi yine o aşina olduğunuz huzurlu, revaklı avlu karşılar. Tam ortada küçük ve zarif bir şadırvan bulunur. 💧 Su sesi burada da vardır; ancak bu kez:\n• Hastaları rahatlatmak için değil\n• Talebelerin zihnini berraklaştırmak için\n• Odalar arası ses geçişini yumuşatmak için kullanılır.\n\n🏠 **Eğitim Alanı Genel Düzeni**\nBu bölümde 18 adet oda bulunmaktadır. Avlunun etrafını çevreleyen küçük kapılı odalar tıp talebelerinin konakladığı ve ders çalıştığı “hücreler”dir.\nİçeride:\n• Ocaklar 🔥\n• Kitap nişleri 📖\nyer alır. Mum ışığında İbn-i Sina ve Razi eserlerini çalışan öğrencileri hayal edebilirsiniz.\n\n👨‍🏫 **Müderris Odası**\nSağ köşe tarafında yer alır. Derslerin planlandığı ve ilmin yönlendirildiği noktadır.\n\n📌 **GEÇİŞ NOKTASI**\nŞimdi avlunun daha akademik kalbini anlamış olarak, en önemli eğitim alanlarına doğru ilerliyoruz…",
         q: "Akademik kalbe, dershanelere girmeye hazır mısınız?",
@@ -136,7 +136,7 @@ const tourData = [
         g: ["img/14.jpg"]
     },
     {
-        t: "🎓 15.Durak:\nMEDRESE-İ ETİBBA (2. BÖLÜM)",
+        t: "🎓 15.Durak:\nMEDRESE-İ ETİBBA (2.BÖLÜM)",
         s: "EĞİTİM MERKEZLERİ",
         m: "📖 **Büyük Dershane (Ana Eğitim Alanı)**\nAvlunun en görkemli bölümüdür. Burası başmüderrisin ders anlattığı ana sınıftır. İçeride Hoca 👨‍🏫, Talebeler 👨‍🎓, Cerrahi aletler 🔪 ve Tıbbi bitkiler 🌿 üzerinde uygulamalı tartışmalar yapılırdı.\n\n📚 **Kütüphane Odası: Bilginin Hazinesi**\nBurası sadece bir kütüphane değildir; ilmin en kıymetli hazinelerinden biridir. Raflarda el yazması eserler, tıbbi kitaplar ve yılların bilgisini taşıyan metinler bulunur.\n\n📜 **Padişah Hediyeleri**\nBazı eserler Osmanlı padişahları tarafından gönderilmiş, bizzat mühürlenmiş ve külliyeye armağan edilmiştir. Bu mühürler, kitabın devlet tarafından korunan bir bilgi hazinesi olduğunu gösterir.\n\n🧪 **İlim ve Uygulama Birlikteliği**\nMedrese ile Darüşşifa’nın yakınlığı tesadüf değildir. Sistem:\n**📘 Öğren → 🏥 Gözlemle → ✋ Uygula**\nTalebeler teoriyi burada öğrenir, birkaç adım sonra Darüşşifa’da uygular. Böylece bilgi yaşayan bir deneyime dönüşür.\n\n🌿 **Avludan Ayrılış**\nMedresenin bu ilim dolu atmosferini geride bırakırken, şimdi yolculuğumuz bir sonraki durağa ilerleyiyor…",
         q: "Külliyenin kalbine, cami meydanına çıkalım mı?",
