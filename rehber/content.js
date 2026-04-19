@@ -6,7 +6,7 @@ const tourData = [
         q: "🔑Günlük hayatın gürültüsünü dışarıda bırakın. Şimdi, zamanın ötesine geçmeye hazır mısınız?",
         btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
         a: "audio/intro.mp3",
-        g: ["img/intro.jpg"]
+        g: ["img/intro.png"]
     },
    {
         t: "1.Durak:\n🏛️ ADALET VE ŞİFA KAPISI",
