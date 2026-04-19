@@ -5,7 +5,7 @@ const tourData = [
         m: "🏰500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?\n\n💧Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.",
         q: "🔑Günlük hayatın gürültüsünü dışarıda bırakın. Şimdi, zamanın ötesine geçmeye hazır mısınız?",
         btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
-        a: "audio/Ggg.mp3",
+        a: "audio/durak1.mp3",
         g: ["img/intro.png"]
     },
    {
