@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sultan II. Bayezid Külliyesi | Dijital Rehber</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -14,12 +14,16 @@
 </head>
 <body>
 
+    <!-- Ses Butonu -->
     <div id="sound-btn" onclick="toggleMute()">
         <i id="vol-icon" class="fas fa-volume-up"></i>
     </div>
 
     <audio id="seal-sound" src="audio/muhur.mp3" preload="auto"></audio>
 
+    <!-- ═══════════════════════════════════════
+         EKRAN 1 — GİRİŞ
+    ═══════════════════════════════════════ -->
     <section id="screen-intro" class="screen active-screen">
         <div class="intro-overlay"></div>
         <div class="intro-content">
@@ -30,16 +34,43 @@
         </div>
     </section>
 
+    <!-- ═══════════════════════════════════════
+         EKRAN 2 — TUR
+    ═══════════════════════════════════════ -->
     <section id="screen-tour" class="screen">
         <div class="glass-panel tour-card">
-            <div class="progress-container"><div id="bar"></div></div>
+
+            <!-- ── Zaman Çizelgesi Bandı ── -->
+            <div id="timeline-band">
+
+                <!-- Bölüm adı + aralık -->
+                <div id="tl-bolum-bar">
+                    <span id="tl-bolum-name">Giriş</span>
+                    <span id="tl-bolum-range"></span>
+                </div>
+
+                <!-- Global ilerleme çubuğu -->
+                <div id="tl-global-track">
+                    <div id="tl-global-fill"></div>
+                </div>
+
+                <!-- Önceki · Sayaç · Sonraki -->
+                <div id="tl-nav-strip">
+                    <span id="tl-prev-name" class="tl-side-name tl-prev"></span>
+                    <span id="tl-step-counter"></span>
+                    <span id="tl-next-name" class="tl-side-name tl-next"></span>
+                </div>
+
+            </div>
+            <!-- / Zaman Çizelgesi -->
+
             <h2 id="title"></h2>
             <span id="subtitle" class="sub-gold"></span>
-            
+
             <audio id="audio-player"></audio>
-            
+
             <div id="content" class="text-content"></div>
-            
+
             <div class="interactive-box"><p id="question"></p></div>
 
             <div class="nav-controls">
@@ -51,19 +82,21 @@
         </div>
     </section>
 
+    <!-- ═══════════════════════════════════════
+         EKRAN 3 — ZİYARETÇİ DEFTERİ
+    ═══════════════════════════════════════ -->
     <section id="screen-guestbook" class="screen">
         <div class="glass-panel guestbook-container">
-            <h2 style="font-family: 'Playfair Display';">🖋️ GÖNÜL KÖPRÜSÜ: ZİYARETÇİ DEFTERİ</h2>
+            <h2 style="font-family:'Playfair Display';">🖋️ GÖNÜL KÖPRÜSÜ: ZİYARETÇİ DEFTERİ</h2>
             <p class="guestbook-desc">
                 "Geçmişin şifası, bugünün kelimeleriyle buluşuyor."<br><br>
                 Külliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri duymayı çok isteriz. Kelimeleriniz bu köprünün birer taşı olacak.
             </p>
-            
+
             <div id="msg-form">
-                <input type="text" id="guest-name" placeholder="Adınız Soyadınız">
-                <input type="text" id="guest-city" placeholder="Geldiğiniz Şehir">
-                <textarea id="guest-text" placeholder="Duygularınızı buraya bırakın..."></textarea>
-                
+                <input type="text"     id="guest-name" placeholder="Adınız Soyadınız" autocomplete="name">
+                <input type="text"     id="guest-city" placeholder="Geldiğiniz Şehir"  autocomplete="address-level2">
+                <textarea              id="guest-text" placeholder="Duygularınızı buraya bırakın..."></textarea>
                 <button class="send-btn" onclick="sendMessage()">
                     KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM
                 </button>
@@ -77,29 +110,28 @@
         </div>
     </section>
 
+    <!-- Başarı Popup -->
     <div id="success-popup" class="popup-overlay">
         <div class="popup-content">
             <div class="seal-icon">✨</div>
             <p id="success-msg"></p>
-            <button onclick="location.reload()" class="main-btn">Şifanız Bol Olsun</button>
+            <button onclick="closePopup()" class="main-btn">Şifanız Bol Olsun</button>
         </div>
     </div>
 
-  <script>
+    <!-- ═══════════════════════════════════════
+         FIREBASE
+    ═══════════════════════════════════════ -->
+    <script>
         const firebaseConfig = {
-  apiKey: "AIzaSyDXbfeuczA_aOJcB7YegqrGK29yaWHD-PM",
-  authDomain: "edirnesaglikmuze.firebaseapp.com",
-  projectId: "edirnesaglikmuze",
-  storageBucket: "edirnesaglikmuze.firebasestorage.app",
-  messagingSenderId: "707402210781",
-  appId: "1:707402210781:web:fb65c71ca2557575e4aa34"
-};
-
-        // Firebase'i Başlat
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        // Veritabanı bağlantısını tanımla (Script.js bunu kullanacak)
+            apiKey:            "AIzaSyDXbfeuczA_aOJcB7YegqrGK29yaWHD-PM",
+            authDomain:        "edirnesaglikmuze.firebaseapp.com",
+            projectId:         "edirnesaglikmuze",
+            storageBucket:     "edirnesaglikmuze.firebasestorage.app",
+            messagingSenderId: "707402210781",
+            appId:             "1:707402210781:web:fb65c71ca2557575e4aa34"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
     </script>
 
