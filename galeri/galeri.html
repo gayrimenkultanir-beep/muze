@@ -8,23 +8,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
+        /* --- 1. TEMEL AYARLAR VE DEĞİŞKENLER --- */
         :root { 
             --gold: #d4af37; 
+            --gold-bright: #f1d592;
             --dark: #0f1a24; 
             --parchment: #f4e7c8; 
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Playfair Display', serif;
-            background: #fdf5e6 fixed center/cover;
+            background: #fdf5e6 url("../assets/background.jpg") fixed center/cover;
             padding-top: 130px;
             color: #2b2b2b;
             overflow-x: hidden;
         }
 
-        /* --- NAVİGASYON --- */
+        /* --- 2. NAVİGASYON --- */
         .nav-wrapper { width: 100%; display: flex; justify-content: center; position: fixed; top: 0; left: 0; z-index: 2000; padding: 0 20px; }
         .nav { 
             width: 100%; max-width: 1240px; background: var(--dark); border: 2px solid var(--gold); border-top: none;
@@ -32,6 +35,7 @@
             padding: 15px 30px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
+        .logo-title { font-size: 14px; letter-spacing: 1px; }
         .logo-subtitle { font-family: 'Cinzel'; font-weight: 700; font-size: 16px; }
         .menu-btn { 
             background: transparent; border: 1px solid var(--gold); color: var(--gold); 
@@ -42,48 +46,87 @@
         #globalDropdown {
             display: none; position: absolute; right: 30px; top: calc(100% + 10px);
             background: var(--dark); border: 2px solid var(--gold); min-width: 260px;
-            border-radius: 8px; z-index: 3000;
+            border-radius: 8px; z-index: 3000; box-shadow: 0 15px 40px rgba(0,0,0,0.8);
         }
         #globalDropdown.active { display: block; }
-        .dropdown-link { display: block; padding: 12px 25px; color: var(--gold); text-decoration: none; font-family: 'Cinzel'; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.1); }
+        .dropdown-link { 
+            display: block; padding: 12px 25px; color: var(--gold); text-decoration: none; 
+            font-family: 'Cinzel'; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.1); 
+        }
+        .dropdown-link:hover { background: rgba(212,175,55,0.15); color: #fff; }
 
-        /* --- GALERİ KARTLARI --- */
+        /* --- 3. BANNER --- */
+        .banner-container { max-width: 1240px; margin: 0 auto 40px; padding: 0 20px; }
+        .banner-box { 
+            position: relative; height: 350px; border: 2px solid var(--gold); 
+            border-radius: 12px; overflow: hidden; 
+        }
+        .banner-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); }
+        .banner-overlay { 
+            position: absolute; inset: 0; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; color: #fff; text-align: center; 
+        }
+        .banner-overlay h1 { font-family: 'Cinzel'; font-size: clamp(24px, 5vw, 40px); letter-spacing: 10px; }
+        .banner-overlay p { font-family: 'Cinzel'; color: var(--gold); margin-top: 10px; letter-spacing: 3px; }
+
+        /* --- 4. GALERİ KARTLARI --- */
         .container { max-width: 1240px; margin: 0 auto 50px; padding: 0 20px; }
+        
         .gallery-card {
             background: var(--parchment); border: 2px solid var(--gold);
             border-radius: 12px; margin-bottom: 60px; overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
-        .card-header { background: var(--dark); color: var(--gold); padding: 25px; text-align: center; font-family: 'Cinzel'; border-bottom: 2px solid var(--gold); }
-        .card-body { padding: 40px 20px; text-align: center; }
-        .category-desc { max-width: 850px; margin: 0 auto 30px; line-height: 1.8; font-size: 18px; font-style: italic; }
 
-        /* --- SLIDER (3:2) --- */
+        .card-header {
+            background: var(--dark); color: var(--gold); padding: 25px;
+            text-align: center; font-family: 'Cinzel'; border-bottom: 2px solid var(--gold);
+        }
+
+        .card-body { padding: 40px 20px; text-align: center; }
+        .category-desc { 
+            max-width: 850px; margin: 0 auto 30px; line-height: 1.8; 
+            color: #2b2b2b; font-size: 18px; font-style: italic; 
+        }
+
+        /* --- 5. SLIDER (3:2 ORANINDA) --- */
         .slider-wrapper {
             position: relative; width: 100%; max-width: 900px; 
             margin: 0 auto; overflow: hidden; border: 8px solid #fff;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: #222;
             aspect-ratio: 3 / 2;
         }
-        .slider-track { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-        .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: zoom-in; }
-        .slide img { width: 100%; height: 100%; object-fit: cover; }
+
+        .slider-track {
+            display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .slide {
+            min-width: 100%; height: 100%; display: flex;
+            align-items: center; justify-content: center; cursor: zoom-in;
+        }
+
+        .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             background: rgba(15, 26, 36, 0.8); color: var(--gold);
             border: 1px solid var(--gold); width: 50px; height: 50px;
             cursor: pointer; font-size: 24px; z-index: 10; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
         }
+        .nav-btn:hover { background: var(--gold); color: var(--dark); transform: translateY(-50%) scale(1.1); }
         .prev-btn { left: 15px; }
         .next-btn { right: 15px; }
-        .image-counter { margin-top: 15px; font-family: 'Cinzel'; font-size: 14px; font-weight: bold; }
 
-        /* --- TAM EKRAN LIGHTBOX (3:2 KORUMALI) --- */
+        .image-counter {
+            margin-top: 15px; font-family: 'Cinzel'; font-size: 14px; color: var(--dark); font-weight: bold;
+        }
+
+        /* --- 6. TAM EKRAN LIGHTBOX (3:2 KORUMALI) --- */
         .lightbox {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98);
-            z-index: 9999; justify-content: center; align-items: center; 
+            z-index: 9999; justify-content: center; align-items: center;
         }
         .lightbox.active { display: flex; }
         
@@ -96,7 +139,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 4px solid var(--gold);
+            border: 3px solid var(--gold);
             box-shadow: 0 0 50px rgba(0,0,0,1);
         }
 
@@ -116,16 +159,18 @@
 
         .lb-info { position: absolute; bottom: -40px; left: 0; right: 0; color: var(--gold); font-family: 'Cinzel'; text-align: center; }
 
-        @media (max-width: 1100px) {
-            .lb-prev { left: 10px; }
-            .lb-next { right: 10px; }
-            .close-lb { top: 10px; right: 10px; z-index: 10001; }
-        }
-
+        /* --- 7. FOOTER --- */
         .site-footer {
             background: var(--dark); color: var(--gold); text-align: center;
             padding: 40px; border: 2px solid var(--gold); border-radius: 15px;
             max-width: 1240px; margin: 40px auto; font-family: 'Cinzel';
+        }
+
+        @media (max-width: 1100px) {
+            .lb-prev { left: 10px; }
+            .lb-next { right: 10px; }
+            .close-lb { top: 10px; right: 10px; z-index: 10001; }
+            body { padding-top: 160px; }
         }
     </style>
 </head>
@@ -134,12 +179,12 @@
     <div class="nav-wrapper">
         <nav class="nav">
             <div class="logo">
-                <div style="font-size:12px;">T.C. TRAKYA ÜNİVERSİTESİ</div>
+                <div class="logo-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
                 <div class="logo-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
             </div>
             <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
             <div id="globalDropdown">
-               <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
                 <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
                 <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
                 <a href="../evliya/evliya.html" class="dropdown-link">Evliya Çelebi</a>
@@ -154,19 +199,29 @@
                 <a href="../personel/personel.html" class="dropdown-link">Personelimiz</a>
                 <a href="../haberler/haberler.html" class="dropdown-link">Haberler</a>
                 <a href="../duyurular/duyurular.html" class="dropdown-link">Duyurular</a>
-                 <a href="../basin/basin.html" class="dropdown-link">Basında Biz</a>
+                <a href="../basin/basin.html" class="dropdown-link">Basında Biz</a>
                 <a href="https://www.trakya.edu.tr/" target="_blank" class="dropdown-link">Trakya Üniversitesi</a>
-
             </div>
         </nav>
+    </div>
+
+    <div class="banner-container">
+        <div class="banner-box">
+            <img src="../assets/banner.webp" alt="Müze Banner">
+            <div class="banner-overlay">
+                <h1>GÖRSEL GALERİ</h1>
+                <p>"Geçmişin Şifası, Geleceğin Hafızası"</p>
+            </div>
+        </div>
     </div>
 
     <div class="container" id="galleryRoot"></div>
 
     <div class="container">
         <footer class="site-footer">
-            <div>EDİRNE SAĞLIK MÜZESİ DİJİTAL ARŞİVİ</div>
-            <p style="font-size: 11px; margin-top: 10px;">Hafıza-i Beşer</p>
+            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR • Hafıza-i Beşer</p>
         </footer>
     </div>
 
@@ -179,32 +234,29 @@
             <div class="lb-info" id="lbCounter"></div>
         </div>
     </div>
-<div class="site-footer-wrapper">
-        <footer class="site-footer">
-            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
-            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
-            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
-        </footer>
-    </div>
-    
+
     <script>
+        // 1. Kategoriler
         const categories = [
             "Tarihi Fotoğraflar", "Restorasyon Öncesi Görseller", "Genel Görüntüler",
             "Darüşşifa", "Medrese", "İmaret", 
             "Diğer Bölümler", "Gravür ve Minyatürler", "Ödüller"
         ];
 
-        const description = "Görseller, külliyenin 1488'den günümüze uzanan mimari zarafetini ve hikayesini yansıtmaktadır.";
+        // 2. Açıklama
+        const description = "Görseller, sadece birer anı değil; 1488'den bugüne uzanan merhamet yolculuğunun görsel şahitleridir. Külliyenin mimari zarafeti ve asırlık hikayesi bu karelerde hayat bulmaktadır.";
+
         const galleryRoot = document.getElementById('galleryRoot');
         let currentPositions = new Array(categories.length).fill(0);
 
+        // 3. Kartları Oluşturma
         categories.forEach((catName, catIdx) => {
             const card = document.createElement('div');
             card.className = 'gallery-card';
 
             let slidesHtml = '';
             for (let i = 1; i <= 20; i++) {
-                // Windows Parantezli Format: cat_0_ (1).jpg
+                // Windows Parantezli Format ve .jpg Uzantısı
                 const imgSrc = `../galeri/images/cat_${catIdx}_ (${i}).jpg`;
                 slidesHtml += `
                     <div class="slide" onclick="openLB(${catIdx}, ${i-1})">
@@ -231,15 +283,18 @@
             galleryRoot.appendChild(card);
         });
 
+        // 4. Slider Fonksiyonu
         function moveSlider(catIdx, direction) {
             currentPositions[catIdx] += direction;
             if (currentPositions[catIdx] < 0) currentPositions[catIdx] = 19;
             if (currentPositions[catIdx] > 19) currentPositions[catIdx] = 0;
+
             const track = document.getElementById(`track-${catIdx}`);
             track.style.transform = `translateX(-${currentPositions[catIdx] * 100}%)`;
             document.getElementById(`count-${catIdx}`).innerText = `Görsel: ${currentPositions[catIdx] + 1} / 20`;
         }
 
+        // 5. Lightbox Fonksiyonları
         let activeCat = 0; let activeImg = 0;
 
         function openLB(catIdx, imgIdx) {
@@ -249,9 +304,9 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function closeLB() { 
-            document.getElementById('lightbox').classList.remove('active'); 
-            document.body.style.overflow = 'auto'; 
+        function closeLB() {
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
 
         function changeLB(dir) {
@@ -268,7 +323,7 @@
             document.getElementById('lbCounter').innerText = `${categories[activeCat]} - ${activeImg + 1} / 20`;
         }
 
-        // Klavye Kontrolü (Sağ/Sol Ok ve Esc)
+        // Klavye Kontrolü
         document.addEventListener('keydown', (e) => {
             if (!document.getElementById('lightbox').classList.contains('active')) return;
             if (e.key === "ArrowRight") changeLB(1);
@@ -276,6 +331,7 @@
             if (e.key === "Escape") closeLB();
         });
 
+        // 6. Menü Kontrolü
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('globalDropdown');
         menuBtn.onclick = (e) => { e.stopPropagation(); dropdown.classList.toggle('active'); };
