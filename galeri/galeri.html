@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. DEĞİŞKENLER VE TEMEL AYARLAR --- */
+        /* --- 1. TEMEL AYARLAR VE DEĞİŞKENLER --- */
         :root { 
             --gold: #d4af37; 
             --gold-bright: #f1d592;
@@ -19,11 +19,13 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Playfair Display', serif;
             background: #fdf5e6 url("../assets/background.jpg") fixed center/cover;
             padding-top: 130px;
             color: #2b2b2b;
+            overflow-x: hidden;
         }
 
         /* --- 2. NAVİGASYON --- */
@@ -84,29 +86,30 @@
 
         .card-body { padding: 40px 20px; text-align: center; }
         .category-desc { 
-            max-width: 800px; margin: 0 auto 30px; line-height: 1.8; 
-            color: #444; font-size: 17px; font-style: italic; 
+            max-width: 850px; margin: 0 auto 30px; line-height: 1.8; 
+            color: #2b2b2b; font-size: 18px; font-style: italic; 
         }
 
-        /* --- 5. SLIDER (KAYDIRICI) SİSTEMİ --- */
+        /* --- 5. SLIDER (3:2 ORANINDA) --- */
         .slider-wrapper {
             position: relative; width: 100%; max-width: 900px; 
             margin: 0 auto; overflow: hidden; border: 8px solid #fff;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: #222;
+            aspect-ratio: 3 / 2; /* 3:2 Görüntü Oranı Sabitleme */
         }
 
         .slider-track {
-            display: flex; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .slide {
-            min-width: 100%; aspect-ratio: 16 / 9; display: flex;
+            min-width: 100%; height: 100%; display: flex;
             align-items: center; justify-content: center; cursor: zoom-in;
         }
 
         .slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* Oklar */
+        /* Slider Okları */
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             background: rgba(15, 26, 36, 0.8); color: var(--gold);
@@ -119,7 +122,7 @@
         .next-btn { right: 15px; }
 
         .image-counter {
-            margin-top: 15px; font-family: 'Cinzel'; font-size: 14px; color: var(--dark); opacity: 0.7;
+            margin-top: 15px; font-family: 'Cinzel'; font-size: 14px; color: var(--dark); font-weight: bold;
         }
 
         /* --- 6. LIGHTBOX (TAM EKRAN) --- */
@@ -128,16 +131,25 @@
             z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
         }
         .lightbox.active { display: flex; }
-        .lightbox-img { max-width: 90%; max-height: 80%; border: 3px solid var(--gold); box-shadow: 0 0 50px rgba(0,0,0,0.5); }
+        .lightbox-img { 
+            max-width: 90%; max-height: 80%; 
+            border: 3px solid var(--gold); 
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            object-fit: contain; 
+        }
         .close-lb { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 50px; cursor: pointer; font-family: 'Cinzel'; }
+        
         .lb-nav {
             position: absolute; top: 50%; transform: translateY(-50%);
             background: transparent; color: #fff; border: 2px solid #fff;
             width: 60px; height: 60px; border-radius: 50%; cursor: pointer; font-size: 30px;
+            display: flex; align-items: center; justify-content: center; transition: 0.3s;
         }
         .lb-nav:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
         .lb-prev { left: 30px; }
         .lb-next { right: 30px; }
+
+        .lb-info { margin-top: 20px; color: var(--gold); font-family: 'Cinzel'; font-size: 18px; letter-spacing: 1px; }
 
         /* --- 7. FOOTER --- */
         .site-footer {
@@ -146,10 +158,13 @@
             max-width: 1240px; margin: 0 auto 40px; font-family: 'Cinzel';
         }
 
+        /* MOBİL UYUMLULUK */
         @media (max-width: 768px) {
             body { padding-top: 160px; }
-            .nav-btn { width: 35px; height: 35px; font-size: 18px; }
+            .nav-btn { width: 40px; height: 40px; font-size: 18px; }
             .lb-nav { width: 45px; height: 45px; font-size: 20px; }
+            .lb-prev { left: 10px; }
+            .lb-next { right: 10px; }
         }
     </style>
 </head>
@@ -163,7 +178,7 @@
             </div>
             <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
             <div id="globalDropdown">
-                <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                 <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
                 <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
                 <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
                 <a href="../evliya/evliya.html" class="dropdown-link">Evliya Çelebi</a>
@@ -186,10 +201,10 @@
 
     <div class="banner-container">
         <div class="banner-box">
-            <img src="../assets/banner.webp" alt="Külliye Arşivi">
+            <img src="../assets/banner.webp" alt="Müze Banner">
             <div class="banner-overlay">
                 <h1>GÖRSEL GALERİ</h1>
-                <p>Zamanın İzinde Bir Görsel Yolculuk</p>
+                <p>Müze Arşivinden 3:2 Kareler</p>
             </div>
         </div>
     </div>
@@ -199,7 +214,7 @@
     <div class="container">
         <footer class="site-footer">
             <div>EDİRNE SAĞLIK MÜZESİ DİJİTAL ARŞİVİ</div>
-            <p style="font-size: 12px; margin-top: 10px; opacity: 0.6;">2026</p>
+            <p style="font-size: 12px; margin-top: 10px; opacity: 0.6;">• Hafıza-i Beşer</p>
         </footer>
     </div>
 
@@ -208,49 +223,50 @@
         <button class="lb-nav lb-prev" onclick="changeLB(-1)">&#10094;</button>
         <img src="" class="lightbox-img" id="lbImg">
         <button class="lb-nav lb-next" onclick="changeLB(1)">&#10095;</button>
-        <div id="lbCounter" style="color:white; margin-top:20px; font-family:'Cinzel';"></div>
+        <div class="lb-info" id="lbCounter"></div>
     </div>
- <div class="site-footer-wrapper">
+
+     <div class="site-footer-wrapper">
         <footer class="site-footer">
             <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
             <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
             <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
         </footer>
     </div>
-   
- <script>
-        // --- AYARLAR ---
+
+<script>
+        // 1. Kategoriler
         const categories = [
             "Tarihi Fotoğraflar", "Restorasyon Öncesi Görseller", "Genel Görüntüler",
             "Darüşşifa", "Medrese", "İmaret", 
             "Diğer Bölümler", "Gravür ve Minyatürler", "Ödüller"
         ];
 
-        const commonDesc = "Görseller, sadece birer anı değil; 1488'den bugüne uzanan merhamet yolculuğunun görsel şahitleridir. Külliyenin mimari zarafeti ve asırlık hikayesi bu karelerde hayat bulmaktadır.";
+        // 2. Sabit Açıklama Metni
+        const description = "Görseller, sadece birer anı değil; 1488'den bugüne uzanan merhamet yolculuğunun görsel şahitleridir. Külliyenin mimari zarafeti ve asırlık hikayesi bu karelerde hayat bulmaktadır.";
 
         const galleryRoot = document.getElementById('galleryRoot');
-        let currentImgIndices = new Array(categories.length).fill(0); // Her kategori için aktif resim sırası
+        let currentPositions = new Array(categories.length).fill(0);
 
-        // --- KARTLARI OLUŞTURMA ---
-        categories.forEach((name, catIdx) => {
+        // 3. Kartları Oluşturma Döngüsü
+        categories.forEach((catName, catIdx) => {
             const card = document.createElement('div');
             card.className = 'gallery-card';
 
-            // 20 Görsel Alanı Oluştur
+            // Her kategoride 20 görsel yolu oluştur (gallery/image/ altında)
             let slidesHtml = '';
             for (let i = 1; i <= 20; i++) {
-                // Görsel yolu: ../gallery/cat_0_1.webp gibi...
-                const imgSrc = `../gallery/cat_${catIdx}_${i}.webp`;
+                const imgSrc = `../gallery/image/cat_${catIdx}_${i}.webp`;
                 slidesHtml += `
                     <div class="slide" onclick="openLB(${catIdx}, ${i-1})">
-                        <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/800x450?text=${name}+Görsel+${i}'" alt="${name}">
+                        <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/600x400?text=${catName}+Görsel+${i}'" alt="${catName}">
                     </div>`;
             }
 
             card.innerHTML = `
-                <div class="card-header"><h2>${catIdx + 1}. ${name.toUpperCase()}</h2></div>
+                <div class="card-header"><h2>${catIdx + 1}. ${catName.toUpperCase()}</h2></div>
                 <div class="card-body">
-                    <p class="category-desc">${commonDesc}</p>
+                    <p class="category-desc">${description}</p>
                     <div class="slider-wrapper">
                         <button class="nav-btn prev-btn" onclick="moveSlider(${catIdx}, -1)">&#10094;</button>
                         <div class="slider-track" id="track-${catIdx}">
@@ -264,49 +280,52 @@
             galleryRoot.appendChild(card);
         });
 
-        // --- SLIDER FONKSİYONU ---
+        // 4. Slider Hareket Fonksiyonu
         function moveSlider(catIdx, direction) {
-            currentImgIndices[catIdx] += direction;
+            currentPositions[catIdx] += direction;
 
-            if (currentImgIndices[catIdx] < 0) currentImgIndices[catIdx] = 19;
-            if (currentImgIndices[catIdx] > 19) currentImgIndices[catIdx] = 0;
+            // Döngüsel hareket (Başa veya sona dönme)
+            if (currentPositions[catIdx] < 0) currentPositions[catIdx] = 19;
+            if (currentPositions[catIdx] > 19) currentPositions[catIdx] = 0;
 
             const track = document.getElementById(`track-${catIdx}`);
-            track.style.transform = `translateX(-${currentImgIndices[catIdx] * 100}%)`;
+            track.style.transform = `translateX(-${currentPositions[catIdx] * 100}%)`;
             
-            document.getElementById(`count-${catIdx}`).innerText = `Görsel: ${currentImgIndices[catIdx] + 1} / 20`;
+            document.getElementById(`count-${catIdx}`).innerText = `Görsel: ${currentPositions[catIdx] + 1} / 20`;
         }
 
-        // --- LIGHTBOX (TAM EKRAN) FONKSİYONLARI ---
-        let lbActiveCat = 0;
-        let lbActiveImg = 0;
+        // 5. Lightbox (Tam Ekran) Mantığı
+        let activeCat = 0;
+        let activeImg = 0;
 
         function openLB(catIdx, imgIdx) {
-            lbActiveCat = catIdx;
-            lbActiveImg = imgIdx;
+            activeCat = catIdx;
+            activeImg = imgIdx;
             updateLB();
             document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Scroll'u engelle
         }
 
         function closeLB() {
             document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto'; // Scroll'u aç
         }
 
-        function changeLB(dir) {
-            lbActiveImg += dir;
-            if (lbActiveImg < 0) lbActiveImg = 19;
-            if (lbActiveImg > 19) lbActiveImg = 0;
+        function changeLB(direction) {
+            activeImg += direction;
+            if (activeImg < 0) activeImg = 19;
+            if (activeImg > 19) activeImg = 0;
             updateLB();
         }
 
         function updateLB() {
-            const track = document.getElementById(`track-${lbActiveCat}`);
-            const images = track.querySelectorAll('img');
-            document.getElementById('lbImg').src = images[lbActiveImg].src;
-            document.getElementById('lbCounter').innerText = `${categories[lbActiveCat]} - ${lbActiveImg + 1} / 20`;
+            const track = document.getElementById(`track-${activeCat}`);
+            const slides = track.querySelectorAll('img');
+            document.getElementById('lbImg').src = slides[activeImg].src;
+            document.getElementById('lbCounter').innerText = `${categories[activeCat]} - ${activeImg + 1} / 20`;
         }
 
-        // --- MENÜ DROPDOWN ---
+        // 6. Menü Dropdown
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('globalDropdown');
 
