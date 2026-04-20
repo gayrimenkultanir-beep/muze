@@ -138,10 +138,36 @@
             </div>
             <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
             <div id="globalDropdown">
-                <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                 <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
+                <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
+                <a href="../evliya/evliya.html" class="dropdown-link">Evliya Çelebi</a>
+                <a href="../medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
+                <a href="../hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
+                <a href="../imaret/imaret.html" class="dropdown-link">İmarethane</a>
+                <a href="../music/music.html" class="dropdown-link">Müzikle Tedavi</a>
+                <a href="../geziplani/geziplani.html" class="dropdown-link">Gezi Planı</a>
                 <a href="../galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
+                <a href="../siir/siir.html" class="dropdown-link">Sarmaşık</a>
+                <a href="../oduller/oduller.html" class="dropdown-link">Ödüller</a>
+                <a href="../personel/personel.html" class="dropdown-link">Personelimiz</a>
+                <a href="../haberler/haberler.html" class="dropdown-link">Haberler</a>
+                <a href="../duyurular/duyurular.html" class="dropdown-link">Duyurular</a>
+                 <a href="../basin/basin.html" class="dropdown-link">Basında Biz</a>
+                <a href="https://www.trakya.edu.tr/" target="_blank" class="dropdown-link">Trakya Üniversitesi</a>
+
             </div>
         </nav>
+   </div>
+
+    <div class="banner-container">
+        <div class="banner-box">
+            <img src="../assets/banner.webp" alt="Müze Banner">
+            <div class="banner-overlay">
+                <h1>GÖRSEL GALERİ</h1>
+                <p>Müze Arşivinden 3:2 Kareler</p>
+            </div>
+        </div>
     </div>
 
     <div class="container" id="galleryRoot"></div>
@@ -149,19 +175,26 @@
     <div class="container">
         <footer class="site-footer">
             <div>EDİRNE SAĞLIK MÜZESİ DİJİTAL ARŞİVİ</div>
-            <p style="font-size: 11px; margin-top: 10px;">&copy; 2026 Tüm Hakları Saklıdır</p>
+            <p style="font-size: 12px; margin-top: 10px; opacity: 0.6;">• Hafıza-i Beşer</p>
         </footer>
     </div>
 
     <div class="lightbox" id="lightbox">
-        <div class="lb-content">
-            <span class="close-lb" onclick="closeLB()">KAPAT ×</span>
-            <button class="lb-nav lb-prev" onclick="changeLB(-1)">&#10094;</button>
-            <img src="" class="lightbox-img" id="lbImg">
-            <button class="lb-nav lb-next" onclick="changeLB(1)">&#10095;</button>
-            <div class="lb-info" id="lbCounter"></div>
-        </div>
+        <span class="close-lb" onclick="closeLB()">&times;</span>
+        <button class="lb-nav lb-prev" onclick="changeLB(-1)">&#10094;</button>
+        <img src="" class="lightbox-img" id="lbImg">
+        <button class="lb-nav lb-next" onclick="changeLB(1)">&#10095;</button>
+        <div class="lb-info" id="lbCounter"></div>
     </div>
+
+     <div class="site-footer-wrapper">
+        <footer class="site-footer">
+            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
+            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
+            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
+        </footer>
+    </div>
+
 
     <script>
         const categories = [
