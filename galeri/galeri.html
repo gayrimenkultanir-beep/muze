@@ -256,7 +256,7 @@
             // Her kategoride 20 görsel yolu oluştur (gallery/image/ altında)
             let slidesHtml = '';
             for (let i = 1; i <= 20; i++) {
-                const imgSrc = `../gallery/image/cat_${catIdx}_${i}.webp`;
+                const imgSrc = `../galeri/image/cat_${catIdx}_${i}.webp`;
                 slidesHtml += `
                     <div class="slide" onclick="openLB(${catIdx}, ${i-1})">
                         <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/600x400?text=${catName}+Görsel+${i}'" alt="${catName}">
