@@ -8,14 +8,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 1. TEMEL AYARLAR VE DEĞİŞKENLER --- */
+        /* --- 1. DEĞİŞKENLER VE TEMEL STİLLER --- */
         :root { 
             --gold: #d4af37; 
             --gold-bright: #f1d592;
             --dark: #0f1a24; 
             --parchment: #f4e7c8; 
-            --v-red: #8b0000; 
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -68,7 +66,6 @@
             justify-content: center; align-items: center; color: #fff; text-align: center; 
         }
         .banner-overlay h1 { font-family: 'Cinzel'; font-size: clamp(24px, 5vw, 40px); letter-spacing: 10px; }
-        .banner-overlay p { font-family: 'Cinzel'; color: var(--gold); margin-top: 10px; letter-spacing: 3px; }
 
         /* --- 4. GALERİ KARTLARI --- */
         .container { max-width: 1240px; margin: 0 auto 50px; padding: 0 20px; }
@@ -76,7 +73,7 @@
         .gallery-card {
             background: var(--parchment); border: 2px solid var(--gold);
             border-radius: 12px; margin-bottom: 60px; overflow: hidden;
-            position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
 
         .card-header {
@@ -95,7 +92,7 @@
             position: relative; width: 100%; max-width: 900px; 
             margin: 0 auto; overflow: hidden; border: 8px solid #fff;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2); background: #222;
-            aspect-ratio: 3 / 2; /* 3:2 Görüntü Oranı Sabitleme */
+            aspect-ratio: 3 / 2; /* Görüntü Oranı 3:2 */
         }
 
         .slider-track {
@@ -125,19 +122,14 @@
             margin-top: 15px; font-family: 'Cinzel'; font-size: 14px; color: var(--dark); font-weight: bold;
         }
 
-        /* --- 6. LIGHTBOX (TAM EKRAN) --- */
+        /* --- 6. LIGHTBOX --- */
         .lightbox {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
         }
         .lightbox.active { display: flex; }
-        .lightbox-img { 
-            max-width: 90%; max-height: 80%; 
-            border: 3px solid var(--gold); 
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            object-fit: contain; 
-        }
-        .close-lb { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 50px; cursor: pointer; font-family: 'Cinzel'; }
+        .lightbox-img { max-width: 90%; max-height: 80%; border: 3px solid var(--gold); object-fit: contain; }
+        .close-lb { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 50px; cursor: pointer; }
         
         .lb-nav {
             position: absolute; top: 50%; transform: translateY(-50%);
@@ -148,8 +140,7 @@
         .lb-nav:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
         .lb-prev { left: 30px; }
         .lb-next { right: 30px; }
-
-        .lb-info { margin-top: 20px; color: var(--gold); font-family: 'Cinzel'; font-size: 18px; letter-spacing: 1px; }
+        .lb-info { margin-top: 20px; color: var(--gold); font-family: 'Cinzel'; font-size: 18px; }
 
         /* --- 7. FOOTER --- */
         .site-footer {
@@ -158,13 +149,9 @@
             max-width: 1240px; margin: 0 auto 40px; font-family: 'Cinzel';
         }
 
-        /* MOBİL UYUMLULUK */
         @media (max-width: 768px) {
             body { padding-top: 160px; }
             .nav-btn { width: 40px; height: 40px; font-size: 18px; }
-            .lb-nav { width: 45px; height: 45px; font-size: 20px; }
-            .lb-prev { left: 10px; }
-            .lb-next { right: 10px; }
         }
     </style>
 </head>
@@ -178,23 +165,8 @@
             </div>
             <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
             <div id="globalDropdown">
-                 <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
-                <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
-                <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
-                <a href="../evliya/evliya.html" class="dropdown-link">Evliya Çelebi</a>
-                <a href="../medrese/medrese.html" class="dropdown-link">Tıp Medresesi</a>
-                <a href="../hastane/hastane.html" class="dropdown-link">Darüşşifa</a>
-                <a href="../imaret/imaret.html" class="dropdown-link">İmarethane</a>
-                <a href="../music/music.html" class="dropdown-link">Müzikle Tedavi</a>
-                <a href="../geziplani/geziplani.html" class="dropdown-link">Gezi Planı</a>
+                <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
                 <a href="../galeri/galeri.html" class="dropdown-link">Görsel Galeri</a>
-                <a href="../siir/siir.html" class="dropdown-link">Sarmaşık</a>
-                <a href="../oduller/oduller.html" class="dropdown-link">Ödüller</a>
-                <a href="../personel/personel.html" class="dropdown-link">Personelimiz</a>
-                <a href="../haberler/haberler.html" class="dropdown-link">Haberler</a>
-                <a href="../duyurular/duyurular.html" class="dropdown-link">Duyurular</a>
-                 <a href="../basin/basin.html" class="dropdown-link">Basında Biz</a>
-                <a href="https://www.trakya.edu.tr/" target="_blank" class="dropdown-link">Trakya Üniversitesi</a>
             </div>
         </nav>
     </div>
@@ -204,7 +176,7 @@
             <img src="../assets/banner.webp" alt="Müze Banner">
             <div class="banner-overlay">
                 <h1>GÖRSEL GALERİ</h1>
-                <p>Müze Arşivinden 3:2 Kareler</p>
+                <p>3:2 Formatında Müze Arşivi</p>
             </div>
         </div>
     </div>
@@ -214,7 +186,7 @@
     <div class="container">
         <footer class="site-footer">
             <div>EDİRNE SAĞLIK MÜZESİ DİJİTAL ARŞİVİ</div>
-            <p style="font-size: 12px; margin-top: 10px; opacity: 0.6;">• Hafıza-i Beşer</p>
+            <p style="font-size: 11px; margin-top: 10px; opacity: 0.6;">&copy; 2026 Tüm Hakları Saklıdır</p>
         </footer>
     </div>
 
@@ -226,40 +198,34 @@
         <div class="lb-info" id="lbCounter"></div>
     </div>
 
-     <div class="site-footer-wrapper">
-        <footer class="site-footer">
-            <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
-            <div class="footer-subtitle">Sultan II. Bayezid Külliyesi Sağlık Müzesi</div>
-            <p style="font-size: 11px; margin-top: 15px; opacity: 0.7;">&copy; 2026 TÜM HAKLARI SAKLIDIR</p>
-        </footer>
-    </div>
-
-<script>
-        // 1. Kategoriler
+    <script>
+        // 1. Kategoriler Tanımı
         const categories = [
             "Tarihi Fotoğraflar", "Restorasyon Öncesi Görseller", "Genel Görüntüler",
             "Darüşşifa", "Medrese", "İmaret", 
             "Diğer Bölümler", "Gravür ve Minyatürler", "Ödüller"
         ];
 
-        // 2. Sabit Açıklama Metni
+        // 2. Açıklama Metni
         const description = "Görseller, sadece birer anı değil; 1488'den bugüne uzanan merhamet yolculuğunun görsel şahitleridir. Külliyenin mimari zarafeti ve asırlık hikayesi bu karelerde hayat bulmaktadır.";
 
         const galleryRoot = document.getElementById('galleryRoot');
         let currentPositions = new Array(categories.length).fill(0);
 
-        // 3. Kartları Oluşturma Döngüsü
+        // 3. Dinamik Kart Oluşturma
         categories.forEach((catName, catIdx) => {
             const card = document.createElement('div');
             card.className = 'gallery-card';
 
-            // Her kategoride 20 görsel yolu oluştur (gallery/image/ altında)
             let slidesHtml = '';
             for (let i = 1; i <= 20; i++) {
-                const imgSrc = `../galeri/images/cat_${catIdx}_ (${i}).jpg";
+                // Yol ve Uzantı: gallery/image/cat_0_1.jpg
+                const imgSrc = `../gallery/image/cat_${catIdx}_${i}.jpg`;
                 slidesHtml += `
                     <div class="slide" onclick="openLB(${catIdx}, ${i-1})">
-                        <img src="${imgSrc}" onerror="this.src='https://via.placeholder.com/600x400?text=${catName}+Görsel+${i}'" alt="${catName}">
+                        <img src="${imgSrc}" 
+                             onerror="this.src='https://via.placeholder.com/600x400?text=${catName}+Görsel+${i}'" 
+                             alt="${catName}">
                     </div>`;
             }
 
@@ -280,39 +246,35 @@
             galleryRoot.appendChild(card);
         });
 
-        // 4. Slider Hareket Fonksiyonu
+        // 4. Slider Fonksiyonu
         function moveSlider(catIdx, direction) {
             currentPositions[catIdx] += direction;
-
-            // Döngüsel hareket (Başa veya sona dönme)
             if (currentPositions[catIdx] < 0) currentPositions[catIdx] = 19;
             if (currentPositions[catIdx] > 19) currentPositions[catIdx] = 0;
 
             const track = document.getElementById(`track-${catIdx}`);
             track.style.transform = `translateX(-${currentPositions[catIdx] * 100}%)`;
-            
             document.getElementById(`count-${catIdx}`).innerText = `Görsel: ${currentPositions[catIdx] + 1} / 20`;
         }
 
-        // 5. Lightbox (Tam Ekran) Mantığı
+        // 5. Lightbox Fonksiyonları
         let activeCat = 0;
         let activeImg = 0;
 
         function openLB(catIdx, imgIdx) {
-            activeCat = catIdx;
-            activeImg = imgIdx;
+            activeCat = catIdx; activeImg = imgIdx;
             updateLB();
             document.getElementById('lightbox').classList.add('active');
-            document.body.style.overflow = 'hidden'; // Scroll'u engelle
+            document.body.style.overflow = 'hidden';
         }
 
         function closeLB() {
             document.getElementById('lightbox').classList.remove('active');
-            document.body.style.overflow = 'auto'; // Scroll'u aç
+            document.body.style.overflow = 'auto';
         }
 
-        function changeLB(direction) {
-            activeImg += direction;
+        function changeLB(dir) {
+            activeImg += dir;
             if (activeImg < 0) activeImg = 19;
             if (activeImg > 19) activeImg = 0;
             updateLB();
@@ -325,18 +287,11 @@
             document.getElementById('lbCounter').innerText = `${categories[activeCat]} - ${activeImg + 1} / 20`;
         }
 
-        // 6. Menü Dropdown
+        // 6. Menü Kontrolü
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('globalDropdown');
-
-        menuBtn.onclick = (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle('active');
-        };
-
-        window.onclick = () => {
-            dropdown.classList.remove('active');
-        };
+        menuBtn.onclick = (e) => { e.stopPropagation(); dropdown.classList.toggle('active'); };
+        window.onclick = () => dropdown.classList.remove('active');
     </script>
 </body>
 </html>
