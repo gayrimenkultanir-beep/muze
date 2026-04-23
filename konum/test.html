@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AR Yönlendirme Demo</title>
+<title>Akıllı Kamera Navigasyon</title>
 
 <style>
 body { margin:0; overflow:hidden; font-family:sans-serif; }
 
+/* Kamera */
 #cam {
   position:fixed;
   width:100%;
@@ -15,15 +16,49 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
   object-fit:cover;
 }
 
+/* Ok */
 #arrow {
   position:fixed;
-  top:50%;
+  top:40%;
   left:50%;
   transform:translate(-50%, -50%);
   font-size:80px;
   z-index:10;
 }
 
+/* Yön skalası */
+#compassBar {
+  position:fixed;
+  top:10%;
+  width:200%;
+  height:40px;
+  left:-50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  z-index:10;
+}
+
+.line {
+  width:4px;
+  height:30px;
+  background:white;
+  margin:0 20px;
+  opacity:0.5;
+}
+
+.centerLine {
+  position:fixed;
+  top:10%;
+  left:50%;
+  width:4px;
+  height:40px;
+  background:red;
+  z-index:11;
+}
+
+/* Bilgi */
 #info {
   position:fixed;
   bottom:10px;
@@ -31,8 +66,23 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
   background:rgba(0,0,0,0.6);
   color:#fff;
   padding:10px;
-  font-size:12px;
-  border-radius:8px;
+  border-radius:10px;
+  font-size:14px;
+  z-index:10;
+}
+
+/* Bildirim */
+#notify {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  background:black;
+  color:white;
+  padding:20px;
+  border-radius:10px;
+  display:none;
+  z-index:20;
 }
 </style>
 </head>
@@ -40,29 +90,31 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
 <body>
 
 <video id="cam" autoplay playsinline></video>
+
+<div id="compassBar"></div>
+<div class="centerLine"></div>
+
 <div id="arrow">⬆️</div>
 <div id="info">Başlatılıyor...</div>
+<div id="notify">Şimdi sunum odasındasınız</div>
 
 <script>
-let userLat = 0;
-let userLng = 0;
+// 📍 SENİN VERDİĞİN KOORDİNATLAR
+const TARGET = { lat: 37.8596296, lng: 27.2728122 };
+
+let userLat = 37.8595412;
+let userLng = 27.2725581;
+
 let heading = 0;
-let currentStep = 0;
+let arrived = false;
 
-// 🔴 TEST İÇİN HEDEF (DEĞİŞTİR)
-const ROUTE = [
-  { lat: 38.4192, lng: 27.1287 }, // 1. nokta
-  { lat: 38.4195, lng: 27.1295 }, // 2. nokta
-  { lat: 38.4200, lng: 27.1302 }  // 3. nokta
-];
-
-// 📷 Kamera aç
+// 📷 Kamera
 navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
 .then(stream => {
   document.getElementById("cam").srcObject = stream;
 });
 
-// 📍 Konum al
+// 📍 Konum
 navigator.geolocation.watchPosition(pos => {
   userLat = pos.coords.latitude;
   userLng = pos.coords.longitude;
@@ -70,12 +122,10 @@ navigator.geolocation.watchPosition(pos => {
 
 // 🧭 Pusula
 window.addEventListener("deviceorientationabsolute", e => {
-  if (e.alpha !== null) {
-    heading = e.alpha;
-  }
+  if (e.alpha !== null) heading = e.alpha;
 });
 
-// 📐 Bearing hesapla
+// 📐 Bearing
 function getBearing(lat1, lon1, lat2, lon2) {
   const toRad = d => d * Math.PI / 180;
   const toDeg = r => r * 180 / Math.PI;
@@ -106,7 +156,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-// 🔄 yön farkı
+// 🔄 fark
 function getDiff(target, current) {
   let diff = target - current;
   if (diff > 180) diff -= 360;
@@ -114,42 +164,60 @@ function getDiff(target, current) {
   return diff;
 }
 
-// ➡️ ok belirleme
-function getArrow(diff) {
-  if (Math.abs(diff) < 15) return "⬆️";
-  if (diff > 15) return "➡️";
-  if (diff < -15) return "⬅️";
+// 🧭 Skala oluştur
+const compass = document.getElementById("compassBar");
+for (let i = 0; i < 50; i++) {
+  const div = document.createElement("div");
+  div.className = "line";
+  compass.appendChild(div);
 }
 
 // 🔄 ana loop
 setInterval(() => {
 
-  if (!ROUTE[currentStep]) return;
+  if (arrived) return;
 
-  const target = ROUTE[currentStep];
-
-  const bearing = getBearing(userLat, userLng, target.lat, target.lng);
+  const bearing = getBearing(userLat, userLng, TARGET.lat, TARGET.lng);
   const diff = getDiff(bearing, heading);
-  const arrow = getArrow(diff);
+  const dist = getDistance(userLat, userLng, TARGET.lat, TARGET.lng);
+
+  // 🧭 skala hareket
+  compass.style.transform = `translateX(${diff * 3}px)`;
+
+  // ➡️ ok
+  let arrow = "⬆️";
+  let text = "";
+
+  if (Math.abs(diff) < 10) {
+    arrow = "⬆️";
+    text = "Düz ilerleyin";
+  } else if (diff > 10) {
+    arrow = "➡️";
+    text = "Sağa dön";
+  } else {
+    arrow = "⬅️";
+    text = "Sola dön";
+  }
 
   document.getElementById("arrow").innerHTML = arrow;
 
-  const dist = getDistance(userLat, userLng, target.lat, target.lng);
-
-  // 📍 noktaya ulaştıysa sonraki
-  if (dist < 10) {
-    currentStep++;
-  }
+  // 👣 adım hesabı (~0.75m/adım)
+  const steps = Math.round(dist / 0.75);
 
   document.getElementById("info").innerHTML =
-    "Adım: " + currentStep +
-    "<br>Mesafe: " + Math.round(dist) + "m" +
-    "<br>Heading: " + Math.round(heading) +
-    "<br>Hedef: " + Math.round(bearing);
+    text + "<br>" +
+    steps + " adım";
 
-}, 500);
+  // 📍 varış
+  if (dist < 5) {
+    arrived = true;
+    document.getElementById("notify").style.display = "block";
+  }
+
+}, 300);
 
 </script>
 
 </body>
 </html>
+  
