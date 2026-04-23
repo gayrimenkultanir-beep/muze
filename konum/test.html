@@ -2,226 +2,186 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AR Pusula Navigasyon</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Akıllı Rehber Pusula</title>
 
 <style>
-body { margin:0; overflow:hidden; font-family:sans-serif; }
-
-/* Kamera */
-#cam {
-  position:fixed;
-  width:100%;
-  height:100%;
-  object-fit:cover;
+html,body{
+margin:0;
+padding:0;
+height:100%;
+overflow:hidden;
+font-family:Arial;
+background:black;
 }
 
-/* ÜST HUD */
-#hud {
-  position:fixed;
-  top:15%;
-  width:100%;
-  text-align:center;
-  color:white;
-  z-index:10;
+/* Kamera arka plan */
+#camera{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+object-fit:cover;
+z-index:1;
+filter:brightness(0.6);
 }
 
-#arrow { font-size:70px; }
-#text { font-size:22px; font-weight:bold; }
-#dist { font-size:16px; opacity:0.85; }
-
-/* PUSULA ALTI */
-#compassWrap {
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:280px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:10;
+/* Overlay */
+#ui{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+z-index:2;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 }
 
-/* DIŞ HALKA (SABİT) */
-.outerRing {
-  position:absolute;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,0.3);
+/* Dış pusula */
+.outer{
+width:320px;
+height:320px;
+border-radius:50%;
+border:2px solid rgba(255,255,255,0.4);
+position:absolute;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
-/* İÇ HALKA (DÖNEN) */
-.innerRing {
-  position:absolute;
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,0.7);
-  transition:transform 0.15s linear;
+/* Sabit N E S W */
+.cardinals{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:white;
+opacity:0.8;
 }
 
-/* MERKEZ OK */
-.centerArrow {
-  position:absolute;
-  font-size:40px;
-  color:#00e5ff;
-  transform:translateY(-20px);
+/* Dönen iç halka */
+.inner{
+width:240px;
+height:240px;
+border-radius:50%;
+border:2px solid rgba(0,255,200,0.4);
+position:absolute;
+display:flex;
+align-items:center;
+justify-content:center;
+transition:transform 0.1s linear;
 }
 
-/* HİZALAMA BANDI ±10° */
-.band {
-  position:absolute;
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  border:3px solid rgba(0,229,255,0.2);
+/* Ok */
+.arrow{
+width:0;
+height:0;
+border-left:15px solid transparent;
+border-right:15px solid transparent;
+border-bottom:40px solid red;
+position:absolute;
+top:20px;
 }
 
-/* BİLDİRİM */
-#notify {
-  position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  background:black;
-  color:white;
-  padding:20px;
-  border-radius:10px;
-  display:none;
-  z-index:20;
+/* Merkez nokta */
+.centerDot{
+width:12px;
+height:12px;
+background:white;
+border-radius:50%;
+position:absolute;
+}
+
+/* Yazı */
+#status{
+position:absolute;
+bottom:80px;
+color:white;
+font-size:22px;
+font-weight:bold;
+text-shadow:0 0 10px black;
+}
+
+#hint{
+position:absolute;
+bottom:40px;
+color:rgba(255,255,255,0.7);
+font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<video id="cam" autoplay playsinline></video>
+<!-- Kamera -->
+<video id="camera" autoplay playsinline></video>
 
-<div id="hud">
-  <div id="arrow"></div>
-  <div id="text"></div>
-  <div id="dist"></div>
+<div id="ui">
+
+    <!-- dış pusula -->
+    <div class="outer">
+        <div class="cardinals">N &nbsp;&nbsp;&nbsp; E &nbsp;&nbsp;&nbsp; S &nbsp;&nbsp;&nbsp; W</div>
+    </div>
+
+    <!-- iç dönen halka -->
+    <div class="inner" id="innerRing">
+        <div class="arrow"></div>
+        <div class="centerDot"></div>
+    </div>
+
+    <div id="status">Hizalanıyor...</div>
+    <div id="hint">Telefonu çevirerek oku hizala</div>
+
 </div>
-
-<div id="compassWrap">
-
-  <div class="outerRing"></div>
-
-  <div id="inner" class="innerRing"></div>
-
-  <div class="band"></div>
-
-  <div class="centerArrow">▲</div>
-
-</div>
-
-<div id="notify">Şu an sunum odasındasınız</div>
 
 <script>
-
-// 📍 HEDEF
-const TARGET = { lat: 37.8596296, lng: 27.2728122 };
-
-// 📍 BAŞLANGIÇ (fallback)
-let userLat = 37.8595412;
-let userLng = 27.2725581;
-
-let heading = 0;
-let arrived = false;
-
-// 📷 Kamera
+// Kamera aç
 navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-.then(stream => {
-  document.getElementById("cam").srcObject = stream;
+.then(stream=>{
+document.getElementById("camera").srcObject = stream;
 });
 
-// 📍 GPS
-navigator.geolocation.watchPosition(pos => {
-  userLat = pos.coords.latitude;
-  userLng = pos.coords.longitude;
+// hedef açı (örnek: 0 = kuzey)
+let target = 0;
+
+function normalize(angle){
+angle = angle % 360;
+if(angle < 0) angle += 360;
+return angle;
+}
+
+// cihaz yönü
+window.addEventListener("deviceorientation", (e)=>{
+let heading = e.alpha; // 0-360
+
+if(heading === null) return;
+
+heading = normalize(heading);
+
+// iç halka döner
+document.getElementById("innerRing").style.transform =
+`rotate(${ -heading }deg)`;
+
+// fark hesapla
+let diff = Math.abs(target - heading);
+if(diff > 180) diff = 360 - diff;
+
+let status = document.getElementById("status");
+
+if(diff <= 10){
+status.innerText = "👉 İLERLEYİNİZ";
+status.style.color = "lime";
+} else if(diff <= 30){
+status.innerText = "Yaklaştınız";
+status.style.color = "orange";
+} else {
+status.innerText = "Hizalanıyor...";
+status.style.color = "white";
+}
 });
-
-// 🧭 pusula
-window.addEventListener("deviceorientationabsolute", e => {
-  if (e.alpha !== null) heading = e.alpha;
-});
-
-// 📐 bearing
-function getBearing(lat1, lon1, lat2, lon2) {
-  const toRad = d => d * Math.PI / 180;
-  const toDeg = r => r * 180 / Math.PI;
-
-  const dLon = toRad(lon2 - lon1);
-
-  const y = Math.sin(dLon) * Math.cos(toRad(lat2));
-  const x =
-    Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
-    Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
-
-  return (toDeg(Math.atan2(y, x)) + 360) % 360;
-}
-
-// 📏 mesafe
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371e3;
-  const toRad = d => d * Math.PI / 180;
-
-  const dLat = toRad(lat2 - lat1);
-  const dLon = toRad(lon2 - lon1);
-
-  const a =
-    Math.sin(dLat/2)**2 +
-    Math.cos(toRad(lat1))*Math.cos(toRad(lat2)) *
-    Math.sin(dLon/2)**2;
-
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-}
-
-// 🔄 fark
-function diff(target, current) {
-  let d = target - current;
-  if (d > 180) d -= 360;
-  if (d < -180) d += 360;
-  return d;
-}
-
-// 🔄 loop
-setInterval(() => {
-
-  if (arrived) return;
-
-  const bearing = getBearing(userLat, userLng, TARGET.lat, TARGET.lng);
-  const d = diff(bearing, heading);
-  const dist = getDistance(userLat, userLng, TARGET.lat, TARGET.lng);
-
-  // 🎯 iç halka dönüşü (ANA MEKANİK)
-  document.getElementById("inner").style.transform =
-    `rotate(${d}deg)`;
-
-  let arrow = "";
-  let text = "";
-
-  // ±10° kontrol
-  if (Math.abs(d) < 10) {
-    arrow = "⬆️";
-    text = "İLERLEYİNİZ";
-  } else {
-    text = "Hizalayın";
-  }
-
-  document.getElementById("arrow").innerHTML = arrow;
-  document.getElementById("text").innerHTML = text;
-  document.getElementById("dist").innerHTML =
-    Math.round(dist) + " metre";
-
-  // 📍 varış
-  if (dist < 6) {
-    arrived = true;
-    document.getElementById("notify").style.display = "block";
-  }
-
-}, 200);
 
 </script>
 
