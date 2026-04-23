@@ -15,94 +15,217 @@
     --ink: #1a1208;
     --ink-mid: #3d2b0e;
     --stone: #7a6645;
-    --panel-bg: rgba(26, 18, 8, 0.88);
+    --panel-bg: rgba(26, 18, 8, 0.92);
     --border: rgba(201, 168, 76, 0.4);
+    --header-h: 64px;
+    --panel-h: 200px;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; overflow: hidden; }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    position: fixed;
+    top: 0; left: 0;
+  }
 
   body {
     font-family: 'Lora', Georgia, serif;
     background: var(--ink);
     color: var(--cream);
+  }
+
+  /* ── LAYOUT ── */
+  #app {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+  }
+
+  /* ── HEADER ── */
+  #header {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(26,18,8,0.98), rgba(61,43,14,0.95));
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px 8px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  #header-text { flex: 1; min-width: 0; }
+
+  #header-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(10px, 3vw, 14px);
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    text-shadow: 0 0 16px rgba(201,168,76,0.5);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #header-sub {
+    font-size: 9px;
+    color: var(--stone);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  #legend-btn {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid var(--border);
+    color: var(--gold);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
     position: relative;
   }
 
-  /* ── MAP CANVAS ── */
-  #map-container {
-    width: 100vw;
-    height: 100vh;
+  #legend {
+    position: absolute;
+    top: calc(var(--header-h) + 4px);
+    right: 12px;
+    z-index: 200;
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    display: none;
+    min-width: 175px;
+    max-height: 60vh;
+    overflow-y: auto;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  }
+
+  #legend.open { display: block; }
+
+  .legend-title {
+    font-size: 9px;
+    color: var(--stone);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .legend-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 0;
+    font-size: 11px;
+    color: var(--cream-dark);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(201,168,76,0.08);
+  }
+
+  .legend-item:last-child { border-bottom: none; }
+  .legend-item:active { opacity: 0.7; }
+
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ── MAP AREA ── */
+  #map-wrap {
+    flex: 1;
     position: relative;
-    background: #2a1f0a;
+    overflow: hidden;
+    background: #1a1208;
+    min-height: 0;
   }
 
   #map-svg {
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0; left: 0;
+    display: block;
   }
 
-  /* ── HEADER ── */
-  #header {
+  /* ── USER PIN ── */
+  #user-pin {
     position: absolute;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    background: linear-gradient(to bottom, rgba(26,18,8,0.97) 0%, rgba(26,18,8,0.0) 100%);
-    padding: 14px 18px 30px;
+    z-index: 50;
+    transform: translate(-50%, -100%);
+    display: none;
     pointer-events: none;
+    transition: left 0.5s ease, top 0.5s ease;
+    filter: drop-shadow(0 3px 10px rgba(0,0,0,0.7));
   }
 
-  #header-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 13px;
-    letter-spacing: 0.12em;
-    color: var(--gold-light);
-    text-shadow: 0 0 20px rgba(201,168,76,0.6);
-    line-height: 1.4;
-  }
+  #user-pin.visible { display: block; }
 
-  #header-sub {
+  .pin-bubble {
+    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+    border-radius: 8px 8px 8px 2px;
+    padding: 5px 9px;
     font-family: 'Lora', serif;
     font-size: 10px;
-    color: var(--stone);
-    letter-spacing: 0.18em;
-    margin-top: 2px;
-    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink);
+    white-space: normal;
+    max-width: 120px;
+    text-align: center;
+    line-height: 1.3;
+    box-shadow: 0 2px 10px rgba(201,168,76,0.5);
+    animation: pinPulse 2s infinite;
   }
 
-  /* ── STATUS PANEL ── */
-  #status-panel {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
+  @keyframes pinPulse {
+    0%, 100% { box-shadow: 0 2px 10px rgba(201,168,76,0.5); }
+    50% { box-shadow: 0 2px 22px rgba(201,168,76,0.95); }
+  }
+
+  .pin-dot {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    margin: 0 auto;
+    margin-top: -2px;
+  }
+
+  /* ── BOTTOM PANEL ── */
+  #bottom-panel {
+    flex-shrink: 0;
+    background: linear-gradient(to top, rgba(26,18,8,0.99) 0%, rgba(26,18,8,0.95) 100%);
+    border-top: 1px solid var(--border);
+    padding: 12px 14px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
     z-index: 100;
-    background: linear-gradient(to top, rgba(26,18,8,0.98) 60%, transparent);
-    padding: 16px 18px 28px;
   }
 
   #location-card {
-    background: rgba(201,168,76,0.08);
+    background: rgba(201,168,76,0.07);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 12px;
-    backdrop-filter: blur(12px);
-    transition: all 0.5s ease;
-    min-height: 70px;
+    border-radius: 10px;
+    padding: 10px 13px;
+    margin-bottom: 10px;
+    min-height: 64px;
   }
 
   #location-label {
-    font-size: 10px;
+    font-size: 9px;
     letter-spacing: 0.2em;
     color: var(--stone);
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   #location-name {
     font-family: 'Cinzel Decorative', serif;
-    font-size: 15px;
+    font-size: clamp(12px, 4vw, 16px);
     color: var(--gold-light);
     line-height: 1.3;
     transition: all 0.4s ease;
@@ -116,11 +239,12 @@
   }
 
   #location-desc {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--cream-dark);
-    margin-top: 5px;
+    margin-top: 3px;
     opacity: 0.8;
     font-style: italic;
+    line-height: 1.4;
   }
 
   /* ── CONTROLS ── */
@@ -135,25 +259,31 @@
     background: linear-gradient(135deg, var(--gold-dark), var(--gold));
     border: none;
     border-radius: 10px;
-    padding: 13px;
+    padding: 13px 12px;
     font-family: 'Lora', serif;
-    font-size: 13px;
+    font-size: clamp(12px, 3.5vw, 14px);
     color: var(--ink);
     font-weight: 600;
     cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: all 0.3s ease;
+    letter-spacing: 0.04em;
+    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    box-shadow: 0 4px 20px rgba(201,168,76,0.3);
+    gap: 7px;
+    box-shadow: 0 4px 18px rgba(201,168,76,0.3);
+    -webkit-appearance: none;
   }
 
-  #locate-btn:active { transform: scale(0.97); }
-  #locate-btn.tracking { background: linear-gradient(135deg, #1a4a2a, #2d7a4a); color: var(--cream); }
+  #locate-btn:active { transform: scale(0.97); opacity: 0.9; }
+  #locate-btn.tracking {
+    background: linear-gradient(135deg, #1a4a2a, #2d7a4a);
+    color: var(--cream);
+    box-shadow: 0 4px 18px rgba(45,122,74,0.4);
+  }
 
   #sound-btn {
+    flex-shrink: 0;
     width: 48px; height: 48px;
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -162,271 +292,172 @@
     font-size: 20px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
+    transition: all 0.2s ease;
+    -webkit-appearance: none;
   }
 
-  #sound-btn.muted { color: var(--stone); }
-
-  /* ── USER PIN ── */
-  #user-pin {
-    position: absolute;
-    z-index: 200;
-    transform: translate(-50%, -100%);
-    display: none;
-    pointer-events: none;
-    transition: left 0.6s ease, top 0.6s ease;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.7));
-  }
-
-  #user-pin.visible { display: block; }
-
-  .pin-bubble {
-    background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-    border-radius: 10px 10px 10px 2px;
-    padding: 6px 10px;
-    font-family: 'Lora', serif;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--ink);
-    white-space: nowrap;
-    max-width: 140px;
-    white-space: normal;
-    text-align: center;
-    line-height: 1.3;
-    box-shadow: 0 2px 12px rgba(201,168,76,0.5);
-    animation: pinPulse 2s infinite;
-  }
-
-  @keyframes pinPulse {
-    0%, 100% { box-shadow: 0 2px 12px rgba(201,168,76,0.5); }
-    50% { box-shadow: 0 2px 24px rgba(201,168,76,0.9); }
-  }
-
-  .pin-dot {
-    width: 14px; height: 14px;
-    background: var(--gold);
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    margin: 0 auto;
-    margin-top: -3px;
-  }
-
-  .pin-accuracy {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 2px solid rgba(201,168,76,0.3);
-    background: rgba(201,168,76,0.08);
-    pointer-events: none;
-  }
-
-  /* ── AREA POLYGONS ── */
-  .area-poly {
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .area-poly:hover { opacity: 0.85; }
-  .area-poly.active { stroke-width: 2.5 !important; }
-
-  .area-label {
-    font-family: 'Lora', serif;
-    font-size: 10px;
-    fill: rgba(255,240,200,0.85);
-    text-anchor: middle;
-    dominant-baseline: middle;
-    pointer-events: none;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-  }
+  #sound-btn:active { transform: scale(0.95); }
+  #sound-btn.muted { color: var(--stone); background: rgba(122,102,69,0.1); }
 
   /* ── GPS STATUS ── */
   #gps-status {
-    font-size: 10px;
+    font-size: 9px;
     color: var(--stone);
     text-align: center;
-    margin-top: 8px;
-    letter-spacing: 0.08em;
-    min-height: 16px;
+    margin-top: 7px;
+    letter-spacing: 0.06em;
+    min-height: 13px;
+  }
+
+  /* ── SVG STYLES ── */
+  .area-poly {
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .area-poly.active {
+    stroke-width: 3 !important;
+  }
+
+  .area-label {
+    font-family: 'Lora', serif;
+    font-size: 9px;
+    fill: rgba(255,240,200,0.9);
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+    paint-order: stroke;
+    stroke: rgba(0,0,0,0.7);
+    stroke-width: 2px;
   }
 
   /* ── TOAST ── */
   #toast {
-    position: absolute;
-    top: 80px; left: 50%; transform: translateX(-50%);
-    background: rgba(26,18,8,0.95);
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26,18,8,0.96);
     border: 1px solid var(--gold-dark);
     border-radius: 20px;
     padding: 8px 18px;
     font-size: 12px;
     color: var(--gold-light);
-    z-index: 300;
+    z-index: 500;
     opacity: 0;
     transition: opacity 0.3s ease;
     pointer-events: none;
     white-space: nowrap;
+    max-width: 90vw;
+    text-align: center;
   }
 
   #toast.show { opacity: 1; }
-
-  /* ── LEGEND ── */
-  #legend-btn {
-    position: absolute;
-    top: 70px; right: 14px;
-    z-index: 110;
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: rgba(26,18,8,0.9);
-    border: 1px solid var(--border);
-    color: var(--gold);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  #legend {
-    position: absolute;
-    top: 118px; right: 14px;
-    z-index: 110;
-    background: var(--panel-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px;
-    display: none;
-    min-width: 160px;
-  }
-
-  #legend.open { display: block; }
-
-  .legend-item {
-    display: flex; align-items: center; gap: 8px;
-    padding: 4px 0;
-    font-size: 11px;
-    color: var(--cream-dark);
-    cursor: pointer;
-  }
-
-  .legend-dot {
-    width: 12px; height: 12px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-
-  /* ornament */
-  #ornament {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px; height: 200px;
-    pointer-events: none;
-    z-index: 50;
-    opacity: 0;
-    transition: opacity 1s ease;
-  }
-
-  #ornament.loading { opacity: 0.12; }
 </style>
 </head>
 <body>
 
-<div id="map-container">
+<div id="app">
 
-  <!-- Loading ornament -->
-  <svg id="ornament" viewBox="0 0 200 200">
-    <g transform="translate(100,100)">
-      <circle r="90" fill="none" stroke="#c9a84c" stroke-width="0.5" stroke-dasharray="4 8"/>
-      <circle r="70" fill="none" stroke="#c9a84c" stroke-width="0.3" stroke-dasharray="2 12"/>
-      <path d="M0,-85 L8,-20 L20,-20 L0,0 L-20,-20 L-8,-20 Z" fill="rgba(201,168,76,0.3)"/>
-      <path d="M0,85 L8,20 L20,20 L0,0 L-20,20 L-8,20 Z" fill="rgba(201,168,76,0.3)"/>
-      <path d="M-85,0 L-20,-8 L-20,-20 L0,0 L-20,20 L-20,8 Z" fill="rgba(201,168,76,0.3)"/>
-      <path d="M85,0 L20,-8 L20,-20 L0,0 L20,20 L20,8 Z" fill="rgba(201,168,76,0.3)"/>
-      <circle r="8" fill="rgba(201,168,76,0.5)"/>
-    </g>
-  </svg>
-
-  <!-- SVG Map -->
-  <svg id="map-svg" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid meet">
-    <defs>
-      <filter id="glow">
-        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-        <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
-      </filter>
-      <pattern id="bg-pattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-        <rect width="40" height="40" fill="#1a1208"/>
-        <circle cx="20" cy="20" r="0.5" fill="rgba(201,168,76,0.15)"/>
-      </pattern>
-    </defs>
-    <rect width="800" height="900" fill="url(#bg-pattern)"/>
-    <!-- Polygons will be injected here -->
-    <g id="polygons-layer"></g>
-    <g id="labels-layer"></g>
-    <g id="compass" transform="translate(740,820)">
-      <circle r="22" fill="rgba(26,18,8,0.9)" stroke="rgba(201,168,76,0.4)" stroke-width="1"/>
-      <text y="-10" text-anchor="middle" font-size="9" fill="#c9a84c" font-family="serif">K</text>
-      <text y="16" text-anchor="middle" font-size="9" fill="#7a6645" font-family="serif">G</text>
-      <text x="-12" y="4" text-anchor="middle" font-size="9" fill="#7a6645" font-family="serif">B</text>
-      <text x="12" y="4" text-anchor="middle" font-size="9" fill="#7a6645" font-family="serif">D</text>
-      <line x1="0" y1="-16" x2="0" y2="16" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
-      <line x1="-16" y1="0" x2="16" y2="0" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
-      <polygon points="0,-14 3,-4 0,-8 -3,-4" fill="#c9a84c"/>
-    </g>
-  </svg>
-
-  <!-- User pin -->
-  <div id="user-pin">
-    <div class="pin-bubble" id="pin-text">Konumunuz</div>
-    <div class="pin-dot"></div>
-    <div class="pin-accuracy" id="pin-accuracy"></div>
-  </div>
-
-  <!-- Header -->
+  <!-- HEADER -->
   <div id="header">
-    <div id="header-title">II. Bayezid Külliyesi</div>
-    <div id="header-sub">Edirne · Gezi Rehberi · 1484</div>
+    <div id="header-text">
+      <div id="header-title">II. Bayezid Külliyesi</div>
+      <div id="header-sub">Edirne · Gezi Rehberi · 1484</div>
+    </div>
+    <button id="legend-btn" onclick="toggleLegend()">⊞</button>
   </div>
 
-  <!-- Legend button -->
-  <button id="legend-btn" onclick="toggleLegend()">⊞</button>
-  <div id="legend"></div>
+  <!-- MAP -->
+  <div id="map-wrap">
+    <svg id="map-svg" viewBox="0 0 800 860" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+          <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <pattern id="bg-pattern" x="0" y="0" width="30" height="30" patternUnits="userSpaceOnUse">
+          <rect width="30" height="30" fill="#1a1208"/>
+          <circle cx="15" cy="15" r="0.4" fill="rgba(201,168,76,0.12)"/>
+        </pattern>
+        <filter id="shadow">
+          <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,0.5)"/>
+        </filter>
+      </defs>
+      <rect width="800" height="860" fill="url(#bg-pattern)"/>
 
-  <!-- Toast -->
-  <div id="toast"></div>
+      <!-- Polygons injected by JS -->
+      <g id="polygons-layer"></g>
+      <g id="labels-layer"></g>
 
-  <!-- Status Panel -->
-  <div id="status-panel">
+      <!-- Compass — top-right -->
+      <g id="compass" transform="translate(760,50)">
+        <circle r="22" fill="rgba(26,18,8,0.9)" stroke="rgba(201,168,76,0.45)" stroke-width="1"/>
+        <text y="-10" text-anchor="middle" font-size="9" fill="#c9a84c" font-family="serif">K</text>
+        <text y="16" text-anchor="middle" font-size="9" fill="#7a6645" font-family="serif">G</text>
+        <text x="-12" y="4" text-anchor="middle" font-size="9" fill="#7a6645" font-family="serif">B</text>
+        <text x="12" y="4" text-anchor="middle" font-size="9" fill="#7a6645" font-family="serif">D</text>
+        <line x1="0" y1="-16" x2="0" y2="16" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
+        <line x1="-16" y1="0" x2="16" y2="0" stroke="rgba(201,168,76,0.3)" stroke-width="0.5"/>
+        <polygon points="0,-14 3,-4 0,-8 -3,-4" fill="#c9a84c"/>
+      </g>
+
+      <!-- Scale bar -->
+      <g transform="translate(30,820)">
+        <line x1="0" y1="0" x2="80" y2="0" stroke="rgba(201,168,76,0.5)" stroke-width="1.5"/>
+        <line x1="0" y1="-4" x2="0" y2="4" stroke="rgba(201,168,76,0.5)" stroke-width="1.5"/>
+        <line x1="80" y1="-4" x2="80" y2="4" stroke="rgba(201,168,76,0.5)" stroke-width="1.5"/>
+        <text x="40" y="-8" text-anchor="middle" font-size="9" fill="rgba(201,168,76,0.6)" font-family="serif">~50m</text>
+      </g>
+    </svg>
+
+    <!-- User pin (absolute inside map-wrap) -->
+    <div id="user-pin">
+      <div class="pin-bubble" id="pin-text">Konumunuz</div>
+      <div class="pin-dot"></div>
+    </div>
+
+    <!-- Legend dropdown -->
+    <div id="legend"></div>
+  </div>
+
+  <!-- BOTTOM PANEL -->
+  <div id="bottom-panel">
     <div id="location-card">
       <div id="location-label">📍 Bulunduğunuz Alan</div>
-      <div id="location-name" class="outside">Konumunuz bekleniyor...</div>
+      <div id="location-name" class="outside">Haritaya dokunarak keşfedin</div>
       <div id="location-desc"></div>
     </div>
     <div id="controls">
       <button id="locate-btn" onclick="startTracking()">
         <span>◎</span> Konumumu Göster
       </button>
-      <button id="sound-btn" onclick="toggleSound()" title="Sesli rehber">🔊</button>
+      <button id="sound-btn" onclick="toggleSound()">🔊</button>
     </div>
     <div id="gps-status"></div>
   </div>
 
 </div>
 
+<!-- Toast -->
+<div id="toast"></div>
+
 <script>
-// ══════════════════════════════════════════════
-// RAW ZONE DATA — 4 köşe koordinatı her bölge
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// ZONE DATA — orijinal koordinatlar
+// ══════════════════════════════════════
 const RAW_ZONES = [
   {
     id: 'camii',
     name: 'Cami',
-    announce: 'Camisindesiniz',
+    announce: 'Camidesiniz',
     desc: 'Külliyenin ana ibadet mekânı. 1484 tarihli Osmanlı mimarisi.',
-    color: '#8b4513', fill: 'rgba(139,69,19,0.45)',
+    color: '#c8723a', fill: 'rgba(200,114,58,0.5)',
     coords: [
-      [41.685448891957066, 26.54437114674404],
+      [41.68545765882619, 26.544350076064877],
       [41.68525832430702, 26.544578477380984],
-      [41.68560561321275, 26.544605561573643],
-      [41.68544174568038, 26.5448145153369]
+      [41.68564515929766, 26.544603777115636],
+      [41.68542971183034, 26.54487240389607]
     ]
   },
   {
@@ -434,12 +465,12 @@ const RAW_ZONES = [
     name: 'Tabhane Sol',
     announce: 'Sol Tabhane\'desiniz',
     desc: 'Misafirhane bölümü. Yolcuların konakladığı tarihi yapı.',
-    color: '#6b5a2a', fill: 'rgba(107,90,42,0.45)',
+    color: '#9a8a3a', fill: 'rgba(154,138,58,0.5)',
     coords: [
-      [41.68560134567071, 26.544607184699945],
-      [41.685498915871676, 26.54476666980529],
-      [41.685844318030185, 26.54485917116639],
-      [41.685694246975316, 26.545063312101234]
+      [41.68564515929766, 26.544603777115636],
+      [41.685481986279804, 26.544788779837834],
+      [41.68583215268519, 26.544886065752095],
+      [41.6856701711828, 26.54508382727678]
     ]
   },
   {
@@ -447,12 +478,12 @@ const RAW_ZONES = [
     name: 'Tabhane Sağ',
     announce: 'Sağ Tabhane\'desiniz',
     desc: 'Misafirhane bölümü. Külliyenin sağ kanadı.',
-    color: '#6b5a2a', fill: 'rgba(107,90,42,0.45)',
+    color: '#9a8a3a', fill: 'rgba(154,138,58,0.5)',
     coords: [
       [41.685320258855185, 26.54414467789445],
       [41.68516780447553, 26.544300973297688],
-      [41.68544174568038, 26.54436476733982],
-      [41.685286909490515, 26.544527442147277]
+      [41.68545765882619, 26.544350076064877],
+      [41.68531537127034, 26.544519941819146]
     ]
   },
   {
@@ -460,12 +491,12 @@ const RAW_ZONES = [
     name: 'Cami Avlusu',
     announce: 'Cami Avlusundasınız',
     desc: 'Şadırvanlı cami avlusu. Osmanlı klasik düzenlemesi.',
-    color: '#4a7a3a', fill: 'rgba(74,122,58,0.35)',
+    color: '#4a8a3a', fill: 'rgba(74,138,58,0.4)',
     coords: [
       [41.685684931395045, 26.54391140297634],
       [41.68539315331414, 26.54426037889064],
-      [41.685988039262284, 26.544381761817355],
-      [41.685690596975775, 26.544726944515194]
+      [41.68599676002491, 26.544383744681163],
+      [41.68572376804905, 26.544728175497806]
     ]
   },
   {
@@ -473,12 +504,12 @@ const RAW_ZONES = [
     name: 'Sol Avlu',
     announce: 'Sol Avlu\'dasınız',
     desc: 'Caminin sol yan avlusu.',
-    color: '#3a6a2a', fill: 'rgba(58,106,42,0.35)',
+    color: '#3a7a2a', fill: 'rgba(58,122,42,0.4)',
     coords: [
       [41.68599676002491, 26.544383744681163],
-      [41.685729967428614, 26.544702714891844],
+      [41.68572376804905, 26.544728175497806],
       [41.68610492577399, 26.544542614804467],
-      [41.68585383555733, 26.54485263089087]
+      [41.68583215268519, 26.544886065752095]
     ]
   },
   {
@@ -486,12 +517,12 @@ const RAW_ZONES = [
     name: 'Sağ Avlu',
     announce: 'Sağ Avlu\'dasınız',
     desc: 'Caminin sağ yan avlusu.',
-    color: '#3a6a2a', fill: 'rgba(58,106,42,0.35)',
+    color: '#3a7a2a', fill: 'rgba(58,122,42,0.4)',
     coords: [
-      [41.685613245319885, 26.543815977706135],
-      [41.68534168694132, 26.544103050895753],
-      [41.68567994369364, 26.54390209966302],
-      [41.685394093033445, 26.544224259575813]
+      [41.68562374627724, 26.54380260391567],
+      [41.685320258855185, 26.54414467789445],
+      [41.685684931395045, 26.54391140297634],
+      [41.68539315331414, 26.54426037889064]
     ]
   },
   {
@@ -499,7 +530,7 @@ const RAW_ZONES = [
     name: 'Büyük Avlu',
     announce: 'Büyük Avlu\'dasınız',
     desc: 'Külliyenin merkezi büyük avlusu.',
-    color: '#5a8a4a', fill: 'rgba(90,138,74,0.30)',
+    color: '#5a9a4a', fill: 'rgba(90,154,74,0.35)',
     coords: [
       [41.68602214403295, 26.543319122029033],
       [41.68562374627724, 26.54380260391567],
@@ -512,7 +543,7 @@ const RAW_ZONES = [
     name: 'Giriş Avlusu',
     announce: 'Giriş Avlusundasınız',
     desc: 'Külliyenin ana giriş avlusu. Hoş geldiniz!',
-    color: '#7a9a5a', fill: 'rgba(122,154,90,0.35)',
+    color: '#7aaa5a', fill: 'rgba(122,170,90,0.4)',
     coords: [
       [41.68582145907403, 26.542966901970356],
       [41.68558563288972, 26.543234836947338],
@@ -525,7 +556,7 @@ const RAW_ZONES = [
     name: 'Medrese',
     announce: 'Medrese\'desiniz',
     desc: 'Osmanlı eğitim kurumu. Tıp ilimlerinin öğretildiği tarihi mekân.',
-    color: '#4a6a9a', fill: 'rgba(74,106,154,0.45)',
+    color: '#4a7aba', fill: 'rgba(74,122,186,0.5)',
     coords: [
       [41.685607071663334, 26.542635172958246],
       [41.685314074388494, 26.542954143168934],
@@ -538,9 +569,9 @@ const RAW_ZONES = [
     name: 'Darüşşifa 1. Avlu',
     announce: 'Darüşşifa Birinci Avlusundasınız',
     desc: 'Şifahanenin ilk avlusu. Hastane girişi.',
-    color: '#7a4a9a', fill: 'rgba(122,74,154,0.40)',
+    color: '#8a5aba', fill: 'rgba(138,90,186,0.45)',
     coords: [
-      [41.68563089252133, 26.543320958911224],
+      [41.68562119261898, 26.543267413187692],
       [41.685330749065955, 26.54361760120716],
       [41.685809548675245, 26.543582514483983],
       [41.68552608068016, 26.54390786409889]
@@ -551,10 +582,10 @@ const RAW_ZONES = [
     name: 'Darüşşifa 2. Avlu',
     announce: 'Darüşşifa İkinci Avlusundasınız',
     desc: 'Şifahanenin ikinci avlusu. Tedavi bahçesi.',
-    color: '#9a4a8a', fill: 'rgba(154,74,138,0.40)',
+    color: '#ba5aaa', fill: 'rgba(186,90,170,0.45)',
     coords: [
-      [41.68532360277613, 26.543623980611375],
-      [41.6852068799302, 26.543777086312506],
+      [41.685330749065955, 26.54361760120716],
+      [41.68520909046799, 26.5437442736426],
       [41.68552608068016, 26.54390786409889],
       [41.685397447732576, 26.54404821099159]
     ]
@@ -564,12 +595,12 @@ const RAW_ZONES = [
     name: 'Darüşşifa',
     announce: 'Darüşşifa\'dasınız',
     desc: 'Dünyaca ünlü Osmanlı akıl ve ruh hastalıkları hastanesi. Müzik terapisi uygulanırdı.',
-    color: '#8a2a6a', fill: 'rgba(138,42,106,0.50)',
+    color: '#ca3a8a', fill: 'rgba(202,58,138,0.5)',
     coords: [
-      [41.685228318834895, 26.543732430466967],
-      [41.685054425280605, 26.543914243487063],
-      [41.685406976106634, 26.54401950365659],
-      [41.68518782311766, 26.544252351910387]
+      [41.68520909046799, 26.5437442736426],
+      [41.68505306266546, 26.543922896957454],
+      [41.685397447732576, 26.54404821099159],
+      [41.68524482197329, 26.544209970147076]
     ]
   },
   {
@@ -577,7 +608,7 @@ const RAW_ZONES = [
     name: 'İmarethane',
     announce: 'İmarethane\'desiniz',
     desc: 'Külliyenin aşevi. Fakir ve yolculara yemek dağıtılan hayır kurumu.',
-    color: '#9a6a2a', fill: 'rgba(154,106,42,0.45)',
+    color: '#ba8a2a', fill: 'rgba(186,138,42,0.5)',
     coords: [
       [41.68629681124066, 26.544317277125256],
       [41.68572617587665, 26.5450242598068],
@@ -590,7 +621,7 @@ const RAW_ZONES = [
     name: 'İmarethane Avlusu',
     announce: 'İmarethane Avlusundasınız',
     desc: 'Aşevin giriş avlusu ve servis alanı.',
-    color: '#8a5a1a', fill: 'rgba(138,90,26,0.40)',
+    color: '#9a7a2a', fill: 'rgba(154,122,42,0.45)',
     coords: [
       [41.68645985289853, 26.544124763828464],
       [41.68629681124066, 26.544317277125256],
@@ -600,129 +631,137 @@ const RAW_ZONES = [
   }
 ];
 
-// ══════════════════════════════════════════════
-// GEO → SVG PROJECTION
-// ══════════════════════════════════════════════
-// Bounding box hesapla
+// ══════════════════════════════════════
+// PROJEKSIYON — Kuzeyi yukarı (cami üstte)
+// Külliye kuzeye baktığı için: yüksek lat = kuzey = SVG üstü
+// Doğu (yüksek lon) = sağ
+// ══════════════════════════════════════
 let allLats = [], allLons = [];
-RAW_ZONES.forEach(z => z.coords.forEach(([lat, lon]) => { allLats.push(lat); allLons.push(lon); }));
+RAW_ZONES.forEach(z => z.coords.forEach(([lat, lon]) => {
+  allLats.push(lat); allLons.push(lon);
+}));
+
 const minLat = Math.min(...allLats), maxLat = Math.max(...allLats);
 const minLon = Math.min(...allLons), maxLon = Math.max(...allLons);
 
-const SVG_W = 800, SVG_H = 900;
-const PAD = 60;
+const SVG_W = 800, SVG_H = 860;
+const PAD_X = 55, PAD_TOP = 80, PAD_BOT = 55;
+
+// Lon → X: doğu sağda (normal)
+// Lat → Y: kuzey (yüksek lat) üstte — yani lat büyüdükçe Y küçülür
+// ÖNEMLİ: orijinal kodda "lat ters çevir" yapılıyordu (kuzey yukarı)
+// Bu doğruydu ama bounding box hesabı yanlış yöndeydi — düzelttik.
 
 function geoToSVG(lat, lon) {
-  const x = PAD + (lon - minLon) / (maxLon - minLon) * (SVG_W - 2*PAD);
-  // lat ters çevir (kuzey yukarı)
-  const y = SVG_H - PAD - (lat - minLat) / (maxLat - minLat) * (SVG_H - 2*PAD);
+  const x = PAD_X + (lon - minLon) / (maxLon - minLon) * (SVG_W - 2 * PAD_X);
+  // Yüksek lat = kuzey = SVG üstü (düşük Y)
+  const y = PAD_TOP + (1 - (lat - minLat) / (maxLat - minLat)) * (SVG_H - PAD_TOP - PAD_BOT);
   return [x, y];
 }
 
-// ══════════════════════════════════════════════
-// CONVEX HULL — 4 köşeden doğru polygon üret
-// ══════════════════════════════════════════════
-function convexHull(points) {
-  const pts = [...points].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-  const cross = (O, A, B) => (A[0]-O[0])*(B[1]-O[1]) - (A[1]-O[1])*(B[0]-O[0]);
-  const lower = [], upper = [];
-  for (const p of pts) {
-    while (lower.length >= 2 && cross(lower[lower.length-2], lower[lower.length-1], p) <= 0) lower.pop();
-    lower.push(p);
+// ══════════════════════════════════════
+// CONVEX HULL
+// ══════════════════════════════════════
+function convexHull(pts) {
+  const p = [...pts].sort((a,b) => a[0]-b[0] || a[1]-b[1]);
+  const cross = (O,A,B) => (A[0]-O[0])*(B[1]-O[1]) - (A[1]-O[1])*(B[0]-O[0]);
+  const lo = [], hi = [];
+  for (const q of p) {
+    while (lo.length >= 2 && cross(lo[lo.length-2], lo[lo.length-1], q) <= 0) lo.pop();
+    lo.push(q);
   }
-  for (let i = pts.length-1; i >= 0; i--) {
-    const p = pts[i];
-    while (upper.length >= 2 && cross(upper[upper.length-2], upper[upper.length-1], p) <= 0) upper.pop();
-    upper.push(p);
+  for (let i = p.length-1; i >= 0; i--) {
+    const q = p[i];
+    while (hi.length >= 2 && cross(hi[hi.length-2], hi[hi.length-1], q) <= 0) hi.pop();
+    hi.push(q);
   }
-  upper.pop(); lower.pop();
-  return lower.concat(upper);
+  hi.pop(); lo.pop();
+  return lo.concat(hi);
 }
 
-// ══════════════════════════════════════════════
-// ÇAKIŞMA DÜZELTME — polygon shrink
-// ══════════════════════════════════════════════
-function shrinkPolygon(svgPts, factor=0.015) {
-  const cx = svgPts.reduce((s,p)=>s+p[0],0)/svgPts.length;
-  const cy = svgPts.reduce((s,p)=>s+p[1],0)/svgPts.length;
-  return svgPts.map(([x,y]) => [
-    cx + (x - cx) * (1 - factor),
-    cy + (y - cy) * (1 - factor)
-  ]);
+function shrink(pts, f=0.02) {
+  const cx = pts.reduce((s,p)=>s+p[0],0)/pts.length;
+  const cy = pts.reduce((s,p)=>s+p[1],0)/pts.length;
+  return pts.map(([x,y]) => [cx+(x-cx)*(1-f), cy+(y-cy)*(1-f)]);
 }
 
-// ══════════════════════════════════════════════
-// ZONE BUILD
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// BUILD ZONES
+// ══════════════════════════════════════
 const ZONES = RAW_ZONES.map(zone => {
-  const svgRaw = zone.coords.map(([lat,lon]) => geoToSVG(lat, lon));
-  const hull = convexHull(svgRaw);
-  const svgPts = shrinkPolygon(hull, 0.02);
+  const raw = zone.coords.map(([lat,lon]) => geoToSVG(lat, lon));
+  const hull = convexHull(raw);
+  const svgPts = shrink(hull, 0.02);
   const cx = svgPts.reduce((s,p)=>s+p[0],0)/svgPts.length;
   const cy = svgPts.reduce((s,p)=>s+p[1],0)/svgPts.length;
   return { ...zone, svgPts, cx, cy };
 });
 
-// ══════════════════════════════════════════════
-// RENDER SVG ZONES
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// RENDER SVG
+// ══════════════════════════════════════
 const polyLayer = document.getElementById('polygons-layer');
 const labelLayer = document.getElementById('labels-layer');
 
 ZONES.forEach(zone => {
   const pts = zone.svgPts.map(p => p.join(',')).join(' ');
+
   const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
   poly.setAttribute('points', pts);
   poly.setAttribute('fill', zone.fill);
   poly.setAttribute('stroke', zone.color);
-  poly.setAttribute('stroke-width', '1.5');
+  poly.setAttribute('stroke-width', '1.8');
   poly.setAttribute('stroke-linejoin', 'round');
   poly.setAttribute('class', 'area-poly');
   poly.setAttribute('id', 'poly-' + zone.id);
   poly.addEventListener('click', () => showZoneInfo(zone));
   polyLayer.appendChild(poly);
 
-  const label = document.createElementNS('http://www.w3.org/2000/svg','text');
-  label.setAttribute('x', zone.cx);
-  label.setAttribute('y', zone.cy);
-  label.setAttribute('class', 'area-label');
-  label.textContent = zone.name;
-  labelLayer.appendChild(label);
+  const lbl = document.createElementNS('http://www.w3.org/2000/svg','text');
+  lbl.setAttribute('x', zone.cx);
+  lbl.setAttribute('y', zone.cy);
+  lbl.setAttribute('class', 'area-label');
+  lbl.textContent = zone.name;
+  labelLayer.appendChild(lbl);
 });
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
 // LEGEND
-// ══════════════════════════════════════════════
-const legend = document.getElementById('legend');
-legend.innerHTML = '<div style="font-size:10px;color:var(--stone);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px;font-family:\'Lora\',serif">Bölümler</div>' +
+// ══════════════════════════════════════
+const legendEl = document.getElementById('legend');
+legendEl.innerHTML = `<div class="legend-title">Bölümler</div>` +
   ZONES.map(z => `<div class="legend-item" onclick="focusZone('${z.id}')">
     <div class="legend-dot" style="background:${z.fill};border:1px solid ${z.color}"></div>
     <span>${z.name}</span>
   </div>`).join('');
 
 function toggleLegend() {
-  document.getElementById('legend').classList.toggle('open');
+  legendEl.classList.toggle('open');
 }
 
 function focusZone(id) {
   const zone = ZONES.find(z => z.id === id);
   if (zone) showZoneInfo(zone);
-  document.getElementById('legend').classList.remove('open');
+  legendEl.classList.remove('open');
 }
 
-// ══════════════════════════════════════════════
+// Close legend on outside tap
+document.getElementById('map-wrap').addEventListener('click', (e) => {
+  if (!e.target.closest('#legend') && !e.target.closest('#legend-btn')) {
+    legendEl.classList.remove('open');
+  }
+});
+
+// ══════════════════════════════════════
 // POINT-IN-POLYGON (ray casting)
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
 function pointInPolygon(lat, lon, zone) {
-  const pt = geoToSVG(lat, lon);
-  const px = pt[0], py = pt[1];
+  const [px, py] = geoToSVG(lat, lon);
   const poly = zone.svgPts;
   let inside = false;
   for (let i=0, j=poly.length-1; i<poly.length; j=i++) {
-    const xi=poly[i][0], yi=poly[i][1];
-    const xj=poly[j][0], yj=poly[j][1];
-    const intersect = ((yi>py)!==(yj>py)) && (px < (xj-xi)*(py-yi)/(yj-yi)+xi);
-    if (intersect) inside = !inside;
+    const [xi,yi] = poly[i], [xj,yj] = poly[j];
+    if (((yi>py)!==(yj>py)) && (px < (xj-xi)*(py-yi)/(yj-yi)+xi)) inside = !inside;
   }
   return inside;
 }
@@ -731,27 +770,21 @@ function findZone(lat, lon) {
   return ZONES.find(z => pointInPolygon(lat, lon, z)) || null;
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
 // SPEECH
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
 let soundEnabled = true;
 let lastSpoken = '';
 
 function speak(text) {
-  if (!soundEnabled) return;
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang = 'tr-TR';
-    utt.rate = 0.92;
-    utt.pitch = 1.0;
-    utt.volume = 1.0;
-    // Türkçe ses varsa seç
-    const voices = window.speechSynthesis.getVoices();
-    const trVoice = voices.find(v => v.lang.startsWith('tr'));
-    if (trVoice) utt.voice = trVoice;
-    window.speechSynthesis.speak(utt);
-  }
+  if (!soundEnabled || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'tr-TR'; utt.rate = 0.9; utt.pitch = 1.0; utt.volume = 1.0;
+  const voices = window.speechSynthesis.getVoices();
+  const trVoice = voices.find(v => v.lang.startsWith('tr'));
+  if (trVoice) utt.voice = trVoice;
+  window.speechSynthesis.speak(utt);
 }
 
 function toggleSound() {
@@ -762,99 +795,67 @@ function toggleSound() {
   showToast(soundEnabled ? 'Sesli rehber açık' : 'Sesli rehber kapalı');
 }
 
-// Sesleri önceden yükle
-window.addEventListener('load', () => {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.getVoices();
-  }
-});
+if ('speechSynthesis' in window) {
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener('voiceschanged', () => window.speechSynthesis.getVoices());
+}
 
-// ══════════════════════════════════════════════
-// UI STATE
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// UI
+// ══════════════════════════════════════
 function showZoneInfo(zone) {
-  document.getElementById('location-name').className = '';
-  document.getElementById('location-name').textContent = zone.name;
-  document.getElementById('location-desc').textContent = zone.desc;
+  setActiveZone(zone);
+}
 
-  // highlight polygon
-  document.querySelectorAll('.area-poly').forEach(p => p.classList.remove('active'));
-  const activePoly = document.getElementById('poly-' + zone.id);
-  if (activePoly) {
-    activePoly.classList.add('active');
-    activePoly.setAttribute('stroke-width', '3');
+function setActiveZone(zone) {
+  document.querySelectorAll('.area-poly').forEach(p => {
+    p.setAttribute('stroke-width','1.8');
+    p.style.filter = '';
+    p.classList.remove('active');
+  });
+
+  if (zone) {
+    document.getElementById('location-name').className = '';
+    document.getElementById('location-name').textContent = zone.name;
+    document.getElementById('location-desc').textContent = zone.desc;
+
+    const poly = document.getElementById('poly-' + zone.id);
+    if (poly) {
+      poly.setAttribute('stroke-width','3');
+      poly.style.filter = 'url(#glow)';
+      poly.classList.add('active');
+    }
+  } else {
+    document.getElementById('location-name').className = 'outside';
+    document.getElementById('location-name').textContent = 'Külliye alanı dışındasınız';
+    document.getElementById('location-desc').textContent = 'Lütfen külliye sınırları içine giriniz.';
   }
 }
 
 function updateLocationDisplay(zone) {
-  const nameEl = document.getElementById('location-name');
-  const descEl = document.getElementById('location-desc');
-
-  if (zone) {
-    nameEl.className = '';
-    nameEl.textContent = zone.name;
-    descEl.textContent = zone.desc;
-
-    if (lastSpoken !== zone.id) {
-      lastSpoken = zone.id;
-      setTimeout(() => speak(`Şu an ${zone.announce}`), 300);
-    }
-
-    // highlight
-    document.querySelectorAll('.area-poly').forEach(p => {
-      p.setAttribute('stroke-width', '1.5');
-      p.classList.remove('active');
-    });
-    const activePoly = document.getElementById('poly-' + zone.id);
-    if (activePoly) {
-      activePoly.setAttribute('stroke-width', '3');
-      activePoly.style.filter = 'url(#glow)';
-      ZONES.filter(z => z.id !== zone.id).forEach(z => {
-        const el = document.getElementById('poly-' + z.id);
-        if (el) el.style.filter = '';
-      });
-    }
-  } else {
-    nameEl.className = 'outside';
-    nameEl.textContent = 'Külliye alanı dışındasınız';
-    descEl.textContent = 'Lütfen külliye sınırları içine giriniz.';
-    if (lastSpoken !== 'outside') {
-      lastSpoken = 'outside';
-    }
-    document.querySelectorAll('.area-poly').forEach(p => {
-      p.setAttribute('stroke-width', '1.5');
-      p.style.filter = '';
-    });
+  setActiveZone(zone);
+  if (zone && lastSpoken !== zone.id) {
+    lastSpoken = zone.id;
+    setTimeout(() => speak(`Şu an ${zone.announce}`), 300);
+  } else if (!zone && lastSpoken !== 'outside') {
+    lastSpoken = 'outside';
   }
 }
 
-// ══════════════════════════════════════════════
-// GPS TRACKING
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
+// GPS
+// ══════════════════════════════════════
 let watchId = null;
 let isTracking = false;
 
 function startTracking() {
-  if (isTracking) {
-    stopTracking();
-    return;
-  }
+  if (isTracking) { stopTracking(); return; }
+  if (!navigator.geolocation) { showToast('Tarayıcınız konum desteklemiyor'); return; }
 
-  if (!navigator.geolocation) {
-    showToast('Tarayıcınız konum desteklemiyor');
-    return;
-  }
-
-  document.getElementById('ornament').classList.add('loading');
-  document.getElementById('gps-status').textContent = 'GPS sinyali aranıyor...';
-
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 15000,
-    maximumAge: 2000
-  };
-
-  watchId = navigator.geolocation.watchPosition(onPosition, onError, options);
+  document.getElementById('gps-status').textContent = 'GPS sinyali aranıyor…';
+  watchId = navigator.geolocation.watchPosition(onPosition, onError, {
+    enableHighAccuracy: true, timeout: 15000, maximumAge: 2000
+  });
   isTracking = true;
 
   const btn = document.getElementById('locate-btn');
@@ -865,78 +866,57 @@ function startTracking() {
 }
 
 function stopTracking() {
-  if (watchId !== null) {
-    navigator.geolocation.clearWatch(watchId);
-    watchId = null;
-  }
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
   isTracking = false;
-
   const btn = document.getElementById('locate-btn');
   btn.classList.remove('tracking');
   btn.innerHTML = '<span>◎</span> Konumumu Göster';
-
   document.getElementById('user-pin').classList.remove('visible');
   document.getElementById('gps-status').textContent = 'Takip durduruldu';
-  document.getElementById('ornament').classList.remove('loading');
 }
 
 function onPosition(pos) {
-  document.getElementById('ornament').classList.remove('loading');
   const lat = pos.coords.latitude;
   const lon = pos.coords.longitude;
   const acc = pos.coords.accuracy;
 
-  // SVG koordinatına dönüştür
   const [svgX, svgY] = geoToSVG(lat, lon);
-
-  // Ekran koordinatına çevir (SVG viewBox → ekran)
   const svgEl = document.getElementById('map-svg');
   const bbox = svgEl.getBoundingClientRect();
   const scaleX = bbox.width / SVG_W;
   const scaleY = bbox.height / SVG_H;
 
-  const screenX = bbox.left + svgX * scaleX;
-  const screenY = bbox.top + svgY * scaleY;
+  // Pin pozisyonu relative to map-wrap
+  const mapWrap = document.getElementById('map-wrap');
+  const wrapRect = mapWrap.getBoundingClientRect();
+  const pinX = bbox.left - wrapRect.left + svgX * scaleX;
+  const pinY = bbox.top - wrapRect.top + svgY * scaleY;
 
-  // Pin yerleştir
   const pin = document.getElementById('user-pin');
-  pin.style.left = screenX + 'px';
-  pin.style.top = screenY + 'px';
+  pin.style.left = pinX + 'px';
+  pin.style.top = pinY + 'px';
   pin.classList.add('visible');
 
-  // Doğruluk çemberi
-  const accPx = (acc / 111000) * (SVG_H - 2*PAD) / (maxLat - minLat) * scaleY;
-  const accEl = document.getElementById('pin-accuracy');
-  accEl.style.width = Math.max(20, accPx*2) + 'px';
-  accEl.style.height = Math.max(20, accPx*2) + 'px';
-
-  // Bölge tespiti
   const zone = findZone(lat, lon);
-
-  // Pin yazısı güncelle
-  const pinText = document.getElementById('pin-text');
-  pinText.textContent = zone ? zone.name + 'desiniz' : 'Külliye dışı';
-
-  // UI güncelle
+  document.getElementById('pin-text').textContent = zone ? zone.name : 'Külliye dışı';
   updateLocationDisplay(zone);
 
-  const accText = acc < 10 ? 'Mükemmel GPS' : acc < 20 ? 'İyi GPS' : acc < 50 ? 'Orta GPS' : 'Zayıf GPS';
-  document.getElementById('gps-status').textContent = `${accText} · ±${Math.round(acc)}m · ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+  const accText = acc < 10 ? '✦ Mükemmel GPS' : acc < 20 ? '✦ İyi GPS' : acc < 50 ? '◇ Orta GPS' : '○ Zayıf GPS';
+  document.getElementById('gps-status').textContent = `${accText} · ±${Math.round(acc)}m`;
 }
 
 function onError(err) {
-  document.getElementById('ornament').classList.remove('loading');
   let msg = 'Konum alınamadı';
-  if (err.code === 1) msg = 'Konum izni verilmedi. Lütfen tarayıcı ayarlarından izin verin.';
-  else if (err.code === 2) msg = 'GPS sinyali alınamıyor. Açık alanda deneyin.';
-  else if (err.code === 3) msg = 'Konum zaman aşımına uğradı. Tekrar deneyin.';
+  if (err.code === 1) msg = 'Konum izni verilmedi';
+  else if (err.code === 2) msg = 'GPS sinyali alınamıyor';
+  else if (err.code === 3) msg = 'Zaman aşımı — tekrar deneyin';
   document.getElementById('gps-status').textContent = msg;
   showToast(msg);
 }
 
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
 // TOAST
-// ══════════════════════════════════════════════
+// ══════════════════════════════════════
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -946,56 +926,29 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ══════════════════════════════════════════════
-// INIT
-// ══════════════════════════════════════════════
-// İlk yüklemede animasyon
-setTimeout(() => {
-  document.getElementById('ornament').style.animation = 'none';
-}, 2000);
-
-// Pin'i pencere resize'da güncelle
-window.addEventListener('resize', () => {
-  if (isTracking && watchId !== null) {
-    // son konumu yeniden çiz — bir sonraki GPS güncellemesi gelince yenilenir
-  }
-});
-
-// Ses sentezi sesleri yükle
-if ('speechSynthesis' in window) {
-  window.speechSynthesis.addEventListener('voiceschanged', () => {
-    window.speechSynthesis.getVoices();
-  });
-}
-
-// Debug: Test modu için tıklama ile konum simülasyonu (SVG'ye tıkla)
+// ══════════════════════════════════════
+// SİMÜLASYON — haritaya tıkla
+// ══════════════════════════════════════
 document.getElementById('map-svg').addEventListener('click', (e) => {
-  if (isTracking) return; // gerçek GPS aktifse pas geç
+  if (isTracking) return;
   const svg = e.currentTarget;
   const rect = svg.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const clickY = e.clientY - rect.top;
-  const svgX = clickX / rect.width * SVG_W;
-  const svgY = clickY / rect.height * SVG_H;
+  const svgX = (e.clientX - rect.left) / rect.width * SVG_W;
+  const svgY = (e.clientY - rect.top) / rect.height * SVG_H;
 
-  // SVG → Geo dönüşüm (ters)
-  const lon = minLon + (svgX - PAD) / (SVG_W - 2*PAD) * (maxLon - minLon);
-  const lat = minLat + (SVG_H - PAD - svgY) / (SVG_H - 2*PAD) * (maxLat - minLat);
+  // SVG → Geo (ters)
+  const lon = minLon + (svgX - PAD_X) / (SVG_W - 2*PAD_X) * (maxLon - minLon);
+  const lat = minLat + (1 - (svgY - PAD_TOP) / (SVG_H - PAD_TOP - PAD_BOT)) * (maxLat - minLat);
 
-  // Simulate position
-  const fakePos = {
-    coords: { latitude: lat, longitude: lon, accuracy: 5 }
-  };
-
-  // Show pin
+  const mapWrap = document.getElementById('map-wrap');
+  const wrapRect = mapWrap.getBoundingClientRect();
   const pin = document.getElementById('user-pin');
-  pin.style.left = e.clientX + 'px';
-  pin.style.top = e.clientY + 'px';
+  pin.style.left = (e.clientX - wrapRect.left) + 'px';
+  pin.style.top = (e.clientY - wrapRect.top) + 'px';
   pin.classList.add('visible');
 
   const zone = findZone(lat, lon);
-  const pinText = document.getElementById('pin-text');
-  pinText.textContent = zone ? zone.name : 'Külliye dışı';
+  document.getElementById('pin-text').textContent = zone ? zone.name : 'Külliye dışı';
   updateLocationDisplay(zone);
   document.getElementById('gps-status').textContent = `Simülasyon · ${lat.toFixed(6)}, ${lon.toFixed(6)}`;
 });
