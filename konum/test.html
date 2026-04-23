@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pusula Navigasyon</title>
+<title>AR Pusula Navigasyon</title>
 
 <style>
 body { margin:0; overflow:hidden; font-family:sans-serif; }
@@ -16,10 +16,10 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
   object-fit:cover;
 }
 
-/* Üst bilgi */
-#topBox {
+/* ÜST HUD */
+#hud {
   position:fixed;
-  top:18%;
+  top:15%;
   width:100%;
   text-align:center;
   color:white;
@@ -27,62 +27,58 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
 }
 
 #arrow { font-size:70px; }
-#text { font-size:20px; margin-top:5px; }
-#distance { font-size:16px; opacity:0.8; }
+#text { font-size:22px; font-weight:bold; }
+#dist { font-size:16px; opacity:0.85; }
 
-/* Yarım daire pusula */
+/* PUSULA ALTI */
 #compassWrap {
   position:fixed;
   bottom:0;
   width:100%;
-  height:200px;
-  overflow:hidden;
+  height:280px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
   z-index:10;
 }
 
-#compass {
+/* DIŞ HALKA (SABİT) */
+.outerRing {
   position:absolute;
-  bottom:-120px;
-  left:50%;
-  width:600px;
-  height:600px;
-  margin-left:-300px;
+  width:260px;
+  height:260px;
   border-radius:50%;
-  border:2px solid rgba(255,255,255,0.2);
+  border:2px solid rgba(255,255,255,0.3);
 }
 
-.tick {
+/* İÇ HALKA (DÖNEN) */
+.innerRing {
   position:absolute;
-  width:2px;
-  height:20px;
-  background:white;
-  top:0;
-  left:50%;
-  transform-origin:bottom center;
-  opacity:0.4;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,0.7);
+  transition:transform 0.15s linear;
 }
 
-.targetLine {
+/* MERKEZ OK */
+.centerArrow {
   position:absolute;
-  width:4px;
-  height:120px;
-  background:#00e5ff;
-  top:0;
-  left:50%;
-  transform-origin:bottom center;
+  font-size:40px;
+  color:#00e5ff;
+  transform:translateY(-20px);
 }
 
-.centerLine {
+/* HİZALAMA BANDI ±10° */
+.band {
   position:absolute;
-  width:4px;
-  height:140px;
-  background:red;
-  bottom:0;
-  left:50%;
-  transform:translateX(-50%);
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  border:3px solid rgba(0,229,255,0.2);
 }
 
-/* Bildirim */
+/* BİLDİRİM */
 #notify {
   position:fixed;
   top:50%;
@@ -102,24 +98,32 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
 
 <video id="cam" autoplay playsinline></video>
 
-<div id="topBox">
+<div id="hud">
   <div id="arrow"></div>
   <div id="text"></div>
-  <div id="distance"></div>
+  <div id="dist"></div>
 </div>
 
 <div id="compassWrap">
-  <div id="compass"></div>
-  <div class="centerLine"></div>
+
+  <div class="outerRing"></div>
+
+  <div id="inner" class="innerRing"></div>
+
+  <div class="band"></div>
+
+  <div class="centerArrow">▲</div>
+
 </div>
 
 <div id="notify">Şu an sunum odasındasınız</div>
 
 <script>
+
 // 📍 HEDEF
 const TARGET = { lat: 37.8596296, lng: 27.2728122 };
 
-// 📍 BAŞLANGIÇ
+// 📍 BAŞLANGIÇ (fallback)
 let userLat = 37.8595412;
 let userLng = 27.2725581;
 
@@ -132,18 +136,18 @@ navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
   document.getElementById("cam").srcObject = stream;
 });
 
-// 📍 Konum
+// 📍 GPS
 navigator.geolocation.watchPosition(pos => {
   userLat = pos.coords.latitude;
   userLng = pos.coords.longitude;
 });
 
-// 🧭 Pusula
+// 🧭 pusula
 window.addEventListener("deviceorientationabsolute", e => {
   if (e.alpha !== null) heading = e.alpha;
 });
 
-// 📐 Bearing
+// 📐 bearing
 function getBearing(lat1, lon1, lat2, lon2) {
   const toRad = d => d * Math.PI / 180;
   const toDeg = r => r * 180 / Math.PI;
@@ -158,7 +162,7 @@ function getBearing(lat1, lon1, lat2, lon2) {
   return (toDeg(Math.atan2(y, x)) + 360) % 360;
 }
 
-// 📏 Mesafe
+// 📏 mesafe
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371e3;
   const toRad = d => d * Math.PI / 180;
@@ -175,54 +179,41 @@ function getDistance(lat1, lon1, lat2, lon2) {
 }
 
 // 🔄 fark
-function getDiff(target, current) {
-  let diff = target - current;
-  if (diff > 180) diff -= 360;
-  if (diff < -180) diff += 360;
-  return diff;
+function diff(target, current) {
+  let d = target - current;
+  if (d > 180) d -= 360;
+  if (d < -180) d += 360;
+  return d;
 }
 
-// 🧭 pusula çiz
-const compass = document.getElementById("compass");
-for (let i = -90; i <= 90; i += 5) {
-  const tick = document.createElement("div");
-  tick.className = "tick";
-  tick.style.transform = `rotate(${i}deg) translateY(-260px)`;
-  compass.appendChild(tick);
-}
-
-// 🎯 hedef çizgi
-const targetLine = document.createElement("div");
-targetLine.className = "targetLine";
-compass.appendChild(targetLine);
-
-// 🔄 ana loop
+// 🔄 loop
 setInterval(() => {
 
   if (arrived) return;
 
   const bearing = getBearing(userLat, userLng, TARGET.lat, TARGET.lng);
-  const diff = getDiff(bearing, heading);
+  const d = diff(bearing, heading);
   const dist = getDistance(userLat, userLng, TARGET.lat, TARGET.lng);
 
-  // hedef çizgi
-  targetLine.style.transform = `rotate(${diff}deg)`;
+  // 🎯 iç halka dönüşü (ANA MEKANİK)
+  document.getElementById("inner").style.transform =
+    `rotate(${d}deg)`;
 
-  let text = "";
   let arrow = "";
+  let text = "";
 
-  // 🎯 ±10 derece tolerans
-  if (Math.abs(diff) < 10) {
-    text = "Doğru ilerleyin";
+  // ±10° kontrol
+  if (Math.abs(d) < 10) {
     arrow = "⬆️";
+    text = "İLERLEYİNİZ";
   } else {
-    text = "Yönü hizalayın";
-    arrow = "";
+    text = "Hizalayın";
   }
 
   document.getElementById("arrow").innerHTML = arrow;
   document.getElementById("text").innerHTML = text;
-  document.getElementById("distance").innerHTML = Math.round(dist) + " metre";
+  document.getElementById("dist").innerHTML =
+    Math.round(dist) + " metre";
 
   // 📍 varış
   if (dist < 6) {
@@ -230,7 +221,7 @@ setInterval(() => {
     document.getElementById("notify").style.display = "block";
   }
 
-}, 300);
+}, 200);
 
 </script>
 
