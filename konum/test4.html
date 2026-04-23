@@ -3,181 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Müze Navigasyon v3 - Pro</title>
+    <title>Müze Navigasyon v5 - Pro</title>
     <style>
-        html, body { margin: 0; height: 100%; overflow: hidden; background: #000; font-family: 'Segoe UI', Roboto, sans-serif; }
-        #camera { position: fixed; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.5s; }
-        .low-power #camera { opacity: 0.2; filter: grayscale(1); } /* Batarya koruma modu görseli */
-
-        /* UI KATMANI */
-        #ui { position: fixed; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; pointer-events: none; }
+        :root { --accent: #00ffc8; --warning: #ffae00; --danger: #ff3e3e; --bg: #000; }
+        html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', Roboto, sans-serif; }
         
-        /* HEDEF MARKER (Kamera üzerinde yüzen ikon) */
-        #marker {
-            position: absolute; width: 80px; height: 80px;
-            background: rgba(0, 255, 200, 0.8); border: 4px solid white;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 40px; box-shadow: 0 0 20px lime;
-            transform: translate(-50%, -50%); transition: opacity 0.2s; opacity: 0;
+        #camera { position: fixed; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); transition: opacity 0.8s; }
+        .low-power #camera { opacity: 0.15; filter: grayscale(1) blur(4px); }
+
+        #ui { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; pointer-events: none; }
+        
+        /* MODERN PUSULA YAPISI */
+        .outer { 
+            width: 300px; height: 300px; border-radius: 50%; 
+            border: 2px solid rgba(255,255,255,0.1); 
+            position: relative; display: flex; align-items: center; justify-content: center;
+        }
+        .target-gate {
+            position: absolute; top: -10px; width: 40px; height: 20px;
+            border: 3px solid white; border-bottom: none; border-radius: 5px 5px 0 0;
+            box-shadow: 0 -5px 15px rgba(255,255,255,0.3);
         }
 
-        /* PUSULA */
-        .outer { width: 280px; height: 280px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); position: relative; }
-        .inner { width: 100%; height: 100%; position: absolute; transition: transform 0.1s linear; }
-        .arrow { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 40px solid #00ffc8; }
-
-        /* DURUM PANELLERİ */
-        #info-panel { position: absolute; bottom: 40px; text-align: center; width: 100%; color: white; pointer-events: auto; }
-        #status { font-size: 24px; font-weight: bold; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-        #dist { font-size: 18px; color: #00ffc8; margin: 5px 0; }
+        .inner { 
+            width: 100%; height: 100%; position: absolute; 
+            transition: transform 0.8s cubic-bezier(0.15, 0.45, 0.35, 1); /* Çok ağır ve akışkan */
+        }
         
-        /* VARDINIZ EKRANI (MODAL) */
+        .arrow { 
+            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); 
+            width: 0; height: 0; 
+            border-left: 18px solid transparent; border-right: 18px solid transparent; 
+            border-bottom: 45px solid #444;
+            transition: border-bottom-color 0.5s ease, filter 0.5s;
+        }
+
+        /* HUD & BİLGİ */
+        #hud { position: absolute; bottom: 60px; width: 100%; text-align: center; color: white; }
+        #status { font-size: 26px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+        #dist { font-size: 18px; margin-top: 8px; font-family: monospace; color: var(--accent); }
+        #gps-msg { font-size: 10px; opacity: 0.5; margin-top: 5px; }
+
+        /* FENER BUTONU */
+        #torch-btn {
+            position: fixed; top: 20px; right: 20px; width: 50px; height: 50px;
+            background: rgba(0,0,0,0.6); border: 1px solid white; color: white;
+            border-radius: 50%; z-index: 100; cursor: pointer; font-size: 20px;
+        }
+
+        /* VARDI MODALI */
         #arrival-card {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
-            width: 85%; background: white; border-radius: 20px; padding: 20px;
-            text-align: center; display: none; z-index: 100; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.7);
+            width: 80%; background: white; border-radius: 25px; padding: 25px;
+            text-align: center; display: none; z-index: 1000; color: #222;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8); transition: transform 0.4s;
         }
-        #arrival-card img { width: 100%; border-radius: 10px; }
-        #arrival-card h2 { color: #333; margin: 15px 0 5px 0; }
-        #arrival-card p { color: #666; font-size: 14px; }
-        #arrival-card button { background: #00ffc8; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-close { margin-top: 20px; padding: 12px 30px; background: var(--accent); border: none; border-radius: 10px; font-weight: bold; }
 
-        /* BAŞLATMA EKRANI */
-        #overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; }
-        .btn-start { padding: 15px 40px; font-size: 20px; background: #00ffc8; border: none; border-radius: 50px; font-weight: bold; color: black; }
+        #overlay { position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px; }
+        .btn-start { padding: 18px 50px; font-size: 20px; background: var(--accent); border: none; border-radius: 50px; font-weight: bold; color: black; box-shadow: 0 0 20px var(--accent); }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <h1>Müze Rehberi v3</h1>
-    <p>Navigasyon ve AR deneyimi için</p>
-    <button class="btn-start" onclick="startApp()">KEŞFETMEYE BAŞLA</button>
+    <h1 style="font-size: 45px; margin-bottom: 10px;">Müze v5</h1>
+    <p style="opacity: 0.6; margin-bottom: 30px;">Hassas Sensör ve GPS Filtreleme Aktif</p>
+    <button class="btn-start" onclick="startApp()">KEŞFİ BAŞLAT</button>
 </div>
 
+<button id="torch-btn" onclick="toggleTorch()">🔦</button>
 <video id="camera" autoplay playsinline></video>
 
 <div id="ui">
-    <div id="marker">🏛️</div> <div class="outer">
+    <div class="outer">
+        <div class="target-gate"></div>
         <div id="compass" class="inner">
-            <div class="arrow"></div>
+            <div id="arrow" class="arrow"></div>
         </div>
     </div>
 </div>
 
-<div id="info-panel">
-    <div id="status">SİSTEM HAZIRLANAMADI</div>
-    <div id="dist">--- m</div>
-    <div id="power-msg" style="font-size: 10px; color: orange; display: none;">BATARYA KORUMA: AKTİF</div>
+<div id="hud">
+    <div id="status">SİSTEM BAŞLATILIYOR</div>
+    <div id="dist">--- metre</div>
+    <div id="gps-msg">GPS Filtresi: Stabil</div>
 </div>
 
 <div id="arrival-card">
-    <img src="https://images.unsplash.com/photo-1574362848149-11496d93a7c7?w=500" alt="Eser">
-    <h2>Antik Heykel</h2>
-    <p>Bu eser M.Ö. 2. yüzyıla aittir. Detaylı bilgi için rehberi dinleyebilirsiniz.</p>
-    <button onclick="closeArrival()">Kapat</button>
+    <h2 id="target-title">Eser Tespit Edildi!</h2>
+    <p>Hedeflenen noktaya ulaştınız. Detaylar ekrana yükleniyor...</p>
+    <button class="btn-close" onclick="closeArrival()">DEVAM ET</button>
 </div>
 
 <script>
-const POI = { lat: 37.8596227, lng: 27.2728099, name: "Antik Heykel" };
-let state = { bearing: 0, heading: 0, dist: 999, isArrived: false };
+/* ========================= ⚙️ AYARLAR & DURUM ========================= */
+const TARGET = { lat: 37.8596227, lng: 27.2728099, name: "Antik Heykel" };
+let state = { 
+    bearing: 0, heading: 0, dist: 999, 
+    isArrived: false, torch: false,
+    lastLat: 0, lastLng: 0 
+};
 
+/* ========================= 🛡️ GPS SAPMA FİLTRESİ ========================= */
+// GPS'in bina içinde "zıplamasını" engeller
+function filterGPS(nLat, nLng) {
+    if (state.lastLat === 0) {
+        state.lastLat = nLat;
+        state.lastLng = nLng;
+        return { lat: nLat, lng: nLng };
+    }
+    // Low-pass filter (Yumuşatma: %20 yeni veri, %80 eski konum)
+    state.lastLat = (nLat * 0.2) + (state.lastLat * 0.8);
+    state.lastLng = (nLng * 0.2) + (state.lastLng * 0.8);
+    return { lat: state.lastLat, lng: state.lastLng };
+}
+
+/* ========================= 🚀 ANA MOTOR ========================= */
 async function startApp() {
     document.getElementById("overlay").style.display = "none";
     
-    // 1. Kamera Başlat
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-    document.getElementById("camera").srcObject = stream;
+    // 1. Kamera
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        document.getElementById("camera").srcObject = stream;
+    } catch(e) { console.error("Kamera açılmadı."); }
 
-    // 2. Konum İzle
+    // 2. GPS (Yüksek Hassasiyet)
     navigator.geolocation.watchPosition(p => {
-        const { latitude: lat, longitude: lng } = p.coords;
-        state.dist = calculateDistance(lat, lng, POI.lat, POI.lng);
-        state.bearing = calculateBearing(lat, lng, POI.lat, POI.lng);
+        const f = filterGPS(p.coords.latitude, p.coords.longitude);
+        state.dist = calculateDistance(f.lat, f.lng, TARGET.lat, TARGET.lng);
+        state.bearing = calculateBearing(f.lat, f.lng, TARGET.lat, TARGET.lng);
         updateUI();
     }, null, { enableHighAccuracy: true });
 
-    // 3. Yönelim Sensörü
+    // 3. Sensörler (iOS/Android Uyumlu)
     if (window.DeviceOrientationEvent) {
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-            const res = await DeviceOrientationEvent.requestPermission();
-            if (res === 'granted') window.addEventListener("deviceorientation", handleMotion);
+            DeviceOrientationEvent.requestPermission().then(res => {
+                if(res === 'granted') window.addEventListener("deviceorientation", handleMotion);
+            });
         } else {
             window.addEventListener("deviceorientation", handleMotion);
         }
     }
 }
 
-// --- FİZİK VE MATEMATİK MOTORU ---
 function handleMotion(e) {
+    // Ters yön düzeltmesi yapılmış heading
     let h = e.webkitCompassHeading || (360 - e.alpha);
     if (!h) return;
-    
-    // Low-pass filter (Yumuşatma)
-    state.heading = state.heading + (h - state.heading) * 0.2;
-    
-    // Batarya Optimizasyonu: Cihaz dik tutulmuyorsa (Yere bakıyorsa) kamerayı karart
-    // e.beta cihazın öne-arkaya eğimi. ~90 dik, ~0 yatay.
-    if (e.beta < 40) {
-        document.body.classList.add("low-power");
-        document.getElementById("power-msg").style.display = "block";
-    } else {
-        document.body.classList.remove("low-power");
-        document.getElementById("power-msg").style.display = "none";
-    }
+
+    // PUSULA YAVAŞLATICI: 0.04 (Çok ağır ve premium geçiş)
+    state.heading = state.heading + (h - state.heading) * 0.04;
+
+    // BATARYA KORUMA: Cihaz 35 dereceden fazla öne eğikse (yere bakıyorsa)
+    if (e.beta < 35) document.body.classList.add("low-power");
+    else document.body.classList.remove("low-power");
 
     updateUI();
 }
 
 function updateUI() {
-    const diff = (state.bearing - state.heading + 540) % 360 - 180;
-    
-    // 1. Pusula Dönüşü
-    document.getElementById("compass").style.transform = `rotate(${diff}deg)`;
-    
-    // 2. AR Marker Pozisyonu (Ekranın ortasından sapma)
-    const marker = document.getElementById("marker");
-    if (Math.abs(diff) < 30) { // Eğer hedef görüş alanındaysa (yaklaşık 60 derece)
-        marker.style.opacity = "1";
-        marker.style.left = (50 + diff * 1.5) + "%"; // Görüş açısına göre kaydır
-        marker.style.top = "40%";
-    } else {
-        marker.style.opacity = "0";
+    let diff = (state.bearing - state.heading + 540) % 360 - 180;
+    let absDiff = Math.abs(diff);
+
+    const compass = document.getElementById("compass");
+    const arrow = document.getElementById("arrow");
+    const status = document.getElementById("status");
+
+    // Pusula dönüşü
+    compass.style.transform = `rotate(${diff}deg)`;
+
+    // DİNAMİK RENK VE DURUM SKALASI
+    let color, text, glow;
+    if (absDiff < 8) { // Tam Hizalanma
+        color = "#00ffc8"; text = "🎯 HEDEFE DOĞRU"; glow = "0 0 20px #00ffc8";
+    } else if (absDiff < 25) { // Yakın
+        color = "#008a6d"; text = "Hafif Döndür"; glow = "none";
+    } else if (absDiff < 50) { // Uzak
+        color = "#ffae00"; text = "Yönünü Bul"; glow = "none";
+    } else { // Alakasız
+        color = "#444"; text = "Yön Aranıyor"; glow = "none";
     }
 
-    // 3. Mesafe ve Vardınız Kontrolü
-    const distEl = document.getElementById("dist");
-    const statusEl = document.getElementById("status");
+    arrow.style.borderBottomColor = color;
+    arrow.style.filter = `drop-shadow(${glow})`;
+    status.style.color = color;
+    status.innerText = text;
+    document.getElementById("dist").innerText = `${state.dist.toFixed(1)} metre kaldı`;
 
-    distEl.innerText = `Mesafe: ${state.dist.toFixed(1)} m`;
-
-    if (state.dist < 3 && !state.isArrived) {
+    // VARDI KONTROLÜ
+    if (state.dist < 3.5 && !state.isArrived) {
         triggerArrival();
-    } else {
-        statusEl.innerText = Math.abs(diff) < 15 ? "👉 İLERLEYİN" : "Yönünü Bul";
-        statusEl.style.color = Math.abs(diff) < 15 ? "#00ffc8" : "white";
     }
 }
 
+/* ========================= 💎 EKSTRA ÖZELLİKLER ========================= */
 function triggerArrival() {
     state.isArrived = true;
-    document.getElementById("arrival-card").style.display = "block";
-    document.getElementById("arrival-card").style.transform = "translate(-50%, -50%) scale(1)";
-    if ("vibrate" in navigator) navigator.vibrate(200);
+    const card = document.getElementById("arrival-card");
+    card.style.display = "block";
+    setTimeout(() => card.style.transform = "translate(-50%, -50%) scale(1)", 50);
+    
+    // Titreşim ve Sesli Bildirim
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+    const speech = new SpeechSynthesisUtterance(TARGET.name + " yanındasınız.");
+    speech.lang = 'tr-TR';
+    window.speechSynthesis.speak(speech);
 }
 
 function closeArrival() {
     document.getElementById("arrival-card").style.display = "none";
-    // Tekrar tetiklenmemesi için mesafeyi kontrol etmeye devam et
 }
 
-// Yardımcı Fonksiyonlar
+async function toggleTorch() {
+    const track = document.getElementById("camera").srcObject.getVideoTracks()[0];
+    state.torch = !state.torch;
+    try {
+        await track.applyConstraints({ advanced: [{ torch: state.torch }] });
+    } catch(e) { alert("Fener bu cihazda desteklenmiyor."); }
+}
+
+// YARDIMCI MATEMATİK
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
     const φ1 = lat1 * Math.PI/180, φ2 = lat2 * Math.PI/180;
-    const Δφ = (lat2-lat1) * Math.PI/180, Δλ = (lon2-lon1) * Math.PI/180;
-    const a = Math.sin(Δφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
-    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    const Δλ = (lon2-lon1) * Math.PI/180;
+    return Math.acos(Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2)*Math.cos(Δλ)) * R;
 }
 
 function calculateBearing(lat1, lon1, lat2, lon2) {
