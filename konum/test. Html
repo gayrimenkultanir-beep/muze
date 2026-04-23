@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR Yönlendirme Demo</title>
+
+<style>
+body { margin:0; overflow:hidden; font-family:sans-serif; }
+
+#cam {
+  position:fixed;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+#arrow {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  font-size:80px;
+  z-index:10;
+}
+
+#info {
+  position:fixed;
+  bottom:10px;
+  left:10px;
+  background:rgba(0,0,0,0.6);
+  color:#fff;
+  padding:10px;
+  font-size:12px;
+  border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<video id="cam" autoplay playsinline></video>
+<div id="arrow">⬆️</div>
+<div id="info">Başlatılıyor...</div>
+
+<script>
+let userLat = 0;
+let userLng = 0;
+let heading = 0;
+let currentStep = 0;
+
+// 🔴 TEST İÇİN HEDEF (DEĞİŞTİR)
+const ROUTE = [
+  { lat: 38.4192, lng: 27.1287 }, // 1. nokta
+  { lat: 38.4195, lng: 27.1295 }, // 2. nokta
+  { lat: 38.4200, lng: 27.1302 }  // 3. nokta
+];
+
+// 📷 Kamera aç
+navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+.then(stream => {
+  document.getElementById("cam").srcObject = stream;
+});
+
+// 📍 Konum al
+navigator.geolocation.watchPosition(pos => {
+  userLat = pos.coords.latitude;
+  userLng = pos.coords.longitude;
+});
+
+// 🧭 Pusula
+window.addEventListener("deviceorientationabsolute", e => {
+  if (e.alpha !== null) {
+    heading = e.alpha;
+  }
+});
+
+// 📐 Bearing hesapla
+function getBearing(lat1, lon1, lat2, lon2) {
+  const toRad = d => d * Math.PI / 180;
+  const toDeg = r => r * 180 / Math.PI;
+
+  const dLon = toRad(lon2 - lon1);
+
+  const y = Math.sin(dLon) * Math.cos(toRad(lat2));
+  const x =
+    Math.cos(toRad(lat1)) * Math.sin(toRad(lat2)) -
+    Math.sin(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.cos(dLon);
+
+  return (toDeg(Math.atan2(y, x)) + 360) % 360;
+}
+
+// 📏 Mesafe
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const toRad = d => d * Math.PI / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(toRad(lat1))*Math.cos(toRad(lat2)) *
+    Math.sin(dLon/2)*Math.sin(dLon/2);
+
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+// 🔄 yön farkı
+function getDiff(target, current) {
+  let diff = target - current;
+  if (diff > 180) diff -= 360;
+  if (diff < -180) diff += 360;
+  return diff;
+}
+
+// ➡️ ok belirleme
+function getArrow(diff) {
+  if (Math.abs(diff) < 15) return "⬆️";
+  if (diff > 15) return "➡️";
+  if (diff < -15) return "⬅️";
+}
+
+// 🔄 ana loop
+setInterval(() => {
+
+  if (!ROUTE[currentStep]) return;
+
+  const target = ROUTE[currentStep];
+
+  const bearing = getBearing(userLat, userLng, target.lat, target.lng);
+  const diff = getDiff(bearing, heading);
+  const arrow = getArrow(diff);
+
+  document.getElementById("arrow").innerHTML = arrow;
+
+  const dist = getDistance(userLat, userLng, target.lat, target.lng);
+
+  // 📍 noktaya ulaştıysa sonraki
+  if (dist < 10) {
+    currentStep++;
+  }
+
+  document.getElementById("info").innerHTML =
+    "Adım: " + currentStep +
+    "<br>Mesafe: " + Math.round(dist) + "m" +
+    "<br>Heading: " + Math.round(heading) +
+    "<br>Hedef: " + Math.round(bearing);
+
+}, 500);
+
+</script>
+
+</body>
+</html>
