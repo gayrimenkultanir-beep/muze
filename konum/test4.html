@@ -3,143 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Müze AR Navigasyon Pro</title>
+    <title>Sunum Odası Navigasyonu</title>
     <style>
-        :root { --accent: #00ffc8; --danger: #ff3e3e; --bg: #000; }
-        html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', sans-serif; color: white; }
+        :root {
+            --far: #ff4d4d;     /* Uzak - Kırmızı */
+            --near: #ffae00;    /* Yaklaşıldı - Turuncu */
+            --aligned: #00ffc8; /* Hizalandı - Turkuaz */
+            --bg: #000;
+        }
+        html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', Roboto, sans-serif; color: white; }
         
-        /* KAMERA KATMANI */
-        #camera { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45); transition: opacity 0.5s; }
-        .low-power #camera { opacity: 0.2; filter: grayscale(1) blur(3px); }
+        #camera { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.5); }
 
-        /* UI KATMANI */
         #ui { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; pointer-events: none; }
+
+        /* HEDEF İKONU (KAPI) */
+        #target-icon {
+            position: absolute; top: 15%; width: 100px; height: 100px;
+            background: rgba(0, 255, 200, 0.1); border: 3px solid var(--aligned);
+            border-radius: 20px; display: flex; align-items: center; justify-content: center;
+            font-size: 50px; opacity: 0; transform: scale(0.5);
+            transition: all 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+            box-shadow: 0 0 30px var(--aligned); backdrop-filter: blur(5px);
+        }
+        #target-icon.active { opacity: 1; transform: scale(1); }
+
+        /* MERKEZİ PUSULA SİSTEMİ */
+        .compass-container { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; }
         
-        /* PUSULA TASARIMI */
-        .compass-box { width: 320px; height: 320px; position: relative; display: flex; align-items: center; justify-content: center; }
-        
-        /* Sabit Hedef Kapısı (Üstte duran beyaz hizalayıcı) */
-        .target-gate { 
-            position: absolute; top: -10px; width: 50px; height: 25px; 
-            border: 4px solid white; border-bottom: none; border-radius: 8px 8px 0 0;
-            box-shadow: 0 -5px 15px rgba(255,255,255,0.4); z-index: 5;
+        /* Dinamik Renk Halkası */
+        .status-ring {
+            position: absolute; inset: 0; border-radius: 50%;
+            border: 4px solid rgba(255,255,255,0.1);
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
-        .outer-ring { width: 280px; height: 280px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); position: absolute; }
-        
-        /* Hareketli Pusula Halkası */
-        .inner-compass { 
-            width: 100%; height: 100%; position: absolute; 
-            transition: transform 0.8s cubic-bezier(0.1, 0.3, 0.2, 1); /* Çok yumuşak akış */
+        .inner-compass {
+            width: 100%; height: 100%; position: absolute;
+            transition: transform 0.8s cubic-bezier(0.1, 0.3, 0.2, 1);
         }
-        
+
         /* Navigasyon Oku */
-        .arrow { 
-            position: absolute; top: 15px; left: 50%; transform: translateX(-50%); 
-            width: 0; height: 0; 
-            border-left: 20px solid transparent; border-right: 20px solid transparent; 
-            border-bottom: 50px solid #444; /* Başlangıç rengi pasif */
-            transition: border-bottom-color 0.4s;
+        #nav-arrow {
+            position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 20px solid transparent; border-right: 20px solid transparent;
+            border-bottom: 50px solid #555;
+            transition: border-bottom-color 0.4s ease, filter 0.4s ease;
         }
 
-        /* HUD PANEL */
-        #hud { position: absolute; bottom: 80px; text-align: center; width: 100%; pointer-events: auto; }
-        #status { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
-        #dist { font-size: 20px; color: var(--accent); font-family: monospace; }
-        #gps-status { font-size: 11px; opacity: 0.5; margin-top: 8px; }
+        /* ALT HUD PANEL */
+        #hud { position: absolute; bottom: 50px; width: 90%; background: rgba(0,0,0,0.6); padding: 20px; border-radius: 20px; text-align: center; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        #status-text { font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        #dist-text { font-size: 18px; color: var(--aligned); margin-top: 5px; opacity: 0.9; }
 
-        /* MODALLAR */
-        #overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
-        .btn-main { padding: 18px 50px; font-size: 20px; background: var(--accent); border: none; border-radius: 50px; font-weight: bold; color: black; cursor: pointer; box-shadow: 0 0 20px var(--accent); }
-        
-        #arrival-card {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.7);
-            width: 80%; background: white; border-radius: 25px; padding: 30px;
-            text-align: center; display: none; z-index: 2000; color: #111;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8); transition: transform 0.4s;
-        }
-        .btn-close { margin-top: 20px; padding: 15px 40px; background: #222; color: white; border: none; border-radius: 12px; font-weight: bold; }
-
-        #torch-btn { position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(0,0,0,0.5); border: 1px solid white; border-radius: 50%; color: white; z-index: 100; cursor: pointer; font-size: 20px; }
+        /* BAŞLATMA EKRANI */
+        #overlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+        .btn-start { padding: 18px 50px; font-size: 22px; background: var(--aligned); border: none; border-radius: 50px; font-weight: bold; color: black; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <h1 style="font-size: 36px; margin-bottom: 10px;">MÜZE REHBERİ</h1>
-    <p style="opacity: 0.7; margin-bottom: 40px;">Pusula ve GPS kalibrasyonu aktif.<br>Lütfen tüm izinleri onaylayın.</p>
-    <button class="btn-main" onclick="startApp()">KEŞFETMEYE BAŞLA</button>
+    <h1>SUNUM ODASI</h1>
+    <p style="opacity: 0.6; margin-bottom: 30px;">Navigasyonu Başlatmak İçin Tıklayın</p>
+    <button class="btn-start" onclick="startApp()">KEŞFET</button>
 </div>
 
-<button id="torch-btn" onclick="toggleTorch()">🔦</button>
 <video id="camera" autoplay playsinline></video>
 
 <div id="ui">
-    <div class="compass-box">
-        <div class="target-gate"></div>
-        <div class="outer-ring"></div>
-        <div id="compass" class="inner-compass">
-            <div id="arrow" class="arrow"></div>
+    <div id="target-icon">🚪</div>
+
+    <div class="compass-container">
+        <div id="ring" class="status-ring"></div>
+        <div id="compass-rotate" class="inner-compass">
+            <div id="nav-arrow"></div>
         </div>
+    </div>
+
+    <div id="hud">
+        <div id="status-text">YÖN ARANIYOR</div>
+        <div id="dist-text">--- metre</div>
     </div>
 </div>
 
-<div id="hud">
-    <div id="status">SİNYAL BEKLENİYOR</div>
-    <div id="dist">--- metre</div>
-    <div id="gps-status">GPS Filtresi: Aktif</div>
-</div>
-
-<div id="arrival-card">
-    <h2 id="target-name">Hedefe Varıldı!</h2>
-    <p>Antik eserin önündesiniz. Detaylı bilgi sesli olarak başlatılıyor.</p>
-    <button class="btn-close" onclick="closeArrival()">ANLADIM</button>
-</div>
-
 <script>
-/* ========================= ⚙️ CONFIG ========================= */
-const TARGET = { lat: 37.8596227, lng: 27.2728099, name: "Antik Heykel" };
-let state = { 
-    heading: 0, 
-    bearing: 0, 
-    dist: 999, 
-    isArrived: false,
-    torch: false,
-    lastLat: 0, 
-    lastLng: 0 
-};
+const TARGET = { lat: 37.8596227, lng: 27.2728099, name: "Sunum Odası" };
+let state = { heading: 0, bearing: 0, dist: 999 };
 
-/* ========================= 🛡️ GPS SMOOTHING ========================= */
-function filterGPS(nLat, nLng) {
-    if (state.lastLat === 0) {
-        state.lastLat = nLat; state.lastLng = nLng;
-        return { lat: nLat, lng: nLng };
-    }
-    // Low-pass: GPS sıçramalarını %85 oranında sönümler
-    state.lastLat = (nLat * 0.15) + (state.lastLat * 0.85);
-    state.lastLng = (nLng * 0.15) + (state.lastLng * 0.85);
-    return { lat: state.lastLat, lng: state.lastLng };
-}
-
-/* ========================= 🚀 CORE ENGINE ========================= */
 async function startApp() {
     document.getElementById("overlay").style.display = "none";
 
-    // 1. Kamera Erişimi
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-        document.getElementById("camera").srcObject = stream;
-    } catch(e) { console.error("Kamera izni reddedildi."); }
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+    document.getElementById("camera").srcObject = stream;
 
-    // 2. GPS Takibi
     navigator.geolocation.watchPosition(pos => {
-        const f = filterGPS(pos.coords.latitude, pos.coords.longitude);
-        state.dist = calculateDistance(f.lat, f.lng, TARGET.lat, TARGET.lng);
-        state.bearing = calculateBearing(f.lat, f.lng, TARGET.lat, TARGET.lng);
+        state.dist = calculateDistance(pos.coords.latitude, pos.coords.longitude, TARGET.lat, TARGET.lng);
+        state.bearing = calculateBearing(pos.coords.latitude, pos.coords.longitude, TARGET.lat, TARGET.lng);
         updateUI();
     }, null, { enableHighAccuracy: true });
 
-    // 3. Sensör Takibi (Pusula)
     if (window.DeviceOrientationEvent) {
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
             const res = await DeviceOrientationEvent.requestPermission();
@@ -151,98 +115,70 @@ async function startApp() {
 }
 
 function handleMotion(e) {
-    let rawHeading = 0;
+    let rawHeading = e.webkitCompassHeading || (360 - e.alpha);
+    if (!rawHeading) return;
     
-    if (e.webkitCompassHeading) {
-        rawHeading = e.webkitCompassHeading; // iOS için gerçek kuzey
-    } else {
-        rawHeading = 360 - e.alpha; // Android için düzeltilmiş yön
-    }
-
-    // YÜKSEK DAMPING (Ağır hareket): 0.03 katsayısı okun titremesini tamamen keser
-    state.heading = state.heading + (rawHeading - state.heading) * 0.03;
-
-    // Batarya ve Ergonomi: Telefon yere paralel tutuluyorsa karart
-    if (e.beta < 30) document.body.classList.add("low-power");
-    else document.body.classList.remove("low-power");
-
+    // Smooth damping (Hareketi yumuşatma)
+    state.heading = state.heading + (rawHeading - state.heading) * 0.05;
     updateUI();
 }
 
 function updateUI() {
-    // ÖNEMLİ: Yön tersliğini kıran matematiksel fark
-    let diff = (state.bearing - state.heading + 540) % 360 - 180;
-    
-    const compass = document.getElementById("compass");
-    const arrow = document.getElementById("arrow");
-    const status = document.getElementById("status");
+    const diff = (state.bearing - state.heading + 540) % 360 - 180;
+    const absDiff = Math.abs(diff);
 
-    // Okun dönüşü
+    const ring = document.getElementById("ring");
+    const arrow = document.getElementById("nav-arrow");
+    const status = document.getElementById("status-text");
+    const targetIcon = document.getElementById("target-icon");
+    const compass = document.getElementById("compass-rotate");
+
+    // Pusula dönüşü
     compass.style.transform = `rotate(${diff}deg)`;
 
-    // Renk ve Mesafe Mantığı
-    let absDiff = Math.abs(diff);
-    let color, text;
-
-    if (absDiff < 12) {
-        color = "var(--accent)"; 
-        text = "🎯 İLERLEYİNİZ";
-    } else if (absDiff < 35) {
-        color = "#008a6d"; 
-        text = "HAFİF DÖNÜN";
+    // DİNAMİK RENK VE İKON MANTIĞI
+    if (absDiff < 10) {
+        // TAM HİZALANDI
+        updateStyles("var(--aligned)", "DOĞRU YÖNDESİNİZ", true);
+    } else if (absDiff < 40) {
+        // YAKLAŞTI
+        updateStyles("var(--near)", "YAKLAŞTINIZ", false);
     } else {
-        color = "#444"; 
-        text = "YÖNÜNÜZÜ ARAYIN";
+        // UZAK
+        updateStyles("var(--far)", "YÖNÜNÜZÜ DÖNÜN", false);
     }
 
-    arrow.style.borderBottomColor = color;
-    status.style.color = color;
-    status.innerText = text;
-    document.getElementById("dist").innerText = `${state.dist.toFixed(1)} m`;
-
-    // Varış Kontrolü
-    if (state.dist < 3.2 && !state.isArrived) {
-        triggerArrival();
+    function updateStyles(color, text, isAligned) {
+        ring.style.borderColor = color;
+        ring.style.boxShadow = `0 0 20px ${color}`;
+        arrow.style.borderBottomColor = color;
+        arrow.style.filter = `drop-shadow(0 0 10px ${color})`;
+        status.innerText = text;
+        status.style.color = color;
+        
+        if (isAligned) {
+            targetIcon.classList.add("active");
+        } else {
+            targetIcon.classList.remove("active");
+        }
     }
+
+    document.getElementById("dist-text").innerText = `${state.dist.toFixed(1)} Metre Kaldı`;
 }
 
-/* ========================= 💎 HELPER FUNCTIONS ========================= */
-function triggerArrival() {
-    state.isArrived = true;
-    const card = document.getElementById("arrival-card");
-    card.style.display = "block";
-    setTimeout(() => card.style.transform = "translate(-50%, -50%) scale(1)", 50);
-    
-    // Sesli Rehber & Titreşim
-    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-    const speech = new SpeechSynthesisUtterance(`${TARGET.name} yanındasınız.`);
-    speech.lang = 'tr-TR';
-    window.speechSynthesis.speak(speech);
-}
-
-function closeArrival() {
-    document.getElementById("arrival-card").style.display = "none";
-}
-
-async function toggleTorch() {
-    const track = document.getElementById("camera").srcObject.getVideoTracks()[0];
-    state.torch = !state.torch;
-    try {
-        await track.applyConstraints({ advanced: [{ torch: state.torch }] });
-    } catch(e) { console.log("Fener yok."); }
-}
-
+/* YARDIMCI FONKSİYONLAR */
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
-    const φ1 = lat1 * Math.PI/180, φ2 = lat2 * Math.PI/180;
-    const Δλ = (lon2-lon1) * Math.PI/180;
-    return Math.acos(Math.sin(φ1)*Math.sin(φ2) + Math.cos(φ1)*Math.cos(φ2)*Math.cos(Δλ)) * R;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
 function calculateBearing(lat1, lon1, lat2, lon2) {
-    const y = Math.sin((lon2-lon1)*Math.PI/180) * Math.cos(lat2*Math.PI/180);
-    const x = Math.cos(lat1*Math.PI/180)*Math.sin(lat2*Math.PI/180) - Math.sin(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.cos((lon2-lon1)*Math.PI/180);
-    return (Math.atan2(y, x) * 180/Math.PI + 360) % 360;
+    const y = Math.sin((lon2 - lon1) * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180);
+    const x = Math.cos(lat1 * Math.PI / 180) * Math.sin(lat2 * Math.PI / 180) - Math.sin(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.cos((lon2 - lon1) * Math.PI / 180);
+    return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
 }
 </script>
 </body>
