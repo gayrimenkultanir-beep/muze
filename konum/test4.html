@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Müze Navigasyon v1</title>
+<title>Müze Navigasyon v2 PRO</title>
 
 <style>
 html,body{
@@ -31,43 +31,22 @@ align-items:center;
 justify-content:center;
 }
 
-/* START SCREEN */
+/* START */
 #startBtn{
 position:absolute;
-z-index:10;
-padding:14px 22px;
+z-index:20;
+padding:14px 20px;
 border:none;
 border-radius:12px;
 background:lime;
 font-weight:bold;
 font-size:16px;
-cursor:pointer;
 }
 
-/* OUTER GUIDE */
-.outer{
-width:360px;
-height:360px;
-border-radius:50%;
-border:2px solid rgba(255,255,255,0.2);
-position:absolute;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.marker{
-position:absolute;
-width:2px;
-height:160px;
-background:lime;
-top:10px;
-}
-
-/* COMPASS RING */
+/* RING */
 .ring{
-width:260px;
-height:260px;
+width:280px;
+height:280px;
 border-radius:50%;
 border:2px solid rgba(0,255,200,0.25);
 position:absolute;
@@ -75,7 +54,6 @@ transform-origin:center;
 will-change:transform;
 }
 
-/* ARROW */
 .arrow{
 position:absolute;
 top:20px;
@@ -88,8 +66,7 @@ border-right:14px solid transparent;
 border-bottom:40px solid red;
 }
 
-/* CENTER */
-.dot{
+.center{
 width:10px;
 height:10px;
 background:white;
@@ -100,7 +77,7 @@ left:50%;
 transform:translate(-50%,-50%);
 }
 
-/* TEXT */
+/* UI TEXT */
 #status{
 position:absolute;
 bottom:90px;
@@ -117,6 +94,13 @@ color:rgba(255,255,255,0.7);
 font-size:14px;
 }
 
+#hint{
+position:absolute;
+bottom:25px;
+color:rgba(255,255,255,0.5);
+font-size:13px;
+}
+
 </style>
 </head>
 
@@ -128,43 +112,54 @@ font-size:14px;
 
 <button id="startBtn">BAŞLAT</button>
 
-<div class="outer">
-<div class="marker"></div>
-</div>
-
 <div class="ring" id="ring">
 <div class="arrow"></div>
-<div class="dot"></div>
+<div class="center"></div>
 </div>
 
 <div id="status">Hazır</div>
 <div id="dist"></div>
+<div id="hint"></div>
 
 </div>
 
 <script>
 
 /* =========================
-   🎯 HEDEF NOKTA
+   🗺 ROUTE SYSTEM (MULTI POINT READY)
 ========================= */
-const targetLat = 37.8596227;
-const targetLng = 27.2728099;
+const ROUTE = [
+{
+lat: 37.8596227,
+lng: 27.2728099,
+name: "Hedef Nokta"
+}
+];
+
+let currentIndex = 0;
+
+/* =========================
+   🎯 TARGET
+========================= */
+function getTarget(){
+return ROUTE[currentIndex];
+}
 
 /* =========================
    📷 CAMERA
 ========================= */
 navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}})
-.then(stream=>{
-document.getElementById("camera").srcObject = stream;
+.then(s=>{
+document.getElementById("camera").srcObject = s;
 });
 
 /* =========================
    🧠 MATH ENGINE
 ========================= */
-const MathEngine = {
+const M = {
 
-toRad(d){return d*Math.PI/180;},
-toDeg(r){return r*180/Math.PI;},
+toRad:d=>d*Math.PI/180,
+toDeg:r=>r*180/Math.PI,
 
 bearing(lat1,lng1,lat2,lng2){
 let dLng=this.toRad(lng2-lng1);
@@ -188,46 +183,47 @@ Math.sin(dLng/2)**2;
 return R*(2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a)));
 },
 
-angleDiff(a,b){
+diff(a,b){
 return ((b-a+540)%360)-180;
 }
 
 };
 
 /* =========================
-   📍 STATE
+   📡 STATE
 ========================= */
 let heading = 0;
 let bearing = 0;
+let smoothHeading = 0;
 
 /* =========================
-   🔁 SMOOTH SYSTEM
+   🔥 FILTERS (PRO LEVEL)
 ========================= */
-function smoothAngle(current, target){
-let diff = MathEngine.angleDiff(current, target);
+function smoothAngle(cur,target){
 
-// max 3° hareket (stabilizasyon)
-const maxStep = 3;
-diff = Math.max(-maxStep, Math.min(maxStep, diff));
+let d = M.diff(cur,target);
 
-return current + diff;
+// hız limiti
+const maxStep = 2.8;
+d = Math.max(-maxStep,Math.min(maxStep,d));
+
+// easing
+return cur + d;
 }
 
 /* =========================
-   🚀 START BUTTON FLOW
+   🚀 START SYSTEM
 ========================= */
-document.getElementById("startBtn").onclick = async () => {
+document.getElementById("startBtn").onclick = async ()=>{
 
 document.getElementById("startBtn").style.display="none";
 
-/* GPS permission trigger */
+/* GPS permission */
 navigator.geolocation.getCurrentPosition(()=>{});
 
-/* iOS compass permission */
-if (typeof DeviceOrientationEvent.requestPermission === "function") {
-try {
-await DeviceOrientationEvent.requestPermission();
-} catch(e){}
+/* compass permission */
+if(typeof DeviceOrientationEvent.requestPermission==="function"){
+await DeviceOrientationEvent.requestPermission().catch(()=>{});
 }
 
 startGPS();
@@ -236,27 +232,32 @@ startCompass();
 };
 
 /* =========================
-   📡 GPS ENGINE
+   📍 GPS ENGINE (WITH ACCURACY FILTER)
 ========================= */
 function startGPS(){
 
 navigator.geolocation.watchPosition(pos=>{
 
+if(pos.coords.accuracy > 25) return; // 🔥 FILTER
+
+let t = getTarget();
+
 let lat = pos.coords.latitude;
 let lng = pos.coords.longitude;
 
-bearing = MathEngine.bearing(
-lat,lng,
-targetLat,targetLng
-);
+bearing = M.bearing(lat,lng,t.lat,t.lng);
 
-let dist = MathEngine.distance(
-lat,lng,
-targetLat,targetLng
-);
+let dist = M.distance(lat,lng,t.lat,t.lng);
 
 document.getElementById("dist").innerText =
 "Mesafe: " + dist.toFixed(1) + " m";
+
+/* ARRIVAL CHECK */
+if(dist < 3){
+document.getElementById("status").innerText = "📍 VARIŞ";
+document.getElementById("status").style.color="lime";
+return;
+}
 
 },{enableHighAccuracy:true});
 
@@ -273,30 +274,38 @@ let h = e.alpha;
 if(e.webkitCompassHeading) h = e.webkitCompassHeading;
 if(h == null) return;
 
-/* stabilize */
-heading = smoothAngle(heading, h);
+/* smooth drift fix */
+smoothHeading = smoothAngle(smoothHeading,h);
+heading = smoothHeading;
 
-/* direction diff */
-let diff = MathEngine.angleDiff(heading, bearing);
+let diff = M.diff(heading,bearing);
 
-/* rotate UI */
+/* rotate */
 document.getElementById("ring").style.transform =
 `rotate(${-diff}deg)`;
 
-/* status */
+/* UI logic */
 let status = document.getElementById("status");
+let hint = document.getElementById("hint");
 
-if(Math.abs(diff) <= 10){
-status.innerText = "👉 İLERLEYİNİZ";
-status.style.color = "lime";
+if(Math.abs(diff)<=10){
+status.innerText="👉 İLERLEYİNİZ";
+status.style.color="lime";
+hint.innerText="";
 }
-else if(Math.abs(diff) <= 25){
-status.innerText = "Yaklaştınız";
-status.style.color = "orange";
+else if(Math.abs(diff)<=25){
+status.innerText="Yaklaştınız";
+status.style.color="orange";
+
+hint.innerText =
+diff > 0 ? "➡ Sağa dön" : "⬅ Sola dön";
 }
 else{
-status.innerText = "Yön aranıyor...";
-status.style.color = "white";
+status.innerText="Yön aranıyor...";
+status.style.color="white";
+
+hint.innerText =
+diff > 0 ? "Sağa yönlen" : "Sola yönlen";
 }
 
 });
