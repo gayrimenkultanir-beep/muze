@@ -2,115 +2,54 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Akıllı Navigasyon Sistemi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fix Compass</title>
 
 <style>
-html,body{
-margin:0;
-padding:0;
-height:100%;
-overflow:hidden;
-background:black;
-font-family:Arial;
-}
+html,body{margin:0;height:100%;overflow:hidden;background:black;}
+#camera{position:fixed;width:100%;height:100%;object-fit:cover;filter:brightness(.5);}
 
-#camera{
-position:fixed;
-width:100%;
-height:100%;
-object-fit:cover;
-z-index:1;
-filter:brightness(0.55);
-}
-
-#ui{
-position:fixed;
-width:100%;
-height:100%;
-z-index:2;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-}
+#ui{position:fixed;width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
 
 .outer{
-width:340px;
-height:340px;
-border-radius:50%;
-border:2px solid rgba(255,255,255,0.25);
+width:340px;height:340px;border-radius:50%;
+border:2px solid rgba(255,255,255,.2);
 position:absolute;
-display:flex;
-align-items:center;
-justify-content:center;
+display:flex;align-items:center;justify-content:center;
 }
 
-.target-line{
+.target{
 position:absolute;
-width:2px;
-height:160px;
+width:2px;height:160px;
 background:lime;
 top:10px;
 }
 
 .inner{
-width:250px;
-height:250px;
-border-radius:50%;
-border:2px solid rgba(0,255,200,0.3);
+width:250px;height:250px;border-radius:50%;
+border:2px solid rgba(0,255,200,.3);
 position:absolute;
-transition:transform 0.1s linear;
-display:flex;
-align-items:center;
-justify-content:center;
+transform-origin:center;
 }
 
 .arrow{
-width:0;
-height:0;
+position:absolute;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+width:0;height:0;
 border-left:14px solid transparent;
 border-right:14px solid transparent;
 border-bottom:40px solid red;
-position:absolute;
-top:20px;
-}
-
-.center{
-width:10px;
-height:10px;
-background:white;
-border-radius:50%;
-position:absolute;
 }
 
 #status{
 position:absolute;
-bottom:100px;
+bottom:80px;
 color:white;
 font-size:22px;
-font-weight:bold;
-text-shadow:0 0 10px black;
 }
 
-#dist{
-position:absolute;
-bottom:70px;
-color:rgba(255,255,255,0.7);
-font-size:14px;
-}
-
-#startBtn{
-position:absolute;
-z-index:10;
-padding:14px 20px;
-background:lime;
-border:none;
-border-radius:10px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
 </style>
 </head>
 
@@ -120,147 +59,106 @@ cursor:pointer;
 
 <div id="ui">
 
-<button id="startBtn">NAVİGASYONU BAŞLAT</button>
-
 <div class="outer">
-<div class="target-line"></div>
+<div class="target"></div>
 </div>
 
-<div class="inner" id="compass">
-<div class="arrow"></div>
-<div class="center"></div>
+<div class="inner" id="ring">
+<div class="arrow" id="arrow"></div>
 </div>
 
 <div id="status">Bekleniyor...</div>
-<div id="dist"></div>
 
 </div>
 
 <script>
 
-// 🎯 HEDEF
-const targetLat = 37.8596227;
-const targetLng = 27.2728099;
-
-// 📷 kamera
+// =====================
+// CAMERA
+// =====================
 navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}})
-.then(s=>{
-document.getElementById("camera").srcObject = s;
-});
+.then(s=>document.getElementById("camera").srcObject=s);
 
 // =====================
-// yardımcılar
+// TARGET
+// =====================
+const targetLat=37.8596227;
+const targetLng=27.2728099;
+
+// =====================
+// GPS → BEARING
 // =====================
 function toRad(d){return d*Math.PI/180;}
 function toDeg(r){return r*180/Math.PI;}
 
-function getBearing(lat1,lng1,lat2,lng2){
-let dLng = toRad(lng2-lng1);
-let y = Math.sin(dLng)*Math.cos(toRad(lat2));
-let x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) -
+function bearing(lat1,lng1,lat2,lng2){
+let dLng=toRad(lng2-lng1);
+let y=Math.sin(dLng)*Math.cos(toRad(lat2));
+let x=Math.cos(toRad(lat1))*Math.sin(toRad(lat2))-
 Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(dLng);
-let brng = toDeg(Math.atan2(y,x));
-return (brng+360)%360;
-}
-
-function getDistance(lat1,lng1,lat2,lng2){
-const R=6371000;
-const dLat=toRad(lat2-lat1);
-const dLng=toRad(lng2-lng1);
-let a=Math.sin(dLat/2)**2 +
-Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
-Math.sin(dLng/2)**2;
-let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-return R*c;
-}
-
-// shortest angle
-function angleDiff(a,b){
-return ((b-a+540)%360)-180;
-}
-
-// smoothing
-function smooth(prev,next,alpha){
-return prev + (next-prev)*alpha;
+return (toDeg(Math.atan2(y,x))+360)%360;
 }
 
 // =====================
-// state
+// SHORT ANGLE FIX (CRITICAL)
 // =====================
-let heading=0;
-let bearing=0;
-let gpsAcc=999;
+function shortest(a,b){
+let diff=((b-a+540)%360)-180;
+return a+diff;
+}
 
 // =====================
-// START (permission fix iOS)
+// STATE
 // =====================
-document.getElementById("startBtn").onclick=async ()=>{
+let deviceHeading=0;
+let targetBearing=0;
 
-document.getElementById("startBtn").style.display="none";
-
+// =====================
 // GPS
+// =====================
 navigator.geolocation.watchPosition(pos=>{
 
 let lat=pos.coords.latitude;
 let lng=pos.coords.longitude;
-gpsAcc=pos.coords.accuracy || 999;
 
-bearing=getBearing(lat,lng,targetLat,targetLng);
+targetBearing=bearing(lat,lng,targetLat,targetLng);
 
-let dist=getDistance(lat,lng,targetLat,targetLng);
+},()=>{},{enableHighAccuracy:true});
 
-document.getElementById("dist").innerText=
-"Mesafe: "+dist.toFixed(1)+" m | GPS ±"+gpsAcc.toFixed(1)+"m";
-
-},err=>{
-document.getElementById("status").innerText="GPS alınamadı";
-},{enableHighAccuracy:true});
-
-// orientation permission (iOS fix)
-if (typeof DeviceOrientationEvent.requestPermission === "function") {
-await DeviceOrientationEvent.requestPermission();
-}
-
+// =====================
+// SENSOR
+// =====================
 window.addEventListener("deviceorientation",e=>{
 
-let h = e.alpha;
+let h=e.alpha;
 if(e.webkitCompassHeading) h=e.webkitCompassHeading;
 if(h==null) return;
 
-// 🔁 smoothing (drift fix)
-heading = smooth(heading, h, 0.12);
+// 🔥 FIX 1: smooth + wrap safe
+deviceHeading=shortest(deviceHeading,h);
 
-// rotate compass
-document.getElementById("compass").style.transform=
-`rotate(${-heading}deg)`;
+// 🔥 FIX 2: RELATIVE ALIGNMENT
+let relative = shortest(deviceHeading,targetBearing);
 
-// diff
-let diff = Math.abs(angleDiff(heading,bearing));
+// rotate inner system
+document.getElementById("ring").style.transform=
+`rotate(${-relative}deg)`;
 
-// indoor/outdoor logic
+// 🔥 FIX 3: EXACT ALIGNMENT CHECK (VISUAL)
 let status=document.getElementById("status");
 
-if(diff<=10){
+if(Math.abs(relative) < 10){
 status.innerText="👉 İLERLEYİNİZ";
 status.style.color="lime";
-}
-else if(diff<=25){
+}else if(Math.abs(relative) < 25){
 status.innerText="Yaklaştınız";
 status.style.color="orange";
-}
-else{
+}else{
 status.innerText="Hizalanıyor...";
 status.style.color="white";
 }
 
-// GPS quality adaptation
-if(gpsAcc > 50){
-status.innerText += " (İç mekân modu)";
-}
-
 });
-
-};
 
 </script>
 
