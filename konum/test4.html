@@ -22,7 +22,6 @@ object-fit:cover;
 filter:brightness(0.55);
 }
 
-/* UI CENTER */
 #ui{
 position:fixed;
 width:100%;
@@ -30,6 +29,19 @@ height:100%;
 display:flex;
 align-items:center;
 justify-content:center;
+}
+
+/* START SCREEN */
+#startBtn{
+position:absolute;
+z-index:10;
+padding:14px 22px;
+border:none;
+border-radius:12px;
+background:lime;
+font-weight:bold;
+font-size:16px;
+cursor:pointer;
 }
 
 /* OUTER GUIDE */
@@ -44,11 +56,10 @@ align-items:center;
 justify-content:center;
 }
 
-/* TARGET MARK */
-.target{
+.marker{
 position:absolute;
 width:2px;
-height:170px;
+height:160px;
 background:lime;
 top:10px;
 }
@@ -77,7 +88,7 @@ border-right:14px solid transparent;
 border-bottom:40px solid red;
 }
 
-/* CENTER DOT */
+/* CENTER */
 .dot{
 width:10px;
 height:10px;
@@ -115,8 +126,10 @@ font-size:14px;
 
 <div id="ui">
 
+<button id="startBtn">BAŞLAT</button>
+
 <div class="outer">
-<div class="target"></div>
+<div class="marker"></div>
 </div>
 
 <div class="ring" id="ring">
@@ -124,7 +137,7 @@ font-size:14px;
 <div class="dot"></div>
 </div>
 
-<div id="status">Başlatılıyor...</div>
+<div id="status">Hazır</div>
 <div id="dist"></div>
 
 </div>
@@ -132,7 +145,7 @@ font-size:14px;
 <script>
 
 /* =========================
-   🎯 HEDEF
+   🎯 HEDEF NOKTA
 ========================= */
 const targetLat = 37.8596227;
 const targetLng = 27.2728099;
@@ -141,8 +154,8 @@ const targetLng = 27.2728099;
    📷 CAMERA
 ========================= */
 navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}})
-.then(s=>{
-document.getElementById("camera").srcObject = s;
+.then(stream=>{
+document.getElementById("camera").srcObject = stream;
 });
 
 /* =========================
@@ -188,12 +201,12 @@ let heading = 0;
 let bearing = 0;
 
 /* =========================
-   🔁 SMOOTH FILTER (CRITICAL)
+   🔁 SMOOTH SYSTEM
 ========================= */
 function smoothAngle(current, target){
 let diff = MathEngine.angleDiff(current, target);
 
-// hız limiti (stabilizasyon)
+// max 3° hareket (stabilizasyon)
 const maxStep = 3;
 diff = Math.max(-maxStep, Math.min(maxStep, diff));
 
@@ -201,8 +214,32 @@ return current + diff;
 }
 
 /* =========================
-   📡 GPS
+   🚀 START BUTTON FLOW
 ========================= */
+document.getElementById("startBtn").onclick = async () => {
+
+document.getElementById("startBtn").style.display="none";
+
+/* GPS permission trigger */
+navigator.geolocation.getCurrentPosition(()=>{});
+
+/* iOS compass permission */
+if (typeof DeviceOrientationEvent.requestPermission === "function") {
+try {
+await DeviceOrientationEvent.requestPermission();
+} catch(e){}
+}
+
+startGPS();
+startCompass();
+
+};
+
+/* =========================
+   📡 GPS ENGINE
+========================= */
+function startGPS(){
+
 navigator.geolocation.watchPosition(pos=>{
 
 let lat = pos.coords.latitude;
@@ -223,26 +260,30 @@ document.getElementById("dist").innerText =
 
 },{enableHighAccuracy:true});
 
+}
+
 /* =========================
-   🧭 COMPASS
+   🧭 COMPASS ENGINE
 ========================= */
+function startCompass(){
+
 window.addEventListener("deviceorientation",e=>{
 
 let h = e.alpha;
 if(e.webkitCompassHeading) h = e.webkitCompassHeading;
 if(h == null) return;
 
-/* stabilize heading */
+/* stabilize */
 heading = smoothAngle(heading, h);
 
-/* relative angle */
+/* direction diff */
 let diff = MathEngine.angleDiff(heading, bearing);
 
 /* rotate UI */
 document.getElementById("ring").style.transform =
 `rotate(${-diff}deg)`;
 
-/* decision */
+/* status */
 let status = document.getElementById("status");
 
 if(Math.abs(diff) <= 10){
@@ -254,11 +295,13 @@ status.innerText = "Yaklaştınız";
 status.style.color = "orange";
 }
 else{
-status.innerText = "Hizalanıyor...";
+status.innerText = "Yön aranıyor...";
 status.style.color = "white";
 }
 
 });
+
+}
 
 </script>
 
