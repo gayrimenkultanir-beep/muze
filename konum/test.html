@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akıllı Kamera Navigasyon</title>
+<title>Kamera Navigasyon</title>
 
 <style>
 body { margin:0; overflow:hidden; font-family:sans-serif; }
@@ -16,59 +16,56 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
   object-fit:cover;
 }
 
-/* Ok */
+/* Üst bilgi */
+#topBox {
+  position:fixed;
+  top:10%;
+  width:100%;
+  text-align:center;
+  color:white;
+  z-index:10;
+}
+
 #arrow {
-  position:fixed;
-  top:40%;
-  left:50%;
-  transform:translate(-50%, -50%);
-  font-size:80px;
-  z-index:10;
+  font-size:70px;
 }
 
-/* Yön skalası */
-#compassBar {
+#text {
+  font-size:20px;
+  margin-top:5px;
+}
+
+#distance {
+  font-size:16px;
+  opacity:0.8;
+}
+
+/* Alt butonlar */
+#controls {
   position:fixed;
-  top:10%;
-  width:200%;
-  height:40px;
-  left:-50%;
+  bottom:20px;
+  width:100%;
   display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
+  justify-content:space-around;
   z-index:10;
 }
 
-.line {
-  width:4px;
-  height:30px;
-  background:white;
-  margin:0 20px;
-  opacity:0.5;
-}
-
-.centerLine {
-  position:fixed;
-  top:10%;
-  left:50%;
-  width:4px;
-  height:40px;
-  background:red;
-  z-index:11;
-}
-
-/* Bilgi */
-#info {
-  position:fixed;
-  bottom:10px;
-  left:10px;
-  background:rgba(0,0,0,0.6);
-  color:#fff;
-  padding:10px;
+.btn {
+  padding:15px 20px;
   border-radius:10px;
-  font-size:14px;
-  z-index:10;
+  background:rgba(0,0,0,0.5);
+  color:white;
+  font-size:16px;
+  min-width:90px;
+  text-align:center;
+}
+
+.active {
+  background:#00c853;
+}
+
+.warn {
+  background:#ff5252;
 }
 
 /* Bildirim */
@@ -91,17 +88,25 @@ body { margin:0; overflow:hidden; font-family:sans-serif; }
 
 <video id="cam" autoplay playsinline></video>
 
-<div id="compassBar"></div>
-<div class="centerLine"></div>
+<div id="topBox">
+  <div id="arrow"></div>
+  <div id="text"></div>
+  <div id="distance"></div>
+</div>
 
-<div id="arrow">⬆️</div>
-<div id="info">Başlatılıyor...</div>
-<div id="notify">Şimdi sunum odasındasınız</div>
+<div id="controls">
+  <div id="leftBtn" class="btn">Sola dön</div>
+  <div id="okBtn" class="btn">Tamam</div>
+  <div id="rightBtn" class="btn">Sağa dön</div>
+</div>
+
+<div id="notify">Şu an sunum odasındasınız</div>
 
 <script>
-// 📍 SENİN VERDİĞİN KOORDİNATLAR
+// 📍 HEDEF
 const TARGET = { lat: 37.8596296, lng: 27.2728122 };
 
+// 📍 BAŞLANGIÇ
 let userLat = 37.8595412;
 let userLng = 27.2725581;
 
@@ -149,9 +154,9 @@ function getDistance(lat1, lon1, lat2, lon2) {
   const dLon = toRad(lon2 - lon1);
 
   const a =
-    Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.sin(dLat/2)**2 +
     Math.cos(toRad(lat1))*Math.cos(toRad(lat2)) *
-    Math.sin(dLon/2)*Math.sin(dLon/2);
+    Math.sin(dLon/2)**2;
 
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
@@ -164,14 +169,6 @@ function getDiff(target, current) {
   return diff;
 }
 
-// 🧭 Skala oluştur
-const compass = document.getElementById("compassBar");
-for (let i = 0; i < 50; i++) {
-  const div = document.createElement("div");
-  div.className = "line";
-  compass.appendChild(div);
-}
-
 // 🔄 ana loop
 setInterval(() => {
 
@@ -181,35 +178,38 @@ setInterval(() => {
   const diff = getDiff(bearing, heading);
   const dist = getDistance(userLat, userLng, TARGET.lat, TARGET.lng);
 
-  // 🧭 skala hareket
-  compass.style.transform = `translateX(${diff * 3}px)`;
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+  const okBtn = document.getElementById("okBtn");
 
-  // ➡️ ok
-  let arrow = "⬆️";
+  // reset
+  leftBtn.classList.remove("active");
+  rightBtn.classList.remove("active");
+  okBtn.classList.remove("active");
+
   let text = "";
+  let arrow = "";
 
-  if (Math.abs(diff) < 10) {
+  if (Math.abs(diff) < 12) {
+    okBtn.classList.add("active");
+    text = "Doğru ilerleyin";
     arrow = "⬆️";
-    text = "Düz ilerleyin";
-  } else if (diff > 10) {
-    arrow = "➡️";
+  } else if (diff > 12) {
+    rightBtn.classList.add("active");
     text = "Sağa dön";
+    arrow = "";
   } else {
-    arrow = "⬅️";
+    leftBtn.classList.add("active");
     text = "Sola dön";
+    arrow = "";
   }
 
   document.getElementById("arrow").innerHTML = arrow;
-
-  // 👣 adım hesabı (~0.75m/adım)
-  const steps = Math.round(dist / 0.75);
-
-  document.getElementById("info").innerHTML =
-    text + "<br>" +
-    steps + " adım";
+  document.getElementById("text").innerHTML = text;
+  document.getElementById("distance").innerHTML = Math.round(dist) + " metre";
 
   // 📍 varış
-  if (dist < 5) {
+  if (dist < 6) {
     arrived = true;
     document.getElementById("notify").style.display = "block";
   }
@@ -220,4 +220,3 @@ setInterval(() => {
 
 </body>
 </html>
-  
