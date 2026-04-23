@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Akıllı Rehber Pusula</title>
+<title>Akıllı Navigasyon Sistemi</title>
 
 <style>
 html,body{
@@ -11,25 +11,23 @@ margin:0;
 padding:0;
 height:100%;
 overflow:hidden;
-font-family:Arial;
 background:black;
+font-family:Arial;
 }
 
-/* Kamera arka plan */
 #camera{
 position:fixed;
-top:0;left:0;
-width:100%;height:100%;
+width:100%;
+height:100%;
 object-fit:cover;
 z-index:1;
-filter:brightness(0.6);
+filter:brightness(0.55);
 }
 
-/* Overlay */
 #ui{
 position:fixed;
-top:0;left:0;
-width:100%;height:100%;
+width:100%;
+height:100%;
 z-index:2;
 display:flex;
 align-items:center;
@@ -37,151 +35,232 @@ justify-content:center;
 flex-direction:column;
 }
 
-/* Dış pusula */
 .outer{
-width:320px;
-height:320px;
+width:340px;
+height:340px;
 border-radius:50%;
-border:2px solid rgba(255,255,255,0.4);
+border:2px solid rgba(255,255,255,0.25);
 position:absolute;
 display:flex;
 align-items:center;
 justify-content:center;
 }
 
-/* Sabit N E S W */
-.cardinals{
+.target-line{
 position:absolute;
-width:100%;
-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:18px;
-color:white;
-opacity:0.8;
+width:2px;
+height:160px;
+background:lime;
+top:10px;
 }
 
-/* Dönen iç halka */
 .inner{
-width:240px;
-height:240px;
+width:250px;
+height:250px;
 border-radius:50%;
-border:2px solid rgba(0,255,200,0.4);
+border:2px solid rgba(0,255,200,0.3);
 position:absolute;
+transition:transform 0.1s linear;
 display:flex;
 align-items:center;
 justify-content:center;
-transition:transform 0.1s linear;
 }
 
-/* Ok */
 .arrow{
 width:0;
 height:0;
-border-left:15px solid transparent;
-border-right:15px solid transparent;
+border-left:14px solid transparent;
+border-right:14px solid transparent;
 border-bottom:40px solid red;
 position:absolute;
 top:20px;
 }
 
-/* Merkez nokta */
-.centerDot{
-width:12px;
-height:12px;
+.center{
+width:10px;
+height:10px;
 background:white;
 border-radius:50%;
 position:absolute;
 }
 
-/* Yazı */
 #status{
 position:absolute;
-bottom:80px;
+bottom:100px;
 color:white;
 font-size:22px;
 font-weight:bold;
 text-shadow:0 0 10px black;
 }
 
-#hint{
+#dist{
 position:absolute;
-bottom:40px;
+bottom:70px;
 color:rgba(255,255,255,0.7);
 font-size:14px;
+}
+
+#startBtn{
+position:absolute;
+z-index:10;
+padding:14px 20px;
+background:lime;
+border:none;
+border-radius:10px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Kamera -->
 <video id="camera" autoplay playsinline></video>
 
 <div id="ui">
 
-    <!-- dış pusula -->
-    <div class="outer">
-        <div class="cardinals">N &nbsp;&nbsp;&nbsp; E &nbsp;&nbsp;&nbsp; S &nbsp;&nbsp;&nbsp; W</div>
-    </div>
+<button id="startBtn">NAVİGASYONU BAŞLAT</button>
 
-    <!-- iç dönen halka -->
-    <div class="inner" id="innerRing">
-        <div class="arrow"></div>
-        <div class="centerDot"></div>
-    </div>
+<div class="outer">
+<div class="target-line"></div>
+</div>
 
-    <div id="status">Hizalanıyor...</div>
-    <div id="hint">Telefonu çevirerek oku hizala</div>
+<div class="inner" id="compass">
+<div class="arrow"></div>
+<div class="center"></div>
+</div>
+
+<div id="status">Bekleniyor...</div>
+<div id="dist"></div>
 
 </div>
 
 <script>
-// Kamera aç
-navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-.then(stream=>{
-document.getElementById("camera").srcObject = stream;
+
+// 🎯 HEDEF
+const targetLat = 37.8596227;
+const targetLng = 27.2728099;
+
+// 📷 kamera
+navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}})
+.then(s=>{
+document.getElementById("camera").srcObject = s;
 });
 
-// hedef açı (örnek: 0 = kuzey)
-let target = 0;
+// =====================
+// yardımcılar
+// =====================
+function toRad(d){return d*Math.PI/180;}
+function toDeg(r){return r*180/Math.PI;}
 
-function normalize(angle){
-angle = angle % 360;
-if(angle < 0) angle += 360;
-return angle;
+function getBearing(lat1,lng1,lat2,lng2){
+let dLng = toRad(lng2-lng1);
+let y = Math.sin(dLng)*Math.cos(toRad(lat2));
+let x = Math.cos(toRad(lat1))*Math.sin(toRad(lat2)) -
+Math.sin(toRad(lat1))*Math.cos(toRad(lat2))*Math.cos(dLng);
+let brng = toDeg(Math.atan2(y,x));
+return (brng+360)%360;
 }
 
-// cihaz yönü
-window.addEventListener("deviceorientation", (e)=>{
-let heading = e.alpha; // 0-360
-
-if(heading === null) return;
-
-heading = normalize(heading);
-
-// iç halka döner
-document.getElementById("innerRing").style.transform =
-`rotate(${ -heading }deg)`;
-
-// fark hesapla
-let diff = Math.abs(target - heading);
-if(diff > 180) diff = 360 - diff;
-
-let status = document.getElementById("status");
-
-if(diff <= 10){
-status.innerText = "👉 İLERLEYİNİZ";
-status.style.color = "lime";
-} else if(diff <= 30){
-status.innerText = "Yaklaştınız";
-status.style.color = "orange";
-} else {
-status.innerText = "Hizalanıyor...";
-status.style.color = "white";
+function getDistance(lat1,lng1,lat2,lng2){
+const R=6371000;
+const dLat=toRad(lat2-lat1);
+const dLng=toRad(lng2-lng1);
+let a=Math.sin(dLat/2)**2 +
+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*
+Math.sin(dLng/2)**2;
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+return R*c;
 }
+
+// shortest angle
+function angleDiff(a,b){
+return ((b-a+540)%360)-180;
+}
+
+// smoothing
+function smooth(prev,next,alpha){
+return prev + (next-prev)*alpha;
+}
+
+// =====================
+// state
+// =====================
+let heading=0;
+let bearing=0;
+let gpsAcc=999;
+
+// =====================
+// START (permission fix iOS)
+// =====================
+document.getElementById("startBtn").onclick=async ()=>{
+
+document.getElementById("startBtn").style.display="none";
+
+// GPS
+navigator.geolocation.watchPosition(pos=>{
+
+let lat=pos.coords.latitude;
+let lng=pos.coords.longitude;
+gpsAcc=pos.coords.accuracy || 999;
+
+bearing=getBearing(lat,lng,targetLat,targetLng);
+
+let dist=getDistance(lat,lng,targetLat,targetLng);
+
+document.getElementById("dist").innerText=
+"Mesafe: "+dist.toFixed(1)+" m | GPS ±"+gpsAcc.toFixed(1)+"m";
+
+},err=>{
+document.getElementById("status").innerText="GPS alınamadı";
+},{enableHighAccuracy:true});
+
+// orientation permission (iOS fix)
+if (typeof DeviceOrientationEvent.requestPermission === "function") {
+await DeviceOrientationEvent.requestPermission();
+}
+
+window.addEventListener("deviceorientation",e=>{
+
+let h = e.alpha;
+if(e.webkitCompassHeading) h=e.webkitCompassHeading;
+if(h==null) return;
+
+// 🔁 smoothing (drift fix)
+heading = smooth(heading, h, 0.12);
+
+// rotate compass
+document.getElementById("compass").style.transform=
+`rotate(${-heading}deg)`;
+
+// diff
+let diff = Math.abs(angleDiff(heading,bearing));
+
+// indoor/outdoor logic
+let status=document.getElementById("status");
+
+if(diff<=10){
+status.innerText="👉 İLERLEYİNİZ";
+status.style.color="lime";
+}
+else if(diff<=25){
+status.innerText="Yaklaştınız";
+status.style.color="orange";
+}
+else{
+status.innerText="Hizalanıyor...";
+status.style.color="white";
+}
+
+// GPS quality adaptation
+if(gpsAcc > 50){
+status.innerText += " (İç mekân modu)";
+}
+
 });
+
+};
 
 </script>
 
