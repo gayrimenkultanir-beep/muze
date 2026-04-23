@@ -3,146 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Müze Navigasyon v5 - Pro</title>
+    <title>Müze AR Navigasyon Pro</title>
     <style>
-        :root { --accent: #00ffc8; --warning: #ffae00; --danger: #ff3e3e; --bg: #000; }
-        html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', Roboto, sans-serif; }
+        :root { --accent: #00ffc8; --danger: #ff3e3e; --bg: #000; }
+        html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); font-family: 'Segoe UI', sans-serif; color: white; }
         
-        #camera { position: fixed; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); transition: opacity 0.8s; }
-        .low-power #camera { opacity: 0.15; filter: grayscale(1) blur(4px); }
+        /* KAMERA KATMANI */
+        #camera { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.45); transition: opacity 0.5s; }
+        .low-power #camera { opacity: 0.2; filter: grayscale(1) blur(3px); }
 
-        #ui { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 10; pointer-events: none; }
+        /* UI KATMANI */
+        #ui { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; pointer-events: none; }
         
-        /* MODERN PUSULA YAPISI */
-        .outer { 
-            width: 300px; height: 300px; border-radius: 50%; 
-            border: 2px solid rgba(255,255,255,0.1); 
-            position: relative; display: flex; align-items: center; justify-content: center;
-        }
-        .target-gate {
-            position: absolute; top: -10px; width: 40px; height: 20px;
-            border: 3px solid white; border-bottom: none; border-radius: 5px 5px 0 0;
-            box-shadow: 0 -5px 15px rgba(255,255,255,0.3);
+        /* PUSULA TASARIMI */
+        .compass-box { width: 320px; height: 320px; position: relative; display: flex; align-items: center; justify-content: center; }
+        
+        /* Sabit Hedef Kapısı (Üstte duran beyaz hizalayıcı) */
+        .target-gate { 
+            position: absolute; top: -10px; width: 50px; height: 25px; 
+            border: 4px solid white; border-bottom: none; border-radius: 8px 8px 0 0;
+            box-shadow: 0 -5px 15px rgba(255,255,255,0.4); z-index: 5;
         }
 
-        .inner { 
+        .outer-ring { width: 280px; height: 280px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); position: absolute; }
+        
+        /* Hareketli Pusula Halkası */
+        .inner-compass { 
             width: 100%; height: 100%; position: absolute; 
-            transition: transform 0.8s cubic-bezier(0.15, 0.45, 0.35, 1); /* Çok ağır ve akışkan */
+            transition: transform 0.8s cubic-bezier(0.1, 0.3, 0.2, 1); /* Çok yumuşak akış */
         }
         
+        /* Navigasyon Oku */
         .arrow { 
             position: absolute; top: 15px; left: 50%; transform: translateX(-50%); 
             width: 0; height: 0; 
-            border-left: 18px solid transparent; border-right: 18px solid transparent; 
-            border-bottom: 45px solid #444;
-            transition: border-bottom-color 0.5s ease, filter 0.5s;
+            border-left: 20px solid transparent; border-right: 20px solid transparent; 
+            border-bottom: 50px solid #444; /* Başlangıç rengi pasif */
+            transition: border-bottom-color 0.4s;
         }
 
-        /* HUD & BİLGİ */
-        #hud { position: absolute; bottom: 60px; width: 100%; text-align: center; color: white; }
-        #status { font-size: 26px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
-        #dist { font-size: 18px; margin-top: 8px; font-family: monospace; color: var(--accent); }
-        #gps-msg { font-size: 10px; opacity: 0.5; margin-top: 5px; }
+        /* HUD PANEL */
+        #hud { position: absolute; bottom: 80px; text-align: center; width: 100%; pointer-events: auto; }
+        #status { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        #dist { font-size: 20px; color: var(--accent); font-family: monospace; }
+        #gps-status { font-size: 11px; opacity: 0.5; margin-top: 8px; }
 
-        /* FENER BUTONU */
-        #torch-btn {
-            position: fixed; top: 20px; right: 20px; width: 50px; height: 50px;
-            background: rgba(0,0,0,0.6); border: 1px solid white; color: white;
-            border-radius: 50%; z-index: 100; cursor: pointer; font-size: 20px;
-        }
-
-        /* VARDI MODALI */
+        /* MODALLAR */
+        #overlay { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .btn-main { padding: 18px 50px; font-size: 20px; background: var(--accent); border: none; border-radius: 50px; font-weight: bold; color: black; cursor: pointer; box-shadow: 0 0 20px var(--accent); }
+        
         #arrival-card {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.7);
-            width: 80%; background: white; border-radius: 25px; padding: 25px;
-            text-align: center; display: none; z-index: 1000; color: #222;
+            width: 80%; background: white; border-radius: 25px; padding: 30px;
+            text-align: center; display: none; z-index: 2000; color: #111;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8); transition: transform 0.4s;
         }
-        .btn-close { margin-top: 20px; padding: 12px 30px; background: var(--accent); border: none; border-radius: 10px; font-weight: bold; }
+        .btn-close { margin-top: 20px; padding: 15px 40px; background: #222; color: white; border: none; border-radius: 12px; font-weight: bold; }
 
-        #overlay { position: fixed; inset: 0; background: #000; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 20px; }
-        .btn-start { padding: 18px 50px; font-size: 20px; background: var(--accent); border: none; border-radius: 50px; font-weight: bold; color: black; box-shadow: 0 0 20px var(--accent); }
+        #torch-btn { position: fixed; top: 20px; right: 20px; width: 50px; height: 50px; background: rgba(0,0,0,0.5); border: 1px solid white; border-radius: 50%; color: white; z-index: 100; cursor: pointer; font-size: 20px; }
     </style>
 </head>
 <body>
 
 <div id="overlay">
-    <h1 style="font-size: 45px; margin-bottom: 10px;">Müze v5</h1>
-    <p style="opacity: 0.6; margin-bottom: 30px;">Hassas Sensör ve GPS Filtreleme Aktif</p>
-    <button class="btn-start" onclick="startApp()">KEŞFİ BAŞLAT</button>
+    <h1 style="font-size: 36px; margin-bottom: 10px;">MÜZE REHBERİ</h1>
+    <p style="opacity: 0.7; margin-bottom: 40px;">Pusula ve GPS kalibrasyonu aktif.<br>Lütfen tüm izinleri onaylayın.</p>
+    <button class="btn-main" onclick="startApp()">KEŞFETMEYE BAŞLA</button>
 </div>
 
 <button id="torch-btn" onclick="toggleTorch()">🔦</button>
 <video id="camera" autoplay playsinline></video>
 
 <div id="ui">
-    <div class="outer">
+    <div class="compass-box">
         <div class="target-gate"></div>
-        <div id="compass" class="inner">
+        <div class="outer-ring"></div>
+        <div id="compass" class="inner-compass">
             <div id="arrow" class="arrow"></div>
         </div>
     </div>
 </div>
 
 <div id="hud">
-    <div id="status">SİSTEM BAŞLATILIYOR</div>
+    <div id="status">SİNYAL BEKLENİYOR</div>
     <div id="dist">--- metre</div>
-    <div id="gps-msg">GPS Filtresi: Stabil</div>
+    <div id="gps-status">GPS Filtresi: Aktif</div>
 </div>
 
 <div id="arrival-card">
-    <h2 id="target-title">Eser Tespit Edildi!</h2>
-    <p>Hedeflenen noktaya ulaştınız. Detaylar ekrana yükleniyor...</p>
-    <button class="btn-close" onclick="closeArrival()">DEVAM ET</button>
+    <h2 id="target-name">Hedefe Varıldı!</h2>
+    <p>Antik eserin önündesiniz. Detaylı bilgi sesli olarak başlatılıyor.</p>
+    <button class="btn-close" onclick="closeArrival()">ANLADIM</button>
 </div>
 
 <script>
-/* ========================= ⚙️ AYARLAR & DURUM ========================= */
+/* ========================= ⚙️ CONFIG ========================= */
 const TARGET = { lat: 37.8596227, lng: 27.2728099, name: "Antik Heykel" };
 let state = { 
-    bearing: 0, heading: 0, dist: 999, 
-    isArrived: false, torch: false,
-    lastLat: 0, lastLng: 0 
+    heading: 0, 
+    bearing: 0, 
+    dist: 999, 
+    isArrived: false,
+    torch: false,
+    lastLat: 0, 
+    lastLng: 0 
 };
 
-/* ========================= 🛡️ GPS SAPMA FİLTRESİ ========================= */
-// GPS'in bina içinde "zıplamasını" engeller
+/* ========================= 🛡️ GPS SMOOTHING ========================= */
 function filterGPS(nLat, nLng) {
     if (state.lastLat === 0) {
-        state.lastLat = nLat;
-        state.lastLng = nLng;
+        state.lastLat = nLat; state.lastLng = nLng;
         return { lat: nLat, lng: nLng };
     }
-    // Low-pass filter (Yumuşatma: %20 yeni veri, %80 eski konum)
-    state.lastLat = (nLat * 0.2) + (state.lastLat * 0.8);
-    state.lastLng = (nLng * 0.2) + (state.lastLng * 0.8);
+    // Low-pass: GPS sıçramalarını %85 oranında sönümler
+    state.lastLat = (nLat * 0.15) + (state.lastLat * 0.85);
+    state.lastLng = (nLng * 0.15) + (state.lastLng * 0.85);
     return { lat: state.lastLat, lng: state.lastLng };
 }
 
-/* ========================= 🚀 ANA MOTOR ========================= */
+/* ========================= 🚀 CORE ENGINE ========================= */
 async function startApp() {
     document.getElementById("overlay").style.display = "none";
-    
-    // 1. Kamera
+
+    // 1. Kamera Erişimi
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
         document.getElementById("camera").srcObject = stream;
-    } catch(e) { console.error("Kamera açılmadı."); }
+    } catch(e) { console.error("Kamera izni reddedildi."); }
 
-    // 2. GPS (Yüksek Hassasiyet)
-    navigator.geolocation.watchPosition(p => {
-        const f = filterGPS(p.coords.latitude, p.coords.longitude);
+    // 2. GPS Takibi
+    navigator.geolocation.watchPosition(pos => {
+        const f = filterGPS(pos.coords.latitude, pos.coords.longitude);
         state.dist = calculateDistance(f.lat, f.lng, TARGET.lat, TARGET.lng);
         state.bearing = calculateBearing(f.lat, f.lng, TARGET.lat, TARGET.lng);
         updateUI();
     }, null, { enableHighAccuracy: true });
 
-    // 3. Sensörler (iOS/Android Uyumlu)
+    // 3. Sensör Takibi (Pusula)
     if (window.DeviceOrientationEvent) {
         if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-            DeviceOrientationEvent.requestPermission().then(res => {
-                if(res === 'granted') window.addEventListener("deviceorientation", handleMotion);
-            });
+            const res = await DeviceOrientationEvent.requestPermission();
+            if (res === 'granted') window.addEventListener("deviceorientation", handleMotion);
         } else {
             window.addEventListener("deviceorientation", handleMotion);
         }
@@ -150,65 +151,71 @@ async function startApp() {
 }
 
 function handleMotion(e) {
-    // Ters yön düzeltmesi yapılmış heading
-    let h = e.webkitCompassHeading || (360 - e.alpha);
-    if (!h) return;
+    let rawHeading = 0;
+    
+    if (e.webkitCompassHeading) {
+        rawHeading = e.webkitCompassHeading; // iOS için gerçek kuzey
+    } else {
+        rawHeading = 360 - e.alpha; // Android için düzeltilmiş yön
+    }
 
-    // PUSULA YAVAŞLATICI: 0.04 (Çok ağır ve premium geçiş)
-    state.heading = state.heading + (h - state.heading) * 0.04;
+    // YÜKSEK DAMPING (Ağır hareket): 0.03 katsayısı okun titremesini tamamen keser
+    state.heading = state.heading + (rawHeading - state.heading) * 0.03;
 
-    // BATARYA KORUMA: Cihaz 35 dereceden fazla öne eğikse (yere bakıyorsa)
-    if (e.beta < 35) document.body.classList.add("low-power");
+    // Batarya ve Ergonomi: Telefon yere paralel tutuluyorsa karart
+    if (e.beta < 30) document.body.classList.add("low-power");
     else document.body.classList.remove("low-power");
 
     updateUI();
 }
 
 function updateUI() {
+    // ÖNEMLİ: Yön tersliğini kıran matematiksel fark
     let diff = (state.bearing - state.heading + 540) % 360 - 180;
-    let absDiff = Math.abs(diff);
-
+    
     const compass = document.getElementById("compass");
     const arrow = document.getElementById("arrow");
     const status = document.getElementById("status");
 
-    // Pusula dönüşü
+    // Okun dönüşü
     compass.style.transform = `rotate(${diff}deg)`;
 
-    // DİNAMİK RENK VE DURUM SKALASI
-    let color, text, glow;
-    if (absDiff < 8) { // Tam Hizalanma
-        color = "#00ffc8"; text = "🎯 HEDEFE DOĞRU"; glow = "0 0 20px #00ffc8";
-    } else if (absDiff < 25) { // Yakın
-        color = "#008a6d"; text = "Hafif Döndür"; glow = "none";
-    } else if (absDiff < 50) { // Uzak
-        color = "#ffae00"; text = "Yönünü Bul"; glow = "none";
-    } else { // Alakasız
-        color = "#444"; text = "Yön Aranıyor"; glow = "none";
+    // Renk ve Mesafe Mantığı
+    let absDiff = Math.abs(diff);
+    let color, text;
+
+    if (absDiff < 12) {
+        color = "var(--accent)"; 
+        text = "🎯 İLERLEYİNİZ";
+    } else if (absDiff < 35) {
+        color = "#008a6d"; 
+        text = "HAFİF DÖNÜN";
+    } else {
+        color = "#444"; 
+        text = "YÖNÜNÜZÜ ARAYIN";
     }
 
     arrow.style.borderBottomColor = color;
-    arrow.style.filter = `drop-shadow(${glow})`;
     status.style.color = color;
     status.innerText = text;
-    document.getElementById("dist").innerText = `${state.dist.toFixed(1)} metre kaldı`;
+    document.getElementById("dist").innerText = `${state.dist.toFixed(1)} m`;
 
-    // VARDI KONTROLÜ
-    if (state.dist < 3.5 && !state.isArrived) {
+    // Varış Kontrolü
+    if (state.dist < 3.2 && !state.isArrived) {
         triggerArrival();
     }
 }
 
-/* ========================= 💎 EKSTRA ÖZELLİKLER ========================= */
+/* ========================= 💎 HELPER FUNCTIONS ========================= */
 function triggerArrival() {
     state.isArrived = true;
     const card = document.getElementById("arrival-card");
     card.style.display = "block";
     setTimeout(() => card.style.transform = "translate(-50%, -50%) scale(1)", 50);
     
-    // Titreşim ve Sesli Bildirim
+    // Sesli Rehber & Titreşim
     if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-    const speech = new SpeechSynthesisUtterance(TARGET.name + " yanındasınız.");
+    const speech = new SpeechSynthesisUtterance(`${TARGET.name} yanındasınız.`);
     speech.lang = 'tr-TR';
     window.speechSynthesis.speak(speech);
 }
@@ -222,10 +229,9 @@ async function toggleTorch() {
     state.torch = !state.torch;
     try {
         await track.applyConstraints({ advanced: [{ torch: state.torch }] });
-    } catch(e) { alert("Fener bu cihazda desteklenmiyor."); }
+    } catch(e) { console.log("Fener yok."); }
 }
 
-// YARDIMCI MATEMATİK
 function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371e3;
     const φ1 = lat1 * Math.PI/180, φ2 = lat2 * Math.PI/180;
