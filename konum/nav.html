@@ -1,18 +1,1094 @@
-**Müze Navigasyon Sistemi** hazır! 🏛️
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Müze Navigasyon Sistemi</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --clr-bg: #030a12;
+  --clr-panel: rgba(6, 18, 32, 0.92);
+  --clr-border: rgba(0, 200, 255, 0.18);
+  --clr-accent: #00c8ff;
+  --clr-gold: #ffd060;
+  --clr-green: #00ff88;
+  --clr-orange: #ff9500;
+  --clr-red: #ff3a5c;
+  --clr-text: #c8e8ff;
+  --clr-muted: rgba(200, 232, 255, 0.45);
+  --clr-glow: rgba(0, 200, 255, 0.35);
+  --dir-color: var(--clr-red);
+}
 
-Sistemin tam akışı şöyle işliyor:
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-**1. İzin Ekranı →** GPS, kamera ve sensör için kullanıcıya bilgi verip tek tuşla tüm izinleri alır.
+html, body {
+  height: 100%; width: 100%;
+  overflow: hidden;
+  background: var(--clr-bg);
+  font-family: 'Rajdhani', sans-serif;
+  color: var(--clr-text);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
 
-**2. Bölüm Seçim Ekranı →** 6 müze bölümü listelenir (Sunum Odası, Arkeoloji, Sanat, Kafeterya, Ana Giriş, Restorasyon). Her biri için ikon, açıklama ve mesafe gösterilir.
+/* ─── BACKGROUND GRID ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(0,200,255,0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-**3. Navigasyon Ekranı →**
-- AR kamera arka planda açık
-- Dönen pusula iğnesi, renk kademeli değişir: 🔴 Kırmızı → 🟠 Turuncu → 🟡 Sarı → 🟢 Yeşil
-- **±10° içinde** kapı ikonu belirir ve *"İLERLEYİNİZ"* yazısı çıkar
-- Mesafe, sapma açısı ve istikamet metrikleri canlı güncellenir
-- **Sesli yönlendirme** her değişimde Türkçe konuşur
+/* ─── CAMERA ─── */
+#camera {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.28) saturate(0.6);
+  display: none;
+  z-index: 1;
+}
+#camera.active { display: block; }
 
-**4. Hedefe Ulaşıldı Ekranı →** Sesli tebrik, bilgi mesajı ve *"KAPAT & YENİ HEDEF"* butonu — bu butona basınca otomatik bölüm seçim ekranına döner.
+/* ─── SCREENS ─── */
+.screen {
+  position: fixed; inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 20px;
+}
+.screen.active { display: flex; }
 
-> **Not:** Gerçek cihazda (HTTPS üzerinden) çalışır; tarayıcıda GPS/sensör simülasyon kısıtlamaları olabilir. Sunum odası koordinatı: `41.6854481, 26.5437456` olarak tanımlı.
+/* ─── PERMISSION SCREEN ─── */
+#perm-screen {
+  background: var(--clr-bg);
+}
+.perm-logo {
+  width: 80px; height: 80px;
+  border: 2px solid var(--clr-accent);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 0 30px var(--clr-glow), inset 0 0 20px rgba(0,200,255,0.08);
+  margin-bottom: 28px;
+  animation: logoGlow 2s ease-in-out infinite alternate;
+}
+@keyframes logoGlow {
+  from { box-shadow: 0 0 20px var(--clr-glow), inset 0 0 10px rgba(0,200,255,0.05); }
+  to   { box-shadow: 0 0 50px var(--clr-glow), inset 0 0 30px rgba(0,200,255,0.12); }
+}
+.perm-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px; font-weight: 900;
+  color: var(--clr-accent);
+  letter-spacing: 4px;
+  text-align: center;
+  margin-bottom: 6px;
+}
+.perm-subtitle {
+  font-size: 14px; color: var(--clr-muted);
+  letter-spacing: 2px; text-align: center;
+  margin-bottom: 40px;
+}
+.perm-list {
+  width: 100%; max-width: 340px;
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 36px;
+}
+.perm-item {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(0,200,255,0.05);
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.perm-item-icon { font-size: 22px; }
+.perm-item-text { font-size: 14px; line-height: 1.4; }
+.perm-item-text b { color: var(--clr-accent); display: block; font-size: 13px; letter-spacing: 1px; }
+.btn-primary {
+  padding: 18px 52px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 3px;
+  background: transparent;
+  border: 2px solid var(--clr-accent);
+  border-radius: 50px;
+  color: var(--clr-accent);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--clr-accent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-primary:hover::before, .btn-primary:active::before { opacity: 0.12; }
+.btn-primary:active { transform: scale(0.97); }
+
+/* ─── SECTION SELECT SCREEN ─── */
+#section-screen {
+  background: var(--clr-bg);
+  justify-content: flex-start;
+  padding-top: 0;
+  overflow-y: auto;
+}
+.section-header {
+  width: 100%;
+  padding: 50px 24px 20px;
+  text-align: center;
+  position: relative;
+}
+.section-header-tag {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--clr-accent);
+  letter-spacing: 4px;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.section-header h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px; font-weight: 900;
+  color: white;
+  letter-spacing: 2px;
+}
+.section-header p {
+  font-size: 13px; color: var(--clr-muted);
+  margin-top: 6px;
+}
+.section-grid {
+  width: 100%; max-width: 480px;
+  padding: 0 16px 30px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.section-btn {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--clr-panel);
+  border: 1px solid var(--clr-border);
+  border-radius: 16px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+}
+.section-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.05));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.section-btn:hover::after, .section-btn:active::after { opacity: 1; }
+.section-btn:active { transform: scale(0.98); border-color: rgba(0,200,255,0.4); }
+.section-btn-icon {
+  width: 52px; height: 52px; flex-shrink: 0;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  background: rgba(0,200,255,0.08);
+  border: 1px solid rgba(0,200,255,0.2);
+}
+.section-btn-info { flex: 1; }
+.section-btn-name {
+  font-size: 17px; font-weight: 700;
+  color: white; letter-spacing: 0.5px;
+}
+.section-btn-desc { font-size: 12px; color: var(--clr-muted); margin-top: 3px; }
+.section-btn-dist {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px; color: var(--clr-accent);
+  white-space: nowrap;
+}
+.section-arrow {
+  color: var(--clr-muted); font-size: 18px;
+}
+.section-divider {
+  width: 100%; padding: 0 16px 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  color: var(--clr-muted);
+  max-width: 480px;
+}
+
+/* ─── NAV SCREEN ─── */
+#nav-screen {
+  background: transparent;
+  z-index: 10;
+  pointer-events: none;
+}
+#nav-screen.active { display: flex; }
+
+/* TOP BAR */
+.nav-topbar {
+  position: absolute; top: 0; left: 0; right: 0;
+  padding: 52px 20px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(3,10,18,0.9) 60%, transparent);
+  pointer-events: auto;
+  z-index: 20;
+}
+.nav-back-btn {
+  width: 44px; height: 44px;
+  border: 1px solid var(--clr-border);
+  border-radius: 12px;
+  background: var(--clr-panel);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s;
+}
+.nav-back-btn:active { transform: scale(0.93); }
+.nav-destination {
+  text-align: center; flex: 1; padding: 0 12px;
+}
+.nav-dest-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; letter-spacing: 3px; color: var(--clr-accent); opacity: 0.7;
+}
+.nav-dest-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 15px; font-weight: 700; color: white;
+  letter-spacing: 1px;
+}
+.nav-gps-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--clr-green);
+  box-shadow: 0 0 8px var(--clr-green);
+  animation: gpsPulse 1.5s ease-in-out infinite;
+}
+@keyframes gpsPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* COMPASS WRAP */
+.compass-outer {
+  position: relative;
+  width: 280px; height: 280px;
+  margin-top: 60px;
+}
+
+/* Outer decorative rings */
+.comp-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0,200,255,0.12);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: ringRotate 20s linear infinite;
+}
+.comp-ring:nth-child(1) { width: 330px; height: 330px; border-style: dashed; animation-duration: 30s; }
+.comp-ring:nth-child(2) { width: 310px; height: 310px; animation-direction: reverse; animation-duration: 20s; }
+@keyframes ringRotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Main compass circle */
+.comp-main {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--dir-color);
+  background: radial-gradient(ellipse at center,
+    rgba(0,200,255,0.06) 0%,
+    rgba(3,10,18,0.85) 70%);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 40px rgba(0,200,255,0.1), inset 0 0 40px rgba(0,0,0,0.5);
+  transition: border-color 0.6s, box-shadow 0.6s;
+  overflow: hidden;
+}
+.comp-main::before {
+  content: '';
+  position: absolute; inset: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,200,255,0.08);
+}
+
+/* Tick marks */
+.comp-ticks {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+}
+
+/* Needle container — rotates */
+#needle-wrap {
+  position: absolute; inset: 0;
+  transition: transform 0.7s cubic-bezier(0.08, 0.6, 0.2, 1.0);
+}
+
+/* The arrow needle */
+.needle-body {
+  position: absolute;
+  left: 50%; top: 20px;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+}
+.needle-top {
+  width: 0; height: 0;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom: 60px solid var(--dir-color);
+  filter: drop-shadow(0 0 12px var(--dir-color));
+  transition: border-bottom-color 0.6s, filter 0.6s;
+}
+.needle-bot {
+  width: 0; height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 40px solid rgba(0,200,255,0.25);
+}
+/* Center circle */
+.comp-center {
+  position: absolute;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--clr-bg);
+  border: 2px solid var(--dir-color);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  box-shadow: 0 0 12px var(--clr-glow);
+  transition: border-color 0.6s;
+}
+/* N/S/E/W labels */
+.comp-label {
+  position: absolute;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 11px; font-weight: 700;
+  color: rgba(200,232,255,0.4);
+  transform: translate(-50%, -50%);
+}
+.comp-label.N { top: 14%; left: 50%; color: var(--clr-accent); opacity: 0.6; }
+.comp-label.S { top: 86%; left: 50%; }
+.comp-label.E { top: 50%; left: 86%; }
+.comp-label.W { top: 50%; left: 14%; }
+
+/* DOOR ICON */
+#door-icon {
+  position: absolute;
+  bottom: -24px; left: 50%;
+  transform: translateX(-50%) scale(0.5);
+  width: 70px; height: 70px;
+  border-radius: 16px;
+  background: rgba(0,255,136,0.12);
+  border: 2px solid var(--clr-green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.3);
+  box-shadow: 0 0 30px rgba(0,255,136,0.3);
+}
+#door-icon.visible { opacity: 1; transform: translateX(-50%) scale(1); bottom: -36px; }
+
+/* ANGLE INDICATOR */
+#angle-band {
+  position: absolute;
+  bottom: -80px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: var(--clr-muted);
+  text-align: center;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+#angle-band.visible { opacity: 1; }
+
+/* BOTTOM HUD */
+.nav-hud {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px 20px 44px;
+  background: linear-gradient(to top, rgba(3,10,18,0.95) 70%, transparent);
+  pointer-events: auto;
+}
+.hud-status-row {
+  text-align: center;
+  margin-bottom: 14px;
+}
+#status-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px; font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--dir-color);
+  transition: color 0.5s;
+  text-shadow: 0 0 20px currentColor;
+}
+#status-sub {
+  font-size: 13px;
+  color: var(--clr-muted);
+  margin-top: 4px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.hud-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+.hud-metric {
+  background: var(--clr-panel);
+  border: 1px solid var(--clr-border);
+  border-radius: 14px;
+  padding: 14px 10px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+.hud-metric-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  color: var(--clr-muted);
+  margin-bottom: 6px;
+}
+.hud-metric-val {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px; font-weight: 700;
+  color: var(--clr-accent);
+}
+.hud-metric-unit {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 10px; color: var(--clr-muted);
+  margin-top: 2px;
+}
+
+/* ACCURACY BAR */
+.acc-bar-wrap {
+  margin-top: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.acc-bar-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; letter-spacing: 2px; color: var(--clr-muted);
+  white-space: nowrap;
+}
+.acc-bar-bg {
+  flex: 1; height: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.acc-bar-fill {
+  height: 100%; width: 0%;
+  background: var(--clr-green);
+  border-radius: 2px;
+  transition: width 0.5s, background 0.5s;
+}
+.acc-val {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; color: var(--clr-muted);
+  white-space: nowrap;
+}
+
+/* ─── ARRIVED SCREEN ─── */
+#arrived-screen {
+  background: rgba(3,10,18,0.97);
+  z-index: 200;
+}
+.arrived-anim {
+  width: 120px; height: 120px;
+  border-radius: 30px;
+  background: rgba(0,255,136,0.1);
+  border: 2px solid var(--clr-green);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 52px;
+  box-shadow: 0 0 60px rgba(0,255,136,0.3);
+  animation: arrivedPulse 1.5s ease-in-out infinite;
+  margin-bottom: 28px;
+}
+@keyframes arrivedPulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(0,255,136,0.3); transform: scale(1); }
+  50% { box-shadow: 0 0 80px rgba(0,255,136,0.5); transform: scale(1.04); }
+}
+.arrived-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px; font-weight: 900;
+  color: var(--clr-green);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.arrived-dest {
+  font-size: 16px; color: var(--clr-muted);
+  letter-spacing: 2px; text-align: center;
+  margin-bottom: 8px;
+}
+.arrived-info {
+  font-size: 13px; color: var(--clr-muted);
+  text-align: center; max-width: 280px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+.btn-close {
+  padding: 18px 52px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 3px;
+  background: var(--clr-green);
+  border: none;
+  border-radius: 50px;
+  color: #030a12;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(0,255,136,0.35);
+  transition: all 0.2s;
+}
+.btn-close:active { transform: scale(0.96); }
+
+/* SCAN LINE EFFECT */
+@keyframes scanLine {
+  0% { top: -5%; }
+  100% { top: 105%; }
+}
+.scan-line {
+  position: fixed;
+  left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.25), transparent);
+  animation: scanLine 4s linear infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* corner decorations */
+.corner {
+  position: fixed;
+  width: 40px; height: 40px;
+  pointer-events: none;
+  z-index: 15;
+}
+.corner::before, .corner::after {
+  content: ''; position: absolute;
+  background: var(--clr-accent);
+  opacity: 0.5;
+}
+.corner::before { width: 100%; height: 2px; top: 0; left: 0; }
+.corner::after { width: 2px; height: 100%; top: 0; left: 0; }
+.corner.tl { top: 16px; left: 16px; }
+.corner.tr { top: 16px; right: 16px; transform: scaleX(-1); }
+.corner.bl { bottom: 16px; left: 16px; transform: scaleY(-1); }
+.corner.br { bottom: 16px; right: 16px; transform: scale(-1); }
+
+</style>
+</head>
+<body>
+
+<!-- Scan & Corner Decor -->
+<div class="scan-line"></div>
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<!-- CAMERA -->
+<video id="camera" autoplay playsinline muted></video>
+
+<!-- ═══ PERMISSION SCREEN ═══ -->
+<div id="perm-screen" class="screen active">
+  <div class="perm-logo">🏛️</div>
+  <div class="perm-title">MÜZE REHBERİ</div>
+  <div class="perm-subtitle">AKILLI NAVİGASYON SİSTEMİ v2.0</div>
+  <div class="perm-list">
+    <div class="perm-item">
+      <div class="perm-item-icon">📍</div>
+      <div class="perm-item-text">
+        <b>KONUM ERİŞİMİ</b>
+        Gerçek zamanlı mesafe ve yön hesabı için gereklidir.
+      </div>
+    </div>
+    <div class="perm-item">
+      <div class="perm-item-icon">📷</div>
+      <div class="perm-item-text">
+        <b>KAMERA ERİŞİMİ</b>
+        AR katmanı için arka plan kamerası kullanılır.
+      </div>
+    </div>
+    <div class="perm-item">
+      <div class="perm-item-icon">🧭</div>
+      <div class="perm-item-text">
+        <b>SENSÖR ERİŞİMİ</b>
+        Pusula ve yön sensörü için gereklidir.
+      </div>
+    </div>
+  </div>
+  <button class="btn-primary" onclick="requestPermissions()">İZİNLERİ VER VE BAŞLA</button>
+</div>
+
+<!-- ═══ SECTION SELECT SCREEN ═══ -->
+<div id="section-screen" class="screen">
+  <div style="width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;">
+    <div class="section-header">
+      <div class="section-header-tag">// NAVİGASYON SİSTEMİ HAZIR</div>
+      <h2>MÜZE BÖLÜMLERİ</h2>
+      <p>Gitmek istediğiniz bölümü seçin</p>
+    </div>
+    <div class="section-divider">// POPULER GÜZERGAHLAR</div>
+    <div class="section-grid" id="section-grid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NAV SCREEN ═══ -->
+<div id="nav-screen" class="screen">
+
+  <!-- Top bar -->
+  <div class="nav-topbar">
+    <div class="nav-back-btn" onclick="goBack()">←</div>
+    <div class="nav-destination">
+      <div class="nav-dest-label">// HEDEF</div>
+      <div class="nav-dest-name" id="nav-dest-name">—</div>
+    </div>
+    <div class="nav-gps-dot" id="gps-dot"></div>
+  </div>
+
+  <!-- Compass -->
+  <div class="compass-outer" id="compass-outer">
+    <div class="comp-ring"></div>
+    <div class="comp-ring"></div>
+    <div class="comp-main">
+      <span class="comp-label N">N</span>
+      <span class="comp-label S">G</span>
+      <span class="comp-label E">D</span>
+      <span class="comp-label W">B</span>
+      <div id="needle-wrap">
+        <div class="needle-body">
+          <div class="needle-top" id="needle-top"></div>
+          <div class="needle-bot"></div>
+        </div>
+      </div>
+      <div class="comp-center" id="comp-center"></div>
+    </div>
+    <div id="door-icon">🚪</div>
+    <div id="angle-band">— °</div>
+  </div>
+
+  <!-- Bottom HUD -->
+  <div class="nav-hud">
+    <div class="hud-status-row">
+      <div id="status-text">BAĞLANILIYOR...</div>
+      <div id="status-sub">GPS sinyal bekleniyor</div>
+    </div>
+    <div class="hud-meters">
+      <div class="hud-metric">
+        <div class="hud-metric-label">MESAFE</div>
+        <div class="hud-metric-val" id="met-dist">—</div>
+        <div class="hud-metric-unit" id="met-dist-unit">m</div>
+      </div>
+      <div class="hud-metric">
+        <div class="hud-metric-label">SAPMA</div>
+        <div class="hud-metric-val" id="met-angle">—</div>
+        <div class="hud-metric-unit">derece</div>
+      </div>
+      <div class="hud-metric">
+        <div class="hud-metric-label">İSTİKAMET</div>
+        <div class="hud-metric-val" id="met-bearing">—</div>
+        <div class="hud-metric-unit">°</div>
+      </div>
+    </div>
+    <div class="acc-bar-wrap">
+      <span class="acc-bar-label">GPS HASSAS.</span>
+      <div class="acc-bar-bg"><div class="acc-bar-fill" id="acc-fill"></div></div>
+      <span class="acc-val" id="acc-val">±∞</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ARRIVED SCREEN ═══ -->
+<div id="arrived-screen" class="screen">
+  <div class="arrived-anim" id="arrived-icon">🎯</div>
+  <div class="arrived-title">HEDEFE ULAŞILDI!</div>
+  <div class="arrived-dest" id="arrived-dest">Sunum Odası</div>
+  <div class="arrived-info" id="arrived-info">
+    Tebrikler! Hedefinize başarıyla ulaştınız. Şimdi başka bir bölüme gidebilirsiniz.
+  </div>
+  <button class="btn-close" onclick="backToSections()">KAPAT &amp; YENİ HEDEF</button>
+</div>
+
+<script>
+// ─── SECTIONS DATA ──────────────────────────────────────────
+const SECTIONS = [
+  {
+    id: 'sunum',
+    name: 'Sunum Odası',
+    icon: '🚪',
+    desc: 'Ana sunum ve konferans salonu',
+    lat: 41.6854481,
+    lng: 26.5437456,
+    color: '#00c8ff',
+    info: 'Sunum Odası\'na doğru ilerliyorsunuz. Kapıdan geçerek koridoru takip edin.'
+  },
+  {
+    id: 'arkeoloji',
+    name: 'Arkeoloji Galerisi',
+    icon: '🏺',
+    desc: 'Antik çağ eserleri koleksiyonu',
+    lat: 41.6856000,
+    lng: 26.5439000,
+    color: '#ffd060',
+    info: 'Arkeoloji Galerisi\'ne doğru ilerliyorsunuz. Tarihi eserleri keşfetmeye hazır olun.'
+  },
+  {
+    id: 'sanat',
+    name: 'Sanat Galerisi',
+    icon: '🎨',
+    desc: 'Çağdaş ve klasik sanat eserleri',
+    lat: 41.6852000,
+    lng: 26.5435000,
+    color: '#ff9500',
+    info: 'Sanat Galerisi\'ne doğru ilerliyorsunuz. Birbirinden değerli tablolar sizi bekliyor.'
+  },
+  {
+    id: 'kafeterya',
+    name: 'Kafeterya',
+    icon: '☕',
+    desc: 'Dinlenme ve ikram alanı',
+    lat: 41.6858000,
+    lng: 26.5433000,
+    color: '#00ff88',
+    info: 'Kafeteryaya doğru ilerliyorsunuz. Bir mola vermek için ideal bir yer.'
+  },
+  {
+    id: 'giris',
+    name: 'Ana Giriş',
+    icon: '🏛️',
+    desc: 'Müze ana giriş kapısı',
+    lat: 41.6850000,
+    lng: 26.5441000,
+    color: '#ff3a5c',
+    info: 'Ana Girişe doğru ilerliyorsunuz.'
+  },
+  {
+    id: 'depo',
+    name: 'Restorasyon Atölyesi',
+    icon: '🔬',
+    desc: 'Eser restorasyon ve araştırma birimi',
+    lat: 41.6860000,
+    lng: 26.5430000,
+    color: '#c084fc',
+    info: 'Restorasyon Atölyesi\'ne doğru ilerliyorsunuz. Uzmanların çalıştığı bu alana önceden randevu almanız önerilir.'
+  }
+];
+
+// ─── STATE ───────────────────────────────────────────────────
+let state = {
+  heading: 0,
+  smoothHeading: 0,
+  bearing: 0,
+  dist: 0,
+  accuracy: 999,
+  hasGPS: false,
+  target: null,
+  watchId: null,
+  arrived: false,
+  lastVoiceTime: 0,
+  lastVoiceType: ''
+};
+
+// ─── SPEECH ──────────────────────────────────────────────────
+function speak(text, force = false) {
+  if (!window.speechSynthesis) return;
+  const now = Date.now();
+  if (!force && now - state.lastVoiceTime < 8000) return;
+  state.lastVoiceTime = now;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'tr-TR';
+  u.rate = 0.92;
+  u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+// ─── PERMISSIONS ─────────────────────────────────────────────
+async function requestPermissions() {
+  try {
+    speak('Konum ve kamera izinleri alınıyor.', true);
+
+    // Camera
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' }
+    });
+    document.getElementById('camera').srcObject = stream;
+    document.getElementById('camera').classList.add('active');
+
+    // GPS
+    navigator.geolocation.watchPosition(onPosition, onGPSError, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+      timeout: 8000
+    });
+
+    // Compass/Orientation
+    if (window.DeviceOrientationEvent) {
+      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+        try {
+          const res = await DeviceOrientationEvent.requestPermission();
+          if (res === 'granted') window.addEventListener('deviceorientation', onOrientation);
+        } catch(e) {
+          window.addEventListener('deviceorientation', onOrientation);
+        }
+      } else {
+        window.addEventListener('deviceorientation', onOrientation);
+      }
+    }
+
+    showScreen('section-screen');
+    renderSections();
+    speak('Sistem hazır. Lütfen bir bölüm seçin.', true);
+
+  } catch (err) {
+    alert('İzin alınamadı: ' + err.message);
+  }
+}
+
+// ─── SECTIONS ────────────────────────────────────────────────
+function renderSections() {
+  const grid = document.getElementById('section-grid');
+  grid.innerHTML = '';
+  SECTIONS.forEach(s => {
+    const distText = state.hasGPS
+      ? formatDist(getDistance(
+          state.lastLat || 0, state.lastLng || 0, s.lat, s.lng
+        ))
+      : '— m';
+    const el = document.createElement('div');
+    el.className = 'section-btn';
+    el.innerHTML = `
+      <div class="section-btn-icon" style="border-color:${s.color}22;background:${s.color}11;">${s.icon}</div>
+      <div class="section-btn-info">
+        <div class="section-btn-name">${s.name}</div>
+        <div class="section-btn-desc">${s.desc}</div>
+      </div>
+      <div class="section-btn-dist">${distText}</div>
+      <div class="section-arrow">›</div>
+    `;
+    el.onclick = () => startNav(s);
+    grid.appendChild(el);
+  });
+}
+
+function startNav(section) {
+  state.target = section;
+  state.arrived = false;
+  document.getElementById('nav-dest-name').textContent = section.name;
+  document.getElementById('arrived-dest').textContent = section.name;
+  showScreen('nav-screen');
+  speak(`${section.name}'a navigasyon başlatılıyor. ${section.info}`, true);
+  updateNavUI();
+}
+
+// ─── GPS ─────────────────────────────────────────────────────
+function onPosition(pos) {
+  state.lastLat = pos.coords.latitude;
+  state.lastLng = pos.coords.longitude;
+  state.accuracy = pos.coords.accuracy;
+  state.hasGPS = true;
+
+  if (!state.target) return;
+
+  state.dist = getDistance(
+    state.lastLat, state.lastLng,
+    state.target.lat, state.target.lng
+  );
+  state.bearing = getBearing(
+    state.lastLat, state.lastLng,
+    state.target.lat, state.target.lng
+  );
+
+  updateNavUI();
+
+  // Arrived check
+  if (state.dist < 8 && !state.arrived) {
+    triggerArrived();
+  }
+}
+
+function onGPSError(err) {
+  document.getElementById('status-sub').textContent = 'GPS hatası: ' + err.message;
+}
+
+// ─── COMPASS ─────────────────────────────────────────────────
+function onOrientation(e) {
+  let raw = e.webkitCompassHeading;
+  if (raw === undefined || raw === null) {
+    raw = e.alpha !== null ? (360 - e.alpha) : null;
+  }
+  if (raw === null || raw === undefined) return;
+
+  // Smooth damping
+  let diff = raw - state.heading;
+  if (diff > 180) diff -= 360;
+  if (diff < -180) diff += 360;
+  state.heading += diff * 0.1;
+  state.heading = ((state.heading % 360) + 360) % 360;
+
+  if (state.target) updateNavUI();
+}
+
+// ─── NAV UI UPDATE ───────────────────────────────────────────
+function updateNavUI() {
+  if (!state.target) return;
+
+  let diff = ((state.bearing - state.heading) + 540) % 360 - 180;
+  const absDiff = Math.abs(diff);
+
+  // Rotate needle
+  document.getElementById('needle-wrap').style.transform = `rotate(${diff}deg)`;
+
+  // Color theme
+  let clr, statusTxt, statusSub, voiceType;
+
+  if (absDiff <= 10) {
+    clr = '#00ff88';
+    statusTxt = 'TAM İSTİKAMET';
+    statusSub = `±${absDiff.toFixed(0)}° — Düz ilerleyin`;
+    voiceType = 'aligned';
+  } else if (absDiff <= 30) {
+    clr = '#ffd060';
+    statusTxt = 'DOĞRUYA YAKLAŞIN';
+    statusSub = `${diff > 0 ? 'Sağa' : 'Sola'} ${absDiff.toFixed(0)}° döndürün`;
+    voiceType = 'near';
+  } else if (absDiff <= 70) {
+    clr = '#ff9500';
+    statusTxt = 'YÖNÜNÜZÜ AYARLAYIN';
+    statusSub = `${diff > 0 ? 'Sağa' : 'Sola'} ${absDiff.toFixed(0)}° çevirin`;
+    voiceType = 'mid';
+  } else {
+    clr = '#ff3a5c';
+    statusTxt = 'GERİ DÖNÜN';
+    statusSub = `${diff > 0 ? 'Sağa' : 'Sola'} ${absDiff.toFixed(0)}° dönmeniz gerekiyor`;
+    voiceType = 'far';
+  }
+
+  // Apply colors
+  document.documentElement.style.setProperty('--dir-color', clr);
+  document.getElementById('status-text').style.color = clr;
+  document.getElementById('status-text').textContent = statusTxt;
+  document.getElementById('status-sub').textContent = statusSub;
+  document.getElementById('needle-top').style.borderBottomColor = clr;
+  document.getElementById('needle-top').style.filter = `drop-shadow(0 0 12px ${clr})`;
+  document.getElementById('comp-center').style.borderColor = clr;
+  document.querySelector('.comp-main').style.borderColor = clr;
+  document.querySelector('.comp-main').style.boxShadow =
+    `0 0 40px ${clr}22, inset 0 0 40px rgba(0,0,0,0.5)`;
+
+  // Door icon
+  const door = document.getElementById('door-icon');
+  if (absDiff <= 10) {
+    door.classList.add('visible');
+  } else {
+    door.classList.remove('visible');
+  }
+
+  // Angle band
+  const band = document.getElementById('angle-band');
+  band.textContent = `±10° içinde → İLERLEYİNİZ   |   Mevcut: ${absDiff.toFixed(1)}°`;
+  band.classList.add('visible');
+
+  // Metrics
+  const distFmt = formatDist(state.dist);
+  document.getElementById('met-dist').textContent = distFmt.split(' ')[0];
+  document.getElementById('met-dist-unit').textContent = distFmt.split(' ')[1] || 'm';
+  document.getElementById('met-angle').textContent = absDiff.toFixed(0);
+  document.getElementById('met-bearing').textContent = state.bearing.toFixed(0);
+
+  // GPS accuracy bar
+  const acc = Math.min(state.accuracy, 100);
+  const fill = Math.max(0, 100 - acc);
+  document.getElementById('acc-fill').style.width = fill + '%';
+  document.getElementById('acc-fill').style.background =
+    acc < 5 ? '#00ff88' : acc < 15 ? '#ffd060' : '#ff3a5c';
+  document.getElementById('acc-val').textContent = `±${state.accuracy.toFixed(1)}m`;
+
+  // Voice cues (throttled)
+  if (voiceType !== state.lastVoiceType) {
+    state.lastVoiceType = voiceType;
+    if (voiceType === 'aligned') {
+      speak(`Tam istikamette! ${formatDist(state.dist)} kaldı, düz ilerleyin.`);
+    } else if (voiceType === 'near') {
+      speak(`${diff > 0 ? 'Biraz sağa' : 'Biraz sola'} dönün.`);
+    } else if (voiceType === 'far') {
+      speak(`Yönünüzü düzeltin, ${diff > 0 ? 'sağa' : 'sola'} dönmeniz gerekiyor.`);
+    }
+  }
+
+  // Distance voice cues
+  if (state.dist < 10 && !state.arrived) {
+    speak(`Hedefe çok yaklaştınız, ${state.dist.toFixed(0)} metre kaldı.`);
+  } else if (state.dist < 30) {
+    speak(`${formatDist(state.dist)} kaldı.`);
+  }
+}
+
+// ─── ARRIVED ─────────────────────────────────────────────────
+function triggerArrived() {
+  state.arrived = true;
+  speak(`${state.target.name}'a ulaştınız! Tebrikler, hedefinize başarıyla ulaşıldı.`, true);
+  document.getElementById('arrived-icon').textContent = state.target.icon;
+  document.getElementById('arrived-dest').textContent = state.target.name;
+  document.getElementById('arrived-info').textContent =
+    `"${state.target.name}" bölümüne başarıyla ulaştınız. Ziyaretinizin tadını çıkarın!`;
+  setTimeout(() => showScreen('arrived-screen'), 800);
+}
+
+function backToSections() {
+  showScreen('section-screen');
+  renderSections();
+  speak('Bölüm seçim ekranına dönüldü. Yeni bir hedef seçebilirsiniz.', true);
+}
+
+function goBack() {
+  showScreen('section-screen');
+  renderSections();
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function formatDist(m) {
+  if (m >= 1000) return (m / 1000).toFixed(2) + ' km';
+  if (m >= 100) return m.toFixed(0) + ' m';
+  return m.toFixed(1) + ' m';
+}
+
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function getBearing(lat1, lon1, lat2, lon2) {
+  const y = Math.sin((lon2-lon1)*Math.PI/180) * Math.cos(lat2*Math.PI/180);
+  const x = Math.cos(lat1*Math.PI/180)*Math.sin(lat2*Math.PI/180) -
+            Math.sin(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.cos((lon2-lon1)*Math.PI/180);
+  return (Math.atan2(y, x) * 180/Math.PI + 360) % 360;
+}
+</script>
+</body>
+</html>
