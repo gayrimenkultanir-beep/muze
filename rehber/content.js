@@ -9,7 +9,7 @@ const tourData = [
         q: "🔑Büyük fotoğrafı inceledikten sonra hemen sol tarafınızda bulunan kapıdan Darüşşifanın bahçesine giriniz.",
 
         btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
-        a: "audio/rehber1.mp3",
+        a: "audio/rehber-1.mp3",
         g: ["img/intro.png"]
     },
    {
