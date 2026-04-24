@@ -1,15 +1,15 @@
 const tourData = [
    {
-       t: "Trakya Üniversitesit\n🏛️ SULTAN II. BAYEZİD KÜLLİYESİ SAĞLIK MÜZESİ",
+       t: "🏛️ SULTAN II. BAYEZİD KÜLLİYESİ\nSAĞLIK MÜZESİ",
 
         s: "✨ ŞİFA YOLCULUĞU",
 
-        m: "🏰500 yıllık köklü bir geçmişe hoş geldiniz.\n\n🌿Ruhunuzu dinlendirmeye ve geçmişin bilgeliğiyle buluşmaya hazır mısınız?\n\n💧Burada suyun ritmini, neyin nefesini ve şifanın sessizliğini keşfedeceksiniz.",
+        m: "Trakya Üniversitesi, Sultan II. Bayezid Külliyesi, Sağlık Müzesi’ne, tarihin şifayla buluştuğu bu alana hoş geldiniz.\n\n👑 **TARİH:**\nFatih Sultan Mehmet’in oğlu ve 8. Osmanlı Padişahı Sultan 2. Bayezid tarafından, dönemin mimarbaşı Hayrettin’e yaptırılan bu yapılar topluluğu, Osmanlı külliyeleri içinde günümüze en sağlam olarak ulaşmış olan külliyedir.\n\n🏗️ **YAPI:**\nMerkezinde camii, sağ tarafında darüşşifa ve medrese, sol tarafında imaret ve kiler, caminin kenarlarına bitişik olarak yapılmış misafirhane ve arka tarafta Tunca Nehri üzerindeki köprüsüyle Osmanlı’nın sosyal devlet anlayışını en güçlü biçimde yansıtan sağlık, sosyal, kültürel, eğitim ve dini yapıları içinde barındırır.\n\n🎧 **REHBER:**\nKülliyeyi ve müzemizi daha bilinçli şekilde gezmeniz için size yazılı, sesli ve görsel olarak yardımcı olmaya çalışacağım.\n\n📵 **DİKKAT:**\nLütfen dikkatinizi cep telefonunuzdan ayırmayınız.\n\n📍 **KONUM:**\nŞu an bilet gişemizi geçtiniz ve ön bahçemizde bulunuyorsunuz. Tam karşıdaki duvarda asılı bulunan büyük külliye fotoğrafının önünde durunuz ve tarihimizin bu yapılar topluluğunun Edirne şehrindeki konumunu inceleyiniz.\n\n🏫 **YÖN BULMA:**\nBu noktaya doğru yürürken sağ tarafınızda kalan yapı külliyenin Tıp Medresesi, karşınızdaki yapı ise külliyenin belki de kalbi ve müzemizin merkezi olan Darüşşifa’dır.",
 
-        q: "🔑Günlük hayatın gürültüsünü dışarıda bırakın. Şimdi, zamanın ötesine geçmeye hazır mısınız?",
+        q: "🔑Büyük fotoğrafı inceledikten sonra hemen sol tarafınızda bulunan kapıdan Darüşşifanın bahçesine giriniz.",
 
         btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
-        a: "audio/giris1.mp3",
+        a: "audio/rehber1.mp3",
         g: ["img/intro.png"]
     },
    {
