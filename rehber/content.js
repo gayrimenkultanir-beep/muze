@@ -2,7 +2,7 @@ const tourData = [
    {
        t: "🏛️ SULTAN II. BAYEZİD KÜLLİYESİ\nSAĞLIK MÜZESİ",
 
-        s: "✨ ŞİFA YOLCULUĞU",
+        s: "✨ ŞİFA YOLCULUĞU - MÜZE GİRİŞİ",
 
         m: "👑 **TARİH:**\nŞu an Edirne'nin en çok ilgi çeken tarihi alanlarından birinde, Sultan ikinci bayezid Külliyesi Sağlık Müzesindesiniz. Tarih ile şifanın buluştuğu bu alana hoş geldiniz.\n\n🏗️ **YAPI:**\nFatih Sultan Mehmet'in oğlu ve 8. Osmanlı Padişahı Sultan 2. Bayezid tarafından, dönemin mimarbaşı Hayrettin'e yaptırılan bu yapılar topluluğu, Osmanlı külliyeleri içinde günümüze en sağlam olarak ulaşmış olan külliyedir. Merkezinde camii, sağ tarafında darüşşifa ve medrese, sol tarafında imaret ve kiler, caminin kenarlarına bitişik olarak yapılmış misafirhane ve arka tarafta Tunca Nehri üzerindeki köprüsüyle Osmanlı'nın sosyal devlet anlayışını en güçlü biçimde yansıtan sağlık, sosyal, kültürel, eğitim ve dini yapıları içinde barındırır.\n\n🎧 **REHBER:**\nKülliyeyi ve müzemizi daha bilinçli şekilde gezmeniz için size yazılı, sesli ve görsel olarak yardımcı olmaya çalışacağım.\n\n📵 **DİKKAT:**\nLütfen dikkatinizi cep telefonunuzdan ayırmayınız.\n\n📍 **KONUM:**\nŞu an bilet gişemizi geçtiniz ve ön bahçemizde bulunuyorsunuz. Tam karşıdaki duvarda asılı bulunan büyük külliye fotoğrafının önünde durunuz ve tarihimizin bu yapılar topluluğunun Edirne şehrindeki konumunu inceleyiniz.\n\n🏫 **YÖN BULMA:**\nBu noktaya doğru yürürken sağ tarafınızda kalan yapı külliyenin Tıp Medresesi, karşınızdaki yapı ise külliyenin belki de kalbi ve müzemizin merkezi olan Darüşşifa'dır.",
          q: "👣 “Büyük fotoğrafı inceledikten sonra hemen sol tarafınızda bulunan kapıdan Darüşşifa'nın bahçesine giriniz.”",
