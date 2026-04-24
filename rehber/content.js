@@ -6,31 +6,48 @@ const tourData = [
 
         m: "👑 **TARİH:**\nŞu an Edirne'nin en çok ilgi çeken tarihi alanlarından birinde, Sultan ikinci bayezid Külliyesi Sağlık Müzesindesiniz. Tarih ile şifanın buluştuğu bu alana hoş geldiniz.\n\n🏗️ **YAPI:**\nFatih Sultan Mehmet'in oğlu ve 8. Osmanlı Padişahı Sultan 2. Bayezid tarafından, dönemin mimarbaşı Hayrettin'e yaptırılan bu yapılar topluluğu, Osmanlı külliyeleri içinde günümüze en sağlam olarak ulaşmış olan külliyedir. Merkezinde camii, sağ tarafında darüşşifa ve medrese, sol tarafında imaret ve kiler, caminin kenarlarına bitişik olarak yapılmış misafirhane ve arka tarafta Tunca Nehri üzerindeki köprüsüyle Osmanlı'nın sosyal devlet anlayışını en güçlü biçimde yansıtan sağlık, sosyal, kültürel, eğitim ve dini yapıları içinde barındırır.\n\n🎧 **REHBER:**\nKülliyeyi ve müzemizi daha bilinçli şekilde gezmeniz için size yazılı, sesli ve görsel olarak yardımcı olmaya çalışacağım.\n\n📵 **DİKKAT:**\nLütfen dikkatinizi cep telefonunuzdan ayırmayınız.\n\n📍 **KONUM:**\nŞu an bilet gişemizi geçtiniz ve ön bahçemizde bulunuyorsunuz. Tam karşıdaki duvarda asılı bulunan büyük külliye fotoğrafının önünde durunuz ve tarihimizin bu yapılar topluluğunun Edirne şehrindeki konumunu inceleyiniz.\n\n🏫 **YÖN BULMA:**\nBu noktaya doğru yürürken sağ tarafınızda kalan yapı külliyenin Tıp Medresesi, karşınızdaki yapı ise külliyenin belki de kalbi ve müzemizin merkezi olan Darüşşifa'dır.",
          q: "👣 “Büyük fotoğrafı inceledikten sonra hemen sol tarafınızda bulunan kapıdan Darüşşifa'nın bahçesine giriniz.”",
-        btnNext: "🚶‍♂️ ZAMANDA YOLCULUĞA BAŞLA",
+        btnNext: "🚶‍♂️ Zamanda Yolculuğa Başla ➡",
         a: "audio/rehber-1.mp3",
         g: ["img/intro.png"]
     },
    {
-        t: "DARÜŞŞİFA 1.AVLU\n🏛️ ADALET VE ŞİFA KAPISI",
-        s: "⚖️ MİMARİ VE FONKSİYONEL BÜTÜNLÜK",
+        t: "Darüşşifa Girişi\n🏛️ ADALET VE ŞİFA KAPISI",
+        s: "⚖️ ŞİFANIN İLK DURAĞI",
        m: "🏥 **DARÜŞŞİFA 1. AVLU:**\nŞu anda, Osmanlı'nın önemli şifa merkezlerinden biri olan Edirne Darüşşifası'nın ilk avlusundasınız.\nLütfen burada kısa bir an durup çevrenizi gözlemleyin.\n\n🌍 **TARİHSEL ÖNEM:**\nÖncelikle şunu bilmelisiniz: Bu yapı, merkezi ve ayrıntılı planlanmış hastanelerin tarihteki ilk örneklerinden biri olarak kabul edilir. Batı'daki benzerlerine ancak yaklaşık 200 yıl sonra rastlanan bu hastanede, tedavi ve hizmet alanları döneminin ötesinde bir mimari anlayışla hayata geçirilmiştir.\n\n🛏️ **HİZMET BİRİMLERİ:**\nÖnünüzdeki yoldan ilerlediğinizde, girişin hemen solunda yer alan dört oda Darüşşifa'nın hizmet birimleridir. Bu odalar; personel odası, çamaşırhane, diyet mutfağı ve erzakların depolandığı kiler olarak yan yana sıralanmıştır.\n\n🩺 **POLİKLİNİK ODALARI:**\nSağ tarafınızda, sütunların arkasında bulunan altı oda ise poliklinik odalarıdır. Günlük hasta muayeneleri, bakımları ve acil müdahaleler bu odalarda gerçekleştirilirdi. Kuruluş yıllarında bu odalardan biri, \"kehhal\" adı verilen göz hekimlerine ayrılmıştı.\n\n🧭 **YÖNLENDİRME:**\nÇeşitli canlandırmalar ve bilgilendirme panolarıyla düzenlenmiş bu odaları ayrıntılı gezmeyi dönüşünüze bırakarak, şimdi sizi sunum odamıza doğru yönlendirelim.\nİlk avlunun ilerisinde, sol tarafta yer alan odamız sunum odasıdır. Oraya doğru yürürken, solunuzda kalan kuyuya dikkatinizi çekmek isterim.\n\n💧 **SÜT KUYUSU:**\nİçindeki suyun, yeni doğum yapan annelerin sütünü artırdığına inanıldığı için \"Süt Kuyusu\" olarak adlandırılan bu taş yapının yaklaşık 20 metre ilerisinde, çimlerin arasında bir ağaç ve ona sarılmış bir sarmaşık göreceksiniz.\n\n🌿 **AĞAÇ VE SARMAŞIK:**\nBu noktaya yaklaştığınızda, çimler içindeki panoda Ahmet Kutsi Tecer'in bu ağaç için kaleme aldığı hüzünlü sevda şiirini mutlaka okuyun. Ardından, o duyguyla ağaca ve sarmaşığa bir kez daha bakmanızı öneririm.\n\n🎬 **SUNUM ODASI:**\nŞiirin devamında, hemen sol tarafta sunum odamız yer almaktadır.\nBurada, Külliye'nin ve Darüşşifanın tarihçesi ile gelişimini anlatan videoyu izleyerek bulunduğunuz mekânın tıp ve mimarlık tarihindeki önemine dair kapsamlı bilgi edinebilirsiniz.",
-        q: "🗣️ “Külliyenin genel yerleşim planını ve bu muazzam organizasyonun işleyişini kavramak adına şimdi sizi Sunum Odası’na davet ediyorum”",
-        btnNext: "⬅ Sunum Odasına Giriş ",
+        q: "🎬 “Görsel ve işitsel bir yolculukla bu devasa yapının sırlarını keşfetmeye hazırsanız, sunumumuzu başlatalım.",
+        btnNext: "Sunum Odasına Giriş ➡ ",
         a: "audio/01.mp3",
         g: ["img/01.jpg"]
     },
    {
-        t: "2.Durak:\n🏛️ DARÜŞŞİFA TAÇ KAPISI",
-        s: "🏛️ ESTETİK VE NİZAM",
-        m: "🚪 Şifanın giriş kapısına ulaştığınızda, sağ cephede yer alan bilgilendirme panoları sizi karşılayacaktır.\n\n📌 **Bu panolar aracılığıyla:**\n• Külliyenin muazzam **yerleşim planını**,\n• Darüşşifa’nın **mimari kurgusunu** ve işleyiş şemasını teknik detaylarıyla inceleyebilirsiniz.\n\n👁️ Bu görsel veriler, adımlayacağınız mekanın dehasını anlamlandırmanıza yardımcı olacaktır. Şimdi, Darüşşifa’nın o vakur ve ağırbaşlı kapısından geçiyoruz…\n\n🌿 Beş asırlık bir sükunetin kapılarını aralıyor ve şifanın dış dünyaya açılan ilk halkası olan **1. AVLUYA** dahil oluyoruz.",
-        q: "👣 “Tarihin ve tıbbın iç içe geçtiği bu kutsal eşikten geçerek, ilk avlunun huzuruna tanıklık etmeye hazır mısınız?”",
-        btnNext: "1. Avluya Adım At ➡",
+        t: "Sunum Odasından Çıkış:\n🏛️ BİLGİDEN DENEYİME",
+        s: "🏛️ İDARE VE NİZAM",
+        m: "🚪 **2. AVLUYA GEÇİŞ:**\nSunum odasından çıkar çıkmaz, hemen solunuzdaki görkemli kapıdan geçip yönetici odalarının bulunduğu ikinci avluya geçiniz.\n\n🏛️ **YÖNETİCİ ODALARI:**\nBu avluda sağda ve solda ikişerden 4 oda bulunur. Hekim başı ve diğer hekimler bu odaları kullanır; hastanenin tüm işleri bu odalarda planlanıp yürütülürdü. Külliyenin yapıldığı yıllarda bu darüşşifada 1 hekimbaşı, iki hekim, 2 cerrah, 2 göz hekimi ve 1 eczacı bulunurdu.\n\n🔒 **İDARİ BÖLÜM:**\nİdari odaların bulunduğu bu bölüm aynı zamanda ilk avludaki günlük hasta sirkülasyonuyla, biraz sonra gireceğiniz yataklı tedavi bölümü arasında koruyucu bir bariyer oluşturma amacı güderdi.\n\n✨ **KİTABE VE GİRİŞ:**\nŞimdi kapının üzerinde yazılı şifahanenin kitabesini okuduktan sonra nefesinizi tutunuz,",
+      q: "🚶‍♂️ Şimdi müzik ve su sesinin şifayla buluştuğu bu büyülü alana giriş yapınız.",  
+      btnNext: "Odaları Keşfetmeye Başla ➡",
         a: "audio/02.mp3",
         g: ["img/02.jpg"]
     },
     {
+        t: "Büyük Şifahane (SEKİZGEN BÖLÜM)\n🏛️ DARÜŞŞİFA EŞİĞİ",
+        s: "🌊 RUHUN ŞİFAYA KAVUŞTUĞU ZİRVE",
+       m: "🏥 **YATAKLI TEDAVİ BÖLÜMÜ:**\nŞu an müzemizin kalbinde ve Edirne Darüşşifası'nın yataklı tedavi bölümündesiniz. Bu bölümde, 500 yıl öncesinin şifa yurdunda, asırlar boyunca şifa bulmuş insanların hissiyatıyla dolaşınız.\n\n🌊 **HASTANENİN YAPISI:**\nÖyle bir hastane düşünün ki sizi, ortada suyu belli bir ritimle akan bir şadırvan ile hemen tam karşıda bulunan müzik sahnesi karşılasın. Geniş kubbenin örttüğü bu merkezi planlı hastane, 6 kışlık, 4 yazlık hasta odası ile bir müzik sahnesinden meydana gelir. Geniş kubbedeki aydınlatma feneri aynı zamanda hastanenin kötü kokularını dışarı atar. Zemindeki meyilli döşeme ve devamındaki kanallar ise hastanenin kolay yıkanıp temizlenmesi içindir.\n\n🎵 **MÜZİKLE TEDAVİ:**\nBu hastaneyi diğerlerinden ayıran en büyük özellik, tedavide dönemin hekimlik bilgilerinin yanında müzik makamlarının da kullanılmış olmasıdır. Tedavi esnasında 10 kişiden oluşan musiki grubunun, hekimlerin önerileri doğrultusunda her hastalığa göre çalıp söyledikleri müzik makamlarının çeşitli hastalıklara iyi geldiği düşünülürdü.\n\n💧 **SUYLA TEDAVİ:**\nYapının tam ortasında bulunan şadırvandan akan suyun çıkardığı ses, tedavinin önemli bir parçasıydı ve hastaları rahatlatmaya yönelikti.\n\n🌿 **KOKU TEDAVİSİ:**\nDarüşşifada müzik ve su sesine ek olarak koku tedavisi de uygulanırdı. Darüşşifa avlusu ve çevresinde yetiştirilen çeşitli bitkilerin yaydığı kokular da tedavinin önemli bir parçasıydı.\n\n🧺 **MEŞGULEK TEDAVİSİ:**\nAyrıca meşguliyet de bu hastanede tedavi amacıyla kullanılıyordu. Hastalar, sepet ve örgü örmenin yanı sıra çeşitli el işleriyle meşgul edilir, dertlerinden ve düşüncelerinden uzaklaştırılmaya çalışılırdı.\n\n🚶 **ÇIKIŞ VE GEZİ:**\nOsmanlı tıbbının farklı özelliklerinin tanıtıldığı odaları gezdikten sonra yataklı tedavi bölümünden çıkabilirsiniz. Aralıksız olarak 400 yıl hizmet veren bu şifa yurdundan çıkarken zamanınız doğrultusunda ikinci ve birinci avludaki diğer odaları da gezebilir hem Edirne Darüşşifası hem de Osmanlı hekimliği ile ilgili farklı bilgilere ulaşabilirsiniz.",
+        q: "🏫 **TIP MEDRESESİNE DOĞRU:**\nŞimdi Darüşşifadan çıkıp büyük fotoğrafın olduğu giriş bahçesinin sol tarafında bulunan Tıp Medresesine doğru yürüyünüz.",
+        btnNext: "Büyük Şifahaneyi Keşfet ➡",
+        a: "audio/11.mp3",
+        g: ["img/11.jpg"]
+    },
+   
+   
+   
+   
+   
+   
+   
+   
+   {
         t: "3.Durak:\n🏛️ DARÜŞŞİFA 1. AVLU",
-        s: "ŞİFANIN İLK DURAĞI",
+        s: "MİMARİ VE FONKSİYONEL BÜTÜNLÜK",
         m: "🌿 Şu an Darüşşifa’nın ana avlusu olan 1. Avludayız.\n\n✨ **Eşiği geçtiğiniz an:**\n• Dış dünyanın gürültüsü kaybolur\n• Yerini taşın serinliği ve ferahlık hissi alır\n\n🏛️ **1. Avlu: Şifanın İlk Durağı**\n\n👀 Başınızı kaldırdığınızda:\n• Sağ tarafta revaklı yürüyüş yolları\n• Her revakta küçük kubbeler ve düzenli bir ritim\n\n🧱 Sağınıza ve solunuza baktığınızda:\n• Birbirinden bağımsız kapılara sahip odalar görürsünüz\n\n🏠 **Sol taraf (4 hizmet odası):**\n• Personel Odası\n• Çamaşırhane\n• Mutfak\n• Kiler\n\n🏥 **Sağ taraf (6 oda):**\n• Poliklinik hizmetlerinin verildiği odalar\n\n👨‍⚕️ **Burada:**\n• Hastalar ilk muayenelerini olurdu\n• Göz, cerrahi ve diğer hekimler görev yapardı\n\n🏛️ Bu avlu, yataklı tedaviye geçmeden önce;\n• Muayene\n• İlaç hazırlama\n• Tıbbi düzenleme\nsüreçlerinin yürütüldüğü merkezdi.",
         q: "🔁 Bu odalara tekrar döneceğimiz için şimdi yolumuza devam edebiliriz.",
         btnNext: "Süt Kuyusu ve Sunum Odasına Doğru ➡",
@@ -101,15 +118,7 @@ const tourData = [
         a: "audio/10.mp3",
         g: ["img/10.jpg"]
     },
-{
-        t: "11.Durak:\n🏛️ DARÜŞŞİFA EŞİĞİ",
-        s: "📜 TAŞIN MÜHÜRLENDİĞİ GEÇİT",
-        m: "İdari nizamın hüküm sürdüğü İkinci Avlu’dan ayrılarak, külliyenin en gizemli ve ihtişamlı noktasına; devasa bir şifa mabedinin eşiğine ulaştınız.\n\n🚪 **Eşik Noktası: Taşın Sessiz Daveti**\nYüksek kemerin altında durup başınızı yukarı kaldırdığınızda, taşın üzerine bir mühür gibi işlenmiş o kadim kitabeyi göreceksiniz. Bu yazı, binanın kimliğini ve sunduğu sükuneti asırlardır muhafaza etmektedir.\n\n🌿 **Manevi Trans: Bir Dünyadan Diğerine**\nBu eşikten süzülerek içeri girdiğiniz an, fiziksel dünyanın gürültüsü tamamen silinir. Artık ne taşlar sadece taştır, ne de sesler sadece ses... Kendinizi mimarinin, suyun ve musikinin ruhu sarıp sarmaladığı bambaşka bir boyutta bulursunuz.",
-        q: "💎 “Beş yüz yıllık bir huzur senfonisine; Büyük Şifahane’nin kalbine tanıklık etmeye hazır mısınız?”",
-        btnNext: "Büyük Şifahaneyi Keşfet ➡",
-        a: "audio/11.mp3",
-        g: ["img/11.jpg"]
-    },
+
     {
         t: "12.Durak:\n🏛️ BÜYÜK ŞİFAHANE (SEKİZGEN BÖLÜM)",
         s: "🌊 RUHUN ŞİFAYA KAVUŞTUĞU ZİRVE",
