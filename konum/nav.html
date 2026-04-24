@@ -3,1091 +3,654 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Müze Navigasyon Sistemi</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<title>Sultan II. Bayezid Külliyesi — Sağlık Müzesi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
-  --clr-bg: #030a12;
-  --clr-panel: rgba(6, 18, 32, 0.92);
-  --clr-border: rgba(0, 200, 255, 0.18);
-  --clr-accent: #00c8ff;
-  --clr-gold: #ffd060;
-  --clr-green: #00ff88;
-  --clr-orange: #ff9500;
-  --clr-red: #ff3a5c;
-  --clr-text: #c8e8ff;
-  --clr-muted: rgba(200, 232, 255, 0.45);
-  --clr-glow: rgba(0, 200, 255, 0.35);
-  --dir-color: var(--clr-red);
+  --bg:#06090f;--panel:rgba(8,14,26,0.88);--border:rgba(180,145,80,0.22);
+  --accent:#c8a84b;--accent2:#00d4ff;--green:#00e87a;--orange:#ff9d35;--red:#ff4060;
+  --text:#e8dcc8;--muted:rgba(232,220,200,0.42);--glow:rgba(200,168,75,0.3);--dir:#ff4060;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;width:100%;overflow:hidden;background:var(--bg);
+  font-family:'Rajdhani',sans-serif;color:var(--text);
+  -webkit-tap-highlight-color:transparent;user-select:none}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(200,168,75,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,168,75,0.03) 1px,transparent 1px);background-size:36px 36px}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% -10%,rgba(200,168,75,0.06) 0%,transparent 55%)}
+#camera{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:brightness(0.25) saturate(0.5);display:none;z-index:1}
+#camera.on{display:block}
+.screen{position:fixed;inset:0;display:none;flex-direction:column;
+  align-items:center;justify-content:center;z-index:100;padding:20px}
+.screen.active{display:flex}
+.scanline{position:fixed;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(200,168,75,0.18),transparent);
+  animation:scan 5s linear infinite;pointer-events:none;z-index:5}
+@keyframes scan{0%{top:-2%}100%{top:102%}}
+.corner{position:fixed;width:26px;height:26px;pointer-events:none;z-index:6}
+.corner::before,.corner::after{content:'';position:absolute;background:var(--accent);opacity:0.5}
+.corner::before{width:100%;height:1px;top:0;left:0}
+.corner::after{width:1px;height:100%;top:0;left:0}
+.corner.tl{top:14px;left:14px}.corner.tr{top:14px;right:14px;transform:scaleX(-1)}
+.corner.bl{bottom:14px;left:14px;transform:scaleY(-1)}.corner.br{bottom:14px;right:14px;transform:scale(-1)}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* PERM SCREEN */
+#perm-screen{background:var(--bg)}
+.perm-emblem{width:88px;height:88px;border-radius:50%;border:2px solid var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+  box-shadow:0 0 40px var(--glow);margin-bottom:22px;
+  animation:embP 2.5s ease-in-out infinite alternate}
+@keyframes embP{from{box-shadow:0 0 20px var(--glow)}to{box-shadow:0 0 60px var(--glow),0 0 100px rgba(200,168,75,0.14)}}
+.perm-mname{font-family:'Cinzel',serif;font-size:11px;font-weight:600;color:var(--accent);
+  letter-spacing:3px;text-align:center;margin-bottom:4px}
+.perm-title{font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:white;
+  text-align:center;letter-spacing:1px;margin-bottom:4px}
+.perm-sub{font-size:12px;color:var(--muted);letter-spacing:2px;text-align:center;margin-bottom:28px}
+.perm-list{width:100%;max-width:330px;display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.perm-item{display:flex;align-items:center;gap:12px;background:rgba(200,168,75,0.05);
+  border:1px solid var(--border);border-radius:12px;padding:12px 15px}
+.perm-icon{font-size:19px;flex-shrink:0}
+.perm-text{font-size:13px;line-height:1.4}
+.perm-text b{color:var(--accent);display:block;font-size:10px;letter-spacing:1.5px;margin-bottom:2px}
+.btn-start{padding:15px 48px;font-family:'Cinzel',serif;font-size:12px;font-weight:700;
+  letter-spacing:3px;background:transparent;border:1.5px solid var(--accent);border-radius:4px;
+  color:var(--accent);cursor:pointer;position:relative;overflow:hidden;transition:all 0.3s;
+  box-shadow:0 0 18px rgba(200,168,75,0.15)}
+.btn-start::before{content:'';position:absolute;inset:0;background:var(--accent);opacity:0;transition:opacity 0.3s}
+.btn-start:active::before{opacity:0.1}
+.btn-start:active{transform:scale(0.97)}
 
-html, body {
-  height: 100%; width: 100%;
-  overflow: hidden;
-  background: var(--clr-bg);
-  font-family: 'Rajdhani', sans-serif;
-  color: var(--clr-text);
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
+/* SECTION SCREEN */
+#section-screen{background:var(--bg);justify-content:flex-start;padding:0;overflow-y:auto}
+.sec-header{width:100%;padding:46px 20px 14px;text-align:center}
+.sec-mname{font-family:'Cinzel',serif;font-size:10px;color:var(--accent);
+  letter-spacing:3px;opacity:0.8;margin-bottom:5px}
+.sec-title{font-family:'Cinzel',serif;font-size:17px;font-weight:700;color:white;
+  letter-spacing:1px;margin-bottom:3px}
+.sec-sub{font-size:11px;color:var(--muted);letter-spacing:1px}
+.sec-divider{width:calc(100% - 32px);max-width:450px;margin:10px auto 5px;
+  display:flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;
+  font-size:9px;letter-spacing:2px;color:var(--muted)}
+.sec-divider::before,.sec-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.sec-grid{width:100%;max-width:450px;padding:0 14px 36px;
+  display:flex;flex-direction:column;gap:7px;margin:0 auto}
+.sec-btn{display:flex;align-items:center;gap:12px;background:var(--panel);
+  border:1px solid var(--border);border-radius:13px;padding:13px 14px;cursor:pointer;
+  transition:all 0.2s;position:relative;overflow:hidden;text-align:left}
+.sec-btn::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(200,168,75,0.05));opacity:0;transition:opacity 0.3s}
+.sec-btn:active::after{opacity:1}
+.sec-btn:active{transform:scale(0.984);border-color:rgba(200,168,75,0.45)}
+.sec-icon{width:44px;height:44px;flex-shrink:0;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;font-size:20px}
+.sec-body{flex:1;min-width:0}
+.sec-name{font-size:15px;font-weight:700;color:white;letter-spacing:0.3px}
+.sec-desc{font-size:10px;color:var(--muted);margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sec-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
+.sec-dist{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--accent)}
+.sec-route{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;
+  color:var(--accent2);background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.22);
+  border-radius:4px;padding:1px 5px}
+.sec-arr{color:var(--muted);font-size:15px}
 
-/* ─── BACKGROUND GRID ─── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image:
-    linear-gradient(rgba(0,200,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,200,255,0.04) 1px, transparent 1px);
-  background-size: 40px 40px;
-  pointer-events: none;
-  z-index: 0;
-}
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(0,200,255,0.07) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
+/* NAV SCREEN */
+#nav-screen{background:transparent;z-index:10;pointer-events:none}
+#nav-screen.active{display:flex}
+.nav-top{position:absolute;top:0;left:0;right:0;padding:46px 14px 12px;
+  display:flex;align-items:center;gap:11px;
+  background:linear-gradient(to bottom,rgba(6,9,15,0.93) 60%,transparent);
+  pointer-events:auto;z-index:20}
+.nav-back{width:38px;height:38px;border:1px solid var(--border);border-radius:9px;
+  background:var(--panel);display:flex;align-items:center;justify-content:center;
+  font-size:17px;cursor:pointer;backdrop-filter:blur(10px);flex-shrink:0;transition:all 0.2s}
+.nav-back:active{transform:scale(0.91)}
+.nav-dest-wrap{flex:1;min-width:0}
+.nav-dest-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;
+  letter-spacing:2.5px;color:var(--accent);opacity:0.7}
+.nav-dest-name{font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:white;
+  letter-spacing:0.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-wp-row{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--accent2);
+  margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gps-pill{display:flex;align-items:center;gap:5px;background:rgba(0,232,122,0.1);
+  border:1px solid rgba(0,232,122,0.28);border-radius:20px;padding:4px 9px;flex-shrink:0}
+.gps-dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 5px var(--green);animation:gBlink 1.4s ease-in-out infinite}
+@keyframes gBlink{0%,100%{opacity:1}50%{opacity:0.3}}
+.gps-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--green)}
 
-/* ─── CAMERA ─── */
-#camera {
-  position: fixed; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  filter: brightness(0.28) saturate(0.6);
-  display: none;
-  z-index: 1;
-}
-#camera.active { display: block; }
+/* COMPASS — compact & semi-transparent */
+.comp-wrap{position:relative;width:190px;height:190px;margin-top:44px;flex-shrink:0}
+.comp-deco{position:absolute;border-radius:50%;top:50%;left:50%;
+  transform:translate(-50%,-50%);border:1px dashed rgba(200,168,75,0.1)}
+.comp-deco.d1{width:228px;height:228px;animation:cspin 38s linear infinite}
+.comp-deco.d2{width:212px;height:212px;animation:cspin 26s linear infinite reverse}
+@keyframes cspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.comp-face{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--dir);
+  background:radial-gradient(ellipse at center,rgba(200,168,75,0.03) 0%,rgba(6,9,15,0.65) 65%);
+  backdrop-filter:blur(5px);
+  box-shadow:0 0 24px rgba(200,168,75,0.07),inset 0 0 24px rgba(0,0,0,0.55);
+  transition:border-color 0.5s,box-shadow 0.5s;overflow:hidden}
+.comp-face::before{content:'';position:absolute;inset:9px;border-radius:50%;
+  border:1px solid rgba(200,168,75,0.06)}
+.card{position:absolute;font-family:'Cinzel',serif;font-size:9px;font-weight:600;
+  color:rgba(232,220,200,0.3);transform:translate(-50%,-50%)}
+.card.N{top:11%;left:50%;color:var(--accent);opacity:0.65}
+.card.S{top:89%;left:50%}.card.E{top:50%;left:89%}.card.W{top:50%;left:11%}
+#nwrap{position:absolute;inset:0;transition:transform 0.65s cubic-bezier(0.08,0.55,0.18,1.0)}
+.nup{position:absolute;left:50%;top:16px;transform:translateX(-50%);width:0;height:0;
+  border-left:10px solid transparent;border-right:10px solid transparent;
+  border-bottom:40px solid var(--dir);
+  filter:drop-shadow(0 0 7px var(--dir));transition:border-bottom-color 0.5s,filter 0.5s}
+.ndn{position:absolute;left:50%;top:calc(50% + 6px);transform:translateX(-50%);width:0;height:0;
+  border-left:6px solid transparent;border-right:6px solid transparent;
+  border-top:24px solid rgba(200,168,75,0.18)}
+.chub{position:absolute;width:16px;height:16px;border-radius:50%;
+  top:50%;left:50%;transform:translate(-50%,-50%);z-index:5;
+  background:var(--bg);border:1.5px solid var(--dir);
+  box-shadow:0 0 7px var(--glow);transition:border-color 0.5s}
+#beacon{position:absolute;bottom:-26px;left:50%;transform:translateX(-50%) scale(0.5);
+  width:48px;height:48px;border-radius:11px;background:rgba(0,232,122,0.1);
+  border:1.5px solid var(--green);display:flex;align-items:center;justify-content:center;
+  font-size:22px;opacity:0;transition:all 0.45s cubic-bezier(0.17,0.89,0.32,1.3);
+  box-shadow:0 0 18px rgba(0,232,122,0.22)}
+#beacon.show{opacity:1;transform:translateX(-50%) scale(1);bottom:-30px}
+#ahint{position:absolute;bottom:-58px;left:50%;transform:translateX(-50%);
+  font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--muted);
+  white-space:nowrap;text-align:center;opacity:0;transition:opacity 0.4s}
+#ahint.show{opacity:1}
+#wpbar{position:absolute;top:-20px;left:0;right:0;display:flex;justify-content:center;gap:5px}
+.wpdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.18);transition:all 0.35s}
+.wpdot.done{background:var(--green);border-color:var(--green);box-shadow:0 0 5px var(--green)}
+.wpdot.active{background:var(--accent);border-color:var(--accent);
+  box-shadow:0 0 7px var(--accent);animation:wpp 1s ease-in-out infinite}
+@keyframes wpp{50%{transform:scale(1.45)}}
 
-/* ─── SCREENS ─── */
-.screen {
-  position: fixed; inset: 0;
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  padding: 20px;
-}
-.screen.active { display: flex; }
+/* HUD */
+.nav-hud{position:absolute;bottom:0;left:0;right:0;padding:14px 14px 36px;
+  background:linear-gradient(to top,rgba(6,9,15,0.95) 72%,transparent);pointer-events:auto}
+.hud-status{text-align:center;margin-bottom:10px}
+#smain{font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:2px;
+  color:var(--dir);transition:color 0.45s;text-shadow:0 0 14px currentColor}
+#ssub{font-size:11px;color:var(--muted);margin-top:3px;
+  font-family:'Share Tech Mono',monospace;min-height:14px}
+#wpinfo{font-size:10px;color:var(--accent2);margin-top:2px;
+  font-family:'Share Tech Mono',monospace;min-height:13px}
+.hud-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.hud-cell{background:var(--panel);border:1px solid var(--border);border-radius:11px;
+  padding:10px 7px;text-align:center;backdrop-filter:blur(8px)}
+.hud-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;
+  color:var(--muted);margin-bottom:4px}
+.hud-val{font-family:'Cinzel',serif;font-size:16px;font-weight:700;color:var(--accent)}
+.hud-unit{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--muted);margin-top:1px}
+.acc-row{display:flex;align-items:center;gap:7px;margin-top:7px}
+.acc-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1.5px;
+  color:var(--muted);white-space:nowrap}
+.acc-bg{flex:1;height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden}
+.acc-fill{height:100%;width:0%;border-radius:2px;transition:width 0.5s,background 0.5s}
+.acc-num{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--muted)}
 
-/* ─── PERMISSION SCREEN ─── */
-#perm-screen {
-  background: var(--clr-bg);
-}
-.perm-logo {
-  width: 80px; height: 80px;
-  border: 2px solid var(--clr-accent);
-  border-radius: 20px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 36px;
-  box-shadow: 0 0 30px var(--clr-glow), inset 0 0 20px rgba(0,200,255,0.08);
-  margin-bottom: 28px;
-  animation: logoGlow 2s ease-in-out infinite alternate;
-}
-@keyframes logoGlow {
-  from { box-shadow: 0 0 20px var(--clr-glow), inset 0 0 10px rgba(0,200,255,0.05); }
-  to   { box-shadow: 0 0 50px var(--clr-glow), inset 0 0 30px rgba(0,200,255,0.12); }
-}
-.perm-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 24px; font-weight: 900;
-  color: var(--clr-accent);
-  letter-spacing: 4px;
-  text-align: center;
-  margin-bottom: 6px;
-}
-.perm-subtitle {
-  font-size: 14px; color: var(--clr-muted);
-  letter-spacing: 2px; text-align: center;
-  margin-bottom: 40px;
-}
-.perm-list {
-  width: 100%; max-width: 340px;
-  display: flex; flex-direction: column; gap: 12px;
-  margin-bottom: 36px;
-}
-.perm-item {
-  display: flex; align-items: center; gap: 14px;
-  background: rgba(0,200,255,0.05);
-  border: 1px solid var(--clr-border);
-  border-radius: 12px;
-  padding: 14px 18px;
-}
-.perm-item-icon { font-size: 22px; }
-.perm-item-text { font-size: 14px; line-height: 1.4; }
-.perm-item-text b { color: var(--clr-accent); display: block; font-size: 13px; letter-spacing: 1px; }
-.btn-primary {
-  padding: 18px 52px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 14px; font-weight: 700;
-  letter-spacing: 3px;
-  background: transparent;
-  border: 2px solid var(--clr-accent);
-  border-radius: 50px;
-  color: var(--clr-accent);
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s;
-}
-.btn-primary::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: var(--clr-accent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.btn-primary:hover::before, .btn-primary:active::before { opacity: 0.12; }
-.btn-primary:active { transform: scale(0.97); }
-
-/* ─── SECTION SELECT SCREEN ─── */
-#section-screen {
-  background: var(--clr-bg);
-  justify-content: flex-start;
-  padding-top: 0;
-  overflow-y: auto;
-}
-.section-header {
-  width: 100%;
-  padding: 50px 24px 20px;
-  text-align: center;
-  position: relative;
-}
-.section-header-tag {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
-  color: var(--clr-accent);
-  letter-spacing: 4px;
-  opacity: 0.7;
-  margin-bottom: 8px;
-}
-.section-header h2 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 20px; font-weight: 900;
-  color: white;
-  letter-spacing: 2px;
-}
-.section-header p {
-  font-size: 13px; color: var(--clr-muted);
-  margin-top: 6px;
-}
-.section-grid {
-  width: 100%; max-width: 480px;
-  padding: 0 16px 30px;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.section-btn {
-  display: flex; align-items: center; gap: 16px;
-  background: var(--clr-panel);
-  border: 1px solid var(--clr-border);
-  border-radius: 16px;
-  padding: 18px 20px;
-  cursor: pointer;
-  transition: all 0.25s;
-  position: relative;
-  overflow: hidden;
-  text-align: left;
-}
-.section-btn::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.05));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.section-btn:hover::after, .section-btn:active::after { opacity: 1; }
-.section-btn:active { transform: scale(0.98); border-color: rgba(0,200,255,0.4); }
-.section-btn-icon {
-  width: 52px; height: 52px; flex-shrink: 0;
-  border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 26px;
-  background: rgba(0,200,255,0.08);
-  border: 1px solid rgba(0,200,255,0.2);
-}
-.section-btn-info { flex: 1; }
-.section-btn-name {
-  font-size: 17px; font-weight: 700;
-  color: white; letter-spacing: 0.5px;
-}
-.section-btn-desc { font-size: 12px; color: var(--clr-muted); margin-top: 3px; }
-.section-btn-dist {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 12px; color: var(--clr-accent);
-  white-space: nowrap;
-}
-.section-arrow {
-  color: var(--clr-muted); font-size: 18px;
-}
-.section-divider {
-  width: 100%; padding: 0 16px 8px;
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; letter-spacing: 3px;
-  color: var(--clr-muted);
-  max-width: 480px;
-}
-
-/* ─── NAV SCREEN ─── */
-#nav-screen {
-  background: transparent;
-  z-index: 10;
-  pointer-events: none;
-}
-#nav-screen.active { display: flex; }
-
-/* TOP BAR */
-.nav-topbar {
-  position: absolute; top: 0; left: 0; right: 0;
-  padding: 52px 20px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: linear-gradient(to bottom, rgba(3,10,18,0.9) 60%, transparent);
-  pointer-events: auto;
-  z-index: 20;
-}
-.nav-back-btn {
-  width: 44px; height: 44px;
-  border: 1px solid var(--clr-border);
-  border-radius: 12px;
-  background: var(--clr-panel);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  backdrop-filter: blur(12px);
-  transition: all 0.2s;
-}
-.nav-back-btn:active { transform: scale(0.93); }
-.nav-destination {
-  text-align: center; flex: 1; padding: 0 12px;
-}
-.nav-dest-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; letter-spacing: 3px; color: var(--clr-accent); opacity: 0.7;
-}
-.nav-dest-name {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 15px; font-weight: 700; color: white;
-  letter-spacing: 1px;
-}
-.nav-gps-dot {
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--clr-green);
-  box-shadow: 0 0 8px var(--clr-green);
-  animation: gpsPulse 1.5s ease-in-out infinite;
-}
-@keyframes gpsPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.7); }
-}
-
-/* COMPASS WRAP */
-.compass-outer {
-  position: relative;
-  width: 280px; height: 280px;
-  margin-top: 60px;
-}
-
-/* Outer decorative rings */
-.comp-ring {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(0,200,255,0.12);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  animation: ringRotate 20s linear infinite;
-}
-.comp-ring:nth-child(1) { width: 330px; height: 330px; border-style: dashed; animation-duration: 30s; }
-.comp-ring:nth-child(2) { width: 310px; height: 310px; animation-direction: reverse; animation-duration: 20s; }
-@keyframes ringRotate { to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-/* Main compass circle */
-.comp-main {
-  position: absolute; inset: 0;
-  border-radius: 50%;
-  border: 2px solid var(--dir-color);
-  background: radial-gradient(ellipse at center,
-    rgba(0,200,255,0.06) 0%,
-    rgba(3,10,18,0.85) 70%);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 0 40px rgba(0,200,255,0.1), inset 0 0 40px rgba(0,0,0,0.5);
-  transition: border-color 0.6s, box-shadow 0.6s;
-  overflow: hidden;
-}
-.comp-main::before {
-  content: '';
-  position: absolute; inset: 10px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,200,255,0.08);
-}
-
-/* Tick marks */
-.comp-ticks {
-  position: absolute; inset: 0;
-  border-radius: 50%;
-}
-
-/* Needle container — rotates */
-#needle-wrap {
-  position: absolute; inset: 0;
-  transition: transform 0.7s cubic-bezier(0.08, 0.6, 0.2, 1.0);
-}
-
-/* The arrow needle */
-.needle-body {
-  position: absolute;
-  left: 50%; top: 20px;
-  transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center;
-}
-.needle-top {
-  width: 0; height: 0;
-  border-left: 16px solid transparent;
-  border-right: 16px solid transparent;
-  border-bottom: 60px solid var(--dir-color);
-  filter: drop-shadow(0 0 12px var(--dir-color));
-  transition: border-bottom-color 0.6s, filter 0.6s;
-}
-.needle-bot {
-  width: 0; height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 40px solid rgba(0,200,255,0.25);
-}
-/* Center circle */
-.comp-center {
-  position: absolute;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  background: var(--clr-bg);
-  border: 2px solid var(--dir-color);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 5;
-  box-shadow: 0 0 12px var(--clr-glow);
-  transition: border-color 0.6s;
-}
-/* N/S/E/W labels */
-.comp-label {
-  position: absolute;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 11px; font-weight: 700;
-  color: rgba(200,232,255,0.4);
-  transform: translate(-50%, -50%);
-}
-.comp-label.N { top: 14%; left: 50%; color: var(--clr-accent); opacity: 0.6; }
-.comp-label.S { top: 86%; left: 50%; }
-.comp-label.E { top: 50%; left: 86%; }
-.comp-label.W { top: 50%; left: 14%; }
-
-/* DOOR ICON */
-#door-icon {
-  position: absolute;
-  bottom: -24px; left: 50%;
-  transform: translateX(-50%) scale(0.5);
-  width: 70px; height: 70px;
-  border-radius: 16px;
-  background: rgba(0,255,136,0.12);
-  border: 2px solid var(--clr-green);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 32px;
-  opacity: 0;
-  transition: all 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.3);
-  box-shadow: 0 0 30px rgba(0,255,136,0.3);
-}
-#door-icon.visible { opacity: 1; transform: translateX(-50%) scale(1); bottom: -36px; }
-
-/* ANGLE INDICATOR */
-#angle-band {
-  position: absolute;
-  bottom: -80px; left: 50%;
-  transform: translateX(-50%);
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 13px;
-  color: var(--clr-muted);
-  text-align: center;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-#angle-band.visible { opacity: 1; }
-
-/* BOTTOM HUD */
-.nav-hud {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 20px 20px 44px;
-  background: linear-gradient(to top, rgba(3,10,18,0.95) 70%, transparent);
-  pointer-events: auto;
-}
-.hud-status-row {
-  text-align: center;
-  margin-bottom: 14px;
-}
-#status-text {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 18px; font-weight: 900;
-  letter-spacing: 3px;
-  color: var(--dir-color);
-  transition: color 0.5s;
-  text-shadow: 0 0 20px currentColor;
-}
-#status-sub {
-  font-size: 13px;
-  color: var(--clr-muted);
-  margin-top: 4px;
-  font-family: 'Share Tech Mono', monospace;
-}
-
-.hud-meters {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-}
-.hud-metric {
-  background: var(--clr-panel);
-  border: 1px solid var(--clr-border);
-  border-radius: 14px;
-  padding: 14px 10px;
-  text-align: center;
-  backdrop-filter: blur(8px);
-}
-.hud-metric-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; letter-spacing: 2px;
-  color: var(--clr-muted);
-  margin-bottom: 6px;
-}
-.hud-metric-val {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 16px; font-weight: 700;
-  color: var(--clr-accent);
-}
-.hud-metric-unit {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 10px; color: var(--clr-muted);
-  margin-top: 2px;
-}
-
-/* ACCURACY BAR */
-.acc-bar-wrap {
-  margin-top: 10px;
-  display: flex; align-items: center; gap: 10px;
-}
-.acc-bar-label {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; letter-spacing: 2px; color: var(--clr-muted);
-  white-space: nowrap;
-}
-.acc-bar-bg {
-  flex: 1; height: 4px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.acc-bar-fill {
-  height: 100%; width: 0%;
-  background: var(--clr-green);
-  border-radius: 2px;
-  transition: width 0.5s, background 0.5s;
-}
-.acc-val {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 9px; color: var(--clr-muted);
-  white-space: nowrap;
-}
-
-/* ─── ARRIVED SCREEN ─── */
-#arrived-screen {
-  background: rgba(3,10,18,0.97);
-  z-index: 200;
-}
-.arrived-anim {
-  width: 120px; height: 120px;
-  border-radius: 30px;
-  background: rgba(0,255,136,0.1);
-  border: 2px solid var(--clr-green);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 52px;
-  box-shadow: 0 0 60px rgba(0,255,136,0.3);
-  animation: arrivedPulse 1.5s ease-in-out infinite;
-  margin-bottom: 28px;
-}
-@keyframes arrivedPulse {
-  0%, 100% { box-shadow: 0 0 40px rgba(0,255,136,0.3); transform: scale(1); }
-  50% { box-shadow: 0 0 80px rgba(0,255,136,0.5); transform: scale(1.04); }
-}
-.arrived-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 22px; font-weight: 900;
-  color: var(--clr-green);
-  letter-spacing: 3px;
-  text-align: center;
-  margin-bottom: 8px;
-}
-.arrived-dest {
-  font-size: 16px; color: var(--clr-muted);
-  letter-spacing: 2px; text-align: center;
-  margin-bottom: 8px;
-}
-.arrived-info {
-  font-size: 13px; color: var(--clr-muted);
-  text-align: center; max-width: 280px;
-  line-height: 1.6;
-  margin-bottom: 40px;
-}
-.btn-close {
-  padding: 18px 52px;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 13px; font-weight: 700;
-  letter-spacing: 3px;
-  background: var(--clr-green);
-  border: none;
-  border-radius: 50px;
-  color: #030a12;
-  cursor: pointer;
-  box-shadow: 0 8px 30px rgba(0,255,136,0.35);
-  transition: all 0.2s;
-}
-.btn-close:active { transform: scale(0.96); }
-
-/* SCAN LINE EFFECT */
-@keyframes scanLine {
-  0% { top: -5%; }
-  100% { top: 105%; }
-}
-.scan-line {
-  position: fixed;
-  left: 0; right: 0; height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(0,200,255,0.25), transparent);
-  animation: scanLine 4s linear infinite;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* corner decorations */
-.corner {
-  position: fixed;
-  width: 40px; height: 40px;
-  pointer-events: none;
-  z-index: 15;
-}
-.corner::before, .corner::after {
-  content: ''; position: absolute;
-  background: var(--clr-accent);
-  opacity: 0.5;
-}
-.corner::before { width: 100%; height: 2px; top: 0; left: 0; }
-.corner::after { width: 2px; height: 100%; top: 0; left: 0; }
-.corner.tl { top: 16px; left: 16px; }
-.corner.tr { top: 16px; right: 16px; transform: scaleX(-1); }
-.corner.bl { bottom: 16px; left: 16px; transform: scaleY(-1); }
-.corner.br { bottom: 16px; right: 16px; transform: scale(-1); }
-
+/* ARRIVED SCREEN */
+#arrived-screen{background:rgba(6,9,15,0.98);z-index:200;overflow-y:auto;
+  justify-content:flex-start;padding:30px 20px 40px}
+.arr-wrap{width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center}
+.arr-circle{width:96px;height:96px;border-radius:50%;background:rgba(0,232,122,0.08);
+  border:2px solid var(--green);display:flex;align-items:center;justify-content:center;
+  font-size:40px;box-shadow:0 0 48px rgba(0,232,122,0.22);margin-bottom:18px;
+  animation:arrP 1.8s ease-in-out infinite}
+@keyframes arrP{0%,100%{box-shadow:0 0 32px rgba(0,232,122,0.18)}
+  50%{box-shadow:0 0 64px rgba(0,232,122,0.42);transform:scale(1.04)}}
+.arr-tag{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:3px;
+  color:var(--green);margin-bottom:7px}
+.arr-title{font-family:'Cinzel',serif;font-size:19px;font-weight:700;color:var(--green);
+  letter-spacing:2px;text-align:center;margin-bottom:5px}
+.arr-dest{font-family:'Cinzel',serif;font-size:13px;color:white;
+  letter-spacing:1px;text-align:center;margin-bottom:14px}
+.arr-short{font-size:13px;color:var(--muted);text-align:center;max-width:300px;
+  line-height:1.6;margin-bottom:12px}
+.arr-card{background:rgba(200,168,75,0.05);border:1px solid var(--border);
+  border-radius:12px;padding:14px 16px;width:100%;
+  font-size:13px;line-height:1.72;color:var(--text);margin-bottom:24px;text-align:left}
+.arr-card-title{font-family:'Cinzel',serif;font-size:10px;color:var(--accent);
+  letter-spacing:2px;margin-bottom:8px}
+.btn-close{padding:14px 42px;font-family:'Cinzel',serif;font-size:11px;font-weight:700;
+  letter-spacing:3px;background:var(--green);border:none;border-radius:4px;color:#06090f;
+  cursor:pointer;box-shadow:0 5px 22px rgba(0,232,122,0.28);transition:all 0.2s}
+.btn-close:active{transform:scale(0.96)}
 </style>
 </head>
 <body>
-
-<!-- Scan & Corner Decor -->
-<div class="scan-line"></div>
-<div class="corner tl"></div>
-<div class="corner tr"></div>
-<div class="corner bl"></div>
-<div class="corner br"></div>
-
-<!-- CAMERA -->
+<div class="scanline"></div>
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
 <video id="camera" autoplay playsinline muted></video>
 
-<!-- ═══ PERMISSION SCREEN ═══ -->
+<!-- PERM -->
 <div id="perm-screen" class="screen active">
-  <div class="perm-logo">🏛️</div>
-  <div class="perm-title">MÜZE REHBERİ</div>
-  <div class="perm-subtitle">AKILLI NAVİGASYON SİSTEMİ v2.0</div>
+  <div class="perm-emblem">☽</div>
+  <div class="perm-mname">SULTAN II. BAYEZİD KÜLLİYESİ</div>
+  <div class="perm-title">SAĞLIK MÜZESİ</div>
+  <div class="perm-sub">EDİRNE — AKILLI ZİYARET REHBERİ</div>
   <div class="perm-list">
-    <div class="perm-item">
-      <div class="perm-item-icon">📍</div>
-      <div class="perm-item-text">
-        <b>KONUM ERİŞİMİ</b>
-        Gerçek zamanlı mesafe ve yön hesabı için gereklidir.
-      </div>
-    </div>
-    <div class="perm-item">
-      <div class="perm-item-icon">📷</div>
-      <div class="perm-item-text">
-        <b>KAMERA ERİŞİMİ</b>
-        AR katmanı için arka plan kamerası kullanılır.
-      </div>
-    </div>
-    <div class="perm-item">
-      <div class="perm-item-icon">🧭</div>
-      <div class="perm-item-text">
-        <b>SENSÖR ERİŞİMİ</b>
-        Pusula ve yön sensörü için gereklidir.
-      </div>
-    </div>
+    <div class="perm-item"><div class="perm-icon">📍</div>
+      <div class="perm-text"><b>GPS KONUMU</b>Gerçek zamanlı mesafe ve yön hesabı</div></div>
+    <div class="perm-item"><div class="perm-icon">📷</div>
+      <div class="perm-text"><b>KAMERA</b>Artırılmış gerçeklik navigasyon katmanı</div></div>
+    <div class="perm-item"><div class="perm-icon">🧭</div>
+      <div class="perm-text"><b>YÖN SENSÖRÜ</b>Pusula ve istikamet tespiti</div></div>
   </div>
-  <button class="btn-primary" onclick="requestPermissions()">İZİNLERİ VER VE BAŞLA</button>
+  <button class="btn-start" onclick="requestPerms()">NAVİGASYONU BAŞLAT</button>
 </div>
 
-<!-- ═══ SECTION SELECT SCREEN ═══ -->
+<!-- SECTIONS -->
 <div id="section-screen" class="screen">
-  <div style="width:100%;max-width:480px;display:flex;flex-direction:column;align-items:center;">
-    <div class="section-header">
-      <div class="section-header-tag">// NAVİGASYON SİSTEMİ HAZIR</div>
-      <h2>MÜZE BÖLÜMLERİ</h2>
-      <p>Gitmek istediğiniz bölümü seçin</p>
+  <div style="width:100%;max-width:450px;display:flex;flex-direction:column;align-items:center;">
+    <div class="sec-header">
+      <div class="sec-mname">SULTAN II. BAYEZİD KÜLLİYESİ · EDİRNE</div>
+      <div class="sec-title">SAĞLIK MÜZESİ</div>
+      <div class="sec-sub">Ziyaret etmek istediğiniz bölümü seçin</div>
     </div>
-    <div class="section-divider">// POPULER GÜZERGAHLAR</div>
-    <div class="section-grid" id="section-grid">
-      <!-- injected by JS -->
-    </div>
+    <div class="sec-divider">MEKÂNLAR</div>
+    <div class="sec-grid" id="sec-grid"></div>
   </div>
 </div>
 
-<!-- ═══ NAV SCREEN ═══ -->
+<!-- NAV -->
 <div id="nav-screen" class="screen">
-
-  <!-- Top bar -->
-  <div class="nav-topbar">
-    <div class="nav-back-btn" onclick="goBack()">←</div>
-    <div class="nav-destination">
-      <div class="nav-dest-label">// HEDEF</div>
+  <div class="nav-top">
+    <div class="nav-back" onclick="goBack()">←</div>
+    <div class="nav-dest-wrap">
+      <div class="nav-dest-lbl">// HEDEF</div>
       <div class="nav-dest-name" id="nav-dest-name">—</div>
+      <div class="nav-wp-row" id="nav-wp-row"></div>
     </div>
-    <div class="nav-gps-dot" id="gps-dot"></div>
+    <div class="gps-pill">
+      <div class="gps-dot"></div>
+      <span class="gps-lbl" id="gps-lbl">GPS</span>
+    </div>
   </div>
 
-  <!-- Compass -->
-  <div class="compass-outer" id="compass-outer">
-    <div class="comp-ring"></div>
-    <div class="comp-ring"></div>
-    <div class="comp-main">
-      <span class="comp-label N">N</span>
-      <span class="comp-label S">G</span>
-      <span class="comp-label E">D</span>
-      <span class="comp-label W">B</span>
-      <div id="needle-wrap">
-        <div class="needle-body">
-          <div class="needle-top" id="needle-top"></div>
-          <div class="needle-bot"></div>
-        </div>
+  <div class="comp-wrap">
+    <div id="wpbar"></div>
+    <div class="comp-deco d1"></div>
+    <div class="comp-deco d2"></div>
+    <div class="comp-face" id="cface">
+      <span class="card N">K</span><span class="card S">G</span>
+      <span class="card E">D</span><span class="card W">B</span>
+      <div id="nwrap">
+        <div class="nup" id="nup"></div>
+        <div class="ndn"></div>
       </div>
-      <div class="comp-center" id="comp-center"></div>
+      <div class="chub" id="chub"></div>
     </div>
-    <div id="door-icon">🚪</div>
-    <div id="angle-band">— °</div>
+    <div id="beacon">🚪</div>
+    <div id="ahint"></div>
   </div>
 
-  <!-- Bottom HUD -->
   <div class="nav-hud">
-    <div class="hud-status-row">
-      <div id="status-text">BAĞLANILIYOR...</div>
-      <div id="status-sub">GPS sinyal bekleniyor</div>
+    <div class="hud-status">
+      <div id="smain">BAĞLANILIYOR...</div>
+      <div id="ssub">GPS bekleniyor</div>
+      <div id="wpinfo"></div>
     </div>
-    <div class="hud-meters">
-      <div class="hud-metric">
-        <div class="hud-metric-label">MESAFE</div>
-        <div class="hud-metric-val" id="met-dist">—</div>
-        <div class="hud-metric-unit" id="met-dist-unit">m</div>
-      </div>
-      <div class="hud-metric">
-        <div class="hud-metric-label">SAPMA</div>
-        <div class="hud-metric-val" id="met-angle">—</div>
-        <div class="hud-metric-unit">derece</div>
-      </div>
-      <div class="hud-metric">
-        <div class="hud-metric-label">İSTİKAMET</div>
-        <div class="hud-metric-val" id="met-bearing">—</div>
-        <div class="hud-metric-unit">°</div>
-      </div>
+    <div class="hud-grid">
+      <div class="hud-cell"><div class="hud-lbl">MESAFE</div>
+        <div class="hud-val" id="hdist">—</div><div class="hud-unit" id="hdistu">m</div></div>
+      <div class="hud-cell"><div class="hud-lbl">SAPMA</div>
+        <div class="hud-val" id="hang">—</div><div class="hud-unit">derece</div></div>
+      <div class="hud-cell"><div class="hud-lbl">İSTİKAMET</div>
+        <div class="hud-val" id="hbear">—</div><div class="hud-unit">°</div></div>
     </div>
-    <div class="acc-bar-wrap">
-      <span class="acc-bar-label">GPS HASSAS.</span>
-      <div class="acc-bar-bg"><div class="acc-bar-fill" id="acc-fill"></div></div>
-      <span class="acc-val" id="acc-val">±∞</span>
+    <div class="acc-row">
+      <span class="acc-lbl">GPS HASSAS.</span>
+      <div class="acc-bg"><div class="acc-fill" id="afill"></div></div>
+      <span class="acc-num" id="anum">±∞</span>
     </div>
   </div>
 </div>
 
-<!-- ═══ ARRIVED SCREEN ═══ -->
+<!-- ARRIVED -->
 <div id="arrived-screen" class="screen">
-  <div class="arrived-anim" id="arrived-icon">🎯</div>
-  <div class="arrived-title">HEDEFE ULAŞILDI!</div>
-  <div class="arrived-dest" id="arrived-dest">Sunum Odası</div>
-  <div class="arrived-info" id="arrived-info">
-    Tebrikler! Hedefinize başarıyla ulaştınız. Şimdi başka bir bölüme gidebilirsiniz.
+  <div class="arr-wrap">
+    <div class="arr-circle" id="arr-icon">🎯</div>
+    <div class="arr-tag">// HEDEFE ULAŞILDI</div>
+    <div class="arr-title">TEBRİKLER!</div>
+    <div class="arr-dest" id="arr-dest">—</div>
+    <div class="arr-short" id="arr-short">Bölüme başarıyla ulaştınız.</div>
+    <div class="arr-card">
+      <div class="arr-card-title">// MEKÂN HAKKINDA</div>
+      <div id="arr-detail"></div>
+    </div>
+    <button class="btn-close" onclick="backToSections()">KAPAT &amp; YENİ HEDEF</button>
   </div>
-  <button class="btn-close" onclick="backToSections()">KAPAT &amp; YENİ HEDEF</button>
 </div>
 
 <script>
-// ─── SECTIONS DATA ──────────────────────────────────────────
+// ══════════ WAYPOINTS ══════════
+const WP_GIRIS_AVLU  = { lat:41.6857676, lng:26.5434693, name:'Giriş Avlusu',  icon:'⛩️' };
+const WP_BUYUK_AVLU  = { lat:41.6859467, lng:26.5440668, name:'Büyük Avlu',    icon:'🌿' };
+
+// ══════════ SECTIONS ══════════
 const SECTIONS = [
-  {
-    id: 'sunum',
-    name: 'Sunum Odası',
-    icon: '🚪',
-    desc: 'Ana sunum ve konferans salonu',
-    lat: 41.6854481,
-    lng: 26.5437456,
-    color: '#00c8ff',
-    info: 'Sunum Odası\'na doğru ilerliyorsunuz. Kapıdan geçerek koridoru takip edin.'
+  { id:'anaGiris',   name:'Ana Giriş',          icon:'🏛️', color:'#c8a84b',
+    desc:'Külliye ana giriş kapısı',
+    lat:41.6859462, lng:26.5432350, group:'giris',
+    arrShort:'Külliyenin ana giriş kapısına hoş geldiniz.',
+    detail:'Sultan II. Bayezid Külliyesi\'nin ana giriş kapısından içeri adım atıyorsunuz. 1488\'de tamamlanan bu muhteşem yapı kompleksi, döneminin en kapsamlı sosyal kurumlarından biridir. Kapı üzerindeki Osmanlı kitabesi ve taş işçiliği, ustalar tarafından özenle işlenmiştir.'
   },
-  {
-    id: 'arkeoloji',
-    name: 'Arkeoloji Galerisi',
-    icon: '🏺',
-    desc: 'Antik çağ eserleri koleksiyonu',
-    lat: 41.6856000,
-    lng: 26.5439000,
-    color: '#ffd060',
-    info: 'Arkeoloji Galerisi\'ne doğru ilerliyorsunuz. Tarihi eserleri keşfetmeye hazır olun.'
+  { id:'girisAvlu',  name:'Giriş Avlusu',       icon:'⛩️', color:'#b8a070',
+    desc:'Ana giriş sonrası iç avlu',
+    lat:41.6857676, lng:26.5434693, group:'giris',
+    arrShort:'Giriş avlusuna ulaştınız.',
+    detail:'Giriş avlusu, külliyenin farklı bölümlerine erişimi sağlayan merkezi geçiş noktasıdır. Osmanlı mimari geleneğinde avlular, sosyal etkileşim ve dinlenme alanı olarak tasarlanmıştır. Çevrenizdeki revak kemerleri 15. yüzyıl taş ustalarının eseridir.'
   },
-  {
-    id: 'sanat',
-    name: 'Sanat Galerisi',
-    icon: '🎨',
-    desc: 'Çağdaş ve klasik sanat eserleri',
-    lat: 41.6852000,
-    lng: 26.5435000,
-    color: '#ff9500',
-    info: 'Sanat Galerisi\'ne doğru ilerliyorsunuz. Birbirinden değerli tablolar sizi bekliyor.'
+  { id:'dar1avlu',   name:'Darüşşifa 1. Avlu',  icon:'🏥', color:'#00d4ff',
+    desc:'Darüşşifa birinci avlusu',
+    lat:41.6857121, lng:26.5435370, group:'darussifa',
+    arrShort:'Darüşşifa Birinci Avlusuna ulaştınız.',
+    detail:'Osmanlı döneminin en önemli sağlık kurumlarından olan Darüşşifa\'nın ilk avlusundasınız. Bu avlu, hastanın kabul ve muayene işlemlerinin gerçekleştirildiği bölümdür. Ortasındaki havuz hem estetik hem de terapi amaçlıydı; su sesi hastalara huzur verirdi.'
   },
-  {
-    id: 'kafeterya',
-    name: 'Kafeterya',
-    icon: '☕',
-    desc: 'Dinlenme ve ikram alanı',
-    lat: 41.6858000,
-    lng: 26.5433000,
-    color: '#00ff88',
-    info: 'Kafeteryaya doğru ilerliyorsunuz. Bir mola vermek için ideal bir yer.'
+  { id:'dar2avlu',   name:'Darüşşifa 2. Avlu',  icon:'🏛️', color:'#00b8e8',
+    desc:'Darüşşifa ikinci iç avlu',
+    lat:41.6853845, lng:26.5438083, group:'darussifa',
+    arrShort:'Darüşşifa İkinci Avlusuna ulaştınız.',
+    detail:'İkinci avlu, Darüşşifa\'nın tedavi bölümlerine açılan daha iç mekânıdır. Çevresindeki hücreler hasta odaları olarak kullanılmıştır. Müzisyenler bu avluda çalarak hastalara müzik terapisi uygulamışlardır; bu uygulama Osmanlı tıbbının çağının ilerisindeki yaklaşımını yansıtır.'
   },
-  {
-    id: 'giris',
-    name: 'Ana Giriş',
-    icon: '🏛️',
-    desc: 'Müze ana giriş kapısı',
-    lat: 41.6850000,
-    lng: 26.5441000,
-    color: '#ff3a5c',
-    info: 'Ana Girişe doğru ilerliyorsunuz.'
+  { id:'sunum',      name:'Sunum Odası',         icon:'🚪', color:'#00e87a',
+    desc:'Konferans ve sunum salonu',
+    lat:41.6854501, lng:26.5437436, group:'darussifa',
+    arrShort:'Sunum Odasına ulaştınız.',
+    detail:'Müzenin modern sunum ve konferans salonu olarak düzenlenmiş bu mekân, tarihi yapı içinde çağdaş bir fonksiyon üstlenmiştir. Müze tanıtım sunumları, akademik konferanslar ve eğitim etkinlikleri burada düzenlenmektedir. Osmanlı dönemine ait orijinal taş duvarlar restore edilerek korunmuştur.'
   },
-  {
-    id: 'depo',
-    name: 'Restorasyon Atölyesi',
-    icon: '🔬',
-    desc: 'Eser restorasyon ve araştırma birimi',
-    lat: 41.6860000,
-    lng: 26.5430000,
-    color: '#c084fc',
-    info: 'Restorasyon Atölyesi\'ne doğru ilerliyorsunuz. Uzmanların çalıştığı bu alana önceden randevu almanız önerilir.'
+  { id:'darussifa',  name:'Darüşşifa',           icon:'⚕️', color:'#00c8ff',
+    desc:'Osmanlı\'nın ünlü şifahanesi',
+    lat:41.6852256, lng:26.5439612, group:'darussifa',
+    arrShort:'Darüşşifa ana bölümüne ulaştınız.',
+    detail:'Sultan II. Bayezid tarafından 1488\'de yaptırılan bu şifahane, döneminin en modern tıp kurumuydu. Akıl hastaları dahil tüm hastalara ücretsiz tedavi sunulmuştur. Müzik terapisi, su sesi ve koku tedavisi gibi yöntemler burada uygulanmıştır. Avrupa\'nın henüz ortaçağ koşullarında olduğu bu dönemde insanlık adına önemli bir kilometre taşıydı.'
+  },
+  { id:'medrese',    name:'Medrese',              icon:'📚', color:'#ffd060',
+    desc:'Osmanlı ilim yuvası',
+    lat:41.6856587, lng:26.5431364, group:'medrese',
+    arrShort:'Medreseye ulaştınız.',
+    detail:'Külliyenin eğitim bölümünü oluşturan medrese, teoloji, tıp ve felsefe eğitimi verilen bir ilim merkeziydi. Odalar etrafını saran revaklarla çevrili avlusu, öğrencilerin hem barındığı hem de ders gördüğü alandır. Günümüzde restore edilerek müze kompleksinin bir parçası hâline getirilmiştir.'
+  },
+  { id:'buyukAvlu',  name:'Büyük Avlu',          icon:'🌿', color:'#a0e070',
+    desc:'Külliyenin merkezi büyük avlusu',
+    lat:41.6859467, lng:26.5440668, group:'kuzey',
+    arrShort:'Büyük Avluya ulaştınız.',
+    detail:'Külliyenin en geniş açık alanı olan Büyük Avlu, tüm yapıları birbirine bağlayan merkezi kamusal mekândır. Osmanlı döneminde burası sosyal yardım, ticaret ve günlük yaşamın iç içe geçtiği canlı bir meydan işlevi görüyordu. Etrafınızdaki anıtsal yapılar 15. yüzyıl Osmanlı mimarlığının şaheserlerini oluşturmaktadır.'
+  },
+  { id:'imarethane', name:'İmarethane',          icon:'🍲', color:'#ff9d35',
+    desc:'Osmanlı aşevi ve sosyal yardım birimi',
+    lat:41.6860085, lng:26.5446310, group:'kuzey',
+    arrShort:'İmarethaneye ulaştınız.',
+    detail:'İmarethane, külliyenin yoksullara, yolculara ve öğrencilere ücretsiz yemek dağıttığı aşevidir. Osmanlı sosyal devlet anlayışının en somut göstergelerinden biri olan bu yapıda günde iki öğün yüzlerce kişiye hizmet verilmiştir. Mutfak ve depo bölümlerinin kalıntıları günümüzde de görülebilmektedir.'
+  },
+  { id:'tabhane',    name:'Tabhane',             icon:'🛏️', color:'#c084fc',
+    desc:'Yolcu ve misafir konaklama birimi',
+    lat:41.6857080, lng:26.5448875, group:'kuzey',
+    arrShort:'Tabhaneye ulaştınız.',
+    detail:'Tabhane, külliyeye gelen yolcuların ve misafirlerin ücretsiz konakladığı kervansaray işlevli yapıdır. "Vakıf misafirhanesi" geleneğinin güzel bir örneği olan bu mekânda ziyaretçiler belirli bir süre bedava yeme ve barınma hakkından yararlanabiliyordu. Odalar etrafındaki avlu bugün restore edilmiş hâliyle ziyarete açıktır.'
+  },
+  { id:'cami',       name:'Cami',               icon:'🕌', color:'#60c0ff',
+    desc:'Külliyenin ana ibadet mekânı',
+    lat:41.6858553, lng:26.5441405, group:'kuzey',
+    arrShort:'Camiye ulaştınız.',
+    detail:'Sultan II. Bayezid Camii, külliyenin ruhani merkezidir. Mimar Hayreddin tarafından tasarlanan yapı, zarif kubbesi ve ince minaresiyle erken Osmanlı mimarisinin önemli örneklerinden biridir. İçerideki çini süslemeler ve ahşap işçiliği 15. yüzyıl sanat anlayışını gözler önüne serer.'
+  },
+  { id:'konferans',  name:'Konferans Salonu',    icon:'🎤', color:'#ff7eb3',
+    desc:'Modern konferans ve etkinlik alanı',
+    lat:41.6861542, lng:26.5447186, group:'kuzey',
+    arrShort:'Konferans Salonuna ulaştınız.',
+    detail:'Tarihi yapı içinde modern teknolojiyle donatılmış konferans salonu, akademik etkinlikler, sempozyumlar ve kültürel programlar için kullanılmaktadır. Osmanlı külliye geleneğinin çağdaş bir yansıması olarak bilginin üretildiği ve paylaşıldığı bu alan, müzenin eğitim misyonunun merkezini oluşturmaktadır.'
   }
 ];
 
-// ─── STATE ───────────────────────────────────────────────────
-let state = {
-  heading: 0,
-  smoothHeading: 0,
-  bearing: 0,
-  dist: 0,
-  accuracy: 999,
-  hasGPS: false,
-  target: null,
-  watchId: null,
-  arrived: false,
-  lastVoiceTime: 0,
-  lastVoiceType: ''
+// ══════════ ROUTING ══════════
+// Grup geçiş kuralları:
+// giris -> darussifa/medrese: [girisAvlu]
+// giris -> kuzey: [buyukAvlu]
+// darussifa/medrese -> kuzey: [girisAvlu, buyukAvlu]
+// kuzey -> darussifa/medrese: [buyukAvlu, girisAvlu]
+// kuzey -> giris: [buyukAvlu, girisAvlu]
+// darussifa <-> medrese: [girisAvlu]
+// same group: []
+function buildRoute(fromGroup, target) {
+  const tg = target.group;
+  if (fromGroup === tg) return [];
+  const ga = WP_GIRIS_AVLU, ba = WP_BUYUK_AVLU;
+  if (fromGroup==='giris') {
+    if (tg==='darussifa'||tg==='medrese') return [ga];
+    if (tg==='kuzey') return [ba];
+  }
+  if ((fromGroup==='darussifa'||fromGroup==='medrese')) {
+    if (tg==='kuzey') return [ga,ba];
+    if (fromGroup!==tg && (tg==='darussifa'||tg==='medrese')) return [ga];
+    if (tg==='giris') return [ga];
+  }
+  if (fromGroup==='kuzey') {
+    if (tg==='darussifa'||tg==='medrese') return [ba,ga];
+    if (tg==='giris') return [ba,ga];
+  }
+  return [];
+}
+
+// ══════════ STATE ══════════
+const S = {
+  lat:0,lng:0,acc:999,hasGPS:false,heading:0,bearing:0,dist:0,
+  target:null,fromGroup:'giris',
+  waypoints:[],wpIdx:0,arrived:false,
+  lastVT:'',lastVTime:0,voicedDists:new Set()
 };
 
-// ─── SPEECH ──────────────────────────────────────────────────
-function speak(text, force = false) {
-  if (!window.speechSynthesis) return;
-  const now = Date.now();
-  if (!force && now - state.lastVoiceTime < 8000) return;
-  state.lastVoiceTime = now;
+// ══════════ SPEECH ══════════
+function speak(txt,force=false){
+  if(!window.speechSynthesis)return;
+  const now=Date.now();
+  if(!force&&now-S.lastVTime<7000)return;
+  S.lastVTime=now;
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'tr-TR';
-  u.rate = 0.92;
-  u.pitch = 1;
+  const u=new SpeechSynthesisUtterance(txt);
+  u.lang='tr-TR';u.rate=0.93;u.pitch=1;
   window.speechSynthesis.speak(u);
 }
 
-// ─── PERMISSIONS ─────────────────────────────────────────────
-async function requestPermissions() {
-  try {
-    speak('Konum ve kamera izinleri alınıyor.', true);
-
-    // Camera
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: 'environment' }
-    });
-    document.getElementById('camera').srcObject = stream;
-    document.getElementById('camera').classList.add('active');
-
-    // GPS
-    navigator.geolocation.watchPosition(onPosition, onGPSError, {
-      enableHighAccuracy: true,
-      maximumAge: 0,
-      timeout: 8000
-    });
-
-    // Compass/Orientation
-    if (window.DeviceOrientationEvent) {
-      if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-        try {
-          const res = await DeviceOrientationEvent.requestPermission();
-          if (res === 'granted') window.addEventListener('deviceorientation', onOrientation);
-        } catch(e) {
-          window.addEventListener('deviceorientation', onOrientation);
-        }
-      } else {
-        window.addEventListener('deviceorientation', onOrientation);
-      }
+// ══════════ PERMISSIONS ══════════
+async function requestPerms(){
+  try{
+    speak('Konum ve sensör izinleri alınıyor.',true);
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    document.getElementById('camera').srcObject=stream;
+    document.getElementById('camera').classList.add('on');
+    navigator.geolocation.watchPosition(onGPS,onGPSErr,{enableHighAccuracy:true,maximumAge:0,timeout:8000});
+    if(window.DeviceOrientationEvent){
+      if(typeof DeviceOrientationEvent.requestPermission==='function'){
+        try{const r=await DeviceOrientationEvent.requestPermission();
+          if(r==='granted')window.addEventListener('deviceorientation',onOrient);
+        }catch(e){window.addEventListener('deviceorientation',onOrient);}
+      }else{window.addEventListener('deviceorientation',onOrient);}
     }
-
-    showScreen('section-screen');
-    renderSections();
-    speak('Sistem hazır. Lütfen bir bölüm seçin.', true);
-
-  } catch (err) {
-    alert('İzin alınamadı: ' + err.message);
-  }
+    renderSections();showScreen('section-screen');
+    speak('Sistem hazır. Ziyaret etmek istediğiniz bölümü seçin.',true);
+  }catch(e){alert('İzin alınamadı: '+e.message);}
 }
 
-// ─── SECTIONS ────────────────────────────────────────────────
-function renderSections() {
-  const grid = document.getElementById('section-grid');
-  grid.innerHTML = '';
-  SECTIONS.forEach(s => {
-    const distText = state.hasGPS
-      ? formatDist(getDistance(
-          state.lastLat || 0, state.lastLng || 0, s.lat, s.lng
-        ))
-      : '— m';
-    const el = document.createElement('div');
-    el.className = 'section-btn';
-    el.innerHTML = `
-      <div class="section-btn-icon" style="border-color:${s.color}22;background:${s.color}11;">${s.icon}</div>
-      <div class="section-btn-info">
-        <div class="section-btn-name">${s.name}</div>
-        <div class="section-btn-desc">${s.desc}</div>
+// ══════════ SECTIONS ══════════
+function renderSections(){
+  const g=document.getElementById('sec-grid');g.innerHTML='';
+  SECTIONS.forEach(s=>{
+    const dist=S.hasGPS?formatDist(getDist(S.lat,S.lng,s.lat,s.lng)):'— m';
+    const route=buildRoute(S.fromGroup,s);
+    const hasRoute=route.length>0;
+    const el=document.createElement('div');el.className='sec-btn';
+    el.innerHTML=`
+      <div class="sec-icon" style="background:${s.color}10;border:1px solid ${s.color}28">${s.icon}</div>
+      <div class="sec-body">
+        <div class="sec-name">${s.name}</div>
+        <div class="sec-desc">${s.desc}</div>
       </div>
-      <div class="section-btn-dist">${distText}</div>
-      <div class="section-arrow">›</div>
-    `;
-    el.onclick = () => startNav(s);
-    grid.appendChild(el);
+      <div class="sec-right">
+        <div class="sec-dist">${dist}</div>
+        ${hasRoute?`<div class="sec-route">${route.map(w=>w.icon).join('→')}</div>`:''}
+        <div class="sec-arr">›</div>
+      </div>`;
+    el.onclick=()=>startNav(s);
+    g.appendChild(el);
   });
 }
 
-function startNav(section) {
-  state.target = section;
-  state.arrived = false;
-  document.getElementById('nav-dest-name').textContent = section.name;
-  document.getElementById('arrived-dest').textContent = section.name;
+// ══════════ START NAV ══════════
+function startNav(section){
+  S.target=section;S.arrived=false;S.voicedDists=new Set();S.lastVT='';
+  const intermediates=buildRoute(S.fromGroup,section);
+  S.waypoints=[
+    ...intermediates,
+    {lat:section.lat,lng:section.lng,name:section.name,icon:section.icon,isFinal:true}
+  ];
+  S.wpIdx=0;
+  document.getElementById('nav-dest-name').textContent=section.name;
+  document.getElementById('arr-dest').textContent=section.name;
+  document.getElementById('beacon').textContent=section.icon;
+  // waypoint dots
+  const bar=document.getElementById('wpbar');
+  bar.innerHTML=S.waypoints.map((_,i)=>
+    `<div class="wpdot${i===0?' active':''}" id="wpd${i}"></div>`).join('');
   showScreen('nav-screen');
-  speak(`${section.name}'a navigasyon başlatılıyor. ${section.info}`, true);
+  const routeStr=S.waypoints.map(w=>w.name).join(', ardından ');
+  speak(`${section.name} navigasyonu başlatıldı. Güzergah: ${routeStr}.`,true);
   updateNavUI();
 }
 
-// ─── GPS ─────────────────────────────────────────────────────
-function onPosition(pos) {
-  state.lastLat = pos.coords.latitude;
-  state.lastLng = pos.coords.longitude;
-  state.accuracy = pos.coords.accuracy;
-  state.hasGPS = true;
-
-  if (!state.target) return;
-
-  state.dist = getDistance(
-    state.lastLat, state.lastLng,
-    state.target.lat, state.target.lng
-  );
-  state.bearing = getBearing(
-    state.lastLat, state.lastLng,
-    state.target.lat, state.target.lng
-  );
-
-  updateNavUI();
-
-  // Arrived check
-  if (state.dist < 8 && !state.arrived) {
-    triggerArrived();
-  }
-}
-
-function onGPSError(err) {
-  document.getElementById('status-sub').textContent = 'GPS hatası: ' + err.message;
-}
-
-// ─── COMPASS ─────────────────────────────────────────────────
-function onOrientation(e) {
-  let raw = e.webkitCompassHeading;
-  if (raw === undefined || raw === null) {
-    raw = e.alpha !== null ? (360 - e.alpha) : null;
-  }
-  if (raw === null || raw === undefined) return;
-
-  // Smooth damping
-  let diff = raw - state.heading;
-  if (diff > 180) diff -= 360;
-  if (diff < -180) diff += 360;
-  state.heading += diff * 0.1;
-  state.heading = ((state.heading % 360) + 360) % 360;
-
-  if (state.target) updateNavUI();
-}
-
-// ─── NAV UI UPDATE ───────────────────────────────────────────
-function updateNavUI() {
-  if (!state.target) return;
-
-  let diff = ((state.bearing - state.heading) + 540) % 360 - 180;
-  const absDiff = Math.abs(diff);
-
-  // Rotate needle
-  document.getElementById('needle-wrap').style.transform = `rotate(${diff}deg)`;
-
-  // Color theme
-  let clr, statusTxt, statusSub, voiceType;
-
-  if (absDiff <= 10) {
-    clr = '#00ff88';
-    statusTxt = 'TAM İSTİKAMET';
-    statusSub = `±${absDiff.toFixed(0)}° — Düz ilerleyin`;
-    voiceType = 'aligned';
-  } else if (absDiff <= 30) {
-    clr = '#ffd060';
-    statusTxt = 'DOĞRUYA YAKLAŞIN';
-    statusSub = `${diff > 0 ? 'Sağa' : 'Sola'} ${absDiff.toFixed(0)}° döndürün`;
-    voiceType = 'near';
-  } else if (absDiff <= 70) {
-    clr = '#ff9500';
-    statusTxt = 'YÖNÜNÜZÜ AYARLAYIN';
-    statusSub = `${diff > 0 ? 'Sağa' : 'Sola'} ${absDiff.toFixed(0)}° çevirin`;
-    voiceType = 'mid';
-  } else {
-    clr = '#ff3a5c';
-    statusTxt = 'GERİ DÖNÜN';
-    statusSub = `${diff > 0 ? 'Sağa' : 'Sola'} ${absDiff.toFixed(0)}° dönmeniz gerekiyor`;
-    voiceType = 'far';
-  }
-
-  // Apply colors
-  document.documentElement.style.setProperty('--dir-color', clr);
-  document.getElementById('status-text').style.color = clr;
-  document.getElementById('status-text').textContent = statusTxt;
-  document.getElementById('status-sub').textContent = statusSub;
-  document.getElementById('needle-top').style.borderBottomColor = clr;
-  document.getElementById('needle-top').style.filter = `drop-shadow(0 0 12px ${clr})`;
-  document.getElementById('comp-center').style.borderColor = clr;
-  document.querySelector('.comp-main').style.borderColor = clr;
-  document.querySelector('.comp-main').style.boxShadow =
-    `0 0 40px ${clr}22, inset 0 0 40px rgba(0,0,0,0.5)`;
-
-  // Door icon
-  const door = document.getElementById('door-icon');
-  if (absDiff <= 10) {
-    door.classList.add('visible');
-  } else {
-    door.classList.remove('visible');
-  }
-
-  // Angle band
-  const band = document.getElementById('angle-band');
-  band.textContent = `±10° içinde → İLERLEYİNİZ   |   Mevcut: ${absDiff.toFixed(1)}°`;
-  band.classList.add('visible');
-
-  // Metrics
-  const distFmt = formatDist(state.dist);
-  document.getElementById('met-dist').textContent = distFmt.split(' ')[0];
-  document.getElementById('met-dist-unit').textContent = distFmt.split(' ')[1] || 'm';
-  document.getElementById('met-angle').textContent = absDiff.toFixed(0);
-  document.getElementById('met-bearing').textContent = state.bearing.toFixed(0);
-
-  // GPS accuracy bar
-  const acc = Math.min(state.accuracy, 100);
-  const fill = Math.max(0, 100 - acc);
-  document.getElementById('acc-fill').style.width = fill + '%';
-  document.getElementById('acc-fill').style.background =
-    acc < 5 ? '#00ff88' : acc < 15 ? '#ffd060' : '#ff3a5c';
-  document.getElementById('acc-val').textContent = `±${state.accuracy.toFixed(1)}m`;
-
-  // Voice cues (throttled)
-  if (voiceType !== state.lastVoiceType) {
-    state.lastVoiceType = voiceType;
-    if (voiceType === 'aligned') {
-      speak(`Tam istikamette! ${formatDist(state.dist)} kaldı, düz ilerleyin.`);
-    } else if (voiceType === 'near') {
-      speak(`${diff > 0 ? 'Biraz sağa' : 'Biraz sola'} dönün.`);
-    } else if (voiceType === 'far') {
-      speak(`Yönünüzü düzeltin, ${diff > 0 ? 'sağa' : 'sola'} dönmeniz gerekiyor.`);
+// ══════════ GPS ══════════
+function onGPS(pos){
+  S.lat=pos.coords.latitude;S.lng=pos.coords.longitude;S.acc=pos.coords.accuracy;S.hasGPS=true;
+  document.getElementById('gps-lbl').textContent='CANLI';
+  if(!S.target||S.arrived)return;
+  const wp=S.waypoints[S.wpIdx];if(!wp)return;
+  const dtw=getDist(S.lat,S.lng,wp.lat,wp.lng);
+  const thresh=wp.isFinal?7:10;
+  if(dtw<thresh){
+    if(wp.isFinal){triggerArrived();}
+    else{
+      speak(`${wp.name}'ya ulaştınız, devam edin.`);
+      S.wpIdx++;
+      document.querySelectorAll('.wpdot').forEach((d,i)=>{
+        d.className='wpdot'+(i<S.wpIdx?' done':i===S.wpIdx?' active':'');
+      });
     }
+    return;
   }
+  S.bearing=getBearing(S.lat,S.lng,wp.lat,wp.lng);S.dist=dtw;
+  const rem=S.waypoints.length-S.wpIdx-1;
+  document.getElementById('nav-wp-row').textContent=
+    rem>0?`→ ${wp.name} (${rem} adım kaldı)`:`→ ${wp.name}`;
+  updateNavUI();
+  [50,25,10].forEach(m=>{
+    if(wp.isFinal&&dtw<m&&!S.voicedDists.has(m)){
+      S.voicedDists.add(m);
+      speak(`${S.target.name}'na ${Math.round(dtw)} metre kaldı.`);
+    }
+  });
+}
+function onGPSErr(e){document.getElementById('ssub').textContent='GPS: '+e.message;}
 
-  // Distance voice cues
-  if (state.dist < 10 && !state.arrived) {
-    speak(`Hedefe çok yaklaştınız, ${state.dist.toFixed(0)} metre kaldı.`);
-  } else if (state.dist < 30) {
-    speak(`${formatDist(state.dist)} kaldı.`);
+// ══════════ COMPASS ══════════
+function onOrient(e){
+  let raw=e.webkitCompassHeading;
+  if(raw==null)raw=e.alpha!=null?(360-e.alpha):null;
+  if(raw==null)return;
+  let d=raw-S.heading;
+  if(d>180)d-=360;if(d<-180)d+=360;
+  S.heading+=d*0.09;
+  S.heading=((S.heading%360)+360)%360;
+  if(S.target&&!S.arrived)updateNavUI();
+}
+
+// ══════════ NAV UI ══════════
+function updateNavUI(){
+  if(!S.target)return;
+  let diff=((S.bearing-S.heading)+540)%360-180;
+  const abs=Math.abs(diff);
+  document.getElementById('nwrap').style.transform=`rotate(${diff}deg)`;
+  let clr,main,sub,vt;
+  if(abs<=10){clr='#00e87a';main='TAM İSTİKAMET';sub=`±${abs.toFixed(0)}° — Düz ilerleyin`;vt='aligned';}
+  else if(abs<=30){clr='#ffd060';main='DOĞRUYA YAKLIN';sub=`${diff>0?'Sağa':'Sola'} ${abs.toFixed(0)}° dönün`;vt='near';}
+  else if(abs<=70){clr='#ff9d35';main='YÖNÜNÜZÜ AYARLAYIN';sub=`${diff>0?'Sağa':'Sola'} ${abs.toFixed(0)}° çevirin`;vt='mid';}
+  else{clr='#ff4060';main='GERİ DÖNÜN';sub=`${diff>0?'Sağa':'Sola'} dönerek yönünüzü bulun`;vt='far';}
+  document.documentElement.style.setProperty('--dir',clr);
+  const sm=document.getElementById('smain');sm.style.color=clr;sm.textContent=main;
+  document.getElementById('ssub').textContent=sub;
+  document.getElementById('nup').style.borderBottomColor=clr;
+  document.getElementById('nup').style.filter=`drop-shadow(0 0 7px ${clr})`;
+  document.getElementById('chub').style.borderColor=clr;
+  const cf=document.getElementById('cface');
+  cf.style.borderColor=clr;
+  cf.style.boxShadow=`0 0 24px ${clr}18,inset 0 0 24px rgba(0,0,0,0.55)`;
+  const bc=document.getElementById('beacon');
+  abs<=10?bc.classList.add('show'):bc.classList.remove('show');
+  const ah=document.getElementById('ahint');
+  ah.textContent=abs<=10?'✓ İLERLEYİNİZ — ±10° içinde':`Sapma: ${abs.toFixed(1)}°  |  ±10° içinde → İLERLEYİNİZ`;
+  ah.classList.add('show');
+  const df=formatDist(S.dist||0);const[dv,du]=df.split(' ');
+  document.getElementById('hdist').textContent=dv;
+  document.getElementById('hdistu').textContent=du||'m';
+  document.getElementById('hang').textContent=abs.toFixed(0);
+  document.getElementById('hbear').textContent=(S.bearing||0).toFixed(0);
+  const a=Math.min(S.acc,100);const fill=Math.max(0,100-a);
+  document.getElementById('afill').style.width=fill+'%';
+  document.getElementById('afill').style.background=a<5?'#00e87a':a<15?'#ffd060':'#ff4060';
+  document.getElementById('anum').textContent=`±${S.acc.toFixed(1)}m`;
+  if(vt!==S.lastVT){
+    S.lastVT=vt;
+    if(vt==='aligned')speak(`Tam istikamette! ${formatDist(S.dist)} kaldı, düz ilerleyin.`);
+    else if(vt==='near')speak(`${diff>0?'Biraz sağa':'Biraz sola'} dönün.`);
+    else if(vt==='far')speak(`Yönünüzü düzeltin.`);
   }
 }
 
-// ─── ARRIVED ─────────────────────────────────────────────────
-function triggerArrived() {
-  state.arrived = true;
-  speak(`${state.target.name}'a ulaştınız! Tebrikler, hedefinize başarıyla ulaşıldı.`, true);
-  document.getElementById('arrived-icon').textContent = state.target.icon;
-  document.getElementById('arrived-dest').textContent = state.target.name;
-  document.getElementById('arrived-info').textContent =
-    `"${state.target.name}" bölümüne başarıyla ulaştınız. Ziyaretinizin tadını çıkarın!`;
-  setTimeout(() => showScreen('arrived-screen'), 800);
+// ══════════ ARRIVED ══════════
+function triggerArrived(){
+  S.arrived=true;S.fromGroup=S.target.group;
+  const t=S.target;
+  const voiceText=`${t.name}'a ulaştınız! ${t.arrShort} ${t.detail.substring(0,100)}`;
+  speak(voiceText,true);
+  document.getElementById('arr-icon').textContent=t.icon;
+  document.getElementById('arr-dest').textContent=t.name;
+  document.getElementById('arr-short').textContent=t.arrShort;
+  document.getElementById('arr-detail').textContent=t.detail;
+  setTimeout(()=>showScreen('arrived-screen'),700);
 }
-
-function backToSections() {
-  showScreen('section-screen');
-  renderSections();
-  speak('Bölüm seçim ekranına dönüldü. Yeni bir hedef seçebilirsiniz.', true);
+function backToSections(){
+  showScreen('section-screen');renderSections();
+  speak('Bölüm seçim ekranı. Yeni hedefinizi seçin.',true);
 }
+function goBack(){showScreen('section-screen');renderSections();}
 
-function goBack() {
-  showScreen('section-screen');
-  renderSections();
-}
-
-// ─── HELPERS ─────────────────────────────────────────────────
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+// ══════════ UTILS ══════════
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-
-function formatDist(m) {
-  if (m >= 1000) return (m / 1000).toFixed(2) + ' km';
-  if (m >= 100) return m.toFixed(0) + ' m';
-  return m.toFixed(1) + ' m';
+function formatDist(m){
+  if(m>=1000)return(m/1000).toFixed(2)+' km';
+  if(m>=100)return m.toFixed(0)+' m';
+  return m.toFixed(1)+' m';
 }
-
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δφ = (lat2 - lat1) * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+function getDist(a,b,c,d){
+  const R=6371000,p1=a*Math.PI/180,p2=c*Math.PI/180;
+  const dp=(c-a)*Math.PI/180,dl=(d-b)*Math.PI/180;
+  const x=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));
 }
-
-function getBearing(lat1, lon1, lat2, lon2) {
-  const y = Math.sin((lon2-lon1)*Math.PI/180) * Math.cos(lat2*Math.PI/180);
-  const x = Math.cos(lat1*Math.PI/180)*Math.sin(lat2*Math.PI/180) -
-            Math.sin(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.cos((lon2-lon1)*Math.PI/180);
-  return (Math.atan2(y, x) * 180/Math.PI + 360) % 360;
+function getBearing(a,b,c,d){
+  const y=Math.sin((d-b)*Math.PI/180)*Math.cos(c*Math.PI/180);
+  const x=Math.cos(a*Math.PI/180)*Math.sin(c*Math.PI/180)-
+    Math.sin(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.cos((d-b)*Math.PI/180);
+  return(Math.atan2(y,x)*180/Math.PI+360)%360;
 }
 </script>
 </body>
