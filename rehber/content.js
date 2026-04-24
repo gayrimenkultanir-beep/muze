@@ -24,7 +24,7 @@ const tourData = [
         s: "🏛️ İDARE VE NİZAM",
         m: "🚪 **2. AVLUYA GEÇİŞ:**\nSunum odasından çıkar çıkmaz, hemen solunuzdaki görkemli kapıdan geçip yönetici odalarının bulunduğu ikinci avluya geçiniz.\n\n🏛️ **YÖNETİCİ ODALARI:**\nBu avluda sağda ve solda ikişerden 4 oda bulunur. Hekim başı ve diğer hekimler bu odaları kullanır; hastanenin tüm işleri bu odalarda planlanıp yürütülürdü. Külliyenin yapıldığı yıllarda bu darüşşifada 1 hekimbaşı, iki hekim, 2 cerrah, 2 göz hekimi ve 1 eczacı bulunurdu.\n\n🔒 **İDARİ BÖLÜM:**\nİdari odaların bulunduğu bu bölüm aynı zamanda ilk avludaki günlük hasta sirkülasyonuyla, biraz sonra gireceğiniz yataklı tedavi bölümü arasında koruyucu bir bariyer oluşturma amacı güderdi.\n\n✨ **KİTABE VE GİRİŞ:**\nŞimdi kapının üzerinde yazılı şifahanenin kitabesini okuduktan sonra nefesinizi tutunuz,",
       q: "🚶‍♂️ Şimdi müzik ve su sesinin şifayla buluştuğu bu büyülü alana giriş yapınız.",  
-      btnNext: "Odaları Keşfetmeye Başla ➡",
+      btnNext: "Büyük Şifahaneyi Keşfet ➡",
         a: "audio/rehber-3.mp3",
         g: ["img/02.jpg"]
     },
@@ -33,8 +33,8 @@ const tourData = [
         s: "🌊 RUHUN ŞİFAYA KAVUŞTUĞU ZİRVE",
        m: "🏥 **YATAKLI TEDAVİ BÖLÜMÜ:**\nŞu an müzemizin kalbinde ve Edirne Darüşşifası'nın yataklı tedavi bölümündesiniz. Bu bölümde, 500 yıl öncesinin şifa yurdunda, asırlar boyunca şifa bulmuş insanların hissiyatıyla dolaşınız.\n\n🌊 **HASTANENİN YAPISI:**\nÖyle bir hastane düşünün ki sizi, ortada suyu belli bir ritimle akan bir şadırvan ile hemen tam karşıda bulunan müzik sahnesi karşılasın. Geniş kubbenin örttüğü bu merkezi planlı hastane, 6 kışlık, 4 yazlık hasta odası ile bir müzik sahnesinden meydana gelir. Geniş kubbedeki aydınlatma feneri aynı zamanda hastanenin kötü kokularını dışarı atar. Zemindeki meyilli döşeme ve devamındaki kanallar ise hastanenin kolay yıkanıp temizlenmesi içindir.\n\n🎵 **MÜZİKLE TEDAVİ:**\nBu hastaneyi diğerlerinden ayıran en büyük özellik, tedavide dönemin hekimlik bilgilerinin yanında müzik makamlarının da kullanılmış olmasıdır. Tedavi esnasında 10 kişiden oluşan musiki grubunun, hekimlerin önerileri doğrultusunda her hastalığa göre çalıp söyledikleri müzik makamlarının çeşitli hastalıklara iyi geldiği düşünülürdü.\n\n💧 **SUYLA TEDAVİ:**\nYapının tam ortasında bulunan şadırvandan akan suyun çıkardığı ses, tedavinin önemli bir parçasıydı ve hastaları rahatlatmaya yönelikti.\n\n🌿 **KOKU TEDAVİSİ:**\nDarüşşifada müzik ve su sesine ek olarak koku tedavisi de uygulanırdı. Darüşşifa avlusu ve çevresinde yetiştirilen çeşitli bitkilerin yaydığı kokular da tedavinin önemli bir parçasıydı.\n\n🧺 **MEŞGULEK TEDAVİSİ:**\nAyrıca meşguliyet de bu hastanede tedavi amacıyla kullanılıyordu. Hastalar, sepet ve örgü örmenin yanı sıra çeşitli el işleriyle meşgul edilir, dertlerinden ve düşüncelerinden uzaklaştırılmaya çalışılırdı.\n\n🚶 **ÇIKIŞ VE GEZİ:**\nOsmanlı tıbbının farklı özelliklerinin tanıtıldığı odaları gezdikten sonra yataklı tedavi bölümünden çıkabilirsiniz. Aralıksız olarak 400 yıl hizmet veren bu şifa yurdundan çıkarken zamanınız doğrultusunda ikinci ve birinci avludaki diğer odaları da gezebilir hem Edirne Darüşşifası hem de Osmanlı hekimliği ile ilgili farklı bilgilere ulaşabilirsiniz.",
         q: "🏫 **TIP MEDRESESİNE DOĞRU:**\nŞimdi Darüşşifadan çıkıp büyük fotoğrafın olduğu giriş bahçesinin sol tarafında bulunan Tıp Medresesine doğru yürüyünüz.",
-        btnNext: "Büyük Şifahaneyi Keşfet ➡",
-        a: "audio/11.mp3",
+        btnNext: "Medreseye Yolu ➡",
+        a: "audio/rehber-4.mp3",
         g: ["img/11.jpg"]
     },
    
