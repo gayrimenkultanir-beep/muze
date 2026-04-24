@@ -25,7 +25,7 @@ const tourData = [
         m: "🚪 **2. AVLUYA GEÇİŞ:**\nSunum odasından çıkar çıkmaz, hemen solunuzdaki görkemli kapıdan geçip yönetici odalarının bulunduğu ikinci avluya geçiniz.\n\n🏛️ **YÖNETİCİ ODALARI:**\nBu avluda sağda ve solda ikişerden 4 oda bulunur. Hekim başı ve diğer hekimler bu odaları kullanır; hastanenin tüm işleri bu odalarda planlanıp yürütülürdü. Külliyenin yapıldığı yıllarda bu darüşşifada 1 hekimbaşı, iki hekim, 2 cerrah, 2 göz hekimi ve 1 eczacı bulunurdu.\n\n🔒 **İDARİ BÖLÜM:**\nİdari odaların bulunduğu bu bölüm aynı zamanda ilk avludaki günlük hasta sirkülasyonuyla, biraz sonra gireceğiniz yataklı tedavi bölümü arasında koruyucu bir bariyer oluşturma amacı güderdi.\n\n✨ **KİTABE VE GİRİŞ:**\nŞimdi kapının üzerinde yazılı şifahanenin kitabesini okuduktan sonra nefesinizi tutunuz,",
       q: "🚶‍♂️ Şimdi müzik ve su sesinin şifayla buluştuğu bu büyülü alana giriş yapınız.",  
       btnNext: "Odaları Keşfetmeye Başla ➡",
-        a: "audio/02.mp3",
+        a: "audio/rehber-3.mp3",
         g: ["img/02.jpg"]
     },
     {
