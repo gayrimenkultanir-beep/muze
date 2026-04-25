@@ -46,24 +46,23 @@ const tourData = [
         a: "audio/rehber-5.mp3",
         g: ["img/03.jpg"]
     },
-
-
-
-
-
-
-
-
-   
 {
-        t: "4.Durak:\n🏛️ SEMBOLLER VE SUNUM ODASI",
-        s: "🌿 ŞİFA YOLUNDA İNANÇ VE SEMBOLİZM",
-        m: "🚶‍♂️ Sunum odasına doğru ilerlerken, avlunun sessiz tanıkları olan kadim semboller yolunuza eşlik edecek.\n\n💧 **Süt Kuyusu:** Sol taraftaki hizmet birimlerinin hemen ilerisinde yer alan bu kuyu, asırlık bir halk inanışının merkezidir. Döneminde, emziren annelerin şifa bulduğuna ve sütlerinin bereketlendiğine inanılan bu nokta, suyun kutsiyetini simgeler.\n\n🌳 **Ağaç ve Sarmaşık:** Birkaç adım ileride, gövdesine sıkıca sarılmış sarmaşığıyla yükselen o ağacı göreceksiniz. Bu görsel harmoni, müzemizin ruhuna işleyen, sadakat ve yaşam döngüsünü anlatan 'Ağaç ile Sarmaşık' efsanesinin can bulduğu noktadır.\n\n🏛️ **Bilgi Eşiği:** İkinci Avlu’ya açılan taç kemerli geçiş kapısına ulaştığınızda, sol tarafta yer alan **Sunum Odası** sizi karşılayacaktır.\n\n🧭 Burası, yapının tarihsel derinliğini, mimari dehasını ve 'dünya üzerinde eşi benzeri olmayan bir şifahane' olma vasfını tüm detaylarıyla keşfedeceğiniz ana duraktır.",
-        q: "🎬 “Görsel ve işitsel bir yolculukla bu devasa yapının sırlarını keşfetmeye hazırsanız, sunumumuzu başlatalım.”",
-        btnNext: "Sunumu Başlat ➡",
-        a: "audio/04.mp3",
+        t: "Sükünet ve Işığın Buluşması:\n🕌 CAMİNİN GÖRKEMİNE DOĞRU",
+        s: "🌿RUHANİ DİNGİNLİĞE ADIM",
+       m: "🌳 **BAHÇEYE GEÇİŞ:**\nDarüşşifa ve Medrese bölümlerini gezdikten sonra caminin bahçesine geçtiniz. Bu güzel ve asırlık çınar ağaçlarının bulunduğu bahçeyi ağır ağır ilerleyerek tam karşıda bulunan müzenin İmaret bölümüne doğru yürüyünüz.\n\n💧 **SU TERAZİSİ:**\nDarüşşifadan bahçeye girdiğinizde ilk olarak sağ tarafınızda, caminin köşesinde 4 metre kadar yüksekliğindeki dikdörtgen taş yapıya dikkatinizi çekmek isterim. Bu yapı Külliyenin su terazisidir. Yüksek tepelerden borularla getirilen suların basıncı önce bu yapı içinde dengelenir ve o şekilde külliyenin diğer birimlerine dağıtılırdı.\n\n🕌 **CAMİ TAÇ KAPISI:**\nSu terazisini geçtikten sonra sizi hemen sağınızdaki caminin muhteşem taç kapısı karşılar. Taç kapıdan cami avlusuna geçip bu eşsiz eseri dolaşmayı gezimizin en sonuna bırakarak İmarete doğru yürüyüşümüze devam edelim.\n\n🏛️ **KİLER VE İMAret:**\nKarşıda sizi yan yana benzer mimariyle inşa edilmiş iki büyük yapı karşılayacaktır. Solda olan, şu an müzenin bilimsel ve kültürel etkinliklerinde kullanılan Kiler ve fodlahane denilen fırın bölümleridir. Sağ tarafta olan ise şu an sizi yönlendirmekte olduğum İmaret bölümüdür.",
+   q: "👣 “🍲Şimdi Osmanlı'nın imaret kültürünü görmeye ve aşçı Yahya baba efsanesini dinlemeye hazır mısınız? O halde müzenin girişinde kesmiş olduğunuz bileti göstererek turnikeden bu bölüme giriniz ve içerideki bilgileri dinlemek için bir sonrasını tıklayınız.",    
+   btnNext: "Manevi Bir Vefa Noktası YAHYA BABA ➡",
+        a: "audio/rehber-6.mp3",
         g: ["img/04.jpg"]
     },
+   
+   
+   
+   
+   
+   
+   
+   
    {
         t: "5.Durak:\n🏛️ BİLGİDEN DENEYİME",
         s: "📜 TAŞLARIN DİLE GELDİĞİ ANLAR",
