@@ -60,7 +60,7 @@ const tourData = [
    
    
    
- 
+ {
         t: "16.Durak:\n🎓 İMARETHANE YOLU",
         s: "KÜLLİYENİN KALBİNE BAKIŞ",
         m: "🚪 **Medrese-i Etıbba’dan Ayrılış**\nMedrese-i Etıbba’nın kapısından dışarı süzülüp, çıkış kapısının karşısında bulunan turnikeli kapıya doğru ilerleyebiliriz.\n\n🌿 **Turnikeden Sonra: Açık Alan ve Nefes**\nTurnikeyi geçtiğimizde geniş meydana çıkarız. Temiz havayı ciğerlerinize çekip rotamızı değiştiriyoruz.\n\n🏛️ **Külliyenin Kalbine Bakış**\nŞimdi sağımıza baktığımızda, külliyenin tüm yapılarını bir tespih tanesi gibi etrafında dizen o en heybetli yapıyı görebilirsiniz: **🕌 Sultan II. Bayezid Camii’nin taç kapısı**\n✔️ Cami ibadete açık ve halka açık bir camidir. Cami bölümü gezimizin son durağında ziyaret edilecektir.\n\n🚶‍♂️ **Yol Üzerindeki Yapılar**\nYolumuza düz devam ettiğimizde karşımızda iki büyük yapı karşılar:\n🏗️ Dik Karşımızdaki Yapılar: Konferans ve sergi alanı, Fırın bölümü, Kiler kısımları.\n\n➡️ **Yön Değişimi: İmarethane’ye Doğru**\nBiz yönümüzü sağımıza çeviriyoruz ve müzemizin 3. bölümü olan İmarethane’ye ulaşıyoruz.\n\n🚪 **İlk Kapıdan İçeri Giriş**\nİmarethanenin ilk kapısından içeri giriyoruz…",
