@@ -37,15 +37,7 @@ const tourData = [
         a: "audio/rehber-4.mp3",
         g: ["img/11.jpg"]
     },
-   
-   
-   
-   
-   
-   
-   
-   
-   {
+      {
         t: "Şifadan Bilgiye:\n🎓 MEDRESE-İ ETİBBA",
         s: "HEKİMLERİN YETİŞTİĞİ OCAK",
         m: "🏫 **TIP MEDRESESİ:**\nDarüşşifayı dolaştınız ve şimdi de külliyenin çok önemli bir başka bölümüne geçtiniz. Burası Sultan II. Bayezid Külliyesi Tıp Medresesi'dir.\nSağ ve karşı taraftaki müze olarak düzenlenmiş odalara geçmeden önce durunuz ve bu eşsiz mekânı inceleyiniz.\n\n🌍 **TARİHSEL ÖNEM:**\nŞu an kare planlı bir avlu etrafında şekillenen bir bina olarak gördüğünüz bu mekân, Osmanlı İmparatorluğu'nda hekim yetiştiren en seçkin eğitim kurumlarından biriydi ve yüzyıllar boyunca birçok önemli hekimin yetiştiği önemli bir ilim merkezi konumundaydı.\n\n📚 **EĞİTİM SİSTEMİ:**\nOsmanlı eğitim sistemi içinde en üst düzey kabul edilen \"60'lık ve altmış üstü medreseler\" arasında yer alan bu yapıda öğrenciler, almış oldukları teorik eğitimlerini hemen yanındaki darüşşifada uygulama imkânı bularak bilgilerini pratikle pekiştirirlerdi.\n\n🏛️ **MİMARİ YAPI:**\nOrtasında günümüze ulaşmayan bir şadırvan ve köşede su ihtiyaçlarının karşılandığı bir kuyusu bulunan medrese, üç yönde sıralanmış 18 öğrenci odası ve tam karşıda yer alan bir dershaneden oluşmaktadır.\n\n📜 **EVLİYA ÇELEBİ:**\n1652 yılında külliyeyi ziyaret eden Evliya Çelebi, bu medrese hakkında şunları yazmıştır: \"Medrese-i Etıbba ve odalarında talebeler vardır ki her biri daima Eflatun, Sokrat, Aristoteles, Galinos ve Pisagor gibi âlimlerden bahseden olgun tabiplerdir. Her biri bir fenne yönelip hekimlik ilminde kıymetli kitaplara itibar ederek insanoğlunun derdine deva bulmaya çalışırlar.\"\n\n👨‍🏫 **EĞİTİM KADROSU:**\nMedresenin eğitim kadrosunda, 18 öğrenciye ders veren ve günde 60 akçe ücret alan bir müderris, bir müderris yardımcısı, bir kütüphaneci ve iki hizmetli bulunurdu.\nÖğrencilerin tüm ihtiyaçları karşılandığı gibi, onlara ayrıca günde ikişer akçe burs verilirdi.\n\n📖 **EL YAZMALARI:**\nBurada okutulan ve birçoğu Osmanlı padişahlarının mühürlerini taşıyan 38 el yazması tıp eseri günümüze kadar ulaşmıştır. Bu kıymetli eserler bugün Selimiye Yazma Eserler Kütüphanesi'nde koruma altındadır.\n\n🏥 **SAĞLIK MÜZESİ:**\nMedrese, Trakya Üniversitesi tarafından 2007 yılında Sağlık Müzesi'nin ikinci seksiyonu olarak açılmış olup, odalarında dönemin hekimlik eğitimi anlatılmaktadır.\nEn önemli bölümü, girişin tam karşısında bulunan dershanedir.",
@@ -55,6 +47,14 @@ const tourData = [
         g: ["img/03.jpg"]
     },
 
+
+
+
+
+
+
+
+   
 {
         t: "4.Durak:\n🏛️ SEMBOLLER VE SUNUM ODASI",
         s: "🌿 ŞİFA YOLUNDA İNANÇ VE SEMBOLİZM",
