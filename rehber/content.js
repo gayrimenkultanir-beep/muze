@@ -50,8 +50,8 @@ const tourData = [
         t: "Sükünet ve Işığın Buluşması:\n🕌 CAMİNİN GÖRKEMİNE DOĞRU",
         s: "🌿RUHANİ DİNGİNLİĞE ADIM",
        m: "🌳 **BAHÇEYE GEÇİŞ:**\nDarüşşifa ve Medrese bölümlerini gezdikten sonra caminin bahçesine geçtiniz. Bu güzel ve asırlık çınar ağaçlarının bulunduğu bahçeyi ağır ağır ilerleyerek tam karşıda bulunan müzenin İmaret bölümüne doğru yürüyünüz.\n\n💧 **SU TERAZİSİ:**\nDarüşşifadan bahçeye girdiğinizde ilk olarak sağ tarafınızda, caminin köşesinde 4 metre kadar yüksekliğindeki dikdörtgen taş yapıya dikkatinizi çekmek isterim. Bu yapı Külliyenin su terazisidir. Yüksek tepelerden borularla getirilen suların basıncı önce bu yapı içinde dengelenir ve o şekilde külliyenin diğer birimlerine dağıtılırdı.\n\n🕌 **CAMİ TAÇ KAPISI:**\nSu terazisini geçtikten sonra sizi hemen sağınızdaki caminin muhteşem taç kapısı karşılar. Taç kapıdan cami avlusuna geçip bu eşsiz eseri dolaşmayı gezimizin en sonuna bırakarak İmarete doğru yürüyüşümüze devam edelim.\n\n🏛️ **KİLER VE İMARET:**\nKarşıda sizi yan yana benzer mimariyle inşa edilmiş iki büyük yapı karşılayacaktır. Solda olan, şu an müzenin bilimsel ve kültürel etkinliklerinde kullanılan Kiler ve fodlahane denilen fırın bölümleridir. Sağ tarafta olan ise şu an sizi yönlendirmekte olduğum İmaret bölümüdür.",
-   q: "👣 “🍲Şimdi Osmanlı'nın imaret kültürünü görmeye ve aşçı Yahya baba efsanesini dinlemeye hazır mısınız? O halde müzenin girişinde kesmiş olduğunuz bileti göstererek turnikeden bu bölüme giriniz ve içerideki bilgileri dinlemek için bir sonrasını tıklayınız.",    
-   btnNext: "Külliyenin Kalbine Bakış (İMARETHANE) ➡",
+   q: "🍲Şimdi Osmanlı'nın imaret kültürünü görmeye ve aşçı Yahya baba efsanesini dinlemeye hazır mısınız? O halde müzenin girişinde kesmiş olduğunuz bileti göstererek turnikeden bu bölüme giriniz ve içerideki bilgileri dinlemek için bir sonrasını tıklayınız.",    
+   btnNext: "BEREKETİN VE PAYLAŞMANIN KALBİ ➡",
         a: "audio/rehber-6.mp3",
         g: ["img/04.jpg"]
     },
@@ -60,101 +60,7 @@ const tourData = [
    
    
    
-   
-   
-   
-   {
-        t: "5.Durak:\n🏛️ BİLGİDEN DENEYİME",
-        s: "📜 TAŞLARIN DİLE GELDİĞİ ANLAR",
-        m: "📚 Sunum odasında edindiğimiz tarihsel perspektifle, şimdi bu muazzam yapının taşları zihnimizde yeniden canlanıyor. Bilgiyi deneyime dönüştürmek üzere Birinci Avlu turumuza kaldığımız yerden devam ediyoruz.\n\n🚶‍♂️ Revaklı yolun gölgesinde, geçmişin ayak izlerini takip ederek sağ kanattan itibaren ağır adımlarla ilerleyelim.\n\n👀 Şimdi her bir odayı sadece mekan olarak değil, yüzyıllar boyu hizmet vermiş birer yaşam alanı olarak sırasıyla keşfetmeye ve hissetmeye başlıyoruz.",
-        q: "👣 “Lojistik ve şifa birimlerinin saklı hikâyelerini dinlemeye hazır mısınız?”",
-        btnNext: "Odaları Keşfetmeye Başla ➡",
-        a: "audio/05.mp3",
-        g: ["img/05.jpg"]
-    },
-   {
-        t: "6.Durak:\n🏛️ İDARİ VE LOJİSTİK BİRİMLER",
-        s: "🧼 DARÜŞŞİFADA YAŞAM VE HİJYEN EKOLÜ",
-        m: "🚪 Giriş aksının sol kanadında sıralanan bu odalar, darüşşifanın kesintisiz hizmet veren lojistik merkezidir:\n\n🛏️ **Personel Odası:** Hekim, cerrah ve eczacıların dinlenme alanı olan bu birim, 24 saat esaslı nöbet sistemiyle şifahanenin her an hazır bulunmasını sağlıyordu.\n\n🧺 **Çamaşırhane:** Osmanlı tıp geleneğinde hijyen, tedavinin temelidir. Sargı bezlerinden yatak örtülerine kadar tüm tekstil ürünlerinin sterilizasyonu burada sağlanarak kontaminasyonun önüne geçilirdi.\n\n🍲 **Mutfak (Matbah):** Beslenmenin 'gıdayla tedavi' olarak görüldüğü bu alanda, her hasta için özel diyetler, şifalı şerbetler ve hafif yemekler titizlikle hazırlanırdı.\n\n🏺 **Kiler:** Baharatlardan tıbbi bitkilere, tahıldan özel erzaklara kadar tüm stokların yönetildiği bu birim, darüşşifanın dış dünyaya bağımlı kalmadan kendi kendine yetebilmesini mümkün kılıyordu.\n\n🔎 **Kurumsal Vizyon:** Bu dörtlü yapı; insan kaynağı, hijyen, beslenme ve stok yönetiminin tek bir çatı altında nasıl kusursuz bir organizasyona dönüştüğünün kanıtıdır.",
-        q: "🏛️ “Lojistik birimleri geride bırakırken, şifanın teşhis noktalarına; revakların altındaki poliklinik odalarına doğru ilerleyelim.”",
-        btnNext: "Poliklinik Odalarına Geç ➡",
-        a: "audio/06.mp3",
-        g: ["img/06.jpg"]
-    },
-   {
-        t: "7.Durak:\n🏛️ POLİKLİNİK BİRİMLERİ",
-        s: "🩺 TEŞHİS, KARAR VE KLİNİK YÖNETİMİ",
-        m: "Bu birimler, şifahanenin kapısından giren her birey için yol haritasının çizildiği, modern tıptaki 'ilk kabul ve triyaj' merkezinin tarihsel karşılığıdır.\n\n🔍 **Klinik Değerlendirme Süreci:**\n\n1️⃣ **İlk Muayene ve Teşhis:** Hekimler, hastanın nabız ritmini ve genel semptomlarını inceler; şikayetleri İbn-i Sina ve Razi gibi otoritelerin rehberliğinde analiz ederlerdi.\n\n2️⃣ **Triyaj ve Sınıflandırma:** Muayene sonrası hastalar ihtiyaçlarına göre ayrıştırılırdı:\n🧠 **Nöro-psikiyatrik vakalar:** Musiki ve su sesiyle tedavi merkezlerine,\n🏥 **Somatik (fiziksel) vakalar:** İlgili ihtisas koğuşlarına yönlendirilirdi.\n\n3️⃣ **Ayakta Tedavi (Ambülatuvar Hizmet):** Yatış gerektirmeyen hafif vakalar, bu odalarda reçete edilen ilaçlar veya basit müdahalelerle sağlığına kavuşturulup taburcu edilirdi.\n\n⚖️ **Bütüncül Yaklaşım:** Osmanlı hekimliği, hastayı sadece semptomlar üzerinden değil; mizaç, çevre ve ruhsal durum bütünlüğüyle ele alan 'holistik' bir vizyona sahipti.\n\n🏛️ **Stratejik Önem:** Poliklinik odaları, darüşşifanın **operasyonel beyni** ve hastanın şifa yolculuğundaki ilk ciddi duraktır.",
-        q: "👉 “Tıbbın bu kadim uygulama alanlarını daha yakından tanımak için muayene türlerini detaylandıralım.”",
-        btnNext: "Muayene Türlerini İncele ➡",
-        a: "audio/07.mp3",
-        g: ["img/07.jpg"]
-    },
-   {
-        t: "8.Durak:\n🏛️ POLİKLİNİK BİRİMLERİ VE İHTİSAS ALANLARI",
-        s: "🩺 KLİNİK BRANŞLAŞMANIN TARİHSEL KÖKENLERİ",
-        m: "🩺 **Darüşşifa’da İhtisas Alanları ve Klinik Uygulamalar:**\n\n🧠 **1. Asabiye ve Ruh Sağlığı:** Nöro-psikiyatrik semptomların analiz edildiği, hastanın mizaç yapısına göre musiki veya su sesiyle tedavi protokollerinin belirlendiği başlangıç noktasıdır.\n\n🌡️ **2. Dahiliye (İç Hastalıkları):** Ateşli hastalıklar ve metabolik bozuklukların, dönemin tıbbi otoritelerinin doktrinleri ışığında teşhis edildiği birimdir.\n\n⚔️ **3. Hariciye (Cerrahi Müdahaleler):** Travmatoloji, yara bakımı ve cerrahi operasyon gerektiren vakaların klinik değerlendirmesinin yapıldığı alandır.\n\n👁️ **4. Kehhallik (Göz Hekimliği):** Osmanlı tıbbının en gelişmiş kollarından biri olan göz hastalıkları, bu alanda uzmanlaşmış 'Kehhaller' tarafından titizlikle incelenirdi.\n\n🌿 **5. Eczacılık ve Farmakoloji:** Hekim ve eczacı iş birliğiyle, İbn-i Sina farmakopesine dayalı kişiselleştirilmiş ilaç reçetelerinin (terkip) hazırlandığı karar merkezidir.\n\n🔎 **Bilimsel Perspektif:** Bu odalarda bugünkü anlamda modern tabelalar bulunmasa da, fonksiyonel olarak **'ilk branşlaşmış poliklinik sistemi'** burada vuku bulmuştur.\n\n👉 **Süreç Dinamiği:** Klinik gözlem, metodolojik ayrıştırma ve doğru tedavi kanalına sevk ile işleyen kusursuz bir tıbbi disiplin hakimdir.",
-        q: "🤫 “Polikliniklerin hareketliliğinden ayrılıp, sükunetin ve derin şifanın hakim olduğu İkinci Avlu’ya geçmeye hazır mısınız?”",
-        btnNext: "İkinci Avluya İlerle ➡",
-        a: "audio/08.mp3",
-        g: ["img/08.jpg"]
-    },
-   {
-        t: "9.Durak:\n🏛️ İKİNCİ AVLU EŞİĞİ",
-        s: "🔇 AKUSTİK FİLTRE VE RUHSAL ARINMA",
-        m: "Birinci Avlu'nun o hummalı poliklinik hareketliliğini geride bırakarak, Darüşşifa’nın kalbine doğru ilerliyoruz. Sunum Odası'nın yanındaki ana geçiş kapısına ulaştığımızda, mimari bir dehanın sessiz bir kalkan gibi sizi karşıladığını göreceksiniz.\n\n🚪 **Eşik: Seslerin Sustuğu Filtre**\nBu kapının dar ve alçak yapısı, sadece fiziksel bir geçit değil; aynı zamanda akustik bir bariyerdir. Kapıdan içeri adım attığınız an, dış dünyanın uğultusu bıçak gibi kesilir.\n\n🎧 **Mimari Akustik Mucize:** Bu geçiş, bir 'ses filtresi' vazifesi görerek zihninizi dış etkenlerden arındırır. Sizi içerideki saklı huzura, musiki ve su sesinin hakim olduğu o derin atmosfere hazırlar.\n\n⬆️ **Sembolik Geçiş:** Başınızı hafifçe eğerek geçtiğiniz bu taş kemer, ziyaretçiye artık idari ve manevi sükunetin başladığı o mahrem alana dahil olduğunu hatırlatır.",
-        q: "⚖️ “Hiyerarşinin ve disiplinli yönetim merkezinin sessiz dünyasına adım atmaya hazır mısınız?”",
-        btnNext: "Yönetim Merkezine Giriş ➡",
-        a: "audio/09.mp3",
-        g: ["img/09.jpg"]
-    },
-   {
-        t: "10.Durak:\n🏛️ İKİNCİ AVLU | İDARE VE NİZAM",
-        s: "⚖️ ŞİFAHANENİN OPERASYONEL MERKEZİ",
-        m: "Eşikten geçtiğiniz an, mimari bir daralma ile gelen mutlak düzenin hâkim olduğu İkinci Avlu sizi karşılar. Burası Darüşşifa’nın entelektüel ve idari beynidir.\n\n🏢 **Yönetim Merkezi:** Sağ ve sol kanatta yer alan dört birim, şifahanenin hiyerarşik yapısını yansıtır. Burada **Reisü’l-Etibba (Başhekim)** ve yardımcıları, tıbbi protokolleri denetlerken; vakıf gelirleri ve bütçe yönetimi büyük bir titizlikle yürütülürdü.\n\n📜 **Kâtipler ve Bürokrasinin Gücü:** Masa başında divit ve kâğıtlarıyla tasvir edilen kâtipler, Osmanlı tıp sisteminin disiplinli yüzüdür. Her hastanın kaydı, yatış planlaması ve tedavi süreçleri burada belgelenerek kurumsal bir hafıza oluşturulurdu.\n\n📌 **Mimari Saygı:** Bu avludaki sessizlik ve adımlarınızın yankısı, sizi az sonra karşılaşacağınız o büyük mimari ve ruhsal mucizeye zihnen hazırlar.",
-        q: "💎 “Beş asırlık sükunetin zirvesine; sekizgen plana sahip Büyük Şifahane’ye girmeye hazır mısınız?”",
-        btnNext: "Büyük Şifahaneye Adım At ➡",
-        a: "audio/10.mp3",
-        g: ["img/10.jpg"]
-    },
-
-    {
-        t: "12.Durak:\n🏛️ BÜYÜK ŞİFAHANE (SEKİZGEN BÖLÜM)",
-        s: "🌊 RUHUN ŞİFAYA KAVUŞTUĞU ZİRVE",
-        m: "Eşikten içeri adım attığınız an, sizi sekizgen bir mimari formun ihtişamı ve gökyüzünü sembolize eden devasa **Merkezi Kubbe** karşılar. Burası, sesin ve suyun dahi bir mühendislikle şifaya dönüştüğü bir huzur mabedidir.\n\n🌊 **Akustik Mahremiyet (Şadırvan):**\nMerkezdeki sekizgen şadırvandan dökülen suyun ritmi, sadece bir melodi değil, aynı zamanda 'akustik bir perde'dir. Suyun sesi, koğuşlar arasında mekanik bir izolasyon sağlayarak hastalar için mutlak bir mahremiyet alanı oluşturur.\n\n🎶 **Haftada Üç Gün Musiki Terapisi:**\nŞadırvanın hemen arkasındaki **Musiki Sekisi**, şifanın melodiyle buluştuğu noktadır. 500 yıl önce, haftada üç gün on kişiden oluşan seçkin bir heyet; ney, ud ve kanun eşliğinde ruhun ihtiyacı olan makamları (Uykusuzluğa **Rehavi**, neşeye **Rast**) bu kubbenin altında yankılandırırdı.\n\n🛌 **6 Kışlık ve 4 Yazlık Oda Dengesi:**\nŞifahane, toplam 10 adet koğuşun merkezi alana açıldığı kusursuz bir yerleşime sahiptir:\n\n🏠 **6 Kapalı Koğuş (Kışlık Birimler):** Köşelerde yer alan, ahşap kapılı korunaklı alanlardır. Duvar içlerindeki **ocaklar** kışın sıcaklığı korurken, zarif **nişler** (duvar rafları) hastaların ilaç ve kişisel eşyalarını barındırır.\n\n🌤️ **4 Açık Eyvan (Yazlık Birimler):** Önü tamamen açık olan bu ferah bölümler, yaz aylarında serin hava akışını sağlarken suyun ve musikinin şifalı frekanslarını hiçbir engel olmadan içeri alır.\n\n🌿 **Holistik Tedavi:**\nYüksek pencerelerden süzülen ışık, gül bahçelerinden gelen esinti ve mermerin serinliği; burada **müzik, su sesi ve çiçek kokusunun** ilaçtan önce geldiği bütüncül bir tedavi anlayışını simgeler.",
-        q: "🌿 “Ruhunuzda bu kadim dinginliği taşıyarak, şimdi hekimlerin yetiştiği ilim yuvasına, Medreseye doğru ilerliyoruz.”",
-        btnNext: "Medrese Yoluna Dön ➡",
-        a: "audio/12.mp3",
-        g: ["img/12.jpg"]
-    },
-   {
-        t: "13.Durak:\n🏛️ İLİM YOLUNA DÖNÜŞ",
-        s: "🎓 ŞİFADAN BİLGİYE: MEDRESE EŞİĞİ",
-        m: "🌿 **Darüşşifa'dan Ayrılış:** Sekizgen kubbenin manevi atmosferinden, üzerinde 'Ya Şafi' (Ey Şifa Veren) ismiyle mühürlenmiş o görkemli kapıdan geçerek ayrılıyorsunuz. Yeniden İkinci Avlu’nun idari sükunetine dahil oluyorsunuz.\n\n🚪 **Akustik Eşiği Yeniden Geçiş:** Dış dünyanın sesini filtreleyen o dar ve basık kapıdan bu kez ters yöne geçerek, polikliniklerin hareketli dünyasına; Birinci Avlu’nun genişliğine ulaşıyorsunuz.\n\n🏛️ **Külliye Aksında İlerleyiş:** Sağınızda ve solunuzda kalan ihtisas odalarının ve Sunum Odası'nın önünden vakur adımlarla geçerek, Darüşşifa’nın ana taç kapısına yöneliyorsunuz.\n\n🌬️ **Mekânsal Yönelim:** Darüşşifa’nın ana kapısından dışarı süzüldüğünüzde, kendinizi yeniden külliyenin geniş giriş avlusunda bulursunuz. Şimdi şifanın uygulandığı yerden, bu şifanın ilminin üretildiği noktaya yöneliyoruz.\n\n📜 **İkiz Yapı: Medrese-i Etıbba:** Hemen solunuza baktığınızda, Darüşşifa ile mimari bir bütünlük içinde yükselen ve dönemin tıp fakültesi olan **Medrese-i Etıbba**, tüm ihtişamıyla sizi karşılar.",
-        q: "🎓 “Şifanın bilimle harmanlandığı, geleceğin hekimlerinin yetiştiği ilim yuvasına girmeye hazır mısınız?”",
-        btnNext: "Medreseye Adım At ➡",
-        a: "audio/13.mp3",
-        g: ["img/13.jpg"]
-    },
-{
-        t: "14.Durak:\n🎓 MEDRESE-İ ETİBBA (1.BÖLÜM)",
-        s: "HEKİMLERİN YETİŞTİĞİ OCAK",
-        m: "🏛️ **Medreseye Giriş: İlim Kapısından İçeri**\nMedresenin kapısından içeri girdiğiniz an, buranın Darüşşifa’dan farklı olarak daha akademik ve disiplinli bir atmosfere sahip olduğunu fark edebilirsiniz. Burası, dönemin en prestijli tıp fakültesidir.\n\n🌿 **Avlunun Yapısı**\nİçeri süzülüğünüzde sizi yine o aşina olduğunuz huzurlu, revaklı avlu karşılar. Tam ortada küçük ve zarif bir şadırvan bulunur. 💧 Su sesi burada da vardır; ancak bu kez:\n• Hastaları rahatlatmak için değil\n• Talebelerin zihnini berraklaştırmak için\n• Odalar arası ses geçişini yumuşatmak için kullanılır.\n\n🏠 **Eğitim Alanı Genel Düzeni**\nBu bölümde 18 adet oda bulunmaktadır. Avlunun etrafını çevreleyen küçük kapılı odalar tıp talebelerinin konakladığı ve ders çalıştığı “hücreler”dir.\nİçeride:\n• Ocaklar 🔥\n• Kitap nişleri 📖\nyer alır. Mum ışığında İbn-i Sina ve Razi eserlerini çalışan öğrencileri hayal edebilirsiniz.\n\n👨‍🏫 **Müderris Odası**\nSağ köşe tarafında yer alır. Derslerin planlandığı ve ilmin yönlendirildiği noktadır.\n\n📌 **GEÇİŞ NOKTASI**\nŞimdi avlunun daha akademik kalbini anlamış olarak, en önemli eğitim alanlarına doğru ilerliyoruz…",
-        q: "Akademik kalbe, dershanelere girmeye hazır mısınız?",
-        btnNext: "Eğitim Merkezlerine İlerle ➡",
-        a: "audio/14.mp3",
-        g: ["img/14.jpg"]
-    },
-    {
-        t: "15.Durak:\n🎓 MEDRESE-İ ETİBBA (2.BÖLÜM)",
-        s: "EĞİTİM MERKEZLERİ",
-        m: "📖 **Büyük Dershane (Ana Eğitim Alanı)**\nAvlunun en görkemli bölümüdür. Burası başmüderrisin ders anlattığı ana sınıftır. İçeride Hoca 👨‍🏫, Talebeler 👨‍🎓, Cerrahi aletler 🔪 ve Tıbbi bitkiler 🌿 üzerinde uygulamalı tartışmalar yapılırdı.\n\n📚 **Kütüphane Odası: Bilginin Hazinesi**\nBurası sadece bir kütüphane değildir; ilmin en kıymetli hazinelerinden biridir. Raflarda el yazması eserler, tıbbi kitaplar ve yılların bilgisini taşıyan metinler bulunur.\n\n📜 **Padişah Hediyeleri**\nBazı eserler Osmanlı padişahları tarafından gönderilmiş, bizzat mühürlenmiş ve külliyeye armağan edilmiştir. Bu mühürler, kitabın devlet tarafından korunan bir bilgi hazinesi olduğunu gösterir.\n\n🧪 **İlim ve Uygulama Birlikteliği**\nMedrese ile Darüşşifa’nın yakınlığı tesadüf değildir. Sistem:\n**📘 Öğren → 🏥 Gözlemle → ✋ Uygula**\nTalebeler teoriyi burada öğrenir, birkaç adım sonra Darüşşifa’da uygular. Böylece bilgi yaşayan bir deneyime dönüşür.\n\n🌿 **Avludan Ayrılış**\nMedresenin bu ilim dolu atmosferini geride bırakırken, şimdi yolculuğumuz bir sonraki durağa ilerleyiyor…",
-        q: "Külliyenin kalbine, cami meydanına çıkalım mı?",
-        btnNext: "Meydana Çıkış ➡",
-        a: "audio/15.mp3",
-        g: ["img/15.jpg"]
-    },
-    {
+ 
         t: "16.Durak:\n🎓 İMARETHANE YOLU",
         s: "KÜLLİYENİN KALBİNE BAKIŞ",
         m: "🚪 **Medrese-i Etıbba’dan Ayrılış**\nMedrese-i Etıbba’nın kapısından dışarı süzülüp, çıkış kapısının karşısında bulunan turnikeli kapıya doğru ilerleyebiliriz.\n\n🌿 **Turnikeden Sonra: Açık Alan ve Nefes**\nTurnikeyi geçtiğimizde geniş meydana çıkarız. Temiz havayı ciğerlerinize çekip rotamızı değiştiriyoruz.\n\n🏛️ **Külliyenin Kalbine Bakış**\nŞimdi sağımıza baktığımızda, külliyenin tüm yapılarını bir tespih tanesi gibi etrafında dizen o en heybetli yapıyı görebilirsiniz: **🕌 Sultan II. Bayezid Camii’nin taç kapısı**\n✔️ Cami ibadete açık ve halka açık bir camidir. Cami bölümü gezimizin son durağında ziyaret edilecektir.\n\n🚶‍♂️ **Yol Üzerindeki Yapılar**\nYolumuza düz devam ettiğimizde karşımızda iki büyük yapı karşılar:\n🏗️ Dik Karşımızdaki Yapılar: Konferans ve sergi alanı, Fırın bölümü, Kiler kısımları.\n\n➡️ **Yön Değişimi: İmarethane’ye Doğru**\nBiz yönümüzü sağımıza çeviriyoruz ve müzemizin 3. bölümü olan İmarethane’ye ulaşıyoruz.\n\n🚪 **İlk Kapıdan İçeri Giriş**\nİmarethanenin ilk kapısından içeri giriyoruz…",
