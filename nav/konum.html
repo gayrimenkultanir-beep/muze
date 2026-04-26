@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#f7f0e3">
+<title>Harita — Sultan II. Bayezid Külliyesi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<style>
+:root {
+  --bg:      #f7f0e3;
+  --surface: #ffffff;
+  --border:  rgba(160,120,60,0.22);
+  --gold:    #b8860b;
+  --gold-br: #d4a017;
+  --gold-lt: #e8c068;
+  --ink:     #1c1408;
+  --ink-mid: #4a3a1e;
+  --ink-soft:#7a6040;
+  --crimson: #8b1a1a;
+  --teal:    #1e5f5f;
+  --shadow:  0 4px 20px rgba(30,20,5,0.12);
+  --font-d:  'Cormorant Garamond', Georgia, serif;
+  --font-b:  'DM Sans', system-ui, sans-serif;
+  --r:       10px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box; margin:0; padding:0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width:100%; height:100%; overflow:hidden; position:fixed;
+  top:0; left:0;
+  font-family: var(--font-b);
+  background: var(--bg); color: var(--ink);
+}
+
+#app {
+  display:flex; flex-direction:column;
+  width:100%; height:100%; height:100dvh;
+}
+
+/* ── Header ─ */
+#header {
+  flex-shrink:0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  display:flex; align-items:center; gap:10px;
+  box-shadow: var(--shadow);
+  z-index:1000;
+}
+
+#back-btn {
+  width:36px; height:36px; border-radius:50%;
+  background:transparent; border:1.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:1rem; color:var(--ink-mid);
+  flex-shrink:0; transition: all .18s;
+  text-decoration:none;
+}
+#back-btn:hover { background:rgba(184,134,11,0.08); border-color:var(--gold); color:var(--gold); }
+
+#header-text { flex:1; min-width:0; }
+
+#header-title {
+  font-family: var(--font-d);
+  font-size: clamp(12px,3.5vw,16px);
+  font-weight:700; color:var(--gold);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+#header-sub {
+  font-size:9px; color:var(--ink-soft);
+  letter-spacing:.14em; text-transform:uppercase; margin-top:1px;
+}
+
+/* Compass */
+#compass-ring {
+  width:38px; height:38px; border-radius:50%;
+  border:1.5px solid var(--border);
+  background:var(--surface);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; position:relative; overflow:hidden;
+  box-shadow: var(--shadow);
+}
+#needle-wrap {
+  position:absolute; width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  transition: transform .3s ease;
+}
+#needle-wrap svg { width:24px; height:24px; }
+#compass-deg {
+  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  font-size:7px; color:var(--ink-soft); font-family:monospace;
+  background: rgba(247,240,227,0.8); padding:0 2px; border-radius:2px;
+}
+
+/* ── Map ─ */
+#map { flex:1; min-height:0; position:relative; z-index:1; }
+.leaflet-tile { filter: sepia(.25) brightness(.95) saturate(.8); }
+body.satellite .leaflet-tile { filter: brightness(.92) saturate(.9); }
+
+/* User marker */
+.u-wrap { display:flex; flex-direction:column; align-items:center; pointer-events:none; filter:drop-shadow(0 3px 10px rgba(0,0,0,.3)); }
+.u-arrow { width:0; height:0; border-left:8px solid transparent; border-right:8px solid transparent; border-bottom:24px solid var(--gold); animation:aPulse 2s infinite; }
+.u-dot   { width:10px; height:10px; border-radius:50%; background:var(--gold-lt); border:2px solid #fff; margin-top:2px; box-shadow:0 0 8px rgba(184,134,11,.8); }
+@keyframes aPulse { 0%,100%{filter:drop-shadow(0 0 4px rgba(184,134,11,.5))} 50%{filter:drop-shadow(0 0 14px rgba(184,134,11,1))} }
+
+/* Overlays */
+#tile-sw { position:absolute; top:10px; right:10px; z-index:500; display:flex; gap:5px; }
+.tile-btn {
+  padding:5px 10px; border-radius:var(--r); border:1.5px solid var(--border);
+  background:rgba(247,240,227,.92); color:var(--ink-soft);
+  font-size:10px; letter-spacing:.06em; cursor:pointer;
+  backdrop-filter:blur(6px); transition:all .18s; font-family:var(--font-b);
+}
+.tile-btn.active { color:var(--gold); background:rgba(247,240,227,.98); border-color:var(--gold); }
+
+#map-ctrl { position:absolute; top:48px; right:10px; z-index:500; display:flex; flex-direction:column; gap:5px; margin-top:5px; }
+.mctrl {
+  width:34px; height:34px; border-radius:var(--r);
+  border:1.5px solid var(--border); background:rgba(247,240,227,.92);
+  color:var(--gold); font-size:14px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(6px); transition:all .18s;
+}
+.mctrl:active { transform:scale(.94); }
+.mctrl.active { background:rgba(184,134,11,.12); border-color:var(--gold); }
+
+#hdg-label {
+  position:absolute; bottom:10px; left:50%; transform:translateX(-50%);
+  z-index:500; background:rgba(247,240,227,.88); border:1.5px solid var(--border);
+  border-radius:20px; padding:3px 12px;
+  font-size:9px; color:var(--ink-soft); letter-spacing:.1em; text-transform:uppercase;
+  white-space:nowrap; backdrop-filter:blur(6px);
+}
+
+/* ── Bottom panel ─ */
+#bottom-panel {
+  flex-shrink:0; background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:10px 14px max(10px,env(safe-area-inset-bottom));
+  z-index:1000; box-shadow:0 -4px 16px rgba(30,20,5,.08);
+}
+
+#loc-card {
+  background: rgba(184,134,11,.06);
+  border:1.5px solid var(--border);
+  border-radius:var(--r); padding:8px 12px; margin-bottom:8px;
+  min-height:54px; position:relative; overflow:hidden;
+  transition:border-color .35s;
+}
+#loc-card::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--zone-color,transparent); border-radius:var(--r) 0 0 var(--r);
+  transition:background .35s;
+}
+
+#loc-label { font-size:9px; letter-spacing:.18em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:3px; }
+#loc-name  { font-family:var(--font-d); font-size:clamp(12px,3.5vw,15px); color:var(--gold); line-height:1.3; transition:all .35s; }
+#loc-name.outside { color:var(--ink-soft); font-size:11px; font-family:var(--font-b); font-style:italic; }
+#loc-desc  { font-size:10px; color:var(--ink-mid); margin-top:2px; opacity:.8; font-style:italic; line-height:1.4; }
+
+#controls { display:flex; gap:8px; align-items:center; }
+#locate-btn {
+  flex:1; background:linear-gradient(135deg,var(--gold),var(--gold-br));
+  border:none; border-radius:var(--r); padding:11px 10px;
+  font-family:var(--font-b); font-size:clamp(12px,3.5vw,14px);
+  color:#fff; font-weight:600; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  box-shadow:0 4px 16px rgba(184,134,11,.3);
+  -webkit-appearance:none; transition:all .18s;
+}
+#locate-btn:active { transform:scale(.97); }
+#locate-btn.tracking { background:linear-gradient(135deg,var(--teal),#2d8a8a); box-shadow:0 4px 16px rgba(30,95,95,.3); }
+
+#sound-btn-map {
+  width:42px; height:42px; border-radius:50%;
+  background:var(--surface); border:1.5px solid var(--border);
+  font-size:1.2rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:var(--shadow); transition:all .18s; flex-shrink:0;
+  -webkit-appearance:none;
+}
+#sound-btn-map.muted { color:var(--ink-soft); }
+#sound-btn-map:hover { border-color:var(--gold); }
+
+#gps-status { font-size:9px; color:var(--ink-soft); margin-top:4px; letter-spacing:.06em; text-align:center; }
+
+/* ── Legend ─ */
+#legend-panel {
+  position:absolute; bottom:0; left:0; right:0; z-index:800;
+  background:var(--surface); border-top:1px solid var(--border);
+  border-radius:20px 20px 0 0;
+  padding:1rem 1rem 2rem;
+  transform:translateY(100%); transition:transform .35s cubic-bezier(.4,0,.2,1);
+  max-height:60dvh; overflow-y:auto; box-shadow:0 -8px 28px rgba(30,20,5,.12);
+}
+#legend-panel.open { transform:translateY(0); }
+
+.legend-title { font-family:var(--font-d); font-size:1rem; font-weight:700; color:var(--gold); margin-bottom:.75rem; }
+.legend-item { display:flex; align-items:center; gap:.6rem; padding:.45rem 0; border-bottom:1px solid var(--border); font-size:.82rem; color:var(--ink-mid); }
+.legend-dot { width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+.legend-toggle { position:absolute; top:10px; left:10px; z-index:500; }
+.ltoggle-btn {
+  padding:5px 10px; border-radius:var(--r); border:1.5px solid var(--border);
+  background:rgba(247,240,227,.92); color:var(--ink-mid);
+  font-size:10px; cursor:pointer; backdrop-filter:blur(6px); transition:all .18s;
+}
+
+/* ── Toast ─ */
+#toast {
+  position:fixed; bottom:calc(env(safe-area-inset-bottom,16px)+80px); left:50%;
+  transform:translateX(-50%) translateY(60px); opacity:0;
+  background:var(--ink); color:var(--bg); padding:.55rem 1.2rem;
+  border-radius:20px; font-size:.78rem; z-index:3000;
+  transition:transform .3s,opacity .3s; pointer-events:none;
+  white-space:nowrap; max-width:88vw; text-align:center;
+}
+#toast.show { transform:translateX(-50%) translateY(0); opacity:1; }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Header -->
+  <div id="header">
+    <a id="back-btn" href="rehber.html" aria-label="Rehbere dön">←</a>
+    <div id="header-text">
+      <div id="header-title">Sultan II. Bayezid Külliyesi</div>
+      <div id="header-sub">Canlı Konum Haritası</div>
+    </div>
+    <div id="compass-ring" aria-label="Pusula">
+      <div id="needle-wrap">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L15 10H9L12 2Z" fill="#b8860b"/>
+          <path d="M12 22L9 14H15L12 22Z" fill="#7a6040"/>
+          <circle cx="12" cy="12" r="2" fill="#1c1408"/>
+        </svg>
+      </div>
+      <div id="compass-deg">—°</div>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div id="map" aria-label="Külliye haritası"></div>
+
+  <!-- Tile switcher -->
+  <div id="tile-sw">
+    <button class="tile-btn active" id="btn-street" onclick="switchTile('street')">Harita</button>
+    <button class="tile-btn" id="btn-sat"    onclick="switchTile('sat')">Uydu</button>
+  </div>
+
+  <!-- Map controls -->
+  <div id="map-ctrl">
+    <button class="mctrl active" id="orient-btn" onclick="toggleOrient()" aria-label="Yön kilidi" title="Yön Kilidi">↑</button>
+    <button class="mctrl"        id="center-btn" onclick="recenterMap()"   aria-label="Konumu ortala" title="Ortala">⊕</button>
+  </div>
+
+  <!-- Legend toggle -->
+  <div class="legend-toggle">
+    <button class="ltoggle-btn" onclick="toggleLegend()" aria-label="Bölge listesi">🗂 Bölgeler</button>
+  </div>
+
+  <!-- Heading label -->
+  <div id="hdg-label">Harita yükleniyor…</div>
+
+  <!-- Bottom panel -->
+  <div id="bottom-panel">
+    <div id="loc-card">
+      <div id="loc-label">ŞU AN BULUNDUĞUNUZ YER</div>
+      <div id="loc-name" class="outside">Konum bekleniyor…</div>
+      <div id="loc-desc"></div>
+    </div>
+    <div id="controls">
+      <button id="locate-btn" onclick="startTracking()" aria-label="Konumu göster">
+        <span>◎</span> Konumumu Göster
+      </button>
+      <button id="sound-btn-map" onclick="toggleSound()" aria-label="Sesli rehber">🔊</button>
+    </div>
+    <div id="gps-status">Takip başlatılmadı</div>
+  </div>
+
+  <!-- Legend panel -->
+  <div id="legend-panel">
+    <div class="legend-title">🗺️ Külliye Bölgeleri</div>
+    <div id="legend-items"></div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ── Külliye Bölgeleri ────────────────────────────────────── */
+const KULLIYE_CENTER = [41.6775, 26.5557];
+
+const ZONES = [
+  { id:'giris',    name:'Müze Girişi',        color:'#1e5f5f', announce:'Müze girişindesiniz. Bilet gişesini geçip ön bahçeye ilerleyebilirsiniz.',
+    poly:[[41.67820,26.55480],[41.67850,26.55510],[41.67830,26.55540],[41.67800,26.55510]] },
+  { id:'daruss1',  name:'Darüşşifa 1. Avlu',  color:'#b8860b', announce:'Darüşşifanın birinci avlusundasınız. Poliklinik odaları sağınızda, hizmet birimleri solunuzdadır.',
+    poly:[[41.67840,26.55420],[41.67870,26.55460],[41.67850,26.55490],[41.67820,26.55460]] },
+  { id:'daruss2',  name:'Büyük Şifahane',      color:'#c9962a', announce:'Büyük Şifahane, yani sekizgen bölümündesiniz. Ortadaki şadırvanın sesine kulak verin.',
+    poly:[[41.67870,26.55390],[41.67900,26.55430],[41.67880,26.55460],[41.67850,26.55420]] },
+  { id:'medrese',  name:'Tıp Medresesi',       color:'#5a8a3a', announce:'Tıp Medresesindesiniz. Osmanlı hekimleri burada eğitim alırdı.',
+    poly:[[41.67800,26.55380],[41.67830,26.55420],[41.67810,26.55450],[41.67780,26.55410]] },
+  { id:'bahce',    name:'Külliye Bahçesi',     color:'#8aab4a', announce:'Külliyenin asırlık çınar ağaçlarıyla dolu bahçesindesiniz.',
+    poly:[[41.67750,26.55430],[41.67790,26.55480],[41.67770,26.55510],[41.67730,26.55460]] },
+  { id:'imaret',   name:'İmarethane',          color:'#c97a2a', announce:'İmarethanedeysiniz. Yahya Baba\'nın efsanevi kazanlarının olduğu mutfak bu yapıdadır.',
+    poly:[[41.67730,26.55470],[41.67760,26.55510],[41.67740,26.55540],[41.67710,26.55500]] },
+  { id:'cami',     name:'Sultan Camii',        color:'#8b1a1a', announce:'Caminin muhteşem avlusundasınız. Tek kubbe ve şadırvanlı avlusuyla dikkat çeker.',
+    poly:[[41.67780,26.55490],[41.67820,26.55540],[41.67800,26.55570],[41.67760,26.55520]] },
+  { id:'gonul',    name:'Gönül Köprüsü',       color:'#2d5a8a', announce:'Ziyaretçi defteri alanındasınız. Düşüncelerinizi dijital rehberden paylaşabilirsiniz.',
+    poly:[[41.67710,26.55440],[41.67740,26.55480],[41.67720,26.55500],[41.67690,26.55460]] },
+];
+
+/* ── Harita Init ──────────────────────────────────────────── */
+const map = L.map('map', { zoomControl:false, attributionControl:false });
+
+const TILES = {
+  street: L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom:20 }),
+  sat:    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom:20 })
+};
+
+TILES.street.addTo(map);
+map.flyTo(KULLIYE_CENTER, 18, { duration:1 });
+
+let activeTile = 'street';
+function switchTile(type) {
+  if (type === activeTile) return;
+  map.removeLayer(TILES[activeTile]);
+  TILES[type].addTo(map);
+  activeTile = type;
+  document.getElementById('btn-street').classList.toggle('active', type==='street');
+  document.getElementById('btn-sat').classList.toggle('active', type==='sat');
+  document.body.classList.toggle('satellite', type==='sat');
+}
+
+/* ── Zone polygons ────────────────────────────────────────── */
+const polyLayers = {};
+ZONES.forEach(z => {
+  polyLayers[z.id] = L.polygon(z.poly, {
+    color:z.color, fillColor:z.color, fillOpacity:.12, weight:2, opacity:.6
+  }).addTo(map).bindTooltip(z.name, { permanent:false, direction:'center' });
+});
+
+function findZone(lat, lon) {
+  return ZONES.find(z => {
+    const ll = z.poly.map(([a,b]) => [a,b]);
+    return pointInPolygon([lat,lon], ll);
+  }) || null;
+}
+
+function pointInPolygon([y, x], poly) {
+  let inside = false;
+  for (let i=0, j=poly.length-1; i<poly.length; j=i++) {
+    const [yi,xi] = poly[i], [yj,xj] = poly[j];
+    if (((yi>y)!=(yj>y)) && (x<(xj-xi)*(y-yi)/(yj-yi)+xi)) inside=!inside;
+  }
+  return inside;
+}
+
+function highlightZone(zone) {
+  Object.values(polyLayers).forEach(l => l.setStyle({ weight:2, fillOpacity:.12 }));
+  if (zone && polyLayers[zone.id]) {
+    polyLayers[zone.id].setStyle({ weight:3, fillOpacity:.28 });
+  }
+}
+
+function updateCard(zone) {
+  const nameEl = document.getElementById('loc-name');
+  const descEl = document.getElementById('loc-desc');
+  const card   = document.getElementById('loc-card');
+  if (zone) {
+    nameEl.textContent = zone.name;
+    nameEl.className   = '';
+    descEl.textContent = zone.announce.split('.')[0] + '.';
+    card.style.setProperty('--zone-color', zone.color);
+    nameEl.style.color = zone.color;
+  } else {
+    nameEl.textContent = 'Külliye dışındasınız';
+    nameEl.className   = 'outside';
+    descEl.textContent = 'Külliye sınırları içine girdiğinizde konum bilgisi güncellenir.';
+    card.style.setProperty('--zone-color','transparent');
+    nameEl.style.color = '';
+  }
+}
+
+/* ── Legend ───────────────────────────────────────────────── */
+const legItems = document.getElementById('legend-items');
+ZONES.forEach(z => {
+  legItems.innerHTML += `<div class="legend-item">
+    <div class="legend-dot" style="background:${z.color}"></div>
+    <span>${z.name}</span>
+  </div>`;
+});
+
+function toggleLegend() {
+  document.getElementById('legend-panel').classList.toggle('open');
+}
+
+/* ── Compass / Orientation ────────────────────────────────── */
+let currentHeading = 0;
+let orientMode     = true;
+
+function setHeading(deg) {
+  currentHeading = deg;
+  document.getElementById('needle-wrap').style.transform = `rotate(${deg}deg)`;
+  document.getElementById('compass-deg').textContent     = Math.round(deg) + '°';
+  if (orientMode) applyMapRotation(deg);
+}
+
+function applyMapRotation(deg) {
+  map.getContainer().style.transform = `rotate(${-deg}deg)`;
+  map.getContainer().style.transformOrigin = '50% 50%';
+  document.getElementById('tile-sw').style.transform    = `rotate(${deg}deg)`;
+  document.getElementById('map-ctrl').style.transform   = `rotate(${deg}deg)`;
+  document.getElementById('hdg-label').style.transform  = `translateX(-50%) rotate(${deg}deg)`;
+  document.querySelector('.legend-toggle').style.transform = `rotate(${deg}deg)`;
+}
+
+function toggleOrient() {
+  orientMode = !orientMode;
+  document.getElementById('orient-btn').classList.toggle('active', orientMode);
+  if (!orientMode) {
+    map.getContainer().style.transform = '';
+    applyMapRotation(0);
+    showToast('Kuzey yukarı — sabit');
+  } else {
+    applyMapRotation(currentHeading);
+    showToast('Yön kilidi açık');
+  }
+}
+
+function recenterMap() {
+  if (lastLat !== null) map.flyTo([lastLat,lastLon], 19, { duration:.7 });
+  else map.flyTo(KULLIYE_CENTER, 18, { duration:.7 });
+}
+
+/* ── User Marker ──────────────────────────────────────────── */
+const userIcon = L.divIcon({
+  className:'',
+  html:`<div class="u-wrap"><div class="u-arrow"></div><div class="u-dot"></div></div>`,
+  iconSize:[16,36], iconAnchor:[8,33]
+});
+
+let userMarker=null, accCircle=null;
+
+function updateUserMarker(lat,lon,acc) {
+  if (!userMarker) {
+    userMarker = L.marker([lat,lon],{icon:userIcon,zIndexOffset:1000,interactive:false}).addTo(map);
+  } else { userMarker.setLatLng([lat,lon]); }
+  if (!accCircle) {
+    accCircle = L.circle([lat,lon],{radius:acc,color:' rgba(184,134,11,.5)',fillColor:'rgba(184,134,11,.08)',fillOpacity:1,weight:1.2,interactive:false}).addTo(map);
+  } else { accCircle.setLatLng([lat,lon]); accCircle.setRadius(acc); }
+}
+
+/* ── GPS ──────────────────────────────────────────────────── */
+let isTracking=false, watchId=null;
+let lastLat=null, lastLon=null, lastSpoken='';
+let deviceHeadingAvailable=false;
+
+function startTracking() {
+  if (isTracking) { stopTracking(); return; }
+  if (!navigator.geolocation) { showToast('Tarayıcınız konum desteklemiyor'); return; }
+
+  document.getElementById('gps-status').textContent = 'GPS sinyali aranıyor…';
+  watchId = navigator.geolocation.watchPosition(onPos, onErr, { enableHighAccuracy:true, timeout:15000, maximumAge:1000 });
+  isTracking = true;
+
+  const btn = document.getElementById('locate-btn');
+  btn.classList.add('tracking');
+  btn.innerHTML = '<span>◉</span> Takip Aktif';
+
+  initOrientation();
+  speak('Konum takibi başladı. Külliye içinde ilerlediğinizde harita yönünüze göre döner.');
+}
+
+function stopTracking() {
+  if (watchId!==null) { navigator.geolocation.clearWatch(watchId); watchId=null; }
+  isTracking=false;
+  const btn = document.getElementById('locate-btn');
+  btn.classList.remove('tracking');
+  btn.innerHTML = '<span>◎</span> Konumumu Göster';
+  if (userMarker) { map.removeLayer(userMarker); userMarker=null; }
+  if (accCircle)  { map.removeLayer(accCircle);  accCircle=null; }
+  document.getElementById('gps-status').textContent = 'Takip durduruldu';
+  lastLat=null; lastLon=null; currentHeading=0;
+  if (orientMode) applyMapRotation(0);
+  document.getElementById('needle-wrap').style.transform='rotate(0deg)';
+  document.getElementById('compass-deg').textContent='—°';
+}
+
+function onPos(pos) {
+  const {latitude:lat, longitude:lon, accuracy:acc, heading:h, speed:sp} = pos.coords;
+
+  if (h!==null&&!isNaN(h)&&sp>0.3&&!deviceHeadingAvailable) setHeading(h);
+
+  if (lastLat!==null&&!deviceHeadingAvailable) {
+    const dy=(lat-lastLat)*111320, dx=(lon-lastLon)*111320*Math.cos(lat*Math.PI/180);
+    if (Math.sqrt(dx*dx+dy*dy)>0.5) setHeading((Math.atan2(dx,dy)*180/Math.PI+360)%360);
+  }
+
+  lastLat=lat; lastLon=lon;
+  updateUserMarker(lat,lon,acc);
+  map.setView([lat,lon], map.getZoom(), { animate:true, duration:.5 });
+
+  const zone = findZone(lat,lon);
+  highlightZone(zone);
+  updateCard(zone);
+  announceZone(zone);
+
+  const accTxt = acc<10?'✦ Mükemmel':acc<20?'✦ İyi':acc<50?'◇ Orta':'○ Zayıf';
+  document.getElementById('gps-status').textContent = `${accTxt} GPS · ±${Math.round(acc)}m · ${Math.round(currentHeading)}°`;
+  document.getElementById('hdg-label').textContent  = `GPS aktif · ${Math.round(currentHeading)}° · ±${Math.round(acc)}m`;
+}
+
+function onErr(err) {
+  const m = {1:'Konum izni verilmedi',2:'GPS sinyali alınamıyor',3:'Zaman aşımı'}[err.code]||'Konum alınamadı';
+  document.getElementById('gps-status').textContent = m;
+  showToast(m);
+}
+
+/* ── Device Orientation ───────────────────────────────────── */
+function initOrientation() {
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    DeviceOrientationEvent.requestPermission()
+      .then(s => { if(s==='granted') listenOri(); }).catch(()=>{});
+  } else if (typeof DeviceOrientationEvent !== 'undefined') {
+    listenOri();
+  }
+}
+
+function listenOri() {
+  let wk=false;
+  window.addEventListener('deviceorientationabsolute', e=>{
+    if(e.alpha!==null&&e.absolute){deviceHeadingAvailable=true;setHeading((360-e.alpha+360)%360);}
+  },true);
+  window.addEventListener('deviceorientation', e=>{
+    if(e.webkitCompassHeading!==undefined&&e.webkitCompassHeading!==null){wk=true;deviceHeadingAvailable=true;setHeading(e.webkitCompassHeading);}
+    else if(!wk&&e.absolute&&e.alpha!==null){deviceHeadingAvailable=true;setHeading((360-e.alpha+360)%360);}
+  },true);
+}
+
+/* ── Map click simulation ────────────────────────────────── */
+let simLat=null, simLon=null;
+map.on('click', e=>{
+  if(isTracking) return;
+  document.getElementById('legend-panel').classList.remove('open');
+  const {lat,lng:lon}=e.latlng;
+  if(simLat!==null){
+    const dy=(lat-simLat)*111320,dx=(lon-simLon)*111320*Math.cos(lat*Math.PI/180);
+    if(Math.sqrt(dx*dx+dy*dy)>0.3) setHeading((Math.atan2(dx,dy)*180/Math.PI+360)%360);
+  }
+  simLat=lat; simLon=lon;
+  updateUserMarker(lat,lon,5);
+  const zone=findZone(lat,lon);
+  highlightZone(zone); updateCard(zone); announceZone(zone);
+  document.getElementById('hdg-label').textContent=`Simülasyon · ${lat.toFixed(5)},${lon.toFixed(5)}`;
+  document.getElementById('gps-status').textContent=`Simülasyon · ${Math.round(currentHeading)}°`;
+});
+
+/* ── Zone announce ────────────────────────────────────────── */
+function announceZone(zone) {
+  const key = zone ? zone.id : 'outside';
+  if (key === lastSpoken) return;
+  lastSpoken = key;
+  if (zone) setTimeout(()=>speak(`Şu an ${zone.announce}`), 300);
+}
+
+/* ── Speech ───────────────────────────────────────────────── */
+let soundOn = localStorage.getItem('audioMuted') !== 'true';
+
+function speak(text) {
+  if (!soundOn || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'tr-TR'; u.rate = 0.92;
+  const voices = window.speechSynthesis.getVoices();
+  const tr = voices.find(v=>v.lang.startsWith('tr'));
+  if(tr) u.voice=tr;
+  window.speechSynthesis.speak(u);
+}
+
+if('speechSynthesis' in window){
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener('voiceschanged',()=>window.speechSynthesis.getVoices());
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  localStorage.setItem('audioMuted', !soundOn);
+  const btn = document.getElementById('sound-btn-map');
+  btn.textContent = soundOn ? '🔊' : '🔇';
+  btn.classList.toggle('muted', !soundOn);
+  showToast(soundOn ? 'Sesli rehber açık' : 'Sesli rehber kapalı');
+}
+
+// Sync with main app mute state
+document.getElementById('sound-btn-map').textContent = soundOn ? '🔊' : '🔇';
+
+/* ── Toast ────────────────────────────────────────────────── */
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+/* Init */
+document.getElementById('orient-btn').classList.add('active');
+map.flyTo(KULLIYE_CENTER, 18, { duration:1.2 });
+</script>
+</body>
+</html>

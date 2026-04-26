@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#f7f0e3">
+  <meta name="description" content="Sultan II. Bayezid Külliyesi Sağlık Müzesi Dijital Rehberi">
+  <title>Sultan II. Bayezid Külliyesi | Dijital Rehber</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────────────────────
+     GLOBAL CONTROLS (persistent across all screens)
+───────────────────────────────────────────────────────────── -->
+
+<!-- Hamburger menü butonu -->
+<button id="menu-btn" aria-label="Menüyü aç" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Ses butonu -->
+<button id="sound-btn" aria-label="Ses aç/kapat">
+  <i id="vol-icon" class="fas fa-volume-high"></i>
+</button>
+
+<!-- Müzik efekti sesi -->
+<audio id="seal-sound" src="assets/audio/muhur.mp3" preload="auto"></audio>
+
+<!-- Ana tur sesi -->
+<audio id="audio-player" preload="auto"></audio>
+
+<!-- Toast bildirimi -->
+<div id="toast" role="status" aria-live="polite"></div>
+
+<!-- ─────────────────────────────────────────────────────────
+     NAV DRAWER
+───────────────────────────────────────────────────────────── -->
+<div id="nav-overlay" role="presentation" aria-hidden="true"></div>
+
+<nav id="nav-drawer" role="navigation" aria-label="Ana menü" aria-hidden="true">
+  <div class="nav-header">
+    <h3>🏛️ Sultan II. Bayezid Külliyesi</h3>
+    <small>Dijital Rehber</small>
+  </div>
+  <div class="nav-items" id="nav-items" role="menu"></div>
+
+  <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border); margin-top: auto;">
+    <!-- Konum sayfası linki -->
+    <a href="konum3.html"
+       style="display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--ink-soft);padding:.6rem 0;"
+       aria-label="Harita ve konumuma git">
+      <span>🗺️</span> Harita &amp; Konum
+    </a>
+  </div>
+</nav>
+
+<!-- ─────────────────────────────────────────────────────────
+     SCREEN 1 — GİRİŞ
+───────────────────────────────────────────────────────────── -->
+<section id="screen-intro" class="screen active-screen" aria-label="Müze girişi">
+
+  <!-- Dairesel video / görsel -->
+  <div class="intro-video-wrap" aria-hidden="true">
+    <video autoplay muted loop playsinline poster="assets/img/intro.webp"
+           aria-label="Külliye tanıtım videosu">
+      <source src="assets/video/intro.mp4" type="video/mp4">
+      <!-- Fallback -->
+      <div class="intro-placeholder">🏛️</div>
+    </video>
+  </div>
+
+  <!-- Metin -->
+  <div class="intro-content">
+    <h1>🏛️ <em>Eşiğe Davet</em></h1>
+    <p class="intro-tagline">
+      Zamanın ötesine, şifanın merkezine<br>bir yolculuk…
+    </p>
+    <div class="intro-divider" aria-hidden="true"></div>
+    <button id="btn-start" class="btn btn-primary intro-pulse"
+            aria-label="Sesli tura başla">
+      YOLCULUĞA BAŞLA
+    </button>
+  </div>
+
+</section>
+
+<!-- ─────────────────────────────────────────────────────────
+     SCREEN 2 — TUR
+───────────────────────────────────────────────────────────── -->
+<section id="screen-tour" class="screen" aria-label="Sesli tur ekranı">
+
+  <!-- ── Zaman Çizelgesi (sabit üst bar) ── -->
+  <div id="timeline-band" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+
+    <div id="tl-row1">
+      <span id="tl-section-name"></span>
+      <span id="tl-counter"></span>
+    </div>
+
+    <div id="tl-track" aria-hidden="true">
+      <div id="tl-fill"></div>
+    </div>
+
+    <div id="tl-row3">
+      <span id="tl-prev" class="tl-side tl-prev"></span>
+      <span id="tl-pct"></span>
+      <span id="tl-next" class="tl-side tl-next"></span>
+    </div>
+
+  </div>
+  <!-- /timeline -->
+
+  <!-- ── Tur kartı ── -->
+  <article class="tour-card" aria-live="polite">
+
+    <h2 id="step-title" class="step-title"></h2>
+    <span id="step-subtitle" class="step-subtitle"></span>
+
+    <div class="text-content" id="text-content"></div>
+
+    <div class="question-box" id="step-question"></div>
+
+    <!-- Navigasyon -->
+    <div class="nav-controls">
+      <button id="btn-prev" class="btn btn-secondary"
+              aria-label="Önceki adım" style="visibility:hidden">
+        ⬅ Geri
+      </button>
+      <button id="btn-next" class="btn btn-primary"
+              aria-label="Sonraki adım">
+        İleri ➡
+      </button>
+    </div>
+
+    <!-- Galeri -->
+    <div id="gallery-target" aria-label="Durak görselleri"></div>
+
+  </article>
+
+  <!-- Evliya Çelebi karakteri -->
+  <div id="evliya-wrap" aria-hidden="true">
+    <div id="evliya-bubble"></div>
+    <div id="evliya-char">🧙‍♂️</div>
+  </div>
+
+</section>
+
+<!-- ─────────────────────────────────────────────────────────
+     SCREEN 3 — GÖNÜL KÖPRÜSÜ
+───────────────────────────────────────────────────────────── -->
+<section id="screen-guestbook" class="screen" aria-label="Ziyaretçi defteri">
+
+  <div class="guestbook-wrap">
+
+    <h2>🖋️ Gönül Köprüsü: Ziyaretçi Defteri</h2>
+
+    <p class="guestbook-desc">
+      "Geçmişin şifası, bugünün kelimeleriyle buluşuyor."<br><br>
+      Külliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri
+      duymayı çok isteriz. Kelimeleriniz bu köprünün birer taşı olacak.
+    </p>
+
+    <!-- Form -->
+    <form class="gb-form" onsubmit="return false;" aria-label="Not bırak formu" novalidate>
+      <div class="form-row">
+        <input type="text"  id="gb-name" placeholder="Adınız Soyadınız"
+               autocomplete="name" aria-label="Adınız">
+        <input type="text"  id="gb-city" placeholder="Geldiğiniz Şehir"
+               autocomplete="address-level2" aria-label="Şehriniz">
+      </div>
+      <textarea id="gb-text" placeholder="Duygularınızı buraya bırakın…"
+                aria-label="Mesajınız" rows="5"></textarea>
+      <button id="btn-send" type="button" class="btn btn-send"
+              aria-label="Notunuzu gönderin">
+        KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM
+      </button>
+    </form>
+
+    <div class="ottodiv" aria-hidden="true">— ✦ —</div>
+
+    <!-- Mesaj listesi -->
+    <div class="msg-list-section">
+      <h3 class="msg-section-title">
+        📜 Son Mesajlar
+        <small>Gönül Köprüsü'nden sesler</small>
+      </h3>
+      <div id="list-target" aria-live="polite" aria-label="Ziyaretçi mesajları"></div>
+      <div id="page-target" class="pagination" role="navigation" aria-label="Sayfalama"></div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ─────────────────────────────────────────────────────────
+     AI SORU-CEVAP PANELİ
+───────────────────────────────────────────────────────────── -->
+<div id="ai-panel" role="dialog" aria-label="Rehber soru-cevap" aria-modal="true" aria-hidden="true">
+  <div class="ai-handle" role="presentation"></div>
+  <div class="ai-header">
+    <h4>🏛️ Rehbere Sor</h4>
+    <button id="ai-close-btn" aria-label="Paneli kapat">✕</button>
+  </div>
+  <div id="ai-messages" aria-live="polite" aria-label="Rehber yanıtları"></div>
+  <div id="ai-input-area">
+    <input type="text" id="ai-input"
+           placeholder="Külliye hakkında bir şey sorun…"
+           aria-label="Soru girin"
+           autocomplete="off">
+    <button id="ai-send-btn" aria-label="Gönder">➤</button>
+  </div>
+</div>
+
+<!-- AI aç/kapat FAB -->
+<button id="ai-fab" class="hidden" aria-label="Rehbere soru sor" title="Rehbere Sor">
+  💬
+</button>
+
+<!-- ─────────────────────────────────────────────────────────
+     BAŞARI POPUP
+───────────────────────────────────────────────────────────── -->
+<div id="success-popup" role="alertdialog" aria-modal="true" aria-label="Başarı bildirimi">
+  <div class="popup-content">
+    <div class="popup-seal" aria-hidden="true">✨</div>
+    <p id="success-msg"></p>
+    <button id="popup-close" class="btn btn-primary" aria-label="Kapat">
+      Şifanız Bol Olsun
+    </button>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────
+     FIREBASE CONFIG
+───────────────────────────────────────────────────────────── -->
+<script>
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDXbfeuczA_aOJcB7YegqrGK29yaWHD-PM",
+    authDomain:        "edirnesaglikmuze.firebaseapp.com",
+    projectId:         "edirnesaglikmuze",
+    storageBucket:     "edirnesaglikmuze.firebasestorage.app",
+    messagingSenderId: "707402210781",
+    appId:             "1:707402210781:web:fb65c71ca2557575e4aa34"
+  };
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+  const db = firebase.firestore();
+</script>
+
+<!-- ─────────────────────────────────────────────────────────
+     SCRIPTS (sıralı yükleme)
+───────────────────────────────────────────────────────────── -->
+<script src="js/content.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/navigation.js"></script>
+<script src="js/ai.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
