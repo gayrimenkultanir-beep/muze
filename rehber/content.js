@@ -65,123 +65,17 @@ const tourData = [
         a: "audio/rehber-7.mp3",
         g: ["img/16.jpg"]
     },
-   
-
-
-
-
-
-   
-   {
-        t: "So:\n🍲 İMARETHANE",
-        s: "BEREKETİN VE PAYLAŞMANIN KALBİ",
-        m: "🏛️ **İmaretin Ruhu**\nII. Bayezid Külliyesi içinde yer alan İmarethane, sadece yemek yapılan bir yer değil; paylaşmanın, dayanışmanın ve bereketin merkeziydi.\n\n🍞 **İçeri İlk Adım: Sıcaklığın Başlangıcı**\nİçeriye adım attığımızda bizi Mutfak bölümü ve hemen sağında toplu yemek bölümü karşılar. Burada farklı bir sıcaklık vardır… 🔥 Bu sıcaklık sadece ateşten değil, insanlıktan gelir.\n\n🌿 **Sosyal Adaletin Yaşayan Hali**\nOsmanlı’nın sosyal adalet anlayışının ete kemiğe bürünmüş halidir. 🎯 Temel amaç:\n• 🎓 Külliyede eğitim gören öğrenciler\n• 🏥 Tedavi gören hastalar\n• 🧑‍🍳 Çalışan personel\n• 🧳 Yolcular\n• 🤲 Yoksullar ve kimsesizler\nhiçbir ücret ödemeden karınlarını doyurabilsin diye kurulmuştur.\n\n🍲 **500 Yıl Önceki Sofra Düzeni**\nHer gün binlerce kişilik sofralar kurulur, din ve dil ayrımı yapılmazdı. Herkese bir tas sıcak çorba 🥣 ve taze ekmek 🍞 ikram edilirdi.\n\n🏭 **Mutfak Bölümü (Meşkhane)**\nGelin şimdi bu devasa yapının mutfak bölümünü gezelim…\n\n🔥 **Dev Kazanlar (Kuşhaneler)**\nKapıdan içeri süzüldüğünüzde en geniş ve en heybetli alan sizi karşılar. Ocağın üzerinde dev bakır kazanlar 🪔 yer alır. Bu kazanlarda pirinç çorbası, buğday çorbası ve etli yemekler gün doğmadan kaynamaya başlardı.\n\n🌬️ **Bacalar Sistemi**\nBaşınızı yukarı kaldırdığınızda yüksek bacalar 🏗️ görülür. Bu sistem dumanı dışarı atar, ısıyı dengeler ve aşçıların rahat çalışmasını sağlar.\n\n🪨 **Hazırlık Tezgahları**\nMermer ve taş tezgâhlarda binlerce kişilik yemek hazırlıkları, malzeme ayrımları ve günlük üretim düzeni yapılırdı.",
-        q: "Şimdi yemeklerin sunulduğu Yemekhane ve Kiler bölümlerine bakalım mı?",
-        btnNext: "Yemekhane ve Kilere Geç ➡",
-        a: "audio/17.mp3",
-        g: ["img/17.jpg"]
-    },
-{
-        t: "18.Durak:\n🏛️ İMARETHANE",
-        s: "SOSYAL DEVLETİN VE BEREKETİN MERKEZİ",
-        m: "🔥 **Kazanın Hiç Sönmeyen Ateşi**\nBüyük bakır kazanlar, günün ilk ışıklarıyla kaynamaya başlar… İçinde çorbalar, yemekler, şifalı gıdalar hazırlanır. Bu ocak kolay kolay sönmez. Çünkü burada yemek, sadece ihtiyaç değil; bir görevdir.\n\n👨‍🍳 **Herkes İçin Sofra**\nİmarethanede sadece darüşşifa hastaları değil; yolcular, fakirler, medrese öğrencileri ve çalışanlar da yemek yerdi. Kim olduğunuz önemli değildi… Açsanız, burada yeriniz vardı.\n\n🍞 **Düzenli ve Adil Dağıtım**\nYemekler belirli bir düzen içinde dağıtılırdı. Herkese eşit şekilde ulaşması sağlanırdı. Bu düzen, Osmanlı’nın sosyal adalet anlayışının bir yansımasıydı.\n\n🌿 **Şifa ve Beslenme Bir Arada**\nDarüşşifa hastaları için hazırlanan yemekler özel olurdu. Hafif, dengeli ve iyileştirici gıdalar tercih edilirdi. Çünkü burada yemek, tedavinin bir parçasıydı.\n\n✨ **Sonuç: Bir Tabak Yemekten Fazlası**\nİmarethane sadece karın doyurmazdı… İnsana değer verildiğini hissettirirdi. Burada paylaşılan her lokma, birlikteliğin, merhametin ve bereketin simgesiydi.",
-        q: "İmaretin diğer temel bölümlerini ve mutfağın kalbini görmeye hazır mısınız?",
-        btnNext: "Mutfak ve Kilere İlerle ➡",
-        a: "audio/18.mp3",
-        g: ["img/18.jpg"]
-    },
-    {
-        t: "19.Durak:\n🏛️ İMARETHANE (DEVAM)",
-        s: "İMARETİN TEMEL BÖLÜMLERİ",
-        m: "🍽️ **Yemekhane (Me’kel)**\nYemeklerin servis edildiği ve bazen de hızlıca tüketildiği alandır.\n📌 **Düzen:** Talebeler ve görevliler belli bir nizam içinde yemeklerini alır, odalarına veya ortak alanlara geçerlerdi.\n🍃 **Sofra Adabı:** Burada sadece karınlar doymaz, aynı zamanda bir nezaket ve şükür kültürü de yaşatılırdı.\n\n🥖 **İmaretin Diğer Temel Bölümleri**\n\n🔥 **Ekmek Fırını (Fırın-ı Has)**\nMutfağın hemen bitişiğinde, mis gibi taze ekmek kokularının yükseldiği bölümdür.\n🍞 **Pişirme Alanı:** Külliyenin kendi buğdayının un haline gelip burada “fodula” adı verilen özel ekmeklere dönüştüğü yerdir.\n⚖️ **Önemi:** Ekmek gramajı ve kalitesi bizzat vakıf denetçileri tarafından kontrol edilirdi; amaç herkese eşit ve en kaliteli ekmeği ulaştırmaktı.\n\n🏺 **Kiler ve Erzak Depoları**\nİmaretin en serin ve en korunaklı bölümleridir.\n📦 **Malzeme Zenginliği:** Derin nişlerde çuvallarla pirinç, mercimek, nohut; küplerle zeytinyağı saklanırdı.\n🏗️ **Lojistik Mucize:** Ürünlerin bozulmadan nasıl muhafaza edildiğini duvarlardaki havalandırma deliklerinden anlayabilirsiniz.\n\n🐴 **Odunluk ve Ahır Bölümleri**\n🔥 **Enerji Kaynağı:** Devasa ocakların sönmemesi için gereken tonlarca odun burada istiflenirdi.\n\n✨ **SON MESAJ**\nİmaretin ocağından yükselen bereketi ve paylaşım ruhunu hissettiyseniz; artık bu muazzam yolculuğun sonuna yaklaşmış bulunuyoruz.",
-        q: "Şehre gelen yolcuların sığınağı olan Tabhanelere geçelim mi?",
-        btnNext: "Tabhanelere İlerle ➡",
-        a: "audio/19.mp3",
-        g: ["img/19.jpg"]
-    },
-    {
-        t: "20.Durak:\n🏛️ TABHANELER",
-        s: "MİSAFİRHANELER",
-        m: "İmaret bölümünü de tamamladıktan sonra şimdi hemen imaretin yanı başında, Sultan II. Bayezid Camii’ne bitişik bulunan **Tabhaneler (misafirhaneler)** bölümüne ilerliyoruz.\n\n🕌 **Camii ile Bütünleşen Misafirperverlik**\nCaminin sağında ve solunda yer alan bu yapılar, Osmanlı mimarisinin en insani dokunuşlarından biridir. Mimarinin misafirperverliğe dönüşmüş bir hayat felsefesi olduğunu hissedersiniz.\n\n🏠 **Burası bir “misafirhane”dir.**\nŞehre gelen yolcular, garibanlar ve dervişler burada 3 gün boyunca ücretsiz ağırlanırdı. Ne yemek ne konaklama için bir ücret istenirdi… Sadece “misafir olmak” yeterliydi.\n\n🔥 **Hücreler ve Ocaklar**\nKüçük kapılardan geçerek girdiğiniz kare planlı odalar (hücreler), bu yapının en samimi alanlarıdır. 🪵 Her odada bir ocak bulunur. Kışın o ocaklarda yanan odunların çıtırtısını ve dışarıdan gelen bir yolcunun burada ilk kez ısınırken hissettiği o güveni düşünün.\n\n🤝 **Paylaşım ve Konukseverlik Kültürü**\nTabhanelerde kalan misafirler külliyenin yemeklerinden ücretsiz yararlanır, yolculuklarına dinlenmiş bir beden ve sakin bir ruhla devam ederdi.\n\n✨ **SON MESAJ**\nTabhaneler bize şunu hatırlatır: Osmanlı’da mimari sadece yapı değil, insana dokunan bir merhamet sistemiydi.",
-        q: "🥤 Şimdi bu tarihi atmosferde bir yorgunluk şerbeti içmeye ne dersiniz?",
-        btnNext: "Şerbetevine İlerle ➡",
-        a: "audio/20.mp3",
-        g: ["img/20.jpg"]
-    },
-{
-        t: "21.Durak:\n🏛️ ŞERBETEVİ & HEDİYELİK EŞYA",
-        s: "GEÇMİŞİN TATLI HATIRASI",
-        m: "İçerisinde bulunduğumuz tabhane kısmı, tarihi dokusuna sadık kalınarak düzenlenen Şerbetevi ile sizi karşılıyor.\n\n🥤 **Şifalı Reçeteler**\nDarüşşifa’da anlatılan şifalı bitkiler burada adeta birer sanat eserine dönüşmüştür:\n• 🍹 Demirhindi şerbeti\n• 🌹 Gül şerbeti\n• 🌿 Reyhan şerbeti\n• 🏺 Osmanlı geleneksel şerbetleri\n\n🏛️ **Tarihi Atmosferde Mola**\n15. yüzyılda bu külliyede dolaşan bir hekimin ya da bir talebenin içtiği o serinletici lezzetlerin bugün sizin bardağınızda yeniden canlandığını hissedersiniz. Bir yudum şerbet, gezinin yorgunluğunu alır.\n\n🎁 **HEDİYELİK EŞYA BÖLÜMÜ**\n🎨 **Geleneksel Sanatlar:** Edirnekâri işçiliğiyle süslenmiş kutular, el yapımı seramikler.\n🌿 **Şifalı Kokular:** Gül, Lavanta ve Misk esansları ile külliyenin kokusunu evinize taşıyabilirsiniz.\n🏺 **Hatıra Objeleri:** Külliyenin kubbelerini temsil eden minyatürler ve tarihi sahnelerin replikaları.",
-        q: "✨ Şerbetevinde içilen bir yudum, geçmiş ile bugün arasında kurulan tatlı bir hatıradır.",
-        btnNext: "Avluya ve Yahya Baba'ya İlerle ➡",
-        a: "audio/21.mp3",
-        g: ["img/21.jpg"]
-    },
-    {
-        t: "22.Durak:\n🌿 AVLUYA VE FERAHLIĞA DÖNÜŞ & YAHYA BABA",
-        s: "MANEVİ BİR VEFA NOKTASI",
-        m: "Artık caminin manevi havasını ve tabhanelerin şefkatli dokusunu arkamızda bırakıyoruz. Tabhanelerin loş odalarından geçerek yeniden dış avluya doğru süzülüyoruz.\n\n🌳 **YAHYA BABA**\nEğer bu muazzam külliyenin harcına duasını, mutfağına bereketini katan o manevi bekçiye, Yahya Baba’ya bir vefa selamı vermek isterseniz; hazirenin o ağaçlıklı köşesine doğru ilerliyoruz.\n\n🌲 **Sessizliğin İçinde Bir İstirahat**\nBurası; külliyenin inşasında çalışanlara yemek hazırlayan, geceleri ise bu yapıların bereketi için dua eden o büyük gönül insanının istirahat yeridir.\n\n🪦 **Yahya Baba ve Meryem Sultan**\nMeryem Sultan ile yan yana yatan Yahya Baba’nın başında durduğunuzda, bu yapıların sadece taş ve kubbeden ibaret olmadığını; **İnanç, Emek ve Gönül Birliği** ile yükseldiğini hissedersiniz.",
-        q: "🤲 Şimdi Yahya Baba ile vedalaşıp yönümüzü yeniden CAMİ’ye çevirme vakti...",
-        btnNext: "Caminin Görkemine Doğru ➡",
-        a: "audio/22.mp3",
-        g: ["img/22.jpg"]
-    },
-   {
-        t: "23.Durak:\n🕌 CAMİNİN GÖRKEMİNE DOĞRU",
-        s: "RUHANİ DİNGİNLİĞE ADIM",
-        m: "Geniş meydana çıktığınızda temiz havayı ciğerlerinize çekip rotamızı değiştiriyoruz. Şimdi külliyenin tüm yapılarını bir tespih tanesi gibi etrafında dizen o en heybetli yapıyı, **Sultan II. Bayezid Camii’nin taç kapısını** görebilirsiniz.\n\n🚶 **Meydandan Taç Kapıya Yürüyüş**\n📍 **Sağınızda:** Medrese ve Darüşşifa\n📍 **Solunuzda:** İmaretimizin kubbeleri\n🎯 **Tam Karşınızda:** Caminin devasa giriş kapısı\n\n🏛️ **Taç Kapının İhtişamı**\nBu kapıdan içeri girdiğinizde, Darüşşifa’nın sekizgen düzeni geride kalır; yerini tek bir büyük kubbenin altında birleşen sonsuz bir huzur alır.\n\n🤍 **Ruhani Geçiş Anı**\nMüziğin, şifanın ve ilmin sesinden sonra şimdi; sessizliğin, ibadetin ve ruhani dinginliğin içine adım atmaya hazırlanıyorsunuz.",
-        q: "🤫 Sessizliğin içine adım atmaya hazır mısınız?",
-        btnNext: "Cami Avlusuna Giriş ➡",
-        a: "audio/23.mp3",
-        g: ["img/23.jpg"]
-    },
-    {
-        t: "24.Durak:\n🕌 CAMİ AVLUSU",
-        s: "SÜKÛNETİN VE IŞIĞIN BULUŞMASI",
+       {
+        t: "RUHANİ ATMOSFERE HAZIRLIK:\n🕌 CAMİ AVLUSU",
+        s: "TEK KUBBE, SONSUZ HUZUR",
         m: "Caminin devasa taç kapısından içeri süzüldüğünüzde, mermer işçiliğinin zarafeti sizi karşılar. Burası dışarıdaki meydandan çok daha farklı bir dünyadır.\n\n⛲ **Şadırvanlı Avlu’nun Kalbi**\n📍 **Tam Ortada:** Avlunun kalbinde yer alan zarif şadırvan… Suyun sesi, taşın sessizliğine karışır.\n\n🏛️ **Sütunlar ve Mimari Denge**\nEtrafınızı saran mermer sütunlar sizi bir koruma halkası gibi sarar. Her sütunun farklı mermerlerden yapılmış olması, Osmanlı’nın estetik zenginliğini ve düzen içindeki gizli güzelliği anlatır.\n\n✨ **SON HİS**\nBu avluda hissettiğiniz şey sadece bir mekân değil; yüzyıllardır değişmeyen bir sükûnet duygusudur.",
         q: "Mabedin içindeki o büyük boşluğa ve huzura geçelim mi?",
         btnNext: "İç Mekana İlerle ➡",
         a: "audio/24.mp3",
         g: ["img/24.jpg"]
     },
-    {
-        t: "25.Durak:\n📜 CAMİNİN İBADET ALANINA DOĞRU",
-        s: "RUHANİ ATMOSFERE HAZIRLIK",
-        m: "🌿 Şimdi avlunun mermer zemininde ağır adımlarla yürüyerek asıl ibadet alanının girişine doğru yöneliyoruz...\n\n🎯 **Tam Karşınızda:** İbadet mekanının ağırbaşlı giriş kapısı, hat yazıları ve ahşap işçiliğiyle sizi karşılıyor.\n\n🧭 İçeri girmeden önce hazırlığınızı yapıp yumuşak halıya ilk adımınızı attığınızda, başınızı kaldırdığınız an devasa tek bir kubbenin altında bulacaksınız kendinizi.",
-        q: "✨ Işığın desenlerle dans ettiği bu ruhani dünyaya girmeye hazır mısınız?",
-        btnNext: "İç Mekana Giriş Yap ➡",
-        a: "audio/27.mp3", 
-        g: ["img/27.jpg"]
-    },
-    {
-        t: "26.Durak:\n🕌 CAMİNİN İÇ MEKANI",
-        s: "TEK KUBBE, SONSUZ HUZUR",
-        m: "🌌 İçeriye ilk adımınızı attığınızda sizi Edirne’nin gökyüzünü andıran devasa bir kubbe karşılar.\n\n🏛️ **Mimarideki Birlik ve Önemi:**\nBu cami, Osmanlı mimarisinde **'Tek Kubbe'** geleneğinin en saf örneklerinden biridir. Bu tasarım hem ilahi birliği simgeler hem de dönemin mühendislik dehasını kanıtlar.\n\n🕌 **Mihrap, Minber ve Hünkâr Mahfili:**\n• **Mihrap ve Minber:** Sadelikle ihtişamın buluştuğu mermer işçiliği.\n• **Hünkâr Mahfili:** Osmanlı mimarisindeki en erken ve en zarif örneklerden biridir. Caminin sol köşesinde, mermer sütunlar üzerinde yükselen bu yapı, külliyenin genelindeki 'sadelik içinde ihtişam' felsefesini tamamlar.\n\n🔇 **Akustik ve Sessizlik:**\nŞifahanedeki su sesi burada yerini derin bir sükunete bırakır. Kubbe altındaki en küçük ses bile tüm mekâna yayılır.",
-        q: "🌿 Bu ruhani atmosferden yavaşça ayrılıp nehir kıyısına doğru süzülelim mi?",
-        btnNext: "Tunca Nehri'ne Doğru ➡",
-        a: "audio/28.mp3",
-        g: ["img/28.jpg"]
-    },
-    {
-        t: "27.Durak:\n🌊 VEDAYA DOĞRU – TUNCA’NIN KIYISI",
-        s: "ŞİFA ŞEHRİNE BAKIŞ",
-        m: "🌿 Artık heybemizde hem şifalı tatlar hem de kıymetli hatıralar var. Külliyenin dış avlusundan çıkıp, nehrin serin esintisini tenimizde hissedeceğimiz Tunca Nehri kıyısına doğru süzülüyoruz.\n\n🌅 Bu devasa şifa ve ilim şehrine, nehrin üzerinden batan güneşin ışıklarıyla veda etmeye hazır mısınız?\n\n🔥 İmaretin ocağından yükselen paylaşım ruhunu arkamızda bırakarak, bu muazzam yapıların nehirle kucaklaştığı noktaya yöneliyoruz.",
-        q: "Vedanın ve huzurun adresine ulaşmaya hazır mısınız?",
-        btnNext: "Nehir Kıyısına Ulaş ➡",
-        a: "audio/29.mp3",
-        g: ["img/29.jpg"]
-    },
-    {
-        t: "28.Durak:\n🌊 TUNCA NEHRİ KIYISI",
-        s: "VEDANIN VE HUZURUN ADRESİ",
-        m: "🌿 Külliyenin o devasa dış avlusundan ağır adımlarla çıkıp, nehrin serin esintisini hissettiğinizde bu gezi zihninizde bir bütün haline gelir.\n\n🏛️ **Arkanıza dönüp baktığınızda:**\nKülliyeyi tüm ihtişamıyla görebilirsiniz: Darüşşifa’nın kubbeleri, Medrese’nin ilim yuvaları ve caminin minareleri...\n\n🌊 **Nehrin Sesi:**\nNehrin akışı, Darüşşifa’da duyduğunuz su sesinin doğadaki yankısıdır. Suyun dingin akışı yüzyıllarca burada şifa, huzur ve terapi olmuştur.\n\n🌉 **Tarihi Köprü:**\nBiraz ilerlediğinizde II. Bayezid Köprüsü’nü görebilirsiniz. Bu köprü yalnızca iki kıyıyı değil; ✨ **şifa ile hayatı**, ✨ **ilim ile toplumu** birbirine bağlayan bir geçittir.",
-        q: "Bu eşsiz yolculuğu bizimle tamamladığınız için teşekkür ederiz. Şifa ile kalın.",
-        btnNext: "Yolculuğu Tamamla ✨",
-        a: "audio/30.mp3",
-        g: ["img/30.jpg"]
-    },
-    {
-        t: "29.Durak:\n🌊 GÖNÜL KÖPRÜSÜNE DAVET",
+            {
+        t: "Veda Vakti:\n🌊 GÖNÜL KÖPRÜSÜNE DAVET",
         s: "BU HİKAYEDE SİZİN DE İZİNİZ OLSUN",
         m: "🏛️ Adım adım geçmişin izlerine dokunduk, bu muazzam mimariyi birlikte soluduk. Şimdi bu tarihi mekana kendi nefesinizi katma vakti.\n\n💭 **İçinizde Yankılananlar…**\nBir anlık huzur, derin bir hayranlık ya da kalbinizde kalan o sessiz tını…\n\n📖 Sizler için hazırladığımız **Ziyaretçi Defteri**, bu deneyimin manevi bir arşividir.\n\n🖋️ **Buraya bırakacağınız her cümle:**\n• 🤍 Bizim için paha biçilemez bir anı,\n• 🌍 Diğer misafirlerimiz için ise bu yolculuğu anlamlandıran bir ışık tutacaktır.\n\n✨ Kalbinizden süzülenleri bizimle paylaşın, bu Gönül Köprüsü’nde sizin de bir ebedi iziniz kalsın…",
         q: "✍️ Gönül Köprüsü sayfamızda duygularınızı paylaşmaya davet ediyoruz.",
