@@ -1,91 +1,30 @@
 /* ============================================================
-   ai.js — Rehber Soru-Cevap Modülü
-   Kullanıcı sorusunu JSON içeriğiyle eşleştirir, TTS ile okur
+   ai.js — Rehber Soru-Cevap Modülü (Claude API destekli)
+   Mevcut tur adımını bağlam olarak kullanır
    ============================================================ */
 
 const AIGuide = (() => {
-  /* ── Bilgi bankası — anahtar kelime → cevap ─────────────── */
-  const KB = [
-    {
-      keys: ['darüşşifa','hastane','şifahane','tedavi'],
-      ans:  'Edirne Darüşşifası, 1488 yılında Sultan II. Bayezid tarafından yaptırılmış, Osmanlı tıp tarihinin en önemli eserlerinden biridir. Müzik, su sesi ve koku terapisi gibi yöntemlerle tedavi uygulanmıştır.'
-    },
-    {
-      keys: ['müzik','makam','tedavi müzik'],
-      ans:  'Bu hastanede 10 kişilik bir musiki grubu, hekimlerin önerileriyle her hastalığa özel müzik makamları çalardı. Rast makamı kalp ve beyne, Irak makamı sırt ağrısına, Dügah makamı ise ruh hastalıklarına iyi gelirdi.'
-    },
-    {
-      keys: ['imaret','yemek','aşevi','fakir'],
-      ans:  'İmarethane, günde üç öğün fakir ve yolculara ücretsiz yemek dağıtan sosyal bir yapıydı. Yahya Baba efsanesine göre birkaç avuç pirinci mucizevi şekilde binlerce insana yetirmişti.'
-    },
-    {
-      keys: ['medrese','tıp','hekim','eğitim'],
-      ans:  'Külliyenin Tıp Medresesi, Osmanlı\'nın hekimleri yetiştirdiği bir okuldur. Eğitim teorik ve pratik olarak verilir; öğrenciler medresede ders alır, Darüşşifada uygulama yapardı.'
-    },
-    {
-      keys: ['yahya baba','balık','pilav','efsane'],
-      ans:  'Aşçıbaşı Yahya Baba, yaptığı pilavla hem hastaları doyurur hem de artan pilavı Tunca Nehri\'ndeki balıklara verirdi. Padişah bunu görünce kızdı, ama balıklar dile gelip "Bizim rızkımıza mı göz diker!" dedi. Yahya Baba bu utançla secdeye kapanıp orada vefat etti.'
-    },
-    {
-      keys: ['cami','kubbe','avlu','namaz'],
-      ans:  'Sultan II. Bayezid Camii, tek kubbe mimarisiyle görkemli bir yapıdır. Şadırvanlı avlusu, mermer sütunları ve işli taç kapısıyla Osmanlı klasik döneminin simgelerinden biridir.'
-    },
-    {
-      keys: ['konum','neredeyim','neresi','yer'],
-      ans:  'Şu an Sultan II. Bayezid Külliyesi Sağlık Müzesindesiniz. Külliye 1488\'de inşa edilmiş ve günümüze en sağlam ulaşmış Osmanlı külliyelerinden biridir. Konum menüsünden harita görünümüne geçebilirsiniz.'
-    },
-    {
-      keys: ['bayezid','sultan','padişah','tarih'],
-      ans:  'Sultan II. Bayezid, Fatih Sultan Mehmet\'in oğlu ve 8. Osmanlı Padişahı\'dır. 1481-1512 yılları arasında hüküm sürmüştür. Bu külliye, onun adına Hayrettin Mimar tarafından Edirne\'de inşa edilmiştir.'
-    },
-    {
-      keys: ['giriş','bilet','ziyaret','açık','saat'],
-      ans:  'Müze genel olarak hafta içi ve hafta sonu ziyarete açıktır. Güncel çalışma saatleri ve bilet bilgileri için müze girişindeki bilgi panosunu incelemenizi öneririm.'
-    },
-    {
-      keys: ['su','şadırvan','kuyu','süt kuyusu'],
-      ans:  'Darüşşifa avlusundaki "Süt Kuyusu"nun, yeni doğum yapan annelerin sütünü artırdığına inanılırdı. Büyük şifahanedeki şadırvandan akan su ise hastaları rahatlatmak amacıyla tasarlanmıştır.'
-    },
-  ];
-
-  /* ── Fallback cevap ─────────────────────────────────────── */
-  const FALLBACK = 'Bu konuda bilgim sınırlı. Külliye hakkında merak ettiklerinizi müze rehberimize veya bilgi panolarına sorabilirsiniz. 🏛️';
-
-  /* ── State ──────────────────────────────────────────────── */
   let _open = false;
 
   /* ── Init ─────────────────────────────────────────────────── */
   function init() {
-    // FAB butonu
-    const fab = document.getElementById('ai-fab');
-    if (fab) fab.addEventListener('click', togglePanel);
+    document.getElementById('ai-fab')?.addEventListener('click', togglePanel);
+    document.getElementById('ai-close-btn')?.addEventListener('click', closePanel);
+    document.getElementById('ai-send-btn')?.addEventListener('click', _submit);
+    document.querySelector('.ai-handle')?.addEventListener('click', closePanel);
 
-    // Kapat butonu
-    const closeBtn = document.getElementById('ai-close-btn');
-    if (closeBtn) closeBtn.addEventListener('click', closePanel);
-
-    // Gönder butonu
-    const sendBtn = document.getElementById('ai-send-btn');
-    const input   = document.getElementById('ai-input');
-    if (sendBtn) sendBtn.addEventListener('click', _submit);
+    const input = document.getElementById('ai-input');
     if (input) {
       input.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); _submit(); }
       });
     }
 
-    // Sürükleme tutacağı
-    const handle = document.querySelector('.ai-handle');
-    if (handle) handle.addEventListener('click', closePanel);
-
-    // Hoş geldin mesajı
-    _addMsg('bot', '🏛️ Merhaba! Ben dijital rehberinizim. Külliye hakkında her şeyi sorabilirsiniz. Örn: "Müzik tedavisi nasıl yapılırdı?"');
+    _addMsg('bot', '🏛️ Merhaba! Ben dijital rehberinizim. Külliye, tedavi yöntemleri, tarih veya müze hakkında aklınıza takılan her şeyi sorabilirsiniz.');
   }
 
   /* ── Panel aç/kapa ─────────────────────────────────────── */
-  function togglePanel() {
-    _open ? closePanel() : openPanel();
-  }
+  function togglePanel() { _open ? closePanel() : openPanel(); }
 
   function openPanel() {
     _open = true;
@@ -98,51 +37,73 @@ const AIGuide = (() => {
     _open = false;
     document.getElementById('ai-panel')?.classList.remove('open');
     const fab = document.getElementById('ai-fab');
-    if (fab && Navigation.activeScreen() === 'screen-tour') {
+    if (fab && Navigation.activeScreen() !== 'screen-intro') {
       fab.classList.remove('hidden');
     }
   }
 
   /* ── Soru gönder ────────────────────────────────────────── */
-  function _submit() {
+  async function _submit() {
     const input = document.getElementById('ai-input');
     const q = (input?.value || '').trim();
     if (!q) return;
 
     _addMsg('user', q);
     input.value = '';
+    input.disabled = true;
+    document.getElementById('ai-send-btn').disabled = true;
 
-    // Kısa gecikme ile "düşünüyor" efekti
-    const typingId = _addMsg('bot typing', '...');
-    setTimeout(() => {
+    const typingId = _addMsg('bot typing', '✦ Düşünüyor…');
+
+    try {
+      const ans = await _callClaude(q);
       _removeMsg(typingId);
-      const ans = _answer(q);
       _addMsg('bot', ans);
       AudioController.speak(ans);
-    }, 600 + Math.random() * 400);
+    } catch (err) {
+      _removeMsg(typingId);
+      _addMsg('bot', '⚠️ Bağlantı hatası oluştu. Lütfen tekrar deneyin.');
+      console.error('[AIGuide]', err);
+    } finally {
+      input.disabled = false;
+      document.getElementById('ai-send-btn').disabled = false;
+      input.focus();
+    }
   }
 
-  /* ── Cevap üret ─────────────────────────────────────────── */
-  function _answer(q) {
-    const low = q.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-
-    // Mevcut tur adımını da bağlam olarak kullan
-    let contextBonus = '';
+  /* ── Claude API çağrısı ─────────────────────────────────── */
+  async function _callClaude(question) {
+    // Mevcut tur adımını bağlam olarak al
+    let stepContext = '';
     if (typeof TourManager !== 'undefined') {
       const step = TourManager.currentData();
-      if (step) contextBonus = (step.t + ' ' + step.s + ' ' + step.m).toLowerCase();
+      if (step) {
+        stepContext = `\nZiyaretçi şu an "${step.t.replace(/\n/g,' ')}" durağında bulunuyor.\nDurak içeriği: ${step.m.substring(0, 600)}`;
+      }
     }
 
-    const haystack = low + ' ' + contextBonus;
+    const systemPrompt = `Sen Sultan II. Bayezid Külliyesi Sağlık Müzesi'nin dijital rehberisin. Adın Evliya Çelebi'dir.
+Müze Edirne'de, 1488 yılında inşa edilmiş tarihi bir Osmanlı külliyesidir.
+Külliye; Darüşşifa (hastane), Tıp Medresesi, İmarethane, Cami ve diğer yapılardan oluşur.
+Darüşşifada müzik, su sesi, koku ve meşguliyet terapileriyle tedavi yapılırdı.
+İmarethane'de Yahya Baba efsanesi anlatılır: pilavın bereketlenmesi ve balıkların konuşması.
+Türkçe, sıcak ve bilgilendirici bir üslupla cevap ver. Cevapların 2-4 cümle uzunluğunda olsun.
+Bilmediğin şeylerde müze görevlilerine yönlendir.${stepContext}`;
 
-    // En iyi eşleşmeyi bul (en çok anahtar kelime sayısı)
-    let best = null, bestScore = 0;
-    for (const entry of KB) {
-      const score = entry.keys.filter(k => haystack.includes(k)).length;
-      if (score > bestScore) { bestScore = score; best = entry; }
-    }
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
+        messages: [{ role: 'user', content: question }]
+      })
+    });
 
-    return bestScore > 0 ? best.ans : FALLBACK;
+    if (!response.ok) throw new Error('API ' + response.status);
+    const data = await response.json();
+    return data.content?.map(b => b.text || '').join('') || 'Cevap alınamadı.';
   }
 
   /* ── Mesaj DOM işlemleri ─────────────────────────────────── */
@@ -151,10 +112,9 @@ const AIGuide = (() => {
   function _addMsg(role, text) {
     const container = document.getElementById('ai-messages');
     if (!container) return null;
-
     const id  = 'aimsg-' + (++_msgIdCounter);
     const div = document.createElement('div');
-    div.id        = id;
+    div.id = id;
     div.className = 'ai-msg ' + role;
     div.textContent = text;
     container.appendChild(div);
@@ -163,8 +123,7 @@ const AIGuide = (() => {
   }
 
   function _removeMsg(id) {
-    if (!id) return;
-    document.getElementById(id)?.remove();
+    if (id) document.getElementById(id)?.remove();
   }
 
   return { init, openPanel, closePanel, togglePanel };
