@@ -1046,14 +1046,10 @@ const TourManager=(()=>{
   let _imgIdx=0;
 
   function start(){
-    try {
-      Navigation.changeScreen('screen-tour');
-      _step=0; _imgIdx=0;
-      AudioController.fx('assets/audio/muhur.mp3');
-      render();
-    } catch(e) {
-      console.error('[TourManager.start] HATA:', e);
-    }
+    Navigation.changeScreen('screen-tour');
+    _step=0; _imgIdx=0;
+    AudioController.fx('assets/audio/muhur.mp3');
+    render();
   }
 
   function goToStep(idx){
@@ -1415,7 +1411,7 @@ const KonumSystem=(()=>{
         const zoneEl=document.getElementById('konum-screen-zone');
         const descEl=document.getElementById('konum-screen-desc');
         if(zoneEl) zoneEl.textContent='📍 '+zoneName;
-        if(descEl) descEl.textContent=z?z.announce:"GPS konumunuzu alındı.";
+        if(descEl) descEl.textContent=z?z.announce:'GPS konumunuzu alındı.';
 
         UI.toast('📍 Şu an: '+zoneName);
         if(z) AudioController.speak('Şu an '+z.announce);
@@ -1437,30 +1433,20 @@ const KonumSystem=(()=>{
    DOM READY — INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded',()=>{
-  try {
-    AudioController.init('audio-player');
-    Navigation.init();
-    AIGuide.init();
+  AudioController.init('audio-player');
+  Navigation.init();
+  AIGuide.init();
 
-    const ps = document.getElementById('popup-close');
-    const bs = document.getElementById('btn-send');
-    const bn = document.getElementById('btn-next');
-    const bp = document.getElementById('btn-prev');
-    const bst = document.getElementById('btn-start');
-    const bki = document.getElementById('btn-konum-intro');
+  document.getElementById('popup-close')?.addEventListener('click',UI.closePopup);
+  document.getElementById('btn-send')?.addEventListener('click',GuestBook.send);
+  document.getElementById('btn-next')?.addEventListener('click',()=>TourManager.nav(1));
+  document.getElementById('btn-prev')?.addEventListener('click',()=>TourManager.nav(-1));
+  document.getElementById('btn-start')?.addEventListener('click',TourManager.start);
 
-    if(ps) ps.addEventListener('click', UI.closePopup);
-    if(bs) bs.addEventListener('click', GuestBook.send);
-    if(bn) bn.addEventListener('click', ()=>TourManager.nav(1));
-    if(bp) bp.addEventListener('click', ()=>TourManager.nav(-1));
-    if(bst) bst.addEventListener('click', ()=>{ console.log('[btn-start] tıklandı'); TourManager.start(); });
-    if(bki) bki.addEventListener('click', KonumSystem.locate);
+  // Konum butonları
+  document.getElementById('btn-konum-intro')?.addEventListener('click',KonumSystem.locate);
 
-    Navigation.changeScreen('screen-intro', false);
-    console.log('[init] Başarılı. btn-start:', !!bst);
-  } catch(e) {
-    console.error('[DOMContentLoaded] HATA:', e);
-  }
+  Navigation.changeScreen('screen-intro', false);
 });
 </script>
 
