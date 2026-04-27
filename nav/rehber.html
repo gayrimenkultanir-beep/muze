@@ -343,11 +343,15 @@ a { color: var(--gold); text-decoration: none; }
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 #evliya-char {
-  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
   animation: evliyaBob 3s ease-in-out infinite;
   cursor: default;
   user-select: none;
+  width: 68px;
+  height: 68px;
 }
 @keyframes evliyaBob { 0%,100%{transform:translateY(0) rotate(-3deg);} 50%{transform:translateY(-6px) rotate(3deg);} }
 #evliya-bubble {
@@ -511,40 +515,7 @@ a { color: var(--gold); text-decoration: none; }
 #konum-result-popup .kr-desc { font-style: italic; line-height: 1.4; font-size: 0.78rem; }
 #konum-result-popup .kr-close { position: absolute; top: 6px; right: 8px; font-size: 0.9rem; cursor: pointer; color: var(--ink-pale); background: none; border: none; line-height: 1; }
 
-/* ── API Key modal ─────────────────────────────────────────── */
-#api-key-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 5000;
-  background: rgba(28,20,8,0.7);
-  backdrop-filter: blur(6px);
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-}
-#api-key-modal.show { display: flex; }
-.api-modal-box {
-  background: var(--surface);
-  border: 1.5px solid var(--gold-light);
-  border-radius: var(--r-lg);
-  padding: 2rem 1.5rem;
-  max-width: 360px;
-  width: 100%;
-  box-shadow: var(--shadow-lg), var(--shadow-gold);
-  animation: screenIn 0.3s ease both;
-}
-.api-modal-box h4 { font-family: var(--font-display); font-size: 1.15rem; color: var(--gold); margin-bottom: 0.5rem; }
-.api-modal-box p { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1rem; line-height: 1.5; }
-.api-modal-box input {
-  width: 100%; padding: 0.7rem 1rem;
-  border: 1.5px solid var(--border); border-radius: var(--r-md);
-  font-family: var(--font-body); font-size: 0.85rem; color: var(--ink);
-  background: var(--bg); outline: none; margin-bottom: 1rem;
-  -webkit-appearance: none;
-}
-.api-modal-box input:focus { border-color: var(--gold); }
-.api-modal-btns { display: flex; gap: 0.5rem; }
+
 </style>
 </head>
 <body>
@@ -600,7 +571,7 @@ a { color: var(--gold); text-decoration: none; }
 <!-- ── SCREEN 1: GİRİŞ ── -->
 <section id="screen-intro" class="screen active-screen" aria-label="Müze girişi">
   <div class="intro-video-wrap" aria-hidden="true">
-    <img src="assets/img/evliya.gif" alt="Evliya Çelebi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <img src="assets/img/muze.webp" alt="Sultan II. Bayezid Külliyesi" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
     <div class="intro-placeholder" style="display:none">🏛️</div>
   </div>
 
@@ -659,7 +630,11 @@ a { color: var(--gold); text-decoration: none; }
   <!-- Evliya Çelebi -->
   <div id="evliya-wrap" aria-hidden="true">
     <div id="evliya-bubble"></div>
-    <div id="evliya-char">🧙‍♂️</div>
+    <div id="evliya-char">
+      <img src="assets/img/evliya.gif" alt="Evliya Çelebi" 
+           style="width:64px;height:64px;object-fit:contain;border-radius:50%;border:2px solid var(--gold-light);box-shadow:0 4px 16px rgba(184,134,11,0.3);"
+           onerror="this.outerHTML='🧙‍♂️'">
+    </div>
   </div>
 </section>
 
@@ -1369,6 +1344,157 @@ const GuestBook=(()=>{
 const AIGuide=(()=>{
   let _open=false;
 
+  /* ════════════════════════════════════════════════════════════
+     BİLGİ BANKASI — Ücretsiz yerel AI sistemi
+     Anahtar kelime eşleştirme + bağlam ağırlıklandırma
+     ════════════════════════════════════════════════════════════ */
+  const KB = [
+    /* ── KÜLLİYE GENEL ── */
+    {
+      keys:['külliye','nedir','ne','genel','hakkında','anlat','tarih','ne zaman','kaç','yıl','inşa','yapı','yapılar','1488'],
+      ans:'Sultan II. Bayezid Külliyesi, 1488 yılında Fatih Sultan Mehmet\'in oğlu 8. Osmanlı Padişahı Sultan II. Bayezid tarafından dönemin mimarbaşı Hayrettin\'e yaptırılmıştır. Cami, Darüşşifa, Tıp Medresesi, İmarethane, kiler ve misafirhaneden oluşan bu külliye, Osmanlı külliyeleri arasında günümüze en sağlam ulaşanıdır. Osmanlı\'nın sosyal devlet anlayışını en güçlü biçimde yansıtır.'
+    },
+    /* ── DARÜŞŞİFA ── */
+    {
+      keys:['darüşşifa','hastane','şifahane','şifa','tedavi','hasta','yataklı','bölüm','avlu'],
+      ans:'Edirne Darüşşifası, merkezi ve ayrıntılı planlanmış hastanelerin tarihteki ilk örneklerinden biri kabul edilir. Batı\'daki benzerlerine yaklaşık 200 yıl sonra rastlanmıştır. 6 kışlık, 4 yazlık hasta odası, müzik sahnesi ve ortasında şadırvan bulunan sekizgen büyük şifahaneden oluşur. Müzik, su sesi, koku ve meşguliyet gibi yöntemlerle tedavi uygulanırdı.'
+    },
+    /* ── MÜZİK TEDAVİSİ ── */
+    {
+      keys:['müzik','makam','musiki','saz','nota','rast','irak','dügah','uşşak','hicaz','çalgı','enstrüman'],
+      ans:'Darüşşifada 10 kişilik bir musiki grubu, hekimlerin önerileriyle her hastalığa özel makamlar çalıp söylerdi. Rast makamı kalp ve beyne, Uşşak makamı baş ağrısına, Hicaz makamı idrara, Irak makamı sırt ağrısına, Dügah makamı ise ruh hastalıklarına faydalı sayılırdı. Müzik haftada üç gün icra edilir, tedavi sabah saatlerinde uygulanırdı.'
+    },
+    /* ── SU TEDAVİSİ ── */
+    {
+      keys:['su','şadırvan','çeşme','nehir','tunca','ses','ritim','akan'],
+      ans:'Darüşşifanın ortasındaki sekizgen şadırvandan akan suyun sesi, tedavinin ayrılmaz bir parçasıydı. Suyun belli bir ritimde akması hastaları sakinleştirir, uykuya dalmalarını kolaylaştırırdı. Tunca Nehri\'ne yakın konumu da külliyeye ferah bir hava sağlardı.'
+    },
+    /* ── KOKU TEDAVİSİ ── */
+    {
+      keys:['koku','bitki','çiçek','lavanta','gül','bahçe','aromatik','terapi'],
+      ans:'Darüşşifa avlusu ve çevresinde yetiştirilen çeşitli tıbbi bitkiler koku terapisi için kullanılırdı. Gül, lavanta ve çeşitli otların kokuları hastaların ruh halini iyileştirmek amacıyla düzenlenir, hasta odalarına taşınırdı. Bu yöntem modern aromaterapi uygulamalarının öncüsü sayılmaktadır.'
+    },
+    /* ── MEŞGULİYET TEDAVİSİ ── */
+    {
+      keys:['meşguliyet','sepet','örgü','el işi','uğraş','iş','aktivite','ergoterapy'],
+      ans:'Hastalar sepet örmek, el işi yapmak ve çeşitli zanaatlarla meşgul edilerek dertlerinden uzaklaştırılırdı. Bu yöntem modern "ergoterapy" (uğraş terapisi) yaklaşımının yüzyıllar önceki uygulamasıdır. Boş kalan zihnin hastalığı büyüttüğü düşüncesiyle hastalar sürekli aktif tutulurdu.'
+    },
+    /* ── SÜT KUYUSU ── */
+    {
+      keys:['süt','kuyu','anne','emzirme','doğum','bebek','inanç'],
+      ans:'Darüşşifanın birinci avlusundaki "Süt Kuyusu"nun, içindeki suyun yeni doğum yapan annelerin sütünü artırdığına inanılırdı. Yüzyıllar boyunca anneler bu kuyuya gelir, çocuklarının şifası için dua ederdi. Kuyunun özel bir kutsallık taşıdığına duyulan inanç günümüze dek süregelmiştir.'
+    },
+    /* ── TIP MEDRESESİ ── */
+    {
+      keys:['medrese','tıp','hekim','eğitim','öğrenci','okul','hoca','ders','cerrah','göz','kehhal','eczacı'],
+      ans:'Külliyenin Tıp Medresesi, Osmanlı\'nın en önemli tıp eğitim kurumlarından biriydi. Öğrenciler medresede teorik dersler alır, yanı başındaki Darüşşifada hasta başında pratik yapardı; bu sistem modern tıp fakülte-hastane entegrasyonunun ilk örneğidir. Külliyede 1 hekimbaşı, 2 hekim, 2 cerrah, 2 göz hekimi (kehhal) ve 1 eczacı görev yapardı.'
+    },
+    /* ── İMARET / YAHYA BABA ── */
+    {
+      keys:['imaret','yemek','aşçı','pilav','balık','yahya','baba','efsane','bereket','mucize','türbe','kiler','fodlahane','fırın'],
+      ans:'İmarethanede günde üç öğün fakir, yolcu ve öğrencilere ücretsiz yemek dağıtılırdı. Aşçıbaşı Yahya Baba\'nın az pirince çok kişiyi doyuran bereketli pilavı efsaneleşmiştir. Padişah "hastaların nafakasını suya mı dökersin?" diye çıkıştığında Tunca\'daki balıklar başlarını sudan çıkararak "Bizim rızkımıza mı göz diker?" diye seslendi. Yahya Baba bu şaşkınlıkla secdeye kapandı ve orada ruhunu teslim etti; türbesi bugün imarethane arkasındadır.'
+    },
+    /* ── CAMİ ── */
+    {
+      keys:['cami','kubbe','namaz','avlu','şadırvan','taç kapı','sütun','mermer','mihrap','minber','minare'],
+      ans:'Sultan II. Bayezid Camii, tek kubbeyle örülmüş görkemli bir yapıdır. Şadırvanlı avlusundaki farklı renkli mermer sütunlar Osmanlı estetik zenginliğini yansıtır. Caminin muhteşem taç kapısı, işçiliğiyle döneme ait en önemli mimari öğelerden biridir. İçerideki geniş kubbe altında hissedilen sükûnet, 500 yıllık bir huzurun izini taşır.'
+    },
+    /* ── SUL-TAN BAYEZİD ── */
+    {
+      keys:['sultan','bayezid','padişah','fatih','osmanlı','hükümdar','hayrettin','mimar'],
+      ans:'Sultan II. Bayezid, Fatih Sultan Mehmet\'in oğlu ve sekizinci Osmanlı padişahıdır; 1481-1512 yılları arasında hüküm sürmüştür. "Veli" lakabıyla anılan Bayezid, ilim ve sanata büyük değer veren, tasavvufa yakın bir hükümdardı. Bu külliyeyi dönemin mimarbaşı Hayrettin\'e yaptırarak Edirne\'ye kazandırmıştır.'
+    },
+    /* ── SU TERAZİSİ ── */
+    {
+      keys:['su terazi','terazi','boru','basınç','dağıtım','altyapı','sistem'],
+      ans:'Külliyenin köşesinde yer alan yaklaşık 4 metrelik dikdörtgen taş yapı, su terazisidir. Yüksek tepelerden borularla gelen sular burada basınçlandırılarak külliyenin cami, darüşşifa, imaret ve diğer tüm birimlerine dağıtılırdı. Bu mühendislik çözümü döneminin en gelişmiş su altyapı sistemlerinden biridir.'
+    },
+    /* ── MİSAFİRHANE / KAFE ── */
+    {
+      keys:['misafirhane','kafe','kafeterya','otur','dinlen','mola','çay','yiyecek'],
+      ans:'Külliyenin eski misafirhane bölümü günümüzde ziyaretçilerin dinlenip çay-kahve içebileceği müze kafesi olarak hizmet vermektedir. Tarihi atmosferde bir mola vermek için ideal bir mekândır. Külliye hakkında daha fazla bilgi için müze görevlilerimize danışabilirsiniz.'
+    },
+    /* ── ZİYARET BİLGİSİ ── */
+    {
+      keys:['bilet','giriş','ücret','açık','kapalı','saat','çalışma','ziyaret','ne zaman gidilir'],
+      ans:'Müze genellikle hafta içi ve hafta sonu ziyarete açıktır. Güncel çalışma saatleri ve bilet bilgileri için müze girişindeki bilgi panosunu veya müze görevlilerini incelemenizi öneririm. Özel tur ve grup ziyaretleri için önceden randevu alınabilmektedir.'
+    },
+    /* ── KONUM / YER ── */
+    {
+      keys:['neredeyim','nerede','konum','yer','harita','neresi','hangi bölüm','bölge'],
+      ans:'Şu an Sultan II. Bayezid Külliyesi Sağlık Müzesindesiniz! 📍 Konumunuzu tespit etmek için ekranın sağ alt köşesindeki 📍 butonuna basabilirsiniz; GPS ile bulunduğunuz bölge sesli olarak size bildirilecektir. Ayrıca Harita menüsünden külliyenin tüm bölgelerini görebilirsiniz.'
+    },
+    /* ── GÖNÜL KÖPRÜSÜ / DEFTERİ ── */
+    {
+      keys:['defter','köprü','gönül','yorum','not','bırak','paylaş','iz','mesaj'],
+      ans:'Gönül Köprüsü, bu tarihi mekânda hissettiğiniz duyguları gelecek ziyaretçilerle paylaşabileceğiniz dijital ziyaretçi defterimizdir. Menüden "Gönül Köprüsü" sekmesine girerek adınızı, şehrinizi ve düşüncelerinizi yazabilirsiniz. Her sözcük bu köprünün bir taşı olacak.'
+    },
+    /* ── OSMANLI TIBBI / GENEL ── */
+    {
+      keys:['osmanlı tıbbı','tıp','ilaç','eczane','ot','hekimlik','tabip','sağlık','modern'],
+      ans:'Osmanlı tıbbı; Hipokrat, Galen ve İbn Sina geleneğini sürdürürken müzik, koku ve meşguliyet gibi özgün yaklaşımları da entegre etmiştir. Bu bütüncül anlayış, modern "biyopsikososyal model"in yüzyıllar önceki uygulamasıdır. Darüşşifa\'da uygulanan yöntemlerin bir kısmı günümüz tıbbında yeniden keşfedilmekte ve bilimsel çalışmalarla desteklenmektedir.'
+    },
+    /* ── EVLIYA ÇELEBİ ── */
+    {
+      keys:['evliya','çelebi','kim','sen','rehber','dijital','karakter'],
+      ans:'Ben Evliya Çelebi! 17. yüzyılın ünlü Osmanlı seyyahı ve yazarıyım. Seyahatname adlı eserimde Edirne ve bu külliyeyi de anlattım. Dijital rehberiniz olarak 500 yıllık bu şifa yurdunu sizinle birlikte keşfetmek için buradayım. Külliye hakkında merak ettiğiniz her şeyi sorabilirsiniz!'
+    },
+  ];
+
+  const FALLBACK_RESPONSES = [
+    'Bu konuda bilgim sınırlı kalıyor; müze görevlilerimiz size daha ayrıntılı yardımcı olabilir. Külliyenin yapıları, tedavi yöntemleri, Yahya Baba efsanesi veya Osmanlı tıbbı hakkında soru sorabilirsiniz! 🏛️',
+    'Sorunuzu tam anlayamadım, farklı bir ifadeyle tekrar sorabilir misiniz? Darüşşifa, müzik tedavisi, Tıp Medresesi, İmarethane, cami veya külliyenin tarihi hakkında konuşmaktan memnuniyet duyarım. ✨',
+    'Bu konuda kesin bir bilgim yok. Müze bilgi panosunu veya görevlilerimizi incelemenizi öneririm. Başka bir konu hakkında yardımcı olmamı ister misiniz? 🌿',
+  ];
+  let _fallbackIdx = 0;
+
+  /* ── Türkçe normalize: şüçöğı → sucogi ── */
+  function _norm(s){
+    return s.toLowerCase()
+      .replace(/ş/g,'s').replace(/ç/g,'c').replace(/ö/g,'o')
+      .replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ı/g,'i')
+      .replace(/â/g,'a').replace(/î/g,'i').replace(/û/g,'u')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  /* ── Cevap bul ── */
+  function _answer(q){
+    const normQ = _norm(q);
+    const words = normQ.split(/\s+/);
+
+    // Mevcut tur durağını bağlam olarak ekle
+    let contextStr = '';
+    if(typeof TourManager !== 'undefined'){
+      const step = TourManager.currentData();
+      if(step) contextStr = _norm(step.t + ' ' + step.s + ' ' + step.m).substring(0, 300);
+    }
+    const haystack = normQ + ' ' + contextStr;
+
+    // Her KB girdisi için skor hesapla
+    let best = null, bestScore = 0;
+    for(const entry of KB){
+      let score = 0;
+      for(const key of entry.keys){
+        const normKey = _norm(key);
+        // Tam eşleşme daha yüksek puan
+        if(haystack.includes(normKey)) score += normKey.split(' ').length * 2;
+        // Kısmi kelime eşleşmesi
+        else for(const w of words){
+          if(w.length > 2 && normKey.includes(w)) score += 1;
+        }
+      }
+      if(score > bestScore){ bestScore = score; best = entry; }
+    }
+
+    if(bestScore > 0) return best.ans;
+
+    // Fallback — her seferinde farklı yanıt
+    const r = FALLBACK_RESPONSES[_fallbackIdx % FALLBACK_RESPONSES.length];
+    _fallbackIdx++;
+    return r;
+  }
+
+  /* ── PANEL VE MESAJ MANTIĞI ── */
   function init(){
     document.getElementById('ai-fab')?.addEventListener('click',togglePanel);
     document.getElementById('ai-close-btn')?.addEventListener('click',closePanel);
@@ -1393,69 +1519,20 @@ const AIGuide=(()=>{
     if(fab&&Navigation.activeScreen()!=='screen-intro') fab.classList.remove('hidden');
   }
 
-  async function _submit(){
+  function _submit(){
     const input=document.getElementById('ai-input');
     const q=(input?.value||'').trim();
     if(!q) return;
     _addMsg('user',q);
     input.value='';
-    input.disabled=true;
-    document.getElementById('ai-send-btn').disabled=true;
+    // Kısa gecikme ile "düşünüyor" efekti — gerçekçi hissi
     const typingId=_addMsg('bot typing','✦ Düşünüyor…');
-    try{
-      const ans=await _callClaude(q);
+    setTimeout(()=>{
       _removeMsg(typingId);
-      _addMsg('bot',ans);
+      const ans = _answer(q);
+      _addMsg('bot', ans);
       AudioController.speak(ans);
-    }catch(err){
-      _removeMsg(typingId);
-      _addMsg('bot','⚠️ Bağlantı hatası oluştu. Lütfen tekrar deneyin.');
-      console.error('[AIGuide]',err);
-    }finally{
-      input.disabled=false;
-      document.getElementById('ai-send-btn').disabled=false;
-      input.focus();
-    }
-  }
-
-  async function _callClaude(question){
-    let stepContext='';
-    const step=TourManager.currentData();
-    if(step) stepContext=`\nZiyaretçi şu an "${step.t.replace(/\n/g,' ')}" durağında bulunuyor.\nDurak içeriği: ${step.m.substring(0,600)}`;
-
-    const systemPrompt=`Sen Sultan II. Bayezid Külliyesi Sağlık Müzesi'nin dijital rehberisin. Adın Evliya Çelebi'dir.
-Müze Edirne'de, 1488 yılında inşa edilmiş tarihi bir Osmanlı külliyesidir.
-Külliye; Darüşşifa (hastane), Tıp Medresesi, İmarethane, Cami ve diğer yapılardan oluşur.
-Darüşşifada müzik, su sesi, koku ve meşguliyet terapileriyle tedavi yapılırdı.
-İmarethane'de Yahya Baba efsanesi anlatılır: pilavın bereketlenmesi ve balıkların konuşması.
-Türkçe, sıcak ve bilgilendirici bir üslupla cevap ver. Cevapların 2-4 cümle uzunluğunda olsun.
-Bilmediğin şeylerde müze görevlilerine yönlendir.${stepContext}`;
-
-    const API_KEY = window.CLAUDE_API_KEY || '';
-    if(!API_KEY){
-      return '⚠️ Lütfen HTML dosyasında window.CLAUDE_API_KEY değişkenini tanımlayın.';
-    }
-    const response=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:500,
-        system:systemPrompt,
-        messages:[{role:'user',content:question}]
-      })
-    });
-    if(!response.ok){
-      const errData=await response.json().catch(()=>({}));
-      throw new Error('API '+response.status+': '+(errData.error?.message||'Bilinmeyen hata'));
-    }
-    const data=await response.json();
-    return data.content?.map(b=>b.text||'').join('')||'Cevap alınamadı.';
+    }, 500 + Math.random()*400);
   }
 
   let _msgId=0;
@@ -1542,52 +1619,9 @@ const KonumSystem=(()=>{
    ============================================================ */
 
 /* ============================================================
-   API KEY MANAGER
+   API KEY — Sabit tanımlı (ziyaretçiye sorulmaz)
    ============================================================ */
-const ApiKeyManager = (() => {
-  const STORAGE_KEY = 'evliya_api_key';
-
-  function init() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      window.CLAUDE_API_KEY = saved;
-    } else {
-      // Show modal on first visit
-      setTimeout(() => {
-        document.getElementById('api-key-modal').classList.add('show');
-      }, 1200);
-    }
-    // Enter key on input
-    document.getElementById('api-key-input')?.addEventListener('keydown', e => {
-      if (e.key === 'Enter') save();
-    });
-  }
-
-  function save() {
-    const val = (document.getElementById('api-key-input')?.value || '').trim();
-    if (!val.startsWith('sk-')) {
-      UI.toast('⚠️ Geçersiz API anahtarı');
-      return;
-    }
-    localStorage.setItem(STORAGE_KEY, val);
-    window.CLAUDE_API_KEY = val;
-    document.getElementById('api-key-modal').classList.remove('show');
-    UI.toast('✓ Evliya Çelebi aktif!');
-  }
-
-  function skip() {
-    document.getElementById('api-key-modal').classList.remove('show');
-  }
-
-  function reset() {
-    localStorage.removeItem(STORAGE_KEY);
-    window.CLAUDE_API_KEY = '';
-    document.getElementById('api-key-input').value = '';
-    document.getElementById('api-key-modal').classList.add('show');
-  }
-
-  return { init, save, skip, reset };
-})();
+// Yerel bilgi bankası sistemi aktif — API anahtarı gerekmez
 
 /* ============================================================
    GLOBAL KONUM BUTTON — Tüm ekranlarda çalışır
@@ -1669,7 +1703,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   AudioController.init('audio-player');
   Navigation.init();
   AIGuide.init();
-  ApiKeyManager.init();
   GlobalKonum.init();
 
   document.getElementById('popup-close')?.addEventListener('click',UI.closePopup);
@@ -1697,18 +1730,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   <div class="kr-desc" id="kr-zone-desc"></div>
 </div>
 
-<!-- ── API KEY MODAL ── -->
-<div id="api-key-modal" role="dialog" aria-modal="true" aria-label="API Anahtarı">
-  <div class="api-modal-box">
-    <h4>🔑 Rehber Aktivasyonu</h4>
-    <p>Evliya Çelebi'yi aktifleştirmek için Anthropic API anahtarınızı girin. Bu anahtar yalnızca tarayıcınızda saklanır.</p>
-    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
-    <div class="api-modal-btns">
-      <button class="btn btn-primary" style="flex:1" onclick="ApiKeyManager.save()">✓ Kaydet &amp; Başlat</button>
-      <button class="btn btn-secondary" style="flex:1" onclick="ApiKeyManager.skip()">Atla</button>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
