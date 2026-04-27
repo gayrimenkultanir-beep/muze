@@ -105,26 +105,35 @@
 ───────────────────────────────────────────────────────────── -->
 <section id="screen-tour" class="screen" aria-label="Sesli tur ekranı">
 
-  <!-- ── Zaman Çizelgesi (sabit üst bar) ── -->
-  <div id="timeline-band" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <!-- ── Üst Başlık Çubuğu: Menü | Zaman Çizelgesi | Ses ── -->
+  <div id="tour-topbar">
+    <!-- Sol: Menü butonu yuvası -->
+    <div class="topbar-btn-slot" id="topbar-menu-slot"></div>
 
-    <div id="tl-row1">
-      <span id="tl-section-name"></span>
-      <span id="tl-counter"></span>
+    <!-- Orta: Zaman Çizelgesi -->
+    <div id="timeline-band" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+
+      <div id="tl-row1">
+        <span id="tl-section-name"></span>
+        <span id="tl-counter"></span>
+      </div>
+
+      <div id="tl-track" aria-hidden="true">
+        <div id="tl-fill"></div>
+      </div>
+
+      <div id="tl-row3">
+        <span id="tl-prev" class="tl-side tl-prev"></span>
+        <span id="tl-pct"></span>
+        <span id="tl-next" class="tl-side tl-next"></span>
+      </div>
+
     </div>
 
-    <div id="tl-track" aria-hidden="true">
-      <div id="tl-fill"></div>
-    </div>
-
-    <div id="tl-row3">
-      <span id="tl-prev" class="tl-side tl-prev"></span>
-      <span id="tl-pct"></span>
-      <span id="tl-next" class="tl-side tl-next"></span>
-    </div>
-
+    <!-- Sağ: Ses butonu yuvası -->
+    <div class="topbar-btn-slot" id="topbar-sound-slot"></div>
   </div>
-  <!-- /timeline -->
+  <!-- /topbar -->
 
   <!-- ── Tur kartı ── -->
   <article class="tour-card" aria-live="polite">
@@ -156,9 +165,7 @@
   <!-- Evliya Çelebi karakteri -->
   <div id="evliya-wrap" aria-hidden="true">
     <div id="evliya-bubble"></div>
-    <div id="evliya-char">
-  <img src="assets/img/evliya.webp" alt="Evliya Çelebi" style="width:80px;">
-</div>
+    <div id="evliya-char">🧙‍♂️</div>
   </div>
 
 </section>
