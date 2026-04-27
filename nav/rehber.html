@@ -463,6 +463,88 @@ a { color: var(--gold); text-decoration: none; }
   #screen-guestbook { padding-top:var(--sp-xl); }
   #ai-panel { max-width:480px; left:auto; right:0; border-left:1px solid var(--border); border-top-left-radius:var(--r-lg); }
 }
+
+/* ── Global Konum Floating Button ──────────────────────────── */
+#global-konum-btn {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 16px) + 76px);
+  right: 16px;
+  z-index: 590;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(30,95,95,0.4);
+  transition: all var(--t-fast);
+  -webkit-appearance: none;
+}
+#global-konum-btn:hover { transform: scale(1.08); }
+#global-konum-btn:active { transform: scale(0.95); }
+
+/* ── Konum sonuç popup ─────────────────────────────────────── */
+#konum-result-popup {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 16px) + 130px);
+  right: 16px;
+  z-index: 591;
+  background: var(--surface);
+  border: 1.5px solid var(--gold);
+  border-radius: var(--r-lg);
+  padding: 0.75rem 1rem;
+  max-width: 220px;
+  box-shadow: var(--shadow-gold);
+  font-size: 0.82rem;
+  color: var(--ink-mid);
+  display: none;
+  animation: revealUp 0.3s ease both;
+}
+#konum-result-popup.show { display: block; }
+#konum-result-popup .kr-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--ink-pale); margin-bottom: 0.25rem; }
+#konum-result-popup .kr-zone { font-family: var(--font-display); font-size: 1rem; color: var(--gold); font-weight: 600; margin-bottom: 0.2rem; }
+#konum-result-popup .kr-desc { font-style: italic; line-height: 1.4; font-size: 0.78rem; }
+#konum-result-popup .kr-close { position: absolute; top: 6px; right: 8px; font-size: 0.9rem; cursor: pointer; color: var(--ink-pale); background: none; border: none; line-height: 1; }
+
+/* ── API Key modal ─────────────────────────────────────────── */
+#api-key-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  background: rgba(28,20,8,0.7);
+  backdrop-filter: blur(6px);
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+#api-key-modal.show { display: flex; }
+.api-modal-box {
+  background: var(--surface);
+  border: 1.5px solid var(--gold-light);
+  border-radius: var(--r-lg);
+  padding: 2rem 1.5rem;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: var(--shadow-lg), var(--shadow-gold);
+  animation: screenIn 0.3s ease both;
+}
+.api-modal-box h4 { font-family: var(--font-display); font-size: 1.15rem; color: var(--gold); margin-bottom: 0.5rem; }
+.api-modal-box p { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1rem; line-height: 1.5; }
+.api-modal-box input {
+  width: 100%; padding: 0.7rem 1rem;
+  border: 1.5px solid var(--border); border-radius: var(--r-md);
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--ink);
+  background: var(--bg); outline: none; margin-bottom: 1rem;
+  -webkit-appearance: none;
+}
+.api-modal-box input:focus { border-color: var(--gold); }
+.api-modal-btns { display: flex; gap: 0.5rem; }
 </style>
 </head>
 <body>
@@ -1349,20 +1431,29 @@ Darüşşifada müzik, su sesi, koku ve meşguliyet terapileriyle tedavi yapıl�
 Türkçe, sıcak ve bilgilendirici bir üslupla cevap ver. Cevapların 2-4 cümle uzunluğunda olsun.
 Bilmediğin şeylerde müze görevlilerine yönlendir.${stepContext}`;
 
+    const API_KEY = window.CLAUDE_API_KEY || '';
+    if(!API_KEY){
+      return '⚠️ Lütfen HTML dosyasında window.CLAUDE_API_KEY değişkenini tanımlayın.';
+    }
     const response=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
+        'x-api-key': API_KEY,
+        'anthropic-version':'2023-06-01',
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:1000,
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:500,
         system:systemPrompt,
         messages:[{role:'user',content:question}]
       })
     });
-    if(!response.ok) throw new Error('API '+response.status);
+    if(!response.ok){
+      const errData=await response.json().catch(()=>({}));
+      throw new Error('API '+response.status+': '+(errData.error?.message||'Bilinmeyen hata'));
+    }
     const data=await response.json();
     return data.content?.map(b=>b.text||'').join('')||'Cevap alınamadı.';
   }
@@ -1449,10 +1540,137 @@ const KonumSystem=(()=>{
 /* ============================================================
    DOM READY — INIT
    ============================================================ */
+
+/* ============================================================
+   API KEY MANAGER
+   ============================================================ */
+const ApiKeyManager = (() => {
+  const STORAGE_KEY = 'evliya_api_key';
+
+  function init() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      window.CLAUDE_API_KEY = saved;
+    } else {
+      // Show modal on first visit
+      setTimeout(() => {
+        document.getElementById('api-key-modal').classList.add('show');
+      }, 1200);
+    }
+    // Enter key on input
+    document.getElementById('api-key-input')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') save();
+    });
+  }
+
+  function save() {
+    const val = (document.getElementById('api-key-input')?.value || '').trim();
+    if (!val.startsWith('sk-')) {
+      UI.toast('⚠️ Geçersiz API anahtarı');
+      return;
+    }
+    localStorage.setItem(STORAGE_KEY, val);
+    window.CLAUDE_API_KEY = val;
+    document.getElementById('api-key-modal').classList.remove('show');
+    UI.toast('✓ Evliya Çelebi aktif!');
+  }
+
+  function skip() {
+    document.getElementById('api-key-modal').classList.remove('show');
+  }
+
+  function reset() {
+    localStorage.removeItem(STORAGE_KEY);
+    window.CLAUDE_API_KEY = '';
+    document.getElementById('api-key-input').value = '';
+    document.getElementById('api-key-modal').classList.add('show');
+  }
+
+  return { init, save, skip, reset };
+})();
+
+/* ============================================================
+   GLOBAL KONUM BUTTON — Tüm ekranlarda çalışır
+   ============================================================ */
+const GlobalKonum = (() => {
+  const ZONES=[
+    {id:'darussifa', name:'Darüşşifa',      announce:"Darüşşifa bölgesindesiniz. Osmanlı'nın şifa yurdu sizi karşılıyor.", lat:41.6775, lon:26.5560, r:60},
+    {id:'medrese',   name:'Tıp Medresesi',  announce:"Tıp Medresesi bölgesindesiniz. İlmin ve hekimliğin beşiğindesiniz.", lat:41.6777, lon:26.5570, r:50},
+    {id:'imaret',    name:'İmarethane',      announce:"İmarethane bölgesindesiniz. Yahya Baba'nın duaları bu mekânda yankılanıyor.", lat:41.6770, lon:26.5565, r:50},
+    {id:'cami',      name:'Cami',            announce:"Cami avlusundasınız. 500 yıllık huzur sizi kucaklıyor.", lat:41.6772, lon:26.5558, r:65},
+    {id:'bahce',     name:'Külliye Bahçesi', announce:"Külliye Bahçesindesiniz. Asırlık çınarlar sizi selamlıyor.", lat:41.6773, lon:26.5562, r:80},
+    {id:'giris',     name:'Müze Girişi',     announce:"Müze Girişindesiniz. Hoş geldiniz!", lat:41.6774, lon:26.5555, r:40},
+  ];
+
+  function _findZone(lat, lon) {
+    for (const z of ZONES) {
+      const dy = (lat - z.lat) * 111320;
+      const dx = (lon - z.lon) * 111320 * Math.cos(lat * Math.PI / 180);
+      if (Math.sqrt(dx*dx + dy*dy) < z.r) return z;
+    }
+    return null;
+  }
+
+  function locate() {
+    const btn = document.getElementById('global-konum-btn');
+    if (btn) btn.textContent = '⏳';
+
+    if (!navigator.geolocation) {
+      UI.toast('⚠️ Tarayıcınız konum desteklemiyor');
+      if (btn) btn.textContent = '📍';
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const z = _findZone(pos.coords.latitude, pos.coords.longitude);
+        const zoneName = z ? z.name : 'Külliye Çevresi';
+        const zoneDesc = z ? z.announce : 'Külliye sınırları dışındasınız.';
+
+        // Show result popup
+        const popup = document.getElementById('konum-result-popup');
+        document.getElementById('kr-zone-name').textContent = zoneName;
+        document.getElementById('kr-zone-desc').textContent = zoneDesc;
+        popup.classList.add('show');
+
+        // Auto-hide after 6s
+        setTimeout(() => popup.classList.remove('show'), 6000);
+
+        // Speak
+        AudioController.speak('Şu an ' + zoneDesc);
+
+        // Also update intro badge if visible
+        const badge = document.getElementById('konum-badge');
+        const badgeText = document.getElementById('konum-badge-text');
+        if (badgeText) badgeText.textContent = zoneName;
+        if (badge) { badge.style.display = 'inline-flex'; badge.classList.add('show'); }
+
+        if (btn) btn.textContent = '📍';
+      },
+      err => {
+        const msgs = {1:'Konum izni verilmedi', 2:'GPS sinyali alınamıyor', 3:'Zaman aşımı'};
+        UI.toast('❌ ' + (msgs[err.code] || 'Konum alınamadı'));
+        if (btn) btn.textContent = '📍';
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 5000 }
+    );
+  }
+
+  function init() {
+    document.getElementById('global-konum-btn')?.addEventListener('click', locate);
+    // Also bind the intro konum button
+    document.getElementById('btn-konum-intro')?.addEventListener('click', locate);
+  }
+
+  return { init, locate };
+})();
+
 document.addEventListener('DOMContentLoaded',()=>{
   AudioController.init('audio-player');
   Navigation.init();
   AIGuide.init();
+  ApiKeyManager.init();
+  GlobalKonum.init();
 
   document.getElementById('popup-close')?.addEventListener('click',UI.closePopup);
   document.getElementById('btn-send')?.addEventListener('click',GuestBook.send);
@@ -1461,11 +1679,36 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('btn-start')?.addEventListener('click',TourManager.start);
 
   // Konum butonları
-  document.getElementById('btn-konum-intro')?.addEventListener('click',KonumSystem.locate);
+  // konum handled by GlobalKonum.init()
 
   Navigation.changeScreen('screen-intro', false);
 });
 </script>
+
+
+<!-- ── GLOBAL KONUM BUTTON ── -->
+<button id="global-konum-btn" title="Konumum" aria-label="Anlık konum">📍</button>
+
+<!-- ── KONUM RESULT POPUP ── -->
+<div id="konum-result-popup" role="status" aria-live="polite">
+  <button class="kr-close" onclick="document.getElementById('konum-result-popup').classList.remove('show')" aria-label="Kapat">✕</button>
+  <div class="kr-label">📍 Şu an</div>
+  <div class="kr-zone" id="kr-zone-name">—</div>
+  <div class="kr-desc" id="kr-zone-desc"></div>
+</div>
+
+<!-- ── API KEY MODAL ── -->
+<div id="api-key-modal" role="dialog" aria-modal="true" aria-label="API Anahtarı">
+  <div class="api-modal-box">
+    <h4>🔑 Rehber Aktivasyonu</h4>
+    <p>Evliya Çelebi'yi aktifleştirmek için Anthropic API anahtarınızı girin. Bu anahtar yalnızca tarayıcınızda saklanır.</p>
+    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." autocomplete="off" spellcheck="false">
+    <div class="api-modal-btns">
+      <button class="btn btn-primary" style="flex:1" onclick="ApiKeyManager.save()">✓ Kaydet &amp; Başlat</button>
+      <button class="btn btn-secondary" style="flex:1" onclick="ApiKeyManager.skip()">Atla</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
