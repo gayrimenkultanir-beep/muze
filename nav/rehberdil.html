@@ -691,33 +691,33 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
 <nav id="nav-drawer" role="navigation" aria-label="Ana menü" aria-hidden="true">
   <div class="nav-header">
     <h3>🏛️ Sultan II. Bayezid Külliyesi</h3>
-    <small>Dijital Rehber</small>
+    <small data-i18n="navSubtitle">Dijital Rehber</small>
   </div>
 
   <div class="nav-items">
-    <div class="nav-section-title">TUR DURAKLARI</div>
+    <div class="nav-section-title" data-i18n="tourSection">TUR DURAKLARI</div>
     <div class="nav-item" id="nav-intro" role="menuitem" aria-label="Müze Girişi - Ana Sayfa">
       <span class="nav-icon">🏠</span>
-      <span>Açılış Sayfası</span>
+      <span data-i18n="navMuseum">Açılış Sayfası</span>
     </div>
     <div id="nav-items-tour"></div>
 
     <div class="nav-divider"></div>
-    <div class="nav-section-title">SAYFALAR</div>
+    <div class="nav-section-title" data-i18n="pagesSection">SAYFALAR</div>
 
     <div class="nav-item" id="nav-konum" role="menuitem" aria-label="Harita ve Konum">
       <span class="nav-icon">🗺️</span>
-      <span>Harita &amp; Konum</span>
+      <span data-i18n="navMap">Harita &amp; Konum</span>
     </div>
 
     <div class="nav-item" id="nav-guestbook" role="menuitem" aria-label="Ziyaretçi Defteri">
       <span class="nav-icon">🖋️</span>
-      <span>Gönül Köprüsü</span>
+      <span data-i18n="navGuest">Gönül Köprüsü</span>
     </div>
 
     <div class="nav-item" id="nav-ai" role="menuitem" aria-label="Rehbere Soru Sor">
       <span class="nav-icon">💬</span>
-      <span>Rehbere Sor</span>
+      <span data-i18n="navAsk">Rehbere Sor</span>
     </div>
   </div>
 </nav>
@@ -730,22 +730,22 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
   </div>
 
   <div class="intro-content">
-    <h1>🏛️ <em>Eşiğe Davet</em></h1>
-    <p class="intro-tagline">
+    <h1>🏛️ <em data-i18n="introTitle">Eşiğe Davet</em></h1>
+    <p class="intro-tagline" data-i18n="tagline">
       Zamanın ötesine, şifanın merkezine<br>bir yolculuk…
     </p>
     <div class="intro-divider" aria-hidden="true"></div>
     <button id="btn-start" class="btn btn-primary" aria-label="Sesli tura başla">
-      YOLCULUĞA BAŞLA
+      <span data-i18n="btnStart">YOLCULUĞA BAŞLA</span>
     </button>
 
     <br>
     <button class="intro-konum-btn" id="btn-konum-intro" aria-label="Konumumu göster">
-      📍 Neredeyim?
+      <span data-i18n="where">📍 Neredeyim?</span>
     </button>
 
     <div id="konum-badge" role="status" aria-live="polite">
-      Şu an: <strong id="konum-badge-text">…</strong> dasınız
+      <span data-i18n="nowAt">Şu an:</span> <strong id="konum-badge-text">…</strong> <span data-i18n="youAre">dasınız</span>
     </div>
   </div>
 </section>
@@ -775,8 +775,8 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
     <div class="text-content" id="text-content"></div>
     <div class="question-box" id="step-question"></div>
     <div class="nav-controls">
-      <button id="btn-prev" class="btn btn-secondary" aria-label="Önceki adım" style="visibility:hidden">⬅ Geri</button>
-      <button id="btn-next" class="btn btn-primary" aria-label="Sonraki adım">İleri ➡</button>
+      <button id="btn-prev" class="btn btn-secondary" aria-label="Önceki adım" style="visibility:hidden"><span data-i18n="btnPrev">⬅ Geri</span></button>
+      <button id="btn-next" class="btn btn-primary" aria-label="Sonraki adım"><span data-i18n="btnNext">İleri ➡</span></button>
     </div>
     <div id="gallery-target" aria-label="Durak görselleri"></div>
   </article>
@@ -793,24 +793,24 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
 <!-- ── SCREEN 3: GÖNÜL KÖPRÜSÜ ── -->
 <section id="screen-guestbook" class="screen" aria-label="Ziyaretçi defteri">
   <div class="guestbook-wrap">
-    <h2>🖋️ Gönül Köprüsü</h2>
-    <p class="guestbook-desc">
+    <h2 data-i18n="gbTitle">🖋️ Gönül Köprüsü</h2>
+    <p class="guestbook-desc" data-i18n="gbDesc">
       "Geçmişin şifası, bugünün kelimeleriyle buluşuyor."<br><br>
       Külliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri duymayı çok isteriz. Kelimeleriniz bu köprünün birer taşı olacak.
     </p>
     <form class="gb-form" onsubmit="return false;" aria-label="Not bırak formu" novalidate>
       <div class="form-row">
-        <input type="text" id="gb-name" placeholder="Adınız Soyadınız" autocomplete="name" aria-label="Adınız">
-        <input type="text" id="gb-city" placeholder="Geldiğiniz Şehir" autocomplete="address-level2" aria-label="Şehriniz">
+        <input type="text" id="gb-name" placeholder="Adınız Soyadınız" autocomplete="name" aria-label="Adınız" data-i18n-ph="gbPlaceName">
+        <input type="text" id="gb-city" placeholder="Geldiğiniz Şehir" autocomplete="address-level2" aria-label="Şehriniz" data-i18n-ph="gbPlaceCity">
       </div>
-      <textarea id="gb-text" placeholder="Duygularınızı buraya bırakın…" aria-label="Mesajınız" rows="5"></textarea>
+      <textarea id="gb-text" placeholder="Duygularınızı buraya bırakın…" aria-label="Mesajınız" rows="5" data-i18n-ph="gbPlaceMsg"></textarea>
       <button id="btn-send" type="button" class="btn btn-send" aria-label="Notunuzu gönderin">
-        KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM
+        <span data-i18n="btnSend">KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM</span>
       </button>
     </form>
     <div class="ottodiv" aria-hidden="true">— ✦ —</div>
     <div class="msg-list-section">
-      <h3 class="msg-section-title">📜 Son Mesajlar<small>Gönül Köprüsü'nden sesler</small></h3>
+      <h3 class="msg-section-title"><span data-i18n="gbMessages">📜 Son Mesajlar</span><small data-i18n="gbMessagesSubtitle">Gönül Köprüsü'nden sesler</small></h3>
       <div id="list-target" aria-live="polite" aria-label="Ziyaretçi mesajları"></div>
       <div id="page-target" class="pagination" role="navigation" aria-label="Sayfalama"></div>
     </div>
@@ -820,18 +820,18 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
 <!-- ── SCREEN 4: KONUM ── -->
 <section id="screen-konum" class="screen" aria-label="Harita ve Konum">
   <div class="konum-wrap">
-    <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,5vw,2rem);margin-bottom:var(--sp-sm);">🗺️ Harita &amp; Konum</h2>
-    <p style="color:var(--ink-soft);font-size:0.9rem;margin-bottom:var(--sp-md);">Külliye içindeki konumunuzu takip edin, bölgeler arası yönlenin.</p>
+    <h2 style="font-family:var(--font-display);font-size:clamp(1.5rem,5vw,2rem);margin-bottom:var(--sp-sm);" data-i18n="konumTitle">🗺️ Harita &amp; Konum</h2>
+    <p style="color:var(--ink-soft);font-size:0.9rem;margin-bottom:var(--sp-md);" data-i18n="konumDesc">Külliye içindeki konumunuzu takip edin, bölgeler arası yönlenin.</p>
 
     <div class="konum-card">
       <div class="konum-icon">📍</div>
       <div>
-        <div class="konum-card-title" id="konum-screen-zone">Konum belirleniyor…</div>
-        <div class="konum-card-desc" id="konum-screen-desc">GPS konumunuzu almak için aşağıdaki butona basın.</div>
+        <div class="konum-card-title" id="konum-screen-zone" data-i18n="konumDetecting">Konum belirleniyor…</div>
+        <div class="konum-card-desc" id="konum-screen-desc" data-i18n="konumGPS">GPS konumunuzu almak için aşağıdaki butona basın.</div>
       </div>
     </div>
 
-    <a id="konum-open-btn" href="konum.html" target="_blank" aria-label="Harita uygulamasını aç">
+    <a id="konum-open-btn" href="konum.html" target="_blank" aria-label="Harita uygulamasını aç" data-i18n="konumOpenBtn">
       🗺️ TAM HARİTAYI AÇ (konum.html)
     </a>
 
@@ -852,12 +852,12 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
 <div id="ai-panel" role="dialog" aria-label="Rehber soru-cevap" aria-modal="true" aria-hidden="true">
   <div class="ai-handle" role="presentation"></div>
   <div class="ai-header">
-    <h4>🏛️ Rehbere Sor — Evliya Çelebi</h4>
+    <h4 data-i18n="aiTitle">🏛️ Rehbere Sor — Evliya Çelebi</h4>
     <button id="ai-close-btn" aria-label="Paneli kapat">✕</button>
   </div>
   <div id="ai-messages" aria-live="polite" aria-label="Rehber yanıtları"></div>
   <div id="ai-input-area">
-    <input type="text" id="ai-input" placeholder="Külliye hakkında bir şey sorun…" aria-label="Soru girin" autocomplete="off">
+    <input type="text" id="ai-input" placeholder="Külliye hakkında bir şey sorun…" aria-label="Soru girin" autocomplete="off" data-i18n-ph="aiPlaceholder">
     <button id="ai-send-btn" aria-label="Gönder">➤</button>
   </div>
 </div>
@@ -869,7 +869,7 @@ body[dir="rtl"] #lang-dropdown { right: auto; left: 14px; }
   <div class="popup-content">
     <div class="popup-seal" aria-hidden="true">✨</div>
     <p id="success-msg"></p>
-    <button id="popup-close" class="btn btn-primary" aria-label="Kapat">Şifanız Bol Olsun</button>
+    <button id="popup-close" class="btn btn-primary" aria-label="Kapat"><span data-i18n="popupClose">Şifanız Bol Olsun</span></button>
   </div>
 </div>
 
@@ -1044,7 +1044,10 @@ const AudioController=(()=>{
   function toggle(){
     _muted=!_muted; localStorage.setItem('audioMuted',_muted);
     if(_audioEl){ _audioEl.muted=_muted; if(_muted){_audioEl.pause();_cancelTTS();}else{_audioEl.play().catch(()=>{});} }
-    _syncIcon(); UI.toast(_muted?'🔇 Ses kapalı':'🔊 Ses açık');
+    _syncIcon();
+    const onMsg  = window._i18n_audioOn  || '🔊 Ses açık';
+    const offMsg = window._i18n_audioOff || '🔇 Ses kapalı';
+    UI.toast(_muted ? offMsg : onMsg);
   }
   function play(src){ if(!_audioEl)return; _audioEl.src=src||''; _audioEl.muted=_muted; if(!_muted&&src)_audioEl.play().catch(()=>{}); }
   function stop(){ if(!_audioEl)return; _audioEl.pause(); _audioEl.src=''; }
@@ -1305,12 +1308,17 @@ const TourManager=(()=>{
     _setText('step-subtitle',data.s);
     _setHTML('text-content',_fmt(data.m));
     _setText('step-question',data.q||'');
-    // btnNext: adım kendi metnini taşıyorsa onu kullan, yoksa dil dizgesini kullan
+    // btnNext: adıma özel metin varsa onu kullan, yoksa dil dizgesinden al
     const L = (typeof LanguageManager !== 'undefined') ? LanguageManager.langs[LanguageManager.currentLang()] : null;
-    const nextLabel = data.btnNext || (L ? L.btnNext : 'İleri ➡');
-    _setText('btn-next', nextLabel);
+    const nextSpan = document.querySelector('#btn-next [data-i18n="btnNext"]');
+    if (nextSpan) nextSpan.textContent = data.btnNext || (L ? L.btnNext : 'İleri ➡');
+    else _setText('btn-next', data.btnNext || (L ? L.btnNext : 'İleri ➡'));
     const bpEl=document.getElementById('btn-prev');
-    if(bpEl){ bpEl.style.visibility=_step===0?'hidden':'visible'; if(L) bpEl.textContent=L.btnPrev; }
+    if(bpEl){
+      bpEl.style.visibility=_step===0?'hidden':'visible';
+      const prevSpan = bpEl.querySelector('[data-i18n="btnPrev"]');
+      if (prevSpan && L) prevSpan.textContent = L.btnPrev;
+    }
 
     const fillEl=document.getElementById('tl-fill');
     if(fillEl) fillEl.style.width=pct+'%';
@@ -1446,45 +1454,50 @@ const GuestBook=(()=>{
     const cityEl=document.getElementById('gb-city');
     const textEl=document.getElementById('gb-text');
     const btn=document.getElementById('btn-send');
-    if(!textEl||!textEl.value.trim()){UI.toast('✨ Lütfen bir not bırakın');return;}
-    const orig=btn?.textContent||'';
-    if(btn){btn.disabled=true;btn.textContent='Mühürleniyor...';}
+    const L = (typeof LanguageManager !== 'undefined') ? LanguageManager.langs[LanguageManager.currentLang()] : null;
+    const emptyMsg = L ? (L.gbEmptyMsg || '✨ Please leave a message') : '✨ Lütfen bir not bırakın';
+    if(!textEl||!textEl.value.trim()){UI.toast(emptyMsg);return;}
+    const orig=btn?.innerHTML||'';
+    if(btn){btn.disabled=true; const sp=btn.querySelector('[data-i18n]'); if(sp) sp.textContent=L?(L.gbSending||'Sending…'):'Mühürleniyor...';}
     AudioController.fx('assets/audio/muhur.mp3');
     const database=_db();
     if(database){
       try{
         await database.collection('messages').add({
-          user:(nameEl?.value.trim())||'Anonim Ziyaretçi',
-          city:(cityEl?.value.trim())||'Belirtilmedi',
+          user:(nameEl?.value.trim())||(L?L.gbAnon:'Anonim Ziyaretçi'),
+          city:(cityEl?.value.trim())||(L?L.gbNoCity:'Belirtilmedi'),
           text:textEl.value.trim(),
           timestamp:firebase.firestore.FieldValue.serverTimestamp()
         });
         if(nameEl)nameEl.value='';
         if(cityEl)cityEl.value='';
         textEl.value='';
-        setTimeout(()=>UI.showPopup("Duygularınız Gönül Köprüsü'ne mühürlendi. ✨\nBıraktığınız bu anlamlı iz, külliyemizin manevi mirasını zenginleştirdi..."),900);
+        const successMsg = L ? (L.gbSuccess || "Your feelings have been sealed on the Bridge.") : "Duygularınız Gönül Köprüsü'ne mühürlendi. ✨\nBıraktığınız bu anlamlı iz, külliyemizin manevi mirasını zenginleştirdi...";
+        setTimeout(()=>UI.showPopup(successMsg),900);
       }catch(err){
         console.error('[GuestBook]',err);
-        UI.toast('❌ Bağlantı hatası!');
+        UI.toast('❌ '+(L?L.gbError:'Bağlantı hatası!'));
       }
     } else {
-      _messages.unshift({user:(nameEl?.value.trim())||'Anonim',city:(cityEl?.value.trim())||'',text:textEl.value.trim(),timestamp:null});
+      _messages.unshift({user:(nameEl?.value.trim())||(L?L.gbAnon:'Anonim'),city:(cityEl?.value.trim())||'',text:textEl.value.trim(),timestamp:null});
       if(nameEl)nameEl.value='';if(cityEl)cityEl.value='';textEl.value='';
-      _renderMessages();UI.showPopup('Not bırakıldı. ✨');
+      _renderMessages();UI.showPopup(L?L.gbSuccess:'Not bırakıldı. ✨');
     }
-    if(btn){btn.disabled=false;btn.textContent=orig;}
+    if(btn){btn.disabled=false;btn.innerHTML=orig;}
   }
 
   function _renderMessages(){
     const target=document.getElementById('list-target');
     if(!target) return;
     target.innerHTML='';
+    const L = (typeof LanguageManager !== 'undefined') ? LanguageManager.langs[LanguageManager.currentLang()] : null;
     const start=(_page-1)*PER_PAGE;
     const slice=_messages.slice(start,start+PER_PAGE);
-    if(!slice.length){target.innerHTML='<p class="msg-empty">Henüz mesaj yok. İlk taşı siz koyun! ✨</p>';_renderPagination();return;}
+    if(!slice.length){target.innerHTML='<p class="msg-empty">'+(L?L.gbNoMessages:'Henüz mesaj yok. İlk taşı siz koyun! ✨')+'</p>';_renderPagination();return;}
     const frag=document.createDocumentFragment();
+    const locale = L ? (LanguageManager.currentLang()+'-'+LanguageManager.currentLang().toUpperCase()) : 'tr-TR';
     slice.forEach(m=>{
-      const ts=m.timestamp?new Date(m.timestamp.seconds*1000).toLocaleDateString('tr-TR'):'';
+      const ts=m.timestamp?new Date(m.timestamp.seconds*1000).toLocaleDateString(locale):'';
       const div=document.createElement('div'); div.className='msg-card';
       div.innerHTML=`<div class="msg-author">${UI.esc(m.user||'Anonim')}</div><div class="msg-city">${UI.esc(m.city||'')}</div><div class="msg-body">${UI.esc(m.text||'')}</div>${ts?`<div class="msg-date">${ts}</div>`:''}`;
       frag.appendChild(div);
@@ -1793,142 +1806,185 @@ const KonumSystem=(()=>{
 const LanguageManager = (() => {
   /* ── Desteklenen diller ── */
   const LANGS = {
-    tr: { name:'Türkçe',   tts:'tr-TR', dir:'ltr', flag:'🇹🇷',
-          loading:'Yükleniyor…', welcome:'🏛️ Merhaba! Ben dijital rehberinizim Evliya Çelebi.',
-          btnStart:'YOLCULUĞA BAŞLA', btnNext:'İleri ➡', btnPrev:'⬅ Geri',
-          btnSend:'KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM', gbPlaceName:'Adınız Soyadınız',
-          gbPlaceCity:'Geldiğiniz Şehir', gbPlaceMsg:'Duygularınızı buraya bırakın…',
-          aiPlaceholder:'Külliye hakkında bir şey sorun…', navMuseum:'Açılış Sayfası',
-          navMap:'Harita & Konum', navGuest:'Gönül Köprüsü', navAsk:'Rehbere Sor',
-          tourSection:'TUR DURAKLARI', pagesSection:'SAYFALAR',
-          tagline:'Zamanın ötesine, şifanın merkezine\nbir yolculuk…',
-          where:'📍 Neredeyim?'
-        },
-    en: { name:'English',  tts:'en-GB', dir:'ltr', flag:'🇬🇧',
-          loading:'Translating…', welcome:'🏛️ Hello! I am your digital guide, Evliya Çelebi.',
-          btnStart:'BEGIN THE JOURNEY', btnNext:'Next ➡', btnPrev:'⬅ Back',
-          btnSend:'I LEAVE MY MARK ON THE BRIDGE', gbPlaceName:'Your Full Name',
-          gbPlaceCity:'Your City', gbPlaceMsg:'Share your thoughts and feelings…',
-          aiPlaceholder:'Ask anything about the complex…', navMuseum:'Welcome Screen',
-          navMap:'Map & Location', navGuest:'Bridge of Hearts', navAsk:'Ask the Guide',
-          tourSection:'TOUR STOPS', pagesSection:'PAGES',
-          tagline:'A journey beyond time,\nto the heart of healing…',
-          where:'📍 Where am I?'
-        },
-    de: { name:'Deutsch',  tts:'de-DE', dir:'ltr', flag:'🇩🇪',
-          loading:'Übersetzung läuft…', welcome:'🏛️ Willkommen! Ich bin Ihr digitaler Reiseführer Evliya Çelebi.',
-          btnStart:'REISE BEGINNEN', btnNext:'Weiter ➡', btnPrev:'⬅ Zurück',
-          btnSend:'ICH HINTERLASSE MEINE SPUR', gbPlaceName:'Ihr vollständiger Name',
-          gbPlaceCity:'Ihre Stadt', gbPlaceMsg:'Teilen Sie Ihre Eindrücke…',
-          aiPlaceholder:'Stellen Sie Fragen über den Komplex…', navMuseum:'Startseite',
-          navMap:'Karte & Standort', navGuest:'Brücke der Herzen', navAsk:'Führer fragen',
-          tourSection:'TOURSTOPPS', pagesSection:'SEITEN',
-          tagline:'Eine Reise jenseits der Zeit,\nins Herz des Heilens…',
-          where:'📍 Wo bin ich?'
-        },
+    tr: { name:'Türkçe', tts:'tr-TR', dir:'ltr', flag:'🇹🇷',
+      loading:'Yükleniyor…',
+      navSubtitle:'Dijital Rehber', tourSection:'TUR DURAKLARI', pagesSection:'SAYFALAR',
+      navMuseum:'Açılış Sayfası', navMap:'Harita & Konum', navGuest:'Gönül Köprüsü', navAsk:'Rehbere Sor',
+      introTitle:'Eşiğe Davet',
+      tagline:'Zamanın ötesine, şifanın merkezine\nbir yolculuk…',
+      btnStart:'YOLCULUĞA BAŞLA', btnNext:'İleri ➡', btnPrev:'⬅ Geri',
+      btnSend:'KÖPRÜYE BİR TAŞ DA BEN KOYUYORUM',
+      where:'📍 Neredeyim?', nowAt:'Şu an:', youAre:'dasınız',
+      gbTitle:'🖋️ Gönül Köprüsü',
+      gbDesc:'"Geçmişin şifası, bugünün kelimeleriyle buluşuyor."\n\nKülliyemizde çıktığınız bu 500 yıllık yolculuğun sizde bıraktığı izleri duymayı çok isteriz. Kelimeleriniz bu köprünün birer taşı olacak.',
+      gbPlaceName:'Adınız Soyadınız', gbPlaceCity:'Geldiğiniz Şehir', gbPlaceMsg:'Duygularınızı buraya bırakın…',
+      gbMessages:'📜 Son Mesajlar', gbMessagesSubtitle:'Gönül Köprüsü\'nden sesler',
+      konumTitle:'🗺️ Harita & Konum', konumDesc:'Külliye içindeki konumunuzu takip edin, bölgeler arası yönlenin.',
+      konumDetecting:'Konum belirleniyor…', konumGPS:'GPS konumunuzu almak için aşağıdaki butona basın.',
+      konumOpenBtn:'🗺️ TAM HARİTAYI AÇ (konum.html)',
+      aiTitle:'🏛️ Rehbere Sor — Evliya Çelebi', aiPlaceholder:'Külliye hakkında bir şey sorun…',
+      welcome:'🏛️ Merhaba! Ben dijital rehberinizim Evliya Çelebi. Külliye, tedavi yöntemleri, tarih veya müze hakkında aklınıza takılan her şeyi sorabilirsiniz.',
+      popupClose:'Şifanız Bol Olsun',
+      krLabel:'📍 Şu an',
+      audioOn:'🔊 Ses açık', audioOff:'🔇 Ses kapalı',
+    },
+    en: { name:'English', tts:'en-GB', dir:'ltr', flag:'🇬🇧',
+      loading:'Translating…',
+      navSubtitle:'Digital Guide', tourSection:'TOUR STOPS', pagesSection:'PAGES',
+      navMuseum:'Welcome Screen', navMap:'Map & Location', navGuest:'Bridge of Hearts', navAsk:'Ask the Guide',
+      introTitle:'Welcome to the Threshold',
+      tagline:'A journey beyond time,\nto the heart of healing…',
+      btnStart:'BEGIN THE JOURNEY', btnNext:'Next ➡', btnPrev:'⬅ Back',
+      btnSend:'I LEAVE MY MARK ON THE BRIDGE',
+      where:'📍 Where am I?', nowAt:'Now at:', youAre:'',
+      gbTitle:'🖋️ Bridge of Hearts',
+      gbDesc:'"The healing of the past meets the words of today."\n\nWe would love to hear the impressions this 500-year journey through our complex has left on you. Your words will be the stones of this bridge.',
+      gbPlaceName:'Your Full Name', gbPlaceCity:'Your City', gbPlaceMsg:'Share your thoughts and feelings…',
+      gbMessages:'📜 Recent Messages', gbMessagesSubtitle:'Voices from the Bridge of Hearts',
+      konumTitle:'🗺️ Map & Location', konumDesc:'Track your location within the complex and navigate between areas.',
+      konumDetecting:'Detecting location…', konumGPS:'Press the button below to get your GPS location.',
+      konumOpenBtn:'🗺️ OPEN FULL MAP (konum.html)',
+      aiTitle:'🏛️ Ask the Guide — Evliya Çelebi', aiPlaceholder:'Ask anything about the complex…',
+      welcome:'🏛️ Hello! I am your digital guide, Evliya Çelebi. Feel free to ask me anything about the complex, healing methods, history, or the museum.',
+      popupClose:'May You Be Blessed',
+      krLabel:'📍 Currently at',
+      audioOn:'🔊 Sound on', audioOff:'🔇 Sound off',
+    },
+    de: { name:'Deutsch', tts:'de-DE', dir:'ltr', flag:'🇩🇪',
+      loading:'Übersetzung läuft…',
+      navSubtitle:'Digitaler Reiseführer', tourSection:'TOURSTOPPS', pagesSection:'SEITEN',
+      navMuseum:'Startseite', navMap:'Karte & Standort', navGuest:'Brücke der Herzen', navAsk:'Führer fragen',
+      introTitle:'Willkommen an der Schwelle',
+      tagline:'Eine Reise jenseits der Zeit,\nins Herz des Heilens…',
+      btnStart:'REISE BEGINNEN', btnNext:'Weiter ➡', btnPrev:'⬅ Zurück',
+      btnSend:'ICH HINTERLASSE MEINE SPUR AUF DER BRÜCKE',
+      where:'📍 Wo bin ich?', nowAt:'Jetzt bei:', youAre:'',
+      gbTitle:'🖋️ Brücke der Herzen',
+      gbDesc:'"Die Heilung der Vergangenheit trifft die Worte der Gegenwart."\n\nWir würden gerne hören, welche Eindrücke diese 500-jährige Reise durch unseren Komplex bei Ihnen hinterlassen hat. Ihre Worte werden die Steine dieser Brücke sein.',
+      gbPlaceName:'Ihr vollständiger Name', gbPlaceCity:'Ihre Stadt', gbPlaceMsg:'Teilen Sie Ihre Eindrücke…',
+      gbMessages:'📜 Neueste Nachrichten', gbMessagesSubtitle:'Stimmen von der Brücke der Herzen',
+      konumTitle:'🗺️ Karte & Standort', konumDesc:'Verfolgen Sie Ihren Standort im Komplex und navigieren Sie zwischen den Bereichen.',
+      konumDetecting:'Standort wird ermittelt…', konumGPS:'Drücken Sie die Schaltfläche unten, um Ihren GPS-Standort zu ermitteln.',
+      konumOpenBtn:'🗺️ VOLLSTÄNDIGE KARTE ÖFFNEN (konum.html)',
+      aiTitle:'🏛️ Führer fragen — Evliya Çelebi', aiPlaceholder:'Stellen Sie Fragen über den Komplex…',
+      welcome:'🏛️ Willkommen! Ich bin Ihr digitaler Reiseführer Evliya Çelebi. Fragen Sie mich gerne alles über den Komplex, Heilmethoden, Geschichte oder das Museum.',
+      popupClose:'Auf Ihre Gesundheit',
+      krLabel:'📍 Aktuell bei',
+      audioOn:'🔊 Ton an', audioOff:'🔇 Ton aus',
+    },
     fr: { name:'Français', tts:'fr-FR', dir:'ltr', flag:'🇫🇷',
-          loading:'Traduction en cours…', welcome:'🏛️ Bonjour! Je suis votre guide numérique, Evliya Çelebi.',
-          btnStart:'COMMENCER LE VOYAGE', btnNext:'Suivant ➡', btnPrev:'⬅ Retour',
-          btnSend:'JE LAISSE MA TRACE SUR LE PONT', gbPlaceName:'Votre nom complet',
-          gbPlaceCity:'Votre ville', gbPlaceMsg:'Partagez vos impressions…',
-          aiPlaceholder:'Posez vos questions sur le complexe…', navMuseum:'Page d\'accueil',
-          navMap:'Carte & Localisation', navGuest:'Pont des Cœurs', navAsk:'Demander au guide',
-          tourSection:'ÉTAPES DE LA VISITE', pagesSection:'PAGES',
-          tagline:'Un voyage au-delà du temps,\nau cœur de la guérison…',
-          where:'📍 Où suis-je?'
-        },
-    ar: { name:'العربية',  tts:'ar-SA', dir:'rtl', flag:'🇸🇦',
-          loading:'جارٍ الترجمة…', welcome:'🏛️ مرحباً! أنا مرشدكم الرقمي أولياء جلبي.',
-          btnStart:'ابدأ الرحلة', btnNext:'التالي ➡', btnPrev:'⬅ السابق',
-          btnSend:'أترك أثري على الجسر', gbPlaceName:'اسمك الكامل',
-          gbPlaceCity:'مدينتك', gbPlaceMsg:'شاركنا مشاعرك وأفكارك…',
-          aiPlaceholder:'اسأل عن المجمع التاريخي…', navMuseum:'الصفحة الرئيسية',
-          navMap:'الخريطة والموقع', navGuest:'جسر القلوب', navAsk:'اسأل المرشد',
-          tourSection:'محطات الجولة', pagesSection:'الصفحات',
-          tagline:'رحلة عبر الزمن،\nإلى قلب الشفاء…',
-          where:'📍 أين أنا؟'
-        },
-    zh: { name:'中文',     tts:'zh-CN', dir:'ltr', flag:'🇨🇳',
-          loading:'翻译中…', welcome:'🏛️ 您好！我是您的数字导游埃夫利亚·切莱比。',
-          btnStart:'开始旅程', btnNext:'下一步 ➡', btnPrev:'⬅ 返回',
-          btnSend:'我在桥上留下印记', gbPlaceName:'您的姓名',
-          gbPlaceCity:'您所在的城市', gbPlaceMsg:'分享您的感受与想法…',
-          aiPlaceholder:'请询问关于建筑群的问题…', navMuseum:'欢迎页面',
-          navMap:'地图与位置', navGuest:'心桥', navAsk:'向导游提问',
-          tourSection:'游览站点', pagesSection:'页面',
-          tagline:'穿越时光的旅程，\n走进治愈的中心…',
-          where:'📍 我在哪里？'
-        },
+      loading:'Traduction en cours…',
+      navSubtitle:'Guide numérique', tourSection:'ÉTAPES DE LA VISITE', pagesSection:'PAGES',
+      navMuseum:'Page d\'accueil', navMap:'Carte & Localisation', navGuest:'Pont des Cœurs', navAsk:'Demander au guide',
+      introTitle:'Bienvenue au Seuil',
+      tagline:'Un voyage au-delà du temps,\nau cœur de la guérison…',
+      btnStart:'COMMENCER LE VOYAGE', btnNext:'Suivant ➡', btnPrev:'⬅ Retour',
+      btnSend:'JE LAISSE MA TRACE SUR LE PONT',
+      where:'📍 Où suis-je?', nowAt:'Maintenant à:', youAre:'',
+      gbTitle:'🖋️ Pont des Cœurs',
+      gbDesc:'"La guérison du passé rencontre les mots d\'aujourd\'hui."\n\nNous aimerions entendre les impressions que ce voyage de 500 ans à travers notre complexe a laissées en vous. Vos mots seront les pierres de ce pont.',
+      gbPlaceName:'Votre nom complet', gbPlaceCity:'Votre ville', gbPlaceMsg:'Partagez vos impressions…',
+      gbMessages:'📜 Messages récents', gbMessagesSubtitle:'Voix du Pont des Cœurs',
+      konumTitle:'🗺️ Carte & Localisation', konumDesc:'Suivez votre position dans le complexe et naviguez entre les zones.',
+      konumDetecting:'Détection de l\'emplacement…', konumGPS:'Appuyez sur le bouton ci-dessous pour obtenir votre position GPS.',
+      konumOpenBtn:'🗺️ OUVRIR LA CARTE COMPLÈTE (konum.html)',
+      aiTitle:'🏛️ Demander au guide — Evliya Çelebi', aiPlaceholder:'Posez vos questions sur le complexe…',
+      welcome:'🏛️ Bonjour! Je suis votre guide numérique, Evliya Çelebi. N\'hésitez pas à me poser toutes vos questions sur le complexe, les méthodes de guérison, l\'histoire ou le musée.',
+      popupClose:'Que vous soyez en bonne santé',
+      krLabel:'📍 Actuellement à',
+      audioOn:'🔊 Son activé', audioOff:'🔇 Son désactivé',
+    },
+    ar: { name:'العربية', tts:'ar-SA', dir:'rtl', flag:'🇸🇦',
+      loading:'جارٍ الترجمة…',
+      navSubtitle:'الدليل الرقمي', tourSection:'محطات الجولة', pagesSection:'الصفحات',
+      navMuseum:'الصفحة الرئيسية', navMap:'الخريطة والموقع', navGuest:'جسر القلوب', navAsk:'اسأل المرشد',
+      introTitle:'مرحباً بكم على العتبة',
+      tagline:'رحلة عبر الزمن،\nإلى قلب الشفاء…',
+      btnStart:'ابدأ الرحلة', btnNext:'التالي ➡', btnPrev:'⬅ السابق',
+      btnSend:'أترك أثري على الجسر',
+      where:'📍 أين أنا؟', nowAt:'الآن في:', youAre:'',
+      gbTitle:'🖋️ جسر القلوب',
+      gbDesc:'"يلتقي شفاء الماضي بكلمات الحاضر."\n\nنودّ أن نسمع الانطباعات التي تركتها هذه الرحلة التي تمتد 500 عام عبر مجمعنا فيكم. كلماتكم ستكون حجارة هذا الجسر.',
+      gbPlaceName:'اسمك الكامل', gbPlaceCity:'مدينتك', gbPlaceMsg:'شاركنا مشاعرك وأفكارك…',
+      gbMessages:'📜 أحدث الرسائل', gbMessagesSubtitle:'أصوات من جسر القلوب',
+      konumTitle:'🗺️ الخريطة والموقع', konumDesc:'تتبع موقعك داخل المجمع والتنقل بين المناطق.',
+      konumDetecting:'جارٍ تحديد الموقع…', konumGPS:'اضغط الزر أدناه للحصول على موقعك عبر GPS.',
+      konumOpenBtn:'🗺️ فتح الخريطة الكاملة (konum.html)',
+      aiTitle:'🏛️ اسأل المرشد — أوليا جلبي', aiPlaceholder:'اسأل عن المجمع التاريخي…',
+      welcome:'🏛️ مرحباً! أنا مرشدكم الرقمي أوليا جلبي. لا تترددوا في سؤالي عن المجمع أو أساليب العلاج أو التاريخ أو المتحف.',
+      popupClose:'صحة وعافية',
+      krLabel:'📍 أنت الآن في',
+      audioOn:'🔊 الصوت مفعّل', audioOff:'🔇 الصوت معطّل',
+    },
+    zh: { name:'中文', tts:'zh-CN', dir:'ltr', flag:'🇨🇳',
+      loading:'翻译中…',
+      navSubtitle:'数字导览', tourSection:'游览站点', pagesSection:'页面',
+      navMuseum:'欢迎页面', navMap:'地图与位置', navGuest:'心桥', navAsk:'向导游提问',
+      introTitle:'欢迎来到门槛',
+      tagline:'穿越时光的旅程，\n走进治愈的中心…',
+      btnStart:'开始旅程', btnNext:'下一步 ➡', btnPrev:'⬅ 返回',
+      btnSend:'我在桥上留下印记',
+      where:'📍 我在哪里？', nowAt:'当前位置：', youAre:'',
+      gbTitle:'🖋️ 心桥',
+      gbDesc:'"过去的治愈与今日的文字相遇。"\n\n我们很想听听这段穿越我们建筑群500年历史的旅程给您留下了哪些印象。您的文字将成为这座桥的基石。',
+      gbPlaceName:'您的姓名', gbPlaceCity:'您所在的城市', gbPlaceMsg:'分享您的感受与想法…',
+      gbMessages:'📜 最新留言', gbMessagesSubtitle:'来自心桥的声音',
+      konumTitle:'🗺️ 地图与位置', konumDesc:'在建筑群内追踪您的位置并在各区域间导航。',
+      konumDetecting:'正在检测位置…', konumGPS:'按下方按钮获取您的GPS位置。',
+      konumOpenBtn:'🗺️ 打开完整地图 (konum.html)',
+      aiTitle:'🏛️ 向导游提问 — 埃夫利亚·切莱比', aiPlaceholder:'请询问关于建筑群的问题…',
+      welcome:'🏛️ 您好！我是您的数字导游埃夫利亚·切莱比。欢迎随时向我询问关于建筑群、治疗方法、历史或博物馆的问题。',
+      popupClose:'祝您健康',
+      krLabel:'📍 当前位置',
+      audioOn:'🔊 声音开启', audioOff:'🔇 声音关闭',
+    },
   };
 
   let _currentLang = localStorage.getItem('guideLang') || 'tr';
-  // Çevrilmiş tur verisi önbelleği: { langCode: [...translatedSteps] }
   const _cache = {};
-  // Orijinal Türkçe tur verisi yedek
   let _origTourData = null;
 
   /* ── TTS dil kodu getter ── */
   function ttsLang() { return (LANGS[_currentLang]||LANGS.tr).tts; }
   function currentLang() { return _currentLang; }
 
-  /* ── UI metinlerini güncelle (tur verisi dışı) ── */
+  /* ── data-i18n tabanlı evrensel UI güncelleyici ── */
   function _applyUIStrings(L) {
-    // Yön
+    // Belge yönü ve dil kodu
     document.documentElement.lang = _currentLang;
     document.body.dir = L.dir;
 
-    // Butonlar
-    const btnStart = document.getElementById('btn-start');
-    if (btnStart) btnStart.textContent = L.btnStart;
+    // [data-i18n] → textContent
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (L[key] !== undefined) {
+        // Satır sonu varsa innerHTML kullan
+        if (L[key].includes('\n')) {
+          el.innerHTML = L[key].replace(/\n/g, '<br>');
+        } else {
+          el.textContent = L[key];
+        }
+      }
+    });
 
-    const btnNext = document.getElementById('btn-next');
-    if (btnNext && btnNext.textContent && !btnNext.textContent.includes('🚶'))
-      btnNext.textContent = L.btnNext;
+    // [data-i18n-ph] → placeholder
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.dataset.i18nPh;
+      if (L[key] !== undefined) el.placeholder = L[key];
+    });
 
-    const btnPrev = document.getElementById('btn-prev');
-    if (btnPrev) btnPrev.textContent = L.btnPrev;
-
-    const btnSend = document.getElementById('btn-send');
-    if (btnSend) btnSend.textContent = L.btnSend;
-
-    const btnKonum = document.getElementById('btn-konum-intro');
-    if (btnKonum) btnKonum.textContent = L.where;
-
-    // Giriş ekranı tagline
-    const taglineEl = document.querySelector('.intro-tagline');
-    if (taglineEl) taglineEl.textContent = L.tagline;
-
-    // Guestbook placeholders
-    const gbName = document.getElementById('gb-name');
-    if (gbName) gbName.placeholder = L.gbPlaceName;
-    const gbCity = document.getElementById('gb-city');
-    if (gbCity) gbCity.placeholder = L.gbPlaceCity;
-    const gbText = document.getElementById('gb-text');
-    if (gbText) gbText.placeholder = L.gbPlaceMsg;
-
-    // AI placeholder
-    const aiInput = document.getElementById('ai-input');
-    if (aiInput) aiInput.placeholder = L.aiPlaceholder;
-
-    // Nav menü etiketleri
-    const navIntroEl = document.querySelector('#nav-intro span:last-child');
-    if (navIntroEl) navIntroEl.textContent = L.navMuseum;
-    const navKonumEl = document.querySelector('#nav-konum span:last-child');
-    if (navKonumEl) navKonumEl.textContent = L.navMap;
-    const navGuestEl = document.querySelector('#nav-guestbook span:last-child');
-    if (navGuestEl) navGuestEl.textContent = L.navGuest;
-    const navAiEl = document.querySelector('#nav-ai span:last-child');
-    if (navAiEl) navAiEl.textContent = L.navAsk;
-
-    // Nav section titles
-    const secTitles = document.querySelectorAll('.nav-section-title');
-    if (secTitles[0]) secTitles[0].textContent = L.tourSection;
-    if (secTitles[1]) secTitles[1].textContent = L.pagesSection;
-
-    // Lang button active state
+    // Lang dropdown aktif seçim
     document.querySelectorAll('.lang-option').forEach(el => {
       el.classList.toggle('active', el.dataset.lang === _currentLang);
     });
+
+    // Toast mesajları güncelle (AudioController)
+    if (typeof AudioController !== 'undefined') {
+      // audioOn/audioOff metinleri AudioController.toggle içinde kullanılır
+      // bunları global erişim için sakla
+      window._i18n_audioOn  = L.audioOn  || '🔊 Ses açık';
+      window._i18n_audioOff = L.audioOff || '🔇 Ses kapalı';
+    }
   }
 
   /* ── Claude API ile toplu çeviri ── */
@@ -2197,7 +2253,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 <!-- ── KONUM RESULT POPUP ── -->
 <div id="konum-result-popup" role="status" aria-live="polite">
   <button class="kr-close" onclick="document.getElementById('konum-result-popup').classList.remove('show')" aria-label="Kapat">✕</button>
-  <div class="kr-label">📍 Şu an</div>
+  <div class="kr-label" data-i18n="krLabel">📍 Şu an</div>
   <div class="kr-zone" id="kr-zone-name">—</div>
   <div class="kr-desc" id="kr-zone-desc"></div>
 </div>
