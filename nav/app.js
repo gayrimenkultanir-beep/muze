@@ -57,9 +57,21 @@ function getSectionByIdx(idx) {
    TUR YÖNETİCİSİ
 ════════════════════════════════════════════════════════════ */
 const TourManager = (() => {
-  let _step      = 0;
-  let _imgIdx    = 0;
-  let _evliyaDone = false;
+  let _step   = 0;
+  let _imgIdx = 0;
+
+  /* ── Evliya mesajları — her adım için farklı ─────────────── */
+  const EVLIYA_MSGS = [
+    '🏛️ Hoş geldiniz! Bu 500 yıllık şifa yurduna adım attınız. Ben Evliya Çelebi, dijital rehberinizim.',
+    '⚖️ Dikkat edin! Burada kehhal odaları vardı. Osmanlı göz hekimliği için bile özel odalar ayrılmıştı.',
+    '🚪 Hekimbaşının odasına yaklaşıyorsunuz. Kapının üstündeki kitabeyi okumayı unutmayın!',
+    '🎵 Kulak verin… 500 yıl önce tam burada musiki sesleri yükselir, hastalar iyileşirdi.',
+    '📜 Bu medreseden yetişen hekimler bütün imparatorluğa yayılırdı. İlim buradan akardı.',
+    '🌳 Asırlık çınarlar burada nice şifalı nesli gördü. Şimdi sizi görüyorlar.',
+    '🍲 Yahya Baba'nın pilavı hâlâ bereketlidir derler. Belki siz de bir damla hissedersiniz…',
+    '🕌 Tek kubbenin altına girin ve bir an susun. Bu sessizlik 500 yıllık huzurun sesidir.',
+    '🖋️ Son durağa hoş geldiniz. Kalbinizden geçenleri bu sayfaya bırakın, ebediyen kalsın.',
+  ];
 
   /* ── Başlat ─────────────────────────────────────────────── */
   function start() {
@@ -68,6 +80,17 @@ const TourManager = (() => {
     _imgIdx = 0;
     AudioController.fx('assets/audio/muhur.mp3');
     render();
+  }
+
+  /* ── Belirli adıma git (menüden çağrılır) ────────────────── */
+  function goToStep(step) {
+    if (typeof tourData === 'undefined') return;
+    const idx = step - 1; // menü step 1-indexed, array 0-indexed
+    if (idx >= 0 && idx < tourData.length) {
+      _step   = idx;
+      _imgIdx = 0;
+      render();
+    }
   }
 
   /* ── Render ─────────────────────────────────────────────── */
@@ -117,11 +140,12 @@ const TourManager = (() => {
     _imgIdx = 0;
     _buildGallery(data.g || []);
 
-    /* ── Evliya Çelebi (ilk adımda bir kez) ─────────────── */
-    if (_step === 0 && !_evliyaDone) {
-      _evliyaDone = true;
-      _triggerEvliya(data.evliya || '500 yıllık bu yolculuğa hoş geldiniz! Ben dijital rehberiniz Evliya Çelebi\'yim. 🎭');
-    }
+    /* ── Evliya Çelebi — her adımda farklı mesaj ─────────── */
+    const evliyaText = data.evliya || EVLIYA_MSGS[_step] || EVLIYA_MSGS[0];
+    setTimeout(() => _triggerEvliya(evliyaText), 800);
+
+    /* ── Menü aktif öğeyi güncelle ───────────────────────── */
+    Navigation.updateMenuActive('screen-tour', _step + 1);
 
     /* ── Scroll ──────────────────────────────────────────── */
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -133,7 +157,6 @@ const TourManager = (() => {
 
     if (dir === 1) {
       if (_step === total - 1) {
-        // Son adımdan Gönül Köprüsü'ne geç
         Navigation.changeScreen('screen-guestbook');
         GuestBook.load();
         return;
@@ -280,7 +303,7 @@ const TourManager = (() => {
     return tourData[_step];
   }
 
-  return { start, nav, render, currentData };
+  return { start, nav, render, goToStep, currentData };
 })();
 
 /* ════════════════════════════════════════════════════════════
@@ -437,7 +460,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /* Gönder butonu */
   document.getElementById('btn-send')?.addEventListener('click', GuestBook.send);
 
-  /* Tour navigasyon butonları (event delegation) */
+  /* Tour navigasyon butonları */
   document.getElementById('btn-next')?.addEventListener('click', () => TourManager.nav(1));
   document.getElementById('btn-prev')?.addEventListener('click', () => TourManager.nav(-1));
 
@@ -446,4 +469,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Başlangıç ekranı */
   Navigation.changeScreen('screen-intro');
+
+  /* ── Buton taşıma: tur ekranında topbar'a, diğerlerinde fixed ── */
+  const menuBtn  = document.getElementById('menu-btn');
+  const soundBtn = document.getElementById('sound-btn');
+  const menuSlot  = document.getElementById('topbar-menu-slot');
+  const soundSlot = document.getElementById('topbar-sound-slot');
+
+  function _relocateButtons(screenId) {
+    if (screenId === 'screen-tour') {
+      // Topbar slotlarına taşı
+      if (menuBtn && menuSlot && !menuSlot.contains(menuBtn)) {
+        menuBtn.style.position  = 'static';
+        menuBtn.style.boxShadow = 'none';
+        menuSlot.appendChild(menuBtn);
+      }
+      if (soundBtn && soundSlot && !soundSlot.contains(soundBtn)) {
+        soundBtn.style.position  = 'static';
+        soundBtn.style.boxShadow = 'none';
+        soundSlot.appendChild(soundBtn);
+      }
+    } else {
+      // Fixed konuma geri al
+      if (menuBtn && !document.body.contains(menuBtn)) document.body.appendChild(menuBtn);
+      else if (menuBtn && menuBtn.parentElement !== document.body) document.body.appendChild(menuBtn);
+      if (soundBtn && soundBtn.parentElement !== document.body) document.body.appendChild(soundBtn);
+
+      menuBtn.style.position  = '';
+      menuBtn.style.boxShadow = '';
+      soundBtn.style.position = '';
+      soundBtn.style.boxShadow = '';
+    }
+  }
+
+  // Navigation.changeScreen'i wrap et
+  const _origChange = Navigation.changeScreen.bind(Navigation);
+  Navigation.changeScreen = function(id, push) {
+    _origChange(id, push);
+    _relocateButtons(id);
+  };
+
+  // İlk çağrıda da uygula
+  _relocateButtons('screen-intro');
 });
