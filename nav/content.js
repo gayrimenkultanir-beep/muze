@@ -74,11 +74,10 @@ const tourData = [
   {
     t: "Ruhanî Atmosfere Hazırlık:\n🕌 Cami Avlusu",
     s: "TEK KUBBE, SONSUZ HUZUR",
-   m: "Caminin devasa taç kapısından içeri süzüldüğünüzde, mermer işçiliğinin zarafeti sizi karşılar. Burası dışarıdaki meydandan çok daha farklı bir dünyadır.\n\n⛲ **Şadırvanlı Avlu’nun Kalbi**\n📍 **Tam Ortada:** Avlunun kalbinde yer alan zarif şadırvan… Suyun sesi, taşın sessizliğine karışır.\n\n🏛️ **Sütunlar ve Mimari Denge**\nEtrafınızı saran mermer sütunlar sizi bir koruma halkası gibi sarar. Her sütunun farklı mermerlerden yapılmış olması, Osmanlı’nın estetik zenginliğini ve düzen içindeki gizli güzelliği anlatır.\n\n✨ **SON HİS**\nBu avluda hissettiğiniz şey sadece bir mekân değil; yüzyıllardır değişmeyen bir sükûnet duygusudur.",
-        q: "Mabedin içindeki o büyük boşluğa ve huzura geçelim mi?",
-
+  m: "🏛️ AVLU VE CAMİYE GEÇİŞ\nSağlık Müzemizin bölümlerini birlikte gezdiniz, kafemizde Osmanlı şerbetinin serinliğini tattınız. Şimdi ise külliyenin en görkemli yapılarından biriyle, cami ile buluşma zamanı.\n\n🚪 GİRİŞ VE ATMOSFER\nKafenin hemen yanından, avluya açılan zarif yan kapıdan ya da ihtişamlı taç kapıdan içeri adım attığınızda, mermerin ince işçiliği sizi karşılar. Bir anda dış dünyanın hareketliliğinden uzaklaşır, bambaşka bir atmosferin içine süzülürsünüz.\n\n⛲ ŞADIRVAN VE HUZUR\nAvlunun tam ortasında yer alan şadırvan, suyun dingin sesiyle mekâna huzur katar. Bu ses, taşın sessizliğiyle birleşerek sizi yavaşlatır, bulunduğunuz anın farkına varmanızı sağlar.\n\n🏛️ MERMER SÜTUNLAR VE MİMARİ UYUM\nEtrafınızı saran mermer sütunlar, adeta sizi koruyan bir halka gibi yükselir. Farklı renklerde seçilmiş bu sütunlar, Osmanlı estetiğinin zarafetini ve uyum içindeki zenginliğini gözler önüne serer.\n\n✨ İÇ HUZUR VE SÜKÛNET\nBurada hissettiğiniz yalnızca bir mimari güzellik değildir; yüzyıllardır değişmeden süregelen bir sükûnet, bir iç huzur hâlidir.\n\n👁️ GÖZLEM ANLARI\nŞadırvanın başında kısa bir an durup bu yalın ama etkileyici avlu düzenini izleyin. Sütunların, kemerlerin ve ince süslemelerin birbiriyle kurduğu uyumu hissedin.\n\n🚪 CAMİYE GİRİŞ\nArdından, tam karşınızda yükselen görkemli kapıya yönelin. Kapıyı örten meşin perdeyi usulca aralayarak içeri adım atın. Ülkemizin en zarif camilerinden birine girdiğinizi hemen fark edeceksiniz.\n\n🪵 KÜNDEKÂRİ DETAYI\nİçeri girerken, kapının üzerindeki özgün kündekâri işçiliğine dikkat etmeyi ve mümkünse bu eşsiz sanatın dokusunu hissetmeyi unutmayın.",
+q: "Mabedin içindeki o büyük boşluğa ve huzura geçelim mi?",
     btnNext: "İç Mekâna İlerle ➡",
-    a: "assets/audio/24.mp3",
+    a: "assets/audio/rehber-8.mp3",
     g: ["assets/img/24.webp"]
   },
   {
