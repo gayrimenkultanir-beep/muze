@@ -1046,10 +1046,14 @@ const TourManager=(()=>{
   let _imgIdx=0;
 
   function start(){
-    Navigation.changeScreen('screen-tour');
-    _step=0; _imgIdx=0;
-    AudioController.fx('assets/audio/muhur.mp3');
-    render();
+    try {
+      Navigation.changeScreen('screen-tour');
+      _step=0; _imgIdx=0;
+      AudioController.fx('assets/audio/muhur.mp3');
+      render();
+    } catch(e) {
+      console.error('[TourManager.start] HATA:', e);
+    }
   }
 
   function goToStep(idx){
@@ -1069,7 +1073,7 @@ const TourManager=(()=>{
     _setHTML('text-content',_fmt(data.m));
     _setText('step-question',data.q||'');
     _setText('btn-next',data.btnNext||'İleri ➡');
-    document.getElementById('btn-prev').style.visibility=_step===0?'hidden':'visible';
+    const bpEl=document.getElementById('btn-prev'); if(bpEl) bpEl.style.visibility=_step===0?'hidden':'visible';
 
     const fillEl=document.getElementById('tl-fill');
     if(fillEl) fillEl.style.width=pct+'%';
@@ -1373,12 +1377,12 @@ Bilmediğin şeylerde müze görevlilerine yönlendir.${stepContext}`;
 const KonumSystem=(()=>{
   // Külliye bölgeleri (konum.html'den alındı — basitleştirilmiş)
   const ZONES=[
-    {id:'darussifa', name:'Darüşşifa',         announce:'Darüşşifa bölgesindesiniz. Osmanlı'nın şifa yurdu sizi karşılıyor.', lat:41.6775, lon:26.5560, r:60},
-    {id:'medrese',   name:'Tıp Medresesi',     announce:'Tıp Medresesi bölgesindesiniz. İlmin ve hekimliğin beşiğindesiniz.', lat:41.6777, lon:26.5570, r:50},
-    {id:'imaret',    name:'İmarethane',         announce:'İmarethane bölgesindesiniz. Yahya Baba'nın duaları bu mekânda yankılanıyor.', lat:41.6770, lon:26.5565, r:50},
-    {id:'cami',      name:'Cami',               announce:'Cami avlusundasınız. 500 yıllık huzur sizi kucaklıyor.', lat:41.6772, lon:26.5558, r:65},
-    {id:'bahce',     name:'Külliye Bahçesi',    announce:'Külliye Bahçesindesiniz. Asırlık çınarlar sizi selamlıyor.', lat:41.6773, lon:26.5562, r:80},
-    {id:'giris',     name:'Müze Girişi',        announce:'Müze Girişi bölgesindesiniz. Hoş geldiniz!', lat:41.6774, lon:26.5555, r:40},
+    {id:'darussifa', name:'Darüşşifa',         announce:"Darüşşifa bölgesindesiniz. Osmanlı'nın şifa yurdu sizi karşılıyor.", lat:41.6775, lon:26.5560, r:60},
+    {id:'medrese',   name:'Tıp Medresesi',     announce:"Tıp Medresesi bölgesindesiniz. İlmin ve hekimliğin beşiğindesiniz.", lat:41.6777, lon:26.5570, r:50},
+    {id:'imaret',    name:'İmarethane',         announce:"İmarethane bölgesindesiniz. Yahya Baba'nın duaları bu mekânda yankılanıyor.", lat:41.6770, lon:26.5565, r:50},
+    {id:'cami',      name:'Cami',               announce:"Cami avlusundasınız. 500 yıllık huzur sizi kucaklıyor.", lat:41.6772, lon:26.5558, r:65},
+    {id:'bahce',     name:'Külliye Bahçesi',    announce:"Külliye Bahçesindesiniz. Asırlık çınarlar sizi selamlıyor.", lat:41.6773, lon:26.5562, r:80},
+    {id:'giris',     name:'Müze Girişi',        announce:"Müze Girişi bölgesindesiniz. Hoş geldiniz!", lat:41.6774, lon:26.5555, r:40},
   ];
 
   function findZone(lat,lon){
@@ -1411,7 +1415,7 @@ const KonumSystem=(()=>{
         const zoneEl=document.getElementById('konum-screen-zone');
         const descEl=document.getElementById('konum-screen-desc');
         if(zoneEl) zoneEl.textContent='📍 '+zoneName;
-        if(descEl) descEl.textContent=z?z.announce:'GPS konumunuzu alındı.';
+        if(descEl) descEl.textContent=z?z.announce:"GPS konumunuzu alındı.";
 
         UI.toast('📍 Şu an: '+zoneName);
         if(z) AudioController.speak('Şu an '+z.announce);
@@ -1433,20 +1437,30 @@ const KonumSystem=(()=>{
    DOM READY — INIT
    ============================================================ */
 document.addEventListener('DOMContentLoaded',()=>{
-  AudioController.init('audio-player');
-  Navigation.init();
-  AIGuide.init();
+  try {
+    AudioController.init('audio-player');
+    Navigation.init();
+    AIGuide.init();
 
-  document.getElementById('popup-close')?.addEventListener('click',UI.closePopup);
-  document.getElementById('btn-send')?.addEventListener('click',GuestBook.send);
-  document.getElementById('btn-next')?.addEventListener('click',()=>TourManager.nav(1));
-  document.getElementById('btn-prev')?.addEventListener('click',()=>TourManager.nav(-1));
-  document.getElementById('btn-start')?.addEventListener('click',TourManager.start);
+    const ps = document.getElementById('popup-close');
+    const bs = document.getElementById('btn-send');
+    const bn = document.getElementById('btn-next');
+    const bp = document.getElementById('btn-prev');
+    const bst = document.getElementById('btn-start');
+    const bki = document.getElementById('btn-konum-intro');
 
-  // Konum butonları
-  document.getElementById('btn-konum-intro')?.addEventListener('click',KonumSystem.locate);
+    if(ps) ps.addEventListener('click', UI.closePopup);
+    if(bs) bs.addEventListener('click', GuestBook.send);
+    if(bn) bn.addEventListener('click', ()=>TourManager.nav(1));
+    if(bp) bp.addEventListener('click', ()=>TourManager.nav(-1));
+    if(bst) bst.addEventListener('click', ()=>{ console.log('[btn-start] tıklandı'); TourManager.start(); });
+    if(bki) bki.addEventListener('click', KonumSystem.locate);
 
-  Navigation.changeScreen('screen-intro',false);
+    Navigation.changeScreen('screen-intro', false);
+    console.log('[init] Başarılı. btn-start:', !!bst);
+  } catch(e) {
+    console.error('[DOMContentLoaded] HATA:', e);
+  }
 });
 </script>
 
