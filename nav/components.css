@@ -215,6 +215,42 @@
   letter-spacing: 0.06em;
 }
 
+/* ── Tour Topbar — menü | çizelge | ses ─────────────────────── */
+#tour-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  width: 100%;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  grid-template-columns: 58px 1fr 58px;
+  align-items: center;
+  padding: 6px 0;
+  /* 3px rainbow line at very top */
+  border-top: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Timeline içinde, topbar ortasına */
+#tour-topbar #timeline-band {
+  position: static;
+  border: none;
+  box-shadow: none;
+  padding: 2px 4px;
+  background: transparent;
+  width: 100%;
+}
+
+/* Topbar buton yuvaları */
+.topbar-btn-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 /* ── Tour Card ─────────────────────────────────────────────── */
 .tour-card {
   width: 100%;
