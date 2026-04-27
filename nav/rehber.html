@@ -288,7 +288,7 @@ a { color: var(--gold); text-decoration: none; }
 #konum-badge strong { color: var(--gold); font-style: normal; }
 
 /* ── TOUR SCREEN ── */
-#screen-tour { flex-direction:column; align-items:center; padding:0 0 5rem; background:var(--bg); min-height:100dvh; }
+#screen-tour { flex-direction:column; align-items:center; padding:0 0 5rem; background:var(--bg); min-height:100dvh; background-attachment:local; }
 
 #tour-topbar {
   position:sticky; top:0; z-index:200; width:100%; background:var(--surface);
@@ -1161,7 +1161,8 @@ const TourManager=(()=>{
     setTimeout(()=>EvliyaSystem.show(_step, data.evliya), 800);
 
     Navigation.updateMenuActive('screen-tour',_step);
-    window.scrollTo({top:0,behavior:'smooth'});
+    const tourScreen = document.getElementById('screen-tour');
+if(tourScreen) tourScreen.scrollTo({top:0,behavior:'smooth'});
   }
 
   function nav(dir){
