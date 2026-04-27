@@ -8,12 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
     <style>
-      /* --- 1. TEMEL AYARLAR VE DEĞİŞKENLER --- */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root { 
     --gold: #d4af37; 
@@ -31,7 +26,6 @@ body {
     color: #2b2b2b;
 }
 
-/* --- 2. NAVİGASYON --- */
 .nav-wrapper { 
     width: 100%; display: flex; justify-content: center; padding: 0 20px; 
     position: fixed; top: 0; left: 0; z-index: 2000; 
@@ -52,10 +46,8 @@ body {
     cursor: pointer; padding: 8px 18px; font-family: 'Cinzel'; border-radius: 4px; 
     transition: 0.3s ease;
 }
-
 .menu-btn:hover { background: var(--gold); color: var(--dark); box-shadow: 0 0 15px var(--gold); }
 
-/* DROPDOWN */
 #globalDropdown {
     display: none; position: absolute; right: 30px; top: calc(100% + 10px);
     background: var(--dark); border: 2px solid var(--gold);
@@ -66,25 +58,20 @@ body {
 .dropdown-link { display: block; padding: 12px 25px; color: var(--gold) !important; text-decoration: none; font-family: 'Cinzel'; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.1); }
 .dropdown-link:hover { background: rgba(212, 175, 55, 0.15); padding-left: 30px; color: #fff !important; }
 
-/* --- 3. BANNER (YAZILAR DÜZELTİLDİ) --- */
 .banner-container { max-width: 1240px; margin: 0 auto 40px; padding: 0 20px; }
 .banner-box { 
     position: relative; width: 100%; height: 400px; 
     border: 2px solid var(--gold); border-radius: 12px; overflow: hidden; 
 }
-
 .banner-box img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); }
-
 .banner-overlay { 
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     display: flex; flex-direction: column; justify-content: center; align-items: center; 
     z-index: 5; text-align: center; color: #fff; padding: 20px;
 }
-
 .banner-overlay h1 { font-family: 'Cinzel'; font-size: clamp(24px, 5vw, 40px); letter-spacing: 12px; text-shadow: 3px 3px 15px #000; }
 .banner-overlay p { font-family: 'Cinzel'; font-size: 18px; color: var(--gold); margin-top: 15px; letter-spacing: 4px; }
 
-/* --- 4. İÇERİK KARTI VE KÖŞE SÜSLEMELERİ --- */
 .container { max-width: 1240px; margin: 0 auto 40px; padding: 0 20px; }
 .full-card {
     background: var(--parchment); border: 2px solid var(--gold);
@@ -102,7 +89,6 @@ body {
 .content-area { padding: 30px 20px; line-height: 1.8; font-size: 18px; color: #2b2b2b; position: relative; z-index: 2; }
 @media (min-width: 768px) { .content-area { padding: 50px 100px; } }
 
-/* --- 5. 3D KABARTMA GÖRSEL --- */
 .small-img-wrapper { padding: 50px 15px; text-align: center; display: flex; justify-content: center; perspective: 1000px; }
 .small-img-wrapper img { 
     width: 600px; height: 400px; object-fit: cover; border-radius: 6px; 
@@ -116,20 +102,17 @@ body {
     border-color: var(--gold-bright);
 }
 
-/* --- 6. TABLO VE KART SONU (FOOTER) --- */
 .table-wrap { overflow-x: auto; margin: 35px 0; border: 1px solid var(--gold); border-radius: 8px; background: #fff; }
-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+table { width: 100%; border-collapse: collapse; min-width: 500px; }
 th { background: var(--dark); color: var(--gold); padding: 18px; text-align: left; font-family: 'Cinzel'; }
 td { padding: 15px; border-bottom: 1px solid #eee; }
 
-/* Kartın içindeki en alt kısım */
 .card-footer { 
     padding: 40px; background: var(--dark); color: var(--gold); 
     text-align: center; font-family: 'Cinzel'; border-top: 2px solid var(--gold); 
     position: relative; z-index: 2;
 }
 
-/* Sayfanın en altındaki ana footer */
 .site-footer-wrapper { width: 100%; display: flex; justify-content: center; padding: 0 20px; }
 .site-footer { 
     width: 100%; max-width: 1240px; background: var(--dark); 
@@ -137,7 +120,115 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     padding: 30px; text-align: center; color: var(--gold); margin-bottom: 40px;
 }
 
-/* --- 7. MOBİL UYUMLULUK --- */
+/* BÖLÜM BAŞLIĞI */
+.section-title {
+    color: #000;
+    font-weight: bold;
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 8px;
+    margin-top: 40px;
+    margin-bottom: 18px;
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+
+/* SLOGAN / ALINTI KUTUSU */
+.slogan-box {
+    background: var(--dark);
+    color: var(--gold-bright);
+    font-family: 'Cinzel';
+    font-size: clamp(13px, 2vw, 17px);
+    letter-spacing: 1.5px;
+    line-height: 1.9;
+    padding: 25px 35px;
+    margin: 30px 0;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--gold);
+}
+
+/* EVLİYA ÇELEBİ ALINTISI */
+.quote-box {
+    margin: 28px 0;
+    padding: 22px 30px;
+    background: #fff;
+    border-left: 5px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #333;
+}
+.quote-box cite {
+    display: block;
+    text-align: right;
+    font-size: 14px;
+    font-style: normal;
+    font-family: 'Cinzel';
+    color: var(--v-red);
+    margin-top: 12px;
+}
+
+/* BİLGİ KUTUSU */
+.info-box {
+    background: rgba(139,0,0,0.05);
+    border: 1px solid rgba(139,0,0,0.2);
+    border-left: 4px solid var(--v-red);
+    padding: 18px 25px;
+    margin: 25px 0;
+    border-radius: 6px;
+    font-size: 16px;
+    line-height: 1.9;
+}
+
+/* MÜDERRİS GRID */
+.mudерris-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px solid rgba(212,175,55,0.3);
+    padding: 22px;
+    border-radius: 8px;
+    font-size: 15px;
+    margin: 18px 0;
+}
+.mudерris-grid span { padding: 4px 0; }
+
+/* KİTAP LİSTESİ */
+.kitap-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+    counter-reset: kitap;
+}
+.kitap-list li {
+    counter-increment: kitap;
+    padding: 10px 15px 10px 50px;
+    position: relative;
+    border-bottom: 1px solid rgba(212,175,55,0.2);
+    font-size: 16px;
+    line-height: 1.7;
+}
+.kitap-list li::before {
+    content: counter(kitap);
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--dark);
+    color: var(--gold);
+    font-family: 'Cinzel';
+    font-size: 13px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.kitap-list li:last-child { border-bottom: none; }
+
 @media (max-width: 768px) {
     .nav { flex-direction: column; gap: 10px; padding: 10px 20px; }
     .banner-box { height: 250px; }
@@ -146,6 +237,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
     .corner-frame { width: 45px; height: 45px; }
     body { padding-top: 160px; }
     .small-img-wrapper img { width: 100%; height: auto; aspect-ratio: 3/2; transform: none; }
+    .mudерris-grid { grid-template-columns: 1fr; }
 }
     </style>
 </head>
@@ -159,7 +251,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
             </div>
             <button class="menu-btn" id="menuBtn">MENÜ ☰</button>
             <div id="globalDropdown">
-                 <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
+                <a href="../index.html" class="dropdown-link">Ana Sayfa</a>
                 <a href="../tarihce/tarihce.html" class="dropdown-link">Tarihçe</a>
                 <a href="../bayezid/bayezid.html" class="dropdown-link">Sultan II. Bayezid</a>
                 <a href="../evliya/evliya.html" class="dropdown-link">Evliya Çelebi</a>
@@ -174,7 +266,7 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
                 <a href="../personel/personel.html" class="dropdown-link">Personelimiz</a>
                 <a href="../haberler/haberler.html" class="dropdown-link">Haberler</a>
                 <a href="../duyurular/duyurular.html" class="dropdown-link">Duyurular</a>
-                 <a href="../basin/basin.html" class="dropdown-link">Basında Biz</a>
+                <a href="../basin/basin.html" class="dropdown-link">Basında Biz</a>
                 <a href="https://www.trakya.edu.tr/" target="_blank" class="dropdown-link">Trakya Üniversitesi</a>
             </div>
         </nav>
@@ -184,155 +276,154 @@ td { padding: 15px; border-bottom: 1px solid #eee; }
         <div class="banner-box">
             <img src="../assets/banner.webp" alt="Külliye Manzarası">
             <div class="banner-overlay">
-                <h1>MEDRESETÜ’L-ETİBBA</h1>
+                <h1>MEDRESETÜ'L-ETİBBA</h1>
                 <p>Bilim, Şifa ve İnsanlık Hizmetinin 15. Yüzyıldaki Zirvesi</p>
             </div>
         </div>
     </div>
 
-   <div class="container">
-    <div class="full-card">
-        <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Süsleme">
-        <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Süsleme">
-        <img src="../assets/cornerleft.png" class="corner-frame b-l" alt="Süsleme">
-        <img src="../assets/cornerright.png" class="corner-frame b-r" alt="Süsleme">
+    <div class="container">
+        <div class="full-card">
+            <img src="../assets/cornerleftup.png" class="corner-frame t-l" alt="Süsleme">
+            <img src="../assets/cornerrightup.png" class="corner-frame t-r" alt="Süsleme">
+            <img src="../assets/cornerleft.png" class="corner-frame b-l" alt="Süsleme">
+            <img src="../assets/cornerright.png" class="corner-frame b-r" alt="Süsleme">
 
-        <h2 class="main-title">SULTAN II. BAYEZİD KÜLLİYESİ TIP MEDRESESİ</h2>
+            <h2 class="main-title">SULTAN II. BAYEZİD KÜLLİYESİ TIP MEDRESESİ</h2>
 
-        <div class="content-area" style="text-align: justify; text-justify: inter-word;">
-            <p style="text-align: center; font-weight: bold; color: var(--v-red); margin-bottom: 5px; font-size: 22px;">TIP MEDRESESİ</p>
-            <p style="text-align: center; font-family: 'Cinzel'; color: var(--dark); margin-bottom: 25px; font-size: 16px; letter-spacing: 1px;">Medresetü’l-Etibba</p>
+                        <div class="content-area" style="text-align: justify;">
 
-            <p><strong>Medresetü’l-Etibba</strong>, Osmanlı’nın bilim, eğitim ve sağlık anlayışını tek bir sistemde birleştiren nadir kurumlardan biridir. 1488 yılında inşa edilen bu yapı, yalnızca bir medrese değil; teorik bilgi ile klinik uygulamanın birleştiği <strong>erken dönem tıp fakültesi</strong> modelidir.</p>
-            
-            <div class="red-line" style="text-align: center; border-left: none; border-right: 5px solid var(--v-red); background: rgba(139,0,0,0.05); padding: 15px;">
-                <small style="display: block; color: var(--dark); font-weight: bold;">MEDRESE DERECESİ: İSTANBUL AYASOFYA MEDRESESİ İLE EŞDEĞER (60+ AKÇE)</small>
+                <!-- AÇILIŞ SLOGANI -->
+                <p style="text-align: center; font-weight: bold; color: var(--v-red); margin-bottom: 8px; font-size: 20px;">
+                    "Teoriden Pratiğe, Bilgiden Şifaya"
+                </p>
+                <p style="text-align: center; font-family: 'Cinzel'; color: var(--dark); margin-bottom: 30px; font-size: 15px; letter-spacing: 2px;">
+                    Medresetü'l-Etibba — Osmanlı'nın Erken Dönem Tıp Fakültesi
+                </p>
+
+                <!-- GİRİŞ -->
+                <p>Osmanlı Sultanı II. Bayezid, Edirne için sadece bir hastane düşünmemiş; hemen yanına hekimlerin de yetişeceği bir tıp okulu inşa etmişti.</p>
+
+                <p style="margin-top: 15px;">Darüşşifanın doğu ucuna bitişik olarak yapılmış olan Medrese, klasik Osmanlı mimarisinin en yalın ve işlevsel örneklerinden biridir.</p>
+
+                <p style="margin-top: 15px;">18 öğrenci odası ve bir dershaneden oluşan bu önemli medrese, Osmanlı eğitim sistemi içinde en üst düzey kabul edilen <strong>"60'lık (bir dönem de altmış üstü) medreseler"</strong> arasında yer alırdı. Öğrenciler teorik eğitimlerini, hemen yanındaki darüşşifada hastalar üzerinde uygulama imkânı bularak tamamlarlardı.</p>
+
+                <!-- GÖRSEL 1 -->
+                <div class="small-img-wrapper">
+                    <img src="../medrese/medrese1.jpg" alt="Medresetü'l-Etibba Genel Görünüm">
+                </div>
+
+                <!-- EVLİYA ÇELEBİ -->
+                <h3 class="section-title">EVLİYA ÇELEBİ'NİN GÖZLEM NOTLARI</h3>
+
+                <p>Külliyeyi gezerken gözlemlerini kaleme alan ünlü Türk gezgini Evliya Çelebi, medrese hakkında da şunları yazmıştır:</p>
+
+                <div class="quote-box">
+                    "Medrese-i Etıbba ve odalarında talebeler vardır ki her biri daima, Eflatun, Sokrat, Aristoteles, Galinos ve Pisagor gibi âlimlerden bahseden olgun tabiplerdir. Her biri bir fenne yönelip hekimlik ilminde kıymetli kitaplara itibar ederek insanoğlunun derdine deva bulmaya çalışırlar."
+                    <cite>— Evliya Çelebi, Seyahatname (1652)</cite>
+                </div>
+
+                <!-- EĞİTİM KADROSU -->
+                <h3 class="section-title">EĞİTİM KADROSU VE BURS SİSTEMİ</h3>
+
+                <p>Medresenin eğitim kadrosunda 18 öğrenciye ders veren bir müderris, bir müderris yardımcısı, bir kütüphaneci ve iki hizmetli bulunurdu. Öğrencilerin tüm ihtiyaçları karşılandığı gibi, onlara ayrıca günde <strong>ikişer akçe burs</strong> verilirdi.</p>
+
+                <div class="info-box">
+                    1560 yılına ait günümüze ulaşan bir belgede, öğrencilere mutfak giderleri için külliye bütçesinden o yıl için <strong>46.000 akçe</strong> ödenek konulduğundan söz edilmektedir.
+                </div>
+
+                <!-- GÖRSEL 2 -->
+                <div class="small-img-wrapper">
+                    <img src="../medrese/medrese2.jpg" alt="Medrese Avlusu ve Odalar">
+                </div>
+
+                <!-- ÖNEMLİ MÜDERRİSLER -->
+                <h3 class="section-title">ÖNEMLİ MÜDERRİSLER GÖREV YAPTI</h3>
+
+                <p>Osmanlı'nın en önemli şehirlerinden biri olan Edirne'nin bu önemli medresesinde meşhur müderrisler görev yapmıştır. Sultan II. Bayezid Medresesi'nin ilk müderrisi <strong>Şeyh Lütfullah Zade Bahaüddin Efendi</strong>'dir.</p>
+
+                <!-- GÖRSEL 3 -->
+                <div class="small-img-wrapper">
+                    <img src="../medrese/medrese3.jpg" alt="Medrese Derslikleri">
+                </div>
+
+                <h3 class="section-title">XVI. YÜZYIL MÜDERRİSLERİ</h3>
+
+                <p style="margin-bottom: 18px;">Medresede 35'ten fazla büyük âlimin ders verdiği bilinmektedir. Bu isimler, Osmanlı tıp mirasının başlıca taşıyıcılarıdır:</p>
+
+                <div class="mudерris-grid">
+                    <span>◈ Şeyh Lûtfullah zâde Bahaüddin (1489)</span>
+                    <span>◈ İbn Kemal (1513)</span>
+                    <span>◈ Şücâeddin İlyas Rûmî (1517)</span>
+                    <span>◈ Kara Haydar Efendi (1519)</span>
+                    <span>◈ Yakup Bin Seydi Ali Efendi (1524)</span>
+                    <span>◈ Pamuk Kadi (1532)</span>
+                    <span>◈ Muhaşşî Sinan Efendi (1538)</span>
+                    <span>◈ Vâsî Alişi (1537)</span>
+                    <span>◈ Celalzade Salih Efendi (1542)</span>
+                    <span>◈ Taşköprülüzade Ahmet Efendi (1545)</span>
+                    <span>◈ Abdurrahman Bin Seydi Ali (1546)</span>
+                    <span>◈ Samsunlu Zâde Mehmet (1566)</span>
+                    <span>◈ Baba Cafer Efendi (1598)</span>
+                </div>
+
+                <!-- GÖRSEL 4 -->
+                <div class="small-img-wrapper">
+                    <img src="../medrese/medrese4.jpg" alt="Osmanlı Tıp Mirası">
+                </div>
+
+                <!-- TIP KİTAPLARI -->
+                <h3 class="section-title">MEDRESEDE OKUTULAN TIP KİTAPLARI</h3>
+
+                <p>Başta külliyenin kurucusu Sultan II. Bayezid olmak üzere birçok padişah, kendi mühürlerini bastıkları dönemin önemli el yazması tıp kitaplarını medreseye bağışlamışlardır. Aralarında İbn-i Sina ve Fatih Sultan Mehmed'in hocası Akşemseddin'in de olduğu önemli âlimler tarafından kaleme alınan bu kitapların birçoğu zaman içinde kaybolup gitse de <strong>38 adedi günümüze ulaşmış</strong> olup Selimiye Yazma Eserler Kütüphanesinde koruma altındadır.</p>
+
+                <div class="slogan-box">
+                    "Bilginin mühürlü emaneti:<br>
+                    <span style="font-size: 0.85em;">Padişah nişanlı yazma eserler, beş asır sonra hâlâ Selimiye Kütüphanesi'nde yaşamaktadır.</span>"
+                </div>
+
+                <!-- GÖRSEL 5 -->
+                <div class="small-img-wrapper">
+                    <img src="../medrese/medrese5.jpg" alt="El Yazması Tıp Kitapları">
+                </div>
+
+                <h3 class="section-title">EL YAZMASI TIP KİTAPLARINDAN BAZILARI</h3>
+
+                <ul class="kitap-list">
+                    <li>Zahire-yi Harzemşahi</li>
+                    <li>Şifa Al Eskam ve Deva Al Alam</li>
+                    <li>Kitab-el Cami-i Fil Edviyet-ül Müfrede</li>
+                    <li>Kitab-u Edep-üt Tabib</li>
+                    <li>Mala Yasa'u 't Tabiba Cahluhu</li>
+                    <li>Yunyet ül-Mihsalin Fi Tercemet-i Tuhfet ül-Müminin</li>
+                    <li>Akşemseddin – Maddet-ül Hayat</li>
+                    <li>Aksarayi Cemaleddin Muhammed "Hall ül-Şerh ül Mucez"</li>
+                    <li>Ali Mustafa "Rahat ün Nufus"</li>
+                    <li>Antaki, Davud "Tezkiret-ül Davud Antaki"</li>
+                </ul>
+
+                <!-- GÖRSEL 6 -->
+                <div class="small-img-wrapper">
+                    <img src="../medrese/medrese6.jpg" alt="Müze Odaları Canlandırma">
+                </div>
+
+                <!-- KAPANIŞ SLOGANI -->
+                <div class="slogan-box" style="margin-top: 10px;">
+                    "İlim • İrfan • Hikmet • Liyakat"<br>
+                    <span style="font-size: 0.82em; color: var(--gold);">Beş Asırlık Osmanlı Tıp Geleneğinin Yaşayan Tanığı</span>
+                </div>
+
             </div>
 
-            <div class="small-img-wrapper" style="text-align: center;">
-                <img src="../medrese/medrese1.jpg" alt="Tıp Medresesi Genel Görünümü" style="max-width: 100%; height: auto;">
+
+
+            <div class="card-footer">
+                <p style="font-weight: bold; letter-spacing: 2px;">SULTAN II. BAYEZİD KÜLLİYESİ TIP MEDRESESİ</p>
+                <p style="font-size: 14px; margin-top: 10px;">İlim • İrfan • Hikmet • Liyakat</p>
             </div>
-
-            <h3 style="text-align: left;">1. MİMARİ YAPI VE YERLEŞİM DÜZENİ</h3>
-            <p><strong>GENEL YERLEŞİM KROKİSİ:</strong> On sekiz oda ve bir dershaneden oluşan mimari plan.</p>
-            <p>Medrese, darüşşifanın doğu ucuna bitişik olarak inşa edilmiştir ve işlevsel bütünlük esasına göre planlanmıştır. Klasik Osmanlı mimarisinin en yalın ve işlevsel örneklerinden biridir.</p>
-            
-            <ul style="list-style: none; padding-left: 0;">
-                <li>◈ <strong>Plan Şeması:</strong> Ortada dörtgen taş avlu, avluyu çevreleyen 17 sütunlu revaklı yapı ve üç cephede sıralanan 18 öğrenci odası.</li>
-                <li>◈ <strong>Dershane:</strong> Girişin tam karşısında, akustik odak noktası olarak tasarlanmış yüksek kubbeli merkezi derslik.</li>
-                <li>◈ <strong>Bağlantı:</strong> Darüşşifaya (Hastaneye) açılan, teoriden pratiğe geçişi simgeleyen gizli bir geçiş kapısı.</li>
-                <li>◈ <strong>Öğrenci Odaları:</strong> Üçerden altı tanesi dershanenin sağ ve solunda, altışardan on iki tanesi yan cephelerde olmak üzere toplam 18 oda bulunur. Her oda bir öğrenciye aittir.</li>
-                <li>◈ <strong>Revaklar ve Avlu:</strong> Oda kapıları, sağlı sollu 17 sütuna dayanan kemerli revaklara açılır. Avlunun ortasında şadırvan temeli ve bir su kuyusu yer alır.</li>
-                <li>◈ <strong>Bağlantı Kapısı:</strong> Medreseden dârüşşifaya, pencereden bozularak yapılmış bir kapıdan geçilir (Günümüzde taşla örülerek kapatılmıştır).</li>
-            </ul>
-
-            <div class="small-img-wrapper" style="text-align: center;">
-                <img src="../medrese/medrese2.jpg" alt="Medrese Yerleşim Planı Krokisi" style="max-width: 100%; height: auto;">
-            </div>
-
-            <h3 style="text-align: left;">2. AKADEMİK STATÜ VE EĞİTİM SİSTEMİ</h3>
-            <p>Medresetü’l-Etibba, klasik medreselerden farklı olarak <strong>"Klinik Tıp"</strong> modelini benimsemiştir. Teorik eğitim medresede, pratik eğitim ise hemen yan taraftaki darüşşifada verilirdi.</p>
-            
-            <blockquote style="margin: 25px 0; padding: 20px; background: #fff; border-left: 5px solid #d4af37; font-style: italic; text-align: left;">
-                “Medresetü’l-etibba odalarında öyle talebeler vardır ki, her biri Eflatun, Sokrat, Aristotalis ve Calinos hikmetinden bahseden olgun tabiplerdir… İnsanların derdine deva bulmak için çalışırlar.”
-                <br><strong style="display: block; text-align: right; font-size: 14px; margin-top: 10px;">— Evliya Çelebi, Seyahatname (1652)</strong>
-            </blockquote>
-
-            <div class="table-wrap">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead>
-                        <tr style="background: #f4f4f4;">
-                            <th style="padding: 10px; border: 1px solid #ddd;">Kadro Unvanı</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Günlük Ücret</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Görev ve Disiplin Şartları</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Müderris (Profesör)</strong></td><td style="padding: 10px; border: 1px solid #ddd;">50 - 60 Akçe</td><td style="padding: 10px; border: 1px solid #ddd;">Aklî ve naklî ilimlerde uzman. Mazeretsiz ders kesemez.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Mu’îd (Doçent)</strong></td><td style="padding: 10px; border: 1px solid #ddd;">7 Akçe</td><td style="padding: 10px; border: 1px solid #ddd;">Ders anlatmaya yetenekli; öğrencilere kitapları öğreten yardımcı.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>18 Talebe</strong></td><td style="padding: 10px; border: 1px solid #ddd;">2 Akçe (Burs)</td><td style="padding: 10px; border: 1px solid #ddd;">Tam burslu, konaklamalı ve devlet güvencesi altında hekim adayları.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Hafız-ı Kütüp</strong></td><td style="padding: 10px; border: 1px solid #ddd;">2 Akçe</td><td style="padding: 10px; border: 1px solid #ddd;">Kitapları koruyan ve yıllık sayım yapan kütüphane görevlisi.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Ferraş ve Bevvab</strong></td><td style="padding: 10px; border: 1px solid #ddd;">2'şer Akçe</td><td style="padding: 10px; border: 1px solid #ddd;">Temizlik, bakım, güvenlik ve kandillerin her gece yakılması.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h3 style="text-align: left;">3. TARİHİ MÜDERRİS KAYITLARI (XVI. YÜZYIL)</h3>
-            <p>Medresede 35’ten fazla büyük alimin ders verdiği bilinmektedir. Bu isimler, Osmanlı tıp mirasının taşıyıcılarıdır:</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(212, 175, 55, 0.05); padding: 20px; border-radius: 8px; font-size: 15px; text-align: left;">
-                <span>• Şeyh Lûtfullah zâde Bahaüddin (1489)</span>
-                <span>• İbn Kemal (1513)</span>
-                <span>• Şücâeddin İlyas Rûmî (1517)</span>
-                <span>• Kara Haydar Efendi (1519)</span>
-                <span>• Yakup Bin Seydi Ali Efendi (1524)</span>
-                <span>• Pamuk Kadi (1532)</span>
-                <span>• Muhaşşî Sinan Efendi (1538)</span>
-                <span>• Vâsî Alişi (1537)</span>
-                <span>• Celalzade Salih Efendi (1542)</span>
-                <span>• Taşköprülüzade Ahmet Efendi (1545)</span>
-                <span>• Abdurrahman Bin Seydi Ali (1546)</span>
-                <span>• Samsunlu Zâde Mehmet (1566)</span>
-                <span>• Baba Cafer Efendi (1598)</span>
-            </div>
-
-            <div class="small-img-wrapper" style="text-align: center; margin: 25px 0;">
-                <img src="../medrese/medrese3.jpg" alt="Tıp Kütüphanesi" style="max-width: 100%; height: auto;">
-            </div>
-
-            <h3 style="text-align: left;">4. TIP KÜTÜPHANESİ VE BİLGİ ARŞİVİ</h3>
-            <p>Vakfiyeye göre kütüphane başlangıçta 42 ciltlik seçkin bir koleksiyona sahipti. Bilgi disiplini çok sertti: Kitaplar dışarı çıkarılamaz, teslimatlar şahitler huzurunda deftere kaydedilirdi.</p>
-
-            <div class="table-wrap">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead>
-                        <tr style="background: #f4f4f4;">
-                            <th style="padding: 10px; border: 1px solid #ddd;">Eser Adı</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Yazar / Dönem</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">Önemli Detaylar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Zahire-i Harzemşahî</strong></td><td style="padding: 10px; border: 1px solid #ddd;">El-Cürcânî (XII. yy)</td><td style="padding: 10px; border: 1px solid #ddd;">Farsça tıp ansiklopedisi. Cilt kapağında çift yılan motifi bulunur.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Şifa-ül Eskâm</strong></td><td style="padding: 10px; border: 1px solid #ddd;">Hacı Paşa</td><td style="padding: 10px; border: 1px solid #ddd;">4 makale: Teori, ilaçlar, organ hastalıkları ve etik vasiyeti.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Kitab el-Cami</strong></td><td style="padding: 10px; border: 1px solid #ddd;">İbn-i Baytar</td><td style="padding: 10px; border: 1px solid #ddd;">Alfabetik ilaç rehberi. Üzerinde padişahın şahsi mührü basılıdır.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Kitab-u Edebü’t-Tabîb</strong></td><td style="padding: 10px; border: 1px solid #ddd;">İshâk er-Ruhâvî</td><td style="padding: 10px; border: 1px solid #ddd;">Hekimlik ahlakı ve deontoloji üzerine Arapça temel eser.</td></tr>
-                        <tr><td style="padding: 10px; border: 1px solid #ddd;"><strong>Mâlâ Yasa’u’t-Tabîba</strong></td><td style="padding: 10px; border: 1px solid #ddd;">Yusuf bin İsmail</td><td style="padding: 10px; border: 1px solid #ddd;">783 yaprak. İlaç hazırlama ve kullanımının dev rehberi.</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-             <div class="small-img-wrapper" style="text-align: center;">
-                 <img src="../medrese/medrese4.jpg" alt="Cerrahi Alet Replikası" style="max-width: 100%; height: auto;">
-            
- </div>
-
-
-            <h3 style="text-align: left;">5. BİLİMSEL MİRASIN KORUNMASI</h3>
-            <p>Bugün Medresetü’l-Etibba, <strong>Trakya Üniversitesi</strong> bünyesinde modern bir <strong>Sağlık Müzesi</strong> olarak hizmet vermektedir. Öğrenci odalarındaki canlandırmalar, 15. yüzyıldaki eğitim atmosferini birebir yaşatmaktadır.</p>
-
-            <p><strong>Müze Deneyimi:</strong></p>
-            <ul style="list-style: none; padding-left: 0;">
-                <li>◈ Canlandırma odaları ve mankenler</li>
-                <li>◈ Zengin cerrahi alet koleksiyonları</li>
-                <li>◈ Yazma eserlerin dijital arşivleri</li>
-            </ul>
-
-            <div class="red-line" style="text-align: center; border: 1px solid #eee; padding: 20px; margin: 25px 0;">
-                <strong>Biliyor muydunuz?</strong><br>
-                Burada öğrenciler sadece tıp değil; felsefe, matematik ve astronomi dersleri de alarak tam donanımlı <strong>"Hakim-Hekim"</strong> olarak yetişirlerdi.
-            </div>
-
-            <div class="small-img-wrapper" style="text-align: center;">
-                <img src="../medrese/medrese6.jpg" alt="Medresetü’l-Etibba Müze Odalarından Bir Görünüm" style="max-width: 100%; height: auto;">
-            </div>
-        </div>
-
-        <div class="card-footer" style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee;">
-            <p style="font-weight: bold; letter-spacing: 2px;">SULTAN II. BAYEZİD KÜLLİYESİ TIP MEDRESESİ</p>
-            <p style="font-size: 14px; margin-top: 10px;">İlim • İrfan • Hikmet • Liyakat</p>
         </div>
     </div>
-</div>
+
     <div class="site-footer-wrapper">
         <footer class="site-footer">
             <div class="footer-title">T.C. TRAKYA ÜNİVERSİTESİ</div>
