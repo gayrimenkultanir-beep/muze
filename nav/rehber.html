@@ -74,15 +74,7 @@ body {
   line-height: 1.6;
 }
 
-#screen-tour {
-  flex-direction: column;
-  align-items: center;
-  padding: 0 0 5rem;
-  background: var(--bg);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
-  background-attachment: local;
-  min-height: 100dvh;
-}
+#screen-tour { flex-direction:column; align-items:center; padding:0; background:var(--bg); min-height:100dvh; }
 h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; color: var(--ink); }
 p { text-align: justify; }
 a { color: var(--gold); text-decoration: none; }
@@ -318,7 +310,7 @@ a { color: var(--gold); text-decoration: none; }
 .tl-side.tl-prev { text-align:left; } .tl-side.tl-next { text-align:right; }
 #tl-pct { font-size:0.65rem; color:var(--gold); font-weight:600; text-align:center; letter-spacing:0.06em; }
 
-.tour-card { width:100%; max-width:680px; margin:0 auto; padding:var(--sp-lg) var(--sp-md); background:var(--surface); border-left:1px solid var(--border); border-right:1px solid var(--border); min-height:100%; }
+.tour-card { width:100%; max-width:680px; margin:0 auto; padding:var(--sp-lg) var(--sp-md) var(--sp-xl); background:var(--surface); border-left:1px solid var(--border); border-right:1px solid var(--border); min-height:100dvh; flex:1; }
 .step-title { font-family:var(--font-display); font-size:clamp(1.3rem,4vw,1.75rem); font-weight:700; color:var(--ink); line-height:1.25; margin-bottom:0.35rem; white-space:pre-line; }
 .step-subtitle { display:inline-block; font-size:0.75rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold); font-weight:600; margin-bottom:var(--sp-md); padding:3px 10px; background:var(--gold-wash); border-radius:var(--r-xl); border:1px solid rgba(184,134,11,0.2); }
 .text-content { font-size:0.92rem; line-height:1.85; color:var(--ink-mid); margin-bottom:var(--sp-md); text-align:justify; }
