@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyVilla24 — Lüks Tatil Villaları</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #F5F0E8;
+    --sand: #E8DEC8;
+    --gold: #C4973A;
+    --gold-light: #D4AB56;
+    --dark: #060F1A;
+    --dark2: #0A1828;
+    --dark3: #0F2035;
+    --muted: #7A7A72;
+    --text: #F0EAD8;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 48px;
+    background: linear-gradient(to bottom, rgba(6,15,26,0.9) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(6,15,26,0.97); padding: 16px 48px; }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0.15em;
+    color: var(--cream);
+    text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(240,234,216,0.7);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  .nav-lang {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .nav-lang a {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: rgba(240,234,216,0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-lang a:hover, .nav-lang a.active { color: var(--gold); }
+  .nav-lang span { color: rgba(240,234,216,0.2); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    height: 100vh; min-height: 700px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: flex-end;
+    padding-bottom: 80px;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(5,30,50,0.35) 0%, rgba(5,30,50,0.1) 40%, rgba(5,20,40,0.75) 80%, rgba(8,18,32,0.98) 100%),
+      url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=90') center/cover no-repeat;
+    transform: scale(1.05);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes heroZoom {
+    from { transform: scale(1.05); }
+    to { transform: scale(1.12); }
+  }
+
+  .hero-eyebrow {
+    position: relative;
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+    animation: fadeUp 1s 0.2s both;
+  }
+
+  .hero-title {
+    position: relative;
+    font-family: var(--serif);
+    font-size: clamp(52px, 6vw, 90px);
+    font-weight: 300;
+    line-height: 1.05;
+    text-align: center;
+    color: var(--cream);
+    max-width: 800px;
+    margin-bottom: 20px;
+    animation: fadeUp 1s 0.4s both;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+
+  .hero-sub {
+    position: relative;
+    font-size: 14px; letter-spacing: 0.06em;
+    color: rgba(240,234,216,0.6);
+    text-align: center;
+    margin-bottom: 48px;
+    animation: fadeUp 1s 0.6s both;
+  }
+
+  .hero-scroll {
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    animation: fadeUp 1s 1s both;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+  .scroll-text {
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: rgba(240,234,216,0.4);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-section {
+    background: var(--dark2);
+    padding: 0 48px 0;
+    position: relative;
+    z-index: 10;
+  }
+
+  .search-bar {
+    background: var(--dark3);
+    border: 1px solid rgba(196,151,58,0.2);
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 0 auto;
+    transform: translateY(-30px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .search-field {
+    padding: 20px 28px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .search-field:hover { background: rgba(255,255,255,0.03); }
+  .search-field:last-of-type { border-right: none; }
+
+  .search-field label {
+    display: block;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .search-field select,
+  .search-field input {
+    background: none; border: none; outline: none;
+    font-family: var(--sans); font-size: 14px;
+    color: var(--cream); width: 100%; cursor: pointer;
+  }
+  .search-field select option { background: var(--dark3); color: var(--cream); }
+
+  .search-btn {
+    background: var(--gold);
+    border: none; cursor: pointer;
+    padding: 0 36px;
+    font-family: var(--sans); font-size: 11px;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--dark);
+    font-weight: 500;
+    transition: background 0.3s;
+    white-space: nowrap;
+  }
+  .search-btn:hover { background: var(--gold-light); }
+
+  /* ── STATS ── */
+  .stats {
+    padding: 60px 48px 80px;
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex; gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat {
+    flex: 1; padding: 0 40px;
+    border-right: 1px solid rgba(255,255,255,0.06);
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; padding-right: 0; }
+  .stat-number {
+    font-family: var(--serif); font-size: 48px; font-weight: 300;
+    color: var(--gold); line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    padding: 80px 48px 48px;
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .section-eyebrow {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(36px, 3.5vw, 54px);
+    font-weight: 300; line-height: 1.1;
+    color: var(--cream);
+  }
+  .section-title em { font-style: italic; color: rgba(240,234,216,0.5); }
+  .section-link {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); text-decoration: none;
+    border-bottom: 1px solid rgba(196,151,58,0.3);
+    padding-bottom: 2px; white-space: nowrap;
+    transition: border-color 0.3s;
+  }
+  .section-link:hover { border-color: var(--gold); }
+
+  /* ── VILLA GRID ── */
+  .villa-grid {
+    padding: 0 48px 80px;
+    max-width: 1200px; margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .villa-card {
+    background: var(--dark2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                border-color 0.4s;
+  }
+  .villa-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(196,151,58,0.3);
+  }
+
+  .villa-card.featured {
+    grid-column: span 2;
+  }
+
+  .villa-img {
+    position: relative;
+    height: 260px; overflow: hidden;
+  }
+  .villa-card.featured .villa-img { height: 360px; }
+
+  .villa-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    filter: brightness(0.85) saturate(0.9);
+  }
+  .villa-card:hover .villa-img img {
+    transform: scale(1.06);
+    filter: brightness(0.9) saturate(1);
+  }
+
+  .villa-badges {
+    position: absolute; top: 16px; left: 16px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .badge {
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 4px 10px;
+    background: rgba(196,151,58,0.9);
+    color: var(--dark);
+    font-weight: 500;
+  }
+  .badge.pet { background: rgba(240,234,216,0.15); color: var(--cream); }
+  .badge.child { background: rgba(30,80,60,0.85); color: #A8D5B8; }
+
+  .villa-location {
+    position: absolute; bottom: 16px; right: 16px;
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: rgba(240,234,216,0.7);
+    background: rgba(14,14,12,0.6);
+    padding: 4px 10px;
+    backdrop-filter: blur(6px);
+  }
+
+  .villa-info {
+    padding: 20px 22px 22px;
+  }
+
+  .villa-name {
+    font-family: var(--serif); font-size: 20px; font-weight: 400;
+    color: var(--cream); line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .villa-card.featured .villa-name { font-size: 26px; }
+
+  .villa-desc {
+    font-size: 13px; color: var(--muted); line-height: 1.6;
+    margin-bottom: 16px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .villa-meta {
+    display: flex; gap: 16px; margin-bottom: 16px;
+  }
+  .meta-item {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: rgba(240,234,216,0.5);
+  }
+  .meta-icon {
+    width: 12px; height: 12px; opacity: 0.5;
+  }
+
+  .villa-footer {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 14px;
+  }
+
+  .villa-price-label {
+    font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 3px;
+  }
+  .villa-price {
+    font-family: var(--serif); font-size: 22px; font-weight: 300;
+    color: var(--gold);
+  }
+  .villa-price small {
+    font-family: var(--sans); font-size: 11px;
+    color: var(--muted); margin-left: 3px;
+  }
+
+  .villa-cta {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid rgba(196,151,58,0.4);
+    padding: 8px 16px; text-decoration: none;
+    transition: all 0.3s;
+  }
+  .villa-cta:hover {
+    background: var(--gold); color: var(--dark);
+  }
+
+  /* ── LOCATIONS ── */
+  .locations-section {
+    background: var(--dark2);
+    padding: 80px 48px;
+  }
+  .locations-inner {
+    max-width: 1200px; margin: 0 auto;
+  }
+  .locations-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-top: 48px;
+  }
+  .location-card {
+    position: relative; height: 320px;
+    overflow: hidden; cursor: pointer;
+    border-radius: 2px;
+  }
+  .location-card.tall { grid-row: span 1; height: 380px; }
+
+  .location-card img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.6) saturate(0.8);
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s;
+  }
+  .location-card:hover img { transform: scale(1.06); filter: brightness(0.7) saturate(1); }
+
+  .location-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(14,14,12,0.85) 0%, transparent 55%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 24px;
+  }
+  .location-name {
+    font-family: var(--serif); font-size: 28px; font-weight: 300;
+    color: var(--cream); margin-bottom: 4px;
+  }
+  .location-count {
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* ── WHY ── */
+  .why-section {
+    padding: 100px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .why-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 48px; margin-top: 60px;
+  }
+  .why-item {}
+  .why-number {
+    font-family: var(--serif); font-size: 64px; font-weight: 300;
+    color: rgba(196,151,58,0.15); line-height: 1;
+    margin-bottom: 16px;
+  }
+  .why-title {
+    font-family: var(--serif); font-size: 22px; font-weight: 400;
+    color: var(--cream); margin-bottom: 12px;
+  }
+  .why-text {
+    font-size: 14px; color: var(--muted); line-height: 1.8;
+  }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    position: relative; overflow: hidden;
+    padding: 120px 48px;
+    text-align: center;
+  }
+  .cta-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(rgba(5,20,40,0.72), rgba(5,20,40,0.72)),
+      url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&q=80') center/cover;
+  }
+  .cta-content { position: relative; }
+  .cta-title {
+    font-family: var(--serif); font-size: clamp(40px, 4vw, 64px);
+    font-weight: 300; color: var(--cream);
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .cta-title em { font-style: italic; color: var(--gold-light); }
+  .cta-sub {
+    font-size: 15px; color: rgba(240,234,216,0.6);
+    margin-bottom: 40px;
+  }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; }
+  .btn-primary {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+    background: var(--gold); color: var(--dark);
+    padding: 16px 40px; border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: background 0.3s;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-outline {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 400;
+    background: transparent; color: var(--cream);
+    padding: 16px 40px; border: 1px solid rgba(240,234,216,0.3);
+    cursor: pointer; text-decoration: none; display: inline-block;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--cream); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #040D17;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 60px 48px 40px;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px; margin-bottom: 48px;
+  }
+  .footer-logo {
+    font-family: var(--serif); font-size: 24px; font-weight: 300;
+    letter-spacing: 0.1em; color: var(--cream);
+    margin-bottom: 16px; display: block;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-desc {
+    font-size: 13px; color: var(--muted); line-height: 1.8;
+    max-width: 260px;
+  }
+  .footer-col h4 {
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+  }
+  .footer-col a {
+    display: block; font-size: 13px; color: var(--muted);
+    text-decoration: none; margin-bottom: 10px;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--cream); }
+  .footer-bottom {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 24px;
+    font-size: 12px; color: rgba(122,122,114,0.6);
+  }
+  .footer-bottom a { color: var(--muted); text-decoration: none; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .villa-grid { grid-template-columns: 1fr; padding: 0 24px 60px; }
+    .villa-card.featured { grid-column: span 1; }
+    .locations-grid { grid-template-columns: 1fr 1fr; padding: 0; }
+    .search-bar { grid-template-columns: 1fr 1fr; }
+    .search-btn { grid-column: span 2; padding: 16px; }
+    .stats { padding: 40px 24px; gap: 0; }
+    .stat { padding: 0 20px; }
+    .section-header, .why-section, .cta-banner { padding-left: 24px; padding-right: 24px; }
+    .locations-section { padding: 60px 24px; }
+    .why-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="logo">My<span>Villa</span>24</a>
+  <ul class="nav-links">
+    <li><a href="#villas">Villalar</a></li>
+    <li><a href="#locations">Bölgeler</a></li>
+    <li><a href="#why">Neden Biz</a></li>
+    <li><a href="#">Harita</a></li>
+  </ul>
+  <div class="nav-lang">
+    <a href="#" class="active">TR</a>
+    <span>|</span>
+    <a href="#">DE</a>
+    <span>|</span>
+    <a href="#">EN</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <p class="hero-eyebrow">Ege'nin Eşsiz Villaları</p>
+  <h1 class="hero-title">
+    Özel Havuzlu<br><em>Lüks Tatil</em><br>Villaları
+  </h1>
+  <p class="hero-sub">Kuşadası · Çeşme · Fethiye · Bodrum · İzmir</p>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Keşfet</span>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-section">
+  <div class="search-bar">
+    <div class="search-field">
+      <label>Konum</label>
+      <select>
+        <option>Tüm Bölgeler</option>
+        <option>Kuşadası</option>
+        <option>Çeşme</option>
+        <option>Fethiye</option>
+        <option>Bodrum</option>
+        <option>İzmir</option>
+      </select>
+    </div>
+    <div class="search-field">
+      <label>Tarih</label>
+      <input type="text" placeholder="Giriş — Çıkış">
+    </div>
+    <div class="search-field">
+      <label>Misafir</label>
+      <input type="text" placeholder="2 Yetişkin · 1 Oda">
+    </div>
+    <button class="search-btn">Ara</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div style="background: var(--dark2);">
+  <div class="stats" style="max-width:1000px;margin:0 auto;">
+    <div class="stat">
+      <div class="stat-number">25+</div>
+      <div class="stat-label">Seçkin Villa</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">5</div>
+      <div class="stat-label">Prestijli Bölge</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Mahremiyet Garantisi</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">7/24</div>
+      <div class="stat-label">Kişisel Destek</div>
+    </div>
+  </div>
+</div>
+
+<!-- VILLAS -->
+<section id="villas">
+  <div class="section-header">
+    <div>
+      <div class="section-eyebrow">Öne Çıkan Villalar</div>
+      <h2 class="section-title">Kuşadası<br><em>Seçkin Koleksiyon</em></h2>
+    </div>
+    <a href="#" class="section-link">Tüm Villaları Gör →</a>
+  </div>
+
+  <div class="villa-grid">
+
+    <!-- FEATURED -->
+    <div class="villa-card featured">
+      <div class="villa-img">
+        <img src="https://images.unsplash.com/photo-1613977257592-4871e5fcd7c4?w=900&q=80" alt="Villa Sunset Premium">
+        <div class="villa-badges">
+          <span class="badge">Özel Fırsat</span>
+          <span class="badge child">Çocuk Dostu</span>
+        </div>
+        <div class="villa-location">Kuşadası</div>
+      </div>
+      <div class="villa-info">
+        <h3 class="villa-name">Villa Sunset Premium — Deniz Manzaralı Lüks Villa</h3>
+        <p class="villa-desc">Kuşadası'nda özel havuzlu lüks villa — 240 m², 8 kişilik, deniz manzaralı bahçe ve dört banyolu ferah yaşam alanı.</p>
+        <div class="villa-meta">
+          <span class="meta-item">🏠 4+1</span>
+          <span class="meta-item">👥 8 kişi</span>
+          <span class="meta-item">🛏 4 yatak odası</span>
+          <span class="meta-item">🛁 4 banyo</span>
+        </div>
+        <div class="villa-footer">
+          <div>
+            <div class="villa-price-label">Gecelik başlangıç</div>
+            <div class="villa-price">₺8.000 <small>— 20.000</small></div>
+          </div>
+          <a href="#" class="villa-cta">İncele</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="villa-card">
+      <div class="villa-img">
+        <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=600&q=80" alt="Villa Bluebay">
+        <div class="villa-badges"><span class="badge">Özel Fırsat</span></div>
+        <div class="villa-location">Kuşadası</div>
+      </div>
+      <div class="villa-info">
+        <h3 class="villa-name">Villa Bluebay — Özel Havuzlu</h3>
+        <p class="villa-desc">180 m², 8 kişilik, deniz manzaralı villa. Özel havuz ve geniş teras.</p>
+        <div class="villa-meta">
+          <span class="meta-item">🏠 4+1</span>
+          <span class="meta-item">👥 8 kişi</span>
+          <span class="meta-item">🛏 4 yatak</span>
+        </div>
+        <div class="villa-footer">
+          <div>
+            <div class="villa-price-label">Başlangıç</div>
+            <div class="villa-price">₺4.000 <small>— 15.000</small></div>
+          </div>
+          <a href="#" class="villa-cta">İncele</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="villa-card">
+      <div class="villa-img">
+        <img src="https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=600&q=80" alt="Villa Lavinia">
+        <div class="villa-badges"><span class="badge child">Çocuk Dostu</span></div>
+        <div class="villa-location">Kuşadası</div>
+      </div>
+      <div class="villa-info">
+        <h3 class="villa-name">Villa Lavinia — Deniz Manzaralı</h3>
+        <p class="villa-desc">220 m², 8 kişilik, özel havuzlu ve geniş bahçeli villa. Denize yakın konum.</p>
+        <div class="villa-meta">
+          <span class="meta-item">🏠 4+1</span>
+          <span class="meta-item">👥 8 kişi</span>
+          <span class="meta-item">🛏 4 yatak</span>
+        </div>
+        <div class="villa-footer">
+          <div>
+            <div class="villa-price-label">Başlangıç</div>
+            <div class="villa-price">₺10.000 <small>— 23.000</small></div>
+          </div>
+          <a href="#" class="villa-cta">İncele</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="villa-card">
+      <div class="villa-img">
+        <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80" alt="Villa Gardenia">
+        <div class="villa-badges"><span class="badge child">Çocuk Dostu</span></div>
+        <div class="villa-location">Long Beach</div>
+      </div>
+      <div class="villa-info">
+        <h3 class="villa-name">Villa Gardenia — Denize Sıfır</h3>
+        <p class="villa-desc">Long Beach'te denize sıfır, havuzlu site içinde 165 m² lüks villa.</p>
+        <div class="villa-meta">
+          <span class="meta-item">🏠 4+1</span>
+          <span class="meta-item">👥 8 kişi</span>
+          <span class="meta-item">🛏 4 yatak</span>
+        </div>
+        <div class="villa-footer">
+          <div>
+            <div class="villa-price-label">Başlangıç</div>
+            <div class="villa-price">₺10.000 <small>— 23.000</small></div>
+          </div>
+          <a href="#" class="villa-cta">İncele</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section id="locations" class="locations-section">
+  <div class="locations-inner">
+    <div class="section-eyebrow">Bölgelerimiz</div>
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;">
+      <h2 class="section-title" style="margin-top:12px;">Ege'nin <em>En Güzel</em><br>Destinasyonları</h2>
+      <a href="#" class="section-link" style="margin-bottom:6px;">Haritada Gör →</a>
+    </div>
+    <div class="locations-grid">
+      <div class="location-card">
+        <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600&q=80" alt="Kuşadası">
+        <div class="location-overlay">
+          <div class="location-name">Kuşadası</div>
+          <div class="location-count">15 Villa</div>
+        </div>
+      </div>
+      <div class="location-card">
+        <img src="https://images.unsplash.com/photo-1533104816931-20fa691ff6ca?w=600&q=80" alt="Çeşme">
+        <div class="location-overlay">
+          <div class="location-name">Çeşme</div>
+          <div class="location-count">6 Villa</div>
+        </div>
+      </div>
+      <div class="location-card">
+        <img src="https://images.unsplash.com/photo-1582647509711-c8aa8a8bda71?w=600&q=80" alt="Bodrum">
+        <div class="location-overlay">
+          <div class="location-name">Bodrum</div>
+          <div class="location-count">Yakında</div>
+        </div>
+      </div>
+      <div class="location-card">
+        <img src="https://images.unsplash.com/photo-1601628828688-632f38a5a7d0?w=600&q=80" alt="Fethiye">
+        <div class="location-overlay">
+          <div class="location-name">Fethiye</div>
+          <div class="location-count">4 Villa</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" class="why-section">
+  <div class="section-eyebrow">Neden MyVilla24</div>
+  <h2 class="section-title" style="margin-top:12px;">Lüksü <em>Kolaylaştırıyoruz</em></h2>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-number">01</div>
+      <h3 class="why-title">Seçkin Villa Koleksiyonu</h3>
+      <p class="why-text">Ege'nin en prestijli bölgelerinde özenle seçilmiş, üst düzey villa portföyümüzle hayalinizdeki tatili buluyorsunuz.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-number">02</div>
+      <h3 class="why-title">Tam Mahremiyet & Konfor</h3>
+      <p class="why-text">Her villa özel havuzlu, bağımsız ve mahremiyet odaklı tasarlanmış. Kalabalıktan uzak, sadece siz ve sevdikleriniz.</p>
+    </div>
+    <div class="why-item">
+      <div class="why-number">03</div>
+      <h3 class="why-title">7/24 Kişisel Hizmet</h3>
+      <p class="why-text">Rezervasyonunuzdan check-out'a kadar kişisel villanız için dedicated destek ekibimiz her an yanınızda.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <h2 class="cta-title">Hayalinizdeki Villa<br><em>Sizi Bekliyor</em></h2>
+    <p class="cta-sub">Ege'nin en özel noktalarında özel havuzlu villalarınızı keşfedin.</p>
+    <div class="cta-buttons">
+      <a href="#villas" class="btn-primary">Villaları Keşfet</a>
+      <a href="#" class="btn-outline">Bize Ulaşın</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <span class="footer-logo">My<span>Villa</span>24</span>
+      <p class="footer-desc">Türkiye'nin en güzel kıyılarında özel havuzlu ve deniz manzaralı lüks tatil villaları. Hayalinizdeki tatil için doğru adres.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Bölgeler</h4>
+      <a href="#">Kuşadası</a>
+      <a href="#">Çeşme</a>
+      <a href="#">Fethiye</a>
+      <a href="#">Bodrum</a>
+      <a href="#">İzmir</a>
+    </div>
+    <div class="footer-col">
+      <h4>Keşfet</h4>
+      <a href="#">Tüm Villalar</a>
+      <a href="#">Villa Haritası</a>
+      <a href="#">Özel Fırsatlar</a>
+      <a href="#">Evcil Hayvan Dostu</a>
+    </div>
+    <div class="footer-col">
+      <h4>Bilgi</h4>
+      <a href="#">Türkiye Seyahat</a>
+      <a href="#">Gizlilik Politikası</a>
+      <a href="#">Yasal Bilgi</a>
+      <a href="#">İletişim</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 MyVilla24. Tüm hakları saklıdır.</span>
+    <span>Kuşadası · Çeşme · Fethiye · Bodrum</span>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Smooth reveal on scroll
+  const cards = document.querySelectorAll('.villa-card, .location-card, .why-item, .stat');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = entry.target.classList.contains('villa-card') ? 'translateY(0)' : '';
+        }, 100 * (i % 4));
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  cards.forEach(c => {
+    c.style.opacity = '0';
+    c.style.transition = 'opacity 0.7s ease, transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    observer.observe(c);
+  });
+</script>
+
+</body>
+</html>
