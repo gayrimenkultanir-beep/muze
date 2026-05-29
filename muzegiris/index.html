@@ -44,14 +44,19 @@ body{cursor:default;user-select:none;}
   background:var(--ink);
 }
 
-/* ---------- Görsel katmanları (merkezden fade-in geçiş) ---------- */
+/* ---------- Görsel katmanları (parşömen geçişi açar) ---------- */
 #layers{position:absolute; inset:0; z-index:1;}
 .layer{
-  position:absolute; inset:0; opacity:0; transform:scale(.865);
-  transition:opacity 1.05s cubic-bezier(.22,.61,.27,1), transform 1.15s cubic-bezier(.22,.61,.27,1);
-  transform-origin:center center; will-change:opacity,transform;
+  position:absolute; inset:0; opacity:1;
+  transform-origin:center center;
+  /* yumuşak ken burns efekti: yeni gelen katman çok hafif yakınlaşır */
+  animation: kenBurns 22s ease-in-out infinite alternate;
 }
-.layer.show{opacity:1; transform:scale(1);}
+@keyframes kenBurns{
+  0%{transform:scale(1) translate(0,0);}
+  100%{transform:scale(1.04) translate(-12px,-8px);}
+}
+.layer.fadeout{opacity:0; transition:opacity .5s ease;}
 .layer .bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
 /* görsel bulunamazsa zarif yer tutucu */
 .layer .fallback{
@@ -280,16 +285,215 @@ body.editing #edit-controls{display:flex;}
 #toast{position:absolute; bottom:30px; left:30px; z-index:40; padding:14px 26px; border-radius:10px;
   background:rgba(40,120,80,.92); color:#fff; font-family:'Jost'; font-size:15px; display:none;
   box-shadow:0 8px 24px rgba(0,0,0,.5);}
+
+/* ============================================================
+   ✦ PARŞÖMEN AÇILIŞ GEÇİŞİ ✦
+   İki yarım parşömen + ahşap rulolar merkezden açılır
+   ============================================================ */
+#parch{position:absolute; inset:0; z-index:8; pointer-events:none; display:none;}
+#parch.active{display:block;}
+.parch-half{
+  position:absolute; left:-2px; width:calc(100% + 4px); height:50%;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(80,52,18,.18), transparent 55%),
+    radial-gradient(ellipse at 75% 70%, rgba(60,40,14,.22), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(120,80,30,.10), transparent 80%),
+    linear-gradient(180deg, #d8b683 0%, #c69e60 50%, #d8b683 100%);
+  background-blend-mode:multiply,multiply,normal,normal;
+  box-shadow:inset 0 0 80px rgba(60,40,14,.35);
+}
+.parch-half::before{
+  content:""; position:absolute; inset:0;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode:multiply; opacity:.6;
+}
+.parch-half.top{top:0; transform-origin:top center;}
+.parch-half.bot{bottom:0; transform-origin:bottom center;}
+#parch.opening .parch-half{animation:parchScale 1100ms cubic-bezier(.7,.04,.32,1) forwards;}
+@keyframes parchScale{from{transform:scaleY(1);} to{transform:scaleY(0);}}
+
+.parch-rod{
+  position:absolute; left:-40px; width:calc(100% + 80px); height:30px;
+  top:calc(50% - 15px); border-radius:18px;
+  background:
+    linear-gradient(180deg, #1a0e04 0%, #4a2c10 14%, #7a5020 32%, #b08040 50%, #7a5020 68%, #4a2c10 86%, #0e0703 100%);
+  box-shadow:0 12px 30px rgba(0,0,0,.7), inset 0 1px 0 rgba(220,170,90,.5);
+}
+.parch-rod::before, .parch-rod::after{
+  content:""; position:absolute; top:50%; transform:translateY(-50%);
+  width:48px; height:48px; border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%, #ecc870, #8a6418 55%, #2a1808);
+  box-shadow:0 6px 18px rgba(0,0,0,.7), inset 0 1px 2px rgba(255,220,140,.5);
+}
+.parch-rod::before{left:8px;} .parch-rod::after{right:8px;}
+#parch.opening .parch-rod.top{animation:rodUp 1100ms cubic-bezier(.7,.04,.32,1) forwards;}
+#parch.opening .parch-rod.bot{animation:rodDn 1100ms cubic-bezier(.7,.04,.32,1) forwards;}
+@keyframes rodUp{to{top:-46px;}}
+@keyframes rodDn{to{top:calc(100% + 16px);}}
+
+/* parşömen kenarındaki altın ışık çizgisi (açılırken parlar) */
+.parch-glow{position:absolute; left:0; right:0; height:6px; top:calc(50% - 3px);
+  background:linear-gradient(90deg, transparent, #ecc870 20%, #fff5d8 50%, #ecc870 80%, transparent);
+  filter:blur(3px); opacity:0; }
+#parch.opening .parch-glow{animation:glowFlash 1100ms ease-out forwards;}
+@keyframes glowFlash{
+  0%{opacity:0; transform:scaleX(.4);}
+  20%{opacity:1; transform:scaleX(1);}
+  100%{opacity:0; transform:scaleX(1);}
+}
+
+/* ============================================================
+   ✦ PIN İŞARETÇİLERİ (sadece kök/külliye görünümünde) ✦
+   ============================================================ */
+.pin-mark{ pointer-events:none; }
+.pin-mark .pulse{
+  fill:none; stroke:#ecc870; stroke-width:1.5;
+  transform-origin:center; transform-box:fill-box;
+  animation:pinPulse 2.6s ease-out infinite;
+}
+.pin-mark .pulse.d2{animation-delay:.9s;}
+@keyframes pinPulse{
+  0%{r:8; opacity:.8; stroke-width:2;}
+  100%{r:26; opacity:0; stroke-width:.4;}
+}
+.pin-mark .pin-glow{filter:blur(6px); opacity:.7;}
+.pin-mark .pin-core{
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.6));
+}
+.pin-mark .pin-dot{animation:dotShine 3s ease-in-out infinite;}
+@keyframes dotShine{
+  0%,100%{opacity:.7;} 50%{opacity:1;}
+}
+.hotspot .pin-mark{transition:transform .3s ease;}
+.hotspot:hover .pin-mark, .hotspot.touch .pin-mark{transform:translateY(-3px);}
+
+/* ============================================================
+   ✦ YÜZEN PARÇACIKLAR ✦
+   ============================================================ */
+#particles{position:absolute; inset:0; z-index:2; pointer-events:none; overflow:hidden;}
+.p{
+  position:absolute; bottom:-30px; border-radius:50%;
+  background:radial-gradient(circle, rgba(236,200,112,.9), rgba(236,200,112,.2) 50%, transparent 75%);
+  filter:blur(.5px);
+  animation:pfloat linear infinite;
+  opacity:0;
+}
+@keyframes pfloat{
+  0%{transform:translate(0,0); opacity:0;}
+  8%{opacity:var(--op,.6);}
+  92%{opacity:var(--op,.6);}
+  100%{transform:translate(var(--dx,0), -1140px); opacity:0;}
+}
+.p.big{filter:blur(1.5px);}
+
+/* ============================================================
+   ✦ INTRO SAHNESİ ✦
+   ============================================================ */
+#intro{
+  position:absolute; inset:0; z-index:50; display:flex;
+  flex-direction:column; align-items:center; justify-content:center;
+  background:
+    radial-gradient(120% 90% at 50% 50%, #1a120a 0%, #0a0703 60%, #000 100%);
+  transition:opacity 1.2s ease, visibility 1.2s;
+}
+#intro.hide{opacity:0; visibility:hidden;}
+#intro-particles{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+#intro-particles .p{
+  background:radial-gradient(circle, rgba(255,220,140,1), rgba(236,200,112,.4) 45%, transparent 75%);
+}
+.intro-seal{
+  width:160px; height:160px; margin-bottom:36px; position:relative;
+  animation:sealIn 1.6s cubic-bezier(.18,.89,.32,1.28) both;
+}
+.intro-seal svg{width:100%; height:100%;
+  filter:drop-shadow(0 0 30px rgba(200,147,47,.6)) drop-shadow(0 0 60px rgba(200,147,47,.3));}
+.intro-seal::after{
+  content:""; position:absolute; inset:-40px; border-radius:50%;
+  background:radial-gradient(circle, rgba(200,147,47,.25), transparent 65%);
+  animation:sealGlow 3s ease-in-out infinite;
+}
+@keyframes sealIn{
+  0%{opacity:0; transform:scale(.4) rotate(-90deg);}
+  100%{opacity:1; transform:scale(1) rotate(0);}
+}
+@keyframes sealGlow{0%,100%{opacity:.6;}50%{opacity:1;}}
+
+.intro-title{
+  font-family:'Cinzel',serif; font-weight:700; font-size:52px;
+  letter-spacing:.22em; color:#f6ecd2; text-align:center;
+  text-shadow:0 2px 0 #b78c33, 0 4px 0 #82601f, 0 6px 20px rgba(0,0,0,.6),
+              0 0 40px rgba(200,147,47,.4);
+  animation:introLine 1.2s cubic-bezier(.22,.61,.27,1) .4s both;
+  margin-bottom:10px;
+}
+.intro-title .ord{color:var(--copper-lt);}
+.intro-sub{
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:26px;
+  color:var(--copper-lt); letter-spacing:.18em; margin-bottom:46px;
+  animation:introLine 1.2s cubic-bezier(.22,.61,.27,1) .8s both;
+}
+.intro-welcome{
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-size:64px;
+  color:#f6ecd2; letter-spacing:.04em; margin-bottom:54px;
+  text-shadow:0 0 30px rgba(200,147,47,.4);
+  animation:introLine 1.4s cubic-bezier(.22,.61,.27,1) 1.4s both;
+}
+.intro-tap{
+  font-family:'Jost'; font-size:18px; letter-spacing:.36em; color:var(--parch-dim);
+  text-transform:uppercase; padding:14px 38px;
+  border:1px solid var(--line); border-radius:60px;
+  animation:introLine 1.2s ease 2.2s both, tapPulse 2.4s ease-in-out 3.5s infinite;
+}
+@keyframes introLine{from{opacity:0; transform:translateY(20px);} to{opacity:1; transform:translateY(0);}}
+@keyframes tapPulse{0%,100%{transform:scale(1); border-color:var(--line);}50%{transform:scale(1.04); border-color:var(--copper-lt); box-shadow:0 0 24px rgba(200,147,47,.3);}}
+
+/* ============================================================
+   ✦ ATTRACT MODE ✦
+   ============================================================ */
+body.attract #footer, body.attract #actions{opacity:.25; pointer-events:none; transition:opacity .8s;}
+#attract-prompt{
+  position:absolute; left:50%; bottom:40px; transform:translateX(-50%);
+  z-index:15; display:none; padding:14px 38px;
+  font-family:'Jost'; font-size:16px; letter-spacing:.32em; color:#f6ecd2;
+  text-transform:uppercase;
+  background:linear-gradient(180deg, rgba(40,28,12,.7), rgba(20,14,6,.7));
+  border:1px solid var(--copper); border-radius:60px;
+  box-shadow:0 0 30px rgba(200,147,47,.3);
+  animation:tapPulse 2.4s ease-in-out infinite;
+}
+body.attract #attract-prompt{display:block;}
+
+/* ============================================================
+   ✦ TYPEWRITER (karakter karakter beliren başlık/alt başlık) ✦
+   ============================================================ */
+.ch{display:inline-block; opacity:0; transform:translateY(10px);
+  animation:typeIn .5s cubic-bezier(.22,.61,.27,1) forwards;}
+.ch.ord{color:var(--copper-lt);}
+@keyframes typeIn{to{opacity:1; transform:translateY(0);}}
 </style>
 </head>
 <body>
 <div id="viewport">
   <div id="stage">
     <div id="layers"></div>
+    <div id="particles"></div>
     <div id="grain"></div>
     <div id="vignette"></div>
     <div id="scrim-top"></div>
     <div id="scrim-bot"></div>
+
+    <!-- Parşömen geçişi -->
+    <div id="parch">
+      <div class="parch-half top"></div>
+      <div class="parch-half bot"></div>
+      <div class="parch-glow"></div>
+      <div class="parch-rod top"></div>
+      <div class="parch-rod bot"></div>
+    </div>
+
+    <!-- Attract mode prompt -->
+    <div id="attract-prompt">Dokunarak Keşfedin</div>
 
     <!-- Poligon editörü (D) -->
     <svg id="editsvg" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg>
@@ -298,7 +502,7 @@ body.editing #edit-controls{display:flex;}
     <div id="chrome">
       <div id="header">
         <div id="title-wrap">
-          <h1 id="title"></h1>
+          <h1 id="title"><span id="title-base"></span><span id="title-suffix"></span></h1>
           <div id="title-orn">
             <svg viewBox="0 0 340 18" preserveAspectRatio="none">
               <g stroke="var(--copper)" stroke-width="1.4" fill="none">
@@ -390,12 +594,51 @@ body.editing #edit-controls{display:flex;}
     </div>
 
     <div id="toast"></div>
+
+    <!-- ✦ INTRO SAHNESİ ✦ -->
+    <div id="intro">
+      <div id="intro-particles"></div>
+      <div class="intro-seal">
+        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="goldGrad" cx="50%" cy="40%">
+              <stop offset="0%" stop-color="#fff5d8"/>
+              <stop offset="50%" stop-color="#ecc870"/>
+              <stop offset="100%" stop-color="#8a6418"/>
+            </radialGradient>
+          </defs>
+          <!-- dış halka -->
+          <circle cx="80" cy="80" r="74" fill="none" stroke="#8a6418" stroke-width="1.5"/>
+          <circle cx="80" cy="80" r="70" fill="none" stroke="#ecc870" stroke-width=".8" stroke-dasharray="2 4"/>
+          <!-- iç madalyon -->
+          <circle cx="80" cy="80" r="52" fill="url(#goldGrad)" opacity=".15"/>
+          <circle cx="80" cy="80" r="52" fill="none" stroke="#ecc870" stroke-width="1"/>
+          <!-- 8 köşeli yıldız (Selçuklu/Osmanlı geometrisi) -->
+          <g transform="translate(80,80)" fill="none" stroke="#ecc870" stroke-width="1.4" stroke-linejoin="round">
+            <polygon points="0,-44 12,-12 44,0 12,12 0,44 -12,12 -44,0 -12,-12"/>
+            <polygon points="0,-44 12,-12 44,0 12,12 0,44 -12,12 -44,0 -12,-12" transform="rotate(22.5)"/>
+          </g>
+          <!-- merkez nokta -->
+          <circle cx="80" cy="80" r="6" fill="#ecc870"/>
+          <circle cx="80" cy="80" r="3" fill="#fff5d8"/>
+          <!-- dış puantiyeli süs -->
+          <g fill="#ecc870">
+            <circle cx="80" cy="6" r="2.2"/><circle cx="80" cy="154" r="2.2"/>
+            <circle cx="6" cy="80" r="2.2"/><circle cx="154" cy="80" r="2.2"/>
+            <circle cx="28" cy="28" r="1.6"/><circle cx="132" cy="28" r="1.6"/>
+            <circle cx="28" cy="132" r="1.6"/><circle cx="132" cy="132" r="1.6"/>
+          </g>
+        </svg>
+      </div>
+      <h1 class="intro-title">SULTAN <span class="ord">II.</span> BAYEZİD KÜLLİYESİ</h1>
+      <div class="intro-sub">EDİRNE · 1488</div>
+      <div class="intro-welcome">Hoş Geldiniz</div>
+      <div class="intro-tap">Başlamak için dokunun</div>
+    </div>
   </div>
 </div>
 
-<audio id="bg-audio" loop preload="auto">
-  <source src="main/audio/background.mp3" type="audio/mpeg">
-</audio>
+<audio id="bg-audio" loop preload="none"></audio>
 
 <script>
 /* ============================================================
@@ -572,13 +815,24 @@ window.addEventListener('resize', fit); fit();
 function buildTitle(key){
   const segs=[]; let k=key;
   while(k){ const v=VIEWS[k]; if(v.seg) segs.unshift(v.seg); k=v.parent; }
-  // ardışık tekrarları sadeleştir
   const clean=[]; segs.forEach(s=>{ if(clean[clean.length-1]!==s) clean.push(s); });
-  const tail = clean.join(" ");
-  return tail ? `${BASE_TITLE} ${tail}` : BASE_TITLE;
+  return { base: BASE_TITLE, suffix: clean.join(" ") };
+}
+/* Metni karakter karakter beliren <span class="ch"> dizisine dönüştürür.
+   "II." rakamlarına .ord sınıfı eklenir. */
+function typeChars(text, startDelay=0, charDelay=32, baseClass=''){
+  let html=''; let i=0;
+  while(i<text.length){
+    let isOrd=false;
+    if(text.substr(i,3)==='II.'){ isOrd=true; }
+    const c=text[i]; const ch=c===' ' ? '&nbsp;' : c;
+    const cls=`ch${isOrd?' ord':''}${baseClass?' '+baseClass:''}`;
+    html+=`<span class="${cls}" style="animation-delay:${startDelay+i*charDelay}ms">${ch}</span>`;
+    i++;
+  }
+  return html;
 }
 function titleHTML(txt){
-  // "II." kısmını bakır vurgusuyla renklendir
   return txt.replace(/SULTAN\s(II\.)/, 'SULTAN <span class="ord">$1</span>');
 }
 
@@ -681,23 +935,41 @@ function buildLayer(key){
   return layer;
 }
 
-const titleEl=document.getElementById('title');
-const subEl=document.getElementById('subtitle');
-const ornEl=document.getElementById('title-orn');
-const hintEl=document.getElementById('hint');
-const backEl=document.getElementById('back');
+const titleBaseEl  = document.getElementById('title-base');
+const titleSuffixEl= document.getElementById('title-suffix');
+const titleEl      = document.getElementById('title');
+const subEl        = document.getElementById('subtitle');
+const ornEl        = document.getElementById('title-orn');
+const hintEl       = document.getElementById('hint');
+const backEl       = document.getElementById('back');
 
-function updateChrome(key){
+function updateChrome(key, opts={}){
   const v=VIEWS[key];
+  const {base, suffix}=buildTitle(key);
+  // başlığı önce gizle, sonra karakter karakter yaz
   titleEl.classList.add('swap'); subEl.classList.add('swap');
+  const delay = opts.skipFade ? 0 : 280;
   setTimeout(()=>{
-    titleEl.innerHTML=titleHTML(buildTitle(key));
-    // kök başlığı biraz daha büyük; alt görünümlerde küçülsün
+    // base her zaman aynı şekilde, hızlı stagger ile
+    titleBaseEl.innerHTML = typeChars(base, 0, 22);
+    // suffix biraz gecikmeli (base'den sonra)
+    if(suffix){
+      titleSuffixEl.innerHTML = '&nbsp;' + typeChars(suffix, base.length*22 + 60, 38);
+    } else {
+      titleSuffixEl.innerHTML = '';
+    }
+    // alt başlık (slogan) — başlık bitince yaz
+    if(v.subtitle){
+      const subStart = (base.length + (suffix?suffix.length:0))*22 + 200;
+      subEl.innerHTML = typeChars(v.subtitle, subStart, 22);
+    } else {
+      subEl.innerHTML = '';
+    }
+    // boyutu ayarla
     titleEl.style.fontSize = v.root ? '50px' : '40px';
     ornEl.style.width = v.root ? '300px' : '240px';
-    subEl.textContent=v.subtitle||'';
     titleEl.classList.remove('swap'); subEl.classList.remove('swap');
-  },280);
+  }, delay);
   // ipucu yalnızca poligon varsa
   if(v.polygons && v.polygons.length) hintEl.classList.remove('hide');
   else hintEl.classList.add('hide');
@@ -746,9 +1018,16 @@ stage.addEventListener('pointermove',e=>{
 const audio=document.getElementById('bg-audio');
 const soundBtn=document.getElementById('sound');
 let soundOn=true; let started=false;
-audio.src=AUDIO_PATH;
-function startAudio(){ if(started) return; started=true; audio.volume=0.45;
-  audio.play().catch(()=>{}); }
+// audio.src ataması <source> tag'i ile çakışır — sadece JS ile yönetiyoruz
+audio.removeAttribute('src');
+const _audioSrc = AUDIO_PATH;
+function startAudio(){
+  if(started) return; started=true;
+  audio.src = _audioSrc;
+  audio.volume=0.45;
+  audio.load();
+  audio.play().catch(()=>{ /* ses dosyası yoksa veya otoplay engelliyse sessizce devam */ });
+}
 document.addEventListener('pointerdown',startAudio,{once:true});
 soundBtn.addEventListener('click',()=>{
   startAudio(); soundOn=!soundOn; audio.muted=!soundOn;
@@ -898,7 +1177,13 @@ document.getElementById('copy-btn').addEventListener('click',()=>{
   const lines=(v.polygons||[]).map(p=>`  {name:"${p.name}", target:"${p.target||''}", points:"${p.points}"}`);
   const code=`// "${currentKey}" görünümü — polygons:\npolygons:[\n${lines.join(',\n')}\n]`;
   codeout.value=code;
-  navigator.clipboard?.writeText(code).then(()=>showToast('Kod kopyalandı ✓'),()=>showToast('Aşağıdaki kutudan kopyalayın'));
+  // file:// protokolünde navigator.clipboard çalışmaz — execCommand fallback
+  if(navigator.clipboard && location.protocol !== 'file:'){
+    navigator.clipboard.writeText(code).then(()=>showToast('Kod kopyalandı ✓'),()=>showToast('Aşağıdaki kutudan kopyalayın'));
+  } else {
+    try{ codeout.select(); document.execCommand('copy'); showToast('Kod kopyalandı ✓'); }
+    catch(e){ showToast('Aşağıdaki kutudan kopyalayın'); }
+  }
 });
 function showToast(m){ toast.textContent=m; toast.style.display='block';
   clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.style.display='none',2200); }
