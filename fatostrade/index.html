@@ -914,9 +914,9 @@ function openDerinlik(source){
   const t=ticker.toLowerCase();
   const urls={
     bigpara: `https://bigpara.hurriyet.com.tr/borsa/hisse-fiyatlari/${t}-detay/`,
-    isyatirim: `https://www.isyatirim.com.tr/analiz-ve-raporlar/hisse/${ticker}#tab-2`,
+    isyatirim: `https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/sirket-karti.aspx?hisse=${ticker}`,
     tradingview: `https://tr.tradingview.com/chart/?symbol=BIST%3A${ticker}`,
-    kap: `https://www.kap.org.tr/tr/Bildirim/Ara?year=2026&period=&term=${ticker}&bdkReview=false&ruleType=&bdkDecision=&disclosureClass=FR&index=&market=&cgStatus=&bdkStatus=&orderBy=DATE&orderDir=DESC`,
+    kap: `https://www.kap.org.tr/tr/bildirim-sorgu?indexCodes=${ticker}&from=&to=&mkkMemberOidList=&bdkReview=false`,
   };
   const url=urls[source];
   if(url) window.open(url,'_blank');
