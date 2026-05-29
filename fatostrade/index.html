@@ -337,7 +337,7 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
         <i class="ti ti-chart-candle"></i> TradingView
       </div>
       <div class="action-btn" onclick="openDerinlik('kap')" style="display:flex;align-items:center;justify-content:center;gap:6px;background:var(--amber-bg);color:var(--amber);border-color:rgba(245,158,11,.3)">
-        <i class="ti ti-news"></i> KAP Bildirimleri
+        <i class="ti ti-news"></i> Haberler & KAP
       </div>
     </div>
     <div class="section" style="padding-top:4px">
@@ -916,7 +916,7 @@ function openDerinlik(source){
     bigpara: `https://bigpara.hurriyet.com.tr/borsa/hisse-fiyatlari/${t}-detay/`,
     isyatirim: `https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/sirket-karti.aspx?hisse=${ticker}`,
     tradingview: `https://tr.tradingview.com/chart/?symbol=BIST%3A${ticker}`,
-    kap: `https://www.kap.org.tr/tr/bildirim-sorgu?indexCodes=${ticker}&from=&to=&mkkMemberOidList=&bdkReview=false`,
+    kap: `https://bigpara.hurriyet.com.tr/borsa/hisse-fiyatlari/${t}-detay/haberler/`,
   };
   const url=urls[source];
   if(url) window.open(url,'_blank');
