@@ -1046,50 +1046,59 @@ function saveWorker(){
 async function testProxies(){
   const el=document.getElementById('proxy-status');
   el.innerHTML='<span style="color:var(--amber)">Test ediliyor...</span>';
+  const results=[];
+
+  // Worker testi — yeni format (symbols param, flat response)
+  const w=localStorage.getItem('ft_worker_url');
+  try{
+    if(!w) throw new Error('Worker URL girilmemiş');
+    const t=Date.now();
+    const r=await fetch(w.replace(/\/$/,'')+`?symbols=GARAN.IS`,{signal:AbortSignal.timeout(8000)});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    // Flat format: {"GARAN.IS":{previousClose:...}} veya spark format
+    const hasData = d?.['GARAN.IS']?.previousClose || d?.spark?.result;
+    if(!hasData) throw new Error('Veri boş: '+JSON.stringify(d).substring(0,80));
+    const price = d?.['GARAN.IS']?.previousClose || d?.['GARAN.IS']?.regularMarketPrice;
+    results.push(`<span style="color:var(--green)">✓ Cloudflare Worker (${Date.now()-t}ms) — GARAN: ₺${price||'?'}</span>`);
+  }catch(e){
+    results.push(`<span style="color:var(--red)">✗ Cloudflare Worker: ${e.message}</span>`);
+  }
+
+  // Diğer proxy testleri
   const testUrl='https://query2.finance.yahoo.com/v8/finance/spark?symbols=GARAN.IS&range=1d&interval=5m';
   const enc=encodeURIComponent(testUrl);
   const proxies=[
-    {name:'Cloudflare Worker',fn:async()=>{
-      const w=localStorage.getItem('ft_worker_url');
-      if(!w)throw new Error('Kurulmamis');
-      const wurl=w.replace(/\/$/,'')+`?symbols=GARAN.IS`;
-      const r=await fetch(wurl,{signal:AbortSignal.timeout(8000)});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      const d=await r.json(); if(!d?.spark) throw new Error('Spark yok: '+JSON.stringify(d).substring(0,60)); return d;
-    }},
     {name:'allorigins.win',fn:async()=>{
-      const r=await fetch(`https://api.allorigins.win/get?url=${enc}`,{signal:AbortSignal.timeout(6000)});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      const j=await r.json(); if(!j.contents)throw new Error('Bos');
-      const d=JSON.parse(j.contents); if(!d?.spark)throw new Error('Veri yok'); return d;
+      const r=await fetch(`https://api.allorigins.win/get?url=${enc}`,{signal:AbortSignal.timeout(7000)});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j=await r.json();
+      if(!j.contents) throw new Error('Boş');
+      const d=JSON.parse(j.contents);
+      const p=d?.spark?.result?.[0]?.response?.[0]?.meta?.previousClose;
+      if(!p) throw new Error('Veri yok');
+      return p;
     }},
     {name:'corsproxy.io',fn:async()=>{
-      const r=await fetch(`https://corsproxy.io/?${enc}`,{signal:AbortSignal.timeout(6000)});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      const d=await r.json(); if(!d?.spark)throw new Error('Veri yok'); return d;
-    }},
-    {name:'codetabs.com',fn:async()=>{
-      const r=await fetch(`https://api.codetabs.com/v1/proxy/?quest=${enc}`,{signal:AbortSignal.timeout(6000)});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      const d=await r.json(); if(!d?.spark)throw new Error('Veri yok'); return d;
-    }},
-    {name:'thingproxy',fn:async()=>{
-      const r=await fetch(`https://thingproxy.freeboard.io/fetch/${testUrl}`,{signal:AbortSignal.timeout(6000)});
-      if(!r.ok)throw new Error('HTTP '+r.status);
-      const d=await r.json(); if(!d?.spark)throw new Error('Veri yok'); return d;
+      const r=await fetch(`https://corsproxy.io/?${enc}`,{signal:AbortSignal.timeout(7000)});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const d=await r.json();
+      const p=d?.spark?.result?.[0]?.response?.[0]?.meta?.previousClose;
+      if(!p) throw new Error('Veri yok');
+      return p;
     }},
   ];
-  const results=[];
   for(const p of proxies){
     try{
       const t=Date.now();
-      await p.fn();
-      results.push(`<span style="color:var(--green)">✓ ${p.name} (${Date.now()-t}ms)</span>`);
+      const price=await p.fn();
+      results.push(`<span style="color:var(--green)">✓ ${p.name} (${Date.now()-t}ms) — GARAN: ₺${price}</span>`);
     }catch(e){
       results.push(`<span style="color:var(--red)">✗ ${p.name}: ${e.message}</span>`);
     }
   }
-  el.innerHTML=results.join('<br>');
+
+  el.innerHTML=results.join('<br>')||'Test tamamlandı';
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
