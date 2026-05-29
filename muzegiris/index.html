@@ -1018,21 +1018,29 @@ stage.addEventListener('pointermove',e=>{
 const audio=document.getElementById('bg-audio');
 const soundBtn=document.getElementById('sound');
 let soundOn=true; let started=false;
-// audio.src ataması <source> tag'i ile çakışır — sadece JS ile yönetiyoruz
-audio.removeAttribute('src');
-const _audioSrc = AUDIO_PATH;
 function startAudio(){
   if(started) return; started=true;
-  audio.src = _audioSrc;
+  audio.src = AUDIO_PATH;
   audio.volume=0.45;
   audio.load();
-  audio.play().catch(()=>{ /* ses dosyası yoksa veya otoplay engelliyse sessizce devam */ });
+  audio.play().catch(()=>{});
 }
 document.addEventListener('pointerdown',startAudio,{once:true});
 soundBtn.addEventListener('click',()=>{
   startAudio(); soundOn=!soundOn; audio.muted=!soundOn;
   soundBtn.classList.toggle('off',!soundOn);
 });
+
+/* ============================================================
+   INTRO — tıklanınca kapanır ve ana ekrana geçer
+   ============================================================ */
+const introEl = document.getElementById('intro');
+introEl.style.cursor = 'pointer';
+introEl.addEventListener('click', function dismissIntro(){
+  introEl.classList.add('hide');
+  introEl.removeEventListener('click', dismissIntro);
+  setTimeout(()=>{ introEl.style.display='none'; }, 1250);
+}, {once: true});
 
 /* ============================================================
    DİL — basit çok-dilli sözlük (kiosk için temel arayüz)
@@ -1177,7 +1185,6 @@ document.getElementById('copy-btn').addEventListener('click',()=>{
   const lines=(v.polygons||[]).map(p=>`  {name:"${p.name}", target:"${p.target||''}", points:"${p.points}"}`);
   const code=`// "${currentKey}" görünümü — polygons:\npolygons:[\n${lines.join(',\n')}\n]`;
   codeout.value=code;
-  // file:// protokolünde navigator.clipboard çalışmaz — execCommand fallback
   if(navigator.clipboard && location.protocol !== 'file:'){
     navigator.clipboard.writeText(code).then(()=>showToast('Kod kopyalandı ✓'),()=>showToast('Aşağıdaki kutudan kopyalayın'));
   } else {
