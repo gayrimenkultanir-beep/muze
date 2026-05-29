@@ -880,11 +880,12 @@ function closeDetail(){document.getElementById('detail-page').classList.remove('
 function openDerinlik(source){
   if(currentDetail===null) return;
   const ticker=D.stocks[currentDetail].ticker;
+  const t=ticker.toLowerCase();
   const urls={
-    bigpara: `https://bigpara.hurriyet.com.tr/borsa/hisse-detay/${ticker}/derinlik/`,
-    isyatirim: `https://www.isyatirim.com.tr/analiz-ve-raporlar/hisse/${ticker}`,
+    bigpara: `https://bigpara.hurriyet.com.tr/borsa/hisse-fiyatlari/${t}-detay/`,
+    isyatirim: `https://www.isyatirim.com.tr/analiz-ve-raporlar/hisse/${ticker}#tab-2`,
     tradingview: `https://tr.tradingview.com/chart/?symbol=BIST%3A${ticker}`,
-    kap: `https://www.kap.org.tr/tr/Uye/Bul?q=${ticker}`,
+    kap: `https://www.kap.org.tr/tr/Bildirim/Ara?year=2026&period=&term=${ticker}&bdkReview=false&ruleType=&bdkDecision=&disclosureClass=FR&index=&market=&cgStatus=&bdkStatus=&orderBy=DATE&orderDir=DESC`,
   };
   const url=urls[source];
   if(url) window.open(url,'_blank');
