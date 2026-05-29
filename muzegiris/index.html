@@ -92,27 +92,63 @@ body{cursor:default;user-select:none;}
   background:linear-gradient(to top, rgba(6,4,2,.92) 0%, rgba(6,4,2,.5) 50%, transparent 100%);}
 
 /* ---------- POLİGONLAR (SVG, her katmanda) ---------- */
-.polysvg{position:absolute; inset:0; z-index:3; width:100%; height:100%;}
+.polysvg{position:absolute; inset:0; z-index:7; width:100%; height:100%; overflow:visible;}
 .hotspot{cursor:pointer;}
+
+/* Poligon dolgusu — JS sequencer ile 'lit' sınıfı eklenip kaldırılır */
 .hotspot .area{
-  fill:transparent; stroke:none;
-  transition:none;
+  fill:#c89330; stroke:none;
+  filter:url(#feather);
+  fill-opacity:0;
+  transition:fill-opacity 1s cubic-bezier(.4,0,.4,1), fill .4s ease;
 }
-.hotspot .lbl-bg{fill:transparent;}
-.hotspot .lbl{
-  fill:#2a1c08;                          /* iç: derin kahve */
-  font-family:'Cinzel',serif; font-weight:700; letter-spacing:.08em;
-  text-anchor:middle; paint-order:stroke;
-  stroke:var(--copper);                  /* dış: gold kontur */
-  stroke-width:3.4px; stroke-linejoin:round;
-  opacity:.92;
-  transition:opacity .35s ease, filter .35s ease, stroke .35s ease;
+.hotspot.lit .area{
+  fill-opacity:.78; fill:#ecc870;
+}
+.hotspot:hover .area, .hotspot.touch .area{
+  fill-opacity:.9; fill:#ecc870;
+}
+
+/* Etiket kutusu — buton tarzı, varsayılan görünmez */
+.hotspot .lbl-group{
+  opacity:0;
+  transition:opacity .9s cubic-bezier(.4,0,.4,1);
   pointer-events:none;
 }
-.hotspot:hover .lbl, .hotspot.touch .lbl{
-  opacity:1; stroke:var(--copper-lt);
-  filter:drop-shadow(0 0 10px rgba(236,200,112,.55)) drop-shadow(0 0 22px rgba(200,147,47,.35));
+.hotspot.lit .lbl-group,
+.hotspot:hover .lbl-group,
+.hotspot.touch .lbl-group{
+  opacity:1;
 }
+.hotspot .lbl-bg{
+  fill:rgba(28,18,8,.92);
+  stroke:#c8932f; stroke-width:1.3;
+  filter:drop-shadow(0 4px 10px rgba(0,0,0,.55));
+  transition:fill .35s ease, stroke .35s ease, filter .35s ease;
+}
+.hotspot.lit .lbl-bg,
+.hotspot:hover .lbl-bg,
+.hotspot.touch .lbl-bg{
+  fill:rgba(236,200,112,.97);
+  stroke:#fff5d8; stroke-width:1.6;
+  filter:drop-shadow(0 6px 16px rgba(0,0,0,.6))
+         drop-shadow(0 0 14px rgba(236,200,112,.7));
+}
+.hotspot .lbl{
+  fill:#ecc870;
+  font-family:'Cinzel',serif; font-weight:600; letter-spacing:.05em;
+  text-anchor:middle; dominant-baseline:central;
+  transition:fill .35s ease;
+  pointer-events:none;
+}
+.hotspot.lit .lbl,
+.hotspot:hover .lbl,
+.hotspot.touch .lbl{
+  fill:#1a1006;
+}
+.hotspot.disabled{cursor:default;}
+.hotspot.disabled .area{fill:#7a5418;}
+.hotspot.disabled .lbl-bg{stroke:#7a5418; opacity:.5;}
 
 /* ---------- CHROME (başlık / alt yazı / butonlar) ---------- */
 #chrome{position:absolute; inset:0; z-index:10; pointer-events:none;}
@@ -216,6 +252,179 @@ body{cursor:default;user-select:none;}
 #lang-menu .flag{width:24px; height:18px; border-radius:3px; display:inline-block;
   border:1px solid rgba(255,255,255,.15);}
 
+/* ✦ İ (BİLGİ) butonu — footer'ın üstünde, geri butonu hizasında ortada */
+#info-btn{
+  position:absolute; left:50%; bottom:96px; transform:translateX(-50%);
+  z-index:14;
+  width:64px; height:64px; cursor:pointer; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 50% 38%, rgba(236,200,112,.35), rgba(40,26,10,.88));
+  border:2px solid var(--copper); color:#fff5d8;
+  box-shadow:0 10px 24px rgba(0,0,0,.55),
+             inset 0 1px 0 rgba(255,245,216,.45),
+             0 0 22px rgba(200,147,47,.4);
+  font-family:'Cinzel',serif; font-weight:700; line-height:1;
+  transition:transform .25s ease, background .3s ease;
+  animation:infoBreath 3.4s ease-in-out infinite;
+  overflow:hidden;
+}
+#info-btn .ic{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  transition:opacity .35s ease, transform .45s cubic-bezier(.5,-0.5,.5,1.5);
+}
+#info-btn .ic-i{font-size:30px; font-style:italic;}
+#info-btn .ic-x{font-size:26px; opacity:0; transform:rotate(-180deg);}
+#info-btn.open .ic-i{opacity:0; transform:rotate(180deg);}
+#info-btn.open .ic-x{opacity:1; transform:rotate(0);}
+#info-btn.open{
+  background:radial-gradient(circle at 50% 38%, rgba(236,200,112,.5), rgba(60,40,16,.92));
+  animation:none;
+}
+@keyframes infoBreath{
+  0%,100%{box-shadow:0 10px 24px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,245,216,.45), 0 0 18px rgba(200,147,47,.3);}
+  50%{box-shadow:0 14px 30px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,245,216,.6), 0 0 38px rgba(236,200,112,.6);}
+}
+#info-btn:hover{transform:translateX(-50%) translateY(-4px) scale(1.06);}
+#info-btn:active{transform:translateX(-50%) translateY(-1px) scale(1);}
+
+/* ============================================================
+   ✦ DETAY PARŞÖMEN PANELİ — sağdan, padişah fermanı gibi
+   Kapalıyken hiçbir şey görünmez. İ'ye basılınca rulo aşağı açılır
+   ============================================================ */
+#detail{
+  position:absolute; top:0; right:0; height:100%;
+  width:540px; z-index:18; pointer-events:none;
+  visibility:hidden;
+}
+#detail.open{pointer-events:auto; visibility:visible;}
+
+/* Üst rulo — sabit, sadece açıkken görünür */
+.scroll-rod{
+  position:absolute; left:30px; right:30px; height:34px;
+  background:
+    linear-gradient(180deg, #1a0e04 0%, #4a2c10 12%, #7a5020 30%, #c8932f 50%, #7a5020 70%, #4a2c10 88%, #0e0703 100%);
+  border-radius:20px;
+  box-shadow:0 8px 22px rgba(0,0,0,.7),
+             inset 0 1px 0 rgba(255,220,140,.55),
+             inset 0 -2px 4px rgba(0,0,0,.4);
+  z-index:3;
+  opacity:0; transform:translateY(-30px);
+  transition:opacity .35s ease, transform .55s cubic-bezier(.18,.89,.32,1.28);
+}
+.scroll-rod.top{top:150px;}
+.scroll-rod.bot{top:184px; /* başlangıçta üst ruloya yapışık */
+  transition:top .9s cubic-bezier(.65,.05,.36,1), opacity .35s ease, transform .55s cubic-bezier(.18,.89,.32,1.28);}
+#detail.open .scroll-rod{opacity:1; transform:translateY(0);}
+#detail.open .scroll-rod.bot{top:calc(100% - 160px);}
+/* Rulo uçlarındaki gold kapaklar */
+.scroll-rod::before, .scroll-rod::after{
+  content:""; position:absolute; top:50%; transform:translateY(-50%);
+  width:52px; height:52px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff5d8, #ecc870 45%, #8a6418 80%, #2a1808);
+  box-shadow:0 6px 14px rgba(0,0,0,.7), inset 0 1px 2px rgba(255,235,180,.6),
+             inset 0 -2px 4px rgba(60,40,12,.6);
+}
+.scroll-rod::before{left:-26px;}
+.scroll-rod::after{right:-26px;}
+
+/* Parşömen kağıt — yukarıdan aşağı açılır */
+.scroll-paper{
+  position:absolute; left:30px; right:30px; top:166px;
+  height:0;
+  background:
+    radial-gradient(ellipse at 20% 25%, rgba(160,110,40,.18), transparent 55%),
+    radial-gradient(ellipse at 80% 75%, rgba(120,80,30,.22), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(220,180,120,.06), transparent 80%),
+    linear-gradient(180deg, #f4e0b6 0%, #ecd09a 25%, #e3c285 55%, #d9b76e 100%);
+  border-left:1px solid rgba(110,74,28,.4);
+  border-right:1px solid rgba(110,74,28,.4);
+  box-shadow:0 14px 40px rgba(0,0,0,.55),
+             inset 0 0 80px rgba(110,74,28,.18),
+             inset 0 12px 18px rgba(0,0,0,.18);
+  overflow:hidden;
+  transition:height .9s cubic-bezier(.65,.05,.36,1);
+  z-index:2;
+}
+#detail.open .scroll-paper{height:calc(100% - 326px);}
+/* parşömen üzerinde noise dokusu */
+.scroll-paper::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/><feColorMatrix values='0 0 0 0 .38 0 0 0 0 .26 0 0 0 0 .1 0 0 0 .4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode:multiply; opacity:.55;
+}
+/* parşömen üzerinde altın ince çerçeve */
+.scroll-paper::after{
+  content:""; position:absolute; top:14px; bottom:14px; left:18px; right:18px;
+  border:1px solid rgba(110,74,28,.45);
+  box-shadow:inset 0 0 0 2px rgba(244,224,182,.25);
+  pointer-events:none;
+}
+
+/* ✦ Altın yağmuru — parşömen açılırken süzülen altın taneler */
+.gold-rain{
+  position:absolute; top:-10px; pointer-events:none;
+  border-radius:50%;
+  background:radial-gradient(circle, #fff5d8 0%, #ecc870 50%, transparent 80%);
+  box-shadow:0 0 8px rgba(236,200,112,.85), 0 0 16px rgba(236,200,112,.4);
+  animation:goldFall linear forwards;
+}
+@keyframes goldFall{
+  0%{transform:translateY(0) scale(.8); opacity:0;}
+  10%{opacity:1;}
+  100%{transform:translateY(900px) scale(1); opacity:0;}
+}
+
+/* İçerik (paper içinde scrollable alan) */
+.scroll-content{
+  position:absolute; inset:50px 50px 40px 50px; overflow-y:auto;
+  opacity:0; transition:opacity .5s ease .7s;
+  font-family:'Cormorant Garamond',serif; color:#2a1c08;
+}
+#detail.open .scroll-content{opacity:1;}
+.scroll-content::-webkit-scrollbar{width:6px;}
+.scroll-content::-webkit-scrollbar-thumb{background:rgba(110,74,28,.4); border-radius:4px;}
+
+.detail-eyebrow{
+  font-family:'Cinzel',serif; font-size:12px; letter-spacing:.32em;
+  color:#7a5020; text-transform:uppercase; margin-bottom:8px;
+  display:flex; align-items:center; gap:14px;
+}
+.detail-eyebrow::after{
+  content:""; flex:1; height:1px;
+  background:linear-gradient(90deg, rgba(110,74,28,.6), transparent);
+}
+.detail-title{
+  font-family:'Cinzel',serif; font-weight:700;
+  font-size:30px; letter-spacing:.06em; color:#2a1c08;
+  line-height:1.15; margin-bottom:6px;
+}
+.detail-sub{
+  font-style:italic; font-size:19px; color:#5a3c14;
+  margin-bottom:22px; line-height:1.3;
+}
+.detail-orn{
+  width:120px; height:14px; margin:0 0 22px;
+  background:
+    radial-gradient(circle at 50% 50%, #7a5020 1.5px, transparent 2px) 50% 50%/14px 14px no-repeat,
+    linear-gradient(90deg, transparent 0%, #7a5020 12%, #7a5020 38%, transparent 45%, transparent 55%, #7a5020 62%, #7a5020 88%, transparent 100%);
+  background-size:14px 14px, 100% 1px;
+  background-position:center, 0 50%;
+  background-repeat:no-repeat;
+  opacity:.55;
+}
+.detail-body{
+  font-size:18px; line-height:1.55; color:#2c1c0a;
+  text-align:justify;
+}
+.detail-body p{margin-bottom:14px;}
+.detail-body p::first-letter{
+  font-family:'Cinzel',serif; font-weight:700; font-size:34px;
+  color:#7a5020; float:left; line-height:1; padding:4px 8px 0 0;
+}
+.detail-body p:not(:first-child)::first-letter{
+  font-size:18px; color:inherit; font-family:inherit; float:none; padding:0;
+}
+
 /* ---------- POLİGON EDİTÖRÜ (D tuşu) ---------- */
 #editsvg{position:absolute; inset:0; z-index:20; width:100%; height:100%; display:none;}
 body.editing #editsvg{display:block;}
@@ -287,60 +496,89 @@ body.editing #edit-controls{display:flex;}
   box-shadow:0 8px 24px rgba(0,0,0,.5);}
 
 /* ============================================================
-   ✦ PARŞÖMEN AÇILIŞ GEÇİŞİ ✦
-   İki yarım parşömen + ahşap rulolar merkezden açılır
+   ✦ FERMAN GEÇİŞ — sayfalar arası padişah fermanı tarzı geçiş ✦
+   Yukarıdan rulo + parşömen iner, ekranı kapatır, sonra
+   yukarı doğru sarılarak yeni görseli ortaya çıkarır
    ============================================================ */
-#parch{position:absolute; inset:0; z-index:8; pointer-events:none; display:none;}
-#parch.active{display:block;}
-.parch-half{
-  position:absolute; left:-2px; width:calc(100% + 4px); height:50%;
-  background:
-    radial-gradient(ellipse at 20% 30%, rgba(80,52,18,.18), transparent 55%),
-    radial-gradient(ellipse at 75% 70%, rgba(60,40,14,.22), transparent 60%),
-    radial-gradient(ellipse at 50% 50%, rgba(120,80,30,.10), transparent 80%),
-    linear-gradient(180deg, #d8b683 0%, #c69e60 50%, #d8b683 100%);
-  background-blend-mode:multiply,multiply,normal,normal;
-  box-shadow:inset 0 0 80px rgba(60,40,14,.35);
-}
-.parch-half::before{
-  content:""; position:absolute; inset:0;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.4' numOctaves='2'/><feColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  mix-blend-mode:multiply; opacity:.6;
-}
-.parch-half.top{top:0; transform-origin:top center;}
-.parch-half.bot{bottom:0; transform-origin:bottom center;}
-#parch.opening .parch-half{animation:parchScale 1100ms cubic-bezier(.7,.04,.32,1) forwards;}
-@keyframes parchScale{from{transform:scaleY(1);} to{transform:scaleY(0);}}
+#ferman{position:absolute; inset:0; z-index:12; pointer-events:none; display:none;}
+#ferman.active{display:block;}
 
-.parch-rod{
-  position:absolute; left:-40px; width:calc(100% + 80px); height:30px;
-  top:calc(50% - 15px); border-radius:18px;
+/* Üst gold rulo — animasyonla aşağı iner, sonra yukarı çıkar */
+.f-rod{
+  position:absolute; left:-50px; right:-50px; height:38px;
+  top:0; transform:translateY(-60px);
   background:
-    linear-gradient(180deg, #1a0e04 0%, #4a2c10 14%, #7a5020 32%, #b08040 50%, #7a5020 68%, #4a2c10 86%, #0e0703 100%);
-  box-shadow:0 12px 30px rgba(0,0,0,.7), inset 0 1px 0 rgba(220,170,90,.5);
+    linear-gradient(180deg, #1a0e04 0%, #4a2c10 12%, #7a5020 28%, #c8932f 50%, #7a5020 72%, #4a2c10 88%, #0e0703 100%);
+  border-radius:0;
+  box-shadow:0 14px 30px rgba(0,0,0,.75),
+             inset 0 1px 0 rgba(255,235,180,.55),
+             inset 0 -3px 5px rgba(0,0,0,.45);
+  will-change:transform, top;
 }
-.parch-rod::before, .parch-rod::after{
+.f-rod::before, .f-rod::after{
   content:""; position:absolute; top:50%; transform:translateY(-50%);
-  width:48px; height:48px; border-radius:50%;
-  background:
-    radial-gradient(circle at 35% 30%, #ecc870, #8a6418 55%, #2a1808);
-  box-shadow:0 6px 18px rgba(0,0,0,.7), inset 0 1px 2px rgba(255,220,140,.5);
+  width:60px; height:60px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff5d8, #ecc870 45%, #8a6418 80%, #2a1808);
+  box-shadow:0 8px 20px rgba(0,0,0,.7), inset 0 1px 3px rgba(255,235,180,.7),
+             inset 0 -3px 6px rgba(60,40,12,.6);
 }
-.parch-rod::before{left:8px;} .parch-rod::after{right:8px;}
-#parch.opening .parch-rod.top{animation:rodUp 1100ms cubic-bezier(.7,.04,.32,1) forwards;}
-#parch.opening .parch-rod.bot{animation:rodDn 1100ms cubic-bezier(.7,.04,.32,1) forwards;}
-@keyframes rodUp{to{top:-46px;}}
-@keyframes rodDn{to{top:calc(100% + 16px);}}
+.f-rod::before{left:30px;} .f-rod::after{right:30px;}
 
-/* parşömen kenarındaki altın ışık çizgisi (açılırken parlar) */
-.parch-glow{position:absolute; left:0; right:0; height:6px; top:calc(50% - 3px);
-  background:linear-gradient(90deg, transparent, #ecc870 20%, #fff5d8 50%, #ecc870 80%, transparent);
-  filter:blur(3px); opacity:0; }
-#parch.opening .parch-glow{animation:glowFlash 1100ms ease-out forwards;}
-@keyframes glowFlash{
-  0%{opacity:0; transform:scaleX(.4);}
-  20%{opacity:1; transform:scaleX(1);}
-  100%{opacity:0; transform:scaleX(1);}
+/* Parşömen — yukarıdan aşağı uzar, sonra yukarı sarılır */
+.f-paper{
+  position:absolute; left:0; right:0; top:38px;
+  height:0; transform:translateY(-60px);
+  background:
+    radial-gradient(ellipse at 20% 25%, rgba(160,110,40,.18), transparent 55%),
+    radial-gradient(ellipse at 80% 75%, rgba(120,80,30,.22), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, rgba(220,180,120,.06), transparent 80%),
+    linear-gradient(180deg, #f4e0b6 0%, #ecd09a 25%, #e3c285 55%, #d9b76e 100%);
+  box-shadow:0 14px 40px rgba(0,0,0,.55),
+             inset 0 0 80px rgba(110,74,28,.18),
+             inset 0 12px 18px rgba(0,0,0,.18);
+  overflow:hidden;
+}
+.f-paper::before{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2'/><feColorMatrix values='0 0 0 0 .38 0 0 0 0 .26 0 0 0 0 .1 0 0 0 .4 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  mix-blend-mode:multiply; opacity:.5;
+}
+/* parşömenin alt kenarında bir gold çizgi (yeni rulo ipucu) */
+.f-paper::after{
+  content:""; position:absolute; bottom:-4px; left:0; right:0; height:8px;
+  background:linear-gradient(180deg, transparent, rgba(110,74,28,.5));
+}
+
+/* AŞAMA 1 — Açılma: rulo aşağı iner, parşömen ekranı kaplar */
+#ferman.unrolling .f-rod{
+  animation:rodDown .55s cubic-bezier(.22,.61,.27,1) forwards;
+}
+#ferman.unrolling .f-paper{
+  animation:paperDown .55s cubic-bezier(.22,.61,.27,1) forwards;
+}
+@keyframes rodDown{
+  0%{transform:translateY(-60px); top:0;}
+  100%{transform:translateY(0); top:0;}
+}
+@keyframes paperDown{
+  0%{height:0; transform:translateY(-60px);}
+  100%{height:calc(100% - 38px); transform:translateY(0);}
+}
+
+/* AŞAMA 2 — Sarma: parşömen yukarı sarılır, rulo aşağı kayar (alta) */
+#ferman.rolling-up .f-rod{
+  animation:rodSlideDown .8s cubic-bezier(.65,.05,.36,1) forwards;
+}
+#ferman.rolling-up .f-paper{
+  animation:paperRollUp .8s cubic-bezier(.65,.05,.36,1) forwards;
+}
+@keyframes rodSlideDown{
+  0%{top:0;}
+  100%{top:calc(100% + 60px);}
+}
+@keyframes paperRollUp{
+  0%{height:calc(100% - 38px); top:38px;}
+  100%{height:0; top:calc(100% + 22px);}
 }
 
 /* ============================================================
@@ -483,13 +721,10 @@ body.attract #attract-prompt{display:block;}
     <div id="scrim-top"></div>
     <div id="scrim-bot"></div>
 
-    <!-- Parşömen geçişi -->
-    <div id="parch">
-      <div class="parch-half top"></div>
-      <div class="parch-half bot"></div>
-      <div class="parch-glow"></div>
-      <div class="parch-rod top"></div>
-      <div class="parch-rod bot"></div>
+    <!-- Ferman geçişi -->
+    <div id="ferman">
+      <div class="f-paper"></div>
+      <div class="f-rod"></div>
     </div>
 
     <!-- Attract mode prompt -->
@@ -554,6 +789,28 @@ body.attract #attract-prompt{display:block;}
         <button data-lang="tr"><span class="flag" style="background:linear-gradient(0deg,#e30a17 50%,#e30a17 50%);"></span>Türkçe</button>
         <button data-lang="en"><span class="flag" style="background:linear-gradient(180deg,#012169 33%,#fff 33% 66%,#c8102e 66%);"></span>English</button>
         <button data-lang="ar"><span class="flag" style="background:linear-gradient(180deg,#007a3d 33%,#fff 33% 66%,#000 66%);"></span>العربية</button>
+      </div>
+
+      <!-- İ (BİLGİ) butonu — toggle: i ↔ ✕ -->
+      <button id="info-btn" class="clickable" title="Hakkında — Detaylı Bilgi">
+        <span class="ic ic-i">i</span>
+        <span class="ic ic-x">✕</span>
+      </button>
+
+      <!-- Sağdan açılan parşömen detay paneli -->
+      <div id="detail">
+        <div class="scroll-rod top"></div>
+        <div class="scroll-paper">
+          <div class="gold-rain-container"></div>
+          <div class="scroll-content">
+            <div class="detail-eyebrow"><span id="detail-eyebrow-txt">HAKKINDA</span></div>
+            <h2 class="detail-title" id="detail-title"></h2>
+            <div class="detail-sub" id="detail-sub"></div>
+            <div class="detail-orn"></div>
+            <div class="detail-body" id="detail-body"></div>
+          </div>
+        </div>
+        <div class="scroll-rod bot"></div>
       </div>
     </div><!-- /chrome -->
 
@@ -638,7 +895,9 @@ body.attract #attract-prompt{display:block;}
   </div>
 </div>
 
-<audio id="bg-audio" loop preload="none"></audio>
+<audio id="bg-audio" loop preload="auto">
+  <source src="main/audio/background.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 /* ============================================================
@@ -671,6 +930,11 @@ const VIEWS = {
   kulliye:{
     image:"main/img/külliye.png", root:true,
     subtitle:`Edirne · 1488 – ${YEAR}`,
+    info:`Sultan II. Bayezid Külliyesi, Osmanlı İmparatorluğu'nun en görkemli sosyal hizmet komplekslerinden biri olarak 1484-1488 yılları arasında Edirne'nin kuzeyinde, Tunca Nehri kıyısında inşa edilmiştir. Mimar Hayreddin tarafından tasarlanan külliye; cami, darüşşifa, tıp medresesi, imarethane, tabhaneler, hamam, su sistemi ve değirmen gibi pek çok yapıdan oluşan bağımsız bir şehircilik örneğidir.
+
+Külliye, Osmanlı'da hekimliğin, eczacılığın ve tıp eğitiminin birlikte yürütüldüğü en önemli merkezlerden biri olmuştur. Burada akıl ve ruh hastalıkları su sesi, musiki ve nadide kokularla tedavi edilmiş; çağının çok ötesinde bir tıp anlayışı uygulanmıştır.
+
+Bugün UNESCO Dünya Mirası geçici listesinde yer alan külliye, Türkiye'deki en sağlam korunmuş Osmanlı külliyelerinden biridir ve Sağlık Müzesi olarak ziyaretçilerine kapılarını açmaktadır.`,
     polygons:[
       {name:"TABHANE SOL", target:"tabhane",   points:"771,233 876,232 878,326 771,327"},
       {name:"TABHANE SAĞ", target:"tabhane",   points:"1028,232 1126,233 1123,329 1028,329"},
@@ -688,6 +952,7 @@ const VIEWS = {
   camii:{
     image:"main/img/camii.png", parent:"kulliye", seg:"CAMİİ",
     subtitle:"Taşa işlenen huzur, kubbede yükselen dua",
+    ambient:"main/audio/kuslar.mp3",
     polygons:[
       {name:"CAMİİ AVLUSU", target:"camii_avlu",  points:"680,442 1254,439 1269,921 671,921"},
       {name:"CAMİİ",        target:"camii_harim", points:"815,148 1103,147 1107,432 820,436"}
@@ -713,6 +978,7 @@ const VIEWS = {
   darussifa:{
     image:"main/img/darüssifa.png", parent:"kulliye", seg:"DARÜŞŞİFA",
     subtitle:"Su sesi, makam ve şifanın buluştuğu mekân",
+    ambient:"main/audio/sadirvan.mp3",
     polygons:[
       {name:"POLİKLİNİK ODALARI",         target:"ds_poliklinik", points:"1048,561 1115,565 1118,871 1050,870"},
       {name:"HİZMET ODALARI",             target:"ds_hizmet",     points:"811,712 885,712 884,912 813,913"},
@@ -759,7 +1025,8 @@ const VIEWS = {
   md_egitim:{image:"main/img/medrese/egitimodasi.png", parent:"medrese", seg:"EĞİTİM ODASI",
     subtitle:"Bilginin aktarıldığı eğitim mekânı"},
   md_kutuphane:{image:"main/img/medrese/kutuphane.png", parent:"medrese", seg:"KÜTÜPHANESİ",
-    subtitle:"Asırlık el yazmalarının sessiz hazinesi"},
+    subtitle:"Asırlık el yazmalarının sessiz hazinesi",
+    ambient:"main/audio/kutuphane.mp3"},
   md_personel:{image:"main/img/medrese/personelodalari.png", parent:"medrese", seg:"PERSONEL ODALARI",
     subtitle:"Medresenin işleyişini sağlayan eller"},
   md_ogrenci:{image:"main/img/medrese/ogrenciodalari.png", parent:"medrese", seg:"ÖĞRENCİ ODALARI",
@@ -784,7 +1051,13 @@ const VIEWS = {
   ds_hekimbasi:{image:"main/img/darussifa/hekimbasi.png", parent:"darussifa", seg:"HEKİMBAŞI VE HEKİM ODALARI",
     subtitle:"Tecrübenin ve bilgeliğin makamı"},
   ds_sifahane:{image:"main/img/darussifa/sifahane.png", parent:"darussifa", seg:"ŞİFAHANE",
-    subtitle:"Müzik ve suyla iyileşen ruhların kubbesi"},
+    subtitle:"Müzik ve suyla iyileşen ruhların kubbesi",
+    ambient:"main/audio/sifahane.mp3",
+    info:`Şifahane, Sultan II. Bayezid Darüşşifası'nın kalbi olan altıgen planlı, kubbeli ana tedavi mekânıdır. Tam ortasında bulunan şadırvanın su sesi, mekânın akustiği için özel olarak tasarlanmış kubbenin altında yumuşak yankılar yaparak hastaların huzura ermesine yardımcı olurdu.
+
+Burada haftanın belirli günlerinde ud, ney ve kanun ile farklı makamlarda musiki icra edilir; rast, hicaz, segâh ve nihavend gibi makamların ruh ve beden üzerindeki şifa verici etkilerinden yararlanılırdı. Evliya Çelebi, Seyahatname'sinde bu yerin "delilere şifa kaynağı" olduğunu özenle aktarır.
+
+Çevresinde hasta odaları, mekânın merkezi etrafında ışınsal olarak düzenlenmiştir. Hekim, hasta ile burada görüşür; tedavi sürecini buradan yönetirdi.`},
   ds_1avlu:{image:"main/img/1avlu.png", parent:"darussifa", seg:"1. AVLUSU",
     subtitle:"Şifahanenin nefes alan ilk avlusu"},
   // İMARETHANE
@@ -884,6 +1157,28 @@ const layers = document.getElementById('layers');
 let currentKey = null;
 let busy = false;
 
+/* Metin uzunluğuna göre kutu genişliği ölç (sabit yükseklik) */
+function measureLabel(name){
+  const lines = name.split(/\s+/).reduce((acc,w)=>{
+    // 2 kelimeden uzunsa 2 satıra böl
+    if(acc.length===0 || (acc[acc.length-1]+' '+w).length > 18){
+      acc.push(w);
+    } else {
+      acc[acc.length-1] += ' '+w;
+    }
+    return acc;
+  },[]);
+  // 2 satırı geç, 3'e çıkma
+  const finalLines = lines.length>2 ?
+    [lines.slice(0,1).join(' '), lines.slice(1).join(' ')] : lines;
+  // genişlik: en uzun satıra göre
+  const charK = 6.4; // ~11px Cinzel karakter genişliği
+  const maxLen = Math.max(...finalLines.map(l=>l.length));
+  const w = Math.max(110, Math.min(180, maxLen*charK + 24));
+  const h = finalLines.length===2 ? 38 : 26;
+  return {lines:finalLines, w, h, fs:11};
+}
+
 function buildLayer(key){
   const v = VIEWS[key];
   const layer = document.createElement('div');
@@ -904,44 +1199,118 @@ function buildLayer(key){
     svg.setAttribute('viewBox','0 0 1920 1080');
     svg.setAttribute('preserveAspectRatio','none');
     svg.classList.add('polysvg');
-    v.polygons.forEach(p=>{
+
+    const defs=document.createElementNS('http://www.w3.org/2000/svg','defs');
+    defs.innerHTML=`
+      <filter id="feather" x="-30%" y="-30%" width="160%" height="160%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="11"/>
+      </filter>`;
+    svg.appendChild(defs);
+
+    v.polygons.forEach((p,i)=>{
       const pts=parsePts(p.points);
-      const fit=fitLabel(pts, p.name);
+      const bb=bbox(pts);
+      const m=measureLabel(p.name);
       const g=document.createElementNS('http://www.w3.org/2000/svg','g');
       g.classList.add('hotspot');
+      if(!p.target) g.classList.add('disabled');
+      g.dataset.polyIdx = i;
+
       const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
       poly.setAttribute('points',p.points); poly.classList.add('area');
       g.appendChild(poly);
-      // çoklu satır metin
+
+      // Etiket grubu — sabit boyutlu kutu + metin
+      const lblG=document.createElementNS('http://www.w3.org/2000/svg','g');
+      lblG.classList.add('lbl-group');
+      const cx=bb.cx, cy=bb.cy;
+      const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+      rect.setAttribute('x', cx - m.w/2);
+      rect.setAttribute('y', cy - m.h/2);
+      rect.setAttribute('width', m.w);
+      rect.setAttribute('height', m.h);
+      rect.setAttribute('rx', 6); rect.setAttribute('ry', 6);
+      rect.classList.add('lbl-bg');
+      lblG.appendChild(rect);
+
       const t=document.createElementNS('http://www.w3.org/2000/svg','text');
-      t.setAttribute('x',fit.cx); t.setAttribute('font-size',fit.fs);
+      t.setAttribute('x', cx); t.setAttribute('font-size', m.fs);
       t.classList.add('lbl');
-      const lh = fit.fs*1.15;
-      const startY = fit.cy - ((fit.lines.length-1)*lh)/2 + fit.fs*0.34;
-      fit.lines.forEach((ln,i)=>{
-        const ts=document.createElementNS('http://www.w3.org/2000/svg','tspan');
-        ts.setAttribute('x',fit.cx); ts.setAttribute('y',startY+i*lh);
-        ts.textContent=ln; t.appendChild(ts);
-      });
-      g.appendChild(t);
-      // dokunma/tıklama
-      g.addEventListener('click',()=>{ if(!busy && p.target) navigate(p.target); });
+      if(m.lines.length===1){
+        t.setAttribute('y', cy);
+        t.textContent = m.lines[0];
+      } else {
+        const lh = m.fs*1.18;
+        const startY = cy - lh/2;
+        m.lines.forEach((ln,li)=>{
+          const ts=document.createElementNS('http://www.w3.org/2000/svg','tspan');
+          ts.setAttribute('x', cx); ts.setAttribute('y', startY + li*lh);
+          ts.textContent = ln; t.appendChild(ts);
+        });
+      }
+      lblG.appendChild(t);
+      g.appendChild(lblG);
+
+      g.addEventListener('click',()=>{ if(!busy && p.target){ playTouch(); navigate(p.target); } });
       g.addEventListener('pointerdown',()=>g.classList.add('touch'));
       ['pointerup','pointerleave','pointercancel'].forEach(ev=>g.addEventListener(ev,()=>g.classList.remove('touch')));
       svg.appendChild(g);
     });
+
     layer.appendChild(svg);
   }
   return layer;
 }
 
-const titleBaseEl  = document.getElementById('title-base');
-const titleSuffixEl= document.getElementById('title-suffix');
-const titleEl      = document.getElementById('title');
-const subEl        = document.getElementById('subtitle');
-const ornEl        = document.getElementById('title-orn');
-const hintEl       = document.getElementById('hint');
-const backEl       = document.getElementById('back');
+/* ============================================================
+   ✦ POLİGON YANIP SÖNME SEQUENCER ✦
+   Sıralı: poligon yanar (1s fade in) → 2s parlak kalır →
+            1s fade out → 0.5s bekler → bir sonraki başlar.
+   Tek seferde yalnızca bir poligon yanar.
+   ============================================================ */
+let seqTimer=null;
+let seqIdx=0;
+const SEQ = {fadeIn:1000, hold:2000, fadeOut:1000, gap:500};
+
+function stopSequencer(){
+  if(seqTimer){ clearTimeout(seqTimer); seqTimer=null; }
+  // tüm 'lit' sınıflarını temizle
+  document.querySelectorAll('.hotspot.lit').forEach(el=>el.classList.remove('lit'));
+}
+
+function startSequencer(){
+  stopSequencer();
+  const layer = layers.lastElementChild;
+  if(!layer) return;
+  const hotspots = [...layer.querySelectorAll('.hotspot')];
+  if(!hotspots.length) return;
+  seqIdx = 0;
+  const step = ()=>{
+    // önceki ışıkları söndür
+    hotspots.forEach(h=>h.classList.remove('lit'));
+    const target = hotspots[seqIdx % hotspots.length];
+    // hover/touch durumundaki bir hotspot varsa sırayı bekletme — yine de devam et,
+    // çünkü hover stili zaten override eder
+    target.classList.add('lit');
+    seqIdx++;
+    // tam yanma: fadeIn + hold + fadeOut süresince yanar
+    // bir sonraki tetiklenmeden önce gap bekler
+    seqTimer = setTimeout(()=>{
+      target.classList.remove('lit');
+      seqTimer = setTimeout(step, SEQ.fadeOut + SEQ.gap);
+    }, SEQ.fadeIn + SEQ.hold);
+  };
+  // küçük bir başlangıç gecikmesi (sayfa açıldıktan sonra)
+  seqTimer = setTimeout(step, 600);
+}
+
+const titleEl=document.getElementById('title');
+const subEl=document.getElementById('subtitle');
+const titleBaseEl=document.getElementById('title-base');
+const titleSuffixEl=document.getElementById('title-suffix');
+const ornEl=document.getElementById('title-orn');
+const hintEl=document.getElementById('hint');
+const backEl=document.getElementById('back');
 
 function updateChrome(key, opts={}){
   const v=VIEWS[key];
@@ -977,27 +1346,63 @@ function updateChrome(key, opts={}){
   if(v.parent) backEl.classList.add('show'); else backEl.classList.remove('show');
 }
 
+const fermanEl=document.getElementById('ferman');
+
 function navigate(key, opts={}){
   if(busy || !VIEWS[key]) return;
   if(key===currentKey) return;
   exitEdit();
+  closeDetail();
+  stopSequencer();
   busy=true;
-  const newLayer=buildLayer(key);
-  layers.appendChild(newLayer);
-  updateChrome(key);
-  // reflow → animasyon
-  void newLayer.offsetWidth;
-  requestAnimationFrame(()=>newLayer.classList.add('show'));
-  currentKey=key;
-  setTimeout(()=>{
-    // eski katmanları temizle (yeni katman tamamen geldikten sonra)
-    [...layers.children].forEach(l=>{ if(l!==newLayer) l.remove(); });
-    busy=false;
-  },1200);
+  resetIdle();
+
+  // İlk açılış mı? — Intro hâlâ görünürse yumuşak geç, ferman'ı kullanma
+  const useFerman = introDone && !opts.skipFx;
+
+  // Yeni katmanı arka planda hazırla
+  const newLayer = buildLayer(key);
+  const oldLayer = layers.lastElementChild;
+
+  if(useFerman){
+    // AŞAMA 1 — Ferman açılır (rulo iner + parşömen aşağı uzar, 550ms)
+    fermanEl.classList.remove('rolling-up');
+    fermanEl.classList.add('active');
+    void fermanEl.offsetWidth;
+    fermanEl.classList.add('unrolling');
+
+    // Ekran tamamen kapandığında (550ms): yeni katmanı yerleştir, başlığı yenile
+    setTimeout(()=>{
+      layers.appendChild(newLayer);
+      if(oldLayer) oldLayer.remove();
+      updateChrome(key);
+      currentKey=key;
+      setAmbient(VIEWS[key].ambient);
+      // AŞAMA 2 — Ferman yukarı sarılır (rulo aşağı kayar, parşömen sarılır, 800ms)
+      fermanEl.classList.remove('unrolling');
+      fermanEl.classList.add('rolling-up');
+    }, 560);
+
+    // Geçiş tamamen biter
+    setTimeout(()=>{
+      fermanEl.classList.remove('active','rolling-up','unrolling');
+      busy=false;
+      startSequencer();
+    }, 1400);
+
+  } else {
+    // İlk yükleme — direkt göster, ferman yok
+    layers.appendChild(newLayer);
+    if(oldLayer) oldLayer.remove();
+    updateChrome(key, {skipFade:true});
+    currentKey=key;
+    setAmbient(VIEWS[key].ambient);
+    setTimeout(()=>{ busy=false; startSequencer(); }, 400);
+  }
 }
 
 backEl.addEventListener('click',()=>{
-  const v=VIEWS[currentKey]; if(v && v.parent) navigate(v.parent,{back:true});
+  const v=VIEWS[currentKey]; if(v && v.parent){ playTouch(); navigate(v.parent,{back:true}); }
 });
 
 /* ============================================================
@@ -1013,34 +1418,56 @@ stage.addEventListener('pointermove',e=>{
 });
 
 /* ============================================================
-   SES
+   SES SİSTEMİ
    ============================================================ */
 const audio=document.getElementById('bg-audio');
 const soundBtn=document.getElementById('sound');
 let soundOn=true; let started=false;
-function startAudio(){
-  if(started) return; started=true;
-  audio.src = AUDIO_PATH;
-  audio.volume=0.45;
-  audio.load();
-  audio.play().catch(()=>{});
+audio.src=AUDIO_PATH;
+
+// Tıklama sesi — gerçek dosya
+const touchSnd = new Audio('main/audio/button.mp3');
+touchSnd.volume = 0.7;
+function playTouch(){
+  if(!soundOn) return;
+  try{
+    touchSnd.currentTime = 0;
+    touchSnd.play().catch(()=>{}); // dosya yoksa sessiz geç
+  }catch(e){}
 }
+
+// Ambient katmanı — bölüme özgü ses (opsiyonel, dosya yoksa sessiz kalır)
+const ambEl=document.createElement('audio');
+ambEl.loop=true; ambEl.preload='auto'; document.body.appendChild(ambEl);
+let currentAmbient=null;
+function setAmbient(path){
+  if(path===currentAmbient) return;
+  currentAmbient=path;
+  // mevcut sesi yumuşak indir
+  const fadeOut=setInterval(()=>{
+    ambEl.volume=Math.max(0,ambEl.volume-.05);
+    if(ambEl.volume<=.001){
+      clearInterval(fadeOut); ambEl.pause();
+      if(path){
+        ambEl.src=path; ambEl.volume=0;
+        ambEl.play().then(()=>{
+          const fadeIn=setInterval(()=>{
+            ambEl.volume=Math.min(.22, ambEl.volume+.02);
+            if(ambEl.volume>=.22) clearInterval(fadeIn);
+          },60);
+        }).catch(()=>{}); // dosya yoksa sessiz geç
+      }
+    }
+  },50);
+}
+
+function startAudio(){ if(started) return; started=true; audio.volume=.45;
+  audio.play().catch(()=>{}); }
 document.addEventListener('pointerdown',startAudio,{once:true});
 soundBtn.addEventListener('click',()=>{
-  startAudio(); soundOn=!soundOn; audio.muted=!soundOn;
+  startAudio(); soundOn=!soundOn; audio.muted=!soundOn; ambEl.muted=!soundOn;
   soundBtn.classList.toggle('off',!soundOn);
 });
-
-/* ============================================================
-   INTRO — tıklanınca kapanır ve ana ekrana geçer
-   ============================================================ */
-const introEl = document.getElementById('intro');
-introEl.style.cursor = 'pointer';
-introEl.addEventListener('click', function dismissIntro(){
-  introEl.classList.add('hide');
-  introEl.removeEventListener('click', dismissIntro);
-  setTimeout(()=>{ introEl.style.display='none'; }, 1250);
-}, {once: true});
 
 /* ============================================================
    DİL — basit çok-dilli sözlük (kiosk için temel arayüz)
@@ -1074,6 +1501,66 @@ document.addEventListener('click',e=>{
     langMenu.classList.remove('open');
 });
 applyLang();
+
+/* ============================================================
+   ✦ DETAY PARŞÖMENİ ✦  (İ butonu ile sağdan açılır)
+   ============================================================ */
+const infoBtn=document.getElementById('info-btn');
+const detailEl=document.getElementById('detail');
+const detailTitle=document.getElementById('detail-title');
+const detailSub=document.getElementById('detail-sub');
+const detailBody=document.getElementById('detail-body');
+const detailEyebrow=document.getElementById('detail-eyebrow-txt');
+
+const DETAIL_EYEBROW = {tr:'HAKKINDA', en:'ABOUT', ar:'حول'};
+
+function openDetail(){
+  const v=VIEWS[currentKey]; if(!v) return;
+  playTouch();
+  detailEyebrow.textContent = DETAIL_EYEBROW[lang] || 'HAKKINDA';
+  detailTitle.textContent = v.seg || 'SULTAN II. BAYEZİD KÜLLİYESİ';
+  detailSub.textContent = v.subtitle || '';
+  detailBody.innerHTML = (v.info || defaultInfo(v))
+    .split(/\n\s*\n/).map(p=>`<p>${p.trim()}</p>`).join('');
+  detailEl.classList.add('open');
+  infoBtn.classList.add('open');
+  spawnGoldRain();
+  resetIdle();
+}
+function closeDetail(){
+  detailEl.classList.remove('open');
+  infoBtn.classList.remove('open');
+}
+function defaultInfo(v){
+  return `${v.seg||'Sultan II. Bayezid Külliyesi'} hakkında detaylı bilgi yakında eklenecek.
+
+Bu bölümün hikâyesi, mimarisi ve tarihî önemi burada anlatılacak.`;
+}
+function spawnGoldRain(){
+  const container = detailEl.querySelector('.gold-rain-container');
+  if(!container) return;
+  container.innerHTML='';
+  // Parşömen açılırken (~900ms) altın taneler süzülsün
+  for(let i=0;i<28;i++){
+    const s=document.createElement('span');
+    s.className='gold-rain';
+    const sz=2+Math.random()*4;
+    s.style.cssText=`
+      left:${5+Math.random()*90}%;
+      width:${sz}px; height:${sz}px;
+      animation-delay:${100+Math.random()*700}ms;
+      animation-duration:${800+Math.random()*700}ms;
+    `;
+    container.appendChild(s);
+  }
+  // animasyon bitince temizle
+  setTimeout(()=>{ if(container) container.innerHTML=''; }, 2200);
+}
+infoBtn.addEventListener('click', ()=>{
+  playTouch();
+  if(detailEl.classList.contains('open')) closeDetail();
+  else openDetail();
+});
 
 /* ============================================================
    POLİGON EDİTÖRÜ (D)
@@ -1185,12 +1672,7 @@ document.getElementById('copy-btn').addEventListener('click',()=>{
   const lines=(v.polygons||[]).map(p=>`  {name:"${p.name}", target:"${p.target||''}", points:"${p.points}"}`);
   const code=`// "${currentKey}" görünümü — polygons:\npolygons:[\n${lines.join(',\n')}\n]`;
   codeout.value=code;
-  if(navigator.clipboard && location.protocol !== 'file:'){
-    navigator.clipboard.writeText(code).then(()=>showToast('Kod kopyalandı ✓'),()=>showToast('Aşağıdaki kutudan kopyalayın'));
-  } else {
-    try{ codeout.select(); document.execCommand('copy'); showToast('Kod kopyalandı ✓'); }
-    catch(e){ showToast('Aşağıdaki kutudan kopyalayın'); }
-  }
+  navigator.clipboard?.writeText(code).then(()=>showToast('Kod kopyalandı ✓'),()=>showToast('Aşağıdaki kutudan kopyalayın'));
 });
 function showToast(m){ toast.textContent=m; toast.style.display='block';
   clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.style.display='none',2200); }
@@ -1216,6 +1698,82 @@ document.addEventListener('keydown',e=>{
   else if((e.key==='Delete'||e.key==='Backspace') && editing && selPoly>-1){
     VIEWS[currentKey].polygons.splice(selPoly,1); selPoly=-1; renderEditor(); renderList();
   }
+});
+
+/* ============================================================
+   ✦ PARÇACIKLAR — atmosferik altın tozlar
+   ============================================================ */
+function spawnParticles(container, count, opts={}){
+  for(let i=0;i<count;i++){
+    const s=document.createElement('span'); s.className='p'+(opts.big?' big':'');
+    const sz=opts.big? (3+Math.random()*5) : (1+Math.random()*3.2);
+    const op=opts.op || (.35+Math.random()*.55);
+    const dur=opts.dur || (14+Math.random()*16);
+    s.style.cssText=`
+      left:${Math.random()*100}%;
+      width:${sz}px;height:${sz}px;
+      --dx:${(Math.random()-.5)*260}px;
+      --op:${op};
+      animation-duration:${dur}s;
+      animation-delay:${-Math.random()*dur}s;
+    `;
+    container.appendChild(s);
+  }
+}
+spawnParticles(document.getElementById('particles'), 32);
+spawnParticles(document.getElementById('intro-particles'), 40, {big:true, op:.7});
+
+/* ============================================================
+   ✦ INTRO SAHNESİ — ilk girişte
+   ============================================================ */
+const introEl=document.getElementById('intro');
+let introDone=false;
+function dismissIntro(){
+  if(introDone) return; introDone=true;
+  startAudio();
+  introEl.classList.add('hide');
+  setTimeout(()=>introEl.style.display='none', 1300);
+  resetIdle();
+}
+// dokunmada veya 5sn sonra otomatik
+introEl.addEventListener('pointerdown', dismissIntro);
+setTimeout(dismissIntro, 5500);
+
+/* ============================================================
+   ✦ ATTRACT MODE — 45sn boşta kalınca slayt gösterisi
+   ============================================================ */
+const IDLE_MS=90000;
+const ATTRACT_INTERVAL=10000;
+const ATTRACT_TOUR=['kulliye','camii','medrese','darussifa','ds_sifahane','imarethane','tabhane','md_kutuphane','md_ortaavlu'];
+let idleTimer=null, attractTimer=null, attractIdx=0, inAttract=false;
+function resetIdle(){
+  clearTimeout(idleTimer);
+  if(inAttract) exitAttract();
+  if(!introDone) return;
+  // Detail paneli açıkken attract devreye girmesin
+  if(detailEl && detailEl.classList.contains('open')) return;
+  idleTimer=setTimeout(enterAttract, IDLE_MS);
+}
+function enterAttract(){
+  inAttract=true; document.body.classList.add('attract');
+  attractIdx=0;
+  const step=()=>{
+    const k=ATTRACT_TOUR[attractIdx % ATTRACT_TOUR.length];
+    if(VIEWS[k]) navigate(k);
+    attractIdx++;
+  };
+  step();
+  attractTimer=setInterval(step, ATTRACT_INTERVAL);
+}
+function exitAttract(){
+  inAttract=false; document.body.classList.remove('attract');
+  clearInterval(attractTimer); attractTimer=null;
+  // kullanıcı geri etkileşime girdi — kökeüne dön
+  if(currentKey!=='kulliye') navigate('kulliye');
+}
+// herhangi bir kullanıcı etkileşimi idle sayacını sıfırlar
+['pointerdown','keydown','touchstart','wheel'].forEach(ev=>{
+  document.addEventListener(ev, ()=>resetIdle(), {passive:true});
 });
 
 /* ============================================================
