@@ -314,6 +314,20 @@ input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
       <div class="action-btn" onclick="openModal('tx');closeDetail()"><i class="ti ti-plus"></i> İşlem Ekle</div>
       <div class="action-btn" onclick="openModal('alarm');closeDetail()"><i class="ti ti-bell"></i> Alarm Kur</div>
     </div>
+    <div style="padding:0 16px 8px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="action-btn" onclick="openDerinlik('bigpara')" style="display:flex;align-items:center;justify-content:center;gap:6px">
+        <i class="ti ti-layout-list"></i> Bigpara Derinlik
+      </div>
+      <div class="action-btn" onclick="openDerinlik('isyatirim')" style="display:flex;align-items:center;justify-content:center;gap:6px">
+        <i class="ti ti-layout-list"></i> İş Yatırım
+      </div>
+      <div class="action-btn" onclick="openDerinlik('tradingview')" style="display:flex;align-items:center;justify-content:center;gap:6px;background:var(--blue-bg);color:var(--blue);border-color:rgba(59,130,246,.3)">
+        <i class="ti ti-chart-candle"></i> TradingView
+      </div>
+      <div class="action-btn" onclick="openDerinlik('kap')" style="display:flex;align-items:center;justify-content:center;gap:6px;background:var(--amber-bg);color:var(--amber);border-color:rgba(245,158,11,.3)">
+        <i class="ti ti-news"></i> KAP Bildirimleri
+      </div>
+    </div>
     <div class="section" style="padding-top:4px">
       <div class="sec-hdr"><span class="sec-title">Bu hisse işlemleri</span></div>
       <div id="detail-tx-list"></div>
@@ -862,6 +876,19 @@ function openDetail(i){
   document.getElementById('detail-page').classList.add('open');
 }
 function closeDetail(){document.getElementById('detail-page').classList.remove('open');currentDetail=null;if(detailChart){detailChart.destroy();detailChart=null;}}
+
+function openDerinlik(source){
+  if(currentDetail===null) return;
+  const ticker=D.stocks[currentDetail].ticker;
+  const urls={
+    bigpara: `https://bigpara.hurriyet.com.tr/borsa/hisse-detay/${ticker}/derinlik/`,
+    isyatirim: `https://www.isyatirim.com.tr/analiz-ve-raporlar/hisse/${ticker}`,
+    tradingview: `https://tr.tradingview.com/chart/?symbol=BIST%3A${ticker}`,
+    kap: `https://www.kap.org.tr/tr/Uye/Bul?q=${ticker}`,
+  };
+  const url=urls[source];
+  if(url) window.open(url,'_blank');
+}
 function deleteStock(){
   if(currentDetail===null)return;
   const s=D.stocks[currentDetail];
