@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sultan II. Bayezid Külliyesi — Dokunmatik Rehber</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SULTAN II. BAYEZİD KÜLLİYESİ — KIOSK
+   1920 x 1080 dokunmatik müze rehberi
+   Tek dosya · İbrahim için
+   ============================================================ */
+
+:root{
+  /* Osmanlı / müze paleti */
+  --ink:        #0d0a06;   /* en koyu zemin */
+  --ink-2:      #161009;
+  --parch:      #f1e6cd;   /* parşömen / metin */
+  --parch-dim:  #cdbE9c;
+  --copper:     #c8932f;   /* bakır-altın */
+  --copper-lt:  #ecc870;
+  --copper-dk:  #8a6418;
+  --bronze:     #6e5326;
+  --line:       rgba(200,147,47,.45);
+  --scrim:      rgba(8,6,3,.82);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;background:#000;overflow:hidden;font-family:'Jost',system-ui,sans-serif;}
+body{cursor:default;user-select:none;}
+
+/* ---------- Sahne: 1920x1080, ekrana sığacak şekilde ölçeklenir ---------- */
+#viewport{
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #1a130a 0%, #0b0805 55%, #000 100%);
+}
+#stage{
+  position:relative; width:1920px; height:1080px; flex:0 0 auto;
+  transform-origin:center center; overflow:hidden;
+  background:var(--ink);
+}
+
+/* ---------- Görsel katmanları (merkezden fade-in geçiş) ---------- */
+#layers{position:absolute; inset:0; z-index:1;}
+.layer{
+  position:absolute; inset:0; opacity:0; transform:scale(.865);
+  transition:opacity 1.05s cubic-bezier(.22,.61,.27,1), transform 1.15s cubic-bezier(.22,.61,.27,1);
+  transform-origin:center center; will-change:opacity,transform;
+}
+.layer.show{opacity:1; transform:scale(1);}
+.layer .bg{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;}
+/* görsel bulunamazsa zarif yer tutucu */
+.layer .fallback{
+  position:absolute; inset:0; display:none; flex-direction:column;
+  align-items:center; justify-content:center; text-align:center;
+  background:
+    radial-gradient(80% 60% at 50% 35%, #241a0d 0%, #120c06 70%, #0a0703 100%);
+  color:var(--parch-dim);
+}
+.layer.missing .bg{display:none;}
+.layer.missing .fallback{display:flex;}
+.fallback .seal{
+  width:160px;height:160px;border-radius:50%;
+  border:2px solid var(--line); margin-bottom:34px; position:relative;
+  background:radial-gradient(circle at 50% 40%, rgba(200,147,47,.14), transparent 70%);
+}
+.fallback .seal::before{content:"۞"; position:absolute; inset:0; display:flex;
+  align-items:center; justify-content:center; font-size:74px; color:var(--copper);}
+.fallback h4{font-family:'Cinzel',serif; letter-spacing:.16em; color:var(--copper-lt);
+  font-size:30px; font-weight:600; margin-bottom:14px;}
+.fallback code{font-family:'Jost'; font-size:18px; opacity:.6; letter-spacing:.05em;}
+
+/* ince film greni + vinyet, sinematik müze hissi */
+#grain{position:absolute; inset:0; z-index:4; pointer-events:none; mix-blend-mode:overlay; opacity:.05;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");}
+#vignette{position:absolute; inset:0; z-index:5; pointer-events:none;
+  background:radial-gradient(120% 130% at 50% 45%, transparent 52%, rgba(0,0,0,.55) 100%);}
+
+/* ---------- Üst & alt karartma şeritleri (okunabilirlik) ---------- */
+#scrim-top{position:absolute; left:0; right:0; top:0; height:330px; z-index:6; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(6,4,2,.92) 0%, rgba(6,4,2,.55) 45%, transparent 100%);}
+#scrim-bot{position:absolute; left:0; right:0; bottom:0; height:300px; z-index:6; pointer-events:none;
+  background:linear-gradient(to top, rgba(6,4,2,.92) 0%, rgba(6,4,2,.5) 50%, transparent 100%);}
+
+/* ---------- POLİGONLAR (SVG, her katmanda) ---------- */
+.polysvg{position:absolute; inset:0; z-index:3; width:100%; height:100%;}
+.hotspot{cursor:pointer;}
+.hotspot .area{
+  fill:transparent; stroke:none;
+  transition:none;
+}
+.hotspot .lbl-bg{fill:transparent;}
+.hotspot .lbl{
+  fill:#2a1c08;                          /* iç: derin kahve */
+  font-family:'Cinzel',serif; font-weight:700; letter-spacing:.08em;
+  text-anchor:middle; paint-order:stroke;
+  stroke:var(--copper);                  /* dış: gold kontur */
+  stroke-width:3.4px; stroke-linejoin:round;
+  opacity:.92;
+  transition:opacity .35s ease, filter .35s ease, stroke .35s ease;
+  pointer-events:none;
+}
+.hotspot:hover .lbl, .hotspot.touch .lbl{
+  opacity:1; stroke:var(--copper-lt);
+  filter:drop-shadow(0 0 10px rgba(236,200,112,.55)) drop-shadow(0 0 22px rgba(200,147,47,.35));
+}
+
+/* ---------- CHROME (başlık / alt yazı / butonlar) ---------- */
+#chrome{position:absolute; inset:0; z-index:10; pointer-events:none;}
+#chrome button, #chrome .clickable{pointer-events:auto;}
+
+/* Üst başlık bloğu */
+#header{position:absolute; top:32px; left:0; right:0; text-align:center;
+  perspective:1100px; pointer-events:none;}
+#title-wrap{display:inline-block; transform-style:preserve-3d; will-change:transform;
+  animation:floatT 7s ease-in-out infinite;}
+@keyframes floatT{0%,100%{transform:translateY(0) rotateX(0)} 50%{transform:translateY(-5px) rotateX(2deg)}}
+#title{
+  font-family:'Cinzel',serif; font-weight:700; font-size:50px; letter-spacing:.16em;
+  line-height:1; color:#f6ecd2; transform-style:preserve-3d;
+  text-shadow:
+    0 1px 0 #b78c33, 0 2px 0 #9c742a, 0 3px 0 #82601f, 0 4px 0 #6b4f19,
+    0 5px 1px rgba(0,0,0,.35), 0 8px 18px rgba(0,0,0,.65), 0 0 30px rgba(200,147,47,.28);
+  transition:opacity .55s ease, transform .6s ease;
+}
+#title .ord{color:var(--copper-lt);}
+#subtitle{
+  margin-top:6px; font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:21px; letter-spacing:.04em; color:var(--parch-dim); line-height:1.1;
+  transition:opacity .55s ease; min-height:26px;
+}
+#title.swap, #subtitle.swap{opacity:0; transform:translateY(-6px);}
+/* başlık altı süs */
+#title-orn{margin:10px auto 0; width:300px; height:14px; opacity:.78;
+  transition:width .6s ease;}
+#title-orn svg{width:100%; height:100%;}
+
+/* Alt: ipucu + GERİ */
+#footer{position:absolute; bottom:28px; left:0; right:0; text-align:center;
+  display:flex; flex-direction:column; align-items:center; gap:14px;}
+#hint{
+  display:inline-flex; align-items:center; gap:12px; padding:11px 30px;
+  font-family:'Jost'; font-weight:400; font-size:17px; letter-spacing:.2em;
+  color:#f4e9cf; text-transform:uppercase;
+  background:linear-gradient(180deg, rgba(40,28,12,.55), rgba(20,14,6,.55));
+  border:1.5px solid var(--line); border-radius:60px;
+  box-shadow:0 8px 22px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,200,112,.25);
+  transform-style:preserve-3d; animation:hintPulse 2.8s ease-in-out infinite;
+  transition:opacity .5s ease;
+}
+@keyframes hintPulse{
+  0%,100%{transform:translateZ(0) scale(1); box-shadow:0 8px 22px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,200,112,.25), 0 0 0 rgba(200,147,47,0);}
+  50%{transform:translateZ(12px) scale(1.018); box-shadow:0 14px 32px rgba(0,0,0,.55), inset 0 1px 0 rgba(236,200,112,.35), 0 0 26px rgba(200,147,47,.28);}
+}
+#hint .tap{width:22px;height:22px;flex:0 0 auto;animation:tap 2.8s ease-in-out infinite;}
+@keyframes tap{0%,100%{transform:translateY(0) scale(1)}45%{transform:translateY(4px) scale(.9)}}
+#hint.hide{opacity:0; pointer-events:none;}
+
+#back{
+  display:none; align-items:center; gap:10px; cursor:pointer;
+  padding:11px 30px 11px 22px; font-family:'Cinzel',serif; font-weight:600;
+  font-size:17px; letter-spacing:.14em; color:#f4e9cf;
+  background:linear-gradient(180deg, rgba(120,84,28,.45), rgba(60,42,14,.55));
+  border:1.5px solid var(--copper); border-radius:12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(236,200,112,.4);
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+#back.show{display:inline-flex;}
+#back:hover{transform:translateY(-3px); background:linear-gradient(180deg, rgba(150,108,36,.6), rgba(80,56,18,.65));
+  box-shadow:0 12px 26px rgba(0,0,0,.55), inset 0 1px 0 rgba(236,200,112,.5);}
+#back:active{transform:translateY(0);}
+#back .arr{font-size:22px; line-height:1; color:var(--copper-lt);}
+
+/* Sağ alt: ses + dil — aynı boyut, aynı stil */
+#actions{position:absolute; right:44px; bottom:36px; z-index:11; display:flex; gap:14px;
+  pointer-events:auto;}
+.ac-btn{
+  width:64px; height:64px; cursor:pointer; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(circle at 50% 38%, rgba(200,147,47,.22), rgba(20,14,6,.62));
+  border:1.5px solid var(--line); color:var(--copper-lt);
+  box-shadow:0 8px 20px rgba(0,0,0,.55), inset 0 1px 0 rgba(236,200,112,.28);
+  transition:transform .2s ease, border-color .2s ease, color .2s ease;
+  position:relative;
+}
+.ac-btn:hover{transform:translateY(-3px); border-color:var(--copper-lt);
+  box-shadow:0 12px 28px rgba(0,0,0,.6), inset 0 1px 0 rgba(236,200,112,.45);}
+.ac-btn:active{transform:translateY(-1px);}
+.ac-btn svg{width:28px; height:28px;}
+.ac-btn.off{color:rgba(236,200,112,.4); border-color:rgba(236,200,112,.2);}
+.ac-btn .lng{font-family:'Cinzel',serif; font-weight:700; font-size:16px;
+  letter-spacing:.06em; color:var(--copper-lt);}
+
+/* dil menüsü */
+#lang-menu{position:absolute; right:44px; bottom:114px; z-index:12; display:none;
+  flex-direction:column; min-width:180px; padding:10px;
+  background:linear-gradient(180deg, rgba(20,14,7,.97), rgba(12,8,4,.97));
+  border:1.5px solid var(--copper); border-radius:14px;
+  box-shadow:0 16px 40px rgba(0,0,0,.6), inset 0 1px 0 rgba(236,200,112,.25);}
+#lang-menu.open{display:flex;}
+#lang-menu button{cursor:pointer; padding:11px 14px; display:flex; align-items:center; gap:12px;
+  font-family:'Cinzel',serif; font-size:14px; letter-spacing:.1em; color:var(--parch);
+  background:transparent; border:none; border-radius:8px; text-align:left;
+  transition:background .2s ease, color .2s ease;}
+#lang-menu button:hover{background:rgba(200,147,47,.15); color:var(--copper-lt);}
+#lang-menu button.active{background:rgba(200,147,47,.22); color:var(--copper-lt);}
+#lang-menu .flag{width:24px; height:18px; border-radius:3px; display:inline-block;
+  border:1px solid rgba(255,255,255,.15);}
+
+/* ---------- POLİGON EDİTÖRÜ (D tuşu) ---------- */
+#editsvg{position:absolute; inset:0; z-index:20; width:100%; height:100%; display:none;}
+body.editing #editsvg{display:block;}
+body.editing .polysvg{display:none;}
+body.editing #actions, body.editing #footer, body.editing #lang-menu{display:none;}
+#editsvg .e-area{fill:rgba(200,147,47,.10); stroke:#ecc870; stroke-width:2.5;}
+#editsvg .e-area.sel{fill:rgba(236,200,112,.22); stroke:#fff;}
+#editsvg .e-vert{fill:#ffdb7a; stroke:#3a2a0c; stroke-width:2; cursor:grab;}
+#editsvg .e-vert:hover{fill:#fff;}
+#editsvg .e-draw{fill:rgba(120,220,160,.12); stroke:#7be0a0; stroke-width:2.5; stroke-dasharray:6 5;}
+#editsvg .e-dvert{fill:#7be0a0; stroke:#0c2a18; stroke-width:2;}
+#editsvg .e-lbl{fill:#fff; font-family:'Jost'; font-size:20px; font-weight:500; text-anchor:middle;
+  paint-order:stroke; stroke:#000; stroke-width:4px;}
+
+#editor-panel{
+  position:absolute; top:0; left:0; width:380px; height:100%; z-index:30; display:none;
+  flex-direction:column; padding:78px 26px 30px; gap:15px; overflow-y:auto;
+  background:linear-gradient(180deg, rgba(14,10,5,.97), rgba(20,14,7,.97));
+  border-right:2px solid var(--copper); color:var(--parch);
+  font-family:'Jost'; box-shadow:8px 0 40px rgba(0,0,0,.6);
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+}
+body.editing #editor-panel{display:flex;}
+#editor-panel.right{left:auto; right:0; border-right:none; border-left:2px solid var(--copper);
+  box-shadow:-8px 0 40px rgba(0,0,0,.6);}
+#editor-panel.hidden{transform:translateX(-112%);}
+#editor-panel.right.hidden{transform:translateX(112%);}
+
+/* editör modunda üst kontrol çubuğu — her zaman erişilebilir */
+#edit-controls{position:absolute; top:16px; left:50%; transform:translateX(-50%); z-index:45;
+  display:none; gap:10px;}
+body.editing #edit-controls{display:flex;}
+#edit-controls button{cursor:pointer; padding:10px 18px; font-family:'Jost'; font-size:14px;
+  letter-spacing:.06em; color:#f4e9cf; border-radius:9px; border:1px solid var(--copper);
+  background:linear-gradient(180deg, rgba(120,84,28,.6), rgba(50,36,12,.7));
+  box-shadow:0 6px 18px rgba(0,0,0,.5); transition:transform .15s ease, background .2s ease;}
+#edit-controls button:hover{transform:translateY(-2px);
+  background:linear-gradient(180deg, rgba(150,108,36,.7), rgba(70,50,16,.8));}
+#edit-controls button.exit{border-color:rgba(255,160,140,.6);
+  background:linear-gradient(180deg, rgba(150,60,40,.55), rgba(80,30,20,.65));}
+#editor-panel h3{font-family:'Cinzel',serif; color:var(--copper-lt); font-size:22px;
+  letter-spacing:.14em; border-bottom:1px solid var(--line); padding-bottom:14px;}
+#editor-panel .ev{font-size:15px; color:var(--copper-lt); letter-spacing:.05em;}
+#editor-panel .ins{font-size:13.5px; line-height:1.7; color:var(--parch-dim);
+  background:rgba(200,147,47,.07); border:1px solid var(--line); border-radius:10px; padding:12px 14px;}
+#editor-panel label{font-size:13px; color:var(--parch-dim); display:block; margin-bottom:5px; letter-spacing:.05em;}
+#editor-panel input{width:100%; padding:11px 13px; font-family:'Jost'; font-size:15px;
+  background:rgba(0,0,0,.4); border:1px solid var(--line); border-radius:8px; color:var(--parch);}
+#editor-panel input:focus{outline:none; border-color:var(--copper-lt);}
+#editor-panel .row{display:flex; gap:10px;}
+.ebtn{flex:1; padding:13px; font-family:'Jost'; font-weight:500; font-size:15px; cursor:pointer;
+  border-radius:9px; border:1px solid var(--copper); letter-spacing:.05em;
+  background:linear-gradient(180deg, rgba(120,84,28,.5), rgba(60,42,14,.6)); color:#f4e9cf;
+  transition:transform .15s ease, background .2s ease;}
+.ebtn:hover{transform:translateY(-2px); background:linear-gradient(180deg, rgba(150,108,36,.65), rgba(80,56,18,.7));}
+.ebtn.green{border-color:#7be0a0; background:linear-gradient(180deg, rgba(40,120,80,.5), rgba(20,70,46,.6));}
+.ebtn.gray{border-color:rgba(255,255,255,.25); background:rgba(255,255,255,.06);}
+#plist{display:flex; flex-direction:column; gap:7px; max-height:210px; overflow-y:auto;}
+#plist .pitem{display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font-size:13.5px; padding:9px 12px; background:rgba(0,0,0,.35); border:1px solid var(--line);
+  border-radius:7px;}
+#plist .pitem b{color:var(--copper-lt); font-weight:600;}
+#plist .pitem small{opacity:.55; font-size:11px;}
+#plist .pdel{cursor:pointer; color:#e89; font-size:18px; padding:0 4px;}
+#codeout{width:100%; min-height:150px; font-family:'Courier New',monospace; font-size:12px;
+  background:#0a0703; border:1px solid var(--line); border-radius:8px; color:#cfe; padding:12px; resize:vertical;}
+#toast{position:absolute; bottom:30px; left:30px; z-index:40; padding:14px 26px; border-radius:10px;
+  background:rgba(40,120,80,.92); color:#fff; font-family:'Jost'; font-size:15px; display:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.5);}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <div id="layers"></div>
+    <div id="grain"></div>
+    <div id="vignette"></div>
+    <div id="scrim-top"></div>
+    <div id="scrim-bot"></div>
+
+    <!-- Poligon editörü (D) -->
+    <svg id="editsvg" viewBox="0 0 1920 1080" preserveAspectRatio="none"></svg>
+
+    <!-- Sabit arayüz -->
+    <div id="chrome">
+      <div id="header">
+        <div id="title-wrap">
+          <h1 id="title"></h1>
+          <div id="title-orn">
+            <svg viewBox="0 0 340 18" preserveAspectRatio="none">
+              <g stroke="var(--copper)" stroke-width="1.4" fill="none">
+                <line x1="0" y1="9" x2="120" y2="9"/>
+                <line x1="220" y1="9" x2="340" y2="9"/>
+              </g>
+              <g fill="var(--copper-lt)">
+                <circle cx="170" cy="9" r="5"/>
+                <circle cx="142" cy="9" r="2.5"/>
+                <circle cx="198" cy="9" r="2.5"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div id="subtitle"></div>
+      </div>
+
+      <div id="footer">
+        <div id="hint">
+          <svg class="tap" viewBox="0 0 24 24" fill="none" stroke="var(--copper-lt)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11V6a2 2 0 0 1 4 0v5"></path>
+            <path d="M13 11V8a2 2 0 0 1 4 0v3"></path>
+            <path d="M17 11v-1a2 2 0 0 1 4 0v6a6 6 0 0 1-6 6h-2a6 6 0 0 1-5.3-3.2L5 18"></path>
+          </svg>
+          <span class="hint-txt">BÖLÜMLERİ GÖRMEK İÇİN BİNA ÜZERİNE DOKUNUN</span>
+        </div>
+        <button id="back" class="clickable"><span class="arr">‹</span> <span class="back-txt">GERİ</span></button>
+      </div>
+
+      <!-- Sağ alt: Ses + Dil -->
+      <div id="actions">
+        <div id="sound" class="ac-btn clickable" title="Ses Aç / Kapat">
+          <svg id="snd-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path class="snd-wave" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"></path>
+          </svg>
+        </div>
+        <div id="lang" class="ac-btn clickable" title="Dil Seçimi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9.5"></circle>
+            <path d="M3 12h18M12 2.5a14 14 0 0 1 0 19M12 2.5a14 14 0 0 0 0 19"></path>
+          </svg>
+          <span class="lng" id="lang-code" style="position:absolute;bottom:6px;right:6px;font-size:10px;background:#0d0a06;padding:1px 4px;border-radius:4px;border:1px solid var(--line);">TR</span>
+        </div>
+      </div>
+
+      <!-- Dil menüsü -->
+      <div id="lang-menu">
+        <button data-lang="tr"><span class="flag" style="background:linear-gradient(0deg,#e30a17 50%,#e30a17 50%);"></span>Türkçe</button>
+        <button data-lang="en"><span class="flag" style="background:linear-gradient(180deg,#012169 33%,#fff 33% 66%,#c8102e 66%);"></span>English</button>
+        <button data-lang="ar"><span class="flag" style="background:linear-gradient(180deg,#007a3d 33%,#fff 33% 66%,#000 66%);"></span>العربية</button>
+      </div>
+    </div><!-- /chrome -->
+
+    <!-- Editör üst kontrol çubuğu -->
+    <div id="edit-controls">
+      <button id="ec-flip">⇄ Tarafı Değiştir</button>
+      <button id="ec-toggle">▦ Paneli Gizle</button>
+      <button id="ec-exit" class="exit">✕ Çıkış (D)</button>
+    </div>
+
+    <!-- Editör paneli -->
+    <div id="editor-panel">
+      <h3>POLİGON EDİTÖRÜ</h3>
+      <div class="ev">Görünüm: <b id="ev-name"></b></div>
+      <div class="ins">
+        • Resme <b>tıklayarak</b> nokta ekle<br>
+        • <b>Çift tık / Enter</b> → poligonu tamamla<br>
+        • Noktayı <b>sürükle</b> → düzenle<br>
+        • Noktaya <b>sağ tık</b> → noktayı sil<br>
+        • <b>Esc</b> → çizimi iptal · <b>D</b> → çıkış
+      </div>
+      <div>
+        <label>Yeni poligon adı</label>
+        <input id="np-name" placeholder="Örn: ŞİFAHANE">
+      </div>
+      <div>
+        <label>Hedef (target) — boş bırakılabilir</label>
+        <input id="np-target" placeholder="Örn: ds_sifahane">
+      </div>
+      <div class="row">
+        <button class="ebtn green" id="finish-btn">Tamamla</button>
+        <button class="ebtn gray" id="cancel-btn">Çizimi İptal</button>
+      </div>
+      <div class="ev">Bu görünümdeki poligonlar</div>
+      <div id="plist"></div>
+      <button class="ebtn" id="copy-btn">📋 KODU KOPYALA</button>
+      <textarea id="codeout" readonly placeholder="Kod burada görünecek — kopyalayıp bana yapıştırın."></textarea>
+    </div>
+
+    <div id="toast"></div>
+  </div>
+</div>
+
+<audio id="bg-audio" loop preload="auto">
+  <source src="main/audio/background.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* ============================================================
+   KONFİGÜRASYON — tüm yollar, başlıklar, sloganlar, poligonlar
+   Poligonları D editöründen alıp buradaki "points" alanlarına
+   yapıştırabilirsiniz.
+   ============================================================ */
+const BASE_TITLE = "SULTAN II. BAYEZİD KÜLLİYESİ";
+const YEAR = new Date().getFullYear();   // "Bu yıl"
+const AUDIO_PATH = "main/audio/background.mp3"; // dosyanız "backgroun.mp3" ise burayı değiştirin
+
+/* Izgara yerleştirici: poligon koordinatları henüz çizilmediği için
+   geçici (placeholder) konumlar üretir. D editörü ile değiştirin. */
+function autoGrid(items){
+  const n = items.length;
+  const cols = Math.ceil(Math.sqrt(n));
+  const rows = Math.ceil(n/cols);
+  const x0=170, y0=235, x1=1750, y1=860;
+  const cw=(x1-x0)/cols, ch=(y1-y0)/rows, pad=Math.min(cw,ch)*0.12;
+  return items.map((it,i)=>{
+    const c=i%cols, r=Math.floor(i/cols);
+    const ax=Math.round(x0+c*cw+pad), ay=Math.round(y0+r*ch+pad);
+    const bx=Math.round(x0+(c+1)*cw-pad), by=Math.round(y0+(r+1)*ch-pad);
+    return {name:it[0], target:it[1], points:`${ax},${ay} ${bx},${ay} ${bx},${by} ${ax},${by}`};
+  });
+}
+
+const VIEWS = {
+  /* ---------- KÖK: KÜLLİYE ---------- */
+  kulliye:{
+    image:"main/img/külliye.png", root:true,
+    subtitle:`Edirne · 1488 – ${YEAR}`,
+    polygons:[
+      {name:"TABHANE SOL", target:"tabhane",   points:"771,233 876,232 878,326 771,327"},
+      {name:"TABHANE SAĞ", target:"tabhane",   points:"1028,232 1126,233 1123,329 1028,329"},
+      {name:"MEDRESE",     target:"medrese",   points:"1397,679 1627,677 1624,898 1395,899"},
+      {name:"İMARETHANE",  target:"imarethane",points:"471,277 675,275 679,751 472,752"},
+      {name:"CAMİİ",       target:"camii",     points:"871,171 877,332 784,332 787,594 1107,591 1108,332 1024,333 1026,169"},
+      {name:"DARÜŞŞİFA",   target:"darussifa", points:"1172,722 1360,723 1363,380 1362,343 1296,247 1241,247 1178,337 1172,385"},
+      {name:"GİRİŞ",       target:"kl_giris",     points:"1111,848 1182,851 1182,902 1112,900"},
+      {name:"GİRİŞ AVLU",  target:"kl_girisavlu", points:"1181,726 1186,911 1391,924 1391,728"},
+      {name:"BÜYÜK AVLU",  target:"kl_buyukavlu", points:"684,598 1163,596 1174,844 1100,842 1100,905 682,862"}
+    ]
+  },
+
+  /* ---------- BÖLÜMLER ---------- */
+  camii:{
+    image:"main/img/camii.png", parent:"kulliye", seg:"CAMİİ",
+    subtitle:"Taşa işlenen huzur, kubbede yükselen dua",
+    polygons:[
+      {name:"CAMİİ AVLUSU", target:"camii_avlu",  points:"680,442 1254,439 1269,921 671,921"},
+      {name:"CAMİİ",        target:"camii_harim", points:"815,148 1103,147 1107,432 820,436"}
+    ]
+  },
+  medrese:{
+    image:"main/img/medrese.png", parent:"kulliye", seg:"MEDRESE",
+    subtitle:"İlmin ışığı, hikmetin asırlık yuvası",
+    polygons:[
+      {name:"DERSHANE",                target:"md_dershane",    points:"1162,479 1379,479 1380,660 1164,660"},
+      {name:"ORTA AVLU",               target:"md_ortaavlu",    points:"703,422 1063,422 1064,721 711,720"},
+      {name:"EĞİTİM ODASI",            target:"md_egitim",      points:"1163,384 1261,385 1260,473 1162,472"},
+      {name:"KÜTÜPHANE",               target:"md_kutuphane",   points:"1163,244 1261,243 1261,379 1162,380"},
+      {name:"PERSONEL ODALARI",        target:"md_personel",    points:"586,242 1157,244 1152,339 585,344"},
+      {name:"ÖĞRENCİ ODALARI",         target:"md_ogrenci",     points:"796,803 972,805 973,900 796,899"},
+      {name:"DENEYSEL TIP ODASI",      target:"md_deneysel",    points:"1164,666 1265,666 1267,793 1168,796"},
+      {name:"BAŞ MÜDERRİS ODASI",      target:"md_basmuderris", points:"1155,802 1266,802 1266,896 1157,898"},
+      {name:"UYGULAMALI EĞİTİM ODASI", target:"md_uygulamali",  points:"979,804 1151,804 1152,898 978,899"},
+      {name:"TIP EĞİTİMİ",             target:"md_tipegitimi",  points:"790,803 701,803 702,901 790,900"},
+      {name:"KAPICI",                  target:"md_kapici",      points:"694,800 695,904 591,905 588,802"}
+    ]
+  },
+  darussifa:{
+    image:"main/img/darüssifa.png", parent:"kulliye", seg:"DARÜŞŞİFA",
+    subtitle:"Su sesi, makam ve şifanın buluştuğu mekân",
+    polygons:[
+      {name:"POLİKLİNİK ODALARI",         target:"ds_poliklinik", points:"1048,561 1115,565 1118,871 1050,870"},
+      {name:"HİZMET ODALARI",             target:"ds_hizmet",     points:"811,712 885,712 884,912 813,913"},
+      {name:"HEKİMBAŞI VE HEKİM ODALARI", target:"ds_hekimbasi",  points:"804,352 1115,349 1115,555 804,558"},
+      {name:"1.AVLU",                     target:"ds_1avlu",      points:"812,567 1009,568 1012,908 895,906 891,702 812,703"},
+      {name:"ŞİFAHANE",                   target:"ds_sifahane",   points:"1073,345 1112,285 1035,156 994,158 978,132 943,130 920,154 889,156 806,288 852,349"}
+    ]
+  },
+  imarethane:{
+    image:"main/img/imarethane.png", parent:"kulliye", seg:"İMARETHANE",
+    subtitle:"Paylaşmanın ve bereketin sıcak sofrası",
+    polygons:[
+      {name:"İMARETHANE",       target:"im_asevi",     points:"858,191 1141,192 1144,657 854,658"},
+      {name:"KONFERANS SALONU", target:"im_konferans", points:"863,735 1151,735 1153,970 863,970"}
+    ]
+  },
+  tabhane:{
+    image:"main/img/tabhane.png", parent:"kulliye", seg:"TABHANE",
+    subtitle:"Yolcuların ve dervişlerin sükûnet konağı",
+    polygons:[
+      {name:"SAĞ TABHANE", target:"tb_sag", points:"1108,255 1296,251 1296,435 1109,436"},
+      {name:"SOL TABHANE", target:"tb_sol", points:"646,254 816,254 818,435 642,437"}
+    ]
+  },
+
+  /* ---------- ALT BÖLÜMLER (yaprak görseller) ---------- */
+  // KÜLLİYE doğrudan alt mekânları
+  kl_giris:{image:"main/img/giriş.png", parent:"kulliye", seg:"GİRİŞ",
+    subtitle:"Külliyenin eşiği — ilk adımın huzuru"},
+  kl_girisavlu:{image:"main/img/girisavlu.png", parent:"kulliye", seg:"GİRİŞ AVLUSU",
+    subtitle:"Misafiri karşılayan revaklı meydan"},
+  kl_buyukavlu:{image:"main/img/buyukavlu.png", parent:"kulliye", seg:"BÜYÜK AVLUSU",
+    subtitle:"Külliyenin nefes alan kalbi"},
+  // CAMİİ
+  camii_avlu:{image:"main/img/camii/avlu.png", parent:"camii", seg:"AVLUSU",
+    subtitle:"Revakların gölgesinde dingin bir bekleyiş"},
+  camii_harim:{image:"main/img/camii/camii.png", parent:"camii", seg:"HARİMİ",
+    subtitle:"Mihraba yönelen kalplerin mekânı"},
+  // MEDRESE
+  md_dershane:{image:"main/img/medrese/dershane.png", parent:"medrese", seg:"DERSHANESİ",
+    subtitle:"Müderrisin sesinin yankılandığı oda"},
+  md_ortaavlu:{image:"main/img/medrese/ortaavlu.png", parent:"medrese", seg:"ORTA AVLUSU",
+    subtitle:"Şadırvanın çevresinde ilmî sohbetler"},
+  md_egitim:{image:"main/img/medrese/egitimodasi.png", parent:"medrese", seg:"EĞİTİM ODASI",
+    subtitle:"Bilginin aktarıldığı eğitim mekânı"},
+  md_kutuphane:{image:"main/img/medrese/kutuphane.png", parent:"medrese", seg:"KÜTÜPHANESİ",
+    subtitle:"Asırlık el yazmalarının sessiz hazinesi"},
+  md_personel:{image:"main/img/medrese/personelodalari.png", parent:"medrese", seg:"PERSONEL ODALARI",
+    subtitle:"Medresenin işleyişini sağlayan eller"},
+  md_ogrenci:{image:"main/img/medrese/ogrenciodalari.png", parent:"medrese", seg:"ÖĞRENCİ ODALARI",
+    subtitle:"Talebelerin ilimle yoğrulduğu hücreler"},
+  md_deneysel:{image:"main/img/medrese/deneyseltip.png", parent:"medrese", seg:"DENEYSEL TIP ODASI",
+    subtitle:"Tıbbın gözlem ve deneyle buluştuğu oda"},
+  md_basmuderris:{image:"main/img/medrese/basmuderris.png", parent:"medrese", seg:"BAŞ MÜDERRİS ODASI",
+    subtitle:"İlmin başındaki üstadın makamı"},
+  md_uygulamali:{image:"main/img/medrese/uygulamaliegitim.png", parent:"medrese", seg:"UYGULAMALI EĞİTİM ODASI",
+    subtitle:"Teorinin pratiğe döküldüğü mekân"},
+  md_tipegitimi:{image:"main/img/tipegitimi.png", parent:"medrese", seg:"TIP EĞİTİMİ ODASI",
+    subtitle:"Hekimliğin teoride yoğrulduğu mekân"},
+  md_kapici:{image:"main/img/kapici.png", parent:"medrese", seg:"KAPICI ODASI",
+    subtitle:"Külliyenin sessiz bekçisinin makamı"},
+  // DARÜŞŞİFA
+  ds_giris:{image:"main/img/darussifa/girisbahce.png", parent:"darussifa", seg:"GİRİŞ BAHÇESİ",
+    subtitle:"Şifaya açılan ilk eşik, yeşilin sükûneti"},
+  ds_poliklinik:{image:"main/img/darussifa/poliklinik.png", parent:"darussifa", seg:"POLİKLİNİK ODALARI",
+    subtitle:"İlk muayenenin ve ilk umudun odaları"},
+  ds_hizmet:{image:"main/img/darussifa/hizmetodalari.png", parent:"darussifa", seg:"HİZMET ODALARI",
+    subtitle:"Şifahanenin sessiz emekçileri"},
+  ds_hekimbasi:{image:"main/img/darussifa/hekimbasi.png", parent:"darussifa", seg:"HEKİMBAŞI VE HEKİM ODALARI",
+    subtitle:"Tecrübenin ve bilgeliğin makamı"},
+  ds_sifahane:{image:"main/img/darussifa/sifahane.png", parent:"darussifa", seg:"ŞİFAHANE",
+    subtitle:"Müzik ve suyla iyileşen ruhların kubbesi"},
+  ds_1avlu:{image:"main/img/1avlu.png", parent:"darussifa", seg:"1. AVLUSU",
+    subtitle:"Şifahanenin nefes alan ilk avlusu"},
+  // İMARETHANE
+  im_asevi:{image:"main/img/imarethane/imarethane.png", parent:"imarethane", seg:"İMARETHANE",
+    subtitle:"Her güne sıcak bir başlangıç"},
+  im_konferans:{image:"main/img/imarethane/konferans.png", parent:"imarethane", seg:"KONFERANS SALONU",
+    subtitle:"Bilginin paylaşıldığı çağdaş meydan"},
+  // TABHANE
+  tb_sag:{image:"main/img/tabhane/sag.png", parent:"tabhane", seg:"SAĞ TABHANESİ",
+    subtitle:"Misafirin huzur bulduğu doğu kanadı"},
+  tb_sol:{image:"main/img/tabhane/sol.png", parent:"tabhane", seg:"SOL TABHANESİ",
+    subtitle:"Yolculuğun dinlendiği batı kanadı"}
+};
+
+/* ============================================================
+   ÖLÇEKLEME — 1920x1080 sahneyi ekrana sığdır
+   ============================================================ */
+const stage = document.getElementById('stage');
+function fit(){
+  const s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+  stage.style.transform = `scale(${s})`;
+}
+window.addEventListener('resize', fit); fit();
+
+/* ============================================================
+   BAŞLIK YARDIMCISI — parent zinciriyle başlığı kurar
+   ============================================================ */
+function buildTitle(key){
+  const segs=[]; let k=key;
+  while(k){ const v=VIEWS[k]; if(v.seg) segs.unshift(v.seg); k=v.parent; }
+  // ardışık tekrarları sadeleştir
+  const clean=[]; segs.forEach(s=>{ if(clean[clean.length-1]!==s) clean.push(s); });
+  const tail = clean.join(" ");
+  return tail ? `${BASE_TITLE} ${tail}` : BASE_TITLE;
+}
+function titleHTML(txt){
+  // "II." kısmını bakır vurgusuyla renklendir
+  return txt.replace(/SULTAN\s(II\.)/, 'SULTAN <span class="ord">$1</span>');
+}
+
+/* ============================================================
+   POLİGON GEOMETRİ
+   ============================================================ */
+function parsePts(str){ return str.trim().split(/\s+/).map(p=>p.split(',').map(Number)); }
+function ptsStr(pts){ return pts.map(p=>`${Math.round(p[0])},${Math.round(p[1])}`).join(' '); }
+function bbox(pts){
+  let mnX=Infinity,mnY=Infinity,mxX=-Infinity,mxY=-Infinity;
+  pts.forEach(p=>{if(p[0]<mnX)mnX=p[0];if(p[0]>mxX)mxX=p[0];if(p[1]<mnY)mnY=p[1];if(p[1]>mxY)mxY=p[1];});
+  return {x:mnX,y:mnY,w:mxX-mnX,h:mxY-mnY,cx:(mnX+mxX)/2,cy:(mnY+mxY)/2};
+}
+/* metni poligon bbox'ına sığdır: gerekirse kelime sınırından kır, gerekirse font küçült */
+function fitLabel(pts, name){
+  const b = bbox(pts);
+  const padX = 14, padY = 10;
+  const availW = Math.max(40, b.w - padX*2);
+  const availH = Math.max(20, b.h - padY*2);
+  const words = name.split(/\s+/);
+  const charK = 0.56;            // Cinzel için yaklaşık genişlik katsayısı
+  // ideal başlangıç: poligon boyutuna göre 14–20 px arası
+  let fs = Math.round(Math.min(20, Math.max(12, Math.min(b.w/7.5, b.h/3.2))));
+  function layout(size){
+    const cw = size*charK;
+    const lines=[]; let cur='';
+    for(const w of words){
+      const test = cur ? cur+' '+w : w;
+      if(test.length*cw > availW && cur){ lines.push(cur); cur=w; }
+      else cur=test;
+    }
+    if(cur) lines.push(cur);
+    return lines;
+  }
+  let lines = layout(fs);
+  // yükseklik sığmazsa fontu küçült
+  while(((lines.length * fs * 1.15) > availH) && fs > 10){ fs--; lines = layout(fs); }
+  // bir satır hâlâ genişliği aşıyorsa fontu küçült
+  while(lines.some(l => l.length*fs*charK > availW) && fs > 10){ fs--; lines = layout(fs); }
+  // alt satır limiti: en fazla 3, taşarsa son satırı kısalt
+  if(lines.length > 3){ lines = lines.slice(0,3); }
+  return {lines, fs, cx:b.cx, cy:b.cy};
+}
+
+/* ============================================================
+   GÖRÜNÜM OLUŞTURMA + MERKEZDEN FADE-IN GEÇİŞ
+   ============================================================ */
+const layers = document.getElementById('layers');
+let currentKey = null;
+let busy = false;
+
+function buildLayer(key){
+  const v = VIEWS[key];
+  const layer = document.createElement('div');
+  layer.className='layer';
+
+  const img = document.createElement('img');
+  img.className='bg'; img.src=v.image; img.alt='';
+  img.onerror=()=>layer.classList.add('missing');
+  layer.appendChild(img);
+
+  const fb = document.createElement('div');
+  fb.className='fallback';
+  fb.innerHTML=`<div class="seal"></div><h4>${(v.seg||'KÜLLİYE')}</h4><code>${v.image}</code>`;
+  layer.appendChild(fb);
+
+  if(v.polygons && v.polygons.length){
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 1920 1080');
+    svg.setAttribute('preserveAspectRatio','none');
+    svg.classList.add('polysvg');
+    v.polygons.forEach(p=>{
+      const pts=parsePts(p.points);
+      const fit=fitLabel(pts, p.name);
+      const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+      g.classList.add('hotspot');
+      const poly=document.createElementNS('http://www.w3.org/2000/svg','polygon');
+      poly.setAttribute('points',p.points); poly.classList.add('area');
+      g.appendChild(poly);
+      // çoklu satır metin
+      const t=document.createElementNS('http://www.w3.org/2000/svg','text');
+      t.setAttribute('x',fit.cx); t.setAttribute('font-size',fit.fs);
+      t.classList.add('lbl');
+      const lh = fit.fs*1.15;
+      const startY = fit.cy - ((fit.lines.length-1)*lh)/2 + fit.fs*0.34;
+      fit.lines.forEach((ln,i)=>{
+        const ts=document.createElementNS('http://www.w3.org/2000/svg','tspan');
+        ts.setAttribute('x',fit.cx); ts.setAttribute('y',startY+i*lh);
+        ts.textContent=ln; t.appendChild(ts);
+      });
+      g.appendChild(t);
+      // dokunma/tıklama
+      g.addEventListener('click',()=>{ if(!busy && p.target) navigate(p.target); });
+      g.addEventListener('pointerdown',()=>g.classList.add('touch'));
+      ['pointerup','pointerleave','pointercancel'].forEach(ev=>g.addEventListener(ev,()=>g.classList.remove('touch')));
+      svg.appendChild(g);
+    });
+    layer.appendChild(svg);
+  }
+  return layer;
+}
+
+const titleEl=document.getElementById('title');
+const subEl=document.getElementById('subtitle');
+const ornEl=document.getElementById('title-orn');
+const hintEl=document.getElementById('hint');
+const backEl=document.getElementById('back');
+
+function updateChrome(key){
+  const v=VIEWS[key];
+  titleEl.classList.add('swap'); subEl.classList.add('swap');
+  setTimeout(()=>{
+    titleEl.innerHTML=titleHTML(buildTitle(key));
+    // kök başlığı biraz daha büyük; alt görünümlerde küçülsün
+    titleEl.style.fontSize = v.root ? '50px' : '40px';
+    ornEl.style.width = v.root ? '300px' : '240px';
+    subEl.textContent=v.subtitle||'';
+    titleEl.classList.remove('swap'); subEl.classList.remove('swap');
+  },280);
+  // ipucu yalnızca poligon varsa
+  if(v.polygons && v.polygons.length) hintEl.classList.remove('hide');
+  else hintEl.classList.add('hide');
+  // geri butonu kök değilse
+  if(v.parent) backEl.classList.add('show'); else backEl.classList.remove('show');
+}
+
+function navigate(key, opts={}){
+  if(busy || !VIEWS[key]) return;
+  if(key===currentKey) return;
+  exitEdit();
+  busy=true;
+  const newLayer=buildLayer(key);
+  layers.appendChild(newLayer);
+  updateChrome(key);
+  // reflow → animasyon
+  void newLayer.offsetWidth;
+  requestAnimationFrame(()=>newLayer.classList.add('show'));
+  currentKey=key;
+  setTimeout(()=>{
+    // eski katmanları temizle (yeni katman tamamen geldikten sonra)
+    [...layers.children].forEach(l=>{ if(l!==newLayer) l.remove(); });
+    busy=false;
+  },1200);
+}
+
+backEl.addEventListener('click',()=>{
+  const v=VIEWS[currentKey]; if(v && v.parent) navigate(v.parent,{back:true});
+});
+
+/* ============================================================
+   3D BAŞLIK — işaretçiye göre hafif eğim
+   ============================================================ */
+const titleWrap=document.getElementById('title-wrap');
+stage.addEventListener('pointermove',e=>{
+  if(document.body.classList.contains('editing')) return;
+  const r=stage.getBoundingClientRect();
+  const nx=((e.clientX-r.left)/r.width-0.5);
+  const ny=((e.clientY-r.top)/r.height-0.5);
+  titleWrap.style.transform=`rotateY(${nx*10}deg) rotateX(${-ny*7}deg)`;
+});
+
+/* ============================================================
+   SES
+   ============================================================ */
+const audio=document.getElementById('bg-audio');
+const soundBtn=document.getElementById('sound');
+let soundOn=true; let started=false;
+audio.src=AUDIO_PATH;
+function startAudio(){ if(started) return; started=true; audio.volume=0.45;
+  audio.play().catch(()=>{}); }
+document.addEventListener('pointerdown',startAudio,{once:true});
+soundBtn.addEventListener('click',()=>{
+  startAudio(); soundOn=!soundOn; audio.muted=!soundOn;
+  soundBtn.classList.toggle('off',!soundOn);
+});
+
+/* ============================================================
+   DİL — basit çok-dilli sözlük (kiosk için temel arayüz)
+   Bölüm adları ve sloganlar şu an Türkçe; ileride VIEWS yapısına
+   `subtitle_en`, `subtitle_ar` eklenerek genişletilebilir.
+   ============================================================ */
+const LANG = {
+  tr:{ hint:"BÖLÜMLERİ GÖRMEK İÇİN BİNA ÜZERİNE DOKUNUN", back:"GERİ" },
+  en:{ hint:"TAP THE BUILDING TO EXPLORE ITS SECTIONS",   back:"BACK" },
+  ar:{ hint:"اِلْمَسْ المبنى لاستكشاف أقسامه",            back:"رجوع" }
+};
+let lang = 'tr';
+const langBtn = document.getElementById('lang');
+const langMenu = document.getElementById('lang-menu');
+const langCode = document.getElementById('lang-code');
+function applyLang(){
+  document.querySelector('.hint-txt').textContent = LANG[lang].hint;
+  document.querySelector('#back .back-txt').textContent = LANG[lang].back;
+  langCode.textContent = lang.toUpperCase();
+  document.documentElement.dir = (lang==='ar') ? 'rtl' : 'ltr';
+  langMenu.querySelectorAll('button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.lang===lang);
+  });
+}
+langBtn.addEventListener('click',e=>{ e.stopPropagation(); langMenu.classList.toggle('open'); });
+langMenu.querySelectorAll('button').forEach(b=>{
+  b.addEventListener('click',()=>{ lang=b.dataset.lang; applyLang(); langMenu.classList.remove('open'); });
+});
+document.addEventListener('click',e=>{
+  if(!langMenu.contains(e.target) && e.target!==langBtn && !langBtn.contains(e.target))
+    langMenu.classList.remove('open');
+});
+applyLang();
+
+/* ============================================================
+   POLİGON EDİTÖRÜ (D)
+   ============================================================ */
+const editSvg=document.getElementById('editsvg');
+const panel=document.getElementById('editor-panel');
+const evName=document.getElementById('ev-name');
+const npName=document.getElementById('np-name');
+const npTarget=document.getElementById('np-target');
+const plist=document.getElementById('plist');
+const codeout=document.getElementById('codeout');
+const toast=document.getElementById('toast');
+let editing=false;
+let drawing=[];           // mevcut çizilen poligonun noktaları
+let dragRef=null;         // {pi, vi}
+let selPoly=-1;
+
+function toStageCoords(e){
+  const r=stage.getBoundingClientRect();
+  return [ (e.clientX-r.left)/r.width*1920, (e.clientY-r.top)/r.height*1080 ];
+}
+function svgEl(tag,attrs){ const el=document.createElementNS('http://www.w3.org/2000/svg',tag);
+  for(const k in attrs) el.setAttribute(k,attrs[k]); return el; }
+
+function enterEdit(){
+  if(!currentKey) return;
+  const v=VIEWS[currentKey];
+  if(!v.polygons) v.polygons=[];   // yaprak görseller için de çizim yapılabilsin
+  editing=true; document.body.classList.add('editing');
+  panel.classList.remove('hidden'); ecToggle.textContent='▦ Paneli Gizle';
+  evName.textContent=currentKey; drawing=[]; selPoly=-1;
+  renderEditor(); renderList();
+}
+function exitEdit(){
+  editing=false; document.body.classList.remove('editing'); drawing=[]; dragRef=null; selPoly=-1;
+}
+function renderEditor(){
+  const v=VIEWS[currentKey]; editSvg.innerHTML='';
+  (v.polygons||[]).forEach((p,pi)=>{
+    const pts=parsePts(p.points);
+    const poly=svgEl('polygon',{points:p.points, class:'e-area'+(pi===selPoly?' sel':'')});
+    poly.addEventListener('click',()=>{selPoly=pi; renderEditor();});
+    editSvg.appendChild(poly);
+    const bb=bbox(pts);
+    const lbl=svgEl('text',{x:bb.cx,y:bb.cy,class:'e-lbl'}); lbl.textContent=p.name;
+    editSvg.appendChild(lbl);
+    pts.forEach((pt,vi)=>{
+      const c=svgEl('circle',{cx:pt[0],cy:pt[1],r:8,class:'e-vert'});
+      c.addEventListener('pointerdown',ev=>{ev.stopPropagation(); dragRef={pi,vi};});
+      c.addEventListener('contextmenu',ev=>{ev.preventDefault(); removeVertex(pi,vi);});
+      editSvg.appendChild(c);
+    });
+  });
+  // çizilmekte olan poligon
+  if(drawing.length){
+    if(drawing.length>=2){
+      const pl=svgEl('polyline',{points:drawing.map(p=>p.join(',')).join(' '),class:'e-draw',fill:'none'});
+      editSvg.appendChild(pl);
+    }
+    drawing.forEach(pt=>{ editSvg.appendChild(svgEl('circle',{cx:pt[0],cy:pt[1],r:7,class:'e-dvert'})); });
+  }
+}
+function renderList(){
+  const v=VIEWS[currentKey]; plist.innerHTML='';
+  (v.polygons||[]).forEach((p,i)=>{
+    const d=document.createElement('div'); d.className='pitem';
+    d.innerHTML=`<span><b>${p.name}</b><br><small>${p.target||'—'}</small></span><span class="pdel">×</span>`;
+    d.querySelector('.pdel').addEventListener('click',()=>{ v.polygons.splice(i,1); renderEditor(); renderList(); });
+    plist.appendChild(d);
+  });
+}
+function removeVertex(pi,vi){
+  const v=VIEWS[currentKey]; const pts=parsePts(v.polygons[pi].points);
+  if(pts.length<=3){ v.polygons.splice(pi,1); selPoly=-1; }
+  else { pts.splice(vi,1); v.polygons[pi].points=ptsStr(pts); }
+  renderEditor(); renderList();
+}
+function finishPoly(){
+  if(drawing.length<3){ showToast('En az 3 nokta gerekli'); return; }
+  const v=VIEWS[currentKey];
+  v.polygons.push({
+    name:(npName.value||'YENİ').toUpperCase(),
+    target:npTarget.value.trim(),
+    points:ptsStr(drawing)
+  });
+  drawing=[]; npName.value=''; npTarget.value='';
+  renderEditor(); renderList();
+}
+
+// editör tıklamaları
+editSvg.addEventListener('click',e=>{
+  if(e.target.classList.contains('e-vert')||e.target.classList.contains('e-area')) return;
+  const [x,y]=toStageCoords(e); drawing.push([Math.round(x),Math.round(y)]); renderEditor();
+});
+editSvg.addEventListener('dblclick',e=>{ e.preventDefault(); finishPoly(); });
+stage.addEventListener('pointermove',e=>{
+  if(!editing||!dragRef) return;
+  const [x,y]=toStageCoords(e); const v=VIEWS[currentKey];
+  const pts=parsePts(v.polygons[dragRef.pi].points);
+  pts[dragRef.vi]=[Math.round(x),Math.round(y)];
+  v.polygons[dragRef.pi].points=ptsStr(pts); renderEditor();
+});
+window.addEventListener('pointerup',()=>{ dragRef=null; });
+
+document.getElementById('finish-btn').addEventListener('click',finishPoly);
+document.getElementById('cancel-btn').addEventListener('click',()=>{ drawing=[]; renderEditor(); });
+document.getElementById('copy-btn').addEventListener('click',()=>{
+  const v=VIEWS[currentKey];
+  const lines=(v.polygons||[]).map(p=>`  {name:"${p.name}", target:"${p.target||''}", points:"${p.points}"}`);
+  const code=`// "${currentKey}" görünümü — polygons:\npolygons:[\n${lines.join(',\n')}\n]`;
+  codeout.value=code;
+  navigator.clipboard?.writeText(code).then(()=>showToast('Kod kopyalandı ✓'),()=>showToast('Aşağıdaki kutudan kopyalayın'));
+});
+function showToast(m){ toast.textContent=m; toast.style.display='block';
+  clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.style.display='none',2200); }
+
+// editör üst kontrol çubuğu
+const ecToggle=document.getElementById('ec-toggle');
+document.getElementById('ec-flip').addEventListener('click',()=>{ panel.classList.toggle('right'); });
+ecToggle.addEventListener('click',()=>{
+  const hidden=panel.classList.toggle('hidden');
+  ecToggle.textContent = hidden ? '▦ Paneli Göster' : '▦ Paneli Gizle';
+});
+document.getElementById('ec-exit').addEventListener('click',exitEdit);
+
+// klavye
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'){
+    if(e.key==='Enter' && (e.target===npName||e.target===npTarget)){ e.preventDefault(); finishPoly(); }
+    return;
+  }
+  if(e.key==='d'||e.key==='D'||e.key==='ç'){ editing?exitEdit():enterEdit(); }
+  else if(e.key==='Enter' && editing){ finishPoly(); }
+  else if(e.key==='Escape'){ if(editing){ if(drawing.length){drawing=[];renderEditor();} else exitEdit(); } }
+  else if((e.key==='Delete'||e.key==='Backspace') && editing && selPoly>-1){
+    VIEWS[currentKey].polygons.splice(selPoly,1); selPoly=-1; renderEditor(); renderList();
+  }
+});
+
+/* ============================================================
+   BAŞLAT
+   ============================================================ */
+navigate('kulliye');
+</script>
+</body>
+</html>
