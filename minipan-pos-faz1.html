@@ -1,0 +1,1846 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MİNİPAN POS</title>
+<style>
+/* ============================================================
+   MİNİPAN POS — Faz 1 iskeleti
+   Modern wafflecı POS · rol bazlı arayüz · tek dosya
+   ============================================================ */
+
+:root{
+  /* Nötr taban — soğuk değil, hafif sıcak gri */
+  --bg:        #f7f6f3;
+  --surface:   #ffffff;
+  --surface-2: #f0eeea;
+  --line:      #e4e1da;
+  --line-2:    #d4d0c6;
+
+  /* Metin */
+  --ink:       #1c1b18;
+  --ink-2:     #6b685f;
+  --ink-3:     #9d9a90;
+
+  /* Marka — waffle: sıcak amber + sıcak çikolata vurgu */
+  --brand:     #f0a728;   /* amber — birincil aksiyon */
+  --brand-d:   #c9851a;
+  --brand-ink: #4a3206;
+  --brand-soft:#fdf2dd;
+
+  --cocoa:     #6b3f23;   /* çikolata — sıcak vurgu */
+  --cocoa-soft:#f3e8e0;
+
+  /* Durum */
+  --ok:        #1f9d63;
+  --ok-soft:   #e2f4ea;
+  --warn:      #e08a1e;
+  --warn-soft: #fbeed6;
+  --danger:    #d8493f;
+  --danger-soft:#fbe7e5;
+  --info:      #2f7ed8;
+  --info-soft: #e6f0fb;
+
+  /* Rol renkleri */
+  --r-kasa:    #2f7ed8;
+  --r-mudur:   #7a4ddb;
+  --r-genel:   #1f9d63;
+
+  --radius:    14px;
+  --radius-sm: 10px;
+  --radius-lg: 20px;
+  --shadow:    0 1px 2px rgba(28,27,24,.04), 0 4px 16px rgba(28,27,24,.06);
+  --shadow-lg: 0 8px 40px rgba(28,27,24,.12);
+
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", system-ui, sans-serif;
+}
+
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+html,body{margin:0; height:100%}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit}
+input,select{font-family:inherit; font-size:15px}
+
+/* ---------- Giriş ekranı ---------- */
+#login{
+  position:fixed; inset:0; z-index:100;
+  display:flex; align-items:center; justify-content:center;
+  background:radial-gradient(120% 120% at 50% 0%, #fff6e6 0%, var(--bg) 55%);
+}
+.login-card{
+  width:min(420px,92vw);
+  background:var(--surface);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:36px 32px;
+  text-align:center;
+}
+.logo{
+  font-size:30px; font-weight:800; letter-spacing:-.5px;
+  display:inline-flex; align-items:center; gap:10px; margin-bottom:4px;
+}
+.logo .mark{
+  width:42px; height:42px; border-radius:12px;
+  background:linear-gradient(135deg, var(--brand) 0%, var(--brand-d) 100%);
+  display:grid; place-items:center; font-size:24px;
+}
+.login-sub{color:var(--ink-2); margin:2px 0 26px; font-size:14px}
+.role-pick{display:grid; gap:10px}
+.role-btn{
+  display:flex; align-items:center; gap:14px;
+  padding:16px 18px; border-radius:var(--radius);
+  background:var(--surface-2); border:1.5px solid transparent;
+  text-align:left; transition:all .15s;
+}
+.role-btn:hover{border-color:var(--line-2); background:#fff}
+.role-btn:active{transform:scale(.98)}
+.role-dot{width:38px; height:38px; border-radius:10px; flex:none; display:grid; place-items:center; font-size:19px; color:#fff}
+.role-btn .rb-name{font-weight:700; font-size:15px}
+.role-btn .rb-desc{font-size:12.5px; color:var(--ink-2)}
+
+/* ---------- Uygulama kabuğu ---------- */
+#app{display:none; height:100%; flex-direction:column}
+#app.on{display:flex}
+
+.topbar{
+  height:60px; flex:none;
+  background:var(--surface); border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:14px; padding:0 18px;
+}
+.tb-logo{font-weight:800; font-size:18px; letter-spacing:-.3px; display:flex; align-items:center; gap:8px}
+.tb-logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand-d));display:grid;place-items:center;font-size:17px}
+.tb-branch{
+  font-size:13px; color:var(--ink-2); padding:5px 12px;
+  background:var(--surface-2); border-radius:99px; font-weight:600;
+}
+.tb-spacer{flex:1}
+.role-chip{
+  display:flex; align-items:center; gap:8px;
+  padding:6px 14px 6px 8px; border-radius:99px;
+  background:var(--surface-2); font-weight:600; font-size:13px;
+}
+.role-chip .rc-dot{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:14px}
+.tb-out{padding:8px 14px; border-radius:10px; font-weight:600; font-size:13px; color:var(--ink-2)}
+.tb-out:hover{background:var(--danger-soft); color:var(--danger)}
+
+.body{flex:1; display:flex; min-height:0}
+
+/* Sol gezinme — role göre değişen sekmeler */
+.nav{
+  width:76px; flex:none; background:var(--surface); border-right:1px solid var(--line);
+  display:flex; flex-direction:column; padding:12px 0; gap:4px;
+}
+.nav-item{
+  margin:0 10px; padding:12px 0; border-radius:var(--radius-sm);
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  color:var(--ink-3); font-size:10.5px; font-weight:600; transition:all .12s;
+}
+.nav-item .ni-ic{font-size:21px}
+.nav-item:hover{background:var(--surface-2); color:var(--ink-2)}
+.nav-item.active{background:var(--brand-soft); color:var(--brand-d)}
+
+.main{flex:1; min-width:0; overflow-y:auto; padding:22px 26px}
+
+/* ---------- POS satış ekranı ---------- */
+.pos-grid{display:grid; grid-template-columns:1fr 380px; gap:22px; height:100%}
+@media(max-width:980px){.pos-grid{grid-template-columns:1fr}}
+
+.sec-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px}
+.sec-head h2{font-size:19px; font-weight:800; margin:0; letter-spacing:-.3px}
+.sec-head .sh-sub{font-size:13px; color:var(--ink-2)}
+
+.cat-row{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap}
+.cat-pill{
+  padding:9px 16px; border-radius:99px; font-weight:700; font-size:13.5px;
+  background:var(--surface); border:1.5px solid var(--line); color:var(--ink-2);
+}
+.cat-pill.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+
+.prod-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:12px}
+.prod{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px; text-align:left; transition:all .12s; position:relative; overflow:hidden;
+}
+.prod:hover{border-color:var(--brand); box-shadow:var(--shadow)}
+.prod:active{transform:scale(.97)}
+.prod .p-emoji{font-size:30px; margin-bottom:8px; display:block}
+.prod .p-name{font-weight:700; font-size:14px; line-height:1.25; margin-bottom:3px}
+.prod .p-price{font-weight:800; font-size:15px; color:var(--brand-d)}
+.prod.out{opacity:.45; pointer-events:none}
+.prod .p-out{position:absolute; top:8px; right:8px; font-size:10px; font-weight:800; background:var(--danger-soft); color:var(--danger); padding:3px 7px; border-radius:6px}
+
+/* Sepet / adisyon */
+.cart{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.cart-top{padding:16px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between}
+.cart-top .ct-table{font-weight:800; font-size:16px}
+.cart-top .ct-session{font-size:12px; color:var(--ink-2)}
+.cart-items{flex:1; overflow-y:auto; padding:8px 0; min-height:120px}
+.ci{display:flex; align-items:center; gap:10px; padding:10px 18px}
+.ci:hover{background:var(--surface-2)}
+.ci .ci-q{font-weight:800; color:var(--brand-d); width:26px; font-size:14px}
+.ci .ci-name{flex:1; font-size:14px; font-weight:600}
+.ci .ci-name small{display:block; color:var(--ink-3); font-weight:500; font-size:11.5px}
+.ci .ci-price{font-weight:700; font-size:14px}
+.cart-empty{padding:40px 20px; text-align:center; color:var(--ink-3); font-size:13.5px}
+.cart-foot{border-top:1px solid var(--line); padding:16px 18px}
+.cart-total{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px}
+.cart-total .cf-lbl{font-size:14px; color:var(--ink-2); font-weight:600}
+.cart-total .cf-amt{font-size:26px; font-weight:800; letter-spacing:-.5px}
+.cart-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.btn{
+  padding:15px; border-radius:var(--radius-sm); font-weight:700; font-size:14.5px;
+  display:flex; align-items:center; justify-content:center; gap:7px; transition:all .12s;
+}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--brand); color:var(--brand-ink)}
+.btn-primary:hover{background:var(--brand-d); color:#fff}
+.btn-ghost{background:var(--surface-2); color:var(--ink-2)}
+.btn-ghost:hover{background:var(--line)}
+.btn-lock{background:var(--surface-2); color:var(--ink-3)}
+.btn-lock:hover{background:var(--warn-soft); color:var(--warn)}
+.btn-full{grid-column:1/-1}
+
+/* ---------- Müdür / genel müdür panel kartları ---------- */
+.kpi-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:22px}
+.kpi{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px}
+.kpi .k-lbl{font-size:12.5px; color:var(--ink-2); font-weight:600; margin-bottom:6px; display:flex; align-items:center; gap:6px}
+.kpi .k-val{font-size:26px; font-weight:800; letter-spacing:-.5px}
+.kpi .k-val small{font-size:14px; font-weight:600; color:var(--ink-3)}
+.kpi .k-trend{font-size:12px; font-weight:700; margin-top:4px}
+.k-trend.up{color:var(--ok)} .k-trend.down{color:var(--danger)}
+
+/* Şube kartları (genel müdür canlı izleme) */
+.branch-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px}
+.bcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:18px; position:relative}
+.bcard .b-status{position:absolute; top:16px; right:16px; width:11px; height:11px; border-radius:99px}
+.b-status.green{background:var(--ok)} .b-status.yellow{background:var(--warn)} .b-status.red{background:var(--danger)}
+.bcard .b-name{font-weight:800; font-size:16px; margin-bottom:2px}
+.bcard .b-meta{font-size:12.5px; color:var(--ink-2); margin-bottom:14px}
+.bcard .b-stats{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.bstat .bs-l{font-size:11px; color:var(--ink-3); font-weight:600}
+.bstat .bs-v{font-size:17px; font-weight:800}
+.bcard .b-flag{margin-top:12px; padding:8px 11px; border-radius:9px; font-size:12px; font-weight:700; display:flex; align-items:center; gap:7px}
+.b-flag.ok{background:var(--ok-soft); color:var(--ok)}
+.b-flag.warn{background:var(--warn-soft); color:var(--warn)}
+
+/* Yetki rozeti / kilit göstergesi */
+.locked-note{
+  background:var(--warn-soft); border:1px solid #f0d9a8; border-radius:var(--radius);
+  padding:16px 18px; display:flex; gap:13px; align-items:flex-start; margin-bottom:20px;
+}
+.locked-note .ln-ic{font-size:20px; flex:none}
+.locked-note .ln-t{font-weight:700; font-size:14px; margin-bottom:2px}
+.locked-note .ln-d{font-size:13px; color:var(--ink-2)}
+
+.table-wrap{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden}
+table{width:100%; border-collapse:collapse}
+th{text-align:left; font-size:12px; color:var(--ink-2); font-weight:700; padding:13px 16px; border-bottom:1px solid var(--line); background:var(--surface-2)}
+td{padding:13px 16px; border-bottom:1px solid var(--line); font-size:14px}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block; padding:3px 9px; border-radius:7px; font-size:11.5px; font-weight:700}
+.tag.locked{background:var(--surface-2); color:var(--ink-3)}
+.tag.edit{background:var(--ok-soft); color:var(--ok)}
+
+/* ---------- Modal (şifre yükseltme) ---------- */
+.modal-bg{position:fixed; inset:0; z-index:90; background:rgba(28,27,24,.45); display:none; align-items:center; justify-content:center}
+.modal-bg.on{display:flex}
+.modal{width:min(380px,92vw); background:var(--surface); border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); padding:28px; text-align:center}
+.modal .m-ic{width:54px;height:54px;border-radius:14px;background:var(--warn-soft);color:var(--warn);display:grid;place-items:center;font-size:26px;margin:0 auto 14px}
+.modal h3{margin:0 0 6px; font-size:18px; font-weight:800}
+.modal p{margin:0 0 20px; color:var(--ink-2); font-size:13.5px}
+.modal input{width:100%; padding:14px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm); text-align:center; font-size:20px; letter-spacing:6px; margin-bottom:16px}
+.modal input:focus{outline:none; border-color:var(--brand)}
+.modal-actions{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+
+.empty-state{text-align:center; padding:60px 20px; color:var(--ink-3)}
+.empty-state .es-ic{font-size:44px; margin-bottom:12px}
+.empty-state .es-t{font-size:16px; font-weight:700; color:var(--ink-2); margin-bottom:4px}
+
+/* ---------- Opsiyon seçim modalı ---------- */
+.opt-modal{
+  width:min(480px,94vw); max-height:92vh; background:var(--surface);
+  border-radius:var(--radius-lg); box-shadow:var(--shadow-lg);
+  display:flex; flex-direction:column; overflow:hidden;
+}
+.opt-head{display:flex; align-items:center; gap:14px; padding:18px 20px; border-bottom:1px solid var(--line)}
+.opt-head .opt-emoji{font-size:32px}
+.opt-head .opt-name{font-weight:800; font-size:17px; line-height:1.2}
+.opt-head .opt-base{font-size:13px; color:var(--ink-2)}
+.opt-head .opt-x{margin-left:auto; width:34px; height:34px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); font-size:15px; font-weight:700}
+.opt-body{flex:1; overflow-y:auto; padding:6px 20px}
+.opt-grup{padding:14px 0; border-bottom:1px solid var(--surface-2)}
+.opt-grup:last-child{border-bottom:none}
+.opt-grup-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:10px}
+.opt-grup-h .og-ad{font-weight:800; font-size:15px}
+.og-meta{display:flex; align-items:center; gap:8px; flex:none}
+.og-sayac{font-size:12px; font-weight:800; color:var(--ink-3)}
+.og-tip{font-size:10.5px; font-weight:800; padding:3px 9px; border-radius:99px}
+.og-zor{background:var(--danger-soft); color:var(--danger)}
+.og-coklu{background:var(--info-soft); color:var(--info)}
+.opt-secenekler{display:grid; gap:7px}
+.opt-sec{
+  display:flex; align-items:center; gap:12px; padding:12px 14px;
+  border-radius:var(--radius-sm); background:var(--surface-2);
+  border:1.5px solid transparent; text-align:left; transition:all .12s;
+}
+.opt-sec:active{transform:scale(.99)}
+.opt-sec.on{background:var(--brand-soft); border-color:var(--brand)}
+.opt-sec.opt-ist{background:transparent; border:1.5px dashed var(--line-2)}
+.opt-sec.opt-ist.on{background:var(--surface-2); border-style:solid; border-color:var(--ink-3)}
+.opt-sec.opt-disabled{opacity:.38; pointer-events:none}
+.os-mark{width:23px; height:23px; flex:none; border-radius:7px; border:2px solid var(--line-2);
+  display:grid; place-items:center; font-size:13px; font-weight:800; color:#fff; background:#fff}
+.os-mark.radio{border-radius:99px}
+.opt-sec.on .os-mark{background:var(--brand); border-color:var(--brand); color:var(--brand-ink)}
+.os-ad{flex:1; font-size:14px; font-weight:600}
+.os-fiyat{font-weight:800; font-size:13px; color:var(--brand-d); flex:none}
+.opt-not{width:100%; min-height:60px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm);
+  padding:11px 13px; font-size:14px; resize:vertical; font-family:inherit}
+.opt-not:focus{outline:none; border-color:var(--brand)}
+.opt-foot{display:flex; align-items:center; gap:14px; padding:14px 20px; border-top:1px solid var(--line)}
+.opt-toplam{flex:1}
+.opt-toplam .ot-l{font-size:12px; color:var(--ink-2); font-weight:600}
+.opt-toplam .ot-v{font-size:22px; font-weight:800; letter-spacing:-.5px}
+.opt-foot .btn{flex:1; max-width:200px}
+.ci .ci-name small{display:block; color:var(--ink-3); font-weight:500; font-size:11px; line-height:1.3; margin-top:1px}
+
+/* ---------- Opsiyon kapatma (stok) ---------- */
+.opt-kapat-mod{margin-left:auto; padding:7px 13px; border-radius:99px; background:var(--surface-2);
+  color:var(--ink-2); font-size:12px; font-weight:700; display:flex; align-items:center; gap:5px}
+.opt-kapat-mod.on{background:var(--warn-soft); color:var(--warn)}
+.opt-head .opt-x{margin-left:8px}
+.kapat-bilgi{padding:10px 20px; background:var(--warn-soft); color:var(--brand-ink); font-size:12.5px; font-weight:600; line-height:1.4}
+.opt-sec.opt-kapali{opacity:.4}
+.opt-sec.opt-kapali .os-ad{text-decoration:line-through; text-decoration-color:var(--ink-3)}
+.opt-sec.opt-kapali .os-mark{border-style:dashed}
+.kapat-etiket{font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:99px; background:var(--surface-2); color:var(--ink-3); flex:none}
+.kapat-etiket.stok{background:var(--danger-soft); color:var(--danger)}
+/* kapatma modu satırı */
+.opt-kapat-row{cursor:pointer}
+.opt-kapat-row .kapat-tgl{width:24px; height:24px; flex:none; border-radius:99px; display:grid; place-items:center;
+  font-size:13px; font-weight:800; background:var(--ok-soft); color:var(--ok)}
+.opt-kapat-row.kapali{background:var(--danger-soft); border-color:#f0c0bc}
+.opt-kapat-row.kapali .kapat-tgl{background:var(--danger); color:#fff}
+.opt-kapat-row.kapali .os-ad{text-decoration:line-through}
+.kapat-etiket.force{background:var(--warn-soft); color:var(--warn)}
+.force-btn{margin-left:auto; flex:none; font-size:11px; font-weight:800; padding:5px 11px; border-radius:99px;
+  background:var(--ink); color:#fff; white-space:nowrap}
+.force-btn.on{background:var(--warn); color:#fff}
+
+/* ============================================================
+   QR MENÜ — müşteri telefonu (mobil tam ekran)
+   ============================================================ */
+#qrApp{display:none; position:fixed; inset:0; z-index:95; background:var(--bg); overflow-y:auto}
+.qr-screen{max-width:480px; margin:0 auto; min-height:100%; display:flex; flex-direction:column; background:var(--surface); position:relative}
+.qr-close{position:absolute; top:14px; left:14px; z-index:5; width:36px; height:36px; border-radius:99px; background:rgba(255,255,255,.85); backdrop-filter:blur(6px); font-size:16px; font-weight:700; color:var(--ink); box-shadow:var(--shadow)}
+
+/* Karşılama */
+.qr-giris{justify-content:center; align-items:center; padding:30px 24px; background:radial-gradient(130% 90% at 50% 0%, #fff2dc 0%, var(--surface) 60%)}
+.qr-hero{text-align:center; margin-bottom:30px}
+.qr-logo{font-size:64px; margin-bottom:6px}
+.qr-brand{font-size:30px; font-weight:800; letter-spacing:-.5px}
+.qr-masa-rozet{display:inline-block; margin-top:12px; padding:8px 16px; border-radius:99px; background:var(--cocoa); color:#fff; font-size:13px; font-weight:700}
+.qr-giris-kart{width:100%; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:24px; box-shadow:var(--shadow)}
+.qr-g-baslik{font-size:20px; font-weight:800; margin-bottom:4px}
+.qr-g-alt{font-size:13.5px; color:var(--ink-2); line-height:1.5; margin-bottom:18px}
+.qr-ad-input{width:100%; padding:15px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm); font-size:16px; margin-bottom:14px}
+.qr-ad-input:focus{outline:none; border-color:var(--brand)}
+.qr-geo{margin-top:14px; text-align:center; font-size:12px; color:var(--ok); font-weight:600}
+
+.qr-btn-primary{width:100%; padding:16px; border-radius:var(--radius-sm); background:var(--brand); color:var(--brand-ink); font-size:15.5px; font-weight:800}
+.qr-btn-primary:active{transform:scale(.98); background:var(--brand-d); color:#fff}
+.qr-btn-ghost{width:100%; padding:14px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:14px; font-weight:700; margin-top:10px}
+
+/* Menü üst bar */
+.qr-topbar{position:sticky; top:0; z-index:4; display:flex; align-items:center; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line)}
+.qr-topbar .qr-close{position:static; box-shadow:none; background:var(--surface-2)}
+.qr-tb-mid{flex:1; text-align:center}
+.qr-tb-brand{font-size:16px; font-weight:800}
+.qr-tb-masa{font-size:11.5px; color:var(--ink-2)}
+
+/* Kategori şeridi */
+.qr-kat-row{position:sticky; top:61px; z-index:3; display:flex; gap:8px; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line); overflow-x:auto; -webkit-overflow-scrolling:touch}
+.qr-kat-row::-webkit-scrollbar{display:none}
+.qr-kat{flex:none; padding:9px 16px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:700; white-space:nowrap}
+.qr-kat.on{background:var(--cocoa); color:#fff}
+
+/* Ürün kartları (görselli) */
+.qr-menu-list{flex:1; padding:14px; display:flex; flex-direction:column; gap:12px}
+.qr-card{display:flex; gap:13px; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:10px; text-align:left; transition:all .12s}
+.qr-card:active{transform:scale(.99); border-color:var(--brand)}
+.qr-card.qr-out{opacity:.5; pointer-events:none}
+.qr-img{width:84px; height:84px; flex:none; border-radius:12px; background-size:cover; background-position:center}
+.qr-img-ph{display:grid; place-items:center}
+.qr-card-info{flex:1; min-width:0}
+.qr-card-ad{font-weight:800; font-size:15px; line-height:1.25; margin-bottom:2px}
+.qr-card-desc{font-size:11.5px; color:var(--ink-2); line-height:1.35; margin-bottom:5px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.qr-card-fiyat{font-weight:800; font-size:15px; color:var(--brand-d)}
+.qr-card-add{flex:none; width:34px; height:34px; border-radius:99px; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-size:22px; font-weight:700}
+.qr-card-tukendi{flex:none; font-size:10.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:5px 9px; border-radius:7px}
+
+/* Sepet bar (yüzen) */
+.qr-sepet-bar{position:sticky; bottom:0; display:flex; align-items:center; gap:12px; margin:14px; padding:15px 18px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); box-shadow:var(--shadow-lg)}
+.qr-sb-n{width:26px; height:26px; border-radius:99px; background:var(--brand-ink); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:800}
+.qr-sb-t{flex:1; font-weight:800; font-size:15px}
+.qr-sb-f{font-weight:800; font-size:16px}
+
+/* Sepet ekranı */
+.qr-sepet-list{flex:1; padding:14px}
+.qr-bos{text-align:center; padding:60px 20px; color:var(--ink-3); font-size:14px}
+.qr-si{display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line)}
+.qr-si-info{flex:1}
+.qr-si-ad{font-weight:700; font-size:15px}
+.qr-si-secim{font-size:11.5px; color:var(--ink-2); margin-top:3px; line-height:1.4}
+.qr-si-not{font-size:11.5px; color:var(--cocoa); margin-top:4px; font-style:italic}
+.qr-si-sag{text-align:right}
+.qr-si-fiyat{font-weight:800; font-size:15px; margin-bottom:8px}
+.qr-si-adet{display:flex; align-items:center; gap:10px; background:var(--surface-2); border-radius:99px; padding:4px}
+.qr-si-adet button{width:28px; height:28px; border-radius:99px; background:var(--surface); font-size:16px; font-weight:800; color:var(--ink)}
+.qr-si-adet span{font-weight:800; min-width:18px; text-align:center}
+.qr-sepet-foot{position:sticky; bottom:0; padding:16px 18px; background:var(--surface); border-top:1px solid var(--line)}
+.qr-sf-toplam{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; font-size:15px}
+.qr-sf-toplam strong{font-size:24px; font-weight:800}
+.qr-sf-not{text-align:center; font-size:11.5px; color:var(--ink-3); margin-top:8px}
+
+/* Onay ekranı */
+.qr-onay{justify-content:center; align-items:center; padding:40px 24px}
+.qr-onay-ic{text-align:center; width:100%}
+.qr-onay-tik{width:80px; height:80px; margin:0 auto 18px; border-radius:99px; background:var(--ok); color:#fff; display:grid; place-items:center; font-size:42px; font-weight:800}
+.qr-onay-baslik{font-size:23px; font-weight:800; margin-bottom:8px}
+.qr-onay-alt{font-size:14.5px; color:var(--ink-2); line-height:1.6; margin-bottom:14px}
+.qr-onay-masa{display:inline-block; padding:7px 15px; border-radius:99px; background:var(--surface-2); font-size:13px; font-weight:700; margin-bottom:24px}
+</style>
+</head>
+<body>
+
+<!-- ====================== GİRİŞ (rol seçimi — demo) ====================== -->
+<div id="login">
+  <div class="login-card">
+    <div class="logo"><span class="mark">🧇</span> MİNİPAN</div>
+    <div class="login-sub">POS · şube yönetim sistemi</div>
+    <div class="role-pick">
+      <button class="role-btn" onclick="login('kasa')">
+        <span class="role-dot" style="background:var(--r-kasa)">💳</span>
+        <span><span class="rb-name">Kasa görevlisi</span><br><span class="rb-desc">Satış, tahsilat, masa · tek şube</span></span>
+      </button>
+      <button class="role-btn" onclick="login('mudur')">
+        <span class="role-dot" style="background:var(--r-mudur)">📋</span>
+        <span><span class="rb-name">Şube müdürü</span><br><span class="rb-desc">Şube yönetimi, fiyat, kampanya, rapor</span></span>
+      </button>
+      <button class="role-btn" onclick="login('genel')">
+        <span class="role-dot" style="background:var(--r-genel)">🗺️</span>
+        <span><span class="rb-name">Genel müdür</span><br><span class="rb-desc">Tüm şubeler, reçete, merkez tanımlar</span></span>
+      </button>
+      <div style="height:1px;background:var(--line);margin:6px 0"></div>
+      <button class="role-btn" onclick="openQR()">
+        <span class="role-dot" style="background:var(--cocoa)">📱</span>
+        <span><span class="rb-name">QR Menü (müşteri)</span><br><span class="rb-desc">Masadan telefonla sipariş · self servis</span></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ====================== QR MENÜ (müşteri telefonu) ====================== -->
+<div id="qrApp"></div>
+
+<!-- ====================== UYGULAMA ====================== -->
+<div id="app">
+  <div class="topbar">
+    <div class="tb-logo"><span class="mark">🧇</span> MİNİPAN</div>
+    <span class="tb-branch" id="branchLabel">—</span>
+    <div class="tb-spacer"></div>
+    <div class="role-chip">
+      <span class="rc-dot" id="roleDot">·</span>
+      <span id="roleLabel">—</span>
+    </div>
+    <button class="tb-out" onclick="logout()">Çıkış</button>
+  </div>
+  <div class="body">
+    <div class="nav" id="nav"></div>
+    <div class="main" id="main"></div>
+  </div>
+</div>
+
+<!-- Opsiyon seçim modalı -->
+<div class="modal-bg" id="optModal">
+  <div class="opt-modal" id="optModalInner"></div>
+</div>
+
+<!-- Şifre yükseltme modalı -->
+<div class="modal-bg" id="pwModal">
+  <div class="modal">
+    <div class="m-ic">🔐</div>
+    <h3>Yetki onayı gerekli</h3>
+    <p id="pwReason">Bu işlem için şube müdürü şifresi girilmeli. İşlem kayıt altına alınır.</p>
+    <input type="password" id="pwInput" inputmode="numeric" maxlength="4" placeholder="••••">
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closePw()">Vazgeç</button>
+      <button class="btn btn-primary" onclick="confirmPw()">Onayla</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   1) FIRESTORE ŞEMASI (referans — gerçek init burada bağlanır)
+   ------------------------------------------------------------
+   Koleksiyon yapısı, override mantığı ve rol kapsamı aşağıda
+   dokümante edildi. Faz 1'de bu şema ve kurallar Firebase'e
+   taşınır; bu dosya arayüz iskeleti + mantık demosudur.
+   ============================================================ */
+
+const SCHEMA = {
+  // --- MERKEZ (genel müdür yazar, herkes okur) ---
+  "products/{productId}":           { ad:"", kategori:"", recipeId:"", varsayilan_fiyat:0, emoji:"", aktif:true },
+  "recipes/{recipeId}":             { ad:"", malzemeler:[{ingredientId:"", gram:0}] }, // KİLİTLİ
+  "ingredients/{ingredientId}":     { ad:"", birim:"g", merkez_fiyat:0 },
+  "campaigns/{campaignId}":         { ad:"", tip:"yuzde|tutar|happy_hour|ikram", kapsam:"tum|[subeId]", kosul:{}, zaman:{} },
+
+  // --- ŞUBE BAZLI (şube yazar / siz okursunuz) ---
+  "branches/{bId}":                 { ad:"", adres:"", geo:{lat:0,lng:0,yaricap:0}, aktif:true, acilis:"" },
+  "branches/{bId}/pricing/{pId}":   { fiyat:0 },           // OVERRIDE — yoksa products.varsayilan_fiyat
+  "branches/{bId}/sessions/{sId}":  { masa:"", durum:"acik|kapali", acilis:"" },
+  "branches/{bId}/orders/{oId}":    { sessionId:"", kisi_adi:"", kalemler:[], kanal:"pos|qr", durum:"mutfak|hazir", tutar:0, zaman:"" },
+  "branches/{bId}/stock/{ingId}":   { mevcut_gram:0, son:"" },
+  "branches/{bId}/customers/{cId}": { ad:"", puan:0, damga:0 }, // ŞUBE BAZLI sadakat
+  "branches/{bId}/cashclose/{date}":{ acilis:0, kapanis:0, fark:0 },
+
+  // --- ORTAK DEFTER ---
+  "supply_orders/{oId}":            { bId:"", kalemler:[], durum:"", tutar:0 },
+  "supply_ledger/{bId}":            { borc:0, alacak:0 },
+
+  // --- KULLANICILAR / ROL ---
+  "users/{uid}":                    { rol:"genel_mudur|sube_muduru|kasa", sube_id:"", aktif:true }
+};
+
+/* ============================================================
+   2) GÜVENLİK KURALLARI (firestore.rules — Faz 1)
+   ------------------------------------------------------------
+   Asıl güvenlik burada. Arayüz sadece kolaylık; veri erişimi
+   sunucu kurallarıyla zorlanır. Aşağıdaki blok Firebase'e
+   olduğu gibi yüklenir.
+   ============================================================ */
+
+const FIRESTORE_RULES = String.raw`
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function user()    { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function rol()     { return user().rol; }
+    function subem()   { return user().sube_id; }
+    function genel()   { return rol() == 'genel_mudur'; }
+    function mudur()   { return rol() == 'sube_muduru'; }
+    function kasa()    { return rol() == 'kasa'; }
+    function kendiSube(bId) { return subem() == bId; }
+    function girisli() { return request.auth != null && user().aktif == true; }
+
+    // --- MERKEZ TANIMLAR: sadece genel müdür yazar, herkes okur ---
+    match /products/{p}    { allow read: if girisli(); allow write: if girisli() && genel(); }
+    match /recipes/{r}     { allow read: if girisli(); allow write: if girisli() && genel(); } // REÇETE KİLİTLİ
+    match /ingredients/{i} { allow read: if girisli(); allow write: if girisli() && genel(); }
+
+    // --- KAMPANYA: genel müdür her şeyi; şube müdürü sadece kendi kapsamlı ---
+    match /campaigns/{c} {
+      allow read:  if girisli();
+      allow write: if girisli() && (genel() ||
+                     (mudur() && request.resource.data.kapsam == [subem()]));
+    }
+
+    // --- ŞUBE ALTI ---
+    match /branches/{bId} {
+      // Şube dokümanı: genel müdür yazar (yeni şube ekleme dahil), herkes okur
+      allow read:  if girisli();
+      allow write: if girisli() && genel();
+
+      // Fiyat override: genel müdür veya o şubenin müdürü
+      match /pricing/{pId} {
+        allow read:  if girisli();
+        allow write: if girisli() && (genel() || (mudur() && kendiSube(bId)));
+      }
+      // Satış/oturum: kasa + müdür kendi şubesinde yazar; genel müdür okur
+      match /sessions/{sId} {
+        allow read:  if girisli() && (genel() || kendiSube(bId));
+        allow write: if girisli() && kendiSube(bId) && (kasa() || mudur());
+      }
+      match /orders/{oId} {
+        allow read:   if girisli() && (genel() || kendiSube(bId));
+        allow create: if girisli() && kendiSube(bId);          // kasa + QR
+        allow update: if girisli() && kendiSube(bId);
+        // SİLME yalnızca müdür — kayıt dışı satış kapısını kapatır, loglanır
+        allow delete: if girisli() && kendiSube(bId) && (mudur() || genel());
+      }
+      match /stock/{ingId} {
+        allow read:  if girisli() && (genel() || kendiSube(bId));
+        allow write: if girisli() && kendiSube(bId);
+      }
+      match /customers/{cId} {  // şube bazlı sadakat
+        allow read:  if girisli() && (genel() || kendiSube(bId));
+        allow write: if girisli() && kendiSube(bId);
+      }
+      match /cashclose/{d} {
+        allow read:  if girisli() && (genel() || kendiSube(bId));
+        allow write: if girisli() && kendiSube(bId) && (mudur() || genel());
+      }
+    }
+
+    // --- ORTAK DEFTER: şube kendi siparişini yazar, genel müdür hepsini görür ---
+    match /supply_orders/{oId} {
+      allow read:  if girisli();
+      allow write: if girisli() && (genel() || (mudur() && request.resource.data.bId == subem()));
+    }
+    match /supply_ledger/{bId} {
+      allow read:  if girisli() && (genel() || kendiSube(bId));
+      allow write: if girisli() && genel();
+    }
+
+    // --- KULLANICILAR: sadece genel müdür yönetir ---
+    match /users/{uid} {
+      allow read:  if girisli() && (genel() || request.auth.uid == uid);
+      allow write: if girisli() && genel();
+    }
+  }
+}`;
+
+/* ============================================================
+   3) ROL TANIMLARI + YETKİ MATRİSİ (arayüz katmanı)
+   ============================================================ */
+
+const ROLES = {
+  kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", sube:"Kadıköy Şubesi",
+           nav:["satis","masalar"] },
+  mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", sube:"Kadıköy Şubesi",
+           nav:["satis","masalar","stok","fiyat","kampanya","personel","rapor"] },
+  genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
+           nav:["canli","recete","stok","fiyat","kampanya","subeler","rapor","denetim"] },
+};
+
+// Yetki kontrolü: belirli aksiyon bu role açık mı?
+const CAN = {
+  satis:      ["kasa","mudur","genel"],
+  indirim:    ["mudur","genel"],          // kasa → şifre ister
+  urun_pasif: ["mudur","genel"],
+  fiyat_override:["mudur","genel"],
+  recete:     ["genel"],                  // reçete tanımı sadece genel müdür
+  yeni_sube:  ["genel"],
+  canli_tum:  ["genel"],
+  denetim_tum:["genel"],
+};
+function can(role, action){ return (CAN[action]||[]).includes(role); }
+
+const NAV_META = {
+  satis:   {ic:"🧇", ad:"Satış"},
+  masalar: {ic:"🪑", ad:"Masalar"},
+  canli:   {ic:"📡", ad:"Canlı"},
+  recete:  {ic:"📖", ad:"Reçete"},
+  fiyat:   {ic:"🏷️", ad:"Fiyat"},
+  kampanya:{ic:"🎯", ad:"Kampanya"},
+  personel:{ic:"👥", ad:"Personel"},
+  subeler: {ic:"🏬", ad:"Şubeler"},
+  rapor:   {ic:"📊", ad:"Rapor"},
+  denetim: {ic:"🔍", ad:"Denetim"},
+  stok:    {ic:"📦", ad:"Stok"},
+};
+
+/* ============================================================
+   4) DEMO VERİ (Faz 1 — gerçekte Firestore'dan gelir)
+   ============================================================ */
+
+/* ============================================================
+   MİNİPAN GERÇEK MENÜ VERİSİ (merkez katalog — kilitli)
+   PDF kaynaklı: ÜRÜN_GRUPLARI + şubeler
+   Gram reçeteler tahmini (sonra gerçek değerlerle güncellenecek)
+   ============================================================ */
+
+/* --- 8 GERÇEK ŞUBE --- */
+const DEMO_BRANCHES = [
+  {ad:"Bolu Tabaklar",          ciro:6200, masa:6,  bekleyen:2, durum:"green",  fire:"normal"},
+  {ad:"Çanakkale Kemalpaşa",     ciro:4800, masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
+  {ad:"Çankırı Cumhuriyet",      ciro:3900, masa:3,  bekleyen:1, durum:"green",  fire:"normal"},
+  {ad:"Edirne Zübeyde Hanım",    ciro:7100, masa:8,  bekleyen:4, durum:"yellow", fire:"normal"},
+  {ad:"Edirne Atatürk",          ciro:5600, masa:5,  bekleyen:2, durum:"green",  fire:"warn"},
+  {ad:"Lüleburgaz",             ciro:5200, masa:5,  bekleyen:3, durum:"green",  fire:"normal"},
+  {ad:"Süleymanpaşa Değirmenaltı",ciro:4400,masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
+  {ad:"Çorlu Express",           ciro:6800, masa:7,  bekleyen:5, durum:"yellow", fire:"normal"},
+];
+
+/* --- ŞUBE ADRESLERİ (yönetim için) --- */
+const BRANCH_INFO = {
+  "Bolu Tabaklar":           {sehir:"Bolu", adres:"Tabaklar, Börekciler Sk. No:20B D:19, 14100 Bolu Merkez", tel:"08508401756"},
+  "Çanakkale Kemalpaşa":      {sehir:"Çanakkale", adres:"Kemalpaşa, Yalı Cd. No:7, 17000 Çanakkale Merkez", tel:"08508401756", express:true},
+  "Çankırı Cumhuriyet":       {sehir:"Çankırı", adres:"Cumhuriyet Mah. Şht. Üstg. Erdem Öztürk Sk. No:7B, 18100 Çankırı Merkez", tel:"08508401756"},
+  "Edirne Zübeyde Hanım":     {sehir:"Edirne", adres:"1. Murat, Zübeyde Hanım Cd. 4.Sok, 22100 Edirne Merkez", tel:"08508401756"},
+  "Edirne Atatürk":           {sehir:"Edirne", adres:"Atatürk Mh. Şehit Cem Dilay Kerman Bulvarı No:13, 22100 Edirne Merkez", tel:"08508401756"},
+  "Lüleburgaz":              {sehir:"Kırklareli", adres:"8 Kasım, Eski Müsellim Cd. No:52/A, 39750 Lüleburgaz", tel:"08508401756"},
+  "Süleymanpaşa Değirmenaltı":{sehir:"Tekirdağ", adres:"Değirmenaltı, İğde Sk. No:9 D:11A, 59030 Süleymanpaşa", tel:"08508401756"},
+  "Çorlu Express":            {sehir:"Tekirdağ", adres:"Reşadiye, Yunus Emre Cd. Ar. No:4B, 59850 Çorlu", tel:"08508401756", express:true},
+};
+
+/* --- ÜRÜNLER (kategori sıralı) --- */
+const DEMO_PRODUCTS = [
+  // TATLILAR — Minipanlar
+  {ad:"Minipan (8 Adet)",  emoji:"🧇", kat:"Tatlılar", fiyat:245, aktif:true, aciklama:"Seçeceğiniz malzemeler ile. Alerjen içerir"},
+  {ad:"Minipan (10 Adet)", emoji:"🧇", kat:"Tatlılar", fiyat:265, aktif:true, aciklama:"Seçeceğiniz malzemeler ile. Alerjen içerir"},
+  {ad:"Minipan (12 Adet)", emoji:"🧇", kat:"Tatlılar", fiyat:295, aktif:true, aciklama:"Seçeceğiniz malzemeler ile. Alerjen içerir"},
+  {ad:"Minipan (14 Adet)", emoji:"🧇", kat:"Tatlılar", fiyat:325, aktif:true, aciklama:"Seçeceğiniz malzemeler ile. Alerjen içerir"},
+  {ad:"Minipan (18 Adet)", emoji:"🧇", kat:"Tatlılar", fiyat:390, aktif:true, aciklama:"Pancake, seçeceğiniz malzemeler ile. Alerjen içerir"},
+  // TATLILAR — Maglar
+  {ad:"Cicibebeli Mag",    emoji:"🍫", kat:"Tatlılar", fiyat:240, aktif:true, aciklama:"Siparişinize özel anlık hazırlanır. Cam kavanozda servis edilir."},
+  {ad:"Rulokatlı Mag",     emoji:"🍫", kat:"Tatlılar", fiyat:240, aktif:true, aciklama:"Siparişinize özel anlık hazırlanır. Cam kavanozda servis edilir."},
+  {ad:"Bitter Çikolatalı Mag", emoji:"🍫", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"Bitter çikolata ile harmanlanmış muhteşem lezzet. Cam kavanozda servis edilir. Alerjen içerir"},
+  {ad:"Oreolu Mag",        emoji:"🍫", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"Siparişinize özel anlık hazırlanır. Cam kavanozda servis edilir."},
+  {ad:"Brownili Mag",      emoji:"🍫", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"Siparişinize özel anlık hazırlanır. Cam kavanozda servis edilir."},
+  {ad:"Çikolatalı Mag",    emoji:"🍫", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"Siparişinize özel anlık hazırlanır. Cam kavanozda servis edilir."},
+  {ad:"Kitkatlı Mag",      emoji:"🍫", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"Kitkat kırıntı, Mag kreması"},
+  {ad:"Lotus Bisküvili Mag", emoji:"🍫", kat:"Tatlılar", fiyat:275, aktif:true, aciklama:"Cam kavanozda servis edilir. Alerjen içerir"},
+  {ad:"Kadayıflı Magnolya",emoji:"🍮", kat:"Tatlılar", fiyat:250, aktif:true},
+  {ad:"Spoonful Cup",      emoji:"🍮", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"Siparişinize özel anlık hazırlanır, cam kavanozda servis edilir."},
+  // PASTALAR
+  {ad:"Cookie Klasik (100 Gr)", emoji:"🍪", kat:"Pastalar", fiyat:120, aktif:true},
+  {ad:"Cookie Oreolu Kakaolu",  emoji:"🍪", kat:"Pastalar", fiyat:120, aktif:true},
+  // İÇECEKLER
+  {ad:"Coca-Cola Zero (33cl)",  emoji:"🥤", kat:"İçecekler", fiyat:90, aktif:true, aciklama:"Şeker içermeyen, kalorisiz"},
+  {ad:"Coca-Cola (20cl) Cam",   emoji:"🥤", kat:"İçecekler", fiyat:80, aktif:true},
+  {ad:"Coca-Cola (33cl)",       emoji:"🥤", kat:"İçecekler", fiyat:90, aktif:true},
+  {ad:"Sprite (33cl)",          emoji:"🥤", kat:"İçecekler", fiyat:90, aktif:true},
+  {ad:"Soğuk Çay (33cl)",       emoji:"🧊", kat:"İçecekler", fiyat:90, aktif:true},
+  {ad:"Meyveli Soda (25cl)",    emoji:"💧", kat:"İçecekler", fiyat:55, aktif:true},
+  {ad:"Soda (25cl)",            emoji:"💧", kat:"İçecekler", fiyat:50, aktif:true},
+  {ad:"Su (33cl)",              emoji:"💧", kat:"İçecekler", fiyat:30, aktif:true},
+  // GAZOZLAR (butik · hepsi 80₺ cam şişe)
+  {ad:"Uzay Klasik (250ml)",    emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Uzay Kola (250ml)",      emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Bağlar Egzotik (25cl)",  emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Goca Şeftali Lavanta",   emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Bor Yaban Mersini",      emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Bor Hindistan Cevizi",   emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Bor Bubble Gum (200ml)", emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true},
+  {ad:"Kabarcık Ekşi Elma",     emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe, şekersiz"},
+  {ad:"Kabarcık Frambuaz",      emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true},
+  {ad:"Beyoğlu Nane Limon",     emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  {ad:"Şirince Şeftali Mürver", emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true},
+  {ad:"Salda Vişne Nane",       emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true},
+  {ad:"Marmaris Nar (200ml)",   emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true},
+  {ad:"Bodrum Mandalina",       emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true},
+  {ad:"Zafer Klasik (200ml)",   emoji:"🍾", kat:"Gazozlar", fiyat:80, aktif:true, aciklama:"Cam şişe"},
+  // DONDURMALAR (hepsi 60₺ · 1 top)
+  {ad:"Vişneli Dondurma",       emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Oreolu Dondurma",        emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Antep Fıstıklı Dondurma",emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"İtalyan Karamelli Dond.",emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Karadutlu Dondurma",     emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Karamelli Dondurma",     emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Kavunlu Dondurma",       emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Limonlu Dondurma",       emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Mangolu Dondurma",       emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Vanilyalı Dondurma",     emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Balbadem Dondurma",      emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  {ad:"Çilekli Dondurma",       emoji:"🍦", kat:"Dondurmalar", fiyat:60, aktif:true, aciklama:"1 Top"},
+  // ÇİKOLATA SOSLARI (retail · 300gr kavanoz)
+  {ad:"Sütlü Çikolata Sos 300gr", emoji:"🫙", kat:"Çikolata Sosları", fiyat:275, aktif:true, aciklama:"Glutensiz, katkısız, GİMDES sertifikalı"},
+  {ad:"Beyaz Çikolata Sos 300gr", emoji:"🫙", kat:"Çikolata Sosları", fiyat:275, aktif:true, aciklama:"Glutensiz, katkısız, GİMDES sertifikalı"},
+  {ad:"Bitter Çikolata Sos 300gr",emoji:"🫙", kat:"Çikolata Sosları", fiyat:275, aktif:true, aciklama:"Glutensiz, katkısız, GİMDES sertifikalı"},
+];
+
+/* --- ORTAK OPSİYON PARÇALARI (tekrarı önlemek için) --- */
+const SOS6 = [
+  {ad:"Sütlü Çikolatalı Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+  {ad:"Bitter Çikolatalı Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+  {ad:"Beyaz Çikolatalı Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+  {ad:"Karamel Çikolatalı Sos", fiyat:0, recete:[{ing:"seker",g:25}]},
+  {ad:"Frambuaz Çikolatalı Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+  {ad:"Antep Fıstığı Çikolata Sos", fiyat:0, recete:[{ing:"fistik",g:25}]},
+];
+const MEYVE = [
+  {ad:"Çilek", fiyat:0, recete:[{ing:"cilek",g:50}]},
+  {ad:"Muz", fiyat:0, recete:[{ing:"muz",g:50}]},
+  {ad:"Meyve İstemiyorum", fiyat:0, recete:[], istemiyorum:true},
+];
+/* Ekstra süsleme — 14/10/12/18'de ortak büyük liste */
+const SUSLEME = [
+  {ad:"Mısır Gevreği", fiyat:10, recete:[{ing:"misir",g:15}]},
+  {ad:"Toz Fındık", fiyat:20, recete:[{ing:"fistik",g:15}]},
+  {ad:"Rulokat", fiyat:8, recete:[{ing:"cikolata",g:10}]},
+  {ad:"Oreo", fiyat:15, recete:[{ing:"cikolata",g:15}]},
+  {ad:"Cici Bebe", fiyat:8, recete:[{ing:"misir",g:10}]},
+  {ad:"Çakıl Taşı", fiyat:15, recete:[{ing:"cikolata",g:15}]},
+  {ad:"Toz Antep Fıstığı", fiyat:35, recete:[{ing:"fistik",g:20}]},
+  {ad:"Bonibon", fiyat:8, recete:[{ing:"cikolata",g:10}]},
+  {ad:"Hindistan Cevizi", fiyat:5, recete:[{ing:"ceviz",g:10}]},
+  {ad:"Beyaz Damla Çikolata", fiyat:8, recete:[{ing:"cikolata",g:10}]},
+  {ad:"Bitter Damla Çikolata", fiyat:8, recete:[{ing:"cikolata",g:10}]},
+  {ad:"Beyaz Çikolatalı Pirinç Patlağı", fiyat:5, recete:[{ing:"cikolata",g:8}]},
+  {ad:"Bitter Çikolatalı Pirinç Patlağı", fiyat:5, recete:[{ing:"cikolata",g:8}]},
+  {ad:"Frambuaz Çikolatalı Pirinç Patlağı", fiyat:5, recete:[{ing:"cikolata",g:8}]},
+  {ad:"Altın Çikolatalı Pirinç Patlağı", fiyat:5, recete:[{ing:"cikolata",g:8}]},
+  {ad:"Lotus Biscoff", fiyat:25, recete:[{ing:"cikolata",g:15}]},
+  {ad:"Frambuaz Damla Çikolata", fiyat:8, recete:[{ing:"cikolata",g:10}]},
+  {ad:"Sütlü Pirinç Patlağı", fiyat:5, recete:[{ing:"cikolata",g:8}]},
+  {ad:"Karışık Pirinç Patlağı", fiyat:5, recete:[{ing:"cikolata",g:8}]},
+  {ad:"Kitkat Kırıntı", fiyat:15, recete:[{ing:"cikolata",g:12}]},
+  {ad:"Ekstra Süsleme İstemiyorum", fiyat:0, recete:[], istemiyorum:true},
+];
+/* Ekstra sos — küçük boylarda +25₺, 14 Adet'te +10₺ (ayrı tanım) */
+function ekstraSos(fiyat){
+  return [
+    {ad:"Ekstra Karamel Çikolata Sos", fiyat:fiyat, recete:[{ing:"seker",g:20}]},
+    {ad:"Ekstra Frambuaz Çikolatalı Sos", fiyat:fiyat, recete:[{ing:"cikolata",g:20}]},
+    {ad:"Ekstra Antep Fıstığı Çikolata Sos", fiyat:fiyat, recete:[{ing:"fistik",g:20}]},
+    {ad:"Ekstra Sütlü Çikolatalı Sos", fiyat:fiyat, recete:[{ing:"cikolata",g:20}]},
+    {ad:"Ekstra Bitter Çikolatalı Sos", fiyat:fiyat, recete:[{ing:"cikolata",g:20}]},
+    {ad:"Ekstra Beyaz Çikolatalı Sos", fiyat:fiyat, recete:[{ing:"cikolata",g:20}]},
+    {ad:"Ekstra Çikolata Sos İstemiyorum", fiyat:0, recete:[], istemiyorum:true},
+  ];
+}
+/* Minipan ortak yapı üreticisi (boyuta göre süsleme max + ekstra sos fiyatı) */
+function minipanOpts(susMax, sosFiyat){
+  return [
+    { ad:"Pancake Seçimi", tip:"zorunlu_tekli", secenekler:[
+      {ad:"Sütlü Pancake", fiyat:0, recete:[{ing:"hamur",g:280}]},
+    ]},
+    { ad:"Çikolata Sos Seçimi", tip:"coklu", max:2, secenekler:SOS6 },
+    { ad:"Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE },
+    { ad:"Ekstra Süsleme Seçimi", tip:"coklu", max:susMax, secenekler:SUSLEME },
+    { ad:"Ekstra Çikolata Sos Seçimi", tip:"coklu", max:2, secenekler:ekstraSos(sosFiyat) },
+  ];
+}
+
+/* --- ÜRÜN OPSİYONLARI --- */
+const PRODUCT_OPTIONS = {
+  // Minipanlar — boyuta göre süsleme max ve ekstra sos fiyatı PDF'ten
+  "Minipan (8 Adet)":  minipanOpts(8, 25),
+  "Minipan (10 Adet)": minipanOpts(6, 25),
+  "Minipan (12 Adet)": minipanOpts(6, 25),
+  "Minipan (14 Adet)": minipanOpts(6, 10),
+  "Minipan (18 Adet)": minipanOpts(6, 25),
+
+  // Maglar — çoğu sadece meyve seçimi
+  "Cicibebeli Mag":      [{ ad:"Mag Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE }],
+  "Rulokatlı Mag":       [{ ad:"Mag Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE }],
+  "Oreolu Mag":          [{ ad:"Mag Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE }],
+  "Brownili Mag":        [{ ad:"Mag Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE }],
+  "Lotus Bisküvili Mag": [{ ad:"Mag Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE }],
+
+  // Bitter Çikolatalı Mag — kuruyemiş seçimi
+  "Bitter Çikolatalı Mag": [
+    { ad:"Kuruyemiş Seçimi", tip:"zorunlu_tekli", secenekler:[
+      {ad:"Toz Fındık", fiyat:0, recete:[{ing:"fistik",g:15}]},
+      {ad:"Toz Antep Fıstığı", fiyat:0, recete:[{ing:"fistik",g:15}]},
+    ]},
+  ],
+
+  // Çikolatalı Mag — en zengin: bisküvi + meyve + çikolata
+  "Çikolatalı Mag": [
+    { ad:"Bisküvi Seçimi", tip:"coklu", max:1, secenekler:[
+      {ad:"Oreo", fiyat:15, recete:[{ing:"cikolata",g:15}]},
+      {ad:"Cicibebe", fiyat:8, recete:[{ing:"misir",g:10}]},
+      {ad:"Lotus", fiyat:25, recete:[{ing:"cikolata",g:15}]},
+      {ad:"Rulokat", fiyat:8, recete:[{ing:"cikolata",g:10}]},
+      {ad:"Browni", fiyat:15, recete:[{ing:"cikolata",g:20}]},
+      {ad:"Bisküvi İstemiyorum", fiyat:0, recete:[], istemiyorum:true},
+    ]},
+    { ad:"Mag Meyve Seçimi", tip:"coklu", max:2, secenekler:MEYVE },
+    { ad:"Çikolata Seçimi", tip:"coklu", max:1, secenekler:[
+      {ad:"Bitter Çikolata Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+      {ad:"Sütlü Çikolata Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+      {ad:"Frambuazlı Çikolata Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+      {ad:"Karamel Çikolatalı Sos", fiyat:0, recete:[{ing:"seker",g:25}]},
+      {ad:"Beyaz Çikolatalı Sos", fiyat:0, recete:[{ing:"cikolata",g:25}]},
+    ]},
+  ],
+
+  // Kitkatlı Mag, Kadayıflı Magnolya, Spoonful Cup → opsiyonsuz (direkt sepete)
+};
+
+/* --- REÇETELER (merkez kilitli · gram bazlı) --- */
+const RECIPES = {
+  "Çikolatalı Waffle": [{ing:"hamur",g:120},{ing:"cikolata",g:45},{ing:"seker",g:15}],
+  "Muzlu Waffle":      [{ing:"hamur",g:120},{ing:"muz",g:80},{ing:"cikolata",g:30}],
+  "Çilekli Waffle":    [{ing:"hamur",g:120},{ing:"cilek",g:70},{ing:"krema",g:40}],
+  "Fıstıklı Waffle":   [{ing:"hamur",g:120},{ing:"fistik",g:50},{ing:"cikolata",g:30}],
+  "Klasik Pankek":     [{ing:"hamur",g:100},{ing:"seker",g:10}],
+  "Bal & Cevizli":     [{ing:"hamur",g:100},{ing:"bal",g:30},{ing:"ceviz",g:25}],
+  "Sıcak Çikolata":    [{ing:"cikolata",g:25},{ing:"sut",g:200}],
+  "Limonata":          [{ing:"limon",g:60},{ing:"seker",g:20}],
+};
+
+/* --- ŞUBE STOĞU (gram cinsinden · canlı düşer) --- */
+let STOCK = {
+  hamur:    {ad:"Waffle hamuru", mevcut:22000, kritik:3000},
+  cikolata: {ad:"Çikolata",      mevcut:8700,  kritik:1500},
+  seker:    {ad:"Şeker",         mevcut:5400,  kritik:1000},
+  muz:      {ad:"Muz",           mevcut:3200,  kritik:800},
+  cilek:    {ad:"Çilek",         mevcut:2100,  kritik:600},
+  krema:    {ad:"Krema",         mevcut:1800,  kritik:500},
+  fistik:   {ad:"Fıstık ezmesi", mevcut:1400,  kritik:400},
+  bal:      {ad:"Bal",           mevcut:2600,  kritik:500},
+  ceviz:    {ad:"Ceviz",         mevcut:1900,  kritik:400},
+  sut:      {ad:"Süt",           mevcut:12000, kritik:2000},
+  limon:    {ad:"Limon",         mevcut:2800,  kritik:600},
+  misir:    {ad:"Mısır/gevrek",  mevcut:3400,  kritik:700},
+};
+
+/* Bugünkü kümülatif tüketim (denetim için) */
+let CONSUMED = {};
+
+/* ============================================================
+   OPSİYON SEÇENEĞİ KAPATMA (otomatik stok + manuel)
+   - Manuel: kasa/müdür "ürün:grup:seçenek" anahtarıyla kapatır
+   - Otomatik: seçeneğin reçetesindeki hammadde stoğu yetmiyorsa
+   Kapalı seçenek seçilemez; gruptaki diğerleriyle devam edilir.
+   Gerçekte branches/{b}/option_overrides koleksiyonunda tutulur.
+   ============================================================ */
+let OPTION_CLOSED = {};   // { "Minipan (14 Adet)|3|5": true }
+let FORCE_OPEN = {};      // müdür stok 0 iken zorla açtı → stok eksiye düşebilir
+let FORCE_LOG = [];       // { urun, secenek, kim, zaman } denetim kaydı
+
+function optKey(urun, gi, si){ return urun+"|"+gi+"|"+si; }
+
+/* Seçenek stok açısından yapılabilir mi? (reçetedeki her hammadde yeterli mi) */
+function secenekStokYeterli(sec){
+  if(!sec.recete || !sec.recete.length) return true;
+  return sec.recete.every(r=> !STOCK[r.ing] || STOCK[r.ing].mevcut >= r.g);
+}
+
+/* Seçenek kapalı mı? (manuel VEYA otomatik stok)
+   Müdür force-open yaptıysa stok kapatması geçersiz olur. */
+function secenekKapali(urun, gi, si, sec){
+  const k = optKey(urun,gi,si);
+  if(OPTION_CLOSED[k]) return "manuel";
+  if(FORCE_OPEN[k]) return false;              // müdür zorla açtı
+  if(!secenekStokYeterli(sec)) return "stok";
+  return false;
+}
+
+/* Manuel aç/kapa — kasa + müdür yetkili */
+function toggleSecenekKapat(urun, gi, si){
+  const k = optKey(urun,gi,si);
+  if(OPTION_CLOSED[k]) delete OPTION_CLOSED[k];
+  else OPTION_CLOSED[k]=true;
+  renderOptionModal();
+}
+
+/* Stok 0 seçeneği zorla aç — SADECE MÜDÜR/GENEL · stok eksiye düşebilir · loglanır */
+function forceOpenSecenek(urun, gi, si){
+  if(state.role!=="mudur" && state.role!=="genel") return;  // yetki kontrolü
+  const k = optKey(urun,gi,si);
+  if(FORCE_OPEN[k]){
+    delete FORCE_OPEN[k];                       // geri al
+  } else {
+    FORCE_OPEN[k]=true;
+    const sec = PRODUCT_OPTIONS[urun][gi].secenekler[si];
+    FORCE_LOG.push({urun, secenek:sec.ad, kim:ROLES[state.role].ad, zaman:new Date().toLocaleTimeString('tr')});
+    note("⚠ "+sec.ad+" zorla açıldı — stok eksiye düşebilir (loglandı)");
+  }
+  renderOptionModal();
+}
+
+/* Stok kapatma modu aç/kapa (kasa + müdür) */
+function toggleKapatMod(){
+  OPT_STATE.kapatMod = !OPT_STATE.kapatMod;
+  renderOptionModal();
+}
+/* Opsiyonsuz ürünler direkt sepete eklenir (içecekler vb.) */
+
+/* ============================================================
+   5) UYGULAMA DURUMU + GİRİŞ
+   ============================================================ */
+
+let state = { role:null, cat:"Hepsi", cart:[] };
+
+function login(role){
+  state.role = role;
+  const r = ROLES[role];
+  document.getElementById("login").style.display="none";
+  document.getElementById("app").classList.add("on");
+  document.getElementById("branchLabel").textContent = r.sube;
+  document.getElementById("roleLabel").textContent = r.ad;
+  const dot = document.getElementById("roleDot");
+  dot.textContent = r.ic; dot.style.background = r.renk;
+  buildNav();
+  go(r.nav[0]);
+}
+function logout(){
+  state = { role:null, cat:"Hepsi", cart:[] };
+  document.getElementById("app").classList.remove("on");
+  document.getElementById("login").style.display="flex";
+}
+
+function buildNav(){
+  const nav = document.getElementById("nav");
+  nav.innerHTML = ROLES[state.role].nav.map(k=>{
+    const m = NAV_META[k];
+    return `<button class="nav-item" data-k="${k}" onclick="go('${k}')">
+      <span class="ni-ic">${m.ic}</span>${m.ad}</button>`;
+  }).join("");
+}
+
+function go(key){
+  document.querySelectorAll(".nav-item").forEach(n=>n.classList.toggle("active", n.dataset.k===key));
+  const main = document.getElementById("main");
+  main.scrollTop = 0;
+  ({
+    satis:viewSatis, masalar:viewMasalar, canli:viewCanli, recete:viewRecete,
+    fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel,
+    subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok
+  }[key] || viewSatis)(main);
+}
+
+/* ============================================================
+   6) GÖRÜNÜMLER
+   ============================================================ */
+
+// --- SATIŞ (kasa + müdür + genel) ---
+function viewSatis(main){
+  const cats = ["Hepsi", ...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
+  const prods = DEMO_PRODUCTS.filter(p=> state.cat==="Hepsi" || p.kat===state.cat);
+  main.innerHTML = `
+    <div class="pos-grid">
+      <div>
+        <div class="sec-head">
+          <div><h2>Satış</h2><div class="sh-sub">Ürüne dokun → adisyona ekle</div></div>
+        </div>
+        <div class="cat-row">
+          ${cats.map(c=>`<button class="cat-pill ${c===state.cat?'on':''}" onclick="setCat('${c}')">${c}</button>`).join("")}
+        </div>
+        <div class="prod-grid">
+          ${prods.map((p,i)=>{
+            const satilir = urunSatilabilir(p);
+            return `<button class="prod ${satilir?'':'out'}" onclick="addToCart(${DEMO_PRODUCTS.indexOf(p)})">
+              ${satilir?'':'<span class="p-out">Tükendi</span>'}
+              <span class="p-emoji">${p.emoji}</span>
+              <span class="p-name">${p.ad}</span>
+              <span class="p-price">${p.fiyat} ₺</span>
+            </button>`;}).join("")}
+        </div>
+      </div>
+      ${cartHtml()}
+    </div>`;
+}
+function setCat(c){ state.cat=c; go("satis"); }
+
+/* Ürün satılabilir mi? Manuel pasif DEĞİL + reçetedeki her hammadde yeterli */
+function urunSatilabilir(p){
+  if(!p.aktif) return false;
+  const recipe = RECIPES[p.ad];
+  if(!recipe) return true;
+  return recipe.every(r=> !STOCK[r.ing] || STOCK[r.ing].mevcut >= r.g);
+}
+function addToCart(idx){
+  const p = DEMO_PRODUCTS[idx];
+  const opts = PRODUCT_OPTIONS[p.ad];
+  if(opts && opts.length){
+    openOptionModal(idx);          // opsiyonlu ürün → modal aç
+  } else {
+    // opsiyonsuz ürün → direkt ekle
+    state.cart.push({ad:p.ad, fiyat:p.fiyat, q:1, secimler:[], ekstraRecete:[]});
+    go("satis");
+  }
+}
+
+/* ============================================================
+   OPSİYON SEÇİM MODALI (POS + QR ortak mantık)
+   Zorunlu alanlar seçilmeden "Ekle" pasif.
+   Fiyat toplanır + seçimlerin reçeteleri ürüne iliştirilir.
+   ============================================================ */
+let OPT_STATE = null;
+function openOptionModal(idx){
+  const p = DEMO_PRODUCTS[idx];
+  OPT_STATE = { idx:idx, p:p, secim:{}, not:"" };
+  // varsayılan: zorunlu_tekli ilk seçeneği seçili başlat
+  PRODUCT_OPTIONS[p.ad].forEach((grup,gi)=>{
+    if(grup.tip==="zorunlu_tekli") OPT_STATE.secim[gi]=[0];
+    else OPT_STATE.secim[gi]=[];
+  });
+  renderOptionModal();
+  document.getElementById("optModal").classList.add("on");
+}
+function closeOpt(){ document.getElementById("optModal").classList.remove("on"); OPT_STATE=null; }
+
+function toggleOpt(gi, si){
+  const grup = PRODUCT_OPTIONS[OPT_STATE.p.ad][gi];
+  const sel = OPT_STATE.secim[gi];
+  const sec = grup.secenekler[si];
+
+  // Kapalı seçenek seçilemez (manuel veya stok) — İstemiyorum hariç
+  if(!sec.istemiyorum && secenekKapali(OPT_STATE.p.ad, gi, si, sec)) return;
+
+  if(grup.tip==="zorunlu_tekli"){
+    OPT_STATE.secim[gi]=[si];                       // tek seçim
+    renderOptionModal(); return;
+  }
+
+  // "İstemiyorum" seçilince diğer tüm seçimler temizlenir
+  if(sec.istemiyorum){
+    OPT_STATE.secim[gi] = (sel.length===1 && sel[0]===si) ? [] : [si];
+    renderOptionModal(); return;
+  }
+
+  // Normal çoklu (en fazla max)
+  const i = sel.indexOf(si);
+  if(i>=0){
+    sel.splice(i,1);                                // seçili → kaldır
+  } else {
+    // "İstemiyorum" seçiliyse onu kaldır
+    const istIdx = grup.secenekler.findIndex(s=>s.istemiyorum);
+    const istPos = sel.indexOf(istIdx);
+    if(istPos>=0) sel.splice(istPos,1);
+    if(sel.length < (grup.max||99)) sel.push(si);   // max sınırı
+  }
+  renderOptionModal();
+}
+
+/* Zorunlu kurallar sağlandı mı? (Ekle butonu için)
+   - zorunlu_tekli: tam 1 seçili olmalı
+   - coklu: max'ı aşmasın (en az 0 olabilir — İstemiyorum kalıbı) */
+function optGecerli(){
+  const gruplar = PRODUCT_OPTIONS[OPT_STATE.p.ad];
+  const urun = OPT_STATE.p.ad;
+  return gruplar.every((grup,gi)=>{
+    const sel = OPT_STATE.secim[gi];
+    // seçili bir seçenek kapandıysa geçersiz (kullanıcı tekrar seçmeli)
+    const kapaliSecili = sel.some(si=>{
+      const sec=grup.secenekler[si];
+      return !sec.istemiyorum && secenekKapali(urun,gi,si,sec);
+    });
+    if(kapaliSecili) return false;
+    const n = sel.length;
+    if(grup.tip==="zorunlu_tekli") return n===1;
+    if(grup.tip==="coklu") return n <= (grup.max||99);
+    return true;
+  });
+}
+
+/* Seçili opsiyonların toplam ek fiyatı */
+function optEkFiyat(){
+  let ek=0;
+  PRODUCT_OPTIONS[OPT_STATE.p.ad].forEach((grup,gi)=>{
+    OPT_STATE.secim[gi].forEach(si=>{ ek += (grup.secenekler[si].fiyat||0); });
+  });
+  return ek;
+}
+
+function renderOptionModal(){
+  const p = OPT_STATE.p;
+  const gruplar = PRODUCT_OPTIONS[p.ad];
+  let html = '<div class="opt-head"><span class="opt-emoji">'+p.emoji+'</span>'+
+    '<div><div class="opt-name">'+p.ad+'</div><div class="opt-base">'+p.fiyat+' ₺ taban</div></div>'+
+    '<button class="opt-kapat-mod'+(OPT_STATE.kapatMod?' on':'')+'" onclick="toggleKapatMod()" title="Seçenek kapat/aç">'+
+    (OPT_STATE.kapatMod?'✓ Düzenleniyor':'⚙ Stok')+'</button>'+
+    '<button class="opt-x" onclick="closeOpt()">✕</button></div>'+
+    (OPT_STATE.kapatMod?'<div class="kapat-bilgi">Tükenen malzemeyi kapat — müşteri kalan seçeneklerle devam eder. Tekrar dokun: aç.</div>':'')+
+    '<div class="opt-body">';
+  gruplar.forEach((grup,gi)=>{
+    const sel = OPT_STATE.secim[gi];
+    let etiket="";
+    if(grup.tip==="zorunlu_tekli") etiket='<span class="og-tip og-zor">Zorunlu</span>';
+    else etiket='<span class="og-tip og-coklu">En fazla '+grup.max+'</span>';
+    const sayac = grup.tip==="coklu" ? '<span class="og-sayac">'+sel.length+'/'+grup.max+'</span>' : '';
+    html += '<div class="opt-grup"><div class="opt-grup-h"><span class="og-ad">'+grup.ad+'</span>'+
+            '<span class="og-meta">'+sayac+etiket+'</span></div><div class="opt-secenekler">';
+    grup.secenekler.forEach((sec,si)=>{
+      const secili = sel.indexOf(si)>=0;
+      const fiyatTxt = sec.fiyat ? '+'+sec.fiyat+' ₺' : '';
+      const tekli = grup.tip==="zorunlu_tekli";
+      const ist = sec.istemiyorum ? ' opt-ist' : '';
+      const kapali = sec.istemiyorum ? false : secenekKapali(p.ad, gi, si, sec);
+      // max dolu ve bu seçili değilse soluk göster
+      const dolu = grup.tip==="coklu" && !secili && !sec.istemiyorum && sel.length>=grup.max;
+
+      if(OPT_STATE.kapatMod && !sec.istemiyorum){
+        // KAPATMA MODU: her seçenek aç/kapa satırı
+        const manuelKapali = OPTION_CLOSED[optKey(p.ad,gi,si)];
+        const stokKapali = !secenekStokYeterli(sec);
+        const forceAcik = FORCE_OPEN[optKey(p.ad,gi,si)];
+        const mudurMu = state.role==="mudur" || state.role==="genel";
+        // Stok 0 ve müdürse: "yine de aç" düğmesi
+        let forceBtn = '';
+        if(stokKapali && mudurMu && !manuelKapali){
+          forceBtn = '<span class="force-btn'+(forceAcik?' on':'')+'" onclick="event.stopPropagation();forceOpenSecenek(\''+p.ad.replace(/'/g,"\\'")+'\','+gi+','+si+')">'+
+                     (forceAcik?'✓ açık (eksiye düşer)':'yine de aç')+'</span>';
+        }
+        html += '<button class="opt-sec opt-kapat-row'+(manuelKapali?' kapali':'')+'" onclick="toggleSecenekKapat(\''+p.ad.replace(/'/g,"\\'")+'\','+gi+','+si+')">'+
+                '<span class="kapat-tgl">'+(manuelKapali?'✕':'●')+'</span>'+
+                '<span class="os-ad">'+sec.ad+'</span>'+
+                (stokKapali&&!forceAcik?'<span class="kapat-etiket stok">stok 0</span>':'')+
+                (forceAcik?'<span class="kapat-etiket force">zorla açık</span>':'')+
+                (manuelKapali?'<span class="kapat-etiket">kapalı</span>':'')+
+                forceBtn+'</button>';
+      } else {
+        // NORMAL MOD: kapalıysa soluk + seçilemez
+        const kapaliCls = kapali ? ' opt-kapali' : '';
+        const kapaliEt = kapali==='stok' ? '<span class="kapat-etiket stok">tükendi</span>'
+                       : kapali==='manuel' ? '<span class="kapat-etiket">bugün yok</span>' : '';
+        html += '<button class="opt-sec'+(secili?' on':'')+ist+(dolu?' opt-disabled':'')+kapaliCls+'" onclick="toggleOpt('+gi+','+si+')">'+
+                '<span class="os-mark '+(tekli?'radio':'check')+'">'+(secili?(tekli?'●':'✓'):'')+'</span>'+
+                '<span class="os-ad">'+sec.ad+'</span>'+
+                kapaliEt+
+                (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+'</button>';
+      }
+    });
+    html += '</div></div>';
+  });
+  // ürün notu
+  html += '<div class="opt-grup"><div class="opt-grup-h"><span class="og-ad">Not</span></div>'+
+          '<textarea class="opt-not" placeholder="Bu ürünle ilgili notunu buradan iletebilirsin." '+
+          'oninput="OPT_STATE.not=this.value">'+(OPT_STATE.not||'')+'</textarea></div>';
+  html += '</div>';
+  const gecerli = optGecerli();
+  const toplam = p.fiyat + optEkFiyat();
+  html += '<div class="opt-foot">'+
+    '<div class="opt-toplam"><div class="ot-l">Toplam</div><div class="ot-v">'+toplam+' ₺</div></div>'+
+    '<button class="btn btn-primary" '+(gecerli?'':'disabled style="opacity:.4;pointer-events:none"')+' onclick="confirmOpt()">'+
+    (gecerli?'Sepete ekle':'Zorunlu alanı seç')+'</button></div>';
+  document.getElementById("optModalInner").innerHTML = html;
+}
+
+/* Seçim onaylandı: fiyat + reçete ile sepete ekle */
+function confirmOpt(){
+  if(!optGecerli()) return;
+  const p = OPT_STATE.p;
+  const gruplar = PRODUCT_OPTIONS[p.ad];
+  const secimler=[]; const ekstraRecete=[]; let ekFiyat=0;
+  gruplar.forEach((grup,gi)=>{
+    OPT_STATE.secim[gi].forEach(si=>{
+      const sec=grup.secenekler[si];
+      if(!sec.istemiyorum) secimler.push(sec.ad);   // "İstemiyorum" etikete yazılmaz
+      ekFiyat += (sec.fiyat||0);
+      if(sec.recete) sec.recete.forEach(r=>{ if(r.g>0) ekstraRecete.push(r); });
+    });
+  });
+  const yeniKalem = {
+    ad:p.ad, fiyat:p.fiyat+ekFiyat, q:1,
+    secimler:secimler, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
+  };
+  if(OPT_STATE.qr){
+    // QR menüden eklendi → müşteri sepetine
+    QR.sepet.push(yeniKalem);
+    closeOpt();
+    note(p.ad+" eklendi");
+    renderQR();
+  } else {
+    // POS'tan eklendi → adisyona
+    state.cart.push(yeniKalem);
+    closeOpt();
+    go("satis");
+  }
+}
+function cartHtml(){
+  const total = state.cart.reduce((s,c)=>s+c.fiyat*c.q,0);
+  const isKasa = state.role==="kasa";
+  const indirimCls = isKasa ? 'btn-lock' : 'btn-ghost';
+  const indirimClick = isKasa
+    ? "askPw('İndirim uygulamak şube müdürü onayı gerektirir.')"
+    : "note('İndirim uygulandı')";
+  const indirimIc = isKasa ? '🔒' : '';
+  const items = state.cart.length===0
+    ? '<div class="cart-empty">Adisyon boş.<br>Soldan ürün ekleyin.</div>'
+    : state.cart.map(c=>{
+        const secimTxt = (c.secimler && c.secimler.length)
+          ? '<small>'+c.secimler.join(' · ')+'</small>' : '';
+        return '<div class="ci"><span class="ci-q">'+c.q+'×</span>'+
+        '<span class="ci-name">'+c.ad+secimTxt+'</span>'+
+        '<span class="ci-price">'+(c.fiyat*c.q)+' ₺</span></div>';
+      }).join("");
+  return `
+    <div class="cart">
+      <div class="cart-top">
+        <div><div class="ct-table">Masa 7</div><div class="ct-session">Oturum · 3 kişi</div></div>
+        <button class="btn-ghost" style="padding:8px 12px;border-radius:9px;font-size:12px;font-weight:700">Kişi: Ayşe ▾</button>
+      </div>
+      <div class="cart-items">${items}</div>
+      <div class="cart-foot">
+        <div class="cart-total"><span class="cf-lbl">Toplam</span><span class="cf-amt">${total} ₺</span></div>
+        <div class="cart-actions">
+          <button class="btn ${indirimCls}" onclick="${indirimClick}">${indirimIc} İndirim</button>
+          <button class="btn btn-ghost" onclick="note('Hesap bölme ekranı')">Böl</button>
+          <button class="btn btn-primary btn-full" onclick="checkout(${total})">Ödeme al · ${total} ₺</button>
+        </div>
+      </div>
+    </div>`;
+}
+/* ============================================================
+   REÇETE-TÜKETİM MOTORU
+   Satış → reçete → gram düşüm → stok azalt → tüketim logla.
+   Ödeme/indirim/sadakat bu motora DOKUNMAZ — adet üzerinden sayar.
+   ============================================================ */
+function consumeRecipe(cart){
+  const dusenler = [];
+  const uyari = [];
+  cart.forEach(item=>{
+    const recipe = RECIPES[item.ad];
+    // 1) ana ürün reçetesi
+    const tumKalemler = recipe ? recipe.slice() : [];
+    // 2) opsiyon ekstra reçeteleri (ekstra muz, sos vb.)
+    if(item.ekstraRecete) item.ekstraRecete.forEach(r=>tumKalemler.push(r));
+    tumKalemler.forEach(r=>{
+      const toplam = r.g * item.q;              // gram × satılan adet
+      if(STOCK[r.ing]){
+        STOCK[r.ing].mevcut -= toplam;          // stok düş
+        CONSUMED[r.ing] = (CONSUMED[r.ing]||0) + toplam; // denetim logu
+        dusenler.push(STOCK[r.ing].ad+" −"+toplam+"g");
+        if(STOCK[r.ing].mevcut <= STOCK[r.ing].kritik)
+          uyari.push(STOCK[r.ing].ad);
+      }
+    });
+  });
+  return {dusenler, uyari};
+}
+
+function checkout(total){
+  if(total===0){ note("Adisyon boş"); return; }
+  // 1) reçete motoru çalışır — gram tüketimi sabitlenir
+  const {dusenler, uyari} = consumeRecipe(state.cart);
+  // 2) ödeme kaydı (gerçekte branches/{b}/orders'a yazılır + offline kuyruğa)
+  saveOrder(state.cart, total);
+  // 3) sepet temizlenir
+  state.cart=[];
+  // 4) geri bildirim
+  let msg = `Ödeme alındı · ${total} ₺ · puan eklendi`;
+  if(uyari.length) msg = `Ödeme alındı · ⚠️ ${uyari.join(", ")} kritik seviyede`;
+  note(msg);
+  go("satis");
+}
+
+/* ============================================================
+   VERİ KATMANI — Firebase varsa bulut, yoksa offline kuyruk
+   ============================================================ */
+let OFFLINE_QUEUE = [];
+function saveOrder(cart, total){
+  const order = {
+    sessionId:"masa7-oturum1", kisi_adi:"Ayşe",
+    kalemler: cart.map(c=>({ad:c.ad, adet:c.q, tutar:c.fiyat*c.q})),
+    kanal:"pos", durum:"mutfak", tutar:total, zaman:new Date().toISOString()
+  };
+  if(window.__db){
+    // Firebase bağlıysa: branches/{sube}/orders koleksiyonuna yaz
+    try { window.__db.collection(`branches/${window.__sube}/orders`).add(order); }
+    catch(e){ OFFLINE_QUEUE.push(order); }
+  } else {
+    // Offline: yerel kuyruğa al, bağlantı gelince senkron
+    OFFLINE_QUEUE.push(order);
+  }
+}
+
+// --- MASALAR ---
+function viewMasalar(main){
+  const masalar = [
+    {n:7, durum:"dolu", kisi:3, tutar:385}, {n:8, durum:"hesap", kisi:2, tutar:260},
+    {n:12,durum:"dolu", kisi:4, tutar:540}, {n:3, durum:"bos"}, {n:5, durum:"bos"},
+    {n:15,durum:"temizlik"}, {n:1, durum:"bos"}, {n:9, durum:"dolu", kisi:2, tutar:190},
+  ];
+  const renk={dolu:"var(--ok)",hesap:"var(--warn)",bos:"var(--line-2)",temizlik:"var(--info)"};
+  const lbl={dolu:"Dolu",hesap:"Hesap istiyor",bos:"Boş",temizlik:"Temizlik"};
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Masalar</h2><div class="sh-sub">Kadıköy · ${masalar.filter(m=>m.durum!=='bos').length} aktif masa</div></div></div>
+    <div class="prod-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
+      ${masalar.map(m=>`
+        <button class="prod" style="text-align:center" onclick="note('Masa ${m.n} açılıyor')">
+          <div style="font-size:13px;font-weight:800;color:${renk[m.durum]};margin-bottom:6px">● ${lbl[m.durum]}</div>
+          <div style="font-size:28px;font-weight:800;letter-spacing:-1px">${m.n}</div>
+          ${m.durum!=='bos'&&m.durum!=='temizlik'?`<div style="font-size:12px;color:var(--ink-2);margin-top:6px">${m.kisi} kişi · ${m.tutar} ₺</div>`:''}
+        </button>`).join("")}
+    </div>`;
+}
+
+// --- CANLI (genel müdür) ---
+function viewCanli(main){
+  const toplam = DEMO_BRANCHES.reduce((s,b)=>s+b.ciro,0);
+  const bekleyen = DEMO_BRANCHES.reduce((s,b)=>s+b.bekleyen,0);
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Canlı şube takibi</h2><div class="sh-sub">${DEMO_BRANCHES.length} aktif şube · gerçek zamanlı</div></div></div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="k-lbl">💰 Günlük ciro (toplam)</div><div class="k-val">${toplam.toLocaleString('tr')} <small>₺</small></div><div class="k-trend up">▲ %12 dün</div></div>
+      <div class="kpi"><div class="k-lbl">🪑 Açık masa</div><div class="k-val">${DEMO_BRANCHES.reduce((s,b)=>s+b.masa,0)}</div></div>
+      <div class="kpi"><div class="k-lbl">⏳ Bekleyen sipariş</div><div class="k-val">${bekleyen}</div><div class="k-trend ${bekleyen>15?'down':'up'}">${bekleyen>15?'Yoğun':'Normal'}</div></div>
+      <div class="kpi"><div class="k-lbl">🔍 Denetim bayrağı</div><div class="k-val">${DEMO_BRANCHES.filter(b=>b.fire==='warn').length} <small>şube</small></div></div>
+    </div>
+    <div class="branch-grid">
+      ${DEMO_BRANCHES.map(b=>`
+        <div class="bcard">
+          <span class="b-status ${b.durum}"></span>
+          <div class="b-name">${b.ad}</div>
+          <div class="b-meta">${b.masa} açık masa · ${b.bekleyen} bekleyen</div>
+          <div class="b-stats">
+            <div class="bstat"><div class="bs-l">Günlük ciro</div><div class="bs-v">${b.ciro.toLocaleString('tr')} ₺</div></div>
+            <div class="bstat"><div class="bs-l">Doluluk</div><div class="bs-v">${Math.min(99,b.masa*9)}%</div></div>
+          </div>
+          <div class="b-flag ${b.fire==='warn'?'warn':'ok'}">
+            ${b.fire==='warn'?'⚠️ Fire oranı yüksek — incele':'✓ Tüketim normal'}
+          </div>
+        </div>`).join("")}
+    </div>`;
+}
+
+// --- REÇETE (sadece genel müdür) ---
+function viewRecete(main){
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Reçete & ürün tanımı</h2><div class="sh-sub">Merkez · tüm şubelerde geçerli</div></div>
+      <button class="btn btn-primary" style="padding:11px 18px" onclick="note('Yeni reçete')">+ Yeni reçete</button></div>
+    <div class="locked-note">
+      <span class="ln-ic">🔒</span>
+      <div><div class="ln-t">Reçeteler merkezde kilitli</div>
+      <div class="ln-d">Gram bazlı reçeteler yalnızca buradan tanımlanır. Şubeler okur ama değiştiremez — ürün standardı ve maliyet bütünlüğü korunur.</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ürün</th><th>Reçete (gram)</th><th>Maliyet</th><th>Durum</th></tr></thead>
+        <tbody>
+          <tr><td>🧇 Çikolatalı Waffle</td><td>Hamur 120g · Çikolata 45g · Şeker 15g</td><td>~28 ₺</td><td><span class="tag locked">Kilitli</span></td></tr>
+          <tr><td>🍌 Muzlu Waffle</td><td>Hamur 120g · Muz 80g · Çikolata 30g</td><td>~31 ₺</td><td><span class="tag locked">Kilitli</span></td></tr>
+          <tr><td>🍓 Çilekli Waffle</td><td>Hamur 120g · Çilek 70g · Krema 40g</td><td>~34 ₺</td><td><span class="tag locked">Kilitli</span></td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// --- FİYAT (müdür: şube override · genel: merkez taban) ---
+function viewFiyat(main){
+  const isGenel = state.role==="genel";
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Fiyat yönetimi</h2>
+      <div class="sh-sub">${isGenel?'Merkez varsayılan fiyatlar':'Kadıköy şubesi · override'}</div></div></div>
+    ${isGenel?'':`<div class="locked-note" style="background:var(--info-soft);border-color:#bcd9f5">
+      <span class="ln-ic">🏷️</span>
+      <div><div class="ln-t">Şube bazlı fiyat</div>
+      <div class="ln-d">Merkez varsayılanını değiştirmeden bu şubeye özel fiyat tanımlayabilirsiniz. Reçete sabit kalır — sadece satış fiyatı değişir.</div></div></div>`}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ürün</th><th>Merkez varsayılan</th>${isGenel?'':'<th>Bu şube</th>'}<th></th></tr></thead>
+        <tbody>
+          ${DEMO_PRODUCTS.filter(p=>p.kat!=='İçecek').map(p=>`
+            <tr><td>${p.emoji} ${p.ad}</td>
+            <td>${p.fiyat} ₺</td>
+            ${isGenel?'':`<td><strong>${p.fiyat+ (p.ad.includes('Çikolatalı')?15:0)} ₺</strong></td>`}
+            <td><button class="btn btn-ghost" style="padding:8px 14px;font-size:13px" onclick="note('${isGenel?'Varsayılan':'Şube fiyatı'} düzenle')">Düzenle</button></td></tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// --- KAMPANYA ---
+function viewKampanya(main){
+  const isGenel = state.role==="genel";
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Kampanyalar</h2>
+      <div class="sh-sub">${isGenel?'Merkez + tüm şube kampanyaları':'Kadıköy şubesi kampanyaları'}</div></div>
+      <button class="btn btn-primary" style="padding:11px 18px" onclick="note('Yeni kampanya')">+ Yeni</button></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Kampanya</th><th>Tip</th><th>Kapsam</th><th>Zaman</th></tr></thead>
+        <tbody>
+          <tr><td>Happy Hour</td><td>%20 indirim</td><td><span class="tag edit">Tüm şubeler</span></td><td>15:00–17:00</td></tr>
+          <tr><td>Öğrenci günü</td><td>%10 indirim</td><td><span class="tag locked">Kadıköy</span></td><td>Salı</td></tr>
+          ${isGenel?'<tr><td>Hafta sonu 2.si bedava</td><td>İkram</td><td><span class="tag edit">Tüm şubeler</span></td><td>Cmt–Paz</td></tr>':''}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// --- PERSONEL (müdür) ---
+function viewPersonel(main){
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Personel</h2><div class="sh-sub">Kadıköy şubesi · 6 kişi</div></div>
+      <button class="btn btn-primary" style="padding:11px 18px" onclick="note('Personel ekle')">+ Ekle</button></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ad</th><th>Rol</th><th>Bugün</th><th>Durum</th></tr></thead>
+        <tbody>
+          <tr><td>Ayşe K.</td><td>Kasa</td><td>09:00 giriş</td><td><span class="tag edit">Mesaide</span></td></tr>
+          <tr><td>Mehmet T.</td><td>Kasa</td><td>10:00 giriş</td><td><span class="tag edit">Mesaide</span></td></tr>
+          <tr><td>Zeynep A.</td><td>Garson</td><td>Molada</td><td><span class="tag locked">Mola</span></td></tr>
+          <tr><td>Can B.</td><td>Mutfak</td><td>08:30 giriş</td><td><span class="tag edit">Mesaide</span></td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// --- ŞUBELER (genel müdür — dinamik, sınırsız ekleme) ---
+function viewSubeler(main){
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Şubeler</h2><div class="sh-sub">${DEMO_BRANCHES.length} aktif · sınırsız ekleme</div></div>
+      <button class="btn btn-primary" style="padding:11px 18px" onclick="note('Yeni şube ekleniyor — QR ve geo-fence tanımlanır')">+ Yeni şube</button></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Şube</th><th>Açılış</th><th>Geo-fence</th><th>Durum</th><th></th></tr></thead>
+        <tbody>
+          ${DEMO_BRANCHES.map(b=>`
+            <tr><td><strong>${b.ad}</strong></td><td>2024</td><td>150 m</td>
+            <td><span class="tag edit">Aktif</span></td>
+            <td><button class="btn btn-ghost" style="padding:8px 14px;font-size:13px" onclick="note('${b.ad} ayarları')">Yönet</button></td></tr>`).join("")}
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// --- RAPOR ---
+function viewRapor(main){
+  const isGenel = state.role==="genel";
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Raporlar</h2><div class="sh-sub">${isGenel?'Karşılaştırmalı · tüm şubeler':'Kadıköy şubesi'}</div></div></div>
+    <div class="kpi-row">
+      <div class="kpi"><div class="k-lbl">Bugün</div><div class="k-val">${isGenel?'42.2k':'8.4k'} <small>₺</small></div><div class="k-trend up">▲ %12</div></div>
+      <div class="kpi"><div class="k-lbl">Bu hafta</div><div class="k-val">${isGenel?'284k':'52k'} <small>₺</small></div></div>
+      <div class="kpi"><div class="k-lbl">Ort. adisyon</div><div class="k-val">${isGenel?'312':'285'} <small>₺</small></div></div>
+      <div class="kpi"><div class="k-lbl">En çok satan</div><div class="k-val" style="font-size:18px">🧇 Çikolatalı</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ürün</th><th>Adet</th><th>Ciro</th><th>Pay</th></tr></thead>
+        <tbody>
+          <tr><td>🧇 Çikolatalı Waffle</td><td>142</td><td>17.040 ₺</td><td>34%</td></tr>
+          <tr><td>🍌 Muzlu Waffle</td><td>98</td><td>12.740 ₺</td><td>25%</td></tr>
+          <tr><td>🍓 Çilekli Waffle</td><td>76</td><td>10.260 ₺</td><td>20%</td></tr>
+          <tr><td>☕ Sıcak Çikolata</td><td>110</td><td>7.150 ₺</td><td>14%</td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+// --- STOK (canlı · motor düşürür) ---
+function viewStok(main){
+  const items = Object.entries(STOCK);
+  const kritikSayi = items.filter(function(e){ return e[1].mevcut<=e[1].kritik; }).length;
+
+  const uyariBlok = kritikSayi
+    ? '<div class="locked-note" style="background:var(--danger-soft);border-color:#f0c0bc">'+
+      '<span class="ln-ic">⚠️</span><div><div class="ln-t">'+kritikSayi+' hammadde kritik seviyede</div>'+
+      '<div class="ln-d">Merkeze sipariş verilmeli. Stok bittiğinde ilgili ürünler menüden otomatik kalkar.</div></div></div>'
+    : '';
+
+  const satirlar = items.map(function(e){
+    const k=e[0], s=e[1];
+    const eksi = s.mevcut < 0;
+    const krit = s.mevcut<=s.kritik;
+    const tuketim = CONSUMED[k]||0;
+    const kg = (s.mevcut/1000).toFixed(2);
+    const tuketimTxt = tuketim ? (tuketim/1000).toFixed(2)+' kg' : '—';
+    const durumTxt = eksi
+      ? '<span class="tag" style="background:var(--danger);color:#fff">⚠ EKSİ · sayım/giriş gerekli</span>'
+      : krit
+      ? '<span class="tag" style="background:var(--danger-soft);color:var(--danger)">Kritik · sipariş ver</span>'
+      : '<span class="tag edit">Yeterli</span>';
+    return '<tr'+(eksi?' style="background:var(--danger-soft)"':'')+'><td><strong>'+s.ad+'</strong></td>'+
+           '<td'+(eksi?' style="color:var(--danger);font-weight:800"':'')+'>'+kg+' kg</td>'+
+           '<td>'+(s.kritik/1000).toFixed(1)+' kg</td>'+
+           '<td>'+tuketimTxt+'</td>'+
+           '<td>'+durumTxt+'</td></tr>';
+  }).join("");
+
+  main.innerHTML =
+    '<div class="sec-head"><div><h2>Stok durumu</h2>'+
+    '<div class="sh-sub">Canlı · her satışta reçeteden otomatik düşer</div></div></div>'+
+    uyariBlok+
+    '<div class="table-wrap"><table>'+
+    '<thead><tr><th>Hammadde</th><th>Mevcut</th><th>Kritik eşik</th><th>Bugün tüketilen</th><th>Durum</th></tr></thead>'+
+    '<tbody>'+satirlar+'</tbody></table></div>'+
+    '<div style="margin-top:14px;font-size:12.5px;color:var(--ink-3)">'+
+    '💡 Satış ekranından ürün sat, bu tabloya geri dön — tüketilen gramların düştüğünü göreceksin. Motor adet × reçete üzerinden hesaplar.</div>';
+}
+
+// --- DENETİM (genel müdür — fire/kaçak) ---
+function viewDenetim(main){
+  main.innerHTML=`
+    <div class="sec-head"><div><h2>Tüketim denetimi</h2><div class="sh-sub">Beklenen vs gerçek · gram bazlı</div></div></div>
+    <div class="locked-note" style="background:var(--cocoa-soft);border-color:#e0cdc0">
+      <span class="ln-ic">🔍</span>
+      <div><div class="ln-t">Fire & kaçak tespiti</div>
+      <div class="ln-d">Reçeteye göre olması gereken tüketim, şubenin sizden aldığı hammadde ile karşılaştırılır. Büyük fark = fire, porsiyon kaçağı veya kayıt dışı satış sinyali.</div></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Şube</th><th>Hammadde</th><th>Beklenen</th><th>Gerçek alım</th><th>Fark</th></tr></thead>
+        <tbody>
+          <tr><td>Kadıköy</td><td>Çikolata</td><td>8.5 kg</td><td>8.7 kg</td><td><span class="tag edit">+2% normal</span></td></tr>
+          <tr><td>Beşiktaş</td><td>Çikolata</td><td>6.2 kg</td><td>6.3 kg</td><td><span class="tag edit">+2% normal</span></td></tr>
+          <tr><td>Üsküdar</td><td>Çikolata</td><td>4.1 kg</td><td>5.4 kg</td><td><span class="tag" style="background:var(--danger-soft);color:var(--danger)">+32% ⚠️</span></td></tr>
+          <tr><td>Şişli</td><td>Hamur</td><td>22 kg</td><td>22.5 kg</td><td><span class="tag edit">+2% normal</span></td></tr>
+        </tbody>
+      </table>
+    </div>`;
+}
+
+/* ============================================================
+   7) ŞİFRE YÜKSELTME (kasa → indirim onayı)
+   ============================================================ */
+let pwCallback=null;
+function askPw(reason){
+  document.getElementById("pwReason").textContent = reason + " İşlem kayıt altına alınır.";
+  document.getElementById("pwInput").value="";
+  document.getElementById("pwModal").classList.add("on");
+  setTimeout(()=>document.getElementById("pwInput").focus(),100);
+}
+function closePw(){ document.getElementById("pwModal").classList.remove("on"); }
+function confirmPw(){
+  const v=document.getElementById("pwInput").value;
+  closePw();
+  if(v==="1234"){ note("✓ Müdür onayı alındı · indirim açıldı (loglandı)"); }
+  else { note("✗ Şifre hatalı"); }
+}
+
+/* ============================================================
+   QR MENÜ — MÜŞTERİ TELEFONU DENEYİMİ
+   Aynı menü verisi (DEMO_PRODUCTS, PRODUCT_OPTIONS, kapatma).
+   POS'la ortak — bir sos kapanınca burada da kapalı görünür.
+   Akış: QR/masa → menü (görselli) → opsiyon → sepet → mutfak
+   ============================================================ */
+let QR = { masa:7, sube:"Edirne Atatürk", kisi:"", sepet:[], view:"giris", aktifKat:"Tatlılar" };
+
+/* Ürün görseli — gerçek foto URL varsa onu, yoksa degrade+emoji */
+function urunGorsel(p, buyuk){
+  if(p.img) return '<div class="qr-img" style="background-image:url('+p.img+')"></div>';
+  const tonlar = {
+    "Tatlılar":"#f3e2c8,#e8c89a", "Pastalar":"#efe0d2,#d8b89a",
+    "İçecekler":"#d8e8f0,#b0d0e0", "Gazozlar":"#f0e0e8,#e0c0d0",
+    "Dondurmalar":"#f5e8f0,#e8d0e0", "Çikolata Sosları":"#e8dcc8,#cdb89a"
+  };
+  const t = tonlar[p.kat] || "#f0eeea,#d4d0c6";
+  return '<div class="qr-img qr-img-ph" style="background:linear-gradient(135deg,'+t+')">'+
+         '<span style="font-size:'+(buyuk?'72px':'40px')+'">'+p.emoji+'</span></div>';
+}
+
+function openQR(){
+  document.getElementById("login").style.display="none";
+  QR = { masa:7, sube:"Edirne Atatürk", kisi:"", sepet:[], view:"giris", aktifKat:"Tatlılar" };
+  renderQR();
+  document.getElementById("qrApp").style.display="block";
+}
+function closeQR(){
+  document.getElementById("qrApp").style.display="none";
+  document.getElementById("login").style.display="flex";
+}
+function renderQR(){
+  const el = document.getElementById("qrApp");
+  if(QR.view==="giris")      el.innerHTML = qrGirisHtml();
+  else if(QR.view==="menu")  el.innerHTML = qrMenuHtml();
+  else if(QR.view==="sepet") el.innerHTML = qrSepetHtml();
+  else if(QR.view==="onay")  el.innerHTML = qrOnayHtml();
+  el.scrollTop = 0;
+}
+
+function qrGirisHtml(){
+  return '<div class="qr-screen qr-giris">'+
+    '<button class="qr-close" onclick="closeQR()">✕</button>'+
+    '<div class="qr-hero"><div class="qr-logo">🧇</div>'+
+      '<div class="qr-brand">MİNİPAN</div>'+
+      '<div class="qr-masa-rozet">📍 '+QR.sube+' · Masa '+QR.masa+'</div></div>'+
+    '<div class="qr-giris-kart">'+
+      '<div class="qr-g-baslik">Hoş geldin!</div>'+
+      '<div class="qr-g-alt">Sipariş vermek için adını yaz. Aynı masada herkes kendi adına sipariş verebilir.</div>'+
+      '<input class="qr-ad-input" id="qrAdInput" placeholder="Adın (örn. Ayşe)" value="'+QR.kisi+'" oninput="QR.kisi=this.value">'+
+      '<button class="qr-btn-primary" onclick="qrGirisYap()">Menüye geç →</button>'+
+      '<div class="qr-geo">🛰️ Konumun doğrulandı · işletme içindesin</div>'+
+    '</div></div>';
+}
+function qrGirisYap(){
+  const ad = (document.getElementById("qrAdInput").value||"").trim();
+  if(!ad){ note("Lütfen adını yaz"); return; }
+  QR.kisi = ad; QR.view="menu"; renderQR();
+}
+
+function qrMenuHtml(){
+  const kats = [...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
+  const prods = DEMO_PRODUCTS.filter(p=>p.kat===QR.aktifKat);
+  const sepetN = QR.sepet.reduce((s,c)=>s+c.q,0);
+  const sepetT = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
+  let html = '<div class="qr-screen">'+
+    '<div class="qr-topbar"><button class="qr-close" onclick="closeQR()">✕</button>'+
+      '<div class="qr-tb-mid"><div class="qr-tb-brand">MİNİPAN</div>'+
+      '<div class="qr-tb-masa">Masa '+QR.masa+' · '+QR.kisi+'</div></div>'+
+      '<div style="width:34px"></div></div>'+
+    '<div class="qr-kat-row">';
+  kats.forEach(k=>{ html += '<button class="qr-kat'+(k===QR.aktifKat?' on':'')+'" onclick="qrSetKat(\''+k+'\')">'+k+'</button>'; });
+  html += '</div><div class="qr-menu-list">';
+  prods.forEach(p=>{
+    const pi = DEMO_PRODUCTS.indexOf(p);
+    const satilir = urunSatilabilir(p);
+    html += '<button class="qr-card'+(satilir?'':' qr-out')+'" onclick="qrUrunSec('+pi+')">'+
+      urunGorsel(p,false)+
+      '<div class="qr-card-info"><div class="qr-card-ad">'+p.ad+'</div>'+
+        (p.aciklama?'<div class="qr-card-desc">'+p.aciklama+'</div>':'')+
+        '<div class="qr-card-fiyat">'+p.fiyat+' ₺</div></div>'+
+      (satilir?'<span class="qr-card-add">+</span>':'<span class="qr-card-tukendi">Tükendi</span>')+
+      '</button>';
+  });
+  html += '</div>';
+  if(sepetN>0){
+    html += '<button class="qr-sepet-bar" onclick="QR.view=\'sepet\';renderQR()">'+
+      '<span class="qr-sb-n">'+sepetN+'</span><span class="qr-sb-t">Sepetim</span>'+
+      '<span class="qr-sb-f">'+sepetT+' ₺</span></button>';
+  }
+  html += '</div>';
+  return html;
+}
+function qrSetKat(k){ QR.aktifKat=k; renderQR(); }
+
+function qrUrunSec(pi){
+  const p = DEMO_PRODUCTS[pi];
+  if(!urunSatilabilir(p)) return;
+  const opts = PRODUCT_OPTIONS[p.ad];
+  if(opts && opts.length){ openOptionModalQR(pi); }
+  else {
+    QR.sepet.push({ad:p.ad, fiyat:p.fiyat, q:1, secimler:[], ekstraRecete:[], not:""});
+    note(p.ad+" eklendi"); renderQR();
+  }
+}
+function openOptionModalQR(idx){
+  const p = DEMO_PRODUCTS[idx];
+  OPT_STATE = { idx:idx, p:p, secim:{}, not:"", kapatMod:false, qr:true };
+  PRODUCT_OPTIONS[p.ad].forEach((grup,gi)=>{
+    OPT_STATE.secim[gi] = grup.tip==="zorunlu_tekli" ? [0] : [];
+  });
+  renderOptionModal();
+  document.getElementById("optModal").classList.add("on");
+}
+
+function qrSepetHtml(){
+  const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
+  let html = '<div class="qr-screen">'+
+    '<div class="qr-topbar"><button class="qr-close" onclick="QR.view=\'menu\';renderQR()">←</button>'+
+      '<div class="qr-tb-mid"><div class="qr-tb-brand">Sepetim</div>'+
+      '<div class="qr-tb-masa">Masa '+QR.masa+' · '+QR.kisi+'</div></div>'+
+      '<div style="width:34px"></div></div><div class="qr-sepet-list">';
+  if(QR.sepet.length===0){ html += '<div class="qr-bos">Sepetin boş.<br>Menüden ürün ekle.</div>'; }
+  else {
+    QR.sepet.forEach((c,i)=>{
+      const secim = (c.secimler&&c.secimler.length)?'<div class="qr-si-secim">'+c.secimler.join(' · ')+'</div>':'';
+      const notT = c.not?'<div class="qr-si-not">📝 '+c.not+'</div>':'';
+      html += '<div class="qr-si"><div class="qr-si-info"><div class="qr-si-ad">'+c.ad+'</div>'+secim+notT+'</div>'+
+        '<div class="qr-si-sag"><div class="qr-si-fiyat">'+(c.fiyat*c.q)+' ₺</div>'+
+          '<div class="qr-si-adet"><button onclick="qrAdet('+i+',-1)">−</button><span>'+c.q+'</span>'+
+          '<button onclick="qrAdet('+i+',1)">+</button></div></div></div>';
+    });
+  }
+  html += '</div>';
+  if(QR.sepet.length>0){
+    html += '<div class="qr-sepet-foot"><div class="qr-sf-toplam"><span>Toplam</span><strong>'+t+' ₺</strong></div>'+
+      '<button class="qr-btn-primary" onclick="qrSiparisGonder()">Siparişi gönder · mutfağa düşsün</button>'+
+      '<div class="qr-sf-not">Siparişin onaysız doğrudan mutfağa iletilir.</div></div>';
+  }
+  html += '</div>';
+  return html;
+}
+function qrAdet(i, d){
+  QR.sepet[i].q += d;
+  if(QR.sepet[i].q<=0) QR.sepet.splice(i,1);
+  renderQR();
+}
+function qrSiparisGonder(){
+  const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
+  consumeRecipe(QR.sepet);
+  saveOrder(QR.sepet, t);
+  QR.sonTutar = t; QR.sonAdet = QR.sepet.reduce((s,c)=>s+c.q,0);
+  QR.sepet = []; QR.view = "onay"; renderQR();
+}
+function qrOnayHtml(){
+  return '<div class="qr-screen qr-onay"><div class="qr-onay-ic">'+
+    '<div class="qr-onay-tik">✓</div>'+
+    '<div class="qr-onay-baslik">Siparişin alındı!</div>'+
+    '<div class="qr-onay-alt">'+QR.sonAdet+' ürün · '+QR.sonTutar+' ₺<br>Mutfağa iletildi, hazırlanıyor.</div>'+
+    '<div class="qr-onay-masa">Masa '+QR.masa+' · '+QR.kisi+'</div>'+
+    '<button class="qr-btn-primary" onclick="QR.view=\'menu\';renderQR()">Yeni sipariş ekle</button>'+
+    '<button class="qr-btn-ghost" onclick="qrGarsonCagir()">🔔 Garson çağır</button>'+
+    '<button class="qr-btn-ghost" onclick="qrHesapIste()">🧾 Hesap iste</button>'+
+    '</div></div>';
+}
+function qrGarsonCagir(){ note("🔔 Garson çağrıldı · Masa "+QR.masa); }
+function qrHesapIste(){ note("🧾 Hesap istendi · kasaya iletildi"); }
+
+/* ============================================================
+   8) BİLDİRİM (toast)
+   ============================================================ */
+function note(msg){
+  let t=document.getElementById("toast");
+  if(!t){ t=document.createElement("div"); t.id="toast";
+    t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;z-index:200;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .2s,transform .2s";
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;
+  t.style.opacity="1"; t.style.transform="translateX(-50%) translateY(0)";
+  clearTimeout(t._h);
+  t._h=setTimeout(function(){t.style.opacity="0"; t.style.transform="translateX(-50%) translateY(8px)";},2200);
+}
+
+/* ============================================================
+   9) FIREBASE BAĞLANTI KATMANI (opsiyonel)
+   ------------------------------------------------------------
+   FIREBASE_CONFIG doldurulursa buluta bağlanır, onSnapshot ile
+   canlı veri akar. Boşsa sistem offline kuyrukla çalışır —
+   satış hiç durmaz, bağlantı gelince senkron olur.
+   ============================================================ */
+const FIREBASE_CONFIG = {
+  // Buraya Firebase konsol config'i yapıştırılır:
+  // apiKey:"...", authDomain:"...", projectId:"...", ...
+};
+
+window.__db = null;
+window.__sube = "kadikoy";
+
+async function initFirebase(){
+  const dolu = FIREBASE_CONFIG && FIREBASE_CONFIG.projectId;
+  if(!dolu){
+    setConnState(false, "Offline mod · yerel kayıt aktif");
+    return;
+  }
+  try{
+    // Firebase SDK dinamik yüklenir (offline'da hata vermez)
+    const app = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const fs  = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const a = app.initializeApp(FIREBASE_CONFIG);
+    const db = fs.getFirestore(a);
+    // Offline persistence — terminal yerel cache tutar
+    try{ await fs.enableIndexedDbPersistence(db); }catch(e){}
+    window.__db = db; window.__fs = fs;
+    setConnState(true, "Buluta bağlı · canlı senkron");
+    flushQueue();
+  }catch(e){
+    setConnState(false, "Bağlantı yok · offline kuyruk");
+  }
+}
+
+function setConnState(online, msg){
+  let el = document.getElementById("connState");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "connState";
+    el.style.cssText = "position:fixed;bottom:14px;left:14px;font-size:11.5px;font-weight:700;padding:7px 12px;border-radius:99px;z-index:80;display:flex;align-items:center;gap:6px";
+    document.body.appendChild(el);
+  }
+  el.style.background = online ? "var(--ok-soft)" : "var(--warn-soft)";
+  el.style.color = online ? "var(--ok)" : "var(--warn)";
+  el.innerHTML = `<span style="width:7px;height:7px;border-radius:99px;background:currentColor"></span>${msg}`;
+}
+
+/* Bağlantı gelince offline kuyruğu boşalt */
+function flushQueue(){
+  if(!window.__db || !OFFLINE_QUEUE.length) return;
+  const kuyruk = [...OFFLINE_QUEUE]; OFFLINE_QUEUE = [];
+  kuyruk.forEach(o=>{
+    try{ window.__fs.addDoc(window.__fs.collection(window.__db,`branches/${window.__sube}/orders`), o); }
+    catch(e){ OFFLINE_QUEUE.push(o); }
+  });
+  if(kuyruk.length) note(`${kuyruk.length} bekleyen satış senkronlandı`);
+}
+
+// Tarayıcı online/offline olaylarını dinle
+window.addEventListener("online",  ()=>{ setConnState(!!window.__db, window.__db?"Bağlantı geri geldi · senkron":"Çevrimiçi"); flushQueue(); });
+window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi · offline kuyruk"));
+
+// Uygulama açılışında başlat
+initFirebase();
+
+</script>
+</body>
+</html>
