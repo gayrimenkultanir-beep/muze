@@ -390,6 +390,18 @@ tr:last-child td{border-bottom:none}
 .od-bz-deger{flex:1; text-align:center; font-weight:800; font-size:14px; min-width:80px}
 .od-bz-max{padding:0 14px; height:36px; border-radius:9px; background:var(--cocoa); color:#fff; font-weight:800; font-size:12.5px}
 .od-bz-indirim{margin-top:8px; font-size:13px; font-weight:800; color:var(--ok)}
+
+/* Mag kullanım kod akışı */
+.od-mag-kilit{margin-top:12px; padding-top:12px; border-top:1px solid #f0d9a8}
+.od-mk-bilgi{font-size:12.5px; color:var(--ink-2); line-height:1.5; margin-bottom:10px; font-weight:600}
+.od-kod-gonder{width:100%; padding:13px; border-radius:var(--radius-sm); background:var(--cocoa); color:#fff; font-size:14px; font-weight:800}
+.od-kod-gonder:active{transform:scale(.97)}
+.od-kod-row{display:flex; gap:8px}
+.od-kod-input{flex:1; padding:12px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm); font-size:18px; text-align:center; letter-spacing:5px; font-weight:800}
+.od-kod-input:focus{outline:none; border-color:var(--brand)}
+.od-kod-dogrula{padding:0 18px; border-radius:var(--radius-sm); background:var(--ok); color:#fff; font-weight:800; font-size:14px}
+.od-kod-tekrar{width:100%; margin-top:8px; padding:8px; background:none; color:var(--ink-3); font-size:12px; font-weight:700}
+.od-bz-acik{background:var(--ok-soft); border-radius:var(--radius-sm); padding:12px; border-top:none}
 .od-kazanc{margin-top:12px; font-size:13px; color:var(--ink-2); text-align:center}
 .od-kazanc strong{color:var(--brand-d)}
 .od-tahsil-baslik{font-size:15px; font-weight:700; margin-bottom:12px; text-align:center}
@@ -520,6 +532,12 @@ tr:last-child td{border-bottom:none}
 .kmd-bos{text-align:center; padding:40px; color:var(--ink-3); font-size:14px}
 .kmd-kisi{background:var(--surface-2); border-radius:var(--radius); padding:14px 16px}
 .kmd-kisi-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+.kmd-kisi-aksiyon{display:flex; gap:8px; align-items:center}
+.kmd-kisi-ode{padding:7px 14px; border-radius:99px; background:var(--ok); color:#fff; font-size:12.5px; font-weight:800}
+.kmd-kisi-ode:active{transform:scale(.95)}
+.kmd-odendi{opacity:.7}
+.kmd-odendi .kmd-kisi-ad{color:var(--ok)}
+.kmd-odendi-rozet{font-size:12px; font-weight:800; color:var(--ok)}
 .kmd-kisi-ad{font-size:15.5px; font-weight:800}
 .kmd-kisi-ad small{color:var(--brand-d); font-weight:800; margin-left:6px}
 .kmd-ekle{padding:7px 14px; border-radius:99px; background:var(--brand); color:var(--brand-ink); font-size:13px; font-weight:800}
@@ -632,6 +650,21 @@ tr:last-child td{border-bottom:none}
 .qtk-tutar{font-size:15px; font-weight:800; color:var(--brand-d)}
 .qtk-urunler{font-size:13px; color:var(--ink-2); margin-bottom:16px; line-height:1.4}
 .qtk-iptal{text-align:center; padding:12px; background:var(--danger-soft); color:var(--danger); border-radius:var(--radius-sm); font-weight:800; font-size:13.5px}
+
+/* OTP doğrulama */
+.od-otp{padding:8px 0}
+.od-otp-bilgi{background:var(--cocoa-soft); color:var(--cocoa); padding:14px; border-radius:var(--radius); font-size:13px; line-height:1.5; font-weight:600}
+.od-otp-not{font-size:12px; color:var(--ink-3); text-align:center; margin-top:10px}
+
+/* OTP kanal seçimi (kayıt) */
+.qr-kanal-baslik{font-size:13px; font-weight:700; color:var(--ink-2); margin:6px 0 10px; text-align:left}
+.qr-kanal-row{display:flex; gap:10px; margin-bottom:16px}
+.qr-kanal{flex:1; position:relative; display:flex; flex-direction:column; align-items:center; gap:5px; padding:14px 8px; border-radius:var(--radius); background:var(--surface-2); border:1.5px solid transparent}
+.qr-kanal.on{background:var(--brand-soft); border-color:var(--brand)}
+.qr-kanal.disabled{opacity:.5; cursor:not-allowed}
+.qk-ic{font-size:26px}
+.qk-ad{font-size:13px; font-weight:800}
+.qk-yakinda{position:absolute; top:5px; right:5px; font-size:9px; font-weight:800; background:var(--ink-3); color:#fff; padding:2px 6px; border-radius:99px}
 
 /* Ürün kartları (dikey · tam genişlik görsel üstte) */
 .qr-menu-list{flex:1; padding:14px; display:flex; flex-direction:column; gap:18px}
@@ -1937,35 +1970,57 @@ function renderOdemeYontem(){
     // müşteri henüz seçilmedi — telefonla tanı veya sadakatsiz devam
     html += '<div class="od-sadakat-sec">'+
       '<div class="od-ss-baslik">🎁 '+SADAKAT.ad+' Sadakat</div>'+
-      '<div class="od-ss-alt">Kayıtlıysa telefonla tanı, '+SADAKAT.ad+' kazansın/kullansın</div>'+
+      '<div class="od-ss-alt">Üyeyi tanıt, '+SADAKAT.ad+' puanını sorgula</div>'+
       '<div class="od-tel-row">'+
-        '<input class="od-tel-input" id="odTelInput" placeholder="Telefon (05XX...)" inputmode="numeric">'+
-        '<button class="od-tel-btn" onclick="odMusteriTani()">Tanı</button>'+
+        '<input class="od-tel-input" id="odTelInput" placeholder="E-posta veya telefon">'+
+        '<button class="od-tel-btn" onclick="odMusteriTani()">Puan sorgula</button>'+
       '</div>'+
       '<div class="od-ss-not">Kayıtlı değilse aşağıdan direkt tahsil et.</div>'+
     '</div>';
   } else {
-    // müşteri tanındı — Mag puanı + bozdurma
+    // müşteri tanındı — Mag puanı görünür
     const kazanacak = odKazanilacakMag(ob.tutar, ki);
     html += '<div class="od-musteri">'+
       '<div class="od-m-ust"><div class="od-m-ad">🎁 '+m.ad+'</div>'+
         '<div class="od-m-mag">'+m.mag+' '+SADAKAT.ad+'</div></div>'+
       '<div class="od-m-damga">'+m.damga+'/'+DAMGA_HEDEF+' damga</div>';
-    // puanla ödeme (bozdurma)
+    // Mag kullanımı: önce kod doğrulaması gerekir
     if(m.mag>0){
-      const maxBoz = Math.min(m.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
-      html += '<div class="od-bozdurma">'+
-        '<div class="od-bz-baslik">'+SADAKAT.ad+' kullan ('+ob.kullanilanMag+'/'+maxBoz+')</div>'+
-        '<div class="od-bz-kontrol">'+
-          '<button class="od-bz-btn" onclick="odMagAyarla(-10)">−10</button>'+
-          '<button class="od-bz-btn" onclick="odMagAyarla(-1)">−1</button>'+
-          '<span class="od-bz-deger">'+ob.kullanilanMag+' '+SADAKAT.ad+'</span>'+
-          '<button class="od-bz-btn" onclick="odMagAyarla(1)">+1</button>'+
-          '<button class="od-bz-btn" onclick="odMagAyarla(10)">+10</button>'+
-          '<button class="od-bz-max" onclick="odMagMax()">Max</button>'+
-        '</div>'+
-        (indirim>0?'<div class="od-bz-indirim">−'+indirim.toFixed(2)+' ₺ indirim</div>':'')+
-      '</div>';
+      if(!ob.otpOnayli){
+        // Kod gönderilmedi/doğrulanmadı → kod akışı
+        if(!ob.otpGonderildi){
+          html += '<div class="od-mag-kilit">'+
+            '<div class="od-mk-bilgi">🔒 '+SADAKAT.ad+' puanı kullanmak için müşteri doğrulaması gerekir.</div>'+
+            '<button class="od-kod-gonder" onclick="odKodGonder()">📧 E-postaya kod gönder</button>'+
+          '</div>';
+        } else {
+          // kod gönderildi → kod giriş
+          const km = OTP_KANALLAR[(OTP_AKTIF&&OTP_AKTIF.kanal)||"mail"];
+          html += '<div class="od-mag-kilit">'+
+            '<div class="od-mk-bilgi">'+km.ic+' '+m.ad+' adına '+km.ad+' ile kod gönderildi. Müşteriden kodu iste:</div>'+
+            '<div class="od-kod-row">'+
+              '<input class="od-kod-input" id="odKodInput" inputmode="numeric" placeholder="6 haneli kod" maxlength="6">'+
+              '<button class="od-kod-dogrula" onclick="odKodDogrula()">Doğrula</button>'+
+            '</div>'+
+            '<button class="od-kod-tekrar" onclick="odKodGonder()">Kodu tekrar gönder</button>'+
+          '</div>';
+        }
+      } else {
+        // Kod doğrulandı → Mag kullanım kontrolü açık
+        const maxBoz = Math.min(m.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+        html += '<div class="od-bozdurma od-bz-acik">'+
+          '<div class="od-bz-baslik">✓ Doğrulandı · '+SADAKAT.ad+' kullan ('+ob.kullanilanMag+'/'+maxBoz+')</div>'+
+          '<div class="od-bz-kontrol">'+
+            '<button class="od-bz-btn" onclick="odMagAyarla(-10)">−10</button>'+
+            '<button class="od-bz-btn" onclick="odMagAyarla(-1)">−1</button>'+
+            '<span class="od-bz-deger">'+ob.kullanilanMag+' '+SADAKAT.ad+'</span>'+
+            '<button class="od-bz-btn" onclick="odMagAyarla(1)">+1</button>'+
+            '<button class="od-bz-btn" onclick="odMagAyarla(10)">+10</button>'+
+            '<button class="od-bz-max" onclick="odMagMax()">Max</button>'+
+          '</div>'+
+          (indirim>0?'<div class="od-bz-indirim">−'+indirim.toFixed(2)+' ₺ '+SADAKAT.ad+' indirimi</div>':'')+
+        '</div>';
+      }
     }
     html += '<div class="od-kazanc">Bu ödemeyle <strong>+'+kazanacak+' '+SADAKAT.ad+'</strong> + 1 damga kazanacak</div>';
     html += '</div>';
@@ -2009,15 +2064,33 @@ function odKazanilacakMag(tutar, ki){
 
 /* Telefonla müşteri tanı */
 function odMusteriTani(){
-  const tel = (document.getElementById("odTelInput").value||"").replace(/\D/g,"");
-  if(tel.length<10){ note("Geçerli telefon gir"); return; }
-  const m = musteriBul(tel);
+  const girdi = (document.getElementById("odTelInput").value||"").trim();
+  const m = musteriBul(girdi);   // mail veya telefon
   if(!m){
     note("Kayıt yok — yeni kayıt QR menüden yapılabilir");
     return;
   }
   BOL.odemeBekleyen.musteri = m;
   BOL.odemeBekleyen.kullanilanMag = 0;
+  BOL.odemeBekleyen.otpOnayli = false;
+  renderOdemeYontem();
+}
+
+/* Kod gönder — müşterinin kayıtlı kanalına (e-posta girmeye gerek yok) */
+function odKodGonder(){
+  const ob=BOL.odemeBekleyen, m=ob.musteri;
+  if(!m.mail){ note("Bu üyenin e-postası yok — puan kullanımı için e-posta gerekli"); return; }
+  otpGonder(m, "harcama");
+  ob.otpGonderildi=true;
+  renderOdemeYontem();
+}
+/* Kod doğrula — doğrulanınca Mag kullanım kontrolü açılır */
+function odKodDogrula(){
+  const kod=(document.getElementById("odKodInput").value||"").trim();
+  if(!otpDogrula(kod)){ note("Kod hatalı"); return; }
+  const ob=BOL.odemeBekleyen;
+  ob.otpOnayli=true; OTP_AKTIF=null;
+  note("✓ Doğrulandı · "+SADAKAT.ad+" kullanabilirsin");
   renderOdemeYontem();
 }
 
@@ -2136,8 +2209,21 @@ function checkout(total){
 function tekOdemeTamamla(){
   const {uyari} = consumeRecipe(state.cart);
   saveOrder(state.cart, BOL.total);
+  // Masada kişi ödemesi ise → o kişiyi ödendi işaretle, masaya dön
+  const kasaKisi = BOL.kasaKisi;
   state.cart=[]; state.odenen=0; state.bolDurum=null;
   BOL=null;
+  if(kasaKisi){
+    const k = SESSIONS[kasaKisi.masa].kisiler[kasaKisi.ki];
+    if(k) k.odendi = true;
+    // masadaki herkes ödedi mi → masa kapanır
+    const s = SESSIONS[kasaKisi.masa];
+    const hepOdendi = s.kisiler.every(p=> p.odendi || p.kalemler.filter(it=>it.durum!=="iptal").length===0);
+    if(hepOdendi){ s.acik=false; note((k?k.ad:"Kişi")+" ödedi · masa kapandı ✓"); state.kasaMasa=null; }
+    else note((k?k.ad:"Kişi")+" ödemesi alındı ✓");
+    go("masalar");
+    return;
+  }
   let msg = "Ödeme alındı, adisyon kapandı ✓";
   if(uyari.length) msg = "Ödeme alındı · ⚠️ "+uyari.join(", ")+" kritik";
   note(msg);
@@ -2276,11 +2362,17 @@ function kasaMasaDetayHtml(m){
   if(s.kisiler.length===0){
     html+='<div class="kmd-bos">Bu masada henüz sipariş yok. Kişi ekleyip ürün girebilirsin.</div>';
   }
-  s.kisiler.forEach(k=>{
-    const kisiToplam=k.kalemler.filter(it=>it.durum!=="iptal").reduce((s,it)=>s+it.fiyat,0);
-    html+=`<div class="kmd-kisi"><div class="kmd-kisi-ust">
-      <span class="kmd-kisi-ad">👤 ${k.ad} <small>${kisiToplam} ₺</small></span>
-      <button class="kmd-ekle" onclick="kasaUrunEkleBasla(${m},'${k.ad.replace(/'/g,"\\'")}')">+ Ürün</button>
+  s.kisiler.forEach((k,ki)=>{
+    const aktifKalemler=k.kalemler.filter(it=>it.durum!=="iptal");
+    const kisiToplam=aktifKalemler.reduce((s,it)=>s+it.fiyat,0);
+    const kisiOdendi=k.odendi;
+    html+=`<div class="kmd-kisi${kisiOdendi?' kmd-odendi':''}"><div class="kmd-kisi-ust">
+      <span class="kmd-kisi-ad">${kisiOdendi?'✓ ':'👤 '}${k.ad} <small>${kisiToplam} ₺</small></span>
+      <div class="kmd-kisi-aksiyon">
+        <button class="kmd-ekle" onclick="kasaUrunEkleBasla(${m},'${k.ad.replace(/'/g,"\\'")}')">+ Ürün</button>
+        ${!kisiOdendi && kisiToplam>0 ? `<button class="kmd-kisi-ode" onclick="kasaKisiOde(${m},${ki})">Öde · ${kisiToplam} ₺</button>` : ''}
+        ${kisiOdendi ? '<span class="kmd-odendi-rozet">ödendi</span>' : ''}
+      </div>
     </div>`;
     k.kalemler.forEach(it=>{
       const dm=DURUM_META[it.durum];
@@ -2323,6 +2415,21 @@ function kasaYeniKisi(m){
 function kasaUrunEkleBasla(m,kisi){ state.kasaEkle={masa:m,kisi:kisi}; state.cat="Tatlılar"; go("satis"); note("Ürün seç → "+kisi+" (Masa "+m+")"); }
 function kasaKalemIptal(m,id){ kalemIptal(m,id); note("Kalem iptal · tutar düştü"); go("masalar"); }
 function kasaOpsKaldir(m,id,oi){ kalemOpsiyonKaldir(m,id,oi,0); note("Opsiyon kaldırıldı (stok bitti)"); go("masalar"); }
+
+/* Tek kişinin siparişinin ödemesini al (masada kişi seçimi) */
+function kasaKisiOde(m, ki){
+  const k=SESSIONS[m].kisiler[ki];
+  const aktif=k.kalemler.filter(it=>it.durum!=="iptal");
+  const tutar=aktif.reduce((s,it)=>s+it.fiyat,0);
+  if(tutar===0){ note("Bu kişinin ödenecek siparişi yok"); return; }
+  // bu kişiyi tek kişilik ödeme akışına ver (sadakat + yöntem dahil)
+  BOL = {
+    total:tutar, mod:"tek", kisiler:[k.ad], atama:[{}], odenenler:{},
+    tekOdeme:true, kasaKisi:{masa:m, ki:ki}   // ödeme bitince bu kişiyi ödendi işaretle
+  };
+  state.cart = aktif.map(it=>({ad:it.ad, fiyat:it.fiyat, q:1, secimler:it.secimler, ekstraRecete:it.ekstraRecete||[]}));
+  bolPayAl(0, tutar);
+}
 
 /* Masa sipariş kalemlerini state.cart'a yükleyip hesap böl/öde */
 function kasaMasaBol(m){
@@ -2589,13 +2696,38 @@ let QR = { masa:7, sube:"Edirne Atatürk", kisi:"", sepet:[], view:"giris", akti
    Müşteri hangi şubede kazanırsa tüm MİNİPAN'da geçerli.
    Cihaz hafızası: gerçekte localStorage (artifact'te oturum içi simüle)
    ============================================================ */
-let CUSTOMERS = {                       // telefon → ÜYE (zincir geneli sadakat + adres defteri)
-  "5551112233": {ad:"Zeynep", tel:"5551112233", mag:240, damga:7, adresler:[
+let CUSTOMERS = {                       // mail → ÜYE (asıl kimlik mail, telefon ikincil)
+  "zeynep@mail.com": {mail:"zeynep@mail.com", ad:"Zeynep", tel:"5551112233", mag:240, damga:7, adresler:[
     {ad:"Ev", adres:"Atatürk Mah. Cumhuriyet Cad. No:12 D:4, Edirne"},
   ]},
 };
 const ADRES_LIMIT = 3;                  // üye başına en fazla 3 adres
 const ADRES_ETIKETLER = ["Ev","İş","Diğer"];
+
+/* OTP — puan harcama + hesap kurtarma için tek kullanımlık kod (maile gider) */
+/* OTP kanalları — müşteri seçer. WhatsApp şimdilik disabled (API kurulunca aktif) */
+const OTP_KANALLAR = {
+  mail:     {ad:"E-posta", ic:"📧", aktif:true},
+  whatsapp: {ad:"WhatsApp", ic:"💬", aktif:false},   // WhatsApp Business API kurulunca true yap
+};
+let OTP_AKTIF = null;   // {hedef, kanal, kod, amac, zaman}
+function otpUret(){ return String(Math.floor(100000+Math.random()*900000)); }
+/* Kod gönder — kanal: müşterinin tercihi (mail/whatsapp). Hedef: mail adresi veya telefon */
+function otpGonder(uye, amac){
+  const kod = otpUret();
+  // müşterinin tercih ettiği kanal (yoksa mail), WhatsApp disabled ise mail'e düş
+  let kanal = uye.otpKanal || "mail";
+  if(!OTP_KANALLAR[kanal] || !OTP_KANALLAR[kanal].aktif) kanal = "mail";
+  const hedef = kanal==="whatsapp" ? uye.tel : uye.mail;
+  OTP_AKTIF = {hedef:hedef, kanal:kanal, kod:kod, amac:amac, zaman:Date.now()};
+  const km = OTP_KANALLAR[kanal];
+  // GERÇEKTE: mail servisi / WhatsApp Business API kodu gönderir. Demo'da ekranda.
+  note(km.ic+" Kod "+hedef+" adresine "+km.ad+" ile gönderildi (demo: "+kod+")");
+  return kod;
+}
+function otpDogrula(girilen){
+  return OTP_AKTIF && OTP_AKTIF.kod===String(girilen).trim();
+}
 
 /* ============================================================
    PAKET SERVİS (eve teslimat) — sadece üyeler
@@ -2642,7 +2774,19 @@ const SPLASH = {
   rozet: "YENİ ÜRÜN",
 };
 
-function musteriBul(tel){ return CUSTOMERS[tel] || null; }
+/* Mail ile bul (asıl kimlik) */
+function musteriBulMail(mail){ return CUSTOMERS[(mail||"").toLowerCase().trim()] || null; }
+/* Telefon ile bul (ikincil — kasada hızlı erişim) */
+function musteriBulTel(tel){
+  const t=(tel||"").replace(/\D/g,"");
+  return Object.values(CUSTOMERS).find(m=>m.tel===t) || null;
+}
+/* Genel arama — mail veya telefon */
+function musteriBul(anahtar){
+  if(!anahtar) return null;
+  if(String(anahtar).includes("@")) return musteriBulMail(anahtar);
+  return musteriBulTel(anahtar) || CUSTOMERS[anahtar] || null;
+}
 
 /* Ürün görseli — gerçek foto URL varsa onu, yoksa degrade+emoji */
 function urunGorsel(p, buyuk){
@@ -2675,6 +2819,7 @@ function renderQR(){
   if(QR.view==="splash")        el.innerHTML = qrSplashHtml();
   else if(QR.view==="karsilama")el.innerHTML = qrKarsilamaHtml();
   else if(QR.view==="kayit")    el.innerHTML = qrKayitHtml();
+  else if(QR.view==="kurtarma") el.innerHTML = qrKurtarmaHtml();
   else if(QR.view==="giris")    el.innerHTML = qrGirisHtml();
   else if(QR.view==="kategoriler") el.innerHTML = qrKategorilerHtml();
   else if(QR.view==="menu")     el.innerHTML = qrMenuHtml();
@@ -2725,40 +2870,95 @@ function qrKarsilamaHtml(){
       '<div class="qr-g-baslik">MİNİPAN Sadakat</div>'+
       '<div class="qr-g-alt">Kaydol, her siparişte puan ve damga kazan. '+DAMGA_HEDEF+' damgaya 1 ürün bedava! Tüm MİNİPAN şubelerinde geçerli.</div>'+
       '<button class="qr-btn-primary" onclick="QR.view=\'kayit\';renderQR()">🎁 Sadakate kaydol</button>'+
+      '<button class="qr-btn-ghost" onclick="QR.view=\'kurtarma\';renderQR()">Hesabım var · giriş yap</button>'+
       '<button class="qr-btn-ghost" onclick="QR.view=\'giris\';renderQR()">Şimdilik atla, isimle sipariş ver</button>'+
     '</div></div>';
 }
 
-/* 1b) KAYIT — ad + telefon */
+/* 1b) KAYIT — mail (asıl kimlik) + ad + telefon (opsiyonel) */
 function qrKayitHtml(){
   return '<div class="qr-screen qr-giris">'+
     '<button class="qr-close" onclick="QR.view=\'karsilama\';renderQR()">←</button>'+
     '<div class="qr-hero"><div class="qr-logo">🎁</div>'+
       '<div class="qr-brand">Kaydol</div></div>'+
     '<div class="qr-giris-kart">'+
-      '<div class="qr-g-baslik">Sadakat kaydı</div>'+
-      '<div class="qr-g-alt">Telefonunla seni hatırlarız — bir daha numara girmene gerek kalmaz.</div>'+
+      '<div class="qr-g-baslik">Sadakat üyeliği</div>'+
+      '<div class="qr-g-alt">E-postan hesabının anahtarı — telefon değişse de puanların hep seninle kalır.</div>'+
       '<input class="qr-ad-input" id="qrKayitAd" placeholder="Adın" value="'+QR.kisi+'">'+
-      '<input class="qr-ad-input" id="qrKayitTel" placeholder="Telefon (05XX XXX XX XX)" inputmode="numeric" value="'+QR.tel+'">'+
+      '<input class="qr-ad-input" id="qrKayitMail" type="email" placeholder="E-posta (zorunlu)" value="'+(QR.tel&&QR.tel.includes("@")?QR.tel:"")+'">'+
+      '<input class="qr-ad-input" id="qrKayitTel" placeholder="Telefon (opsiyonel)" inputmode="numeric">'+
+      '<div class="qr-kanal-baslik">Doğrulama kodu nereye gelsin?</div>'+
+      '<div class="qr-kanal-row">'+
+        Object.keys(OTP_KANALLAR).map(k=>{
+          const km=OTP_KANALLAR[k];
+          const secili=(QR._kayitKanal||"mail")===k;
+          return '<button class="qr-kanal'+(secili?' on':'')+(km.aktif?'':' disabled')+'" '+
+            (km.aktif?'onclick="QR._kayitKanal=\''+k+'\';renderQR()"':'')+'>'+
+            '<span class="qk-ic">'+km.ic+'</span><span class="qk-ad">'+km.ad+'</span>'+
+            (km.aktif?'':'<span class="qk-yakinda">yakında</span>')+'</button>';
+        }).join("")+
+      '</div>'+
       '<button class="qr-btn-primary" onclick="qrKaydol()">Kaydol ve menüye geç →</button>'+
-      '<div class="qr-geo">🔒 Bilgilerin sadece sadakat için kullanılır</div>'+
+      '<div class="qr-geo">🔒 E-postan sadece üyelik ve güvenlik için kullanılır</div>'+
     '</div></div>';
 }
 function qrKaydol(){
   const ad = (document.getElementById("qrKayitAd").value||"").trim();
+  const mail = (document.getElementById("qrKayitMail").value||"").toLowerCase().trim();
   const tel = (document.getElementById("qrKayitTel").value||"").replace(/\D/g,"");
   if(!ad){ note("Lütfen adını yaz"); return; }
-  if(tel.length<10){ note("Geçerli bir telefon gir"); return; }
-  // kayıt var mı? → tanı, yoksa → oluştur
-  let m = musteriBul(tel);
+  if(!mail || !mail.includes("@") || !mail.includes(".")){ note("Geçerli bir e-posta gir"); return; }
+  // mail kayıtlı mı? → o hesaba gir, yoksa → oluştur
+  let m = musteriBulMail(mail);
   if(!m){
-    m = {ad:ad, tel:tel, mag:0, damga:0, adresler:[]};
-    CUSTOMERS[tel] = m;   // gerçekte customers/{tel} — zincir geneli, tüm şubeler ortak
+    let kanal = QR._kayitKanal||"mail";
+    if(!OTP_KANALLAR[kanal] || !OTP_KANALLAR[kanal].aktif) kanal="mail";  // disabled ise mail
+    m = {mail:mail, ad:ad, tel:tel, mag:0, damga:0, adresler:[], otpKanal:kanal};
+    CUSTOMERS[mail] = m;   // gerçekte customers/{mail} — mail asıl kimlik
   }
-  QR.musteri = m; QR.kisi = m.ad; QR.tel = tel;
-  DEVICE_MEMORY = tel;    // cihaz hafızası (gerçekte localStorage)
+  QR.musteri = m; QR.kisi = m.ad; QR.tel = m.tel||"";
+  DEVICE_MEMORY = mail;    // cihaz hafızası artık mail ile
   note("Hoş geldin "+m.ad+"! "+(m.damga>0?m.damga+" damgan var":"İlk siparişinle kazanmaya başla"));
   QR.view = "kategoriler"; renderQR();
+}
+
+/* 1c) HESAP KURTARMA — yeni cihaz/telefon: mail + kod ile giriş */
+function qrKurtarmaHtml(){
+  const asama = QR._kurtarmaAsama||"mail";
+  let ic;
+  if(asama==="mail"){
+    ic = '<div class="qr-g-baslik">Hesabıma giriş</div>'+
+      '<div class="qr-g-alt">E-postanı gir, sana 6 haneli bir kod gönderelim. Yeni telefonda da puanların seninle.</div>'+
+      '<input class="qr-ad-input" id="qrKurtMail" type="email" placeholder="Kayıtlı e-postan">'+
+      '<button class="qr-btn-primary" onclick="qrKurtarmaKodGonder()">Kod gönder →</button>';
+  } else {
+    ic = '<div class="qr-g-baslik">Kodu gir</div>'+
+      '<div class="qr-g-alt">'+QR._kurtarmaMail+' adresine gönderilen 6 haneli kodu gir.</div>'+
+      '<input class="qr-ad-input" id="qrKurtKod" inputmode="numeric" placeholder="6 haneli kod" style="text-align:center;letter-spacing:6px;font-size:20px">'+
+      '<button class="qr-btn-primary" onclick="qrKurtarmaDogrula()">Giriş yap →</button>'+
+      '<button class="qr-btn-ghost" onclick="QR._kurtarmaAsama=\'mail\';renderQR()">← E-postayı değiştir</button>';
+  }
+  return '<div class="qr-screen qr-giris">'+
+    '<button class="qr-close" onclick="QR._kurtarmaAsama=null;QR.view=\'karsilama\';renderQR()">←</button>'+
+    '<div class="qr-hero"><div class="qr-logo">🔑</div><div class="qr-brand">Giriş</div></div>'+
+    '<div class="qr-giris-kart">'+ic+'</div></div>';
+}
+function qrKurtarmaKodGonder(){
+  const mail=(document.getElementById("qrKurtMail").value||"").toLowerCase().trim();
+  const m=musteriBulMail(mail);
+  if(!m){ note("Bu e-posta ile kayıt bulunamadı"); return; }
+  otpGonder(m, "kurtarma");
+  QR._kurtarmaMail=mail; QR._kurtarmaAsama="kod"; renderQR();
+}
+function qrKurtarmaDogrula(){
+  const kod=(document.getElementById("qrKurtKod").value||"").trim();
+  if(!otpDogrula(kod)){ note("Kod hatalı veya süresi doldu"); return; }
+  const m=musteriBulMail(QR._kurtarmaMail);
+  QR.musteri=m; QR.kisi=m.ad; QR.tel=m.tel||"";
+  DEVICE_MEMORY=m.mail; OTP_AKTIF=null; QR._kurtarmaAsama=null;
+  // yeni telefon güncelleme öner
+  note("Hoş geldin "+m.ad+"! Hesabına yeni cihazdan giriş yaptın · "+m.mag+" "+SADAKAT.ad);
+  QR.view="kategoriler"; renderQR();
 }
 
 function qrGirisHtml(){
