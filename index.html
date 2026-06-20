@@ -1619,8 +1619,8 @@ function renderOdemeYontem(){
   const tahsil = Math.max(0, ob.tutar - indirim);
 
   let html = '<div class="opt-head"><span class="opt-emoji">'+(m?'🎁':'👤')+'</span>'+
-    '<div><div class="opt-name">'+BOL.kisiler[ki]+' · ödeme</div>'+
-    '<div class="opt-base">Pay: '+ob.tutar.toFixed(2)+' ₺</div></div>'+
+    '<div><div class="opt-name">'+(BOL.tekOdeme?'Ödeme al':BOL.kisiler[ki]+' · ödeme')+'</div>'+
+    '<div class="opt-base">'+(BOL.tekOdeme?'Adisyon toplamı':'Pay')+': '+ob.tutar.toFixed(2)+' ₺</div></div>'+
     '<button class="opt-x" onclick="odemeKapat()">✕</button></div>'+
     '<div class="opt-body">';
 
@@ -1750,8 +1750,15 @@ function odemeTamamla(yontem, yontemAd){
   }
 
   BOL.odenenler[ki] = {tutar:ob.tutar, tahsil:tahsil, yontem:yontemAd, mag:m?m.ad:null};
-  state.odenen = (state.odenen||0) + ob.tutar;   // adisyon payı tam kapanır (bozdurma+nakit)
   odemeKapat();
+  // TEK ÖDEME (bölmesiz) → adisyonu direkt kapat
+  if(BOL.tekOdeme){
+    note(BOL.kisiler[ki]+" · "+tahsil.toFixed(2)+" ₺ · "+yontemAd+sadakatNot);
+    tekOdemeTamamla();
+    return;
+  }
+  // BÖLME → payı işaretle, adisyon açık kalır
+  state.odenen = (state.odenen||0) + ob.tutar;
   note(BOL.kisiler[ki]+" ödedi · "+tahsil.toFixed(2)+" ₺ · "+yontemAd+sadakatNot);
   renderBol();
   if(document.querySelector(".cart")) refreshCart();
@@ -1808,15 +1815,22 @@ function consumeRecipe(cart){
 
 function checkout(total){
   if(total===0){ note("Adisyon boş"); return; }
-  // 1) reçete motoru çalışır — gram tüketimi sabitlenir
-  const {dusenler, uyari} = consumeRecipe(state.cart);
-  // 2) ödeme kaydı (gerçekte branches/{b}/orders'a yazılır + offline kuyruğa)
-  saveOrder(state.cart, total);
-  // 3) sepet temizlenir
+  // Bölmesiz tek ödeme — aynı zengin ödeme ekranını kullan (tek "kişi")
+  BOL = {
+    total: total, mod:"tek", kisiler:["Adisyon"], atama:[{}], odenenler:{},
+    tekOdeme: true,   // bölme değil, direkt adisyon ödemesi
+  };
+  bolPayAl(0, total);
+}
+
+/* Direkt adisyon ödemesi tamamlandı → adisyonu kapat */
+function tekOdemeTamamla(){
+  const {uyari} = consumeRecipe(state.cart);
+  saveOrder(state.cart, BOL.total);
   state.cart=[]; state.odenen=0;
-  // 4) geri bildirim
-  let msg = `Ödeme alındı · ${total} ₺ · puan eklendi`;
-  if(uyari.length) msg = `Ödeme alındı · ⚠️ ${uyari.join(", ")} kritik seviyede`;
+  BOL=null;
+  let msg = "Ödeme alındı, adisyon kapandı ✓";
+  if(uyari.length) msg = "Ödeme alındı · ⚠️ "+uyari.join(", ")+" kritik";
   note(msg);
   go("satis");
 }
