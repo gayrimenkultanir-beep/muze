@@ -365,6 +365,35 @@ tr:last-child td{border-bottom:none}
 .oy-ic{font-size:30px}
 .oy-ad{font-size:14px; font-weight:800}
 .oy-btn:last-child:nth-child(odd){grid-column:1/-1}
+
+/* Ödeme ekranı sadakat */
+.od-sadakat-sec{background:var(--cocoa-soft); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px}
+.od-ss-baslik{font-weight:800; font-size:15px; color:var(--cocoa); margin-bottom:2px}
+.od-ss-alt{font-size:12.5px; color:var(--ink-2); margin-bottom:10px}
+.od-tel-row{display:flex; gap:8px}
+.od-tel-input{flex:1; padding:11px 13px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm); font-size:14px}
+.od-tel-input:focus{outline:none; border-color:var(--brand)}
+.od-tel-btn{padding:0 18px; border-radius:var(--radius-sm); background:var(--cocoa); color:#fff; font-weight:800; font-size:14px}
+.od-ss-not{font-size:11.5px; color:var(--ink-3); margin-top:8px}
+.od-musteri{background:var(--brand-soft); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px}
+.od-m-ust{display:flex; justify-content:space-between; align-items:center}
+.od-m-ad{font-weight:800; font-size:16px}
+.od-m-mag{font-weight:800; font-size:16px; color:var(--brand-d)}
+.od-m-damga{font-size:12px; color:var(--ink-2); font-weight:600; margin-top:2px}
+.od-bozdurma{margin-top:12px; padding-top:12px; border-top:1px solid #f0d9a8}
+.od-bz-baslik{font-size:13px; font-weight:700; margin-bottom:8px}
+.od-bz-kontrol{display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+.od-bz-btn{width:38px; height:36px; border-radius:9px; background:#fff; border:1.5px solid var(--line-2); font-weight:800; font-size:13px}
+.od-bz-btn:active{transform:scale(.94)}
+.od-bz-deger{flex:1; text-align:center; font-weight:800; font-size:14px; min-width:80px}
+.od-bz-max{padding:0 14px; height:36px; border-radius:9px; background:var(--cocoa); color:#fff; font-weight:800; font-size:12.5px}
+.od-bz-indirim{margin-top:8px; font-size:13px; font-weight:800; color:var(--ok)}
+.od-kazanc{margin-top:12px; font-size:13px; color:var(--ink-2); text-align:center}
+.od-kazanc strong{color:var(--brand-d)}
+.od-tahsil-baslik{font-size:15px; font-weight:700; margin-bottom:12px; text-align:center}
+.od-tahsil-baslik strong{font-size:18px; color:var(--ink)}
+.od-tahsil-baslik s{color:var(--ink-3); font-weight:600; font-size:14px}
+.oy-tam{background:var(--brand-soft)!important; border-color:var(--brand)!important}
 .ci .ci-name small{display:block; color:var(--ink-3); font-weight:500; font-size:11px; line-height:1.3; margin-top:1px}
 
 /* ---------- Opsiyon kapatma (stok) ---------- */
@@ -1573,49 +1602,158 @@ function renderBol(){
   document.getElementById("bolModalInner").innerHTML = html;
 }
 
-/* Bir kişinin payını tahsil et → önce ödeme yöntemi seç */
+/* Bir kişinin payını tahsil et → ödeme ekranı (sadakat dahil) */
 function bolPayAl(ki, tutar){
-  BOL.odemeBekleyen = {ki:ki, tutar:tutar};
+  BOL.odemeBekleyen = {ki:ki, tutar:parseFloat(tutar), musteri:null, kullanilanMag:0};
   renderOdemeYontem();
   document.getElementById("odemeModal").classList.add("on");
 }
 
-/* Ödeme yöntemi seçim ekranı */
+/* Ödeme ekranı — sadakat + yöntem */
 function renderOdemeYontem(){
-  const {ki, tutar} = BOL.odemeBekleyen;
+  const ob = BOL.odemeBekleyen;
+  const ki = ob.ki;
+  const m = ob.musteri;
+  // bozdurma sonrası tahsil edilecek
+  const indirim = ob.kullanilanMag * SADAKAT.bozdurmaKuru;
+  const tahsil = Math.max(0, ob.tutar - indirim);
+
+  let html = '<div class="opt-head"><span class="opt-emoji">'+(m?'🎁':'👤')+'</span>'+
+    '<div><div class="opt-name">'+BOL.kisiler[ki]+' · ödeme</div>'+
+    '<div class="opt-base">Pay: '+ob.tutar.toFixed(2)+' ₺</div></div>'+
+    '<button class="opt-x" onclick="odemeKapat()">✕</button></div>'+
+    '<div class="opt-body">';
+
+  // SADAKAT BÖLÜMÜ
+  if(!m){
+    // müşteri henüz seçilmedi — telefonla tanı veya sadakatsiz devam
+    html += '<div class="od-sadakat-sec">'+
+      '<div class="od-ss-baslik">🎁 '+SADAKAT.ad+' Sadakat</div>'+
+      '<div class="od-ss-alt">Kayıtlıysa telefonla tanı, '+SADAKAT.ad+' kazansın/kullansın</div>'+
+      '<div class="od-tel-row">'+
+        '<input class="od-tel-input" id="odTelInput" placeholder="Telefon (05XX...)" inputmode="numeric">'+
+        '<button class="od-tel-btn" onclick="odMusteriTani()">Tanı</button>'+
+      '</div>'+
+      '<div class="od-ss-not">Kayıtlı değilse aşağıdan direkt tahsil et.</div>'+
+    '</div>';
+  } else {
+    // müşteri tanındı — Mag puanı + bozdurma
+    const kazanacak = odKazanilacakMag(ob.tutar, ki);
+    html += '<div class="od-musteri">'+
+      '<div class="od-m-ust"><div class="od-m-ad">🎁 '+m.ad+'</div>'+
+        '<div class="od-m-mag">'+m.mag+' '+SADAKAT.ad+'</div></div>'+
+      '<div class="od-m-damga">'+m.damga+'/'+DAMGA_HEDEF+' damga</div>';
+    // puanla ödeme (bozdurma)
+    if(m.mag>0){
+      const maxBoz = Math.min(m.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+      html += '<div class="od-bozdurma">'+
+        '<div class="od-bz-baslik">'+SADAKAT.ad+' kullan ('+ob.kullanilanMag+'/'+maxBoz+')</div>'+
+        '<div class="od-bz-kontrol">'+
+          '<button class="od-bz-btn" onclick="odMagAyarla(-10)">−10</button>'+
+          '<button class="od-bz-btn" onclick="odMagAyarla(-1)">−1</button>'+
+          '<span class="od-bz-deger">'+ob.kullanilanMag+' '+SADAKAT.ad+'</span>'+
+          '<button class="od-bz-btn" onclick="odMagAyarla(1)">+1</button>'+
+          '<button class="od-bz-btn" onclick="odMagAyarla(10)">+10</button>'+
+          '<button class="od-bz-max" onclick="odMagMax()">Max</button>'+
+        '</div>'+
+        (indirim>0?'<div class="od-bz-indirim">−'+indirim.toFixed(2)+' ₺ indirim</div>':'')+
+      '</div>';
+    }
+    html += '<div class="od-kazanc">Bu ödemeyle <strong>+'+kazanacak+' '+SADAKAT.ad+'</strong> + 1 damga kazanacak</div>';
+    html += '</div>';
+  }
+
+  // TAHSİLAT
+  html += '<div class="od-tahsil-baslik">Tahsil edilecek: <strong>'+tahsil.toFixed(2)+' ₺</strong>'+
+          (indirim>0?' <s>'+ob.tutar.toFixed(2)+'</s>':'')+'</div>';
   const yontemler = [
-    {k:"nakit", ad:"Nakit", ic:"💵"},
-    {k:"kredi", ad:"Kredi Kartı", ic:"💳"},
-    {k:"banka", ad:"Banka Kartı", ic:"🏦"},
-    {k:"qr", ad:"QR Ödeme", ic:"📱"},
+    {k:"nakit", ad:"Nakit", ic:"💵"},{k:"kredi", ad:"Kredi Kartı", ic:"💳"},
+    {k:"banka", ad:"Banka Kartı", ic:"🏦"},{k:"qr", ad:"QR Ödeme", ic:"📱"},
     {k:"diger", ad:"Diğer", ic:"⋯"},
   ];
-  let html = '<div class="opt-head"><span class="opt-emoji">'+
-    (BOL.kisiler[ki]?'👤':'🧾')+'</span>'+
-    '<div><div class="opt-name">'+BOL.kisiler[ki]+' · ödeme</div>'+
-    '<div class="opt-base">Tahsil edilecek: '+tutar+' ₺</div></div>'+
-    '<button class="opt-x" onclick="odemeKapat()">✕</button></div>'+
-    '<div class="opt-body"><div class="oy-grid">';
+  html += '<div class="oy-grid">';
   yontemler.forEach(y=>{
     html += '<button class="oy-btn" onclick="odemeTamamla(\''+y.k+'\',\''+y.ad+'\')">'+
             '<span class="oy-ic">'+y.ic+'</span><span class="oy-ad">'+y.ad+'</span></button>';
   });
+  // tam puanla ödendiyse (tahsil 0) ayrı buton
+  if(tahsil===0 && indirim>0){
+    html += '<button class="oy-btn oy-tam" style="grid-column:1/-1" onclick="odemeTamamla(\'mag\',\''+SADAKAT.ad+' ile\')">'+
+            '<span class="oy-ic">🎁</span><span class="oy-ad">Tamamı '+SADAKAT.ad+' ile</span></button>';
+  }
   html += '</div></div>';
   document.getElementById("odemeModalInner").innerHTML = html;
 }
+
+/* Ödenecek tutara göre kazanılacak Mag (oran + ürün bonusu) */
+function odKazanilacakMag(tutar, ki){
+  let mag = Math.round(tutar * SADAKAT.kazancOrani);
+  // ürün bonusu: bu kişiye atanan ürünlerden (kesir/ürün modunda) veya tüm sepetten
+  // basitlik: sepetteki ürün bonuslarını toplam paya oranla — burada sadece oran + sabit bonusları ekle
+  state.cart.forEach(c=>{
+    if(SADAKAT.urunBonus[c.ad]){
+      // eşit/kişi modunda herkese değil; demo: bonusu hesabı ödeyene ekle (ilk ödeyen)
+      // gerçekte ürün kime aitse ona — şimdilik oransal
+    }
+  });
+  return mag;
+}
+
+/* Telefonla müşteri tanı */
+function odMusteriTani(){
+  const tel = (document.getElementById("odTelInput").value||"").replace(/\D/g,"");
+  if(tel.length<10){ note("Geçerli telefon gir"); return; }
+  const m = musteriBul(tel);
+  if(!m){
+    note("Kayıt yok — yeni kayıt QR menüden yapılabilir");
+    return;
+  }
+  BOL.odemeBekleyen.musteri = m;
+  BOL.odemeBekleyen.kullanilanMag = 0;
+  renderOdemeYontem();
+}
+
+/* Mag bozdurma ayarla */
+function odMagAyarla(d){
+  const ob = BOL.odemeBekleyen;
+  const maxBoz = Math.min(ob.musteri.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+  ob.kullanilanMag = Math.max(0, Math.min(maxBoz, ob.kullanilanMag + d));
+  renderOdemeYontem();
+}
+function odMagMax(){
+  const ob = BOL.odemeBekleyen;
+  ob.kullanilanMag = Math.min(ob.musteri.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+  renderOdemeYontem();
+}
 function odemeKapat(){ document.getElementById("odemeModal").classList.remove("on"); BOL.odemeBekleyen=null; }
 
-/* Ödeme alındı → kişi ödendi işaretle, adisyon geri kalanı açık kalır */
+/* Ödeme alındı → sadakat işle (kullanım + kazanım), kişi ödendi */
 function odemeTamamla(yontem, yontemAd){
-  const {ki, tutar} = BOL.odemeBekleyen;
-  BOL.odenenler[ki] = {tutar:tutar, yontem:yontemAd};
-  // ana adisyona ödenen tutarı yansıt (kalan = toplam - ödenen)
-  state.odenen = (state.odenen||0) + parseFloat(tutar);
-  // gerçekte: branches/{sube}/orders/{oId}/payments'a yazılır
+  const ob = BOL.odemeBekleyen;
+  const ki = ob.ki;
+  const m = ob.musteri;
+  const indirim = ob.kullanilanMag * SADAKAT.bozdurmaKuru;
+  const tahsil = Math.max(0, ob.tutar - indirim);
+
+  let sadakatNot = "";
+  if(m){
+    // KULLANIM: bozdurulan Mag düşülür
+    if(ob.kullanilanMag>0){ m.mag -= ob.kullanilanMag; }
+    // KAZANIM: ödenen tutara göre yeni Mag (bir sonraki birikime dahil)
+    const kazanc = odKazanilacakMag(ob.tutar, ki);
+    m.mag += kazanc;
+    m.damga += 1;
+    let bedava=false;
+    if(m.damga>=DAMGA_HEDEF){ m.damga-=DAMGA_HEDEF; bedava=true; }
+    sadakatNot = " · +"+kazanc+" "+SADAKAT.ad+(bedava?" · 🎉 bedava hak!":"");
+    // gerçekte: customers/{tel} güncellenir (zincir geneli)
+  }
+
+  BOL.odenenler[ki] = {tutar:ob.tutar, tahsil:tahsil, yontem:yontemAd, mag:m?m.ad:null};
+  state.odenen = (state.odenen||0) + ob.tutar;   // adisyon payı tam kapanır (bozdurma+nakit)
   odemeKapat();
-  note(BOL.kisiler[ki]+" ödedi · "+tutar+" ₺ · "+yontemAd);
+  note(BOL.kisiler[ki]+" ödedi · "+tahsil.toFixed(2)+" ₺ · "+yontemAd+sadakatNot);
   renderBol();
-  // arkadaki ana adisyon da güncellensin
   if(document.querySelector(".cart")) refreshCart();
 }
 
@@ -1974,11 +2112,28 @@ let QR = { masa:7, sube:"Edirne Atatürk", kisi:"", sepet:[], view:"giris", akti
    Cihaz hafızası: gerçekte localStorage (artifact'te oturum içi simüle)
    ============================================================ */
 let CUSTOMERS = {                       // telefon → müşteri (ZİNCİR GENELİ)
-  "5551112233": {ad:"Zeynep", tel:"5551112233", puan:240, damga:7},
+  "5551112233": {ad:"Zeynep", tel:"5551112233", mag:240, damga:7},
 };
 let DEVICE_MEMORY = null;               // bu cihazda hatırlanan telefon (localStorage simülasyonu)
-const DAMGA_HEDEF = 10;                 // 10 damga = 1 bedava
-const PUAN_ORANI = 0.1;                 // her 1₺ → 0.1 puan
+
+/* ============================================================
+   SADAKAT AYARLARI — genel müdür belirler (merkez kilitli)
+   Tüm oranlar buradan ayarlanır. Gerçekte: settings/loyalty
+   ============================================================ */
+const SADAKAT = {
+  ad: "Mag",                  // puan birimi adı
+  kazancOrani: 0.1,           // her 1₺ → 0.1 Mag (100₺ = 10 Mag)
+  bozdurmaKuru: 1,            // 1 Mag = 1 ₺ (puanla ödeme kuru)
+  damgaHedef: 10,             // 10 damga = 1 bedava ürün
+  // ürün bazlı bonus Mag (belirli ürün alınca ekstra)
+  urunBonus: {
+    "Minipan (18 Adet)": 15,  // bu ürün → +15 Mag bonus
+    "Minipan (14 Adet)": 10,
+    "Lotus Bisküvili Mag": 8,
+  },
+};
+const DAMGA_HEDEF = SADAKAT.damgaHedef;
+const PUAN_ORANI = SADAKAT.kazancOrani;
 
 /* Reklam (splash) — gerçekte WebP/GIF/MP4 URL'i buraya */
 const SPLASH = {
@@ -2095,7 +2250,7 @@ function qrKaydol(){
   // kayıt var mı? → tanı, yoksa → oluştur
   let m = musteriBul(tel);
   if(!m){
-    m = {ad:ad, tel:tel, puan:0, damga:0};
+    m = {ad:ad, tel:tel, mag:0, damga:0};
     CUSTOMERS[tel] = m;   // gerçekte customers/{tel} — zincir geneli, tüm şubeler ortak
   }
   QR.musteri = m; QR.kisi = m.ad; QR.tel = tel;
@@ -2133,14 +2288,14 @@ function qrDamgaSeritHtml(){
   }
   const kalan = DAMGA_HEDEF - m.damga;
   return '<div class="qr-damga-serit">'+
-    '<div class="qr-damga-ust"><span>'+m.ad+' · '+m.puan+' puan</span>'+
+    '<div class="qr-damga-ust"><span>'+m.ad+' · '+m.mag+' '+SADAKAT.ad+'</span>'+
     '<span class="qr-damga-kalan">'+(kalan>0?kalan+' damga sonra bedava!':'🎉 Bedava ürün hakkın var!')+'</span></div>'+
     '<div class="qr-damga-dots">'+dots+'</div></div>';
 }
 function qrSadakatGoster(){
   const m = QR.musteri;
   const kalan = DAMGA_HEDEF - m.damga;
-  note("🎁 "+m.ad+" · "+m.puan+" puan · "+m.damga+"/"+DAMGA_HEDEF+" damga"+(kalan>0?" ("+kalan+" kaldı)":" · bedava hakkın var!"));
+  note("🎁 "+m.ad+" · "+m.mag+" "+SADAKAT.ad+" · "+m.damga+"/"+DAMGA_HEDEF+" damga"+(kalan>0?" ("+kalan+" kaldı)":" · bedava hakkın var!"));
 }
 
 function qrMenuHtml(){
@@ -2248,7 +2403,7 @@ function qrSiparisGonder(){
   QR.kazanim = null;
   if(QR.musteri){
     const puanKazanc = Math.round(t * PUAN_ORANI);
-    QR.musteri.puan += puanKazanc;
+    QR.musteri.mag += puanKazanc;
     QR.musteri.damga += 1;                     // her sipariş 1 damga
     let bedava = false;
     if(QR.musteri.damga >= DAMGA_HEDEF){
@@ -2264,7 +2419,7 @@ function qrOnayHtml(){
   let sadakatBlok = '';
   if(QR.kazanim){
     sadakatBlok = '<div class="qr-onay-sadakat">'+
-      '<div class="qr-os-puan">+'+QR.kazanim.puan+' puan · +1 damga 🧇</div>'+
+      '<div class="qr-os-puan">+'+QR.kazanim.puan+' '+SADAKAT.ad+' · +1 damga 🧇</div>'+
       (QR.kazanim.bedava
         ? '<div class="qr-os-bedava">🎉 Tebrikler! '+DAMGA_HEDEF+' damga doldu — sıradaki siparişte 1 ürün bedava!</div>'
         : '<div class="qr-os-kalan">'+(DAMGA_HEDEF-QR.kazanim.damga)+' damga sonra bedava ürün</div>')+
