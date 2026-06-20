@@ -1445,28 +1445,41 @@ let BOL = null;
 
 function hesapBolAc(total){
   if(total===0){ note("Adisyon boş"); return; }
-  // masadaki kişiler (gerçekte oturum siparişlerinden gelir; demo: 3 kişi)
-  BOL = {
-    total: total,
-    mod: "esit",
-    kisiler: ["Ayşe","Mehmet","Can"],
-    // her ürün satırına kişi/pay ataması (ürüne göre + kesir için)
-    atama: state.cart.map(()=>({})),  // {kisiIndex: oran}
-    odenenler: {},                    // kisiIndex → ödendi mi
-  };
+  // Daha önce bölme başlatıldıysa kaldığı yerden devam et
+  if(state.bolDurum && state.bolDurum.total===total){
+    BOL = state.bolDurum;
+  } else {
+    BOL = {
+      total: total,
+      mod: "esit",
+      kisiler: ["Ayşe","Mehmet","Can"],   // gerçekte oturum siparişlerinden
+      atama: state.cart.map(()=>({})),
+      odenenler: {},
+    };
+    state.bolDurum = BOL;   // adisyona bağlı kalıcı durum
+  }
   renderBol();
   document.getElementById("bolModal").classList.add("on");
 }
-function bolKapat(){ document.getElementById("bolModal").classList.remove("on"); BOL=null; }
-function bolMod(m){ BOL.mod=m; renderBol(); }
+function bolKapat(){ document.getElementById("bolModal").classList.remove("on"); }
+function bolMod(m){
+  // Bir ödeme alındıysa mod değiştirilemez (paylar sabitlenir)
+  if(Object.keys(BOL.odenenler).length>0){
+    note("Ödeme başladı — bölme modu değiştirilemez");
+    return;
+  }
+  BOL.mod=m; renderBol();
+}
 
 /* Kişi ekle/çıkar/adlandır */
 function bolKisiEkle(){
+  if(Object.keys(BOL.odenenler).length>0){ note("Ödeme başladı — kişi değiştirilemez"); return; }
   if(BOL.kisiler.length>=10){ note("En fazla 10 kişi"); return; }
   BOL.kisiler.push("Kişi "+(BOL.kisiler.length+1));
   renderBol();
 }
 function bolKisiCikar(ki){
+  if(Object.keys(BOL.odenenler).length>0){ note("Ödeme başladı — kişi değiştirilemez"); return; }
   if(BOL.kisiler.length<=1){ note("En az 1 kişi olmalı"); return; }
   BOL.kisiler.splice(ki,1);
   // o kişinin ödemesi ve ürün atamalarını temizle
@@ -1777,7 +1790,7 @@ function refreshCart(){
 function bolTamamla(){
   const {uyari} = consumeRecipe(state.cart);
   saveOrder(state.cart, BOL.total);
-  state.cart=[]; state.odenen=0;
+  state.cart=[]; state.odenen=0; state.bolDurum=null;
   bolKapat();
   let msg = "Hesap bölündü, adisyon kapandı ✓";
   if(uyari.length) msg = "Adisyon kapandı · ⚠️ "+uyari.join(", ")+" kritik";
@@ -1827,7 +1840,7 @@ function checkout(total){
 function tekOdemeTamamla(){
   const {uyari} = consumeRecipe(state.cart);
   saveOrder(state.cart, BOL.total);
-  state.cart=[]; state.odenen=0;
+  state.cart=[]; state.odenen=0; state.bolDurum=null;
   BOL=null;
   let msg = "Ödeme alındı, adisyon kapandı ✓";
   if(uyari.length) msg = "Ödeme alındı · ⚠️ "+uyari.join(", ")+" kritik";
