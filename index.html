@@ -1497,7 +1497,9 @@ function login(role){
   const dot = document.getElementById("roleDot");
   dot.textContent = r.ic; dot.style.background = r.renk;
   buildNav();
-  go(r.nav[0]);
+  // Masalar ekranı olan roller (kasa, müdür) girişte doğrudan Masalar'la başlasın
+  const acilis = r.nav.includes("masalar") ? "masalar" : r.nav[0];
+  go(acilis);
 }
 
 /* Şube seçim ekranı (kasa/müdür) */
