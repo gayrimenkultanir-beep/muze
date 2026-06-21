@@ -152,7 +152,8 @@ input,select{font-family:inherit; font-size:15px}
 
 /* ---------- POS satış ekranı ---------- */
 .pos-grid{display:grid; grid-template-columns:1fr 380px; gap:22px; height:100%}
-@media(max-width:980px){.pos-grid{grid-template-columns:1fr}}
+.kasa-masa-grid-layout{grid-template-columns:1fr 500px}
+@media(max-width:980px){.pos-grid{grid-template-columns:1fr}.kasa-masa-grid-layout{grid-template-columns:1fr}}
 
 .sec-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px}
 .sec-head h2{font-size:19px; font-weight:800; margin:0; letter-spacing:-.3px}
@@ -691,6 +692,42 @@ tr:last-child td{border-bottom:none}
 .kfk-dk{font-size:12px; color:#9aa0a6}
 .kfk-urunler{font-size:13px; color:#c8ccd0; margin-bottom:4px}
 .kfk-alt{font-size:11.5px; color:#8a9099}
+/* Garson masa sepeti paneli */
+.grs-sepet-panel{position:sticky; bottom:0; background:var(--surface); border-top:2px solid var(--brand); padding:14px 16px; box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.grs-sp-kisi{margin-bottom:12px}
+.grs-sp-kbaslik{font-size:12.5px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
+.grs-sp-kisiler{display:flex; flex-wrap:wrap; gap:8px}
+.grs-sp-kbtn{padding:8px 14px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:700; border:1.5px solid var(--line-2)}
+.grs-sp-kbtn.on{background:var(--brand); color:#1a1d21; border-color:var(--brand)}
+.grs-sp-kbtn.yeni{background:none; border-style:dashed; color:var(--cocoa)}
+.grs-sp-baslik{font-size:13px; font-weight:800; margin-bottom:8px}
+.grs-sp-kalem{display:flex; justify-content:space-between; align-items:center; font-size:13.5px; padding:5px 0; border-bottom:1px solid var(--line)}
+.grs-sp-sag{display:flex; align-items:center; gap:8px; font-weight:700}
+.grs-sp-sil{width:22px; height:22px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800}
+.grs-sepet-bar{display:flex; gap:12px; align-items:center; margin-top:12px}
+.grs-sepet-bar .grs-pb-bilgi{flex:1; font-size:15px; font-weight:800}
+/* Kasa sepet kişi seçimi */
+.ke-kisi{padding:12px 16px; background:var(--surface-2); border-radius:var(--radius-sm); margin-bottom:12px}
+.ke-kisi-baslik{font-size:12.5px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
+.ke-kisi-row{display:flex; flex-wrap:wrap; gap:8px}
+.ke-kbtn{padding:8px 14px; border-radius:99px; background:var(--surface); color:var(--ink-2); font-size:13px; font-weight:700; border:1.5px solid var(--line-2)}
+.ke-kbtn.on{background:var(--brand); color:#1a1d21; border-color:var(--brand)}
+.ke-kbtn.yeni{background:none; border-style:dashed; color:var(--cocoa)}
+.ci-sil{width:22px; height:22px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800; margin-left:6px}
+/* Kasa masalar — iki kolon (sol masalar, sağ detay/ödeme) */
+.kasa-masa-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:12px}
+.kasa-masa-btn.secili{outline:2.5px solid var(--brand); outline-offset:1px}
+.kasa-sag-panel{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); display:flex; flex-direction:column; overflow:hidden; height:100%}
+.kasa-sag-bos{display:flex; align-items:center; justify-content:center; height:100%; min-height:340px; text-align:center; color:var(--ink-3)}
+.ksb-emoji{font-size:44px; margin-bottom:12px}
+.ksb-baslik{font-size:17px; font-weight:800; color:var(--ink-2); margin-bottom:6px}
+.ksb-alt{font-size:13px; color:var(--ink-3); max-width:220px; line-height:1.5}
+.kasa-detay-head{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--line); background:var(--surface-2)}
+.kdh-baslik{font-size:17px; font-weight:800}
+.kdh-alt{font-size:12.5px; color:var(--ink-2); margin-top:2px}
+.kasa-detay-kapat{width:34px; height:34px; border-radius:10px; background:var(--surface); color:var(--ink-2); font-size:15px; font-weight:800; border:1px solid var(--line)}
+.kasa-sag-panel .kasa-masa-detay{flex:1; overflow-y:auto; padding:14px 16px}
+.kasa-sag-panel .kmd-foot{padding:14px 16px; border-top:1px solid var(--line); background:var(--surface-2)}
 /* Garson paket sekmesi */
 .grs-sekme-row{display:flex; gap:8px; padding:12px 16px 0}
 .grs-sekme{flex:1; padding:11px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:800; border:1.5px solid transparent}
@@ -1563,10 +1600,11 @@ function addToCart(idx){
     note(p.ad+" → 🥡 Paket sepeti");
     go("satis");
   } else if(state.kasaEkle){
-    // kasa masaya/kişiye ekliyor → SESSIONS'a düşer (mutfak görür)
-    masayaUrunEkle(state.kasaEkle.masa, state.kasaEkle.kisi, {ad:p.ad, fiyat:p.fiyat, secimler:[], ekstraRecete:[]});
-    note(p.ad+" → Masa "+state.kasaEkle.masa+" · "+state.kasaEkle.kisi);
-    const m=state.kasaEkle.masa; state.kasaEkle=null; state.kasaMasa=m; go("masalar");
+    // kasa masa sepetine ekle (geçici, gönderince tek fiş)
+    if(!state.kasaEkle.sepet) state.kasaEkle.sepet=[];
+    state.kasaEkle.sepet.push({ad:p.ad, fiyat:p.fiyat, secimler:[], paket:false});
+    note(p.ad+" → sepet ("+state.kasaEkle.kisi+")");
+    go("satis");
   } else {
     // opsiyonsuz ürün → direkt adisyona
     state.cart.push({ad:p.ad, fiyat:p.fiyat, q:1, secimler:[], ekstraRecete:[]});
@@ -1727,7 +1765,13 @@ function renderOptionModal(){
     '<div class="opt-toplam"><div class="ot-l">Toplam</div><div class="ot-v">'+toplam+' ₺</div></div>'+
     '<button class="btn btn-primary" '+(gecerli?'':'disabled style="opacity:.4;pointer-events:none"')+' onclick="confirmOpt()">'+
     (gecerli?'Sepete ekle':'Zorunlu alanı seç')+'</button></div>';
-  document.getElementById("optModalInner").innerHTML = html;
+  const inner = document.getElementById("optModalInner");
+  // scroll pozisyonunu koru (innerHTML değişince başa zıplamasın)
+  const body = inner.querySelector(".opt-body");
+  const scrollY = body ? body.scrollTop : 0;
+  inner.innerHTML = html;
+  const yeniBody = inner.querySelector(".opt-body");
+  if(yeniBody && scrollY) yeniBody.scrollTop = scrollY;
 }
 
 /* Seçim onaylandı: fiyat + reçete ile sepete ekle */
@@ -1763,11 +1807,12 @@ function confirmOpt(){
       note(p.ad+" → Paket sepeti");
       renderGarson();
     } else {
-      // Garson masaya/kişiye ekliyor → SESSIONS'a düşer (mutfak görür)
-      masayaUrunEkle(GARSON.masa, GARSON.kisi, {ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, ekstraRecete:yeniKalem.ekstraRecete});
+      // Garson masa sepetine ekle (geçici, gönderince fiş)
+      if(!GARSON.masaSepet) GARSON.masaSepet=[];
+      GARSON.masaSepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, paket:false});
       closeOpt();
-      note(p.ad+" → Masa "+GARSON.masa+" · "+GARSON.kisi);
-      GARSON.view="masa"; renderGarson();
+      note(p.ad+" → sepet");
+      GARSON.view="menu"; renderGarson();
     }
   } else if(state.kasaPaket){
     // Kasa paket sepetine ekle
@@ -1776,11 +1821,12 @@ function confirmOpt(){
     note(p.ad+" → 🥡 Paket sepeti");
     go("satis");
   } else if(state.kasaEkle){
-    // Kasa masaya/kişiye ekliyor → SESSIONS'a düşer
-    masayaUrunEkle(state.kasaEkle.masa, state.kasaEkle.kisi, {ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, ekstraRecete:yeniKalem.ekstraRecete});
+    // kasa masa sepetine ekle (geçici)
+    if(!state.kasaEkle.sepet) state.kasaEkle.sepet=[];
+    state.kasaEkle.sepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, paket:false});
     closeOpt();
-    note(p.ad+" → Masa "+state.kasaEkle.masa+" · "+state.kasaEkle.kisi);
-    const m=state.kasaEkle.masa; state.kasaEkle=null; state.kasaMasa=m; go("masalar");
+    note(p.ad+" → sepet ("+state.kasaEkle.kisi+")");
+    go("satis");
   } else {
     // POS'tan eklendi → adisyona
     state.cart.push(yeniKalem);
@@ -1789,6 +1835,35 @@ function confirmOpt(){
   }
 }
 function cartHtml(){
+  // KASA MASA SEPETİ — masaya yeni sipariş (geçici sepet, gönderince tek fiş)
+  if(state.kasaEkle){
+    const ke=state.kasaEkle; const sep=ke.sepet||[];
+    const pt=sep.reduce((s,c)=>s+c.fiyat,0);
+    const s=SESSIONS[ke.masa];
+    const items=sep.length===0
+      ? '<div class="cart-empty">🧾 Sepet boş.<br>Soldan ürün ekleyin.</div>'
+      : sep.map((c,i)=>'<div class="ci"><span class="ci-q">1×</span><span class="ci-name">'+c.ad+
+          (c.secimler&&c.secimler.length?'<small>'+c.secimler.join(' · ')+'</small>':'')+
+          '</span><span class="ci-price">'+c.fiyat+' ₺ <button class="ci-sil" onclick="kasaSepetSil('+i+')">✕</button></span></div>').join("");
+    // kişi seçimi
+    let kisiSec='<div class="ke-kisi"><div class="ke-kisi-baslik">Kim için? *</div><div class="ke-kisi-row">';
+    if(s&&s.kisiler.length){
+      s.kisiler.forEach(k=>{ kisiSec+='<button class="ke-kbtn'+(ke.kisi===k.ad?' on':'')+'" onclick="kasaSepetKisi(\''+k.ad.replace(/'/g,"\\'")+'\')">'+k.ad+'</button>'; });
+    }
+    kisiSec+='<button class="ke-kbtn yeni" onclick="kasaSepetYeniKisi()">+ Yeni kişi</button></div></div>';
+    return `<div class="cart">
+      <div class="cart-top"><div><div class="ct-table">🧾 Masa ${ke.masa} · yeni sipariş</div>
+        <div class="ct-session">${ke.kisi?'Kişi: '+ke.kisi:'Kişi seçilmedi'}</div></div>
+        <button class="btn-ghost" style="padding:8px 12px;border-radius:9px;font-size:12px;font-weight:700" onclick="kasaEkleIptal()">✕ Vazgeç</button></div>
+      ${kisiSec}
+      <div class="cart-items">${items}</div>
+      <div class="cart-foot">
+        <div class="cart-total"><span class="cf-lbl">Toplam</span><span class="cf-amt">${pt} ₺</span></div>
+        <div class="cart-actions">
+          <button class="btn btn-primary btn-full" ${(sep.length===0||!ke.kisi)?'disabled style="opacity:.4"':''} onclick="kasaMasaGonder()">${!ke.kisi?'Kişi seç':'✓ Siparişi gönder · fiş çıkar'}</button>
+        </div>
+      </div></div>`;
+  }
   // KASA PAKET MODU — paket sepeti + gönder
   if(state.kasaPaket){
     const kp=state.kasaPaket;
@@ -2275,8 +2350,19 @@ function refreshCart(){
 function bolTamamla(){
   const {uyari} = consumeRecipe(state.cart);
   saveOrder(state.cart, BOL.total);
+  const kasaMasaKapat = BOL.kasaMasaKapat;
   state.cart=[]; state.odenen=0; state.bolDurum=null;
   bolKapat();
+  if(kasaMasaKapat!=null){
+    const s = SESSIONS[kasaMasaKapat];
+    if(s){ s.kisiler.forEach(p=>p.odendi=true); s.acik=false; }
+    state.kasaMasa=null;
+    let msg = "Hesap bölündü · Masa "+kasaMasaKapat+" kapandı ✓";
+    if(uyari.length) msg = "Masa kapandı · ⚠️ "+uyari.join(", ")+" kritik";
+    note(msg);
+    go("masalar");
+    return;
+  }
   let msg = "Hesap bölündü, adisyon kapandı ✓";
   if(uyari.length) msg = "Adisyon kapandı · ⚠️ "+uyari.join(", ")+" kritik";
   note(msg);
@@ -2327,6 +2413,7 @@ function tekOdemeTamamla(){
   saveOrder(state.cart, BOL.total);
   // Masada kişi ödemesi ise → o kişiyi ödendi işaretle, masaya dön
   const kasaKisi = BOL.kasaKisi;
+  const kasaMasaKapat = BOL.kasaMasaKapat;
   state.cart=[]; state.odenen=0; state.bolDurum=null;
   BOL=null;
   if(kasaKisi){
@@ -2337,6 +2424,15 @@ function tekOdemeTamamla(){
     const hepOdendi = s.kisiler.every(p=> p.odendi || p.kalemler.filter(it=>it.durum!=="iptal").length===0);
     if(hepOdendi){ s.acik=false; note((k?k.ad:"Kişi")+" ödedi · masa kapandı ✓"); state.kasaMasa=null; }
     else note((k?k.ad:"Kişi")+" ödemesi alındı ✓");
+    go("masalar");
+    return;
+  }
+  if(kasaMasaKapat!=null){
+    // tüm masa ödendi → masayı kapat
+    const s = SESSIONS[kasaMasaKapat];
+    if(s){ s.kisiler.forEach(p=>p.odendi=true); s.acik=false; }
+    state.kasaMasa=null;
+    note("Ödeme alındı · Masa "+kasaMasaKapat+" kapandı ✓");
     go("masalar");
     return;
   }
@@ -2419,11 +2515,6 @@ function masayaUrunEkle(masaNo, kisiAd, urun){
   let k=s.kisiler.find(x=>x.ad===kisiAd);
   if(!k){ k={ad:kisiAd, kalemler:[]}; s.kisiler.push(k); }
   k.kalemler.push({id:_kalemId++, ad:urun.ad, fiyat:urun.fiyat, secimler:urun.secimler||[], ekstraRecete:urun.ekstraRecete||[], durum:"bekliyor", paket:!!urun.paket});
-  // OTOMATİK MUTFAK FİŞİ — masaya ürün eklendi (garson/kasa)
-  mutfakFisiBas({
-    tip:"masa", baslik:"MASA "+masaNo, alt:kisiAd, kisi:kisiAd, masa:masaNo,
-    kalemler:[{ad:urun.ad, secimler:urun.secimler||[], kisi:kisiAd, paket:!!urun.paket}]
-  });
 }
 
 let OFFLINE_QUEUE = [];
@@ -2446,22 +2537,21 @@ function saveOrder(cart, total){
 // --- MASALAR ---
 function viewMasalar(main){
   if(Object.keys(SESSIONS).length===0) seedSessions();
-  if(state.kasaMasa!=null){ main.innerHTML=kasaMasaDetayHtml(state.kasaMasa); return; }
   const sekme = state.kasaSekme||"masa";
   const tumMasalar=[1,3,5,7,8,9,12,15];
   const aktifPaket=PAKET_ORDERS.filter(p=>p.durum!=="teslim"&&p.durum!=="iptal");
-  let html=`<div class="sec-head"><div><h2>Masalar & Paket</h2><div class="sh-sub">${AKTIF_SUBE}</div></div></div>
+  // SOL kolon: sekmeler + masa ızgarası / paket listesi
+  let sol=`<div class="sec-head"><div><h2>Masalar & Paket</h2><div class="sh-sub">${AKTIF_SUBE}</div></div></div>
     <div class="kasa-sekme-row">
       <button class="kasa-sekme${sekme==="masa"?" on":""}" onclick="state.kasaSekme='masa';go('masalar')">🍽️ Masalar</button>
       <button class="kasa-sekme${sekme==="paket"?" on":""}" onclick="state.kasaSekme='paket';go('masalar')">🥡 Paket${aktifPaket.length?" ("+aktifPaket.length+")":""}</button>
     </div>`;
   if(sekme==="paket"){
-    html+=`<button class="kasa-yeni-paket" onclick="kasaPaketBasla()">+ Yeni paket sipariş</button>
-    <div class="kasa-paket-list">`;
-    if(aktifPaket.length===0){ html+=`<div class="kmd-bos">Bekleyen paket sipariş yok.</div>`; }
+    sol+=`<button class="kasa-yeni-paket" onclick="kasaPaketBasla()">+ Yeni paket sipariş</button><div class="kasa-paket-list">`;
+    if(aktifPaket.length===0){ sol+=`<div class="kmd-bos">Bekleyen paket sipariş yok.</div>`; }
     else aktifPaket.forEach(p=>{
       const dm=TESLIMAT_DURUM[p.durum]; const gelAl=p.tip==="paket";
-      html+=`<div class="kasa-paket-kart">
+      sol+=`<div class="kasa-paket-kart">
         <div class="kpk-ust"><span class="kpk-no">${gelAl?"🥡 Gel-Al":"🛵 Eve"} #${p.id} · ${p.musteri}</span>
           <span class="kpk-durum" style="color:${dm.renk}">${dm.ic} ${dm.ad}</span></div>
         <div class="kpk-urunler">${p.kalemler.map(k=>k.ad).join(", ")}</div>
@@ -2469,25 +2559,34 @@ function viewMasalar(main){
         ${p.odeme==="kasada"?`<button class="kpk-ode" onclick="kasaPaketOde(${p.id})">Öde · ${p.tutar} ₺</button>`:""}</div>
       </div>`;
     });
-    html+=`</div>`;
-    main.innerHTML=html;
-    return;
-  }
-  html+=`<div class="prod-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr))">
+    sol+=`</div>`;
+  } else {
+    sol+=`<div class="kasa-masa-grid">
       ${tumMasalar.map(m=>{
         const s=SESSIONS[m]; const acik=s&&s.acik;
         const kalemler=acik?masaKalemleri(m).filter(it=>it.durum!=="iptal"):[];
         const paketVar=kalemler.some(it=>it.paket);
+        const secili=state.kasaMasa===m;
         const renk=acik?"var(--ok)":"var(--line-2)";
         return `
-        <button class="prod" style="text-align:center;position:relative" onclick="kasaMasaAc(${m})">
+        <button class="prod kasa-masa-btn${secili?' secili':''}" style="text-align:center;position:relative" onclick="kasaMasaAc(${m})">
           ${paketVar?'<span class="kasa-masa-paket">🥡</span>':''}
           <div style="font-size:13px;font-weight:800;color:${renk};margin-bottom:6px">● ${acik?'Dolu':'Boş'}</div>
           <div style="font-size:28px;font-weight:800;letter-spacing:-1px">${m}</div>
           ${acik?`<div style="font-size:12px;color:var(--ink-2);margin-top:6px">${s.kisiler.length} kişi · ${masaToplam(m)} ₺</div>`:''}
         </button>`;}).join("")}
     </div>`;
-  main.innerHTML=html;
+  }
+  // SAĞ kolon: seçili masa detayı/ödeme (yoksa boş durum)
+  let sag;
+  if(state.kasaMasa!=null && SESSIONS[state.kasaMasa]){
+    sag = kasaMasaDetayHtml(state.kasaMasa);
+  } else {
+    sag = `<div class="kasa-sag-bos"><div class="ksb-ic"><div class="ksb-emoji">🪑</div>
+      <div class="ksb-baslik">Masa seç</div>
+      <div class="ksb-alt">Soldan bir masaya dokun · siparişi ve ödemesi burada açılır</div></div></div>`;
+  }
+  main.innerHTML = `<div class="pos-grid kasa-masa-grid-layout"><div>${sol}</div><div class="kasa-sag-panel">${sag}</div></div>`;
 }
 /* Kasa yeni paket sipariş — isim zorunlu (fiş için) */
 function kasaPaketBasla(){
@@ -2536,10 +2635,10 @@ function kasaMasaKapat(){ state.kasaMasa=null; go("masalar"); }
 function kasaMasaDetayHtml(m){
   const s=SESSIONS[m];
   const toplam=masaToplam(m);
-  let html=`<div class="sec-head"><div style="display:flex;align-items:center;gap:12px">
-      <button class="btn btn-ghost" style="padding:8px 14px" onclick="kasaMasaKapat()">← Masalar</button>
-      <div><h2>Masa ${m}</h2><div class="sh-sub">${s.kisiler.length} kişi · ${toplam} ₺</div></div>
-    </div></div>`;
+  let html=`<div class="kasa-detay-head">
+      <div><div class="kdh-baslik">🍽️ Masa ${m}</div><div class="kdh-alt">${s.kisiler.length} kişi · ${toplam} ₺</div></div>
+      <button class="kasa-detay-kapat" onclick="kasaMasaKapat()">✕</button>
+    </div>`;
   html+='<div class="kasa-masa-detay">';
   if(s.kisiler.length===0){
     html+='<div class="kmd-bos">Bu masada henüz sipariş yok. Kişi ekleyip ürün girebilirsin.</div>';
@@ -2551,7 +2650,6 @@ function kasaMasaDetayHtml(m){
     html+=`<div class="kmd-kisi${kisiOdendi?' kmd-odendi':''}"><div class="kmd-kisi-ust">
       <span class="kmd-kisi-ad">${kisiOdendi?'✓ ':'👤 '}${k.ad} <small>${kisiToplam} ₺</small></span>
       <div class="kmd-kisi-aksiyon">
-        <button class="kmd-ekle" onclick="kasaUrunEkleBasla(${m},'${k.ad.replace(/'/g,"\\'")}')">+ Ürün</button>
         ${!kisiOdendi && kisiToplam>0 ? `<button class="kmd-kisi-ode" onclick="kasaKisiOde(${m},${ki})">Öde · ${kisiToplam} ₺</button>` : ''}
         ${kisiOdendi ? '<span class="kmd-odendi-rozet">ödendi</span>' : ''}
       </div>
@@ -2580,12 +2678,13 @@ function kasaMasaDetayHtml(m){
   html+='</div>';
   // alt aksiyon bar: yeni kişi + hesap böl + ödeme
   html+=`<div class="kmd-foot">
-    <button class="btn btn-ghost" onclick="kasaYeniKisi(${m})">+ Yeni kişi</button>
+    <button class="btn btn-ghost" onclick="kasaYeniSiparis(${m})">+ Yeni sipariş</button>
     <button class="btn btn-ghost" onclick="kasaMasaBol(${m})">Hesabı böl</button>
     <button class="btn btn-primary" onclick="kasaMasaOde(${m})">Ödeme al · ${toplam} ₺</button>
   </div>`;
   return html;
 }
+function kasaYeniSiparis(m){ state.kasaEkle={masa:m, kisi:null, sepet:[]}; state.cat="Tatlılar"; go("satis"); note("Ürün seç · Masa "+m); }
 
 function kasaYeniKisi(m){
   const ad=prompt("Kişi adı:");
@@ -2594,7 +2693,37 @@ function kasaYeniKisi(m){
     go("masalar");
   }
 }
-function kasaUrunEkleBasla(m,kisi){ state.kasaEkle={masa:m,kisi:kisi}; state.cat="Tatlılar"; go("satis"); note("Ürün seç → "+kisi+" (Masa "+m+")"); }
+function kasaUrunEkleBasla(m,kisi){ state.kasaEkle={masa:m,kisi:kisi,sepet:[]}; state.cat="Tatlılar"; go("satis"); note("Ürün seç → "+kisi+" (Masa "+m+")"); }
+function kasaSepetSil(i){ state.kasaEkle.sepet.splice(i,1); go("satis"); }
+function kasaSepetKisi(ad){ state.kasaEkle.kisi=ad; go("satis"); }
+function kasaSepetYeniKisi(){ const ad=prompt("Yeni kişi adı:"); if(ad&&ad.trim()){ state.kasaEkle.kisi=ad.trim(); go("satis"); } }
+function kasaEkleIptal(){ const m=state.kasaEkle.masa; state.kasaEkle=null; state.kasaMasa=m; go("masalar"); }
+/* Kasa masa siparişini gönder — sadece YENİ sepet mutfağa + tek fiş */
+function kasaMasaGonder(){
+  const ke=state.kasaEkle;
+  if(!ke || !ke.sepet || ke.sepet.length===0){ note("Sepet boş"); return; }
+  const m=ke.masa, kisi=ke.kisi;
+  let s=SESSIONS[m]; if(!s){ s=SESSIONS[m]={masa:m, acik:true, zaman:Date.now(), kisiler:[]}; }
+  let k=s.kisiler.find(x=>x.ad===kisi);
+  if(!k){ k={ad:kisi, kalemler:[]}; s.kisiler.push(k); }
+  ke.sepet.forEach(c=>{
+    k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+  });
+  consumeRecipe(ke.sepet.map(c=>({...c, q:1, ekstraRecete:[]})));
+  // TEK FİŞ — sadece bu sepet
+  mutfakFisiBas({
+    tip:"masa", baslik:"MASA "+m, alt:kisi, kisi:kisi, masa:m,
+    kalemler:ke.sepet.map(c=>({ad:c.ad, secimler:c.secimler, kisi:kisi, paket:!!c.paket}))
+  });
+  const paketliler=ke.sepet.filter(c=>c.paket);
+  if(paketliler.length>0){
+    PAKET_ORDERS.push({id:_paketId++, takipId:"S"+(_takipId++), tip:"paket", musteri:kisi, tel:null,
+      adres:null, masa:m, kalemler:paketliler.map(c=>({ad:c.ad, secimler:c.secimler, fiyat:c.fiyat})),
+      tutar:paketliler.reduce((a,b)=>a+b.fiyat,0), odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()});
+  }
+  note("✓ Sipariş gönderildi · fiş çıktı ("+kisi+")");
+  state.kasaEkle=null; state.kasaMasa=m; go("masalar");
+}
 function kasaKalemIptal(m,id){ kalemIptal(m,id); note("Kalem iptal · tutar düştü"); go("masalar"); }
 function kasaOpsKaldir(m,id,oi){ kalemOpsiyonKaldir(m,id,oi,0); note("Opsiyon kaldırıldı (stok bitti)"); go("masalar"); }
 
@@ -2620,13 +2749,20 @@ function kasaMasaBol(m){
   state.cart=kalemler.map(it=>({ad:it.ad, fiyat:it.fiyat, q:1, secimler:it.secimler, ekstraRecete:it.ekstraRecete||[]}));
   state.kasaMasa=null;
   hesapBolAc(masaToplam(m));
+  if(BOL) BOL.kasaMasaKapat=m;   // bölme bitince bu masayı kapat
 }
 function kasaMasaOde(m){
   const kalemler=masaKalemleri(m).filter(it=>it.durum!=="iptal");
   if(kalemler.length===0){ note("Masada ürün yok"); return; }
+  const odenecek=masaToplam(m);
+  if(odenecek===0){ note("Bu masada ödenecek tutar yok"); return; }
   state.cart=kalemler.map(it=>({ad:it.ad, fiyat:it.fiyat, q:1, secimler:it.secimler, ekstraRecete:it.ekstraRecete||[]}));
-  state.kasaMasa=null;
-  checkout(masaToplam(m));
+  // tüm masa ödemesi — bitince masayı kapat
+  BOL = {
+    total:odenecek, mod:"tek", kisiler:["Masa "+m], atama:[{}], odenenler:{},
+    tekOdeme:true, kasaMasaKapat:m
+  };
+  bolPayAl(0, odenecek);
 }
 
 // --- CANLI (genel müdür) ---
@@ -4087,12 +4223,12 @@ function garsonMasaHtml(){
     html+='<div class="grs-bos-detay">Bu masada henüz sipariş yok.<br>Aşağıdan kişi ekleyip ürün girebilirsin.</div>';
   }
   s.kisiler.forEach(k=>{
-    html+='<div class="grs-kisi-blok"><div class="grs-kisi-ust"><span class="grs-kisi-ad">👤 '+k.ad+'</span>'+
-      '<button class="grs-ekle-btn" onclick="garsonUrunEkleBasla('+m+',\''+k.ad.replace(/'/g,"\\'")+'\')">+ Ürün</button></div>';
+    const kt=k.kalemler.filter(it=>it.durum!=="iptal").reduce((a,it)=>a+it.fiyat,0);
+    html+='<div class="grs-kisi-blok"><div class="grs-kisi-ust"><span class="grs-kisi-ad">👤 '+k.ad+' <small>'+kt+' ₺</small></span></div>';
     k.kalemler.forEach(it=>{
       const dm=DURUM_META[it.durum];
       html+='<div class="grs-kalem'+(it.durum==="iptal"?' iptal':'')+'">'+
-        '<div class="grs-k-bilgi"><span class="grs-k-ad">'+it.ad+'</span>'+
+        '<div class="grs-k-bilgi"><span class="grs-k-ad">'+(it.paket?'📦 ':'')+it.ad+'</span>'+
         (it.secimler.length?'<span class="grs-k-secim">'+it.secimler.join(' · ')+'</span>':'')+'</div>'+
         '<div class="grs-k-sag"><span class="grs-k-durum" style="color:'+dm.renk+'">'+dm.ad+'</span>'+
         '<span class="grs-k-fiyat">'+it.fiyat+' ₺</span></div></div>';
@@ -4100,9 +4236,13 @@ function garsonMasaHtml(){
     html+='</div>';
   });
   html+='</div>'+
-    '<div class="grs-foot"><button class="grs-yeni-kisi" onclick="garsonYeniKisi('+m+')">+ Yeni kişi ekle</button></div>'+
+    '<div class="grs-foot"><button class="grs-yeni-kisi" onclick="garsonYeniSiparis('+m+')">+ Yeni sipariş ekle</button></div>'+
     '</div>';
   return html;
+}
+/* Yeni sipariş başlat — kişi sepette seçilecek */
+function garsonYeniSiparis(m){
+  GARSON.masa=m; GARSON.kisi=null; GARSON.masaSepet=[]; GARSON.view="menu"; renderGarson();
 }
 function garsonYeniKisi(m){
   const ad=prompt("Kişi adı:");
@@ -4122,7 +4262,7 @@ function garsonMenuHtml(){
   const kats=[...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
   const prods=DEMO_PRODUCTS.filter(p=>p.kat===GARSON.aktifKat);
   const paketModu=GARSON.paketModu;
-  const baslik = paketModu ? '🥡 Paket sipariş' : 'Masa '+GARSON.masa+' · '+GARSON.kisi;
+  const baslik = paketModu ? '🥡 Paket sipariş' : 'Masa '+GARSON.masa+(GARSON.kisi?' · '+GARSON.kisi:' · yeni sipariş');
   let html='<div class="grs-screen"><div class="grs-top">'+
     '<button class="qr-close" style="position:static" onclick="'+(paketModu?'GARSON.paketModu=false;GARSON.view=\'masalar\'':'GARSON.view=\'masa\'')+';renderGarson()">←</button>'+
     '<div class="grs-title">'+baslik+'</div>'+
@@ -4148,8 +4288,39 @@ function garsonMenuHtml(){
       '<button class="grs-pb-gonder" onclick="garsonPaketGonder()">🥡 Paketi gönder →</button>'+
     '</div>';
   }
+  // masa sepeti barı (masa modunda) — sadece bu sepet gönderilecek
+  if(!paketModu && GARSON.masaSepet && GARSON.masaSepet.length>0){
+    const mt=GARSON.masaSepet.reduce((s,c)=>s+c.fiyat,0);
+    const s=SESSIONS[GARSON.masa];
+    html+='<div class="grs-sepet-panel">';
+    // kişi seçimi (sepetin içinde)
+    html+='<div class="grs-sp-kisi"><div class="grs-sp-kbaslik">Kim için? *</div><div class="grs-sp-kisiler">';
+    if(s&&s.kisiler.length){
+      s.kisiler.forEach(k=>{
+        html+='<button class="grs-sp-kbtn'+(GARSON.kisi===k.ad?' on':'')+'" onclick="GARSON.kisi=\''+k.ad.replace(/'/g,"\\'")+'\';renderGarson()">'+k.ad+'</button>';
+      });
+    }
+    html+='<button class="grs-sp-kbtn yeni" onclick="garsonSepetYeniKisi()">+ Yeni kişi</button>';
+    html+='</div></div>';
+    html+='<div class="grs-sp-baslik">🧾 Sepet ('+GARSON.masaSepet.length+')</div>';
+    GARSON.masaSepet.forEach((c,i)=>{
+      html+='<div class="grs-sp-kalem"><span>'+c.ad+(c.secimler&&c.secimler.length?' <small>'+c.secimler.join(', ')+'</small>':'')+'</span>'+
+        '<span class="grs-sp-sag">'+c.fiyat+' ₺ <button class="grs-sp-sil" onclick="garsonSepetSil('+i+')">✕</button></span></div>';
+    });
+    const gonderAktif=!!GARSON.kisi;
+    html+='<div class="grs-sepet-bar"><div class="grs-pb-bilgi">'+mt+' ₺'+(GARSON.kisi?' · '+GARSON.kisi:'')+'</div>'+
+      (gonderAktif
+        ? '<button class="grs-pb-gonder" onclick="garsonMasaGonder()">✓ Siparişi gönder →</button>'
+        : '<button class="grs-pb-gonder" disabled style="opacity:.4">Kişi seç</button>')+'</div>';
+    html+='</div>';
+  }
   html+='</div>';
   return html;
+}
+function garsonSepetSil(i){ GARSON.masaSepet.splice(i,1); renderGarson(); }
+function garsonSepetYeniKisi(){
+  const ad=prompt("Yeni kişi adı:");
+  if(ad&&ad.trim()){ GARSON.kisi=ad.trim(); renderGarson(); }
 }
 function garsonKat(k){ GARSON.aktifKat=k; renderGarson(); }
 
@@ -4169,10 +4340,39 @@ function garsonUrunSec(pi){
     note(p.ad+" → Paket sepeti");
     renderGarson();
   } else {
-    masayaUrunEkle(GARSON.masa, GARSON.kisi, {ad:p.ad, fiyat:p.fiyat, secimler:[], ekstraRecete:[]});
-    note(p.ad+" → Masa "+GARSON.masa+" · "+GARSON.kisi);
-    GARSON.view="masa"; renderGarson();
+    // MASA sepeti — geçici, "Siparişi gönder" ile masaya+mutfağa gider (tek fiş)
+    if(!GARSON.masaSepet) GARSON.masaSepet=[];
+    GARSON.masaSepet.push({ad:p.ad, fiyat:p.fiyat, secimler:[], paket:false});
+    note(p.ad+" → sepet");
+    renderGarson();
   }
+}
+/* Garson masa siparişini gönder — sadece YENİ sepet mutfağa + tek fiş */
+function garsonMasaGonder(){
+  if(!GARSON.masaSepet || GARSON.masaSepet.length===0){ note("Sepet boş"); return; }
+  const m=GARSON.masa, kisi=GARSON.kisi;
+  let s=SESSIONS[m]; if(!s){ s=SESSIONS[m]={masa:m, acik:true, zaman:Date.now(), kisiler:[]}; }
+  let k=s.kisiler.find(x=>x.ad===kisi);
+  if(!k){ k={ad:kisi, kalemler:[]}; s.kisiler.push(k); }
+  // sadece bu sepet kalemleri masaya eklenir
+  GARSON.masaSepet.forEach(c=>{
+    k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+  });
+  consumeRecipe(GARSON.masaSepet.map(c=>({...c, q:1, ekstraRecete:[]})));
+  // TEK FİŞ — sadece bu sepet (eski ürünler hariç)
+  mutfakFisiBas({
+    tip:"masa", baslik:"MASA "+m, alt:kisi, kisi:kisi, masa:m,
+    kalemler:GARSON.masaSepet.map(c=>({ad:c.ad, secimler:c.secimler, kisi:kisi, paket:!!c.paket}))
+  });
+  // paketli kalemler ayrıca paket ekranına
+  const paketliler=GARSON.masaSepet.filter(c=>c.paket);
+  if(paketliler.length>0){
+    PAKET_ORDERS.push({id:_paketId++, takipId:"S"+(_takipId++), tip:"paket", musteri:kisi, tel:null,
+      adres:null, masa:m, kalemler:paketliler.map(c=>({ad:c.ad, secimler:c.secimler, fiyat:c.fiyat})),
+      tutar:paketliler.reduce((a,b)=>a+b.fiyat,0), odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()});
+  }
+  note("✓ Sipariş gönderildi · fiş çıktı ("+kisi+")");
+  GARSON.masaSepet=[]; GARSON.view="masa"; renderGarson();
 }
 /* Garson paket siparişini mutfağa gönder */
 function garsonPaketGonder(){
