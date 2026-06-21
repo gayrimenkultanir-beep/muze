@@ -758,6 +758,31 @@ tr:last-child td{border-bottom:none}
 .kmd-paket-rozet,.grs-paket-rozet{display:inline-block; background:#8e44ad; color:#fff; font-size:9px; font-weight:800; padding:2px 7px; border-radius:99px; margin-left:6px; vertical-align:middle}
 .kmd-kalem-paket{border-left:3px solid #8e44ad}
 .grs-kalem-paket{border-left:3px solid #8e44ad}
+/* Kasa/garson masa kategori başlığı */
+.kasa-kat-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:14px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--line)}
+.kasa-kat-baslik:first-child{margin-top:4px}
+.grs-kat-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:14px 12px 8px}
+/* Masa Yönetimi */
+.my-sube-sec{margin-bottom:18px}
+.my-ss-lbl{font-size:13px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
+.my-ss-row{display:flex; flex-wrap:wrap; gap:8px}
+.my-ss-btn{padding:8px 14px; border-radius:99px; background:var(--surface); border:1.5px solid var(--line); color:var(--ink-2); font-size:13px; font-weight:700}
+.my-ss-btn.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+.my-katlar{display:flex; flex-direction:column; gap:14px; margin-bottom:16px}
+.my-kat-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px}
+.my-kat-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px}
+.my-kat-ad{font-size:16px; font-weight:800}
+.my-kat-aksiyon{display:flex; gap:6px}
+.my-mini{width:34px; height:34px; border-radius:9px; background:var(--surface-2); font-size:14px; border:1px solid var(--line)}
+.my-mini.sil:hover{background:var(--err-soft)}
+.my-masa-grid{display:flex; flex-wrap:wrap; gap:10px}
+.my-masa{display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; background:var(--surface-2); font-weight:700; font-size:14px; border:1px solid var(--line)}
+.my-masa.dolu{background:var(--ok-soft); border-color:var(--ok)}
+.my-masa-sil{width:20px; height:20px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800}
+.my-dolu-rozet{font-size:10px; font-weight:800; color:var(--ok); background:#fff; padding:2px 7px; border-radius:99px}
+.my-masa-ekle{padding:10px 16px; border-radius:10px; background:var(--brand-soft); color:var(--brand-d); font-weight:800; font-size:13px; border:1.5px dashed var(--brand)}
+.my-kat-ekle{width:100%; padding:14px; border-radius:var(--radius); background:var(--cocoa); color:#fff; font-weight:800; font-size:14px}
+.my-bos{padding:30px; text-align:center; color:var(--ink-3); font-size:14px}
 /* Garson paket sekmesi */
 .grs-sekme-row{display:flex; gap:8px; padding:12px 16px 0}
 .grs-sekme{flex:1; padding:11px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:800; border:1.5px solid transparent}
@@ -1172,9 +1197,9 @@ const ROLES = {
   kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", subeSec:true,
            nav:["satis","masalar"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
-           nav:["satis","masalar","stok","fiyat","kampanya","personel","rapor"] },
+           nav:["satis","masalar","masayonetim","stok","fiyat","kampanya","personel","rapor"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","recete","stok","fiyat","kampanya","subeler","rapor","denetim"] },
+           nav:["canli","masayonetim","recete","stok","fiyat","kampanya","subeler","rapor","denetim"] },
 };
 
 // Yetki kontrolü: belirli aksiyon bu role açık mı?
@@ -1193,6 +1218,7 @@ function can(role, action){ return (CAN[action]||[]).includes(role); }
 const NAV_META = {
   satis:   {ic:"🧇", ad:"Satış"},
   masalar: {ic:"🪑", ad:"Masalar"},
+  masayonetim:{ic:"🗂️", ad:"Masa Yönetimi"},
   canli:   {ic:"📡", ad:"Canlı"},
   recete:  {ic:"📖", ad:"Reçete"},
   fiyat:   {ic:"🏷️", ad:"Fiyat"},
@@ -1225,6 +1251,29 @@ const DEMO_BRANCHES = [
   {ad:"Süleymanpaşa Değirmenaltı",ciro:4400,masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
   {ad:"Çorlu Express",           ciro:6800, masa:7,  bekleyen:5, durum:"yellow", fire:"normal"},
 ];
+
+/* ŞUBE-BAZLI MASA YAPISI — her şubenin kendi kategorileri + masaları */
+let BRANCH_TABLES = {
+  "Bolu Tabaklar":            [{kat:"İç Salon", masalar:["1","2","3","4"]}, {kat:"Balkon", masalar:["1","2"]}],
+  "Çanakkale Kemalpaşa":      [{kat:"İç Salon", masalar:["1","2","3","4"]}],
+  "Çankırı Cumhuriyet":       [{kat:"İç Salon", masalar:["1","2","3"]}],
+  "Edirne Zübeyde Hanım":     [{kat:"İç Salon", masalar:["1","2","3","4","5"]}, {kat:"Teras", masalar:["1","2","3"]}],
+  "Edirne Atatürk":           [{kat:"İç Salon", masalar:["1","2","3"]}, {kat:"Bahçe", masalar:["1","2"]}],
+  "Lüleburgaz":               [{kat:"İç Salon", masalar:["1","2","3","4","5"]}],
+  "Süleymanpaşa Değirmenaltı":[{kat:"İç Salon", masalar:["1","2","3","4"]}],
+  "Çorlu Express":            [{kat:"İç Salon", masalar:["1","2","3","4","5","6","7"]}],
+};
+/* Bir şubenin masalarını {id, kat, ad, etiket} olarak döndür (id oturum anahtarı) */
+function subeMasalari(sube){
+  const kats = BRANCH_TABLES[sube] || [];
+  const out = [];
+  kats.forEach(k=>{
+    k.masalar.forEach(ad=>{
+      out.push({ id:k.kat+"|"+ad, kat:k.kat, ad:ad, etiket:k.kat+"-"+ad });
+    });
+  });
+  return out;
+}
 
 /* --- ŞUBE ADRESLERİ (yönetim için) --- */
 const BRANCH_INFO = {
@@ -1575,7 +1624,7 @@ function go(key){
   const main = document.getElementById("main");
   main.scrollTop = 0;
   ({
-    satis:viewSatis, masalar:viewMasalar, canli:viewCanli, recete:viewRecete,
+    satis:viewSatis, masalar:viewMasalar, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
     fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel,
     subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok
   }[key] || viewSatis)(main);
@@ -2490,8 +2539,10 @@ let _kalemId = 1;
 
 /* Demo oturumları kur (gerçekte Firestore'dan canlı gelir) */
 function seedSessions(){
+  // Demo masalar Edirne Atatürk şubesine ait (kategorili id: sube::kat|ad)
+  const S = "Edirne Atatürk::";
   SESSIONS = {
-    7: { masa:7, acik:true, zaman:Date.now()-1200000, kisiler:[
+    [S+"İç Salon|1"]: { masa:S+"İç Salon|1", acik:true, zaman:Date.now()-1200000, kisiler:[
       {ad:"Ayşe", kalemler:[
         {id:_kalemId++, ad:"Minipan (14 Adet)", fiyat:325, secimler:["Sütlü Pancake","Sütlü Çikolatalı Sos","Çilek"], ekstraRecete:[], durum:"hazirlaniyor"},
         {id:_kalemId++, ad:"Coca-Cola (33cl)", fiyat:90, secimler:[], ekstraRecete:[], durum:"gonderildi"},
@@ -2500,13 +2551,13 @@ function seedSessions(){
         {id:_kalemId++, ad:"Bitter Çikolatalı Mag", fiyat:250, secimler:["Toz Antep Fıstığı"], ekstraRecete:[], durum:"bekliyor"},
       ]},
     ]},
-    12: { masa:12, acik:true, zaman:Date.now()-600000, kisiler:[
+    [S+"İç Salon|3"]: { masa:S+"İç Salon|3", acik:true, zaman:Date.now()-600000, kisiler:[
       {ad:"Can", kalemler:[
         {id:_kalemId++, ad:"Minipan (18 Adet)", fiyat:390, secimler:["Sütlü Pancake","Karamel Çikolatalı Sos","Muz","Oreo"], ekstraRecete:[], durum:"bekliyor"},
         {id:_kalemId++, ad:"Lotus Bisküvili Mag", fiyat:275, secimler:["Çilek"], ekstraRecete:[], durum:"bekliyor"},
       ]},
     ]},
-    9: { masa:9, acik:true, zaman:Date.now()-180000, kisiler:[
+    [S+"Bahçe|1"]: { masa:S+"Bahçe|1", acik:true, zaman:Date.now()-180000, kisiler:[
       {ad:"Zeynep", kalemler:[
         {id:_kalemId++, ad:"Oreolu Mag", fiyat:250, secimler:["Muz"], ekstraRecete:[], durum:"hazirlaniyor"},
       ]},
@@ -2578,11 +2629,112 @@ function saveOrder(cart, total){
   }
 }
 
+// --- MASA YÖNETİMİ (müdür: kendi şubesi · genel müdür: tüm şubeler) ---
+function viewMasaYonetim(main){
+  if(Object.keys(SESSIONS).length===0) seedSessions();
+  const genelMu = state.role==="genel";
+  // hedef şube: müdür kendi şubesi, genel müdür seçer
+  if(!state.myHedefSube){
+    state.myHedefSube = genelMu ? DEMO_BRANCHES[0].ad : AKTIF_SUBE;
+  }
+  const sube = state.myHedefSube;
+  const kats = BRANCH_TABLES[sube] || [];
+  let html=`<div class="sec-head"><div><h2>🗂️ Masa Yönetimi</h2>
+    <div class="sh-sub">${genelMu?'Tüm şubelerin masalarını düzenle':'Şubenizin masalarını düzenle'}</div></div></div>`;
+  // genel müdür → şube seçici
+  if(genelMu){
+    html+=`<div class="my-sube-sec"><div class="my-ss-lbl">Şube:</div><div class="my-ss-row">`;
+    DEMO_BRANCHES.forEach(b=>{
+      html+=`<button class="my-ss-btn${sube===b.ad?' on':''}" onclick="myHedefSube('${b.ad.replace(/'/g,"\\'")}')">${b.ad}</button>`;
+    });
+    html+=`</div></div>`;
+  }
+  // kategoriler + masalar
+  html+=`<div class="my-katlar">`;
+  if(kats.length===0){
+    html+=`<div class="my-bos">Bu şubede henüz masa kategorisi yok.</div>`;
+  }
+  kats.forEach((k,ki)=>{
+    html+=`<div class="my-kat-kart">
+      <div class="my-kat-head">
+        <div class="my-kat-ad">📁 ${k.kat}</div>
+        <div class="my-kat-aksiyon">
+          <button class="my-mini" onclick="myKatYenidenAdlandir(${ki})" title="Kategori adını değiştir">✏️</button>
+          <button class="my-mini sil" onclick="myKatSil(${ki})" title="Kategoriyi sil">🗑️</button>
+        </div>
+      </div>
+      <div class="my-masa-grid">`;
+    k.masalar.forEach((ad,mi)=>{
+      const masaId = sube+"::"+k.kat+"|"+ad;   // global oturum anahtarı
+      const dolu = SESSIONS[masaId] && SESSIONS[masaId].acik;
+      html+=`<div class="my-masa${dolu?' dolu':''}">
+        <span class="my-masa-ad">${k.kat}-${ad}</span>
+        ${dolu?'<span class="my-dolu-rozet">dolu</span>'
+          :`<button class="my-masa-sil" onclick="myMasaSil(${ki},${mi})" title="Masayı sil">✕</button>`}
+      </div>`;
+    });
+    html+=`<button class="my-masa-ekle" onclick="myMasaEkle(${ki})">+ Masa</button>`;
+    html+=`</div></div>`;
+  });
+  html+=`</div>`;
+  // yeni kategori
+  html+=`<button class="my-kat-ekle" onclick="myKatEkle()">+ Yeni kategori (Balkon, Teras...)</button>`;
+  main.innerHTML=html;
+}
+function myHedefSube(s){ state.myHedefSube=s; go("masayonetim"); }
+function myKatEkle(){
+  const ad=prompt("Yeni kategori adı (örn. Balkon, Teras, Bahçe):");
+  if(!ad||!ad.trim()) return;
+  const sube=state.myHedefSube;
+  if(!BRANCH_TABLES[sube]) BRANCH_TABLES[sube]=[];
+  if(BRANCH_TABLES[sube].find(k=>k.kat===ad.trim())){ note("Bu kategori zaten var"); return; }
+  BRANCH_TABLES[sube].push({kat:ad.trim(), masalar:[]});
+  note("Kategori eklendi: "+ad.trim());
+  go("masayonetim");
+}
+function myKatYenidenAdlandir(ki){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
+  const ad=prompt("Kategori adı:", k.kat);
+  if(!ad||!ad.trim()) return;
+  k.kat=ad.trim();
+  go("masayonetim");
+}
+function myKatSil(ki){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
+  // kategoride dolu masa var mı
+  const dolu = k.masalar.some(ad=>{ const id=sube+"::"+k.kat+"|"+ad; return SESSIONS[id]&&SESSIONS[id].acik; });
+  if(dolu){ note("Bu kategoride dolu masa var — önce hesapları kapatın"); return; }
+  if(!confirm(k.kat+" kategorisi ve içindeki "+k.masalar.length+" masa silinecek. Emin misiniz?")) return;
+  BRANCH_TABLES[sube].splice(ki,1);
+  note("Kategori silindi");
+  go("masayonetim");
+}
+function myMasaEkle(ki){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
+  // sonraki numarayı öner
+  const sayilar=k.masalar.map(x=>parseInt(x)).filter(n=>!isNaN(n));
+  const oneri=sayilar.length?Math.max(...sayilar)+1:1;
+  const ad=prompt(k.kat+" için masa adı/numarası:", String(oneri));
+  if(!ad||!ad.trim()) return;
+  if(k.masalar.includes(ad.trim())){ note("Bu masa zaten var"); return; }
+  k.masalar.push(ad.trim());
+  note(k.kat+"-"+ad.trim()+" eklendi");
+  go("masayonetim");
+}
+function myMasaSil(ki,mi){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki]; const ad=k.masalar[mi];
+  const id=sube+"::"+k.kat+"|"+ad;
+  if(SESSIONS[id]&&SESSIONS[id].acik){ note("Dolu masa silinemez — önce hesabı kapatın"); return; }
+  if(!confirm(k.kat+"-"+ad+" masası silinecek?")) return;
+  k.masalar.splice(mi,1);
+  note("Masa silindi");
+  go("masayonetim");
+}
+
 // --- MASALAR ---
 function viewMasalar(main){
   if(Object.keys(SESSIONS).length===0) seedSessions();
   const sekme = state.kasaSekme||"masa";
-  const tumMasalar=[1,3,5,7,8,9,12,15];
   const aktifPaket=PAKET_ORDERS.filter(p=>p.durum!=="teslim"&&p.durum!=="iptal");
   // SOL kolon: sekmeler + masa ızgarası / paket listesi
   let sol=`<div class="sec-head"><div><h2>Masalar & Paket</h2><div class="sh-sub">${AKTIF_SUBE}</div></div></div>
@@ -2605,21 +2757,31 @@ function viewMasalar(main){
     });
     sol+=`</div>`;
   } else {
-    sol+=`<div class="kasa-masa-grid">
-      ${tumMasalar.map(m=>{
-        const s=SESSIONS[m]; const acik=s&&s.acik;
-        const kalemler=acik?masaKalemleri(m).filter(it=>it.durum!=="iptal"):[];
+    const masalar = subeMasalari(AKTIF_SUBE);
+    const katlar = [...new Set(masalar.map(m=>m.kat))];
+    if(masalar.length===0){
+      sol+=`<div class="kmd-bos">Bu şubede masa tanımlı değil. Müdür "Masa Yönetimi"nden ekleyebilir.</div>`;
+    }
+    katlar.forEach(kat=>{
+      const katMasalari = masalar.filter(m=>m.kat===kat);
+      sol+=`<div class="kasa-kat-baslik">📁 ${kat}</div><div class="kasa-masa-grid">`;
+      katMasalari.forEach(mm=>{
+        const id = AKTIF_SUBE+"::"+mm.id;   // şubeye özel global anahtar
+        const s=SESSIONS[id]; const acik=s&&s.acik;
+        const kalemler=acik?masaKalemleri(id).filter(it=>it.durum!=="iptal"):[];
         const paketVar=kalemler.some(it=>it.paket);
-        const secili=state.kasaMasa===m;
+        const secili=state.kasaMasa===id;
         const renk=acik?"var(--ok)":"var(--line-2)";
-        return `
-        <button class="prod kasa-masa-btn${secili?' secili':''}" style="text-align:center;position:relative" onclick="kasaMasaAc(${m})">
+        sol+=`
+        <button class="prod kasa-masa-btn${secili?' secili':''}" style="text-align:center;position:relative" onclick="kasaMasaAc('${id.replace(/'/g,"\\'")}')">
           ${paketVar?'<span class="kasa-masa-paket">🥡</span>':''}
           <div style="font-size:13px;font-weight:800;color:${renk};margin-bottom:6px">● ${acik?'Dolu':'Boş'}</div>
-          <div style="font-size:28px;font-weight:800;letter-spacing:-1px">${m}</div>
-          ${acik?`<div style="font-size:12px;color:var(--ink-2);margin-top:6px">${s.kisiler.length} kişi · ${masaToplam(m)} ₺</div>`:''}
-        </button>`;}).join("")}
-    </div>`;
+          <div style="font-size:22px;font-weight:800;letter-spacing:-.5px">${mm.ad}</div>
+          ${acik?`<div style="font-size:12px;color:var(--ink-2);margin-top:6px">${s.kisiler.length} kişi · ${masaToplam(id)} ₺</div>`:''}
+        </button>`;
+      });
+      sol+=`</div>`;
+    });
   }
   // SAĞ kolon: seçili masa detayı/ödeme (yoksa boş durum)
   let sag;
@@ -2669,6 +2831,15 @@ function kasaPaketGonder(){
 }
 function kasaPaketIptal(){ state.kasaPaket=null; go("masalar"); }
 
+/* Masa id'sinden görünen etiket: "sube::Balkon|1" → "Balkon-1" (eski sayısal → "Masa 7") */
+function masaEtiket(id){
+  const s = String(id);
+  if(s.includes("|")){
+    const son = s.split("::").pop();      // "Balkon|1"
+    return son.replace("|","-");          // "Balkon-1"
+  }
+  return "Masa "+s;
+}
 function kasaMasaAc(m){
   if(!SESSIONS[m]){ SESSIONS[m]={masa:m, acik:true, zaman:Date.now(), kisiler:[]}; }
   state.kasaMasa=m; go("masalar");
@@ -2681,7 +2852,7 @@ function kasaMasaDetayHtml(m){
   const toplam=masaToplam(m);
   const kalan=masaKalan(m);
   let html=`<div class="kasa-detay-head">
-      <div><div class="kdh-baslik">🍽️ Masa ${m}</div><div class="kdh-alt">${s.kisiler.length} kişi · kalan ${kalan} ₺${kalan!==toplam?` <small>(toplam ${toplam} ₺)</small>`:''}</div></div>
+      <div><div class="kdh-baslik">🍽️ ${masaEtiket(m)}</div><div class="kdh-alt">${s.kisiler.length} kişi · kalan ${kalan} ₺${kalan!==toplam?` <small>(toplam ${toplam} ₺)</small>`:''}</div></div>
       <button class="kasa-detay-kapat" onclick="kasaMasaKapat()">✕</button>
     </div>`;
   html+='<div class="kasa-masa-detay">';
@@ -4077,7 +4248,7 @@ function kdsMasalarHtml(){
     const paketVar=kalemler.some(it=>it.paket);
     const dk=Math.floor((Date.now()-SESSIONS[m].zaman)/60000);
     html+='<button class="kds-masa-kart'+(bekleyen>0?' acil':'')+'" onclick="kdsMasaAc('+m+')">'+
-      '<div class="kmk-ust"><span class="kmk-no">Masa '+m+(paketVar?' <span class="kmk-paket">🥡</span>':'')+'</span><span class="kmk-dk">'+dk+' dk</span></div>'+
+      '<div class="kmk-ust"><span class="kmk-no">'+masaEtiket(m)+(paketVar?' <span class="kmk-paket">🥡</span>':'')+'</span><span class="kmk-dk">'+dk+' dk</span></div>'+
       '<div class="kmk-kisi">'+SESSIONS[m].kisiler.length+' kişi · '+kalemler.length+' ürün</div>'+
       '<div class="kmk-durum">'+
         (paketVar?'<span class="kmk-rozet paket">🥡 paket var</span>':'')+
@@ -4120,7 +4291,7 @@ function kdsMasaDetayHtml(m){
   const s=SESSIONS[m];
   let html='<div class="kds-screen"><div class="kds-top">'+
     '<button class="qr-close" style="position:static" onclick="kdsGeri()">←</button>'+
-    '<div class="kds-title">Masa '+m+' detayı</div>'+
+    '<div class="kds-title">'+masaEtiket(m)+' detayı</div>'+
     '<button class="kds-fis-btn" onclick="kdsFisYazdir('+m+')">🖨️ Mutfak fişi</button></div>'+
     '<div class="kds-detay">';
   s.kisiler.forEach(k=>{
@@ -4210,7 +4381,6 @@ function renderGarson(){
 
 /* 1) Masa listesi */
 function garsonMasalarHtml(){
-  const tumMasalar=[1,3,5,7,8,9,12,15];   // şubenin masaları
   const aktifPaket=PAKET_ORDERS.filter(p=>p.durum!=="teslim"&&p.durum!=="iptal");
   let html='<div class="grs-screen"><div class="grs-top">'+
     '<button class="qr-close" style="position:static" onclick="closeGarson()">✕</button>'+
@@ -4241,19 +4411,28 @@ function garsonMasalarHtml(){
     html+='</div></div></div>';
     return html;
   }
-  html+='<div class="grs-masa-grid">';
-  tumMasalar.forEach(m=>{
-    const s=SESSIONS[m];
-    const acik=s&&s.acik;
-    const kalemler=acik?masaKalemleri(m).filter(it=>it.durum!=="iptal"):[];
-    html+='<button class="grs-masa'+(acik?' dolu':'')+'" onclick="garsonMasaAc('+m+')">'+
-      '<div class="grs-m-no">Masa '+m+'</div>'+
-      (acik
-        ? '<div class="grs-m-bilgi">'+s.kisiler.length+' kişi · '+kalemler.length+' ürün</div><div class="grs-m-tutar">'+masaToplam(m)+' ₺</div>'
-        : '<div class="grs-m-bos">Boş</div>')+
-    '</button>';
+  const masalar = subeMasalari(AKTIF_SUBE);
+  const katlar = [...new Set(masalar.map(m=>m.kat))];
+  if(masalar.length===0){
+    html+='<div class="grs-bos-detay">Bu şubede masa tanımlı değil.</div></div>';
+    return html;
+  }
+  katlar.forEach(kat=>{
+    html+='<div class="grs-kat-baslik">📁 '+kat+'</div><div class="grs-masa-grid">';
+    masalar.filter(mm=>mm.kat===kat).forEach(mm=>{
+      const id=AKTIF_SUBE+"::"+mm.id;
+      const s=SESSIONS[id]; const acik=s&&s.acik;
+      const kalemler=acik?masaKalemleri(id).filter(it=>it.durum!=="iptal"):[];
+      html+='<button class="grs-masa'+(acik?' dolu':'')+'" onclick="garsonMasaAc(\''+id.replace(/'/g,"\\'")+'\')">'+
+        '<div class="grs-m-no">'+mm.ad+'</div>'+
+        (acik
+          ? '<div class="grs-m-bilgi">'+s.kisiler.length+' kişi · '+kalemler.length+' ürün</div><div class="grs-m-tutar">'+masaToplam(id)+' ₺</div>'
+          : '<div class="grs-m-bos">Boş</div>')+
+      '</button>';
+    });
+    html+='</div>';
   });
-  html+='</div></div>';
+  html+='</div>';
   return html;
 }
 function garsonSekme(s){ GARSON.sekme=s; renderGarson(); }
@@ -4275,7 +4454,7 @@ function garsonMasaHtml(){
   const m=GARSON.masa, s=SESSIONS[m];
   let html='<div class="grs-screen"><div class="grs-top">'+
     '<button class="qr-close" style="position:static" onclick="GARSON.view=\'masalar\';renderGarson()">←</button>'+
-    '<div class="grs-title">Masa '+m+'</div>'+
+    '<div class="grs-title">'+masaEtiket(m)+'</div>'+
     '<div class="grs-tutar-rozet">'+masaToplam(m)+' ₺</div></div>'+
     '<div class="grs-detay">';
   if(s.kisiler.length===0){
@@ -4321,7 +4500,7 @@ function garsonMenuHtml(){
   const kats=[...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
   const prods=DEMO_PRODUCTS.filter(p=>p.kat===GARSON.aktifKat);
   const paketModu=GARSON.paketModu;
-  const baslik = paketModu ? '🥡 Paket sipariş' : 'Masa '+GARSON.masa+(GARSON.kisi?' · '+GARSON.kisi:' · yeni sipariş');
+  const baslik = paketModu ? '🥡 Paket sipariş' : masaEtiket(GARSON.masa)+(GARSON.kisi?' · '+GARSON.kisi:' · yeni sipariş');
   let html='<div class="grs-screen"><div class="grs-top">'+
     '<button class="qr-close" style="position:static" onclick="'+(paketModu?'GARSON.paketModu=false;GARSON.view=\'masalar\'':'GARSON.view=\'masa\'')+';renderGarson()">←</button>'+
     '<div class="grs-title">'+baslik+'</div>'+
