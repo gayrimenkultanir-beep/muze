@@ -730,6 +730,13 @@ tr:last-child td{border-bottom:none}
 .kasa-sag-panel .kmd-foot{padding:14px 16px; border-top:1px solid var(--line); background:var(--surface-2)}
 .kmd-kalem-odendi{opacity:.6}
 .kmd-kalem-odendi .kmd-k-ad{color:var(--ink-2)}
+/* Sepet kalem paketle toggle (kasa + garson) */
+.ci-paketle{display:inline-block; margin-left:8px; padding:3px 10px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:11px; font-weight:800; border:1px solid var(--line-2)}
+.ci-paketle.on{background:#8e44ad; color:#fff; border-color:#8e44ad}
+.ci-paketli{background:#faf5fd}
+.grs-sp-paketle{margin-left:6px; padding:2px 9px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:11px; font-weight:800; border:1px solid var(--line-2)}
+.grs-sp-paketle.on{background:#8e44ad; color:#fff; border-color:#8e44ad}
+.grs-sp-paketli{background:#faf5fd; border-radius:6px; padding-left:4px}
 /* Garson paket sekmesi */
 .grs-sekme-row{display:flex; gap:8px; padding:12px 16px 0}
 .grs-sekme{flex:1; padding:11px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:800; border:1.5px solid transparent}
@@ -1846,8 +1853,10 @@ function cartHtml(){
     const s=SESSIONS[ke.masa];
     const items=sep.length===0
       ? '<div class="cart-empty">🧾 Sepet boş.<br>Soldan ürün ekleyin.</div>'
-      : sep.map((c,i)=>'<div class="ci"><span class="ci-q">1×</span><span class="ci-name">'+c.ad+
+      : sep.map((c,i)=>'<div class="ci'+(c.paket?' ci-paketli':'')+'"><span class="ci-q">1×</span>'+
+          '<span class="ci-name">'+(c.paket?'📦 ':'')+c.ad+
           (c.secimler&&c.secimler.length?'<small>'+c.secimler.join(' · ')+'</small>':'')+
+          '<button class="ci-paketle'+(c.paket?' on':'')+'" onclick="kasaSepetPaket('+i+')">'+(c.paket?'📦 Paket':'📦 Paketle')+'</button>'+
           '</span><span class="ci-price">'+c.fiyat+' ₺ <button class="ci-sil" onclick="kasaSepetSil('+i+')">✕</button></span></div>').join("");
     // kişi seçimi
     let kisiSec='<div class="ke-kisi"><div class="ke-kisi-baslik">Kim için? *</div><div class="ke-kisi-row">';
@@ -2714,6 +2723,7 @@ function kasaYeniKisi(m){
 }
 function kasaUrunEkleBasla(m,kisi){ state.kasaEkle={masa:m,kisi:kisi,sepet:[]}; state.cat="Tatlılar"; go("satis"); note("Ürün seç → "+kisi+" (Masa "+m+")"); }
 function kasaSepetSil(i){ state.kasaEkle.sepet.splice(i,1); go("satis"); }
+function kasaSepetPaket(i){ state.kasaEkle.sepet[i].paket = !state.kasaEkle.sepet[i].paket; go("satis"); }
 function kasaSepetKisi(ad){ state.kasaEkle.kisi=ad; go("satis"); }
 function kasaSepetYeniKisi(){ const ad=prompt("Yeni kişi adı:"); if(ad&&ad.trim()){ state.kasaEkle.kisi=ad.trim(); go("satis"); } }
 function kasaEkleIptal(){ const m=state.kasaEkle.masa; state.kasaEkle=null; state.kasaMasa=m; go("masalar"); }
@@ -4332,7 +4342,8 @@ function garsonMenuHtml(){
     html+='</div></div>';
     html+='<div class="grs-sp-baslik">🧾 Sepet ('+GARSON.masaSepet.length+')</div>';
     GARSON.masaSepet.forEach((c,i)=>{
-      html+='<div class="grs-sp-kalem"><span>'+c.ad+(c.secimler&&c.secimler.length?' <small>'+c.secimler.join(', ')+'</small>':'')+'</span>'+
+      html+='<div class="grs-sp-kalem'+(c.paket?' grs-sp-paketli':'')+'"><span>'+(c.paket?'📦 ':'')+c.ad+(c.secimler&&c.secimler.length?' <small>'+c.secimler.join(', ')+'</small>':'')+
+        ' <button class="grs-sp-paketle'+(c.paket?' on':'')+'" onclick="garsonSepetPaket('+i+')">'+(c.paket?'📦 Paket':'📦 Paketle')+'</button></span>'+
         '<span class="grs-sp-sag">'+c.fiyat+' ₺ <button class="grs-sp-sil" onclick="garsonSepetSil('+i+')">✕</button></span></div>';
     });
     const gonderAktif=!!GARSON.kisi;
@@ -4346,6 +4357,7 @@ function garsonMenuHtml(){
   return html;
 }
 function garsonSepetSil(i){ GARSON.masaSepet.splice(i,1); renderGarson(); }
+function garsonSepetPaket(i){ GARSON.masaSepet[i].paket = !GARSON.masaSepet[i].paket; renderGarson(); }
 function garsonSepetYeniKisi(){
   const ad=prompt("Yeni kişi adı:");
   if(ad&&ad.trim()){ GARSON.kisi=ad.trim(); renderGarson(); }
