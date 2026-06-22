@@ -637,6 +637,9 @@ tr:last-child td{border-bottom:none}
 .qr-kat{flex:none; padding:9px 16px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:700; white-space:nowrap}
 .qr-kat.on{background:var(--cocoa); color:#fff}
 .qr-servis-row{display:flex; gap:8px; padding:12px 14px 0}
+.qr-yardim-row{display:flex; gap:8px; padding:10px 14px 0; flex-wrap:wrap}
+.qr-yardim{flex:1; min-width:fit-content; padding:9px 12px; border-radius:99px; background:var(--surface-2); border:1.5px solid var(--line); color:var(--ink-2); font-size:12.5px; font-weight:700; white-space:nowrap}
+.qr-yardim:active{background:var(--brand-soft); border-color:var(--brand)}
 .qr-servis{flex:1; padding:11px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:800; border:1.5px solid transparent}
 .qr-servis.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
 
@@ -789,6 +792,8 @@ tr:last-child td{border-bottom:none}
 .my-masa{display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; background:var(--surface-2); font-weight:700; font-size:14px; border:1px solid var(--line)}
 .my-masa.dolu{background:var(--ok-soft); border-color:var(--ok)}
 .my-masa-sil{width:20px; height:20px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800}
+.my-masa-qr{padding:4px 10px; border-radius:8px; background:var(--cocoa); color:#fff; font-size:11px; font-weight:800; border:none}
+.my-toplu-qr{width:100%; padding:13px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:14px; border:none; margin-bottom:16px}
 .my-dolu-rozet{font-size:10px; font-weight:800; color:var(--ok); background:#fff; padding:2px 7px; border-radius:99px}
 .my-masa-ekle{padding:10px 16px; border-radius:10px; background:var(--brand-soft); color:var(--brand-d); font-weight:800; font-size:13px; border:1.5px dashed var(--brand)}
 .my-kat-ekle{width:100%; padding:14px; border-radius:var(--radius); background:var(--cocoa); color:#fff; font-weight:800; font-size:14px}
@@ -829,6 +834,203 @@ tr:last-child td{border-bottom:none}
 .fy-btn.kapali{color:var(--err); border-color:var(--err)}
 .fy-btn.sifirla{color:var(--cocoa)}
 @media(max-width:680px){.fy-satir{grid-template-columns:1fr; gap:10px}.fy-aksiyon{justify-content:flex-start}}
+/* Fiyat yönetimi v2 — kanal sekmeleri + alanlar */
+.fy-kanal-row{display:flex; gap:8px; margin:6px 0 14px}
+.fy-kanal{flex:1; padding:11px; border-radius:10px; background:var(--surface); border:1.5px solid var(--line); font-size:13.5px; font-weight:800; color:var(--ink-2)}
+.fy-kanal.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink)}
+.fy-fiyat-blok{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end}
+.fy-alan{display:flex; flex-direction:column; gap:3px}
+.fy-alan-lbl{font-size:10px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.3px}
+.fy-alan-val{padding:7px 12px; border-radius:9px; background:var(--surface-2); border:1px solid var(--line); font-size:13px; font-weight:800; color:var(--ink-2); white-space:nowrap}
+.fy-alan-val.dolu{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.fy-alan-aciklama{flex:1; min-width:120px}
+.fy-alan-aciklama .fy-alan-val{text-align:left; overflow:hidden; text-overflow:ellipsis}
+.fy-onizleme{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:10px; padding-top:10px; border-top:1px dashed var(--line)}
+.fy-kampanya{background:#fff3e0; color:#e8780a; font-size:11px; font-weight:800; padding:2px 9px; border-radius:99px}
+.fy-satir{display:flex; flex-direction:column; gap:8px}
+/* İndirimli ürün kartı yanıp sönme (yumuşak) */
+@keyframes blinkSoft{0%,100%{box-shadow:0 0 0 2px var(--err) inset, 0 0 14px rgba(231,76,60,.25)}50%{box-shadow:0 0 0 1px rgba(231,76,60,.3) inset, 0 0 4px rgba(231,76,60,.1)}}
+.blink-soft{animation:blinkSoft 1.3s ease-in-out infinite}
+.prod-indirimli{position:relative}
+.qr-card-indirimli{border-radius:16px}
+/* Kampanya açıklaması yazısı (satış/qr/garson) */
+.p-kampanya{display:block; font-size:11px; font-weight:800; color:var(--err); margin:2px 0}
+.qr-card-kampanya{font-size:12px; font-weight:800; color:var(--err); margin:3px 0}
+.grs-u-kampanya{font-size:11px; font-weight:800; color:var(--err); margin-top:3px}
+.grs-u-fiyat.indirimli{display:flex; flex-direction:column; align-items:flex-end; line-height:1.1}
+.grs-u-eski{text-decoration:line-through; color:var(--ink-3); font-size:11px}
+.grs-u-yeni{color:var(--err); font-weight:800; font-size:15px}
+/* Şube yönetimi */
+.sb-liste{display:flex; flex-direction:column; gap:12px}
+.sb-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px 18px}
+.sb-kart.sb-kapali{opacity:.6; background:var(--surface-2)}
+.sb-ad{font-size:16px; font-weight:800; margin-bottom:5px}
+.sb-rozet-kapali{font-size:10px; font-weight:800; background:var(--err); color:#fff; padding:2px 8px; border-radius:99px; vertical-align:middle}
+.sb-adres{font-size:12.5px; color:var(--ink-2); line-height:1.4}
+.sb-meta{font-size:12px; color:var(--ink-3); margin-top:3px}
+.sb-aksiyon{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap}
+.sb-btn{padding:8px 14px; border-radius:9px; background:var(--surface-2); border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.sb-btn.kapat{color:#e08a1e; border-color:#e8b56a}
+.sb-btn.ac{color:var(--ok); border-color:var(--ok)}
+.sb-btn.sil{color:var(--err); border-color:#e8a59e; margin-left:auto}
+/* === BAYİ KANALI === */
+.bayi-sekme-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px}
+.bayi-sekme{padding:9px 14px; border-radius:99px; background:var(--surface); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2)}
+.bayi-sekme.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+.bayi-aciklama{background:var(--info-soft); border:1px solid #bcd9f5; border-radius:var(--radius); padding:12px 15px; font-size:13px; margin-bottom:14px; line-height:1.5}
+.bayi-bar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px}
+.bayi-bar-bilgi{font-size:13px; color:var(--ink-2); font-weight:700}
+.bayi-ekle-btn{padding:10px 16px; border-radius:10px; background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:13px; border:none}
+.bayi-tablo{display:flex; flex-direction:column; gap:8px}
+.bayi-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px}
+.bayi-satir-sade{padding:9px 14px; background:var(--surface-2)}
+.bayi-s-ad{flex:1; font-size:14px}
+.bayi-s-kod{font-size:11px; color:var(--ink-3); background:var(--surface-2); padding:1px 7px; border-radius:6px; margin-left:5px}
+.bayi-s-not{font-size:11.5px; color:var(--ink-3); margin-top:3px}
+.bayi-s-deger{font-size:13.5px; font-weight:700; color:var(--ink-2); white-space:nowrap}
+.bayi-s-deger small{font-weight:500; color:var(--ink-3)}
+.bayi-s-aksiyon{display:flex; gap:6px; align-items:center}
+.bayi-mini{padding:6px 12px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line); font-size:12px; font-weight:700; color:var(--ink-2)}
+.bayi-mini.sil{color:var(--err); border-color:#e8a59e}
+.bayi-bos{padding:24px; text-align:center; color:var(--ink-3); font-size:13.5px}
+.bayi-gecmis-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:18px 0 10px}
+/* irsaliye form */
+.bayi-form{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px; margin-bottom:16px}
+.bayi-form-baslik{font-size:15px; font-weight:800; margin-bottom:12px}
+.bayi-form-satir{display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line)}
+.bayi-form-satir label{font-size:12px; font-weight:700; color:var(--ink-3); width:80px}
+.bayi-form-val{padding:6px 12px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2)}
+.bayi-form-kalemler{margin:12px 0; display:flex; flex-direction:column; gap:6px}
+.bayi-kalem-satir{display:flex; align-items:center; gap:10px; background:var(--surface-2); border-radius:8px; padding:8px 12px; font-size:13px}
+.bayi-kalem-satir span:first-child{flex:1; font-weight:600}
+.bayi-kalem-sil{width:22px; height:22px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800; border:none}
+.bayi-kalem-ekle{width:100%; padding:10px; border-radius:9px; background:var(--brand-soft); color:var(--brand-d); font-weight:800; font-size:13px; border:1.5px dashed var(--brand); margin-bottom:12px}
+.bayi-form-foot{display:flex; gap:10px}
+.bayi-form-foot .btn{flex:1}
+/* sipariş kartları */
+.bayi-sip-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px 16px; margin-bottom:10px}
+.bayi-sip-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px}
+.bayi-sip-no{font-size:14px; font-weight:800}
+.bayi-sip-durum{font-size:11px; font-weight:800; padding:3px 10px; border-radius:99px}
+.bayi-sip-tarih{font-size:11.5px; color:var(--ink-3); margin-bottom:10px}
+.bayi-sip-kalemler{display:flex; flex-direction:column; gap:5px; margin-bottom:10px}
+.bayi-sip-kalem{display:flex; align-items:center; gap:10px; font-size:13px; padding:5px 0; border-bottom:1px solid var(--line)}
+.bayi-sip-kalem span:first-child{flex:1; font-weight:600}
+.bayi-sip-toplam{font-size:14px; font-weight:800; text-align:right; margin-bottom:10px}
+.bayi-sip-aksiyon{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.bayi-sip-not-bekle{font-size:12.5px; color:#e08a1e; font-weight:700; text-align:center; padding:8px; background:#fdf0dc; border-radius:8px}
+.bayi-sip-not-ok{font-size:12.5px; color:var(--ok); font-weight:700; text-align:center; padding:8px; background:var(--ok-soft); border-radius:8px}
+.bayi-sip-not-red{font-size:12.5px; color:var(--err); font-weight:700; text-align:center; padding:8px; background:var(--err-soft); border-radius:8px}
+.bayi-odendi-rozet{font-size:12px; font-weight:800; color:var(--ok); background:var(--ok-soft); padding:6px 12px; border-radius:99px}
+.bayi-sube-blok{margin-bottom:16px}
+.bayi-sube-ad{font-size:14px; font-weight:800; margin-bottom:8px}
+.bayi-sepet-miktar{font-size:13px; font-weight:800; color:var(--brand-d)}
+.bayi-sepet-ozet{position:sticky; bottom:0; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px 16px; margin-top:14px; box-shadow:var(--shadow-lg)}
+.bayi-sepet-baslik{font-size:14px; font-weight:800; margin-bottom:10px}
+/* Bayi ödeme modalı */
+.bom-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
+.bom-baslik{font-size:17px; font-weight:800}
+.bom-kapat{width:34px; height:34px; border-radius:10px; background:var(--surface-2); border:1px solid var(--line); font-size:15px; font-weight:800; color:var(--ink-2)}
+.bom-ozet{padding:16px 20px; background:var(--surface-2)}
+.bom-ozet-satir{display:flex; justify-content:space-between; font-size:13.5px; color:var(--ink-2); padding:3px 0}
+.bom-ozet-satir.bom-toplam{font-size:18px; font-weight:800; color:var(--ink); margin-top:6px; padding-top:8px; border-top:1px solid var(--line)}
+.bom-yontem-baslik{font-size:12px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.4px; padding:16px 20px 8px}
+.bom-yontem-row{display:flex; gap:10px; padding:0 20px}
+.bom-yontem{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px; border-radius:12px; background:var(--surface); border:2px solid var(--line); cursor:pointer}
+.bom-yontem.on{border-color:var(--brand); background:var(--brand-soft)}
+.bom-y-ic{font-size:24px}
+.bom-y-ad{font-size:13px; font-weight:800; color:var(--ink-2)}
+.bom-alan-grup{padding:16px 20px; display:flex; flex-direction:column; gap:12px}
+.bom-alan{display:flex; flex-direction:column; gap:5px}
+.bom-alan label{font-size:11px; font-weight:700; color:var(--ink-3)}
+.bom-input{padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; font-weight:600; background:var(--surface); color:var(--ink); width:100%; box-sizing:border-box}
+.bom-input:focus{border-color:var(--brand); outline:none}
+.bom-alan-ikili{display:flex; gap:10px}
+.bom-alan-ikili .bom-alan{flex:1}
+.bom-eft-bilgi{background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:14px}
+.bom-eft-baslik{font-size:13px; font-weight:800; margin-bottom:10px; color:var(--cocoa)}
+.bom-eft-satir{display:flex; justify-content:space-between; gap:10px; font-size:12.5px; padding:4px 0; color:var(--ink-2)}
+.bom-eft-satir strong{color:var(--ink); text-align:right}
+.bom-eft-not{font-size:12px; color:var(--ink-3); line-height:1.5; margin-top:4px}
+.bom-ode-btn{margin:8px 20px 20px; padding:15px; border-radius:12px; background:var(--brand); color:var(--brand-ink); font-size:15px; font-weight:800; border:none; width:calc(100% - 40px); cursor:pointer}
+/* Bayi iskonto + özet tablosu */
+.bayi-iskonto-blok{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px; margin-bottom:16px}
+.bayi-iskonto-baslik{font-size:15px; font-weight:800; margin-bottom:4px}
+.bayi-iskonto-aciklama{font-size:12px; color:var(--ink-3); margin-bottom:12px}
+.bayi-iskonto-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px}
+.bayi-iskonto-kart{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; background:var(--surface-2); border:1.5px solid var(--line); font-size:13px}
+.bayi-iskonto-kart.dolu{background:var(--ok-soft); border-color:var(--ok)}
+.bik-sube{font-weight:700; color:var(--ink-2)}
+.bik-oran{font-weight:800; color:var(--ink-3); white-space:nowrap}
+.bayi-iskonto-kart.dolu .bik-oran{color:var(--ok)}
+.bayi-s-satir-tutar{font-size:12.5px; color:var(--brand-d); font-weight:700; margin-top:3px}
+.bayi-ozet-tablo{background:var(--surface-2); border-radius:10px; padding:12px 14px; margin:10px 0}
+.bayi-ozet-satir{display:flex; justify-content:space-between; font-size:13px; color:var(--ink-2); padding:3px 0}
+.bayi-ozet-satir.bayi-ozet-ind{color:var(--ok); font-weight:700}
+.bayi-ozet-satir.bayi-ozet-net{font-size:15px; font-weight:800; color:var(--ink); margin-top:5px; padding-top:7px; border-top:1px solid var(--line)}
+.bayi-duzenlendi-rozet{font-size:10px; font-weight:800; background:#fdf0dc; color:#e08a1e; padding:2px 8px; border-radius:99px; margin-left:6px}
+.bayi-kalem-silinmis{opacity:.6}
+/* Geçmiş siparişler filtre */
+.gecmis-filtre{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:14px; margin-bottom:12px}
+.gf-alan{display:flex; flex-direction:column; gap:4px}
+.gf-alan label{font-size:11px; font-weight:700; color:var(--ink-3)}
+.gf-select,.gf-date{padding:9px 12px; border-radius:9px; border:1.5px solid var(--line); font-size:13px; font-weight:600; background:var(--surface); color:var(--ink)}
+.gf-temizle{padding:9px 14px; border-radius:9px; background:var(--surface-2); border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.gecmis-ozet-bar{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--cocoa); color:#fff; border-radius:var(--radius); padding:14px 18px; margin-bottom:14px; flex-wrap:wrap}
+.go-bilgi{font-size:14px}
+.go-sayi{font-size:20px; font-weight:800; margin-right:4px}
+.go-bilgi strong{font-size:17px}
+.go-xls{padding:10px 18px; border-radius:10px; background:#fff; color:var(--cocoa); font-size:13.5px; font-weight:800; border:none}
+.go-xls:disabled{opacity:.5}
+/* Sade fiyat ekranı */
+.fy-bilgi-not{background:var(--info-soft); border:1px solid #bcd9f5; border-radius:var(--radius); padding:11px 14px; font-size:12.5px; margin-bottom:12px; line-height:1.5}
+.fy-satir-sade{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px; margin-bottom:8px}
+.fy-satir-sade.fy-kapali{opacity:.55}
+.fy-kampanya-not{display:block; font-size:11.5px; color:var(--err); font-weight:700; margin-top:3px}
+.fy-sag-blok{display:flex; gap:8px; align-items:center}
+.fy-genel-btn{padding:9px 14px; border-radius:10px; background:var(--surface-2); border:1.5px solid var(--line); font-size:14px; font-weight:800; color:var(--ink); white-space:nowrap}
+/* Kampanya listesi */
+.kmp-bos{padding:40px 20px; text-align:center; color:var(--ink-3); font-size:14px}
+.kmp-liste{display:flex; flex-direction:column; gap:10px}
+.kmp-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px 16px}
+.kmp-kart.kmp-aktif{border-color:var(--err); box-shadow:0 0 0 1px var(--err) inset}
+.kmp-kart-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
+.kmp-ad{font-size:16px; font-weight:800}
+.kmp-durum{font-size:11px; font-weight:800; padding:3px 10px; border-radius:99px}
+.kmp-durum.on{background:var(--ok-soft); color:var(--ok)}
+.kmp-durum.off{background:var(--surface-2); color:var(--ink-3)}
+.kmp-urun-satir{font-size:13px; color:var(--ink-2); margin-bottom:8px}
+.kmp-detay{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
+.kmp-rozet{font-size:11px; font-weight:700; background:var(--surface-2); color:var(--ink-2); padding:3px 9px; border-radius:99px}
+.kmp-aksiyon{display:flex; gap:8px}
+.kmp-toggle{padding:8px 14px; border-radius:9px; background:var(--brand-soft); color:var(--brand-d); font-size:12.5px; font-weight:800; border:1px solid var(--brand)}
+.kmp-toggle.pasif{background:var(--surface-2); color:var(--ink-2); border-color:var(--line)}
+.kmp-sil{padding:8px 14px; border-radius:9px; background:var(--err-soft); color:var(--err); font-size:12.5px; font-weight:800; border:1px solid #e8a59e; margin-left:auto}
+/* Kampanya formu */
+.kmpf-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
+.kmpf-baslik{font-size:17px; font-weight:800}
+.kmpf-govde{padding:16px 20px; max-height:60vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px}
+.kmpf-alan{display:flex; flex-direction:column; gap:6px}
+.kmpf-alan label{font-size:12px; font-weight:700; color:var(--ink-3)}
+.kmpf-input{padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; font-weight:600; background:var(--surface); color:var(--ink); width:100%; box-sizing:border-box}
+.kmpf-input:focus{border-color:var(--brand); outline:none}
+.kmpf-secim-row{display:flex; gap:8px}
+.kmpf-secim{flex:1; padding:10px; border-radius:10px; background:var(--surface); border:1.5px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.kmpf-secim.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.kmpf-sube-grid{display:flex; flex-wrap:wrap; gap:6px}
+.kmpf-sube-chip{padding:7px 12px; border-radius:99px; background:var(--surface); border:1.5px solid var(--line); font-size:12px; font-weight:700; color:var(--ink-2)}
+.kmpf-sube-chip.on{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.kmpf-sabit{padding:10px 13px; border-radius:10px; background:var(--surface-2); font-size:13px; font-weight:700; color:var(--ink-2)}
+.kmpf-gun-row{display:flex; gap:5px}
+.kmpf-gun{flex:1; padding:9px 0; border-radius:8px; background:var(--surface); border:1.5px solid var(--line); font-size:12px; font-weight:800; color:var(--ink-2)}
+.kmpf-gun.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+.kmpf-saat-row{display:flex; gap:10px; align-items:center}
+.kmpf-tire{font-weight:800; color:var(--ink-3)}
+.kmpf-tekrar{flex-direction:row; align-items:center; gap:10px; cursor:pointer; background:var(--surface-2); padding:12px 14px; border-radius:10px}
+.kmpf-check{width:24px; height:24px; min-width:24px; border-radius:7px; border:2px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--brand-d)}
+.kmpf-check.on{background:var(--brand); border-color:var(--brand); color:var(--brand-ink)}
+.kmpf-tekrar span{font-size:12.5px; color:var(--ink-2); font-weight:600}
+.kmpf-kaydet{margin:8px 20px 20px; padding:15px; border-radius:12px; background:var(--brand); color:var(--brand-ink); font-size:15px; font-weight:800; border:none; width:calc(100% - 40px)}
 /* Garson paket sekmesi */
 .grs-sekme-row{display:flex; gap:8px; padding:12px 16px 0}
 .grs-sekme{flex:1; padding:11px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:800; border:1.5px solid transparent}
@@ -930,6 +1132,25 @@ tr:last-child td{border-bottom:none}
 /* Splash (açılış reklamı) */
 .qr-splash{justify-content:flex-end; background:#111; position:relative; overflow:hidden}
 .qr-splash-img{position:absolute; inset:0; background-size:cover; background-position:center}
+.qr-splash-anim{animation:splashZoom 12s ease-in-out infinite alternate}
+@keyframes splashZoom{0%{transform:scale(1.05)}100%{transform:scale(1.18)}}
+.qr-splash-veil{position:absolute; inset:0; z-index:1; background:radial-gradient(circle at 50% 30%, transparent, rgba(0,0,0,.4) 70%, rgba(0,0,0,.75))}
+.qr-splash-kmp-wrap{position:absolute; top:0; left:0; right:0; z-index:2; padding:60px 18px 0; max-height:55%; overflow:hidden}
+.qr-splash-kampanyalar{display:flex; flex-direction:column; gap:10px}
+.qr-splash-kmp{background:rgba(20,12,8,.55); backdrop-filter:blur(10px); border:1.5px solid rgba(240,167,40,.6); border-radius:14px; padding:12px 16px; display:flex; flex-direction:column; gap:3px}
+.qsk-ad{font-size:14px; font-weight:800; color:#ffd98a}
+.qsk-ust{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.qsk-oran{font-size:12px; font-weight:800; background:#ff8a5c; color:#3a1505; padding:2px 9px; border-radius:99px}
+.qsk-simdi{font-size:10px; font-weight:800; background:rgba(47,158,68,.9); color:#fff; padding:2px 8px; border-radius:99px; margin-left:6px}
+.qsk-saat{font-size:10px; font-weight:700; color:rgba(255,255,255,.6); margin-left:6px}
+.qsk-urun{font-size:13px; color:#fff; opacity:.9}
+.qsk-fiyat{font-size:15px; font-weight:800; margin-top:2px}
+.qsk-eski{text-decoration:line-through; color:rgba(255,255,255,.55); font-size:13px}
+.qsk-yeni{color:#ff8a5c}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 8px rgba(240,167,40,.3), 0 0 0 rgba(240,167,40,0)}50%{box-shadow:0 0 22px rgba(240,167,40,.7), 0 0 30px rgba(255,138,92,.4)}}
+.glow{animation:glowPulse 1.8s ease-in-out infinite}
+@keyframes glowText{0%,100%{opacity:.85; text-shadow:0 0 6px rgba(240,167,40,.4)}50%{opacity:1; text-shadow:0 0 16px rgba(240,167,40,.9)}}
+.glow-soft{animation:glowText 2s ease-in-out infinite}
 .qr-splash-ph{display:grid; place-items:center; background:linear-gradient(160deg,#3a2418,#6b3f23 60%,#a8693a)}
 .qr-splash-atla{position:absolute; top:16px; right:16px; z-index:3; padding:8px 16px; border-radius:99px; background:rgba(0,0,0,.5); backdrop-filter:blur(8px); color:#fff; font-size:13px; font-weight:700}
 .qr-splash-alt{position:relative; z-index:2; padding:28px 24px 40px; background:linear-gradient(transparent,rgba(0,0,0,.85) 40%); color:#fff}
@@ -1100,6 +1321,16 @@ tr:last-child td{border-bottom:none}
   <div class="opt-modal" id="odemeModalInner" style="max-width:400px"></div>
 </div>
 
+<!-- Bayi ödeme modalı -->
+<div class="modal-bg" id="bayiOdemeModal" style="z-index:135">
+  <div class="opt-modal" id="bayiOdemeInner" style="max-width:420px"></div>
+</div>
+
+<!-- Kampanya formu modalı -->
+<div class="modal-bg" id="kmpModal" style="z-index:140">
+  <div class="opt-modal" id="kmpModalInner" style="max-width:460px"></div>
+</div>
+
 <!-- Şifre yükseltme modalı -->
 <div class="modal-bg" id="pwModal">
   <div class="modal">
@@ -1114,6 +1345,2299 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
+<script>
+/* === Gömülü QR üretici (qrcode-generator MIT, Kazuhiko Arase) === */
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(col * cellSize, row * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+
+;window.qrcode = qrcode;
+</script>
 <script>
 /* ============================================================
    1) FIRESTORE ŞEMASI (referans — gerçek init burada bağlanır)
@@ -1244,9 +3768,9 @@ const ROLES = {
   kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", subeSec:true,
            nav:["satis","masalar"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
-           nav:["satis","masalar","masayonetim","stok","fiyat","kampanya","personel","rapor"] },
+           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","personel","rapor"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","masayonetim","recete","stok","fiyat","kampanya","subeler","rapor","denetim"] },
+           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","subeler","rapor","denetim"] },
 };
 
 // Yetki kontrolü: belirli aksiyon bu role açık mı?
@@ -1266,6 +3790,7 @@ const NAV_META = {
   satis:   {ic:"🧇", ad:"Satış"},
   masalar: {ic:"🪑", ad:"Masalar"},
   masayonetim:{ic:"🗂️", ad:"Masa Yönetimi"},
+  bayi:{ic:"📦", ad:"Bayi Kanalı"},
   canli:   {ic:"📡", ad:"Canlı"},
   recete:  {ic:"📖", ad:"Reçete"},
   fiyat:   {ic:"🏷️", ad:"Fiyat"},
@@ -1288,7 +3813,7 @@ const NAV_META = {
    ============================================================ */
 
 /* --- 8 GERÇEK ŞUBE --- */
-const DEMO_BRANCHES = [
+let DEMO_BRANCHES = [
   {ad:"Bolu Tabaklar",          ciro:6200, masa:6,  bekleyen:2, durum:"green",  fire:"normal"},
   {ad:"Çanakkale Kemalpaşa",     ciro:4800, masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
   {ad:"Çankırı Cumhuriyet",      ciro:3900, masa:3,  bekleyen:1, durum:"green",  fire:"normal"},
@@ -1323,7 +3848,7 @@ function subeMasalari(sube){
 }
 
 /* --- ŞUBE ADRESLERİ (yönetim için) --- */
-const BRANCH_INFO = {
+let BRANCH_INFO = {
   "Bolu Tabaklar":           {sehir:"Bolu", adres:"Tabaklar, Börekciler Sk. No:20B D:19, 14100 Bolu Merkez", tel:"08508401756"},
   "Çanakkale Kemalpaşa":      {sehir:"Çanakkale", adres:"Kemalpaşa, Yalı Cd. No:7, 17000 Çanakkale Merkez", tel:"08508401756", express:true},
   "Çankırı Cumhuriyet":       {sehir:"Çankırı", adres:"Cumhuriyet Mah. Şht. Üstg. Erdem Öztürk Sk. No:7B, 18100 Çankırı Merkez", tel:"08508401756"},
@@ -1524,19 +4049,113 @@ const RECIPES = {
 
 /* --- ŞUBE STOĞU (gram cinsinden · canlı düşer) --- */
 let STOCK = {
-  hamur:    {ad:"Waffle hamuru", mevcut:22000, kritik:3000},
-  cikolata: {ad:"Çikolata",      mevcut:8700,  kritik:1500},
-  seker:    {ad:"Şeker",         mevcut:5400,  kritik:1000},
-  muz:      {ad:"Muz",           mevcut:3200,  kritik:800},
-  cilek:    {ad:"Çilek",         mevcut:2100,  kritik:600},
-  krema:    {ad:"Krema",         mevcut:1800,  kritik:500},
-  fistik:   {ad:"Fıstık ezmesi", mevcut:1400,  kritik:400},
-  bal:      {ad:"Bal",           mevcut:2600,  kritik:500},
-  ceviz:    {ad:"Ceviz",         mevcut:1900,  kritik:400},
-  sut:      {ad:"Süt",           mevcut:12000, kritik:2000},
-  limon:    {ad:"Limon",         mevcut:2800,  kritik:600},
-  misir:    {ad:"Mısır/gevrek",  mevcut:3400,  kritik:700},
+  hamur:    {ad:"Waffle hamuru", mevcut:22000, kritik:3000, birim:"gr"},
+  cikolata: {ad:"Çikolata",      mevcut:8700,  kritik:1500, birim:"gr"},
+  seker:    {ad:"Şeker",         mevcut:5400,  kritik:1000, birim:"gr"},
+  muz:      {ad:"Muz",           mevcut:3200,  kritik:800,  birim:"gr"},
+  cilek:    {ad:"Çilek",         mevcut:2100,  kritik:600,  birim:"gr"},
+  krema:    {ad:"Krema",         mevcut:1800,  kritik:500,  birim:"gr"},
+  fistik:   {ad:"Fıstık ezmesi", mevcut:1400,  kritik:400,  birim:"gr"},
+  bal:      {ad:"Bal",           mevcut:2600,  kritik:500,  birim:"gr"},
+  ceviz:    {ad:"Ceviz",         mevcut:1900,  kritik:400,  birim:"gr"},
+  sut:      {ad:"Süt",           mevcut:12000, kritik:2000, birim:"gr"},
+  limon:    {ad:"Limon",         mevcut:2800,  kritik:600,  birim:"gr"},
+  misir:    {ad:"Mısır/gevrek",  mevcut:3400,  kritik:700,  birim:"gr"},
 };
+
+/* ============================================================
+   BAYİ KANALI (B2B) — genel müdür ↔ bayi (şube) tedarik sistemi
+   - Stok kartları = STOCK (mevcut hammadde, aynı sistem)
+   - MERKEZ_STOK: genel müdürün elindeki toplam stok (= STOCK.mevcut kullanılır)
+   - BAYI_STOK[şube][stokKodu] = miktar (her bayinin kendi deposu)
+   - BAYI_FIYAT[stokKodu] = genel müdürün bayiye satış fiyatı (₺/birim)
+   - IRSALIYELER: genel müdüre gelen mal girişleri
+   - SIParisLER: bayilerin genel müdüre talep listeleri (durum akışlı)
+   ============================================================ */
+let BAYI_STOK = {};          // {"Edirne Atatürk": {hamur:5000, cikolata:2000}}
+let BAYI_FIYAT = {};         // {hamur:120, cikolata:340} — ₺/birim (gr için ₺/kg mantıklı ama basit tutuyoruz)
+let IRSALIYELER = [];        // {id,tarih,tedarikci,aciklama,kalemler:[{kod,miktar}]}
+let BAYI_SIPARISLER = [];    // {id,sube,tarih,kalemler:[{kod,miktar}],durum,odeme,aktarildi}
+let _irsaliyeId = 1, _siparisId = 1;
+const SIPARIS_DURUM = {
+  taslak:    {ad:"Taslak",        renk:"#888",     bg:"#f0f0f0"},
+  onayda:    {ad:"Onay bekliyor", renk:"#e08a1e",  bg:"#fdf0dc"},
+  onaylandi: {ad:"Onaylandı",     renk:"#2f9e44",  bg:"#e8f6ec"},
+  odendi:    {ad:"Ödendi",        renk:"#2f7ed8",  bg:"#e8f1fc"},
+  aktarildi: {ad:"Stok aktarıldı",renk:"#7048c4",  bg:"#f0eafb"},
+  red:       {ad:"Reddedildi",    renk:"#e74c3c",  bg:"#fdeceb"},
+};
+/* Bir bayinin bir stoktaki bakiyesi */
+function bayiStok(sube, kod){ return (BAYI_STOK[sube] && BAYI_STOK[sube][kod]) || 0; }
+function bayiStokYaz(sube, kod, miktar){
+  if(!BAYI_STOK[sube]) BAYI_STOK[sube]={};
+  BAYI_STOK[sube][kod]=miktar;
+}
+/* Bayi satış fiyatı */
+function bayiFiyat(kod){ return BAYI_FIYAT[kod]||0; }
+/* Şubeye özel iskonto (genel müdür tanımlar) — yüzde */
+let BAYI_ISKONTO = {};   // {"Edirne Atatürk": 10}
+function bayiIskonto(sube){ return BAYI_ISKONTO[sube]||0; }
+/* İskontolu birim fiyat */
+function bayiNetFiyat(kod, sube){
+  const f = bayiFiyat(kod);
+  const isk = bayiIskonto(sube);
+  return isk>0 ? f*(1-isk/100) : f;
+}
+/* Bir siparişin brüt ve net (iskontolu) tutarı */
+function siparisTutar(sp){
+  const brut = sp.kalemler.filter(k=>!k.silindi && k.miktar>0).reduce((a,k)=>a+k.miktar*bayiFiyat(k.kod),0);
+  const isk = bayiIskonto(sp.sube);
+  const indirim = brut*isk/100;
+  return { brut, isk, indirim, net:brut-indirim };
+}
+
+/* === B2B KALICILIK — roller arası geçişte (sayfa yenilenince) veri korunur === */
+const B2B_KEY = "minipan_b2b_v1";
+function b2bKaydet(){
+  try{
+    const veri = {
+      BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER,
+      _irsaliyeId, _siparisId,
+      // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
+      STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut]))
+    };
+    localStorage.setItem(B2B_KEY, JSON.stringify(veri));
+  }catch(e){ /* localStorage yoksa sessiz geç */ }
+}
+function b2bYukle(){
+  try{
+    const raw = localStorage.getItem(B2B_KEY);
+    if(!raw) return;
+    const v = JSON.parse(raw);
+    if(v.BAYI_STOK) BAYI_STOK = v.BAYI_STOK;
+    if(v.BAYI_FIYAT) BAYI_FIYAT = v.BAYI_FIYAT;
+    if(v.BAYI_ISKONTO) BAYI_ISKONTO = v.BAYI_ISKONTO;
+    if(v.IRSALIYELER) IRSALIYELER = v.IRSALIYELER;
+    if(v.BAYI_SIPARISLER) BAYI_SIPARISLER = v.BAYI_SIPARISLER;
+    if(v._irsaliyeId) _irsaliyeId = v._irsaliyeId;
+    if(v._siparisId) _siparisId = v._siparisId;
+    if(v.STOCK_MEVCUT){ Object.entries(v.STOCK_MEVCUT).forEach(([k,m])=>{ if(STOCK[k]) STOCK[k].mevcut=m; }); }
+  }catch(e){ /* bozuk veri → yoksay */ }
+}
+
+/* === KAMPANYA + GENEL FİYAT KALICILIĞI === */
+const KMP_KEY = "minipan_kmp_v1";
+function kampanyaKaydet_persist(){
+  try{
+    localStorage.setItem(KMP_KEY, JSON.stringify({ KAMPANYALAR, _kampanyaId, SUBE_FIYAT }));
+  }catch(e){}
+}
+function kampanyaYukle(){
+  try{
+    const raw = localStorage.getItem(KMP_KEY);
+    if(!raw) return;
+    const v = JSON.parse(raw);
+    if(v.KAMPANYALAR) KAMPANYALAR = v.KAMPANYALAR;
+    if(v._kampanyaId) _kampanyaId = v._kampanyaId;
+    if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
+  }catch(e){}
+}
 
 /* Bugünkü kümülatif tüketim (denetim için) */
 let CONSUMED = {};
@@ -1556,36 +4175,100 @@ let CONSUMED = {};
    - kapali: bu şubede satışa kapalı
    GENEL_KAPALI[ürünAdı] = true → tüm şubelerde kapalı (genel müdür)
    ============================================================ */
-let PRICE_OVERRIDE = {};   // { "Edirne Atatürk": { "Cookie": {fiyat:100, indirim:10, kapali:false} } }
-let GENEL_KAPALI = {};     // { "Cookie": true } — genel müdür tüm şubelerde kapattı
+/* ============================================================
+   FİYAT YÖNETİMİ v3 — sadece genel fiyat (indirim KAMPANYA'dan gelir)
+   SUBE_FIYAT[şube][ürün] = {
+     masa: {genel, kapali},
+     eve:  {genel, kapali}
+   }
+   İndirim/oran/açıklama artık burada DEĞİL → KAMPANYALAR'da
+   ============================================================ */
+let SUBE_FIYAT = {};
 
-function urunGenelFiyat(ad){
+function urunVarsayilanFiyat(ad){
   const p = DEMO_PRODUCTS.find(x=>x.ad===ad);
   return p ? p.fiyat : 0;
 }
-/* Şubeye özel override kaydını getir (yoksa boş) */
-function fiyatOverride(sube, ad){
-  return (PRICE_OVERRIDE[sube] && PRICE_OVERRIDE[sube][ad]) || {};
+/* Şube+ürün+kanal kaydını getir (yoksa boş nesne) */
+function fiyatKayit(sube, ad, kanal){
+  return (SUBE_FIYAT[sube] && SUBE_FIYAT[sube][ad] && SUBE_FIYAT[sube][ad][kanal]) || {};
 }
-/* Bir ürünün bir şubedeki NİHAİ fiyat bilgisi:
-   {taban, gecerli, indirim, indirimliFiyat, indirimli(bool), kapali(bool)} */
-function urunFiyatBilgi(ad, sube){
+function fiyatKayitYaz(sube, ad, kanal){
+  if(!SUBE_FIYAT[sube]) SUBE_FIYAT[sube]={};
+  if(!SUBE_FIYAT[sube][ad]) SUBE_FIYAT[sube][ad]={};
+  if(!SUBE_FIYAT[sube][ad][kanal]) SUBE_FIYAT[sube][ad][kanal]={};
+  return SUBE_FIYAT[sube][ad][kanal];
+}
+/* ============================================================
+   KAMPANYA SİSTEMİ
+   KAMPANYALAR = [{
+     id, ad, urun, tip:"oran"|"fiyat", deger,
+     kanal:"masa"|"eve", subeler:"hepsi"|[şube...],
+     gunler:[0-6], saatBas:"HH:MM", saatBit:"HH:MM",
+     tekrar:bool, aktif:bool, olusturan
+   }]
+   ============================================================ */
+let KAMPANYALAR = [];
+let _kampanyaId = 1;
+const GUN_ADLARI = ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];  // 0=Pzt
+/* JS getDay: 0=Paz..6=Cmt → bizim 0=Pzt indeksine çevir */
+function bugunIndeks(){ const d=new Date().getDay(); return d===0?6:d-1; }
+function suankiDakika(){ const d=new Date(); return d.getHours()*60+d.getMinutes(); }
+function saatDakika(hhmm){ if(!hhmm) return null; const p=hhmm.split(":"); return parseInt(p[0])*60+parseInt(p[1]); }
+/* Kampanya şu an aktif mi? (gün+saat) */
+function kampanyaAktifMi(k){
+  if(!k.aktif) return false;
+  // gün kontrolü
+  if(k.gunler && k.gunler.length>0 && !k.gunler.includes(bugunIndeks())) return false;
+  // saat kontrolü
+  const bas=saatDakika(k.saatBas), bit=saatDakika(k.saatBit), simdi=suankiDakika();
+  if(bas!=null && bit!=null){
+    if(bas<=bit){ if(simdi<bas||simdi>bit) return false; }
+    else { if(simdi<bas && simdi>bit) return false; }  // gece aşan aralık
+  }
+  return true;
+}
+/* Bir ürün+şube+kanal için geçerli aktif kampanya (varsa en iyisini döner) */
+function urunKampanya(ad, sube, kanal){
+  const adaylar = KAMPANYALAR.filter(k=>
+    k.urun===ad && k.kanal===kanal && kampanyaAktifMi(k) &&
+    (k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(sube)))
+  );
+  if(adaylar.length===0) return null;
+  // birden fazla varsa en düşük fiyatı veren kazansın
+  return adaylar[0];
+}
+/* Bir ürünün bir şubedeki, bir kanaldaki NİHAİ fiyat bilgisi (kampanya dahil) */
+function urunFiyatBilgi(ad, sube, kanal){
   sube = sube || AKTIF_SUBE;
-  const genel = urunGenelFiyat(ad);
-  const ov = fiyatOverride(sube, ad);
-  // şube fiyatı varsa ve genel fiyatın altındaysa onu kullan (üstüne izin yok)
-  let taban = genel;
-  let subeFiyatiDusuk = false;
-  if(ov.fiyat!=null && ov.fiyat>0 && ov.fiyat<genel){ taban = ov.fiyat; subeFiyatiDusuk = true; }
-  const indirim = ov.indirim || 0;
-  const indirimliFiyat = Math.round(taban * (1 - indirim/100));
-  const indirimli = subeFiyatiDusuk || indirim>0;
-  const kapali = !!GENEL_KAPALI[ad] || !!ov.kapali;
-  // eski (üstü çizili) = genel fiyat · yeni (geçerli) = indirim uygulanmış
-  return { genel, taban, eski:genel, gecerli:indirimliFiyat, indirim, indirimliFiyat, indirimli, kapali, subeFiyatiDusuk };
+  kanal = kanal || "masa";
+  const masaK = fiyatKayit(sube, ad, "masa");
+  const masaGenel = (masaK.genel!=null && masaK.genel>0) ? masaK.genel : urunVarsayilanFiyat(ad);
+  let k, genel;
+  if(kanal==="eve"){
+    k = fiyatKayit(sube, ad, "eve");
+    genel = (k.genel!=null && k.genel>0) ? k.genel : masaGenel;
+  } else {
+    k = masaK; genel = masaGenel;
+  }
+  // KAMPANYA uygula
+  const kmp = urunKampanya(ad, sube, kanal);
+  let gecerli = genel, indOran = 0, aciklama = "", kampanyaAd = "";
+  if(kmp){
+    if(kmp.tip==="oran"){ indOran = kmp.deger; gecerli = Math.round(genel*(1-indOran/100)); }
+    else { gecerli = kmp.deger; indOran = genel>0?Math.round((1-kmp.deger/genel)*100):0; }
+    if(gecerli<0) gecerli=0;
+    aciklama = kmp.ad; kampanyaAd = kmp.ad;
+  }
+  const indirimli = !!kmp && gecerli<genel;
+  const kapali = !!k.kapali;
+  return { genel, eski:genel, gecerli, indirimli, indOran, aciklama, kampanyaAd, kapali };
 }
-/* Satışta gösterilecek nihai fiyat (indirim uygulanmış) */
-function urunGecerliFiyat(ad, sube){ return urunFiyatBilgi(ad, sube).gecerli; }
+/* Satışta gösterilecek nihai fiyat */
+function urunGecerliFiyat(ad, sube, kanal){ return urunFiyatBilgi(ad, sube, kanal).gecerli; }
+/* QR servis tipine göre kanal belirle */
+function aktifKanal(){ return (QR && QR.servis==="eve") ? "eve" : "masa"; }
+
 
 let OPTION_CLOSED = {};   // { "Minipan (14 Adet)|3|5": true }
 let FORCE_OPEN = {};      // müdür stok 0 iken zorla açtı → stok eksiye düşebilir
@@ -1675,10 +4358,15 @@ function subeSecimGoster(role){
     '<div class="login-sub">Hangi şubede çalışıyorsun?</div>'+
     '<div class="role-pick" style="max-height:340px;overflow-y:auto">'+
     DEMO_BRANCHES.map(b=>
-      '<button class="role-btn" onclick="subeSec(\''+role+'\',\''+b.ad.replace(/'/g,"\\'")+'\')">'+
-        '<span class="role-dot" style="background:var(--cocoa);font-size:15px">🏬</span>'+
-        '<span><span class="rb-name">'+b.ad+'</span><br><span class="rb-desc">'+(BRANCH_INFO[b.ad]?BRANCH_INFO[b.ad].sehir:'')+'</span></span>'+
-      '</button>'
+      b.kapali
+      ? '<button class="role-btn" disabled style="opacity:.45;cursor:not-allowed">'+
+          '<span class="role-dot" style="background:var(--ink-3);font-size:15px">⛔</span>'+
+          '<span><span class="rb-name">'+b.ad+'</span><br><span class="rb-desc">geçici kapalı</span></span>'+
+        '</button>'
+      : '<button class="role-btn" onclick="subeSec(\''+role+'\',\''+b.ad.replace(/'/g,"\\'")+'\')">'+
+          '<span class="role-dot" style="background:var(--cocoa);font-size:15px">🏬</span>'+
+          '<span><span class="rb-name">'+b.ad+'</span><br><span class="rb-desc">'+(BRANCH_INFO[b.ad]?BRANCH_INFO[b.ad].sehir:'')+'</span></span>'+
+        '</button>'
     ).join("")+
     '</div>'+
     '<button class="role-btn" style="margin-top:10px;justify-content:center" onclick="location.reload()">← Geri</button>'+
@@ -1705,15 +4393,17 @@ function buildNav(){
   }).join("");
 }
 
-function go(key){
+function go(key, scrollKoru){
   document.querySelectorAll(".nav-item").forEach(n=>n.classList.toggle("active", n.dataset.k===key));
   const main = document.getElementById("main");
-  main.scrollTop = 0;
+  const eskiScroll = main.scrollTop;
+  if(!scrollKoru) main.scrollTop = 0;
   ({
     satis:viewSatis, masalar:viewMasalar, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
-    fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel,
+    fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel, bayi:viewBayi,
     subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok
   }[key] || viewSatis)(main);
+  if(scrollKoru) main.scrollTop = eskiScroll;
 }
 
 /* ============================================================
@@ -1734,16 +4424,22 @@ function viewSatis(main){
           ${cats.map(c=>`<button class="cat-pill ${c===state.cat?'on':''}" onclick="setCat('${c}')">${c}</button>`).join("")}
         </div>
         <div class="prod-grid">
-          ${prods.map((p,i)=>{
+          ${prods.slice().sort((a,b)=>{
+            const ia=urunFiyatBilgi(a.ad,AKTIF_SUBE,"masa").indirimli?0:1;
+            const ib=urunFiyatBilgi(b.ad,AKTIF_SUBE,"masa").indirimli?0:1;
+            return ia-ib;
+          }).map((p,i)=>{
             const satilir = urunSatilabilir(p);
-            const fb = urunFiyatBilgi(p.ad, AKTIF_SUBE);
+            const fb = urunFiyatBilgi(p.ad, AKTIF_SUBE, "masa");
             const fiyatHtml = fb.indirimli
-              ? `<span class="p-price indirimli"><span class="p-eski">${fb.eski} ₺</span><span class="p-yeni blink">${fb.gecerli} ₺</span>${fb.indirim>0?`<span class="p-ind-rozet">%${fb.indirim}</span>`:''}</span>`
+              ? `<span class="p-price indirimli"><span class="p-eski">${fb.eski} ₺</span><span class="p-yeni blink">${fb.gecerli} ₺</span>${fb.indOran>0?`<span class="p-ind-rozet">%${fb.indOran}</span>`:''}</span>`
               : `<span class="p-price">${fb.gecerli} ₺</span>`;
-            return `<button class="prod ${satilir?'':'out'}" onclick="addToCart(${DEMO_PRODUCTS.indexOf(p)})">
+            const aciklamaHtml = (fb.indirimli && fb.aciklama) ? `<span class="p-kampanya blink">🔥 ${fb.aciklama}</span>` : '';
+            return `<button class="prod ${satilir?'':'out'} ${fb.indirimli?'prod-indirimli blink-soft':''}" onclick="addToCart(${DEMO_PRODUCTS.indexOf(p)})">
               ${satilir?'':'<span class="p-out">Tükendi</span>'}
               <span class="p-emoji">${p.emoji}</span>
               <span class="p-name">${p.ad}</span>
+              ${aciklamaHtml}
               ${fiyatHtml}
             </button>`;}).join("")}
         </div>
@@ -1753,11 +4449,11 @@ function viewSatis(main){
 }
 function setCat(c){ state.cat=c; go("satis"); }
 
-/* Ürün satılabilir mi? Satışa kapalı DEĞİL + manuel pasif DEĞİL + stok yeterli */
-function urunSatilabilir(p){
+/* Ürün satılabilir mi? Kanal bazlı satışa kapalı DEĞİL + manuel pasif DEĞİL + stok yeterli */
+function urunSatilabilir(p, kanal){
   if(!p.aktif) return false;
-  // fiyat yönetiminden satışa kapatıldı mı (genel veya şube)
-  const fb = urunFiyatBilgi(p.ad, AKTIF_SUBE);
+  // fiyat yönetiminden bu kanalda satışa kapatıldı mı
+  const fb = urunFiyatBilgi(p.ad, AKTIF_SUBE, kanal||"masa");
   if(fb.kapali) return false;
   const recipe = RECIPES[p.ad];
   if(!recipe) return true;
@@ -1873,7 +4569,7 @@ function renderOptionModal(){
   const p = OPT_STATE.p;
   const gruplar = PRODUCT_OPTIONS[p.ad];
   let html = '<div class="opt-head"><span class="opt-emoji">'+p.emoji+'</span>'+
-    '<div><div class="opt-name">'+p.ad+'</div><div class="opt-base">'+urunGecerliFiyat(p.ad)+' ₺ taban</div></div>'+
+    '<div><div class="opt-name">'+p.ad+'</div><div class="opt-base">'+urunGecerliFiyat(p.ad, (OPT_STATE.qr?(QR.sube||AKTIF_SUBE):AKTIF_SUBE), (OPT_STATE.qr?aktifKanal():"masa"))+' ₺ taban</div></div>'+
     '<button class="opt-kapat-mod'+(OPT_STATE.kapatMod?' on':'')+'" onclick="toggleKapatMod()" title="Seçenek kapat/aç">'+
     (OPT_STATE.kapatMod?'✓ Düzenleniyor':'⚙ Stok')+'</button>'+
     '<button class="opt-x" onclick="closeOpt()">✕</button></div>'+
@@ -1935,7 +4631,9 @@ function renderOptionModal(){
           'oninput="OPT_STATE.not=this.value">'+(OPT_STATE.not||'')+'</textarea></div>';
   html += '</div>';
   const gecerli = optGecerli();
-  const toplam = urunGecerliFiyat(p.ad) + optEkFiyat();
+  const optKanal = OPT_STATE.qr ? aktifKanal() : "masa";
+  const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
+  const toplam = urunGecerliFiyat(p.ad, optSube, optKanal) + optEkFiyat();
   html += '<div class="opt-foot">'+
     '<div class="opt-toplam"><div class="ot-l">Toplam</div><div class="ot-v">'+toplam+' ₺</div></div>'+
     '<button class="btn btn-primary" '+(gecerli?'':'disabled style="opacity:.4;pointer-events:none"')+' onclick="confirmOpt()">'+
@@ -1963,8 +4661,10 @@ function confirmOpt(){
       if(sec.recete) sec.recete.forEach(r=>{ if(r.g>0) ekstraRecete.push(r); });
     });
   });
+  const cKanal = OPT_STATE.qr ? aktifKanal() : "masa";
+  const cSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const yeniKalem = {
-    ad:p.ad, fiyat:urunGecerliFiyat(p.ad)+ekFiyat, q:1,
+    ad:p.ad, fiyat:urunGecerliFiyat(p.ad, cSube, cKanal)+ekFiyat, q:1,
     secimler:secimler, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
   };
   if(OPT_STATE.qr){
@@ -2761,6 +5461,10 @@ function viewMasaYonetim(main){
     });
     html+=`</div></div>`;
   }
+  // toplu QR indirme
+  if(kats.length>0){
+    html+=`<button class="my-toplu-qr" onclick="subeQrTopluIndir('${sube.replace(/'/g,"\\'")}')">🖨️ ${sube} · Tüm masa QR kodlarını indir / yazdır</button>`;
+  }
   // kategoriler + masalar
   html+=`<div class="my-katlar">`;
   if(kats.length===0){
@@ -2779,8 +5483,10 @@ function viewMasaYonetim(main){
     k.masalar.forEach((ad,mi)=>{
       const masaId = sube+"::"+k.kat+"|"+ad;   // global oturum anahtarı
       const dolu = SESSIONS[masaId] && SESSIONS[masaId].acik;
+      const etiket = k.kat+"-"+ad;
       html+=`<div class="my-masa${dolu?' dolu':''}">
-        <span class="my-masa-ad">${k.kat}-${ad}</span>
+        <span class="my-masa-ad">${etiket}</span>
+        <button class="my-masa-qr" onclick="masaQrIndir('${masaId.replace(/'/g,"\\'")}','${etiket.replace(/'/g,"\\'")}')" title="Bu masanın QR kodunu indir">⬇ QR</button>
         ${dolu?'<span class="my-dolu-rozet">dolu</span>'
           :`<button class="my-masa-sil" onclick="myMasaSil(${ki},${mi})" title="Masayı sil">✕</button>`}
       </div>`;
@@ -2794,6 +5500,93 @@ function viewMasaYonetim(main){
   main.innerHTML=html;
 }
 function myHedefSube(s){ state.myHedefSube=s; go("masayonetim"); }
+
+/* ============================================================
+   MASA QR KODLARI — müşteri okutunca o masa açılır
+   QR içeriği: müşteri menü linki + masa kimliği parametresi
+   ============================================================ */
+const QR_BASE_URL = "https://minipan.app/m";   // canlıda gerçek domain
+function masaQrIcerik(masaId){
+  // masaId = "şube::kat|ad" → URL parametresi olarak kodla
+  return QR_BASE_URL + "?t=" + encodeURIComponent(masaId);
+}
+/* Bir masa için QR SVG üret (string döner) */
+function masaQrSvg(masaId, cellSize){
+  const qr = window.qrcode(0, "M");
+  qr.addData(masaQrIcerik(masaId));
+  qr.make();
+  return qr.createSvgTag({cellSize:cellSize||5, margin:2});
+}
+/* SVG'yi PNG'ye çevirip indir */
+function svgIndirPng(svgString, dosyaAdi, etiket){
+  const olcek=3;
+  const img=new Image();
+  const svg64="data:image/svg+xml;base64,"+btoa(unescape(encodeURIComponent(svgString)));
+  img.onload=function(){
+    const pad=40, altYazi=etiket?60:20;
+    const canvas=document.createElement("canvas");
+    canvas.width=img.width*olcek+pad*2;
+    canvas.height=img.height*olcek+pad*2+altYazi;
+    const ctx=canvas.getContext("2d");
+    ctx.fillStyle="#fff"; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.imageSmoothingEnabled=false;
+    ctx.drawImage(img, pad, pad, img.width*olcek, img.height*olcek);
+    if(etiket){
+      ctx.fillStyle="#1a1a1a"; ctx.textAlign="center";
+      ctx.font="bold 34px system-ui,sans-serif";
+      ctx.fillText(etiket, canvas.width/2, img.height*olcek+pad+44);
+    }
+    canvas.toBlob(function(blob){
+      const a=document.createElement("a");
+      a.href=URL.createObjectURL(blob);
+      a.download=dosyaAdi+".png";
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+    });
+  };
+  img.src=svg64;
+}
+/* Tek masa QR indir */
+function masaQrIndir(masaId, etiket){
+  const svg=masaQrSvg(masaId, 6);
+  const safe=(etiket||masaId).replace(/[^\wğüşıöçĞÜŞİÖÇ -]/gi,"_");
+  svgIndirPng(svg, "MINIPAN_QR_"+safe, etiket);
+  note("📥 QR indiriliyor: "+etiket);
+}
+/* Şubenin tüm masaları için yazdırılabilir QR sayfası aç */
+function subeQrTopluIndir(sube){
+  const masalar=subeMasalari(sube);
+  if(masalar.length===0){ note("Bu şubede masa yok"); return; }
+  let kartlar="";
+  masalar.forEach(mm=>{
+    const id=sube+"::"+mm.id;
+    kartlar+='<div class="qr-print-kart">'+masaQrSvg(id,5)+
+      '<div class="qpk-sube">'+sube+'</div>'+
+      '<div class="qpk-masa">'+mm.etiket+'</div>'+
+      '<div class="qpk-not">Okutarak sipariş verin</div></div>';
+  });
+  const w=window.open("","_blank");
+  if(!w){ note("Açılır pencere engellendi — izin verin"); return; }
+  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>MİNİPAN QR · '+sube+'</title>'+
+    '<style>'+
+    'body{font-family:system-ui,sans-serif;margin:0;padding:20px;background:#fff}'+
+    'h1{font-size:18px;text-align:center;margin:0 0 18px}'+
+    '.qr-print-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}'+
+    '.qr-print-kart{border:2px dashed #ccc;border-radius:14px;padding:18px 12px;text-align:center;page-break-inside:avoid;break-inside:avoid}'+
+    '.qr-print-kart svg{width:150px;height:150px}'+
+    '.qpk-sube{font-size:11px;color:#888;margin-top:8px}'+
+    '.qpk-masa{font-size:20px;font-weight:800;color:#1a1a1a;margin-top:2px}'+
+    '.qpk-not{font-size:11px;color:#e08a1e;margin-top:6px;font-weight:700}'+
+    '@media print{.yazdir-btn{display:none}.qr-print-kart{border-color:#ddd}}'+
+    '.yazdir-btn{display:block;margin:0 auto 20px;padding:12px 28px;background:#f0a728;color:#3a2410;border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer}'+
+    '</style></head><body>'+
+    '<h1>🧇 MİNİPAN · '+sube+' — Masa QR Kodları</h1>'+
+    '<button class="yazdir-btn" onclick="window.print()">🖨️ Yazdır / PDF kaydet</button>'+
+    '<div class="qr-print-grid">'+kartlar+'</div></body></html>');
+  w.document.close();
+  note("🖨️ "+masalar.length+" masa QR sayfası açıldı");
+}
+
 function myKatEkle(){
   const ad=prompt("Yeni kategori adı (örn. Balkon, Teras, Bahçe):");
   if(!ad||!ad.trim()) return;
@@ -2802,14 +5595,14 @@ function myKatEkle(){
   if(BRANCH_TABLES[sube].find(k=>k.kat===ad.trim())){ note("Bu kategori zaten var"); return; }
   BRANCH_TABLES[sube].push({kat:ad.trim(), masalar:[]});
   note("Kategori eklendi: "+ad.trim());
-  go("masayonetim");
+  go("masayonetim", true);
 }
 function myKatYenidenAdlandir(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
   const ad=prompt("Kategori adı:", k.kat);
   if(!ad||!ad.trim()) return;
   k.kat=ad.trim();
-  go("masayonetim");
+  go("masayonetim", true);
 }
 function myKatSil(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
@@ -2819,7 +5612,7 @@ function myKatSil(ki){
   if(!confirm(k.kat+" kategorisi ve içindeki "+k.masalar.length+" masa silinecek. Emin misiniz?")) return;
   BRANCH_TABLES[sube].splice(ki,1);
   note("Kategori silindi");
-  go("masayonetim");
+  go("masayonetim", true);
 }
 function myMasaEkle(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
@@ -2831,7 +5624,7 @@ function myMasaEkle(ki){
   if(k.masalar.includes(ad.trim())){ note("Bu masa zaten var"); return; }
   k.masalar.push(ad.trim());
   note(k.kat+"-"+ad.trim()+" eklendi");
-  go("masayonetim");
+  go("masayonetim", true);
 }
 function myMasaSil(ki,mi){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki]; const ad=k.masalar[mi];
@@ -2840,7 +5633,7 @@ function myMasaSil(ki,mi){
   if(!confirm(k.kat+"-"+ad+" masası silinecek?")) return;
   k.masalar.splice(mi,1);
   note("Masa silindi");
-  go("masayonetim");
+  go("masayonetim", true);
 }
 
 // --- MASALAR ---
@@ -3158,151 +5951,290 @@ function viewRecete(main){
     </div>`;
 }
 
-// --- FİYAT YÖNETİMİ (genel müdür: taban + şube · müdür: kendi şubesi) ---
+// --- FİYAT YÖNETİMİ v3 (sade: sadece genel fiyat + aç/kapa · indirim KAMPANYA'da) ---
 function viewFiyat(main){
   const isGenel = state.role==="genel";
-  // hedef: genel müdür "GENEL" (taban) veya bir şube seçer; müdür kendi şubesi
-  if(!state.fiyatHedef){ state.fiyatHedef = isGenel ? "GENEL" : AKTIF_SUBE; }
+  if(!state.fiyatHedef){ state.fiyatHedef = isGenel ? DEMO_BRANCHES[0].ad : AKTIF_SUBE; }
+  if(!state.fiyatKanal) state.fiyatKanal = "masa";
   const hedef = state.fiyatHedef;
-  const genelMod = hedef==="GENEL";
+  const kanal = state.fiyatKanal;
   const kategoriler = [...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
   if(!state.fiyatKat) state.fiyatKat = kategoriler[0];
   const prods = DEMO_PRODUCTS.filter(p=>p.kat===state.fiyatKat);
 
   let html=`<div class="sec-head"><div><h2>🏷️ Fiyat Yönetimi</h2>
-    <div class="sh-sub">${genelMod?'Genel satış fiyatları (tüm şubeler için taban)':hedef+' · şubeye özel fiyat & indirim'}</div></div></div>`;
+    <div class="sh-sub">${hedef} · ${kanal==="eve"?"🛵 Eve teslim fiyatları":"🍽️ Masada / Gel-Al fiyatları"}</div></div></div>`;
+  html+=`<div class="fy-bilgi-not">💡 İndirim ve kampanyalar artık <strong>Kampanyalar</strong> bölümünden tanımlanıyor. Burada sadece genel satış fiyatı belirlenir.</div>`;
 
-  // genel müdür → hedef seçici (GENEL + şubeler)
   if(isGenel){
-    html+=`<div class="fy-hedef-sec"><div class="fy-hs-row">
-      <button class="fy-hs-btn${genelMod?' on':''}" onclick="fiyatHedefSec('GENEL')">⭐ Genel Fiyat</button>`;
+    html+=`<div class="fy-hedef-sec"><div class="fy-hs-row">`;
     DEMO_BRANCHES.forEach(b=>{
       html+=`<button class="fy-hs-btn${hedef===b.ad?' on':''}" onclick="fiyatHedefSec('${b.ad.replace(/'/g,"\\'")}')">${b.ad}</button>`;
     });
     html+=`</div></div>`;
-  } else {
-    html+=`<div class="fy-uyari">🏷️ Şubenize özel fiyat girebilirsiniz — <strong>genel satış fiyatının üzerine çıkamazsınız</strong>. İndirim ve satışa kapatma da yapabilirsiniz.</div>`;
   }
-
-  // kategori sekmeleri
+  html+=`<div class="fy-kanal-row">
+    <button class="fy-kanal${kanal==="masa"?' on':''}" onclick="fiyatKanalSec('masa')">🍽️ Masada / Gel-Al</button>
+    <button class="fy-kanal${kanal==="eve"?' on':''}" onclick="fiyatKanalSec('eve')">🛵 Eve teslim</button>
+  </div>`;
+  if(kanal==="eve"){
+    html+=`<div class="fy-uyari">🛵 Eve teslim fiyatı girilmezse o ürün eve siparişinde <strong>masa fiyatıyla</strong> satılır.</div>`;
+  }
   html+=`<div class="cat-row">`;
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.fiyatKat===k?' on':''}" onclick="fiyatKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
   html+=`</div>`;
 
   html+=`<div class="fy-liste">`;
   prods.forEach(p=>{
-    const genel = p.fiyat;
-    if(genelMod){
-      // genel fiyat düzenleme + tüm şubelerde aç/kapa
-      const kapali = !!GENEL_KAPALI[p.ad];
-      html+=`<div class="fy-satir${kapali?' fy-kapali':''}">
-        <div class="fy-urun"><span class="fy-emoji">${p.emoji}</span><span class="fy-ad">${p.ad}</span></div>
-        <div class="fy-deger"><span class="fy-genel-fiyat">${genel} ₺</span></div>
-        <div class="fy-aksiyon">
-          <button class="fy-btn" onclick="fiyatGenelDuzenle('${p.ad.replace(/'/g,"\\'")}')">✏️ Fiyat</button>
-          <button class="fy-btn ${kapali?'kapali':'acik'}" onclick="fiyatGenelKapat('${p.ad.replace(/'/g,"\\'")}')">${kapali?'⛔ Kapalı':'✓ Açık'}</button>
-        </div>
-      </div>`;
-    } else {
-      // şube fiyatı/indirim/kapatma
-      const fb = urunFiyatBilgi(p.ad, hedef);
-      const ov = fiyatOverride(hedef, p.ad);
-      html+=`<div class="fy-satir${fb.kapali?' fy-kapali':''}${fb.indirimli?' fy-indirimli':''}">
-        <div class="fy-urun"><span class="fy-emoji">${p.emoji}</span><span class="fy-ad">${p.ad}</span>
-          <span class="fy-genel-not">genel: ${genel} ₺</span></div>
-        <div class="fy-deger">
-          ${fb.indirimli
-            ? `<span class="fy-eski">${fb.eski} ₺</span><span class="fy-yeni blink">${fb.gecerli} ₺</span>${fb.indirim>0?`<span class="fy-ind-rozet">%${fb.indirim}</span>`:''}`
-            : `<span class="fy-genel-fiyat">${fb.gecerli} ₺</span>`}
-        </div>
-        <div class="fy-aksiyon">
-          <button class="fy-btn" onclick="fiyatSubeDuzenle('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}')">✏️ Fiyat</button>
-          <button class="fy-btn" onclick="fiyatSubeIndirim('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}')">% İndirim</button>
-          <button class="fy-btn ${fb.kapali?'kapali':'acik'}" onclick="fiyatSubeKapat('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}')">${fb.kapali?'⛔':'✓'}</button>
-          ${(ov.fiyat||ov.indirim)?`<button class="fy-btn sifirla" onclick="fiyatSubeSifirla('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}')" title="Genel fiyata dön">↺</button>`:''}
-        </div>
-      </div>`;
-    }
+    const k = fiyatKayit(hedef, p.ad, kanal);
+    const fb = urunFiyatBilgi(p.ad, hedef, kanal);
+    const masaGenel = urunFiyatBilgi(p.ad, hedef, "masa").genel;
+    const genelGoster = fb.genel;
+    const evMiras = (kanal==="eve" && (k.genel==null||k.genel<=0));
+    html+=`<div class="fy-satir-sade${fb.kapali?' fy-kapali':''}">
+      <div class="fy-urun"><span class="fy-emoji">${p.emoji}</span><span class="fy-ad">${p.ad}</span>
+        ${evMiras?`<span class="fy-genel-not">eve fiyatı girilmedi · masa: ${masaGenel} ₺</span>`:''}
+        ${fb.indirimli?`<span class="fy-kampanya-not">🔥 Kampanyalı: ${fb.gecerli} ₺ (${fb.kampanyaAd})</span>`:''}</div>
+      <div class="fy-sag-blok">
+        <button class="fy-genel-btn" onclick="fiyatGenelGir('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}','${kanal}')">${genelGoster} ₺ ✏️</button>
+        <button class="fy-btn ${fb.kapali?'kapali':'acik'}" onclick="fiyatKanalKapat('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}','${kanal}')">${fb.kapali?'⛔ Kapalı':'✓ Açık'}</button>
+      </div>
+    </div>`;
   });
   html+=`</div>`;
   main.innerHTML=html;
 }
 function fiyatHedefSec(h){ state.fiyatHedef=h; go("fiyat"); }
+function fiyatKanalSec(k){ state.fiyatKanal=k; go("fiyat"); }
 function fiyatKatSec(k){ state.fiyatKat=k; go("fiyat"); }
-/* GENEL fiyat düzenle (genel müdür) */
-function fiyatGenelDuzenle(ad){
-  const p=DEMO_PRODUCTS.find(x=>x.ad===ad);
-  const v=prompt("Genel satış fiyatı (₺):", String(p.fiyat));
+function fiyatGenelGir(sube, ad, kanal){
+  const mevcut = urunFiyatBilgi(ad, sube, kanal).genel;
+  const v=prompt((kanal==="eve"?"Eve teslim ":"")+"genel fiyatı (₺):", String(mevcut));
   if(v==null) return;
   const f=parseInt(v);
   if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
-  p.fiyat=f;
+  fiyatKayitYaz(sube, ad, kanal).genel = f||null;
   note(ad+" genel fiyatı: "+f+" ₺");
-  go("fiyat");
+  kampanyaKaydet_persist();
+  go("fiyat", true);
 }
-function fiyatGenelKapat(ad){
-  GENEL_KAPALI[ad]=!GENEL_KAPALI[ad];
-  note(ad+(GENEL_KAPALI[ad]?" tüm şubelerde satışa kapatıldı":" tüm şubelerde açıldı"));
-  go("fiyat");
-}
-/* ŞUBE fiyatı (genel fiyatın üstüne çıkamaz) */
-function fiyatSubeDuzenle(sube, ad){
-  const genel=urunGenelFiyat(ad);
-  const ov=fiyatOverride(sube,ad);
-  const v=prompt("Şube fiyatı (₺) — genel fiyat "+genel+" ₺, üzerine çıkamazsınız:", String(ov.fiyat||genel));
-  if(v==null) return;
-  const f=parseInt(v);
-  if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
-  if(f>genel){ note("⛔ Genel satış fiyatının ("+genel+" ₺) üzerine çıkılamaz"); return; }
-  if(!PRICE_OVERRIDE[sube]) PRICE_OVERRIDE[sube]={};
-  if(!PRICE_OVERRIDE[sube][ad]) PRICE_OVERRIDE[sube][ad]={};
-  PRICE_OVERRIDE[sube][ad].fiyat = (f===genel ? null : f);  // genele eşitse override kaldır
-  note(ad+" "+sube+" fiyatı: "+f+" ₺");
-  go("fiyat");
-}
-function fiyatSubeIndirim(sube, ad){
-  const ov=fiyatOverride(sube,ad);
-  const v=prompt("% İndirim oranı (0-100):", String(ov.indirim||0));
-  if(v==null) return;
-  const ind=parseInt(v);
-  if(isNaN(ind)||ind<0||ind>100){ note("Geçersiz oran (0-100)"); return; }
-  if(!PRICE_OVERRIDE[sube]) PRICE_OVERRIDE[sube]={};
-  if(!PRICE_OVERRIDE[sube][ad]) PRICE_OVERRIDE[sube][ad]={};
-  PRICE_OVERRIDE[sube][ad].indirim = ind || null;
-  note(ad+" indirim: %"+ind);
-  go("fiyat");
-}
-function fiyatSubeKapat(sube, ad){
-  if(!PRICE_OVERRIDE[sube]) PRICE_OVERRIDE[sube]={};
-  if(!PRICE_OVERRIDE[sube][ad]) PRICE_OVERRIDE[sube][ad]={};
-  PRICE_OVERRIDE[sube][ad].kapali = !PRICE_OVERRIDE[sube][ad].kapali;
-  note(ad+(PRICE_OVERRIDE[sube][ad].kapali?" satışa kapatıldı":" açıldı"));
-  go("fiyat");
-}
-function fiyatSubeSifirla(sube, ad){
-  if(PRICE_OVERRIDE[sube]) delete PRICE_OVERRIDE[sube][ad];
-  note(ad+" genel fiyata döndü");
-  go("fiyat");
+function fiyatKanalKapat(sube, ad, kanal){
+  const rec=fiyatKayitYaz(sube,ad,kanal);
+  rec.kapali = !rec.kapali;
+  note(ad+(rec.kapali?" satışa kapatıldı":" açıldı"));
+  kampanyaKaydet_persist();
+  go("fiyat", true);
 }
 
-// --- KAMPANYA ---
+
+// --- KAMPANYA YÖNETİMİ ---
 function viewKampanya(main){
   const isGenel = state.role==="genel";
-  main.innerHTML=`
-    <div class="sec-head"><div><h2>Kampanyalar</h2>
-      <div class="sh-sub">${isGenel?'Merkez + tüm şube kampanyaları':AKTIF_SUBE+' kampanyaları'}</div></div>
-      <button class="btn btn-primary" style="padding:11px 18px" onclick="note('Yeni kampanya')">+ Yeni</button></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Kampanya</th><th>Tip</th><th>Kapsam</th><th>Zaman</th></tr></thead>
-        <tbody>
-          <tr><td>Happy Hour</td><td>%20 indirim</td><td><span class="tag edit">Tüm şubeler</span></td><td>15:00–17:00</td></tr>
-          <tr><td>Öğrenci günü</td><td>%10 indirim</td><td><span class="tag locked">${AKTIF_SUBE}</span></td><td>Salı</td></tr>
-          ${isGenel?'<tr><td>Hafta sonu 2.si bedava</td><td>İkram</td><td><span class="tag edit">Tüm şubeler</span></td><td>Cmt–Paz</td></tr>':''}
-        </tbody>
-      </table>
-    </div>`;
+  // bu rolün görebileceği kampanyalar
+  const gorunur = KAMPANYALAR.filter(k=>{
+    if(isGenel) return true;
+    // müdür: tüm şubeler kapsayan VEYA kendi şubesini içeren
+    return k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(AKTIF_SUBE));
+  });
+  let html=`<div class="sec-head"><div><h2>🔥 Kampanyalar</h2>
+    <div class="sh-sub">${isGenel?'Merkez + tüm şube kampanyaları':AKTIF_SUBE+' kampanyaları'}</div></div>
+    <button class="btn btn-primary" style="padding:11px 18px" onclick="kampanyaFormAc()">+ Yeni kampanya</button></div>`;
+
+  if(gorunur.length===0){
+    html+=`<div class="kmp-bos">Henüz kampanya yok. "+ Yeni kampanya" ile ekleyebilirsiniz.</div>`;
+  } else {
+    html+=`<div class="kmp-liste">`;
+    gorunur.slice().reverse().forEach(k=>{
+      const aktif = kampanyaAktifMi(k);
+      const urun = DEMO_PRODUCTS.find(p=>p.ad===k.urun);
+      const kapsamAd = k.subeler==="hepsi" ? "Tüm şubeler" : (Array.isArray(k.subeler)?k.subeler.join(", "):"-");
+      const gunAd = (k.gunler&&k.gunler.length>0&&k.gunler.length<7) ? k.gunler.map(g=>GUN_ADLARI[g]).join(",") : "Her gün";
+      const saatAd = (k.saatBas&&k.saatBit) ? k.saatBas+"–"+k.saatBit : "Tüm gün";
+      const indAd = k.tip==="oran" ? "%"+k.deger+" indirim" : k.deger+" ₺ özel fiyat";
+      // müdür sadece kendi eklediği şube-özel kampanyayı silebilir; genel müdür hepsini
+      const silebilir = isGenel || (Array.isArray(k.subeler) && !k.subeler.includes("__merkez__") && k.olusturan===AKTIF_SUBE);
+      html+=`<div class="kmp-kart${aktif?' kmp-aktif':''}">
+        <div class="kmp-kart-ust">
+          <div class="kmp-ad">${urun?urun.emoji+' ':''}${k.ad}</div>
+          <span class="kmp-durum ${aktif?'on':'off'}">${aktif?'🟢 Aktif':'⚪ Pasif'}</span>
+        </div>
+        <div class="kmp-urun-satir">${k.urun} · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}</div>
+        <div class="kmp-detay">
+          <span class="kmp-rozet">🏬 ${kapsamAd}</span>
+          <span class="kmp-rozet">📅 ${gunAd}</span>
+          <span class="kmp-rozet">🕐 ${saatAd}</span>
+          ${k.tekrar?'<span class="kmp-rozet">🔁 Tekrarlı</span>':''}
+        </div>
+        <div class="kmp-aksiyon">
+          <button class="kmp-toggle ${k.aktif?'':'pasif'}" onclick="kampanyaAcKapa(${k.id})">${k.aktif?'⏸ Duraklat':'▶ Etkinleştir'}</button>
+          ${silebilir?`<button class="kmp-sil" onclick="kampanyaSil(${k.id})">🗑️ Sil</button>`:''}
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+  main.innerHTML=html;
 }
+
+/* Kampanya ekleme formu (modal) */
+function kampanyaFormAc(){
+  const isGenel = state.role==="genel";
+  state.kmpForm = {
+    ad:"", urun:DEMO_PRODUCTS[0].ad, tip:"oran", deger:"",
+    kanal:"masa", subeKapsam:isGenel?"hepsi":"secili",
+    subeler:isGenel?[]:[AKTIF_SUBE],
+    gunler:[], saatBas:"", saatBit:"", tekrar:false
+  };
+  renderKampanyaForm();
+  document.getElementById("kmpModal").classList.add("on");
+}
+function kampanyaFormKapat(){
+  document.getElementById("kmpModal").classList.remove("on");
+  state.kmpForm=null;
+}
+function kmpFormSet(alan, deger){
+  if(!state.kmpForm) return;
+  state.kmpForm[alan]=deger;
+  renderKampanyaForm();
+}
+function kmpFormGun(g){
+  const f=state.kmpForm; if(!f) return;
+  if(f.gunler.includes(g)) f.gunler=f.gunler.filter(x=>x!==g);
+  else f.gunler.push(g);
+  renderKampanyaForm();
+}
+function kmpFormSube(sube){
+  const f=state.kmpForm; if(!f) return;
+  if(f.subeler.includes(sube)) f.subeler=f.subeler.filter(x=>x!==sube);
+  else f.subeler.push(sube);
+  renderKampanyaForm();
+}
+function renderKampanyaForm(){
+  const f=state.kmpForm; if(!f) return;
+  const isGenel=state.role==="genel";
+  const kategoriler=[...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
+  let html=`<div class="kmpf-head">
+    <div class="kmpf-baslik">🔥 Yeni Kampanya</div>
+    <button class="bom-kapat" onclick="kampanyaFormKapat()">✕</button></div>
+    <div class="kmpf-govde">`;
+
+  // kampanya adı
+  html+=`<div class="kmpf-alan"><label>Kampanya adı</label>
+    <input class="kmpf-input" id="kmpAdInput" placeholder="örn. Happy Hour" value="${f.ad}" oninput="state.kmpForm.ad=this.value"></div>`;
+
+  // ürün seçimi
+  html+=`<div class="kmpf-alan"><label>Ürün</label>
+    <select class="kmpf-input" onchange="kmpFormSet('urun',this.value)">`;
+  kategoriler.forEach(kat=>{
+    html+=`<optgroup label="${kat}">`;
+    DEMO_PRODUCTS.filter(p=>p.kat===kat).forEach(p=>{
+      html+=`<option value="${p.ad}"${f.urun===p.ad?' selected':''}>${p.ad}</option>`;
+    });
+    html+=`</optgroup>`;
+  });
+  html+=`</select></div>`;
+
+  // indirim tipi
+  html+=`<div class="kmpf-alan"><label>İndirim tipi</label>
+    <div class="kmpf-secim-row">
+      <button class="kmpf-secim${f.tip==="oran"?' on':''}" onclick="kmpFormSet('tip','oran')">% Yüzde indirim</button>
+      <button class="kmpf-secim${f.tip==="fiyat"?' on':''}" onclick="kmpFormSet('tip','fiyat')">₺ Yeni satış fiyatı</button>
+    </div></div>`;
+  html+=`<div class="kmpf-alan"><label>${f.tip==="oran"?"İndirim oranı (%)":"Yeni satış fiyatı (₺)"}</label>
+    <input class="kmpf-input" inputmode="numeric" placeholder="${f.tip==="oran"?"örn. 20":"örn. 75"}" value="${f.deger}" oninput="state.kmpForm.deger=this.value"></div>`;
+
+  // kanal
+  html+=`<div class="kmpf-alan"><label>Uygulanacak kanal</label>
+    <div class="kmpf-secim-row">
+      <button class="kmpf-secim${f.kanal==="masa"?' on':''}" onclick="kmpFormSet('kanal','masa')">🍽️ Masada / Gel-Al</button>
+      <button class="kmpf-secim${f.kanal==="eve"?' on':''}" onclick="kmpFormSet('kanal','eve')">🛵 Eve teslim</button>
+    </div></div>`;
+
+  // şube kapsamı (sadece genel müdür seçebilir; müdür kendi şubesi sabit)
+  if(isGenel){
+    html+=`<div class="kmpf-alan"><label>Şube kapsamı</label>
+      <div class="kmpf-secim-row">
+        <button class="kmpf-secim${f.subeKapsam==="hepsi"?' on':''}" onclick="kmpFormSet('subeKapsam','hepsi')">Tüm şubeler</button>
+        <button class="kmpf-secim${f.subeKapsam==="secili"?' on':''}" onclick="kmpFormSet('subeKapsam','secili')">Seçili şubeler</button>
+      </div></div>`;
+    if(f.subeKapsam==="secili"){
+      html+=`<div class="kmpf-sube-grid">`;
+      DEMO_BRANCHES.forEach(b=>{
+        html+=`<button class="kmpf-sube-chip${f.subeler.includes(b.ad)?' on':''}" onclick="kmpFormSube('${b.ad.replace(/'/g,"\\'")}')">${f.subeler.includes(b.ad)?'✓ ':''}${b.ad}</button>`;
+      });
+      html+=`</div>`;
+    }
+  } else {
+    html+=`<div class="kmpf-alan"><label>Şube</label><div class="kmpf-sabit">🏬 ${AKTIF_SUBE} (kendi şubeniz)</div></div>`;
+  }
+
+  // günler
+  html+=`<div class="kmpf-alan"><label>Günler (boş = her gün)</label>
+    <div class="kmpf-gun-row">`;
+  GUN_ADLARI.forEach((g,i)=>{
+    html+=`<button class="kmpf-gun${f.gunler.includes(i)?' on':''}" onclick="kmpFormGun(${i})">${g}</button>`;
+  });
+  html+=`</div></div>`;
+
+  // saat aralığı
+  html+=`<div class="kmpf-alan"><label>Saat aralığı (boş = tüm gün)</label>
+    <div class="kmpf-saat-row">
+      <input type="time" class="kmpf-input" value="${f.saatBas}" oninput="state.kmpForm.saatBas=this.value">
+      <span class="kmpf-tire">–</span>
+      <input type="time" class="kmpf-input" value="${f.saatBit}" oninput="state.kmpForm.saatBit=this.value">
+    </div></div>`;
+
+  // tekrar
+  html+=`<div class="kmpf-alan kmpf-tekrar" onclick="kmpFormSet('tekrar',${!f.tekrar})">
+    <div class="kmpf-check${f.tekrar?' on':''}">${f.tekrar?'✓':''}</div>
+    <span>🔁 Her hafta tekrarla (seçili gün/saatlerde otomatik aktif olsun)</span></div>`;
+
+  html+=`</div>
+    <button class="kmpf-kaydet" onclick="kampanyaKaydet()">Kampanyayı kaydet</button>`;
+  document.getElementById("kmpModalInner").innerHTML=html;
+}
+function kampanyaKaydet(){
+  const f=state.kmpForm; if(!f) return;
+  const isGenel=state.role==="genel";
+  if(!f.ad.trim()){ note("Kampanya adı girin"); return; }
+  const deger=parseFloat(f.deger);
+  if(isNaN(deger)||deger<=0){ note("Geçerli bir indirim değeri girin"); return; }
+  if(f.tip==="oran" && deger>100){ note("İndirim oranı %100'den fazla olamaz"); return; }
+  // şube kapsamı
+  let subeler;
+  if(isGenel){
+    if(f.subeKapsam==="hepsi") subeler="hepsi";
+    else { if(f.subeler.length===0){ note("En az bir şube seçin"); return; } subeler=f.subeler.slice(); }
+  } else {
+    subeler=[AKTIF_SUBE];
+  }
+  KAMPANYALAR.push({
+    id:_kampanyaId++, ad:f.ad.trim(), urun:f.urun, tip:f.tip, deger:deger,
+    kanal:f.kanal, subeler:subeler,
+    gunler:f.gunler.slice(), saatBas:f.saatBas, saatBit:f.saatBit,
+    tekrar:f.tekrar, aktif:true, olusturan:isGenel?"__merkez__":AKTIF_SUBE
+  });
+  kampanyaFormKapat();
+  note("🔥 Kampanya oluşturuldu: "+f.ad.trim());
+  kampanyaKaydet_persist();
+  go("kampanya");
+}
+function kampanyaAcKapa(id){
+  const k=KAMPANYALAR.find(x=>x.id===id); if(!k) return;
+  k.aktif=!k.aktif;
+  note(k.ad+(k.aktif?" etkinleştirildi":" duraklatıldı"));
+  kampanyaKaydet_persist();
+  go("kampanya", true);
+}
+function kampanyaSil(id){
+  const k=KAMPANYALAR.find(x=>x.id===id); if(!k) return;
+  if(!confirm('"'+k.ad+'" kampanyası silinsin mi?')) return;
+  KAMPANYALAR=KAMPANYALAR.filter(x=>x.id!==id);
+  note("Kampanya silindi");
+  kampanyaKaydet_persist();
+  go("kampanya", true);
+}
+
 
 // --- PERSONEL (müdür) ---
 function viewPersonel(main){
@@ -3323,21 +6255,818 @@ function viewPersonel(main){
 }
 
 // --- ŞUBELER (genel müdür — dinamik, sınırsız ekleme) ---
-function viewSubeler(main){
-  main.innerHTML=`
-    <div class="sec-head"><div><h2>Şubeler</h2><div class="sh-sub">${DEMO_BRANCHES.length} aktif · sınırsız ekleme</div></div>
-      <button class="btn btn-primary" style="padding:11px 18px" onclick="note('Yeni şube ekleniyor — QR ve geo-fence tanımlanır')">+ Yeni şube</button></div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Şube</th><th>Açılış</th><th>Geo-fence</th><th>Durum</th><th></th></tr></thead>
-        <tbody>
-          ${DEMO_BRANCHES.map(b=>`
-            <tr><td><strong>${b.ad}</strong></td><td>2024</td><td>150 m</td>
-            <td><span class="tag edit">Aktif</span></td>
-            <td><button class="btn btn-ghost" style="padding:8px 14px;font-size:13px" onclick="note('${b.ad} ayarları')">Yönet</button></td></tr>`).join("")}
-        </tbody>
-      </table>
+// ============================================================
+// BAYİ KANALI (B2B) — genel müdür ↔ bayi tedarik
+// ============================================================
+function viewBayi(main){
+  const isGenel = state.role==="genel";
+  if(!state.bayiSekme) state.bayiSekme = isGenel ? "stokkart" : "siparis";
+  const sekme = state.bayiSekme;
+  // genel müdür sekmeleri
+  const genelSekmeler = [
+    {k:"stokkart", ad:"📋 Stok Kartları"},
+    {k:"sayim",    ad:"🔢 Sayım"},
+    {k:"irsaliye", ad:"🚚 İrsaliye"},
+    {k:"bfiyat",   ad:"🏷️ Bayi Fiyatları"},
+    {k:"bstok",    ad:"🏪 Bayi Stokları"},
+    {k:"siparis",  ad:"📥 Siparişler"},
+    {k:"gecmis",   ad:"📊 Geçmiş"},
+  ];
+  // müdür sekmeleri
+  const mudurSekmeler = [
+    {k:"sayim",   ad:"🔢 Sayım"},
+    {k:"siparis", ad:"🛒 Sipariş Ver"},
+    {k:"benimsip",ad:"📋 Siparişlerim"},
+    {k:"gecmis",  ad:"📊 Geçmiş"},
+  ];
+  const sekmeler = isGenel ? genelSekmeler : mudurSekmeler;
+  if(!sekmeler.find(s=>s.k===sekme)) state.bayiSekme = sekmeler[0].k;
+
+  let html = `<div class="sec-head"><div><h2>📦 Bayi Kanalı</h2>
+    <div class="sh-sub">${isGenel?'Genel müdür · merkez tedarik':AKTIF_SUBE+' · bayi'}</div></div></div>`;
+  html += `<div class="bayi-sekme-row">`;
+  sekmeler.forEach(s=>{
+    html += `<button class="bayi-sekme${state.bayiSekme===s.k?' on':''}" onclick="bayiSekmeSec('${s.k}')">${s.ad}</button>`;
+  });
+  html += `</div><div class="bayi-icerik">`;
+
+  if(isGenel){
+    if(sekme==="stokkart") html += bayiStokKartHtml();
+    else if(sekme==="sayim") html += bayiSayimHtml(true);
+    else if(sekme==="irsaliye") html += bayiIrsaliyeHtml();
+    else if(sekme==="bfiyat") html += bayiFiyatHtml();
+    else if(sekme==="bstok") html += bayiStoklarHtml();
+    else if(sekme==="siparis") html += bayiSiparisGenelHtml();
+    else if(sekme==="gecmis") html += bayiGecmisHtml(true);
+  } else {
+    if(sekme==="sayim") html += bayiSayimHtml(false);
+    else if(sekme==="siparis") html += bayiSiparisVerHtml();
+    else if(sekme==="benimsip") html += bayiBenimSiparisHtml();
+    else if(sekme==="gecmis") html += bayiGecmisHtml(false);
+  }
+  html += `</div>`;
+  main.innerHTML = html;
+}
+function bayiSekmeSec(k){ state.bayiSekme=k; go("bayi"); }
+
+/* === GEÇMİŞ SİPARİŞLER (tamamlananlar: ödendi + aktarıldı) === */
+/* tr-TR tarih "GG.AA.YYYY" → karşılaştırılabilir YYYYMMDD sayısı */
+function tarihSayi(trTarih){
+  if(!trTarih) return 0;
+  const p = trTarih.split(".");
+  if(p.length!==3) return 0;
+  return parseInt(p[2]+p[1].padStart(2,"0")+p[0].padStart(2,"0"))||0;
+}
+/* YYYY-MM-DD (input[type=date]) → YYYYMMDD sayısı */
+function isoTarihSayi(iso){ return iso ? parseInt(iso.replace(/-/g,""))||0 : 0; }
+
+function bayiGecmisFiltrele(isGenel){
+  let liste = BAYI_SIPARISLER.filter(s=>s.durum==="odendi"||s.durum==="aktarildi");
+  if(!isGenel) liste = liste.filter(s=>s.sube===AKTIF_SUBE);
+  else if(state.gecmisSube && state.gecmisSube!=="hepsi") liste = liste.filter(s=>s.sube===state.gecmisSube);
+  // tarih aralığı
+  const bas = isoTarihSayi(state.gecmisBas);
+  const bit = isoTarihSayi(state.gecmisBit);
+  if(bas) liste = liste.filter(s=>tarihSayi(s.tarih)>=bas);
+  if(bit) liste = liste.filter(s=>tarihSayi(s.tarih)<=bit);
+  return liste;
+}
+function bayiGecmisHtml(isGenel){
+  const liste = bayiGecmisFiltrele(isGenel);
+  const genelToplam = liste.reduce((a,sp)=>a+siparisTutar(sp).net,0);
+  let html = `<div class="bayi-aciklama">📊 Tamamlanan siparişler (ödendi / stok aktarıldı). Tarih aralığı seçip filtreleyebilir, Excel'e aktarabilirsiniz.</div>`;
+  // filtre paneli
+  html += `<div class="gecmis-filtre">`;
+  if(isGenel){
+    html += `<div class="gf-alan"><label>Şube</label>
+      <select class="gf-select" onchange="gecmisFiltreSec('sube',this.value)">
+        <option value="hepsi"${(!state.gecmisSube||state.gecmisSube==="hepsi")?' selected':''}>Tüm şubeler</option>
+        ${DEMO_BRANCHES.map(b=>`<option value="${b.ad}"${state.gecmisSube===b.ad?' selected':''}>${b.ad}</option>`).join("")}
+      </select></div>`;
+  }
+  html += `<div class="gf-alan"><label>Başlangıç</label><input type="date" class="gf-date" value="${state.gecmisBas||''}" onchange="gecmisFiltreSec('bas',this.value)"></div>
+    <div class="gf-alan"><label>Bitiş</label><input type="date" class="gf-date" value="${state.gecmisBit||''}" onchange="gecmisFiltreSec('bit',this.value)"></div>
+    <button class="gf-temizle" onclick="gecmisFiltreTemizle()">↺ Temizle</button>
+  </div>`;
+  // özet bar
+  html += `<div class="gecmis-ozet-bar">
+    <div class="go-bilgi"><span class="go-sayi">${liste.length}</span> sipariş · Net toplam: <strong>${genelToplam.toFixed(0)} ₺</strong></div>
+    <button class="go-xls" onclick="bayiGecmisXls(${isGenel})" ${liste.length===0?'disabled':''}>📥 Excel indir</button>
+  </div>`;
+  if(liste.length===0){ return html+`<div class="bayi-bos">Seçilen aralıkta tamamlanan sipariş yok.</div>`; }
+  // liste
+  liste.slice().reverse().forEach(sp=>{
+    const dm = SIPARIS_DURUM[sp.durum];
+    const t = siparisTutar(sp);
+    const aktifKalem = sp.kalemler.filter(k=>!k.silindi && k.miktar>0);
+    html += `<div class="bayi-sip-kart">
+      <div class="bayi-sip-ust"><span class="bayi-sip-no">#${sp.id}${isGenel?' · '+sp.sube:''}</span>
+        <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
+      <div class="bayi-sip-tarih">${sp.tarih}${sp.odeme?' · '+sp.odeme:''}</div>
+      <div class="bayi-sip-kalemler">`;
+    aktifKalem.forEach(k=>{
+      const s = STOCK[k.kod]; const bf = bayiFiyat(k.kod);
+      html += `<div class="bayi-sip-kalem"><span>${s?s.ad:k.kod}</span>
+        <span>${k.miktar} ${s?(s.birim||"gr"):""} × ${bf} ₺ = ${(k.miktar*bf).toFixed(0)} ₺</span></div>`;
+    });
+    html += `</div>
+      <div class="bayi-ozet-tablo">
+        <div class="bayi-ozet-satir"><span>Toplam (iskontosuz)</span><span>${t.brut.toFixed(0)} ₺</span></div>
+        ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(0)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenen</span><span>${t.net.toFixed(0)} ₺</span></div>
+      </div></div>`;
+  });
+  return html;
+}
+function gecmisFiltreSec(alan, deger){
+  if(alan==="sube") state.gecmisSube=deger;
+  else if(alan==="bas") state.gecmisBas=deger;
+  else if(alan==="bit") state.gecmisBit=deger;
+  go("bayi", true);
+}
+function gecmisFiltreTemizle(){
+  state.gecmisSube="hepsi"; state.gecmisBas=""; state.gecmisBit="";
+  go("bayi", true);
+}
+/* Excel (HTML-tablo .xls) — her kalem bir satır, Türkçe uyumlu */
+function bayiGecmisXls(isGenel){
+  const liste = bayiGecmisFiltrele(isGenel);
+  if(liste.length===0){ note("İndirilecek kayıt yok"); return; }
+  let satirlar = "";
+  let genelNet = 0;
+  liste.forEach(sp=>{
+    const isk = bayiIskonto(sp.sube);
+    sp.kalemler.filter(k=>!k.silindi && k.miktar>0).forEach(k=>{
+      const s = STOCK[k.kod]; const bf = bayiFiyat(k.kod);
+      const brut = k.miktar*bf;
+      const net = brut*(1-isk/100);
+      genelNet += net;
+      satirlar += `<tr>
+        <td>${sp.tarih}</td><td>#${sp.id}</td><td>${sp.sube}</td>
+        <td>${s?s.ad:k.kod}</td><td>${k.miktar}</td><td>${s?(s.birim||"gr"):""}</td>
+        <td>${bf}</td><td>${brut.toFixed(0)}</td><td>%${isk}</td><td>${net.toFixed(0)}</td>
+        <td>${SIPARIS_DURUM[sp.durum].ad}</td><td>${sp.odeme||''}</td></tr>`;
+    });
+  });
+  const baslik = `MİNİPAN Bayi Kanalı — Geçmiş Siparişler`;
+  const aralik = (state.gecmisBas||state.gecmisBit) ? `${state.gecmisBas||'…'} → ${state.gecmisBit||'…'}` : 'Tüm tarihler';
+  const subeBilgi = isGenel ? (state.gecmisSube&&state.gecmisSube!=="hepsi"?state.gecmisSube:'Tüm şubeler') : AKTIF_SUBE;
+  const tablo = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
+    <head><meta charset="utf-8"></head><body>
+    <table border="1">
+      <tr><td colspan="12" style="font-weight:bold;font-size:14px">${baslik}</td></tr>
+      <tr><td colspan="12">${subeBilgi} · ${aralik}</td></tr>
+      <tr></tr>
+      <tr style="background:#f0a728;font-weight:bold">
+        <td>Tarih</td><td>Sipariş No</td><td>Şube</td><td>Ürün</td><td>Miktar</td><td>Birim</td>
+        <td>Birim Fiyat</td><td>Tutar (iskontosuz)</td><td>İskonto</td><td>Net Tutar</td><td>Durum</td><td>Ödeme</td></tr>
+      ${satirlar}
+      <tr style="font-weight:bold;background:#e8f6ec">
+        <td colspan="9">GENEL TOPLAM (Net)</td><td>${genelNet.toFixed(0)} ₺</td><td colspan="2"></td></tr>
+    </table></body></html>`;
+  const blob = new Blob(["\ufeff"+tablo], {type:"application/vnd.ms-excel;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  const dosyaTarih = new Date().toLocaleDateString("tr-TR").replace(/\./g,"-");
+  a.download = `MINIPAN_bayi_gecmis_${dosyaTarih}.xls`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  note("📥 Excel indiriliyor · "+liste.length+" sipariş");
+}
+
+/* === GENEL MÜDÜR: STOK KARTLARI === */
+function bayiStokKartHtml(){
+  // toplam stok değeri (miktar × birim fiyat)
+  let toplamDeger = 0;
+  Object.entries(STOCK).forEach(([kod,s])=>{ toplamDeger += s.mevcut * bayiFiyat(kod); });
+  let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${Object.keys(STOCK).length} stok kartı · toplam değer: <strong>${toplamDeger.toFixed(0)} ₺</strong></div>
+    <button class="bayi-ekle-btn" onclick="stokKartEkle()">+ Yeni stok kartı</button></div>`;
+  html += `<div class="bayi-tablo">`;
+  Object.entries(STOCK).forEach(([kod,s])=>{
+    const bf = bayiFiyat(kod);
+    const satirDeger = s.mevcut * bf;
+    html += `<div class="bayi-satir">
+      <div class="bayi-s-ad"><strong>${s.ad}</strong> <span class="bayi-s-kod">${kod}</span>
+        <div class="bayi-s-not">${s.mevcut} ${s.birim||"gr"} × ${bf>0?bf+' ₺':'fiyat yok'} <small>· kritik ${s.kritik}</small></div></div>
+      <div class="bayi-s-deger">${bf>0?satirDeger.toFixed(0)+' ₺':'—'}</div>
+      <div class="bayi-s-aksiyon">
+        <button class="bayi-mini" onclick="stokKartDuzenle('${kod}')">✏️</button>
+        <button class="bayi-mini sil" onclick="stokKartSil('${kod}')">🗑️</button>
+      </div>
     </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function stokKartEkle(){
+  const ad = prompt("Stok kartı adı (örn. Antep fıstığı):");
+  if(!ad||!ad.trim()) return;
+  const birim = prompt("Birim (gr / adet):", "gr");
+  if(birim==null) return;
+  const kritikV = prompt("Kritik seviye:", "500");
+  if(kritikV==null) return;
+  // kod üret
+  let kod = ad.trim().toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,12) || ("stok"+Date.now());
+  if(STOCK[kod]) kod = kod+Date.now();
+  STOCK[kod] = {ad:ad.trim(), mevcut:0, kritik:parseInt(kritikV)||0, birim:(birim.trim()||"gr")};
+  note("Stok kartı eklendi: "+ad.trim());
+  b2bKaydet();
+  go("bayi", true);
+}
+function stokKartDuzenle(kod){
+  const s = STOCK[kod]; if(!s) return;
+  const ad = prompt("Stok adı:", s.ad);
+  if(ad==null) return;
+  s.ad = ad.trim()||s.ad;
+  const birim = prompt("Birim (gr/adet):", s.birim||"gr");
+  if(birim!=null) s.birim = birim.trim()||"gr";
+  const kritik = prompt("Kritik seviye:", String(s.kritik));
+  if(kritik!=null) s.kritik = parseInt(kritik)||0;
+  note(kod+" güncellendi");
+  b2bKaydet();
+  go("bayi", true);
+}
+function stokKartSil(kod){
+  if(!confirm(STOCK[kod].ad+" stok kartı silinsin mi? Reçetelerde kullanılıyorsa dikkat.")) return;
+  delete STOCK[kod];
+  note("Stok kartı silindi");
+  b2bKaydet();
+  go("bayi", true);
+}
+
+/* === SAYIM GİRİŞİ (genel müdür merkez · müdür bayi) === */
+function bayiSayimHtml(merkez){
+  const sube = merkez ? null : AKTIF_SUBE;
+  let html = `<div class="bayi-aciklama">${merkez?'🏢 Merkez (genel müdür) stok sayımı — girilen değer mevcut stoğun yerine yazılır.':'🏪 '+AKTIF_SUBE+' bayi deposu sayımı.'}</div>`;
+  html += `<div class="bayi-tablo">`;
+  Object.entries(STOCK).forEach(([kod,s])=>{
+    const mevcut = merkez ? s.mevcut : bayiStok(sube,kod);
+    html += `<div class="bayi-satir">
+      <div class="bayi-s-ad"><strong>${s.ad}</strong></div>
+      <div class="bayi-s-deger">mevcut: ${mevcut} ${s.birim||"gr"}</div>
+      <div class="bayi-s-aksiyon">
+        <button class="bayi-mini" onclick="sayimGir('${merkez?'_MERKEZ_':sube.replace(/'/g,"\\'")}','${kod}')">🔢 Sayım gir</button>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function sayimGir(hedef, kod){
+  const merkez = hedef==="_MERKEZ_";
+  const s = STOCK[kod];
+  const mevcut = merkez ? s.mevcut : bayiStok(hedef,kod);
+  const v = prompt(s.ad+" sayım sonucu ("+(s.birim||"gr")+"):", String(mevcut));
+  if(v==null) return;
+  const m = parseInt(v);
+  if(isNaN(m)||m<0){ note("Geçersiz değer"); return; }
+  if(merkez) s.mevcut = m;
+  else bayiStokYaz(hedef, kod, m);
+  note(s.ad+" sayımı işlendi: "+m+" "+(s.birim||"gr"));
+  b2bKaydet();
+  go("bayi", true);
+}
+
+/* === İRSALİYE GİRİŞİ (genel müdür) === */
+function bayiIrsaliyeHtml(){
+  let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${IRSALIYELER.length} irsaliye kayıtlı</div>
+    <button class="bayi-ekle-btn" onclick="irsaliyeBasla()">+ Yeni irsaliye</button></div>`;
+  // taslak irsaliye düzenleniyorsa
+  if(state.irsaliyeTaslak){
+    const t = state.irsaliyeTaslak;
+    html += `<div class="bayi-form">
+      <div class="bayi-form-baslik">🚚 Yeni irsaliye</div>
+      <div class="bayi-form-satir"><label>Tarih</label><span>${t.tarih}</span></div>
+      <div class="bayi-form-satir"><label>Tedarikçi</label><button class="bayi-form-val" onclick="irsaliyeAlan('tedarikci')">${t.tedarikci||'— gir —'}</button></div>
+      <div class="bayi-form-satir"><label>Açıklama</label><button class="bayi-form-val" onclick="irsaliyeAlan('aciklama')">${t.aciklama||'— gir —'}</button></div>
+      <div class="bayi-form-kalemler">`;
+    if(t.kalemler.length===0) html += `<div class="bayi-bos">Henüz ürün eklenmedi.</div>`;
+    t.kalemler.forEach((k,i)=>{
+      html += `<div class="bayi-kalem-satir"><span>${STOCK[k.kod]?STOCK[k.kod].ad:k.kod}</span>
+        <span>${k.miktar} ${STOCK[k.kod]?(STOCK[k.kod].birim||"gr"):""}</span>
+        <button class="bayi-kalem-sil" onclick="irsaliyeKalemSil(${i})">✕</button></div>`;
+    });
+    html += `</div>
+      <button class="bayi-kalem-ekle" onclick="irsaliyeKalemEkle()">+ Ürün ekle</button>
+      <div class="bayi-form-foot">
+        <button class="btn btn-ghost" onclick="irsaliyeIptal()">İptal</button>
+        <button class="btn btn-primary" onclick="irsaliyeKaydet()">İrsaliyeyi kaydet · stoğa işle</button>
+      </div>
+    </div>`;
+  }
+  // geçmiş irsaliyeler
+  if(IRSALIYELER.length>0){
+    html += `<div class="bayi-gecmis-baslik">Geçmiş irsaliyeler</div><div class="bayi-tablo">`;
+    IRSALIYELER.slice().reverse().forEach(ir=>{
+      html += `<div class="bayi-satir">
+        <div class="bayi-s-ad"><strong>${ir.tedarikci||'—'}</strong> <span class="bayi-s-kod">${ir.tarih}</span>
+          <div class="bayi-s-not">${ir.kalemler.length} kalem${ir.aciklama?' · '+ir.aciklama:''}</div></div>
+        <div class="bayi-s-deger">${ir.kalemler.reduce((a,b)=>a+b.miktar,0)} birim</div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  return html;
+}
+function irsaliyeBasla(){
+  const bugun = new Date().toLocaleDateString("tr-TR");
+  state.irsaliyeTaslak = {tarih:bugun, tedarikci:"", aciklama:"", kalemler:[]};
+  go("bayi", true);
+}
+function irsaliyeAlan(alan){
+  const t = state.irsaliyeTaslak; if(!t) return;
+  const v = prompt(alan==="tedarikci"?"Tedarikçi adı:":"Açıklama:", t[alan]||"");
+  if(v==null) return;
+  t[alan] = v.trim();
+  go("bayi", true);
+}
+function irsaliyeKalemEkle(){
+  const t = state.irsaliyeTaslak; if(!t) return;
+  const kodlar = Object.keys(STOCK);
+  const liste = kodlar.map((k,i)=>(i+1)+". "+STOCK[k].ad).join("\n");
+  const sec = prompt("Ürün seç (numara gir):\n\n"+liste);
+  if(sec==null) return;
+  const idx = parseInt(sec)-1;
+  if(isNaN(idx)||idx<0||idx>=kodlar.length){ note("Geçersiz seçim"); return; }
+  const kod = kodlar[idx];
+  const miktarV = prompt(STOCK[kod].ad+" miktarı ("+(STOCK[kod].birim||"gr")+"):");
+  if(miktarV==null) return;
+  const m = parseInt(miktarV);
+  if(isNaN(m)||m<=0){ note("Geçersiz miktar"); return; }
+  t.kalemler.push({kod:kod, miktar:m});
+  go("bayi", true);
+}
+function irsaliyeKalemSil(i){
+  state.irsaliyeTaslak.kalemler.splice(i,1);
+  go("bayi", true);
+}
+function irsaliyeIptal(){ state.irsaliyeTaslak=null; go("bayi", true); }
+function irsaliyeKaydet(){
+  const t = state.irsaliyeTaslak;
+  if(!t || t.kalemler.length===0){ note("En az bir ürün ekleyin"); return; }
+  // stoğa işle (genel müdür merkez stoğu = STOCK.mevcut)
+  t.kalemler.forEach(k=>{ if(STOCK[k.kod]) STOCK[k.kod].mevcut += k.miktar; });
+  IRSALIYELER.push({id:_irsaliyeId++, tarih:t.tarih, tedarikci:t.tedarikci, aciklama:t.aciklama, kalemler:t.kalemler});
+  state.irsaliyeTaslak = null;
+  note("✓ İrsaliye kaydedildi · "+t.kalemler.length+" ürün stoğa işlendi");
+  b2bKaydet();
+  go("bayi", true);
+}
+
+/* === BAYİ FİYATLARI (genel müdür belirler) === */
+function bayiFiyatHtml(){
+  let html = `<div class="bayi-aciklama">🏷️ Bayilere satış fiyatları (₺/birim). Bayiler bu fiyatlardan sipariş verir.</div>`;
+  // ŞUBE İSKONTO bölümü
+  html += `<div class="bayi-iskonto-blok">
+    <div class="bayi-iskonto-baslik">💸 Şube İskontoları</div>
+    <div class="bayi-iskonto-aciklama">Bayilere özel indirim oranı. Talep toplamına uygulanır.</div>
+    <div class="bayi-iskonto-grid">`;
+  DEMO_BRANCHES.forEach(b=>{
+    const isk = bayiIskonto(b.ad);
+    html += `<button class="bayi-iskonto-kart${isk>0?' dolu':''}" onclick="bayiIskontoGir('${b.ad.replace(/'/g,"\\'")}')">
+      <span class="bik-sube">${b.ad}</span>
+      <span class="bik-oran">${isk>0?'%'+isk:'iskonto yok'} ✏️</span>
+    </button>`;
+  });
+  html += `</div></div>`;
+  // ürün fiyatları
+  html += `<div class="bayi-gecmis-baslik">Ürün satış fiyatları</div><div class="bayi-tablo">`;
+  Object.entries(STOCK).forEach(([kod,s])=>{
+    const f = bayiFiyat(kod);
+    html += `<div class="bayi-satir">
+      <div class="bayi-s-ad"><strong>${s.ad}</strong> <span class="bayi-s-kod">₺/${s.birim||"gr"}</span></div>
+      <div class="bayi-s-deger">${f>0?f+' ₺':'<span style="color:var(--ink-3)">fiyat girilmedi</span>'}</div>
+      <div class="bayi-s-aksiyon"><button class="bayi-mini" onclick="bayiFiyatGir('${kod}')">✏️ Fiyat</button></div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function bayiIskontoGir(sube){
+  const v = prompt(sube+" için iskonto oranı (% 0-100, boş=kaldır):", String(bayiIskonto(sube)||""));
+  if(v==null) return;
+  if(v.trim()===""){ BAYI_ISKONTO[sube]=null; note(sube+" iskontosu kaldırıldı"); b2bKaydet(); go("bayi", true); return; }
+  const o = parseFloat(v);
+  if(isNaN(o)||o<0||o>100){ note("Geçersiz oran (0-100)"); return; }
+  BAYI_ISKONTO[sube] = o||null;
+  note(sube+" iskontosu: %"+o);
+  b2bKaydet();
+  go("bayi", true);
+}
+function bayiFiyatGir(kod){
+  const v = prompt(STOCK[kod].ad+" bayi satış fiyatı (₺/"+(STOCK[kod].birim||"gr")+"):", String(bayiFiyat(kod)||""));
+  if(v==null) return;
+  const f = parseFloat(v);
+  if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
+  BAYI_FIYAT[kod] = f||null;
+  note(STOCK[kod].ad+" bayi fiyatı: "+f+" ₺");
+  b2bKaydet();
+  go("bayi", true);
+}
+
+/* === BAYİ STOKLARI (genel müdür görüntüler) === */
+function bayiStoklarHtml(){
+  let html = `<div class="bayi-aciklama">🏪 Tüm bayilerin (şubelerin) elindeki stok durumu.</div>`;
+  DEMO_BRANCHES.forEach(b=>{
+    const stokVar = BAYI_STOK[b.ad] && Object.keys(BAYI_STOK[b.ad]).some(k=>BAYI_STOK[b.ad][k]>0);
+    html += `<div class="bayi-sube-blok"><div class="bayi-sube-ad">🏬 ${b.ad}</div>`;
+    if(!stokVar){ html += `<div class="bayi-bos">Bu bayide stok kaydı yok.</div></div>`; return; }
+    html += `<div class="bayi-tablo">`;
+    Object.keys(STOCK).forEach(kod=>{
+      const m = bayiStok(b.ad, kod);
+      if(m>0) html += `<div class="bayi-satir bayi-satir-sade">
+        <div class="bayi-s-ad">${STOCK[kod].ad}</div>
+        <div class="bayi-s-deger">${m} ${STOCK[kod].birim||"gr"}</div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  return html;
+}
+
+/* === SİPARİŞLER (genel müdür: gelen talepleri yönet) === */
+function bayiSiparisGenelHtml(){
+  const bekleyen = BAYI_SIPARISLER.filter(s=>s.durum==="onayda");
+  const diger = BAYI_SIPARISLER.filter(s=>s.durum!=="onayda"&&s.durum!=="taslak");
+  let html = `<div class="bayi-aciklama">📥 Bayilerden gelen sipariş talepleri. İnceleyip düzenleyebilir, onaylayabilirsiniz.</div>`;
+  if(bekleyen.length===0 && diger.length===0){ return html+`<div class="bayi-bos">Henüz sipariş talebi yok.</div>`; }
+  if(bekleyen.length){
+    html += `<div class="bayi-gecmis-baslik">⏳ Onay bekleyenler (${bekleyen.length})</div>`;
+    bekleyen.forEach(sp=> html += bayiSiparisKartGenel(sp));
+  }
+  if(diger.length){
+    html += `<div class="bayi-gecmis-baslik">Diğer siparişler</div>`;
+    diger.slice().reverse().forEach(sp=> html += bayiSiparisKartGenel(sp));
+  }
+  return html;
+}
+function bayiSiparisKartGenel(sp){
+  const dm = SIPARIS_DURUM[sp.durum];
+  let html = `<div class="bayi-sip-kart">
+    <div class="bayi-sip-ust"><span class="bayi-sip-no">#${sp.id} · ${sp.sube}</span>
+      <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
+    <div class="bayi-sip-tarih">${sp.tarih}</div>
+    <div class="bayi-sip-kalemler">`;
+  sp.kalemler.forEach((k,i)=>{
+    const s = STOCK[k.kod];
+    const talep = k.talepMiktar!=null ? k.talepMiktar : k.miktar;
+    const degisti = talep!==k.miktar || k.silindi;
+    let miktarHtml;
+    if(k.silindi){
+      miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${talep} ${s?(s.birim||"gr"):""}</span> <span style="color:var(--err)">çıkarıldı</span>`;
+    } else if(degisti){
+      miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${talep}</span> → <strong>${k.miktar}</strong> ${s?(s.birim||"gr"):""}${bayiFiyat(k.kod)>0?' · '+(k.miktar*bayiFiyat(k.kod)).toFixed(0)+' ₺':''}`;
+    } else {
+      miktarHtml = `${k.miktar} ${s?(s.birim||"gr"):""}${bayiFiyat(k.kod)>0?' · '+(k.miktar*bayiFiyat(k.kod)).toFixed(0)+' ₺':''}`;
+    }
+    html += `<div class="bayi-sip-kalem${k.silindi?' bayi-kalem-silinmis':''}"><span>${s?s.ad:k.kod}</span>
+      <span>${miktarHtml}</span>
+      ${sp.durum==="onayda"?`<button class="bayi-kalem-sil" onclick="sipKalemDuzenle(${sp.id},${i})">✏️</button>`:''}</div>`;
+  });
+  html += `</div>`;
+  const t = siparisTutar(sp);
+  html += `<div class="bayi-ozet-tablo">
+    <div class="bayi-ozet-satir"><span>Toplam (iskontosuz)</span><span>${t.brut.toFixed(0)} ₺</span></div>
+    ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>Şube iskontosu (%${t.isk})</span><span>− ${t.indirim.toFixed(0)} ₺</span></div>`:''}
+    <div class="bayi-ozet-satir bayi-ozet-net"><span>Net tutar</span><span>${t.net.toFixed(0)} ₺</span></div>
+  </div>`;
+  if(sp.durum==="onayda"){
+    html += `<div class="bayi-sip-aksiyon">
+      <button class="btn btn-ghost" onclick="sipReddet(${sp.id})">Reddet</button>
+      <button class="btn btn-primary" onclick="sipOnayla(${sp.id})">✓ Onayla</button>
+    </div>`;
+  }
+  html += `</div>`;
+  return html;
+}
+function sipKalemDuzenle(id, i){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
+  const k = sp.kalemler[i];
+  const v = prompt(STOCK[k.kod].ad+" miktarı (talep: "+(k.talepMiktar||k.miktar)+", 0=kaldır):", String(k.miktar));
+  if(v==null) return;
+  const m = parseInt(v);
+  if(isNaN(m)||m<0){ note("Geçersiz"); return; }
+  if(m===0){ k.miktar=0; k.silindi=true; }   // silindi işareti (iz kalır, müdür görür)
+  else { k.miktar = m; k.silindi=false; }
+  if((k.talepMiktar||k.miktar)!==k.miktar || k.silindi) sp.duzenlendi=true;
+  note("Sipariş güncellendi");
+  b2bKaydet();
+  go("bayi", true);
+}
+function sipOnayla(id){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
+  const aktif = sp.kalemler.filter(k=>!k.silindi && k.miktar>0);
+  if(aktif.length===0){ note("Tüm kalemler kaldırılmış — onaylanamaz, reddedin"); return; }
+  sp.durum = "onaylandi";
+  note("✓ #"+id+" onaylandı · bayiye iletildi");
+  b2bKaydet();
+  go("bayi", true);
+}
+function sipReddet(id){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
+  if(!confirm("#"+id+" siparişi reddedilsin mi?")) return;
+  sp.durum = "red";
+  note("Sipariş reddedildi");
+  b2bKaydet();
+  go("bayi", true);
+}
+
+/* === MÜDÜR: SİPARİŞ VER (genel müdür stoğunu gör, talep oluştur) === */
+function bayiSiparisVerHtml(){
+  if(!state.bayiSepet) state.bayiSepet = [];
+  let html = `<div class="bayi-aciklama">🛒 Merkez (genel müdür) stok durumuna göre sipariş oluşturun. Bakiyesi olmayan ürünler için de talep açabilirsiniz.</div>`;
+  html += `<div class="bayi-tablo">`;
+  Object.entries(STOCK).forEach(([kod,s])=>{
+    const merkezVar = s.mevcut;
+    const f = bayiFiyat(kod);
+    const sepette = state.bayiSepet.find(x=>x.kod===kod);
+    html += `<div class="bayi-satir">
+      <div class="bayi-s-ad"><strong>${s.ad}</strong>
+        <div class="bayi-s-not">Merkez: ${merkezVar} ${s.birim||"gr"}${merkezVar<=0?' <span style="color:var(--err)">· stokta yok</span>':''}${f>0?' · <strong>'+f+' ₺</strong>/'+(s.birim||"gr"):' · fiyat yok'}</div>
+        ${sepette?`<div class="bayi-s-satir-tutar">${sepette.miktar} × ${f} ₺ = <strong>${(sepette.miktar*f).toFixed(0)} ₺</strong></div>`:''}</div>
+      <div class="bayi-s-aksiyon">
+        ${sepette
+          ? `<span class="bayi-sepet-miktar">${sepette.miktar} ${s.birim||"gr"}</span><button class="bayi-mini sil" onclick="bayiSepetCikar('${kod}')">✕</button>`
+          : `<button class="bayi-mini" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`}
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  if(state.bayiSepet.length>0){
+    const toplam = state.bayiSepet.reduce((a,k)=>a+k.miktar*bayiFiyat(k.kod),0);
+    const isk = bayiIskonto(AKTIF_SUBE);
+    const indirim = toplam*isk/100;
+    const odenecek = toplam-indirim;
+    html += `<div class="bayi-sepet-ozet">
+      <div class="bayi-sepet-baslik">📝 Talep listesi · ${state.bayiSepet.length} kalem</div>
+      <div class="bayi-ozet-tablo">
+        <div class="bayi-ozet-satir"><span>Toplam tutar (iskontosuz)</span><span>${toplam.toFixed(0)} ₺</span></div>
+        ${isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${isk})</span><span>− ${indirim.toFixed(0)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek tutar</span><span>${odenecek.toFixed(0)} ₺</span></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="bayiSiparisGonder()">Onaya gönder</button>
+    </div>`;
+  }
+  return html;
+}
+function bayiSepetEkle(kod){
+  if(!state.bayiSepet) state.bayiSepet=[];
+  const v = prompt(STOCK[kod].ad+" talep miktarı ("+(STOCK[kod].birim||"gr")+"):");
+  if(v==null) return;
+  const m = parseInt(v);
+  if(isNaN(m)||m<=0){ note("Geçersiz miktar"); return; }
+  state.bayiSepet.push({kod:kod, miktar:m});
+  go("bayi", true);
+}
+function bayiSepetCikar(kod){
+  state.bayiSepet = state.bayiSepet.filter(x=>x.kod!==kod);
+  go("bayi", true);
+}
+function bayiSiparisGonder(){
+  if(!state.bayiSepet || state.bayiSepet.length===0){ note("Liste boş"); return; }
+  const bugun = new Date().toLocaleDateString("tr-TR");
+  BAYI_SIPARISLER.push({
+    id:_siparisId++, sube:AKTIF_SUBE, tarih:bugun,
+    kalemler:state.bayiSepet.map(k=>({kod:k.kod, miktar:k.miktar, talepMiktar:k.miktar})),
+    durum:"onayda", odeme:null, aktarildi:false, duzenlendi:false
+  });
+  state.bayiSepet = [];
+  note("✓ Sipariş onaya gönderildi");
+  state.bayiSekme = "benimsip";
+  b2bKaydet();
+  go("bayi", true);
+}
+
+/* === MÜDÜR: SİPARİŞLERİM (durum takip + ödeme + stok aktar) === */
+function bayiBenimSiparisHtml(){
+  const benim = BAYI_SIPARISLER.filter(s=>s.sube===AKTIF_SUBE).slice().reverse();
+  let html = `<div class="bayi-aciklama">📋 Gönderdiğiniz siparişler ve durumları.</div>`;
+  if(benim.length===0) return html+`<div class="bayi-bos">Henüz sipariş göndermediniz.</div>`;
+  benim.forEach(sp=>{
+    const dm = SIPARIS_DURUM[sp.durum];
+    const t = siparisTutar(sp);
+    html += `<div class="bayi-sip-kart">
+      <div class="bayi-sip-ust"><span class="bayi-sip-no">#${sp.id}</span>
+        <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
+      <div class="bayi-sip-tarih">${sp.tarih}${sp.duzenlendi?' <span class="bayi-duzenlendi-rozet">✏️ genel müdür düzenledi</span>':''}</div>
+      <div class="bayi-sip-kalemler">`;
+    sp.kalemler.forEach(k=>{
+      const s = STOCK[k.kod];
+      const bf = bayiFiyat(k.kod);
+      const talep = k.talepMiktar!=null ? k.talepMiktar : k.miktar;
+      const degisti = talep!==k.miktar || k.silindi;
+      let miktarHtml;
+      if(k.silindi){
+        miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${talep} ${s?(s.birim||"gr"):""}</span> <span style="color:var(--err)">çıkarıldı</span>`;
+      } else if(degisti){
+        miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${talep}</span> → <strong>${k.miktar}</strong> ${s?(s.birim||"gr"):""} × ${bf} ₺ = ${(k.miktar*bf).toFixed(0)} ₺`;
+      } else {
+        miktarHtml = `${k.miktar} ${s?(s.birim||"gr"):""} × ${bf} ₺ = ${(k.miktar*bf).toFixed(0)} ₺`;
+      }
+      html += `<div class="bayi-sip-kalem${k.silindi?' bayi-kalem-silinmis':''}"><span>${s?s.ad:k.kod}</span>
+        <span>${miktarHtml}</span></div>`;
+    });
+    html += `</div>
+      <div class="bayi-ozet-tablo">
+        <div class="bayi-ozet-satir"><span>Toplam (iskontosuz)</span><span>${t.brut.toFixed(0)} ₺</span></div>
+        ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(0)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek</span><span>${t.net.toFixed(0)} ₺</span></div>
+      </div>`;
+    // duruma göre aksiyon
+    if(sp.durum==="onayda"){
+      html += `<div class="bayi-sip-not-bekle">⏳ Genel müdür onayı bekleniyor...</div>`;
+    } else if(sp.durum==="onaylandi"){
+      html += `<div class="bayi-sip-aksiyon">
+        <button class="btn btn-primary btn-full" onclick="bayiOdemeAc(${sp.id})">💳 Ödeme yap (${t.net.toFixed(0)} ₺)</button></div>`;
+    } else if(sp.durum==="odendi"){
+      html += `<div class="bayi-sip-aksiyon">
+        <span class="bayi-odendi-rozet">✓ Ödendi (${sp.odeme})</span>
+        <button class="btn btn-primary" onclick="bayiStokAktar(${sp.id})">📦 Stok aktar</button></div>`;
+    } else if(sp.durum==="aktarildi"){
+      html += `<div class="bayi-sip-not-ok">✓ Stoklar bayinize aktarıldı</div>`;
+    } else if(sp.durum==="red"){
+      html += `<div class="bayi-sip-not-red">✕ Genel müdür reddetti</div>`;
+    }
+    html += `</div>`;
+  });
+  return html;
+}
+function bayiOdemeAc(id){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
+  const t = siparisTutar(sp);
+  state.bayiOdeme = {id:id, toplam:t.net, brut:t.brut, isk:t.isk, indirim:t.indirim, yontem:"kredi"};
+  renderBayiOdeme();
+  document.getElementById("bayiOdemeModal").classList.add("on");
+}
+function bayiOdemeKapat(){
+  document.getElementById("bayiOdemeModal").classList.remove("on");
+  state.bayiOdeme=null;
+}
+function bayiOdemeYontem(y){ state.bayiOdeme.yontem=y; renderBayiOdeme(); }
+function renderBayiOdeme(){
+  const o = state.bayiOdeme; if(!o) return;
+  const sp = BAYI_SIPARISLER.find(s=>s.id===o.id);
+  const kalemSayi = sp.kalemler.length;
+  let html = `<div class="bom-head">
+    <div class="bom-baslik">💳 Sipariş Ödemesi</div>
+    <button class="bom-kapat" onclick="bayiOdemeKapat()">✕</button>
+  </div>
+  <div class="bom-ozet">
+    <div class="bom-ozet-satir"><span>Sipariş</span><span>#${o.id} · ${kalemSayi} kalem</span></div>
+    ${o.isk>0?`<div class="bom-ozet-satir"><span>Tutar (iskontosuz)</span><span>${o.brut.toFixed(0)} ₺</span></div>
+    <div class="bom-ozet-satir" style="color:var(--ok)"><span>İskonto (%${o.isk})</span><span>− ${o.indirim.toFixed(0)} ₺</span></div>`:''}
+    <div class="bom-ozet-satir bom-toplam"><span>Ödenecek tutar</span><span>${o.toplam.toFixed(0)} ₺</span></div>
+  </div>
+  <div class="bom-yontem-baslik">Ödeme yöntemi</div>
+  <div class="bom-yontem-row">
+    <button class="bom-yontem${o.yontem==="kredi"?' on':''}" onclick="bayiOdemeYontem('kredi')">
+      <span class="bom-y-ic">💳</span><span class="bom-y-ad">Kredi Kartı</span></button>
+    <button class="bom-yontem${o.yontem==="eft"?' on':''}" onclick="bayiOdemeYontem('eft')">
+      <span class="bom-y-ic">🏦</span><span class="bom-y-ad">EFT / Havale</span></button>
+  </div>`;
+  if(o.yontem==="kredi"){
+    html += `<div class="bom-alan-grup">
+      <div class="bom-alan"><label>Kart numarası</label><input class="bom-input" inputmode="numeric" placeholder="**** **** **** ****" maxlength="19" oninput="kartFormatla(this)"></div>
+      <div class="bom-alan-ikili">
+        <div class="bom-alan"><label>Son kullanma</label><input class="bom-input" placeholder="AA/YY" maxlength="5"></div>
+        <div class="bom-alan"><label>CVV</label><input class="bom-input" inputmode="numeric" placeholder="***" maxlength="3"></div>
+      </div>
+      <div class="bom-alan"><label>Kart üzerindeki isim</label><input class="bom-input" placeholder="${AKTIF_SUBE}"></div>
+    </div>`;
+  } else {
+    html += `<div class="bom-alan-grup">
+      <div class="bom-eft-bilgi">
+        <div class="bom-eft-baslik">MİNİPAN Merkez — Havale/EFT Bilgileri</div>
+        <div class="bom-eft-satir"><span>Banka</span><strong>Ziraat Bankası</strong></div>
+        <div class="bom-eft-satir"><span>IBAN</span><strong>TR00 0001 0000 0000 0000 0000 00</strong></div>
+        <div class="bom-eft-satir"><span>Açıklama</span><strong>Sipariş #${o.id} · ${AKTIF_SUBE}</strong></div>
+      </div>
+      <div class="bom-eft-not">EFT/havale yaptıktan sonra "Ödemeyi onayla" ile siparişi tamamlayın.</div>
+    </div>`;
+  }
+  html += `<button class="bom-ode-btn" onclick="bayiOdemeTamamla()">${o.yontem==="kredi"?"💳 "+o.toplam.toFixed(0)+" ₺ Öde":"✓ Ödemeyi onayla"}</button>`;
+  document.getElementById("bayiOdemeInner").innerHTML = html;
+}
+function kartFormatla(el){
+  let v = el.value.replace(/\D/g,"").slice(0,16);
+  el.value = v.replace(/(.{4})/g,"$1 ").trim();
+}
+function bayiOdemeTamamla(){
+  const o = state.bayiOdeme; if(!o) return;
+  const sp = BAYI_SIPARISLER.find(s=>s.id===o.id); if(!sp) return;
+  const yontem = o.yontem==="eft" ? "EFT/Havale" : "Kredi kartı";
+  sp.durum = "odendi"; sp.odeme = yontem;
+  bayiOdemeKapat();
+  note("✓ Ödeme alındı ("+yontem+") · stok aktarımına hazır");
+  b2bKaydet();
+  go("bayi", true);
+}
+function bayiStokAktar(id){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
+  // genel müdür stoğundan düş, bayiye ekle
+  let uyari = [];
+  sp.kalemler.forEach(k=>{
+    if(k.silindi || k.miktar<=0) return;   // genel müdürün çıkardığı kalem aktarılmaz
+    const s = STOCK[k.kod]; if(!s) return;
+    const aktar = Math.min(k.miktar, s.mevcut);   // bakiye kadar
+    s.mevcut -= aktar;
+    bayiStokYaz(sp.sube, k.kod, bayiStok(sp.sube,k.kod)+aktar);
+    if(aktar < k.miktar) uyari.push(s.ad+" ("+aktar+"/"+k.miktar+")");
+  });
+  sp.durum = "aktarildi"; sp.aktarildi = true;
+  if(uyari.length) note("📦 Aktarıldı · ⚠️ kısmi: "+uyari.join(", "));
+  else note("📦 Tüm stoklar bayinize aktarıldı");
+  b2bKaydet();
+  go("bayi", true);
+}
+
+function viewSubeler(main){
+  const aktifSayi=DEMO_BRANCHES.filter(b=>!b.kapali).length;
+  let html=`<div class="sec-head"><div><h2>🏬 Şubeler</h2>
+    <div class="sh-sub">${aktifSayi} aktif · ${DEMO_BRANCHES.length} toplam</div></div>
+    <button class="btn btn-primary" style="padding:11px 18px" onclick="subeYeniAc()">+ Yeni şube</button></div>`;
+  html+=`<div class="sb-liste">`;
+  DEMO_BRANCHES.forEach((b,i)=>{
+    const info=BRANCH_INFO[b.ad]||{};
+    const masaSayi=subeMasalari(b.ad).length;
+    const kapali=b.kapali;
+    html+=`<div class="sb-kart${kapali?' sb-kapali':''}">
+      <div class="sb-ust">
+        <div class="sb-bilgi">
+          <div class="sb-ad">${info.express?'⚡ ':'🏬 '}${b.ad}${kapali?' <span class="sb-rozet-kapali">KAPALI</span>':''}</div>
+          <div class="sb-adres">📍 ${info.sehir||''}${info.adres?' · '+info.adres:''}</div>
+          <div class="sb-meta">${masaSayi} masa · ${info.tel||'tel yok'}</div>
+        </div>
+      </div>
+      <div class="sb-aksiyon">
+        <button class="sb-btn" onclick="subeDuzenle('${b.ad.replace(/'/g,"\\'")}')">✏️ Düzenle</button>
+        <button class="sb-btn ${kapali?'ac':'kapat'}" onclick="subeKapatAc(${i})">${kapali?'✓ Yeniden aç':'⛔ Kapat'}</button>
+        <button class="sb-btn sil" onclick="subeSil(${i})">🗑️ Sil</button>
+      </div>
+    </div>`;
+  });
+  html+=`</div>`;
+  main.innerHTML=html;
+}
+/* Yeni şube — ad + adres, mevcut şubeyi kopyala */
+function subeYeniAc(){
+  const ad=prompt("Yeni şube adı (örn. Keşan Merkez):");
+  if(!ad||!ad.trim()) return;
+  if(DEMO_BRANCHES.find(b=>b.ad===ad.trim())){ note("Bu isimde şube zaten var"); return; }
+  const adres=prompt("Şube adresi:");
+  if(adres==null) return;
+  // hangi şubeden kopyalansın
+  const kaynaklar=DEMO_BRANCHES.map(b=>b.ad);
+  const kaynak=prompt("Masa düzeni ve fiyatlar hangi şubeden kopyalansın?\n\nMevcut şubeler:\n"+kaynaklar.join("\n")+"\n\n(boş bırakırsanız ilk şube kopyalanır)", kaynaklar[0]);
+  const kopyaSube = (kaynak && DEMO_BRANCHES.find(b=>b.ad===kaynak.trim())) ? kaynak.trim() : kaynaklar[0];
+  const yeniAd=ad.trim();
+  // şube kaydı
+  DEMO_BRANCHES.push({ad:yeniAd, ciro:0, masa:0, bekleyen:0, durum:"green", fire:"normal"});
+  BRANCH_INFO[yeniAd]={sehir:"", adres:adres.trim(), tel:""};
+  // masa düzenini kopyala (derin kopya)
+  BRANCH_TABLES[yeniAd]=JSON.parse(JSON.stringify(BRANCH_TABLES[kopyaSube]||[]));
+  DEMO_BRANCHES.find(b=>b.ad===yeniAd).masa=subeMasalari(yeniAd).length;
+  // fiyatları kopyala
+  if(SUBE_FIYAT[kopyaSube]) SUBE_FIYAT[yeniAd]=JSON.parse(JSON.stringify(SUBE_FIYAT[kopyaSube]));
+  note("🏬 "+yeniAd+" açıldı · "+kopyaSube+" düzeni kopyalandı");
+  go("subeler");
+}
+function subeDuzenle(ad){
+  const info=BRANCH_INFO[ad]||{};
+  const yeniAdres=prompt(ad+" adresi:", info.adres||"");
+  if(yeniAdres==null) return;
+  if(!BRANCH_INFO[ad]) BRANCH_INFO[ad]={};
+  BRANCH_INFO[ad].adres=yeniAdres.trim();
+  const yeniTel=prompt(ad+" telefon:", info.tel||"");
+  if(yeniTel!=null) BRANCH_INFO[ad].tel=yeniTel.trim();
+  note(ad+" bilgileri güncellendi");
+  go("subeler");
+}
+function subeKapatAc(i){
+  const b=DEMO_BRANCHES[i];
+  if(!b.kapali){
+    // açık masa var mı kontrolü
+    const acikMasa=subeMasalari(b.ad).some(mm=>{ const id=b.ad+"::"+mm.id; return SESSIONS[id]&&SESSIONS[id].acik; });
+    if(acikMasa){ note("⛔ "+b.ad+" şubesinde açık masa var — önce hesapları kapatın"); return; }
+    if(!confirm(b.ad+" şubesi geçici kapatılsın mı? Satış durur, veriler korunur, istediğinizde tekrar açabilirsiniz.")) return;
+    b.kapali=true; note("⛔ "+b.ad+" kapatıldı (geçici)");
+  } else {
+    b.kapali=false; note("✓ "+b.ad+" yeniden açıldı");
+  }
+  go("subeler");
+}
+function subeSil(i){
+  const b=DEMO_BRANCHES[i];
+  if(DEMO_BRANCHES.length<=1){ note("Son şube silinemez"); return; }
+  const acikMasa=subeMasalari(b.ad).some(mm=>{ const id=b.ad+"::"+mm.id; return SESSIONS[id]&&SESSIONS[id].acik; });
+  if(acikMasa){ note("⛔ Açık masa var — önce hesapları kapatın"); return; }
+  if(!confirm("⚠️ "+b.ad+" KALICI olarak silinecek!\n\nMasa düzeni, fiyatlar ve tüm ayarları gidecek. Bu işlem geri alınamaz.\n\nEmin misiniz?")) return;
+  // tüm verileri temizle
+  delete BRANCH_TABLES[b.ad];
+  delete BRANCH_INFO[b.ad];
+  delete SUBE_FIYAT[b.ad];
+  DEMO_BRANCHES.splice(i,1);
+  note("🗑️ "+b.ad+" kalıcı olarak silindi");
+  go("subeler");
 }
 
 // --- RAPOR ---
@@ -3609,7 +7338,7 @@ function urunGorsel(p, buyuk){
 
 function openQR(){
   document.getElementById("login").style.display="none";
-  QR = { masa:7, sube:"Edirne Atatürk", kisi:"", tel:"", musteri:null, sepet:[], view:"splash", aktifKat:"Tatlılar" };
+  QR = { masa:"1", masaKat:"İç Salon", sube:"Edirne Atatürk", kisi:"", tel:"", musteri:null, sepet:[], view:"splash", aktifKat:"Tatlılar" };
   renderQR();
   document.getElementById("qrApp").style.display="block";
   // splash 3sn sonra otomatik geçer
@@ -3639,13 +7368,47 @@ function renderQR(){
 /* 0) SPLASH — açılış reklamı (WebP/GIF/MP4) */
 function qrSplashHtml(){
   const gorsel = SPLASH.gorsel
-    ? '<div class="qr-splash-img" style="background-image:url('+SPLASH.gorsel+')"></div>'
-    : '<div class="qr-splash-img qr-splash-ph"><span style="font-size:120px">🍫</span></div>';
+    ? '<div class="qr-splash-img qr-splash-anim" style="background-image:url('+SPLASH.gorsel+')"></div>'
+    : '<div class="qr-splash-img qr-splash-ph qr-splash-anim"><span style="font-size:120px">🍫</span></div>';
+  // bu şubeye ait DURAKLATILMAMIŞ kampanyalar (gün/saat kısıtı introda uygulanmaz — tanıtım amaçlı)
+  const sube = QR.sube || AKTIF_SUBE;
+  const aktifKmp = KAMPANYALAR.filter(k=>
+    k.aktif &&
+    (k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(sube)))
+  );
+  let kmpHtml = "";
+  if(aktifKmp.length>0){
+    kmpHtml = '<div class="qr-splash-kampanyalar">';
+    aktifKmp.slice(0,4).forEach(k=>{
+      // genel fiyat (kampanyasız taban)
+      const genelK = fiyatKayit(sube, k.urun, k.kanal);
+      const masaK = fiyatKayit(sube, k.urun, "masa");
+      const masaGenel = (masaK.genel!=null&&masaK.genel>0)?masaK.genel:urunVarsayilanFiyat(k.urun);
+      const genel = (k.kanal==="eve") ? ((genelK.genel!=null&&genelK.genel>0)?genelK.genel:masaGenel) : masaGenel;
+      // kampanya fiyatını doğrudan kampanyadan hesapla
+      let yeni = genel;
+      if(k.tip==="oran") yeni = Math.round(genel*(1-k.deger/100));
+      else yeni = k.deger;
+      if(yeni<0) yeni=0;
+      const indEtiket = k.tip==="oran" ? "%"+k.deger : "";
+      const aktifSimdi = kampanyaAktifMi(k);  // şu an saat/gün uygun mu → rozet
+      kmpHtml += '<div class="qr-splash-kmp glow">'+
+        '<div class="qsk-ust"><span class="qsk-ad">🔥 '+k.ad+'</span>'+
+        (indEtiket?'<span class="qsk-oran">'+indEtiket+'</span>':'')+'</div>'+
+        '<span class="qsk-urun">'+k.urun+(k.kanal==="eve"?' · 🛵 Eve':'')+'</span>'+
+        '<span class="qsk-fiyat"><span class="qsk-eski">'+genel+' ₺</span> <span class="qsk-yeni">'+yeni+' ₺</span>'+
+        (aktifSimdi?'<span class="qsk-simdi">şimdi geçerli</span>':(k.saatBas&&k.saatBit?'<span class="qsk-saat">'+k.saatBas+'–'+k.saatBit+'</span>':''))+'</span>'+
+      '</div>';
+    });
+    kmpHtml += '</div>';
+  }
   return '<div class="qr-screen qr-splash">'+
     gorsel+
+    '<div class="qr-splash-veil"></div>'+
     '<button class="qr-splash-atla" onclick="splashGec()">Atla ✕</button>'+
+    (kmpHtml ? '<div class="qr-splash-kmp-wrap">'+kmpHtml+'</div>' : '')+
     '<div class="qr-splash-alt">'+
-      '<div class="qr-splash-rozet">'+SPLASH.rozet+'</div>'+
+      '<div class="qr-splash-rozet glow-soft">'+SPLASH.rozet+'</div>'+
       '<div class="qr-splash-baslik">'+SPLASH.baslik+'</div>'+
       '<div class="qr-splash-altyazi">'+SPLASH.altyazi+'</div>'+
       '<div class="qr-splash-bar"><div class="qr-splash-bar-fill"></div></div>'+
@@ -3928,14 +7691,8 @@ function qrKategorilerHtml(){
         ? '<button class="qr-tb-sadakat" onclick="QR.view=\'profil\';renderQR()">🎁<span>'+QR.musteri.damga+'</span></button>'
         : '<div style="width:34px"></div>')+
     '</div>'+
-    '<div class="qr-servis-row">'+
-      '<button class="qr-servis'+(QR.servis==="masa"||!QR.servis?' on':'')+'" onclick="qrServisSec(\'masa\')">🍽️ Masada</button>'+
-      '<button class="qr-servis'+(QR.servis==="paket"?' on':'')+'" onclick="qrServisSec(\'paket\')">🥡 Paket (Gel-Al)</button>'+
-      '<button class="qr-servis'+(QR.servis==="eve"?' on':'')+'" onclick="qrServisSec(\'eve\')">🛵 Eve</button>'+
-    '</div>'+
     (QR.musteri ? qrDamgaSeritHtml() : '')+
-    '<div class="qr-kat-baslik-row"><div class="qr-kat-baslik">Ne yemek istersin?</div>'+
-    '<button class="qr-siparislerim" onclick="QR.view=\'takip\';renderQR()">📍 Siparişlerim</button></div>'+
+    '<div class="qr-kat-baslik-row"><div class="qr-kat-baslik">Ne yemek istersin?</div></div>'+
     '<div class="qr-kat-grid">';
   kats.forEach(k=>{
     const kapak=katKapak(k);
@@ -3945,7 +7702,18 @@ function qrKategorilerHtml(){
       '<div class="qkk-bilgi"><div class="qkk-ad">'+k+'</div><div class="qkk-adet">'+adet+' ürün</div></div>'+
     '</button>';
   });
-  html += '</div>';
+  html += '</div>'+
+    // servis + yardım butonları kategorilerin ALTINDA
+    '<div class="qr-servis-row">'+
+      '<button class="qr-servis'+(QR.servis==="masa"||!QR.servis?' on':'')+'" onclick="qrServisSec(\'masa\')">🍽️ Masada</button>'+
+      '<button class="qr-servis'+(QR.servis==="paket"?' on':'')+'" onclick="qrServisSec(\'paket\')">🥡 Paket (Gel-Al)</button>'+
+      '<button class="qr-servis'+(QR.servis==="eve"?' on':'')+'" onclick="qrServisSec(\'eve\')">🛵 Eve</button>'+
+    '</div>'+
+    '<div class="qr-yardim-row">'+
+      ((QR.servis==="masa"||!QR.servis)?'<button class="qr-yardim" onclick="qrGarsonCagir()">🔔 Garson çağır</button>'+
+      '<button class="qr-yardim" onclick="qrMutfagaMesaj()">💬 Mutfağa mesaj</button>':'')+
+      '<button class="qr-yardim" onclick="QR.view=\'takip\';renderQR()">📍 Siparişlerim</button>'+
+    '</div>';
   if(sepetN>0){
     html += '<button class="qr-sepet-bar" onclick="QR.view=\'sepet\';renderQR()">'+
       '<span class="qr-sb-n">'+sepetN+'</span><span class="qr-sb-t">Sepetim</span>'+
@@ -4042,19 +7810,28 @@ function qrMenuHtml(){
       '<button class="qr-anamenu-btn" onclick="QR.view=\'kategoriler\';renderQR()">☰ Ana menü</button>'+
       '<span class="qr-anamenu-kat">'+QR.aktifKat+'</span>'+
     '</div><div class="qr-menu-list">';
-  prods.forEach(p=>{
+  const kanal = aktifKanal();
+  // indirimli ürünler ilk sırada
+  const sirali = prods.slice().sort((a,b)=>{
+    const fa=urunFiyatBilgi(a.ad, QR.sube||AKTIF_SUBE, kanal).indirimli?0:1;
+    const fb=urunFiyatBilgi(b.ad, QR.sube||AKTIF_SUBE, kanal).indirimli?0:1;
+    return fa-fb;
+  });
+  sirali.forEach(p=>{
     const pi = DEMO_PRODUCTS.indexOf(p);
-    const satilir = urunSatilabilir(p);
-    const fb = urunFiyatBilgi(p.ad, QR.sube||AKTIF_SUBE);
+    const satilir = urunSatilabilir(p, kanal);
+    const fb = urunFiyatBilgi(p.ad, QR.sube||AKTIF_SUBE, kanal);
     const fiyatHtml = fb.indirimli
-      ? '<div class="qr-card-fiyat indirimli"><span class="qr-eski">'+fb.eski+' ₺</span><span class="qr-yeni blink">'+fb.gecerli+' ₺</span>'+(fb.indirim>0?'<span class="qr-ind-rozet">%'+fb.indirim+'</span>':'')+'</div>'
+      ? '<div class="qr-card-fiyat indirimli"><span class="qr-eski">'+fb.eski+' ₺</span><span class="qr-yeni blink">'+fb.gecerli+' ₺</span>'+(fb.indOran>0?'<span class="qr-ind-rozet">%'+fb.indOran+'</span>':'')+'</div>'
       : '<div class="qr-card-fiyat">'+fb.gecerli+' ₺</div>';
-    html += '<div class="qr-card'+(satilir?'':' qr-out')+'">'+
+    const aciklamaHtml = (fb.indirimli && fb.aciklama) ? '<div class="qr-card-kampanya blink">🔥 '+fb.aciklama+'</div>' : '';
+    html += '<div class="qr-card'+(satilir?'':' qr-out')+(fb.indirimli?' qr-card-indirimli blink-soft':'')+'">'+
       urunGorsel(p,true)+
       '<div class="qr-card-body">'+
         '<div class="qr-card-info">'+
           '<div class="qr-card-ad">'+p.ad+'</div>'+
           (p.aciklama?'<div class="qr-card-desc">'+p.aciklama+'</div>':'')+
+          aciklamaHtml+
           fiyatHtml+
         '</div>'+
         (satilir
@@ -4075,11 +7852,11 @@ function qrSetKat(k){ QR.aktifKat=k; renderQR(); }
 
 function qrUrunSec(pi){
   const p = DEMO_PRODUCTS[pi];
-  if(!urunSatilabilir(p)) return;
+  if(!urunSatilabilir(p, aktifKanal())) return;
   const opts = PRODUCT_OPTIONS[p.ad];
   if(opts && opts.length){ openOptionModalQR(pi); }
   else {
-    QR.sepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad, QR.sube||AKTIF_SUBE), q:1, secimler:[], ekstraRecete:[], not:""});
+    QR.sepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad, QR.sube||AKTIF_SUBE, aktifKanal()), q:1, secimler:[], ekstraRecete:[], not:""});
     note(p.ad+" eklendi"); renderQR();
   }
 }
@@ -4346,21 +8123,21 @@ function qrMasaId(){
 }
 function qrGarsonCagir(){
   const id=qrMasaId();
-  if(SESSIONS[id]){ SESSIONS[id].garsonCagri=true; }
-  note("🔔 Garson çağrıldı · Masa "+QR.masa);
+  if(!SESSIONS[id]) SESSIONS[id]={masa:id, acik:false, zaman:Date.now(), kisiler:[]};
+  SESSIONS[id].garsonCagri=true;
+  note("🔔 Garson çağrıldı");
 }
 function qrMutfagaMesaj(){
   const mesaj=prompt("Mutfağa mesajınız (örn. az şekerli olsun, acele):");
   if(!mesaj||!mesaj.trim()) return;
   const id=qrMasaId();
-  if(SESSIONS[id]){
-    if(!SESSIONS[id].mutfakMesajlari) SESSIONS[id].mutfakMesajlari=[];
-    SESSIONS[id].mutfakMesajlari.push({mesaj:mesaj.trim(), kisi:QR.kisi, zaman:Date.now()});
-    SESSIONS[id].mesajVar=true;
-  }
+  if(!SESSIONS[id]) SESSIONS[id]={masa:id, acik:false, zaman:Date.now(), kisiler:[]};
+  if(!SESSIONS[id].mutfakMesajlari) SESSIONS[id].mutfakMesajlari=[];
+  SESSIONS[id].mutfakMesajlari.push({mesaj:mesaj.trim(), kisi:QR.kisi||"Müşteri", zaman:Date.now()});
+  SESSIONS[id].mesajVar=true;
   // mutfağa anlık fiş olarak da bas
-  mutfakFisiBas({tip:"masa", baslik:"MASA "+QR.masa+" · 💬 MESAJ", alt:QR.kisi, kisi:QR.kisi, masa:id,
-    kalemler:[{ad:"💬 "+mesaj.trim(), secimler:[], kisi:QR.kisi}]});
+  mutfakFisiBas({tip:"masa", baslik:masaEtiket(id)+" · 💬 MESAJ", alt:QR.kisi, kisi:QR.kisi||"Müşteri", masa:id,
+    kalemler:[{ad:"💬 "+mesaj.trim(), secimler:[], kisi:QR.kisi||"Müşteri"}]});
   note("💬 Mesaj mutfağa iletildi");
 }
 
@@ -4758,13 +8535,23 @@ function garsonMenuHtml(){
     '<div class="grs-kat-row">';
   kats.forEach(k=>{ html+='<button class="qr-kat'+(k===GARSON.aktifKat?' on':'')+'" onclick="garsonKat(\''+k+'\')">'+k+'</button>'; });
   html+='</div><div class="grs-menu-list">';
-  prods.forEach(p=>{
+  const grsSirali=prods.slice().sort((a,b)=>{
+    const ia=urunFiyatBilgi(a.ad,AKTIF_SUBE,"masa").indirimli?0:1;
+    const ib=urunFiyatBilgi(b.ad,AKTIF_SUBE,"masa").indirimli?0:1;
+    return ia-ib;
+  });
+  grsSirali.forEach(p=>{
     const pi=DEMO_PRODUCTS.indexOf(p);
     const satilir=urunSatilabilir(p);
-    html+='<button class="grs-urun'+(satilir?'':' tukendi')+'" onclick="garsonUrunSec('+pi+')">'+
+    const fb=urunFiyatBilgi(p.ad, AKTIF_SUBE, "masa");
+    const fiyatHtml = fb.indirimli
+      ? '<span class="grs-u-fiyat indirimli"><span class="grs-u-eski">'+fb.eski+'₺</span><span class="grs-u-yeni blink">'+fb.gecerli+'₺</span></span>'
+      : '<span class="grs-u-fiyat">'+fb.gecerli+' ₺</span>';
+    html+='<button class="grs-urun'+(satilir?'':' tukendi')+(fb.indirimli?' grs-indirimli blink-soft':'')+'" onclick="garsonUrunSec('+pi+')">'+
       '<div class="grs-u-info"><div class="grs-u-ad">'+p.ad+'</div>'+
-      (p.aciklama?'<div class="grs-u-desc">'+p.aciklama+'</div>':'')+'</div>'+
-      '<div class="grs-u-sag">'+(satilir?'<span class="grs-u-fiyat">'+urunGecerliFiyat(p.ad)+' ₺</span><span class="grs-u-add">+</span>':'<span class="grs-u-tukendi">Tükendi</span>')+'</div>'+
+      (p.aciklama?'<div class="grs-u-desc">'+p.aciklama+'</div>':'')+
+      ((fb.indirimli&&fb.aciklama)?'<div class="grs-u-kampanya blink">🔥 '+fb.aciklama+'</div>':'')+'</div>'+
+      '<div class="grs-u-sag">'+(satilir?fiyatHtml+'<span class="grs-u-add">+</span>':'<span class="grs-u-tukendi">Tükendi</span>')+'</div>'+
     '</button>';
   });
   html+='</div>';
@@ -4959,6 +8746,8 @@ window.addEventListener("online",  ()=>{ setConnState(!!window.__db, window.__db
 window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi · offline kuyruk"));
 
 // Uygulama açılışında başlat
+b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
+kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
 initFirebase();
 
 </script>
