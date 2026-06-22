@@ -976,6 +976,8 @@ tr:last-child td{border-bottom:none}
 .gf-alan label{font-size:11px; font-weight:700; color:var(--ink-3)}
 .gf-select,.gf-date{padding:9px 12px; border-radius:9px; border:1.5px solid var(--line); font-size:13px; font-weight:600; background:var(--surface); color:var(--ink)}
 .gf-temizle{padding:9px 14px; border-radius:9px; background:var(--surface-2); border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.gf-filtrele{padding:9px 16px; border-radius:9px; background:var(--cocoa); border:none; font-size:12.5px; font-weight:800; color:#fff}
+.gecmis-aktif-filtre{font-size:12px; font-weight:700; color:var(--cocoa); background:var(--surface-2); border-radius:8px; padding:8px 12px; margin-bottom:10px}
 .gecmis-ozet-bar{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--cocoa); color:#fff; border-radius:var(--radius); padding:14px 18px; margin-bottom:14px; flex-wrap:wrap}
 .go-bilgi{font-size:14px}
 .go-sayi{font-size:20px; font-weight:800; margin-right:4px}
@@ -6333,12 +6335,13 @@ function tarihSayi(trTarih){
 function isoTarihSayi(iso){ return iso ? parseInt(iso.replace(/-/g,""))||0 : 0; }
 
 function bayiGecmisFiltrele(isGenel){
-  let liste = BAYI_SIPARISLER.filter(s=>s.durum==="odendi"||s.durum==="aktarildi");
+  // GEÇMİŞ = stok aktarımı tamamlanmış siparişler
+  let liste = BAYI_SIPARISLER.filter(s=>s.durum==="aktarildi");
   if(!isGenel) liste = liste.filter(s=>s.sube===AKTIF_SUBE);
   else if(state.gecmisSube && state.gecmisSube!=="hepsi") liste = liste.filter(s=>s.sube===state.gecmisSube);
-  // tarih aralığı
-  const bas = isoTarihSayi(state.gecmisBas);
-  const bit = isoTarihSayi(state.gecmisBit);
+  // tarih aralığı (uygulanmış filtreden)
+  const bas = isoTarihSayi(state.gecmisBasUyg);
+  const bit = isoTarihSayi(state.gecmisBitUyg);
   if(bas) liste = liste.filter(s=>tarihSayi(s.tarih)>=bas);
   if(bit) liste = liste.filter(s=>tarihSayi(s.tarih)<=bit);
   return liste;
@@ -6346,26 +6349,33 @@ function bayiGecmisFiltrele(isGenel){
 function bayiGecmisHtml(isGenel){
   const liste = bayiGecmisFiltrele(isGenel);
   const genelToplam = liste.reduce((a,sp)=>a+siparisTutar(sp).net,0);
-  let html = `<div class="bayi-aciklama">📊 Tamamlanan siparişler (ödendi / stok aktarıldı). Tarih aralığı seçip filtreleyebilir, Excel'e aktarabilirsiniz.</div>`;
+  let html = `<div class="bayi-aciklama">📊 Stok aktarımı tamamlanan siparişler. Tarih aralığı seçip <strong>Filtrele</strong>'ye basın, Excel'e aktarabilirsiniz.</div>`;
   // filtre paneli
   html += `<div class="gecmis-filtre">`;
   if(isGenel){
     html += `<div class="gf-alan"><label>Şube</label>
-      <select class="gf-select" onchange="gecmisFiltreSec('sube',this.value)">
+      <select class="gf-select" id="gfSube">
         <option value="hepsi"${(!state.gecmisSube||state.gecmisSube==="hepsi")?' selected':''}>Tüm şubeler</option>
         ${DEMO_BRANCHES.map(b=>`<option value="${b.ad}"${state.gecmisSube===b.ad?' selected':''}>${b.ad}</option>`).join("")}
       </select></div>`;
   }
-  html += `<div class="gf-alan"><label>Başlangıç</label><input type="date" class="gf-date" value="${state.gecmisBas||''}" onchange="gecmisFiltreSec('bas',this.value)"></div>
-    <div class="gf-alan"><label>Bitiş</label><input type="date" class="gf-date" value="${state.gecmisBit||''}" onchange="gecmisFiltreSec('bit',this.value)"></div>
+  html += `<div class="gf-alan"><label>Başlangıç</label><input type="date" class="gf-date" id="gfBas" value="${state.gecmisBas||''}"></div>
+    <div class="gf-alan"><label>Bitiş</label><input type="date" class="gf-date" id="gfBit" value="${state.gecmisBit||''}"></div>
+    <button class="gf-filtrele" onclick="gecmisFiltreUygula(${isGenel})">🔍 Filtrele</button>
     <button class="gf-temizle" onclick="gecmisFiltreTemizle()">↺ Temizle</button>
   </div>`;
+  // aktif filtre bilgisi
+  if(state.gecmisBasUyg||state.gecmisBitUyg||(isGenel&&state.gecmisSube&&state.gecmisSube!=="hepsi")){
+    const aralik = (state.gecmisBasUyg||state.gecmisBitUyg) ? `${state.gecmisBasUyg||'…'} → ${state.gecmisBitUyg||'…'}` : 'tüm tarihler';
+    const subeF = (isGenel&&state.gecmisSube&&state.gecmisSube!=="hepsi") ? state.gecmisSube+' · ' : '';
+    html += `<div class="gecmis-aktif-filtre">🔍 ${subeF}${aralik}</div>`;
+  }
   // özet bar
   html += `<div class="gecmis-ozet-bar">
-    <div class="go-bilgi"><span class="go-sayi">${liste.length}</span> sipariş · Net toplam: <strong>${genelToplam.toFixed(0)} ₺</strong></div>
+    <div class="go-bilgi"><span class="go-sayi">${liste.length}</span> sipariş · Aralık toplamı: <strong>${genelToplam.toFixed(0)} ₺</strong></div>
     <button class="go-xls" onclick="bayiGecmisXls(${isGenel})" ${liste.length===0?'disabled':''}>📥 Excel indir</button>
   </div>`;
-  if(liste.length===0){ return html+`<div class="bayi-bos">Seçilen aralıkta tamamlanan sipariş yok.</div>`; }
+  if(liste.length===0){ return html+`<div class="bayi-bos">Seçilen aralıkta tamamlanmış sipariş yok.</div>`; }
   // liste
   liste.slice().reverse().forEach(sp=>{
     const dm = SIPARIS_DURUM[sp.durum];
@@ -6385,19 +6395,25 @@ function bayiGecmisHtml(isGenel){
       <div class="bayi-ozet-tablo">
         <div class="bayi-ozet-satir"><span>Toplam (iskontosuz)</span><span>${t.brut.toFixed(0)} ₺</span></div>
         ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(0)} ₺</span></div>`:''}
-        <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenen</span><span>${t.net.toFixed(0)} ₺</span></div>
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Net tutar</span><span>${t.net.toFixed(0)} ₺</span></div>
       </div></div>`;
   });
   return html;
 }
-function gecmisFiltreSec(alan, deger){
-  if(alan==="sube") state.gecmisSube=deger;
-  else if(alan==="bas") state.gecmisBas=deger;
-  else if(alan==="bit") state.gecmisBit=deger;
+function gecmisFiltreUygula(isGenel){
+  const sube = document.getElementById("gfSube");
+  if(sube) state.gecmisSube = sube.value;
+  state.gecmisBas = document.getElementById("gfBas").value;
+  state.gecmisBit = document.getElementById("gfBit").value;
+  // girilen değerleri "uygulanmış" filtreye kopyala
+  state.gecmisBasUyg = state.gecmisBas;
+  state.gecmisBitUyg = state.gecmisBit;
+  note("🔍 Filtre uygulandı");
   go("bayi", true);
 }
 function gecmisFiltreTemizle(){
   state.gecmisSube="hepsi"; state.gecmisBas=""; state.gecmisBit="";
+  state.gecmisBasUyg=""; state.gecmisBitUyg="";
   go("bayi", true);
 }
 /* Excel (HTML-tablo .xls) — her kalem bir satır, Türkçe uyumlu */
@@ -6421,7 +6437,7 @@ function bayiGecmisXls(isGenel){
     });
   });
   const baslik = `MİNİPAN Bayi Kanalı — Geçmiş Siparişler`;
-  const aralik = (state.gecmisBas||state.gecmisBit) ? `${state.gecmisBas||'…'} → ${state.gecmisBit||'…'}` : 'Tüm tarihler';
+  const aralik = (state.gecmisBasUyg||state.gecmisBitUyg) ? `${state.gecmisBasUyg||'…'} → ${state.gecmisBitUyg||'…'}` : 'Tüm tarihler';
   const subeBilgi = isGenel ? (state.gecmisSube&&state.gecmisSube!=="hepsi"?state.gecmisSube:'Tüm şubeler') : AKTIF_SUBE;
   const tablo = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
     <head><meta charset="utf-8"></head><body>
@@ -6698,15 +6714,16 @@ function bayiStoklarHtml(){
 /* === SİPARİŞLER (genel müdür: gelen talepleri yönet) === */
 function bayiSiparisGenelHtml(){
   const bekleyen = BAYI_SIPARISLER.filter(s=>s.durum==="onayda");
-  const diger = BAYI_SIPARISLER.filter(s=>s.durum!=="onayda"&&s.durum!=="taslak");
-  let html = `<div class="bayi-aciklama">📥 Bayilerden gelen sipariş talepleri. İnceleyip düzenleyebilir, onaylayabilirsiniz.</div>`;
-  if(bekleyen.length===0 && diger.length===0){ return html+`<div class="bayi-bos">Henüz sipariş talebi yok.</div>`; }
+  // aktif süreçtekiler (aktarıldı/red GEÇMİŞE gider, burada görünmez)
+  const diger = BAYI_SIPARISLER.filter(s=>s.durum==="onaylandi"||s.durum==="odendi");
+  let html = `<div class="bayi-aciklama">📥 Bayilerden gelen sipariş talepleri. İnceleyip düzenleyebilir, onaylayabilirsiniz. Stok aktarımı tamamlanan siparişler <strong>Geçmiş</strong> sekmesine taşınır.</div>`;
+  if(bekleyen.length===0 && diger.length===0){ return html+`<div class="bayi-bos">Bekleyen veya işlemdeki sipariş yok.</div>`; }
   if(bekleyen.length){
     html += `<div class="bayi-gecmis-baslik">⏳ Onay bekleyenler (${bekleyen.length})</div>`;
     bekleyen.forEach(sp=> html += bayiSiparisKartGenel(sp));
   }
   if(diger.length){
-    html += `<div class="bayi-gecmis-baslik">Diğer siparişler</div>`;
+    html += `<div class="bayi-gecmis-baslik">İşlemdekiler (onaylandı / ödeme bekliyor)</div>`;
     diger.slice().reverse().forEach(sp=> html += bayiSiparisKartGenel(sp));
   }
   return html;
