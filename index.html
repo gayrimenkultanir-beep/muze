@@ -39,6 +39,8 @@
   --warn-soft: #fbeed6;
   --danger:    #d8493f;
   --danger-soft:#fbe7e5;
+  --err:       #d8493f;
+  --err-soft:  #fbe7e5;
   --info:      #2f7ed8;
   --info-soft: #e6f0fb;
 
@@ -306,6 +308,24 @@ tr:last-child td{border-bottom:none}
 .opt-head .opt-base{font-size:13px; color:var(--ink-2)}
 .opt-head .opt-x{margin-left:auto; width:34px; height:34px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); font-size:15px; font-weight:700}
 .opt-body{flex:1; overflow-y:auto; padding:6px 20px}
+/* Gruplu accordion opsiyon ekranı */
+.opt-bolum-baslik{font-size:20px; font-weight:800; color:var(--ink); margin:18px 0 10px}
+.opt-bolum-baslik:first-child{margin-top:6px}
+.opt-acc{background:var(--surface-2); border:1.5px solid transparent; border-radius:14px; margin-bottom:10px; overflow:hidden; transition:border-color .15s}
+.opt-acc.acik{background:var(--surface); border-color:var(--line)}
+.opt-acc.eksik.acik{border-color:var(--brand)}
+.opt-acc-bas{width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; background:none; border:none; cursor:pointer; text-align:left}
+.oga-ad{font-size:16px; font-weight:800; color:var(--ink)}
+.oga-sag{display:flex; align-items:center; gap:10px}
+.oga-rozet{font-size:11px; font-weight:700; color:var(--ink-3); background:var(--surface); border:1px solid var(--line); padding:3px 9px; border-radius:99px; white-space:nowrap}
+.opt-acc.acik .oga-rozet{background:var(--surface-2)}
+.oga-rozet.zor{color:var(--brand-d); border-color:var(--brand); background:var(--brand-soft)}
+.oga-secili{font-size:12.5px; font-weight:700; color:var(--brand-d); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.oga-ok{font-size:18px; color:var(--ink-3); transition:transform .2s; display:inline-block}
+.opt-acc.acik .oga-ok{transform:rotate(180deg)}
+.opt-acc-ic{padding:0 14px 14px; display:flex; flex-direction:column; gap:7px}
+.opt-not-alan{margin-top:18px}
+.opt-not-h{font-size:14px; font-weight:800; margin-bottom:8px}
 .opt-grup{padding:14px 0; border-bottom:1px solid var(--surface-2)}
 .opt-grup:last-child{border-bottom:none}
 .opt-grup-h{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; gap:10px}
@@ -340,6 +360,125 @@ tr:last-child td{border-bottom:none}
 .osa-art{background:var(--brand); border-color:var(--brand); color:var(--brand-ink)}
 .osa-n{min-width:20px; text-align:center; font-weight:800; font-size:15px}
 .osa-btn.opt-disabled{opacity:.35; pointer-events:none}
+/* === FİYAT/ÜRÜN YÖNETİMİ SEKMELERİ === */
+.fyt-sekme-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px}
+.fyt-sekme{padding:10px 16px; border-radius:99px; background:var(--surface); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2)}
+.fyt-sekme.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+/* Kategori yönetimi */
+.kat-yonetim-liste{display:flex; flex-direction:column; gap:8px}
+.kat-yonetim-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px}
+.kys-emoji{font-size:22px}
+.kys-ad{flex:1; font-weight:700; font-size:14px}
+.kys-sayi{font-size:12px; color:var(--ink-3)}
+.kys-aksiyon{display:flex; gap:5px}
+.kys-btn{width:32px; height:32px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); display:flex; align-items:center; justify-content:center}
+.kys-btn:disabled{opacity:.3}
+.kys-btn.sil{color:var(--err); border-color:#e8a59e}
+/* Seçenek grupları */
+.sg-liste{display:flex; flex-direction:column; gap:10px}
+.sg-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px}
+.sg-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+.sg-ad{font-size:15px; font-weight:800}
+.sg-aksiyon{display:flex; gap:6px}
+.sg-secenekler{display:flex; flex-wrap:wrap; gap:6px}
+.sg-chip{display:inline-flex; align-items:center; gap:6px; background:var(--surface-2); border:1px solid var(--line); border-radius:99px; padding:5px 10px; font-size:12.5px; font-weight:600}
+.sg-chip b{color:var(--brand-d)}
+.sg-chip-x{width:16px; height:16px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:9px; font-weight:800; border:none}
+.sg-bos{font-size:12px; color:var(--ink-3)}
+/* Ürün listesi */
+.uy-liste{display:flex; flex-direction:column; gap:8px}
+.uy-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:10px 14px}
+.uy-satir.uy-pasif{opacity:.55}
+.uy-gorsel{width:48px; height:48px; min-width:48px; border-radius:10px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:24px; overflow:hidden}
+.uy-gorsel img{width:100%; height:100%; object-fit:cover}
+.uy-bilgi{flex:1}
+.uy-ad{font-weight:700; font-size:14px}
+.uy-meta{font-size:12px; color:var(--ink-3); margin-top:2px}
+.uy-aksiyon{display:flex; gap:5px}
+/* Ürün formu */
+.uf-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
+.uf-baslik{font-size:17px; font-weight:800}
+.uf-govde{padding:16px 20px; max-height:62vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px}
+.uf-gorsel-alan{display:flex; gap:14px; align-items:center}
+.uf-gorsel-onizleme{width:80px; height:80px; min-width:80px; border-radius:14px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:38px; overflow:hidden; border:1px solid var(--line)}
+.uf-gorsel-onizleme img{width:100%; height:100%; object-fit:cover}
+.uf-gorsel-btnlar{display:flex; flex-direction:column; gap:8px}
+.uf-yukle-btn{padding:9px 14px; border-radius:9px; background:var(--brand); color:var(--brand-ink); font-size:13px; font-weight:800; cursor:pointer; text-align:center}
+.uf-gorsel-sil,.uf-emoji-btn{padding:8px 14px; border-radius:9px; background:var(--surface-2); border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.uf-alan{display:flex; flex-direction:column; gap:6px}
+.uf-alan label{font-size:12px; font-weight:700; color:var(--ink-3)}
+.uf-input{padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; font-weight:600; background:var(--surface); color:var(--ink); width:100%; box-sizing:border-box}
+.uf-input:focus{border-color:var(--brand); outline:none}
+.uf-textarea{min-height:60px; resize:vertical; font-family:inherit}
+.uf-ikili{display:flex; gap:12px}
+.uf-ikili .uf-alan{flex:1}
+.uf-aktif{display:flex; align-items:center; gap:10px; cursor:pointer; background:var(--surface-2); padding:11px 14px; border-radius:10px}
+.uf-aktif span{font-size:13px; font-weight:600; color:var(--ink-2)}
+.uf-grup-baslik{font-size:14px; font-weight:800; margin-top:8px; padding-top:14px; border-top:1px solid var(--line)}
+.uf-grup-bos{font-size:12.5px; color:var(--ink-3); text-align:center; padding:14px}
+.uf-grup-kart{background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px}
+.uf-grup-ust{display:flex; gap:8px; align-items:center}
+.uf-grup-ad{flex:1; padding:9px 12px; border-radius:9px; border:1.5px solid var(--line); font-size:13.5px; font-weight:700; background:var(--surface)}
+.uf-grup-sil{width:34px; height:34px; min-width:34px; border-radius:9px; background:var(--err-soft); color:var(--err); border:none; font-size:14px}
+.uf-grup-ayar{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+.uf-tip-secim{display:flex; gap:6px}
+.uf-tip{padding:7px 12px; border-radius:8px; background:var(--surface); border:1.5px solid var(--line); font-size:12px; font-weight:700; color:var(--ink-2)}
+.uf-tip.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.uf-minmax{display:flex; gap:6px; align-items:center}
+.uf-minmax label{font-size:11px; font-weight:700; color:var(--ink-3)}
+.uf-mm-input{width:48px; padding:7px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; font-weight:700; text-align:center; background:var(--surface)}
+.uf-mm-not{font-size:10.5px; color:var(--ink-3)}
+.uf-secenekler{display:flex; flex-direction:column; gap:6px}
+.uf-secenek-satir{display:flex; gap:6px; align-items:center}
+.uf-sec-ad{flex:1; padding:8px 11px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; background:var(--surface)}
+.uf-sec-ek{display:flex; align-items:center; gap:1px; font-size:12px; font-weight:700; color:var(--ink-3)}
+.uf-sec-ek-input{width:44px; padding:7px 4px; border-radius:7px; border:1.5px solid var(--line); font-size:13px; font-weight:700; text-align:center; background:var(--surface)}
+.uf-sec-sil{width:28px; height:28px; min-width:28px; border-radius:7px; background:var(--err-soft); color:var(--err); border:none; font-size:11px; font-weight:800}
+.uf-sec-ekle-row{display:flex; gap:8px; margin-top:2px}
+.uf-sec-ekle,.uf-sec-hazir{padding:8px 12px; border-radius:8px; background:var(--surface); border:1.5px dashed var(--line); font-size:12px; font-weight:700; color:var(--ink-2)}
+.uf-sec-hazir{border-style:solid; background:var(--brand-soft); color:var(--brand-d); border-color:var(--brand)}
+.uf-grup-ekle{width:100%; padding:12px; border-radius:10px; background:var(--brand-soft); color:var(--brand-d); font-weight:800; font-size:13.5px; border:1.5px dashed var(--brand)}
+.uf-kaydet{margin:8px 20px 20px; padding:15px; border-radius:12px; background:var(--brand); color:var(--brand-ink); font-size:15px; font-weight:800; border:none; width:calc(100% - 40px)}
+/* Hazır grup seçim modalı */
+.gsm-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
+.gsm-baslik{font-size:16px; font-weight:800}
+.gsm-ara{padding:14px 20px 8px}
+.gsm-liste{padding:0 20px; max-height:50vh; overflow-y:auto; display:flex; flex-direction:column; gap:8px}
+.gsm-kart{text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; cursor:pointer; width:100%}
+.gsm-kart:active{background:var(--brand-soft); border-color:var(--brand)}
+.gsm-kart-ad{font-size:14px; font-weight:800; color:var(--ink)}
+.gsm-say{font-size:11px; font-weight:600; color:var(--ink-3); background:var(--surface-2); padding:1px 8px; border-radius:99px; margin-left:6px}
+.gsm-kart-ornek{font-size:12px; color:var(--ink-3); margin-top:4px; line-height:1.4}
+.gsm-bos-btn{margin:12px 20px 20px; padding:13px; border-radius:11px; background:var(--surface-2); border:1.5px dashed var(--line); font-size:13.5px; font-weight:800; color:var(--ink-2); width:calc(100% - 40px)}
+/* Seçenekler havuzu sekmesi */
+.sec-ara-kutu{margin-bottom:12px}
+.secpool-liste{display:flex; flex-direction:column; gap:7px}
+.secpool-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px}
+.sp-ad{flex:1; font-weight:700; font-size:13.5px}
+.sp-ek{font-size:12px; font-weight:800; color:var(--brand-d)}
+.sp-ek.sp-ucretsiz{color:var(--ink-3); font-weight:600}
+.secpool-satir.sp-kapali{opacity:.7; background:var(--err-soft)}
+.sp-durum-acik{font-size:12px; font-weight:700; color:var(--ok)}
+.sp-durum-kapali{font-size:11.5px; font-weight:700; color:var(--err)}
+.sp-kapat-btn{padding:6px 13px; border-radius:8px; background:var(--err-soft); border:1px solid #e8a59e; color:var(--err); font-size:12px; font-weight:800}
+.sp-kapat-btn.acik{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+/* Seçenek kapatma modalı */
+.skm-bilgi{padding:14px 20px; font-size:13px; color:var(--ink-2); line-height:1.5; border-bottom:1px solid var(--line)}
+.skm-secenekler{padding:16px 20px; display:flex; flex-direction:column; gap:10px}
+.skm-opt{text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:12px; padding:14px 16px; cursor:pointer; display:flex; flex-direction:column; gap:3px}
+.skm-opt:active{background:var(--brand-soft); border-color:var(--brand)}
+.skm-opt-ad{font-size:14.5px; font-weight:800}
+.skm-opt-not{font-size:12px; color:var(--ink-3)}
+.skm-input-alan{padding:18px 20px 24px; display:flex; flex-direction:column; gap:14px}
+.skm-input-alan .uf-input{font-size:16px; text-align:center}
+.skm-uygula{padding:15px 20px; border-radius:11px; background:var(--err); color:#fff; font-size:15px; font-weight:800; border:none; width:100%}
+.sp-aksiyon{display:flex; gap:5px}
+.sp-sec-kart.ekli{opacity:.5}
+/* Ürün formu: özel ad inputları + grup adı dropdown */
+select.uf-grup-ad{flex:1; cursor:pointer}
+.uf-grup-ozel{width:100%; box-sizing:border-box; margin-top:8px; padding:9px 12px; border-radius:9px; border:1.5px solid var(--brand); font-size:13.5px; font-weight:700; background:var(--surface)}
+select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; background:var(--surface)}
+.uf-sec-ozel{flex:1; min-width:70px; padding:8px 11px; border-radius:8px; border:1.5px solid var(--brand); font-size:13px; background:var(--surface)}
 .opt-not{width:100%; min-height:60px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm);
   padding:11px 13px; font-size:14px; resize:vertical; font-family:inherit}
 .opt-not:focus{outline:none; border-color:var(--brand)}
@@ -704,8 +843,10 @@ tr:last-child td{border-bottom:none}
 .fis-cizgi{border-top:2px dashed #999; margin:12px 0}
 .fis-grup-baslik{font-size:14px; font-weight:800; margin-bottom:8px; padding:5px 8px; background:#f0f0f0; border-radius:4px}
 .fis-grup-baslik.paket{background:#f3e8fa; color:#8e44ad}
-.fis-satir{font-size:14px; font-weight:700; margin-bottom:3px}
-.fis-ops{font-size:12px; color:#555; margin-bottom:7px; padding-left:12px}
+.fis-satir{font-size:14px; font-weight:700; margin-bottom:3px; display:flex; justify-content:space-between; align-items:baseline; gap:10px}
+.fis-urun{font-weight:800}
+.fis-kisi{font-weight:600; color:#555; font-size:13px; white-space:nowrap}
+.fis-ops{font-size:12px; color:#555; margin-bottom:7px; padding-left:12px; line-height:1.6}
 .fis-paket-uyari{margin-top:8px; font-size:12px; font-weight:800; color:#8e44ad; text-align:center; padding:6px; border:1.5px dashed #8e44ad; border-radius:6px}
 .fis-toplam{font-size:13px; font-weight:800; text-align:center}
 .fis-aksiyon{display:flex; gap:10px; padding:16px}
@@ -1340,6 +1481,16 @@ tr:last-child td{border-bottom:none}
 <!-- Kampanya formu modalı -->
 <div class="modal-bg" id="kmpModal" style="z-index:140">
   <div class="opt-modal" id="kmpModalInner" style="max-width:460px"></div>
+</div>
+
+<!-- Ürün oluşturma/düzenleme modalı -->
+<div class="modal-bg" id="urunModal" style="z-index:145">
+  <div class="opt-modal" id="urunModalInner" style="max-width:480px"></div>
+</div>
+
+<!-- Hazır seçenek grubu seçim modalı -->
+<div class="modal-bg" id="grupSecModal" style="z-index:150">
+  <div class="opt-modal" id="grupSecInner" style="max-width:440px"></div>
 </div>
 
 <!-- Şifre yükseltme modalı -->
@@ -4255,7 +4406,7 @@ function b2bYukle(){
 const KMP_KEY = "minipan_kmp_v1";
 function kampanyaKaydet_persist(){
   try{
-    localStorage.setItem(KMP_KEY, JSON.stringify({ KAMPANYALAR, _kampanyaId, SUBE_FIYAT }));
+    localStorage.setItem(KMP_KEY, JSON.stringify({ KAMPANYALAR, _kampanyaId }));
   }catch(e){}
 }
 function kampanyaYukle(){
@@ -4393,11 +4544,39 @@ function urunGecerliFiyat(ad, sube, kanal){ return urunFiyatBilgi(ad, sube, kana
 function aktifKanal(){ return (QR && QR.servis==="eve") ? "eve" : "masa"; }
 
 
-let OPTION_CLOSED = {};   // { "Minipan (14 Adet)|3|5": true }
+let OPTION_CLOSED = {};   // { "Minipan (14 Adet)|3|5": true }  — tek üründe manuel kapatma
+let SEC_KAPALI = {};      // { "Çilek": {tip:"surekli"|"tarih"|"saat", deger:"2026-07-01"|"18:30"} } — ada göre merkezi kapatma
 let FORCE_OPEN = {};      // müdür stok 0 iken zorla açtı → stok eksiye düşebilir
 let FORCE_LOG = [];       // { urun, secenek, kim, zaman } denetim kaydı
 
 function optKey(urun, gi, si){ return urun+"|"+gi+"|"+si; }
+
+/* Bir seçenek ADI merkezi olarak kapalı mı? (sürekli / tarihe kadar / saate kadar) */
+function secAdiKapaliMi(ad){
+  const k = SEC_KAPALI[ad];
+  if(!k) return false;
+  if(k.tip==="surekli") return true;
+  if(k.tip==="tarih"){
+    // o tarihe kadar (dahil) kapalı → bugün <= deger ise kapalı
+    const bugun = new Date(); bugun.setHours(0,0,0,0);
+    const hedef = new Date(k.deger+"T23:59:59");
+    return bugun <= hedef;
+  }
+  if(k.tip==="saat"){
+    // bugün o saate kadar kapalı → şu an < deger ise kapalı
+    return suankiDakika() < saatDakika(k.deger);
+  }
+  return false;
+}
+/* Kapatma durumunun okunur metni */
+function secKapaliMetin(ad){
+  const k = SEC_KAPALI[ad];
+  if(!k) return "";
+  if(k.tip==="surekli") return "sürekli kapalı";
+  if(k.tip==="tarih") return k.deger+" tarihine kadar kapalı";
+  if(k.tip==="saat") return "bugün "+k.deger+"'e kadar kapalı";
+  return "";
+}
 
 /* Seçenek stok açısından yapılabilir mi? (reçetedeki her hammadde yeterli mi) */
 function secenekStokYeterli(sec){
@@ -4410,6 +4589,8 @@ function secenekStokYeterli(sec){
 function secenekKapali(urun, gi, si, sec){
   const k = optKey(urun,gi,si);
   if(OPTION_CLOSED[k]) return "manuel";
+  // merkezi seçenek-adı kapatması (havuzdan kapatıldıysa, tüm ürünlerde)
+  if(sec && secAdiKapaliMi(sec.ad)) return "merkez";
   if(FORCE_OPEN[k]) return false;              // müdür zorla açtı
   if(!secenekStokYeterli(sec)) return "stok";
   return false;
@@ -4629,8 +4810,11 @@ function openOptionModal(idx){
   document.getElementById("optModal").classList.add("on");
 }
 function closeOpt(){ document.getElementById("optModal").classList.remove("on"); OPT_STATE=null; }
-/* "İstemiyorum" tipi seçenek mi? */
-function secIstemiyorum(sec){ return /istemiyorum/i.test(sec.ad); }
+/* "İstemiyorum" tipi seçenek mi? (Türkçe İ/I duyarlı) */
+function secIstemiyorum(sec){
+  const t = (sec.ad||"").toLocaleLowerCase("tr-TR");
+  return t.includes("istemiyorum");
+}
 /* Bir grupta toplam seçili adet */
 function grupSecimSayisi(gi){
   const m = OPT_STATE.secim[gi]||{};
@@ -4663,6 +4847,10 @@ function optAdet(gi, si, delta){
   const grup = PRODUCT_OPTIONS[OPT_STATE.p.ad][gi];
   const sec = grup.secenekler[si];
   if(delta>0 && !secIstemiyorum(sec) && secenekKapali(OPT_STATE.p.ad, gi, si, sec)) return;
+  // max limit (isteğe bağlıda da geçerli; 99 = sınırsız)
+  if(delta>0 && grup.max && grup.max<99 && grupSecimSayisi(gi)>=grup.max){
+    note("En fazla "+grup.max+" adet seçebilirsiniz"); return;
+  }
   const m = OPT_STATE.secim[gi];
   const yeni = (m[si]||0)+delta;
   if(yeni<=0) delete m[si];
@@ -4700,87 +4888,47 @@ function optEkFiyat(){
 function renderOptionModal(){
   const p = OPT_STATE.p;
   const gruplar = PRODUCT_OPTIONS[p.ad];
+  // accordion açık-kapalı state (ilk açılışta: ilk zorunlu grup açık)
+  if(!OPT_STATE.acik){
+    OPT_STATE.acik = {};
+    const ilkZorunlu = gruplar.findIndex(g=>g.tip!=="istege");
+    if(ilkZorunlu>=0) OPT_STATE.acik[ilkZorunlu]=true;
+  }
+  const optKanal = OPT_STATE.qr ? aktifKanal() : "masa";
+  const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   let html = '<div class="opt-head"><span class="opt-emoji">'+p.emoji+'</span>'+
-    '<div><div class="opt-name">'+p.ad+'</div><div class="opt-base">'+urunGecerliFiyat(p.ad, (OPT_STATE.qr?(QR.sube||AKTIF_SUBE):AKTIF_SUBE), (OPT_STATE.qr?aktifKanal():"masa"))+' ₺ taban</div></div>'+
-    '<button class="opt-kapat-mod'+(OPT_STATE.kapatMod?' on':'')+'" onclick="toggleKapatMod()" title="Seçenek kapat/aç">'+
-    (OPT_STATE.kapatMod?'✓ Düzenleniyor':'⚙ Stok')+'</button>'+
+    '<div><div class="opt-name">'+p.ad+'</div><div class="opt-base">'+urunGecerliFiyat(p.ad, optSube, optKanal)+' ₺ taban</div></div>'+
+    (OPT_STATE.qr ? '' : '<button class="opt-kapat-mod'+(OPT_STATE.kapatMod?' on':'')+'" onclick="toggleKapatMod()" title="Seçenek kapat/aç">'+
+    (OPT_STATE.kapatMod?'✓ Düzenleniyor':'⚙ Stok')+'</button>')+
     '<button class="opt-x" onclick="closeOpt()">✕</button></div>'+
     (OPT_STATE.kapatMod?'<div class="kapat-bilgi">Tükenen malzemeyi kapat — müşteri kalan seçeneklerle devam eder. Tekrar dokun: aç.</div>':'')+
     '<div class="opt-body">';
-  gruplar.forEach((grup,gi)=>{
-    const m = OPT_STATE.secim[gi]||{};
-    const n = grupSecimSayisi(gi);
-    const istege = grup.tip==="istege";
-    let etiket, sayac="";
-    if(istege){
-      etiket='<span class="og-tip og-coklu">İsteğe bağlı</span>';
-    } else if(grup.max===1){
-      etiket='<span class="og-tip og-zor">Zorunlu</span>';
-    } else {
-      etiket='<span class="og-tip og-zor">Zorunlu · '+(grup.min>0?grup.min+'-':'en fazla ')+grup.max+'</span>';
-      sayac='<span class="og-sayac">'+n+'/'+grup.max+'</span>';
-    }
-    html += '<div class="opt-grup"><div class="opt-grup-h"><span class="og-ad">'+grup.ad+'</span>'+
-            '<span class="og-meta">'+sayac+etiket+'</span></div><div class="opt-secenekler">';
-    grup.secenekler.forEach((sec,si)=>{
-      const adet = m[si]||0;
-      const secili = adet>0;
-      const fiyatTxt = sec.ek ? '+'+sec.ek+' ₺' : '';
-      const ist = secIstemiyorum(sec) ? ' opt-ist' : '';
-      const kapali = secIstemiyorum(sec) ? false : secenekKapali(p.ad, gi, si, sec);
 
-      if(OPT_STATE.kapatMod && !secIstemiyorum(sec)){
-        const manuelKapali = OPTION_CLOSED[optKey(p.ad,gi,si)];
-        const stokKapali = !secenekStokYeterli(sec);
-        const forceAcik = FORCE_OPEN[optKey(p.ad,gi,si)];
-        const mudurMu = state.role==="mudur" || state.role==="genel";
-        let forceBtn = '';
-        if(stokKapali && mudurMu && !manuelKapali){
-          forceBtn = '<span class="force-btn'+(forceAcik?' on':'')+'" onclick="event.stopPropagation();forceOpenSecenek(\''+p.ad.replace(/'/g,"\\'")+'\','+gi+','+si+')">'+
-                     (forceAcik?'✓ açık (eksiye düşer)':'yine de aç')+'</span>';
-        }
-        html += '<button class="opt-sec opt-kapat-row'+(manuelKapali?' kapali':'')+'" onclick="toggleSecenekKapat(\''+p.ad.replace(/'/g,"\\'")+'\','+gi+','+si+')">'+
-                '<span class="kapat-tgl">'+(manuelKapali?'✕':'●')+'</span>'+
-                '<span class="os-ad">'+sec.ad+'</span>'+
-                (stokKapali&&!forceAcik?'<span class="kapat-etiket stok">stok 0</span>':'')+
-                (forceAcik?'<span class="kapat-etiket force">zorla açık</span>':'')+
-                (manuelKapali?'<span class="kapat-etiket">kapalı</span>':'')+
-                forceBtn+'</button>';
-      } else if(istege){
-        // İSTEĞE BAĞLI: adet kontrollü (+/-)
-        const kapaliCls = kapali ? ' opt-kapali' : '';
-        const kapaliEt = kapali==='stok' ? '<span class="kapat-etiket stok">tükendi</span>'
-                       : kapali==='manuel' ? '<span class="kapat-etiket">bugün yok</span>' : '';
-        html += '<div class="opt-sec opt-adetli'+(secili?' on':'')+kapaliCls+'">'+
-                '<span class="os-ad">'+sec.ad+'</span>'+kapaliEt+
-                (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+
-                '<span class="os-adet-kontrol">'+
-                  (secili?'<button class="osa-btn" onclick="optAdet('+gi+','+si+',-1)">−</button><span class="osa-n">'+adet+'</span>':'')+
-                  '<button class="osa-btn osa-art'+(kapali?' opt-disabled':'')+'" onclick="optAdet('+gi+','+si+',1)">+</button>'+
-                '</span></div>';
-      } else {
-        // ZORUNLU: tek/çoklu seçim
-        const tekli = grup.max===1;
-        const dolu = !tekli && !secili && !secIstemiyorum(sec) && n>=grup.max;
-        const kapaliCls = kapali ? ' opt-kapali' : '';
-        const kapaliEt = kapali==='stok' ? '<span class="kapat-etiket stok">tükendi</span>'
-                       : kapali==='manuel' ? '<span class="kapat-etiket">bugün yok</span>' : '';
-        html += '<button class="opt-sec'+(secili?' on':'')+ist+(dolu?' opt-disabled':'')+kapaliCls+'" onclick="toggleOpt('+gi+','+si+')">'+
-                '<span class="os-mark '+(tekli?'radio':'check')+'">'+(secili?(tekli?'●':'✓'):'')+'</span>'+
-                '<span class="os-ad">'+sec.ad+'</span>'+
-                kapaliEt+
-                (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+'</button>';
-      }
-    });
-    html += '</div></div>';
+  // grupları tip'e göre ayır (orijinal index korunarak)
+  const zorunluGruplar = [];
+  const istegeGruplar = [];
+  gruplar.forEach((grup,gi)=>{
+    if(grup.tip==="istege") istegeGruplar.push({grup,gi});
+    else zorunluGruplar.push({grup,gi});
   });
-  html += '<div class="opt-grup"><div class="opt-grup-h"><span class="og-ad">Not</span></div>'+
+
+  // ZORUNLU SEÇİMLER bölümü
+  if(zorunluGruplar.length>0){
+    html += '<div class="opt-bolum-baslik">Zorunlu Seçimler</div>';
+    zorunluGruplar.forEach(({grup,gi})=> html += optGrupAccordionHtml(p, grup, gi));
+  }
+  // İSTEĞE BAĞLI SEÇİMLER bölümü
+  if(istegeGruplar.length>0){
+    html += '<div class="opt-bolum-baslik">İsteğe Bağlı Seçimler</div>';
+    istegeGruplar.forEach(({grup,gi})=> html += optGrupAccordionHtml(p, grup, gi));
+  }
+
+  // not alanı
+  html += '<div class="opt-not-alan"><div class="opt-not-h">Not</div>'+
           '<textarea class="opt-not" placeholder="Bu ürünle ilgili notunu buradan iletebilirsin." '+
           'oninput="OPT_STATE.not=this.value">'+(OPT_STATE.not||'')+'</textarea></div>';
   html += '</div>';
   const gecerli = optGecerli();
-  const optKanal = OPT_STATE.qr ? aktifKanal() : "masa";
-  const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const toplam = urunGecerliFiyat(p.ad, optSube, optKanal) + optEkFiyat();
   html += '<div class="opt-foot">'+
     '<div class="opt-toplam"><div class="ot-l">Toplam</div><div class="ot-v">'+toplam+' ₺</div></div>'+
@@ -4792,6 +4940,105 @@ function renderOptionModal(){
   inner.innerHTML = html;
   const yeniBody = inner.querySelector(".opt-body");
   if(yeniBody && scrollY) yeniBody.scrollTop = scrollY;
+}
+
+/* Tek bir grubun accordion (dropdown) HTML'i */
+function optGrupAccordionHtml(p, grup, gi){
+  const m = OPT_STATE.secim[gi]||{};
+  const n = grupSecimSayisi(gi);
+  const istege = grup.tip==="istege";
+  const acik = OPT_STATE.kapatMod ? true : !!OPT_STATE.acik[gi];
+  // özet (kapalıyken başlıkta seçili olanları göster)
+  const secililer = [];
+  Object.entries(m).forEach(([si,adet])=>{
+    const sec=grup.secenekler[si];
+    if(sec) secililer.push(adet>1 ? sec.ad+" ×"+adet : sec.ad);
+  });
+  // zorunlu eksikse uyarı işareti
+  const eksik = !istege && n<(grup.min||0);
+  let durumRozet="";
+  if(istege){
+    if(grup.max && grup.max<99) durumRozet='<span class="oga-rozet">en fazla '+grup.max+'</span>';
+  } else if(grup.max===1){
+    durumRozet='<span class="oga-rozet zor">zorunlu</span>';
+  } else {
+    durumRozet='<span class="oga-rozet zor">'+(grup.min>0?grup.min+'-':'')+grup.max+' seç</span>';
+  }
+
+  let html = '<div class="opt-acc'+(acik?' acik':'')+(eksik?' eksik':'')+'">';
+  // başlık (tıklanınca aç/kapa)
+  html += '<button class="opt-acc-bas" '+(OPT_STATE.kapatMod?'':'onclick="optAccTogle('+gi+')"')+'>'+
+    '<span class="oga-ad">'+grup.ad+'</span>'+
+    '<span class="oga-sag">'+
+      (secililer.length>0 && !acik ? '<span class="oga-secili">'+secililer.join(", ")+'</span>' : durumRozet)+
+      (OPT_STATE.kapatMod?'':'<span class="oga-ok">⌄</span>')+
+    '</span></button>';
+  // içerik (açıkken)
+  if(acik){
+    html += '<div class="opt-acc-ic">';
+    grup.secenekler.forEach((sec,si)=>{
+      html += optSecenekHtml(p, grup, gi, sec, si, m, n, istege);
+    });
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function optAccTogle(gi){
+  OPT_STATE.acik[gi] = !OPT_STATE.acik[gi];
+  renderOptionModal();
+}
+
+/* Tek bir seçeneğin HTML'i (zorunlu/isteğe bağlı/kapatma moduna göre) */
+function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
+  const adet = m[si]||0;
+  const secili = adet>0;
+  const fiyatTxt = sec.ek ? '+'+sec.ek+' ₺' : '';
+  const ist = secIstemiyorum(sec) ? ' opt-ist' : '';
+  const kapali = secIstemiyorum(sec) ? false : secenekKapali(p.ad, gi, si, sec);
+
+  if(OPT_STATE.kapatMod && !secIstemiyorum(sec)){
+    const manuelKapali = OPTION_CLOSED[optKey(p.ad,gi,si)];
+    const stokKapali = !secenekStokYeterli(sec);
+    const forceAcik = FORCE_OPEN[optKey(p.ad,gi,si)];
+    const mudurMu = state.role==="mudur" || state.role==="genel";
+    let forceBtn = '';
+    if(stokKapali && mudurMu && !manuelKapali){
+      forceBtn = '<span class="force-btn'+(forceAcik?' on':'')+'" onclick="event.stopPropagation();forceOpenSecenek(\''+p.ad.replace(/'/g,"\\'")+'\','+gi+','+si+')">'+
+                 (forceAcik?'✓ açık (eksiye düşer)':'yine de aç')+'</span>';
+    }
+    return '<button class="opt-sec opt-kapat-row'+(manuelKapali?' kapali':'')+'" onclick="toggleSecenekKapat(\''+p.ad.replace(/'/g,"\\'")+'\','+gi+','+si+')">'+
+            '<span class="kapat-tgl">'+(manuelKapali?'✕':'●')+'</span>'+
+            '<span class="os-ad">'+sec.ad+'</span>'+
+            (stokKapali&&!forceAcik?'<span class="kapat-etiket stok">stok 0</span>':'')+
+            (forceAcik?'<span class="kapat-etiket force">zorla açık</span>':'')+
+            (manuelKapali?'<span class="kapat-etiket">kapalı</span>':'')+
+            forceBtn+'</button>';
+  } else if(istege){
+    const kapaliCls = kapali ? ' opt-kapali' : '';
+    const kapaliEt = kapali==='stok' ? '<span class="kapat-etiket stok">tükendi</span>'
+                   : kapali==='merkez' ? '<span class="kapat-etiket stok">bugün yok</span>'
+                   : kapali==='manuel' ? '<span class="kapat-etiket">bugün yok</span>' : '';
+    return '<div class="opt-sec opt-adetli'+(secili?' on':'')+kapaliCls+'">'+
+            '<span class="os-ad">'+sec.ad+'</span>'+kapaliEt+
+            (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+
+            '<span class="os-adet-kontrol">'+
+              (secili?'<button class="osa-btn" onclick="optAdet('+gi+','+si+',-1)">−</button><span class="osa-n">'+adet+'</span>':'')+
+              '<button class="osa-btn osa-art'+(kapali?' opt-disabled':'')+'" onclick="optAdet('+gi+','+si+',1)">+</button>'+
+            '</span></div>';
+  } else {
+    const tekli = grup.max===1;
+    const dolu = !tekli && !secili && !secIstemiyorum(sec) && n>=grup.max;
+    const kapaliCls = kapali ? ' opt-kapali' : '';
+    const kapaliEt = kapali==='stok' ? '<span class="kapat-etiket stok">tükendi</span>'
+                   : kapali==='merkez' ? '<span class="kapat-etiket stok">bugün yok</span>'
+                   : kapali==='manuel' ? '<span class="kapat-etiket">bugün yok</span>' : '';
+    return '<button class="opt-sec'+(secili?' on':'')+ist+(dolu?' opt-disabled':'')+kapaliCls+'" onclick="toggleOpt('+gi+','+si+')">'+
+            '<span class="os-mark '+(tekli?'radio':'check')+'">'+(secili?(tekli?'●':'✓'):'')+'</span>'+
+            '<span class="os-ad">'+sec.ad+'</span>'+
+            kapaliEt+
+            (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+'</button>';
+  }
 }
 
 /* Seçim onaylandı: fiyat + reçete ile sepete ekle */
@@ -6102,20 +6349,92 @@ function viewRecete(main){
 }
 
 // --- FİYAT YÖNETİMİ v3 (sade: sadece genel fiyat + aç/kapa · indirim KAMPANYA'da) ---
+// ============================================================
+// FİYAT & ÜRÜN YÖNETİMİ (sekmeli)
+//  - Genel Fiyatlar (şube bazlı, müdür+genel)
+//  - Kategoriler / Seçenek Grupları / Ürünler (sadece genel müdür)
+// ============================================================
+let OPTION_GROUPS = {};   // {"Sos Seçimi": [{ad,ek},...]} — yeniden kullanılabilir seçenek listeleri
+let OPTION_POOL = [];     // [{ad,ek}] — tekil seçenek havuzu (Sütlü Pankek, Çilek, Karamel Sos...)
+
+/* Ürünlerdeki/gruplardaki tüm tekil seçenekleri OPTION_POOL'a çıkar (benzersiz) */
+function secenekleriTopla(){
+  const harita = {};
+  // gruplardan
+  Object.values(OPTION_GROUPS).forEach(secs=>{
+    secs.forEach(s=>{ if(!(s.ad in harita)) harita[s.ad]=s.ek||0; });
+  });
+  // ürünlerin gömülü gruplarından
+  Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+    gruplar.forEach(g=>g.secenekler.forEach(s=>{ if(!(s.ad in harita)) harita[s.ad]=s.ek||0; }));
+  });
+  OPTION_POOL = Object.entries(harita).map(([ad,ek])=>({ad,ek})).sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+}
+
+/* Ürünlerdeki gömülü seçenek gruplarını OPTION_GROUPS'a çıkar (hazır liste olsun).
+   "1.", "2." gibi önekleri temizler, aynı isimli grupların en zengin halini tutar. */
+function secenekGruplariniTopla(){
+  Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+    gruplar.forEach(g=>{
+      // "1.Pankek", "2. Meyve Seçimi" → "Pankek", "Meyve Seçimi"
+      let ad = g.ad.replace(/^\s*\d+\s*\.?\s*/,"").trim();
+      if(!ad) ad = g.ad.trim();
+      const mevcut = OPTION_GROUPS[ad];
+      // yoksa ekle, varsa daha çok seçenekli olanı tut
+      if(!mevcut || g.secenekler.length > mevcut.length){
+        OPTION_GROUPS[ad] = g.secenekler.map(s=>({ad:s.ad, ek:s.ek||0}));
+      }
+    });
+  });
+}
+let URUN_GORSEL = {};     // {"Pandio": "data:image/..."} — base64 ürün görselleri
+
 function viewFiyat(main){
   const isGenel = state.role==="genel";
+  if(!state.fiyatSekme) state.fiyatSekme = "fiyatlar";
+  // müdür sadece genel fiyatları görür
+  if(!isGenel) state.fiyatSekme = "fiyatlar";
+  const sekme = state.fiyatSekme;
+
+  let html = `<div class="sec-head"><div><h2>🏷️ Fiyat & Ürün Yönetimi</h2>
+    <div class="sh-sub">${isGenel?'Merkez menü yönetimi':AKTIF_SUBE+' fiyatları'}</div></div></div>`;
+
+  if(isGenel){
+    const sekmeler = [
+      {k:"fiyatlar", ad:"💰 Genel Fiyatlar"},
+      {k:"kategori", ad:"🗂️ Kategoriler"},
+      {k:"secenek",  ad:"🧩 Seçenek Grupları"},
+      {k:"secpool",  ad:"🔘 Seçenekler"},
+      {k:"urun",     ad:"📦 Ürünler"},
+    ];
+    html += `<div class="fyt-sekme-row">`;
+    sekmeler.forEach(s=>{
+      html += `<button class="fyt-sekme${sekme===s.k?' on':''}" onclick="fiyatSekmeSec('${s.k}')">${s.ad}</button>`;
+    });
+    html += `</div>`;
+  }
+  html += `<div class="fyt-icerik">`;
+  if(sekme==="fiyatlar") html += fiyatGenelHtml(isGenel);
+  else if(sekme==="kategori") html += kategoriYonetimHtml();
+  else if(sekme==="secenek") html += secenekGrupHtml();
+  else if(sekme==="secpool") html += secenekPoolHtml();
+  else if(sekme==="urun") html += urunYonetimHtml();
+  html += `</div>`;
+  main.innerHTML = html;
+}
+function fiyatSekmeSec(k){ state.fiyatSekme=k; go("fiyat"); }
+
+/* === GENEL FİYATLAR (şube bazlı) === */
+function fiyatGenelHtml(isGenel){
   if(!state.fiyatHedef){ state.fiyatHedef = isGenel ? DEMO_BRANCHES[0].ad : AKTIF_SUBE; }
   if(!state.fiyatKanal) state.fiyatKanal = "masa";
   const hedef = state.fiyatHedef;
   const kanal = state.fiyatKanal;
-  const kategoriler = [...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
-  if(!state.fiyatKat) state.fiyatKat = kategoriler[0];
+  const kategoriler = DEMO_KATEGORILER.map(k=>k.ad);
+  if(!state.fiyatKat || !kategoriler.includes(state.fiyatKat)) state.fiyatKat = kategoriler[0];
   const prods = DEMO_PRODUCTS.filter(p=>p.kat===state.fiyatKat);
 
-  let html=`<div class="sec-head"><div><h2>🏷️ Fiyat Yönetimi</h2>
-    <div class="sh-sub">${hedef} · ${kanal==="eve"?"🛵 Eve teslim fiyatları":"🍽️ Masada / Gel-Al fiyatları"}</div></div></div>`;
-  html+=`<div class="fy-bilgi-not">💡 İndirim ve kampanyalar artık <strong>Kampanyalar</strong> bölümünden tanımlanıyor. Burada sadece genel satış fiyatı belirlenir.</div>`;
-
+  let html=`<div class="fy-bilgi-not">💡 İndirim ve kampanyalar <strong>Kampanyalar</strong> bölümünden tanımlanır. Burada sadece genel satış fiyatı belirlenir.</div>`;
   if(isGenel){
     html+=`<div class="fy-hedef-sec"><div class="fy-hs-row">`;
     DEMO_BRANCHES.forEach(b=>{
@@ -6133,7 +6452,6 @@ function viewFiyat(main){
   html+=`<div class="cat-row">`;
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.fiyatKat===k?' on':''}" onclick="fiyatKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
   html+=`</div>`;
-
   html+=`<div class="fy-liste">`;
   prods.forEach(p=>{
     const k = fiyatKayit(hedef, p.ad, kanal);
@@ -6152,11 +6470,11 @@ function viewFiyat(main){
     </div>`;
   });
   html+=`</div>`;
-  main.innerHTML=html;
+  return html;
 }
-function fiyatHedefSec(h){ state.fiyatHedef=h; go("fiyat"); }
-function fiyatKanalSec(k){ state.fiyatKanal=k; go("fiyat"); }
-function fiyatKatSec(k){ state.fiyatKat=k; go("fiyat"); }
+function fiyatHedefSec(h){ state.fiyatHedef=h; go("fiyat", true); }
+function fiyatKanalSec(k){ state.fiyatKanal=k; go("fiyat", true); }
+function fiyatKatSec(k){ state.fiyatKat=k; go("fiyat", true); }
 function fiyatGenelGir(sube, ad, kanal){
   const mevcut = urunFiyatBilgi(ad, sube, kanal).genel;
   const v=prompt((kanal==="eve"?"Eve teslim ":"")+"genel fiyatı (₺):", String(mevcut));
@@ -6165,16 +6483,679 @@ function fiyatGenelGir(sube, ad, kanal){
   if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
   fiyatKayitYaz(sube, ad, kanal).genel = f||null;
   note(ad+" genel fiyatı: "+f+" ₺");
-  kampanyaKaydet_persist();
+  menuKaydet();
   go("fiyat", true);
 }
 function fiyatKanalKapat(sube, ad, kanal){
   const rec=fiyatKayitYaz(sube,ad,kanal);
   rec.kapali = !rec.kapali;
   note(ad+(rec.kapali?" satışa kapatıldı":" açıldı"));
-  kampanyaKaydet_persist();
+  menuKaydet();
   go("fiyat", true);
 }
+
+/* === KATEGORİLER === */
+function kategoriYonetimHtml(){
+  let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${DEMO_KATEGORILER.length} kategori</div>
+    <button class="bayi-ekle-btn" onclick="kategoriEkle()">+ Yeni kategori</button></div>`;
+  html += `<div class="kat-yonetim-liste">`;
+  DEMO_KATEGORILER.forEach((k,i)=>{
+    const urunSay = DEMO_PRODUCTS.filter(p=>p.kat===k.ad).length;
+    html += `<div class="kat-yonetim-satir">
+      <span class="kys-emoji">${k.emoji}</span>
+      <span class="kys-ad">${k.ad}</span>
+      <span class="kys-sayi">${urunSay} ürün</span>
+      <div class="kys-aksiyon">
+        <button class="kys-btn" onclick="kategoriSiraTasi(${i},-1)" ${i===0?'disabled':''}>↑</button>
+        <button class="kys-btn" onclick="kategoriSiraTasi(${i},1)" ${i===DEMO_KATEGORILER.length-1?'disabled':''}>↓</button>
+        <button class="kys-btn" onclick="kategoriDuzenle(${i})">✏️</button>
+        <button class="kys-btn sil" onclick="kategoriSil(${i})">🗑️</button>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function kategoriEkle(){
+  const ad = prompt("Kategori adı:");
+  if(!ad||!ad.trim()) return;
+  if(DEMO_KATEGORILER.find(k=>k.ad===ad.trim())){ note("Bu kategori zaten var"); return; }
+  const emoji = prompt("Kategori ikonu (emoji):", "🍽️");
+  if(emoji==null) return;
+  DEMO_KATEGORILER.push({ad:ad.trim(), emoji:emoji.trim()||"🍽️"});
+  note("Kategori eklendi: "+ad.trim());
+  menuKaydet();
+  go("fiyat", true);
+}
+function kategoriDuzenle(i){
+  const k = DEMO_KATEGORILER[i];
+  const eskiAd = k.ad;
+  const ad = prompt("Kategori adı:", k.ad);
+  if(ad==null) return;
+  const emoji = prompt("Kategori ikonu:", k.emoji);
+  if(emoji==null) return;
+  k.ad = ad.trim()||k.ad;
+  k.emoji = emoji.trim()||k.emoji;
+  // ürünlerin kategori adını da güncelle
+  if(eskiAd!==k.ad) DEMO_PRODUCTS.forEach(p=>{ if(p.kat===eskiAd) p.kat=k.ad; });
+  note("Kategori güncellendi");
+  menuKaydet();
+  go("fiyat", true);
+}
+function kategoriSil(i){
+  const k = DEMO_KATEGORILER[i];
+  const urunSay = DEMO_PRODUCTS.filter(p=>p.kat===k.ad).length;
+  if(urunSay>0){ note("⛔ Bu kategoride "+urunSay+" ürün var — önce ürünleri taşıyın/silin"); return; }
+  if(!confirm('"'+k.ad+'" kategorisi silinsin mi?')) return;
+  DEMO_KATEGORILER.splice(i,1);
+  note("Kategori silindi");
+  menuKaydet();
+  go("fiyat", true);
+}
+function kategoriSiraTasi(i, yon){
+  const j=i+yon;
+  if(j<0||j>=DEMO_KATEGORILER.length) return;
+  [DEMO_KATEGORILER[i],DEMO_KATEGORILER[j]]=[DEMO_KATEGORILER[j],DEMO_KATEGORILER[i]];
+  menuKaydet();
+  go("fiyat", true);
+}
+
+/* === SEÇENEK GRUPLARI (yeniden kullanılabilir listeler) === */
+function secenekGrupHtml(){
+  const adlar = Object.keys(OPTION_GROUPS);
+  let html = `<div class="fy-bilgi-not">🧩 Seçenek grupları sadece <strong>isim</strong>dir (örn. "Sos Seçimi", "Meyve Seçimi"). Ürün oluştururken bu isimlerden seçip içine "Seçenekler"den seçenek eklersiniz.</div>`;
+  html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${adlar.length} seçenek grubu</div>
+    <button class="bayi-ekle-btn" onclick="secGrupEkle()">+ Yeni grup</button></div>`;
+  if(adlar.length===0){ return html+`<div class="bayi-bos">Henüz seçenek grubu yok.</div>`; }
+  html += `<div class="secpool-liste">`;
+  adlar.forEach(ad=>{
+    html += `<div class="secpool-satir">
+      <span class="sp-ad">${ad}</span>
+      <div class="sp-aksiyon">
+        <button class="kys-btn" onclick="secGrupDuzenle('${ad.replace(/'/g,"\\'")}')">✏️</button>
+        <button class="kys-btn sil" onclick="secGrupSil('${ad.replace(/'/g,"\\'")}')">🗑️</button>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function secGrupEkle(){
+  const ad = prompt("Seçenek grubu adı (örn. Sos Seçimi):");
+  if(!ad||!ad.trim()) return;
+  if(OPTION_GROUPS[ad.trim()]){ note("Bu grup zaten var"); return; }
+  OPTION_GROUPS[ad.trim()] = [];
+  note("Grup eklendi: "+ad.trim());
+  menuKaydet();
+  go("fiyat", true);
+}
+function secGrupDuzenle(ad){
+  const yeni = prompt("Grup adı:", ad);
+  if(yeni==null || !yeni.trim() || yeni.trim()===ad) return;
+  if(OPTION_GROUPS[yeni.trim()]){ note("Bu isimde grup zaten var"); return; }
+  OPTION_GROUPS[yeni.trim()] = OPTION_GROUPS[ad];
+  delete OPTION_GROUPS[ad];
+  note("Grup adı güncellendi");
+  menuKaydet();
+  go("fiyat", true);
+}
+function secGrupSil(ad){
+  if(!confirm('"'+ad+'" grubu silinsin mi?')) return;
+  delete OPTION_GROUPS[ad];
+  note("Grup silindi");
+  menuKaydet();
+  go("fiyat", true);
+}
+function secGrupSecenekEkle(ad){
+  state._secGrupHedef = ad;
+  renderSecPoolSecModal("");
+  document.getElementById("grupSecModal").classList.add("on");
+}
+/* Havuzdan seçenek seçme modalı (gruba seçenek eklerken) */
+function renderSecPoolSecModal(arama){
+  const ad = state._secGrupHedef;
+  const mevcutAdlar = (OPTION_GROUPS[ad]||[]).map(s=>s.ad);
+  const ara = (arama||"").toLocaleLowerCase("tr-TR");
+  const liste = OPTION_POOL.filter(s=>!ara || s.ad.toLocaleLowerCase("tr-TR").includes(ara));
+  let html = `<div class="gsm-head">
+    <div class="gsm-baslik">🔘 "${ad}" grubuna seçenek ekle</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="gsm-ara"><input class="uf-input" placeholder="Seçenek ara..." value="${(arama||'').replace(/"/g,'&quot;')}" oninput="renderSecPoolSecModal(this.value)"></div>
+    <div class="gsm-liste">`;
+  if(liste.length===0){
+    html += `<div class="bayi-bos">Eşleşen seçenek yok.</div>`;
+  } else {
+    liste.forEach(s=>{
+      const ekli = mevcutAdlar.includes(s.ad);
+      html += `<button class="gsm-kart sp-sec-kart${ekli?' ekli':''}" ${ekli?'disabled':`onclick="secGrupSecenekHavuzdan('${s.ad.replace(/'/g,"\\'")}')"`}>
+        <div class="gsm-kart-ad">${s.ad} ${s.ek?`<span class="gsm-say">+${s.ek}₺</span>`:`<span class="gsm-say">ücretsiz</span>`}</div>
+        ${ekli?'<div class="gsm-kart-ornek">✓ zaten ekli</div>':''}
+      </button>`;
+    });
+  }
+  html += `</div>
+    <button class="gsm-bos-btn" onclick="secGrupYeniSecenek()">+ Havuzda yok, yeni seçenek oluştur</button>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function secGrupSecenekHavuzdan(secAd){
+  const ad = state._secGrupHedef;
+  const havuz = OPTION_POOL.find(s=>s.ad===secAd);
+  OPTION_GROUPS[ad].push({ad:havuz.ad, ek:havuz.ek||0});
+  menuKaydet();
+  renderSecPoolSecModal("");  // modal açık kalsın, birden fazla eklenebilsin
+  // arkadaki listeyi de güncelle
+  const main=document.querySelector(".main"); if(main) viewFiyat(main);
+}
+function secGrupYeniSecenek(){
+  const ad = state._secGrupHedef;
+  const sad = prompt("Yeni seçenek adı:");
+  if(!sad||!sad.trim()) return;
+  const ekV = prompt("Ek fiyat (₺, ücretsizse 0):", "0");
+  if(ekV==null) return;
+  const yeni = {ad:sad.trim(), ek:parseInt(ekV)||0};
+  // havuza ekle (yoksa)
+  if(!OPTION_POOL.find(s=>s.ad===yeni.ad)){
+    OPTION_POOL.push({...yeni});
+    OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+  }
+  // gruba ekle
+  OPTION_GROUPS[ad].push({...yeni});
+  menuKaydet();
+  renderSecPoolSecModal("");
+  const main=document.querySelector(".main"); if(main) viewFiyat(main);
+}
+function secGrupSecenekSil(ad, si){
+  OPTION_GROUPS[ad].splice(si,1);
+  menuKaydet();
+  go("fiyat", true);
+}
+
+/* === SEÇENEKLER (tekil havuz) === */
+function secenekPoolHtml(){
+  if(!state.secAra) state.secAra="";
+  const ara = state.secAra.toLocaleLowerCase("tr-TR");
+  const liste = OPTION_POOL.map((s,i)=>({s,i})).filter(x=>!ara || x.s.ad.toLocaleLowerCase("tr-TR").includes(ara));
+  const kapaliSay = OPTION_POOL.filter(s=>secAdiKapaliMi(s.ad)).length;
+  let html = `<div class="fy-bilgi-not">🔘 Tekil seçenek havuzu (örn. "Sütlü Pankek", "Çilek", "Karamel Sos"). Bir seçeneği kapatırsanız, o seçeneği içeren <strong>tüm ürünlerde</strong> seçilemez olur.</div>`;
+  html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${OPTION_POOL.length} seçenek${kapaliSay?` · <span style="color:var(--err)">${kapaliSay} kapalı</span>`:''}</div>
+    <button class="bayi-ekle-btn" onclick="secPoolEkle()">+ Yeni seçenek</button></div>`;
+  html += `<div class="sec-ara-kutu"><input class="uf-input" placeholder="🔍 Seçenek ara..." value="${(state.secAra||'').replace(/"/g,'&quot;')}" oninput="secPoolAra(this.value)"></div>`;
+  if(liste.length===0){ return html+`<div class="bayi-bos">${ara?'Eşleşen seçenek yok.':'Henüz seçenek yok.'}</div>`; }
+  html += `<div class="secpool-liste">`;
+  liste.forEach(({s,i})=>{
+    const kapali = secAdiKapaliMi(s.ad);
+    const kapaliMetin = kapali ? secKapaliMetin(s.ad) : "";
+    html += `<div class="secpool-satir${kapali?' sp-kapali':''}">
+      <span class="sp-ad">${s.ad}</span>
+      ${kapali?`<span class="sp-durum-kapali">⛔ ${kapaliMetin}</span>`:`<span class="sp-durum-acik">✓ açık</span>`}
+      <div class="sp-aksiyon">
+        <button class="sp-kapat-btn${kapali?' acik':''}" onclick="secPoolKapatAc(${i})">${kapali?'Aç':'Kapat'}</button>
+        <button class="kys-btn" onclick="secPoolDuzenle(${i})">✏️</button>
+        <button class="kys-btn sil" onclick="secPoolSil(${i})">🗑️</button>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function secPoolAra(v){ state.secAra=v; go("fiyat", true); }
+function secPoolEkle(){
+  const ad = prompt("Seçenek adı (örn. Sütlü Pankek):");
+  if(!ad||!ad.trim()) return;
+  if(OPTION_POOL.find(s=>s.ad===ad.trim())){ note("Bu seçenek zaten var"); return; }
+  OPTION_POOL.push({ad:ad.trim(), ek:0});
+  OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+  note("Seçenek eklendi: "+ad.trim());
+  menuKaydet();
+  go("fiyat", true);
+}
+function secPoolDuzenle(i){
+  const s = OPTION_POOL[i];
+  const ad = prompt("Seçenek adı:", s.ad);
+  if(ad==null) return;
+  const eskiAd = s.ad;
+  s.ad = ad.trim()||s.ad;
+  // ad değiştiyse kapatma kaydını taşı
+  if(eskiAd!==s.ad && SEC_KAPALI[eskiAd]){ SEC_KAPALI[s.ad]=SEC_KAPALI[eskiAd]; delete SEC_KAPALI[eskiAd]; }
+  OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+  note("Seçenek güncellendi");
+  menuKaydet();
+  go("fiyat", true);
+}
+function secPoolSil(i){
+  const s = OPTION_POOL[i];
+  if(!confirm('"'+s.ad+'" seçeneği havuzdan silinsin mi?')) return;
+  delete SEC_KAPALI[s.ad];
+  OPTION_POOL.splice(i,1);
+  note("Seçenek silindi");
+  menuKaydet();
+  go("fiyat", true);
+}
+/* Seçenek aç/kapa modalı */
+function secPoolKapatAc(i){
+  const s = OPTION_POOL[i];
+  if(secAdiKapaliMi(s.ad)){
+    // açık duruma getir
+    delete SEC_KAPALI[s.ad];
+    note(s.ad+" açıldı");
+    menuKaydet();
+    go("fiyat", true);
+    return;
+  }
+  // kapatma seçenekleri modalı
+  state._kapatHedef = s.ad;
+  renderSecKapatModal();
+  document.getElementById("grupSecModal").classList.add("on");
+}
+function renderSecKapatModal(){
+  const ad = state._kapatHedef;
+  // bu seçeneği içeren ürün sayısı
+  let urunSay=0;
+  Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+    if(gruplar.some(g=>g.secenekler.some(sc=>sc.ad===ad))) urunSay++;
+  });
+  let html = `<div class="gsm-head">
+    <div class="gsm-baslik">⛔ "${ad}" kapat</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="skm-bilgi">Bu seçenek <strong>${urunSay} üründe</strong> kullanılıyor. Kapatınca bu ürünlerin hepsinde seçilemez olur.</div>
+    <div class="skm-secenekler">
+      <button class="skm-opt" onclick="secKapatUygula('surekli')">
+        <span class="skm-opt-ad">🔒 Sürekli kapalı</span>
+        <span class="skm-opt-not">Tekrar açana kadar kapalı kalır</span></button>
+      <button class="skm-opt" onclick="secKapatModalSaat()">
+        <span class="skm-opt-ad">🕐 Saate kadar kapalı</span>
+        <span class="skm-opt-not">Bugün belirli bir saate kadar</span></button>
+      <button class="skm-opt" onclick="secKapatModalTarih()">
+        <span class="skm-opt-ad">📅 Tarihe kadar kapalı</span>
+        <span class="skm-opt-not">Seçtiğiniz güne kadar</span></button>
+    </div>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function secKapatModalSaat(){
+  const ad = state._kapatHedef;
+  let html = `<div class="gsm-head"><div class="gsm-baslik">🕐 Saate kadar kapat</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="skm-bilgi">"${ad}" bugün seçtiğiniz saate kadar kapalı kalsın:</div>
+    <div class="skm-input-alan">
+      <input type="time" class="uf-input" id="skmSaat" value="18:00">
+      <button class="skm-uygula" onclick="secKapatUygula('saat',document.getElementById('skmSaat').value)">Kapat</button>
+    </div>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function secKapatModalTarih(){
+  const ad = state._kapatHedef;
+  const yarin = new Date(Date.now()+86400000).toISOString().slice(0,10);
+  let html = `<div class="gsm-head"><div class="gsm-baslik">📅 Tarihe kadar kapat</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="skm-bilgi">"${ad}" seçtiğiniz tarihe kadar (o gün dahil) kapalı kalsın:</div>
+    <div class="skm-input-alan">
+      <input type="date" class="uf-input" id="skmTarih" value="${yarin}">
+      <button class="skm-uygula" onclick="secKapatUygula('tarih',document.getElementById('skmTarih').value)">Kapat</button>
+    </div>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function secKapatUygula(tip, deger){
+  const ad = state._kapatHedef;
+  if(tip==="saat" && !deger){ note("Saat seçin"); return; }
+  if(tip==="tarih" && !deger){ note("Tarih seçin"); return; }
+  SEC_KAPALI[ad] = {tip, deger:deger||""};
+  grupSecModalKapat();
+  note(ad+" kapatıldı ("+secKapaliMetin(ad)+")");
+  menuKaydet();
+  go("fiyat", true);
+}
+
+/* === ÜRÜNLER === */
+function urunYonetimHtml(){
+  if(!state.urunKat) state.urunKat = DEMO_KATEGORILER[0]?.ad;
+  const kategoriler = DEMO_KATEGORILER.map(k=>k.ad);
+  const prods = DEMO_PRODUCTS.filter(p=>p.kat===state.urunKat);
+  let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${DEMO_PRODUCTS.length} ürün</div>
+    <button class="bayi-ekle-btn" onclick="urunFormAc()">+ Yeni ürün</button></div>`;
+  html += `<div class="cat-row">`;
+  kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.urunKat===k?' on':''}" onclick="urunKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
+  html += `</div>`;
+  html += `<div class="uy-liste">`;
+  prods.forEach(p=>{
+    const pi = DEMO_PRODUCTS.indexOf(p);
+    const opsSay = (PRODUCT_OPTIONS[p.ad]||[]).length;
+    const gorsel = URUN_GORSEL[p.ad];
+    html += `<div class="uy-satir${p.aktif?'':' uy-pasif'}">
+      <div class="uy-gorsel">${gorsel?`<img src="${gorsel}" alt="">`:`<span>${p.emoji}</span>`}</div>
+      <div class="uy-bilgi">
+        <div class="uy-ad">${p.ad}</div>
+        <div class="uy-meta">${p.fiyat} ₺${opsSay?` · ${opsSay} seçenek grubu`:''}${p.aktif?'':' · ⛔ pasif'}</div>
+      </div>
+      <div class="uy-aksiyon">
+        <button class="kys-btn" onclick="urunFormAc(${pi})">✏️</button>
+        <button class="kys-btn sil" onclick="urunSil(${pi})">🗑️</button>
+      </div>
+    </div>`;
+  });
+  if(prods.length===0) html += `<div class="bayi-bos">Bu kategoride ürün yok.</div>`;
+  html += `</div>`;
+  return html;
+}
+function urunKatSec(k){ state.urunKat=k; go("fiyat", true); }
+function urunSil(pi){
+  const p = DEMO_PRODUCTS[pi];
+  if(!confirm('"'+p.ad+'" ürünü silinsin mi?')) return;
+  delete PRODUCT_OPTIONS[p.ad];
+  delete URUN_GORSEL[p.ad];
+  DEMO_PRODUCTS.splice(pi,1);
+  note("Ürün silindi");
+  menuKaydet();
+  go("fiyat", true);
+}
+
+/* === MENÜ KALICILIK === */
+const MENU_KEY = "minipan_menu_v1";
+function menuKaydet(){
+  try{
+    localStorage.setItem(MENU_KEY, JSON.stringify({
+      DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_GORSEL, SUBE_FIYAT
+    }));
+  }catch(e){ /* kota dolabilir (base64 görseller) */ console.warn("menü kayıt hatası", e); }
+}
+function menuYukle(){
+  try{
+    const raw = localStorage.getItem(MENU_KEY);
+    if(!raw) return;
+    const v = JSON.parse(raw);
+    if(v.DEMO_KATEGORILER) DEMO_KATEGORILER = v.DEMO_KATEGORILER;
+    if(v.DEMO_PRODUCTS) DEMO_PRODUCTS = v.DEMO_PRODUCTS;
+    if(v.PRODUCT_OPTIONS) PRODUCT_OPTIONS = v.PRODUCT_OPTIONS;
+    if(v.OPTION_GROUPS) OPTION_GROUPS = v.OPTION_GROUPS;
+    if(v.OPTION_POOL) OPTION_POOL = v.OPTION_POOL;
+    if(v.SEC_KAPALI) SEC_KAPALI = v.SEC_KAPALI;
+    if(v.URUN_GORSEL) URUN_GORSEL = v.URUN_GORSEL;
+    if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
+  }catch(e){}
+}
+
+/* === ÜRÜN OLUŞTURMA / DÜZENLEME FORMU === */
+function urunFormAc(pi){
+  const duzenle = (pi!=null);
+  let p, gruplar;
+  if(duzenle){
+    p = DEMO_PRODUCTS[pi];
+    // mevcut opsiyon gruplarının derin kopyası
+    gruplar = JSON.parse(JSON.stringify(PRODUCT_OPTIONS[p.ad]||[]));
+    state.urunForm = {
+      pi:pi, eskiAd:p.ad, ad:p.ad, aciklama:p.aciklama||"", emoji:p.emoji,
+      kat:p.kat, fiyat:p.fiyat, aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar
+    };
+  } else {
+    state.urunForm = {
+      pi:null, eskiAd:null, ad:"", aciklama:"", emoji:"🍽️",
+      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", aktif:true, gorsel:"", gruplar:[]
+    };
+  }
+  renderUrunForm();
+  document.getElementById("urunModal").classList.add("on");
+}
+function urunFormKapat(){
+  document.getElementById("urunModal").classList.remove("on");
+  state.urunForm=null;
+}
+function renderUrunForm(){
+  const f = state.urunForm; if(!f) return;
+  let html = `<div class="uf-head">
+    <div class="uf-baslik">${f.pi!=null?'✏️ Ürün Düzenle':'📦 Yeni Ürün'}</div>
+    <button class="bom-kapat" onclick="urunFormKapat()">✕</button></div>
+    <div class="uf-govde">`;
+
+  // görsel
+  html += `<div class="uf-gorsel-alan">
+    <div class="uf-gorsel-onizleme">${f.gorsel?`<img src="${f.gorsel}">`:`<span>${f.emoji}</span>`}</div>
+    <div class="uf-gorsel-btnlar">
+      <label class="uf-yukle-btn">📷 Görsel yükle<input type="file" accept="image/*" style="display:none" onchange="urunGorselYukle(this)"></label>
+      ${f.gorsel?`<button class="uf-gorsel-sil" onclick="state.urunForm.gorsel='';renderUrunForm()">Görseli kaldır</button>`:`<button class="uf-emoji-btn" onclick="urunEmojiSec()">😀 Emoji seç</button>`}
+    </div>
+  </div>`;
+
+  // ad
+  html += `<div class="uf-alan"><label>Ürün adı</label>
+    <input class="uf-input" placeholder="örn. Minipan Dubai" value="${(f.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.ad=this.value"></div>`;
+  // açıklama
+  html += `<div class="uf-alan"><label>Açıklama</label>
+    <textarea class="uf-input uf-textarea" placeholder="Ürün açıklaması" oninput="state.urunForm.aciklama=this.value">${f.aciklama||''}</textarea></div>`;
+  // kategori + fiyat yan yana
+  html += `<div class="uf-ikili">
+    <div class="uf-alan"><label>Kategori</label>
+      <select class="uf-input" onchange="state.urunForm.kat=this.value">
+        ${DEMO_KATEGORILER.map(k=>`<option value="${k.ad}"${f.kat===k.ad?' selected':''}>${k.emoji} ${k.ad}</option>`).join("")}
+      </select></div>
+    <div class="uf-alan"><label>Temel fiyat (₺)</label>
+      <input class="uf-input" inputmode="numeric" placeholder="0" value="${f.fiyat||''}" oninput="state.urunForm.fiyat=this.value"></div>
+  </div>`;
+  html += `<div class="uf-aktif" onclick="state.urunForm.aktif=!state.urunForm.aktif;renderUrunForm()">
+    <div class="kmpf-check${f.aktif?' on':''}">${f.aktif?'✓':''}</div><span>Satışta aktif</span></div>`;
+
+  // SEÇENEK GRUPLARI
+  html += `<div class="uf-grup-baslik">🧩 Seçenek Grupları</div>`;
+  if(f.gruplar.length===0) html += `<div class="uf-grup-bos">Henüz seçenek grubu eklenmedi. Aşağıdan ekleyebilirsiniz.</div>`;
+  f.gruplar.forEach((g,gi)=>{
+    // grup adı dropdown seçenekleri (hazır gruplar + mevcut özel ad)
+    const grupAdlar = Object.keys(OPTION_GROUPS);
+    const ozelAd = !grupAdlar.includes(g.ad);
+    html += `<div class="uf-grup-kart">
+      <div class="uf-grup-ust">
+        <select class="uf-grup-ad" onchange="ufGrupAdSec(${gi},this.value)">
+          ${grupAdlar.map(ga=>`<option value="${ga.replace(/"/g,'&quot;')}"${g.ad===ga?' selected':''}>${ga}</option>`).join("")}
+          <option value="__ozel__"${ozelAd?' selected':''}>✏️ Özel ad gir...</option>
+        </select>
+        <button class="uf-grup-sil" onclick="ufGrupSil(${gi})">🗑️</button>
+      </div>
+      ${ozelAd?`<input class="uf-grup-ozel" value="${(g.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.gruplar[${gi}].ad=this.value" placeholder="Grup adı yazın">`:''}
+      <div class="uf-grup-ayar">
+        <div class="uf-tip-secim">
+          <button class="uf-tip${g.tip==='zorunlu'?' on':''}" onclick="ufGrupTip(${gi},'zorunlu')">Zorunlu</button>
+          <button class="uf-tip${g.tip==='istege'?' on':''}" onclick="ufGrupTip(${gi},'istege')">İsteğe bağlı</button>
+        </div>`;
+    if(g.tip==='zorunlu'){
+      html += `<div class="uf-minmax">
+        <label>En az</label><input class="uf-mm-input" inputmode="numeric" value="${g.min}" oninput="state.urunForm.gruplar[${gi}].min=parseInt(this.value)||0">
+        <label>En çok</label><input class="uf-mm-input" inputmode="numeric" value="${g.max}" oninput="state.urunForm.gruplar[${gi}].max=parseInt(this.value)||1">
+      </div>`;
+    } else {
+      html += `<div class="uf-minmax">
+        <label>En çok</label><input class="uf-mm-input" inputmode="numeric" value="${g.max>=99?'':g.max}" placeholder="∞" oninput="state.urunForm.gruplar[${gi}].max=parseInt(this.value)||99">
+        <span class="uf-mm-not">boş = sınırsız</span>
+      </div>`;
+    }
+    html += `</div>
+      <div class="uf-secenekler">`;
+    (g.secenekler||[]).forEach((s,si)=>{
+      // seçenek adı dropdown (havuzdan) + özel
+      const havuzAdlar = OPTION_POOL.map(x=>x.ad);
+      const ozelSec = s.ad && !havuzAdlar.includes(s.ad);
+      html += `<div class="uf-secenek-satir">
+        <select class="uf-sec-ad" onchange="ufSecAdSec(${gi},${si},this.value)">
+          <option value=""${!s.ad?' selected':''}>— seçenek seç —</option>
+          ${OPTION_POOL.map(x=>`<option value="${x.ad.replace(/"/g,'&quot;')}"${s.ad===x.ad?' selected':''}>${x.ad}</option>`).join("")}
+          <option value="__ozel__"${ozelSec?' selected':''}>✏️ Özel...</option>
+        </select>
+        ${ozelSec?`<input class="uf-sec-ozel" value="${(s.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ad=this.value" placeholder="Ad">`:''}
+        <span class="uf-sec-ek">+<input class="uf-sec-ek-input" inputmode="numeric" value="${s.ek||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ek=parseInt(this.value)||0">₺</span>
+        <button class="uf-sec-sil" onclick="ufSecSil(${gi},${si})">✕</button>
+      </div>`;
+    });
+    html += `<div class="uf-sec-ekle-row">
+        <button class="uf-sec-ekle" onclick="ufSecEkle(${gi})">+ seçenek</button>
+      </div>`;
+    html += `</div></div>`;
+  });
+  html += `<button class="uf-grup-ekle" onclick="ufGrupEkle()">+ Seçenek grubu ekle</button>`;
+
+  html += `</div>
+    <button class="uf-kaydet" onclick="urunKaydet()">${f.pi!=null?'Değişiklikleri kaydet':'Ürünü oluştur'}</button>`;
+  document.getElementById("urunModalInner").innerHTML = html;
+}
+function urunGorselYukle(input){
+  const dosya = input.files[0]; if(!dosya) return;
+  if(dosya.size > 2*1024*1024){ note("Görsel 2MB'den küçük olmalı"); return; }
+  const reader = new FileReader();
+  reader.onload = e=>{ state.urunForm.gorsel = e.target.result; renderUrunForm(); };
+  reader.readAsDataURL(dosya);
+}
+function urunEmojiSec(){
+  const e = prompt("Emoji (ürün ikonu):", state.urunForm.emoji);
+  if(e==null) return;
+  state.urunForm.emoji = e.trim()||"🍽️";
+  renderUrunForm();
+}
+function ufGrupEkle(){
+  // hazır grup varsa seçim modalı aç, yoksa direkt boş grup
+  if(Object.keys(OPTION_GROUPS).length>0){ grupSecModalAc(); }
+  else { ufBosGrupEkle(); }
+}
+function ufBosGrupEkle(){
+  state.urunForm.gruplar.push({ad:"Yeni grup", tip:"zorunlu", min:1, max:1, secenekler:[]});
+  renderUrunForm();
+}
+/* Hazır seçenek grubu seçim modalı (tıklanabilir liste) */
+function grupSecModalAc(){
+  renderGrupSecModal("");
+  document.getElementById("grupSecModal").classList.add("on");
+}
+function grupSecModalKapat(){ document.getElementById("grupSecModal").classList.remove("on"); }
+function renderGrupSecModal(arama){
+  const adlar = Object.keys(OPTION_GROUPS).filter(a=>!arama || a.toLocaleLowerCase("tr-TR").includes(arama.toLocaleLowerCase("tr-TR")));
+  let html = `<div class="gsm-head">
+    <div class="gsm-baslik">🧩 Seçenek grubu ekle</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="gsm-ara"><input class="uf-input" placeholder="Grup ara..." value="${(arama||'').replace(/"/g,'&quot;')}" oninput="renderGrupSecModal(this.value)"></div>
+    <div class="gsm-liste">`;
+  if(adlar.length===0){
+    html += `<div class="bayi-bos">Eşleşen grup yok.</div>`;
+  } else {
+    adlar.forEach(ad=>{
+      html += `<button class="gsm-kart" onclick="ufHazirGrupEkle('${ad.replace(/'/g,"\\'")}')">
+        <div class="gsm-kart-ad">${ad}</div>
+      </button>`;
+    });
+  }
+  html += `</div>
+    <button class="gsm-bos-btn" onclick="grupSecModalKapat();ufBosGrupEkle()">+ Özel grup oluştur (elle isim gir)</button>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+/* Seçilen grup ismini ürüne ekle — SADECE İSİM, seçenekler boş (sonra + seçenek ile eklenir) */
+function ufHazirGrupEkle(ad){
+  state.urunForm.gruplar.push({
+    ad:ad, tip:"zorunlu", min:1, max:1, secenekler:[]
+  });
+  grupSecModalKapat();
+  renderUrunForm();
+}
+function ufGrupSil(gi){ state.urunForm.gruplar.splice(gi,1); renderUrunForm(); }
+function ufGrupTip(gi, tip){
+  const g=state.urunForm.gruplar[gi];
+  g.tip=tip;
+  if(tip==="istege"){ g.min=0; g.max=99; }
+  else { if(g.max>=99) g.max=1; if(g.min>g.max) g.min=g.max; }
+  renderUrunForm();
+}
+function ufSecEkle(gi){ state.urunForm.gruplar[gi].secenekler.push({ad:"",ek:0}); renderUrunForm(); }
+/* Grup adı dropdown'dan seçildi */
+function ufGrupAdSec(gi, val){
+  const g = state.urunForm.gruplar[gi];
+  if(val==="__ozel__"){ g.ad=""; renderUrunForm(); return; }
+  // sadece grup ismini değiştir — seçenekler elle (+ seçenek) eklenir
+  g.ad = val;
+  renderUrunForm();
+}
+/* Seçenek adı dropdown'dan seçildi (havuzdan) */
+function ufSecAdSec(gi, si, val){
+  const s = state.urunForm.gruplar[gi].secenekler[si];
+  if(val==="__ozel__"){ s.ad=""; renderUrunForm(); return; }
+  s.ad = val;
+  // fiyat elle girilir; havuzdan otomatik fiyat getirilmez
+  renderUrunForm();
+}
+function ufSecSil(gi,si){ state.urunForm.gruplar[gi].secenekler.splice(si,1); renderUrunForm(); }
+/* grup içindeki "hazır listeden" butonu — sadece o grubun seçeneklerini doldurur */
+function ufHazirGrupYukle(gi){
+  state.urunForm._hedefGrup = gi;
+  renderGrupSecDoldur("");
+  document.getElementById("grupSecModal").classList.add("on");
+}
+function renderGrupSecDoldur(arama){
+  const gi = state.urunForm._hedefGrup;
+  const adlar = Object.keys(OPTION_GROUPS).filter(a=>!arama || a.toLocaleLowerCase("tr-TR").includes(arama.toLocaleLowerCase("tr-TR")));
+  let html = `<div class="gsm-head">
+    <div class="gsm-baslik">📋 Hazır seçenekleri yükle</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="gsm-ara"><input class="uf-input" placeholder="Grup ara..." value="${(arama||'').replace(/"/g,'&quot;')}" oninput="renderGrupSecDoldur(this.value)"></div>
+    <div class="gsm-liste">`;
+  adlar.forEach(ad=>{
+    const secs = OPTION_GROUPS[ad];
+    const ornek = secs.slice(0,4).map(s=>s.ad).join(", ")+(secs.length>4?"...":"");
+    html += `<button class="gsm-kart" onclick="ufHazirSecenekDoldur('${ad.replace(/'/g,"\\'")}')">
+      <div class="gsm-kart-ad">${ad} <span class="gsm-say">${secs.length} seçenek</span></div>
+      <div class="gsm-kart-ornek">${ornek}</div>
+    </button>`;
+  });
+  html += `</div>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function ufHazirSecenekDoldur(ad){
+  const gi = state.urunForm._hedefGrup;
+  state.urunForm.gruplar[gi].secenekler = JSON.parse(JSON.stringify(OPTION_GROUPS[ad]));
+  if(!state.urunForm.gruplar[gi].ad || state.urunForm.gruplar[gi].ad==="Yeni grup")
+    state.urunForm.gruplar[gi].ad = ad;
+  grupSecModalKapat();
+  renderUrunForm();
+}
+function urunKaydet(){
+  const f = state.urunForm;
+  if(!f.ad.trim()){ note("Ürün adı girin"); return; }
+  const fiyat = parseInt(f.fiyat);
+  if(isNaN(fiyat)||fiyat<0){ note("Geçerli bir fiyat girin"); return; }
+  // ad çakışması (yeni ürün veya ad değiştiyse)
+  if(f.ad.trim()!==f.eskiAd && DEMO_PRODUCTS.find(p=>p.ad===f.ad.trim())){
+    note("Bu isimde ürün zaten var"); return;
+  }
+  // grupları temizle (boş seçenekleri at, min/max düzelt)
+  const temizGruplar = f.gruplar
+    .map(g=>({
+      ad:g.ad.trim()||"Seçim",
+      tip:g.tip,
+      min:g.tip==="istege"?0:Math.max(0,g.min||0),
+      max:g.tip==="istege"?99:Math.max(1,g.max||1),
+      secenekler:g.secenekler.filter(s=>s.ad.trim()).map(s=>({ad:s.ad.trim(),ek:s.ek||0}))
+    }))
+    .filter(g=>g.secenekler.length>0);
+
+  const yeniAd = f.ad.trim();
+  if(f.pi!=null){
+    // DÜZENLE
+    const p = DEMO_PRODUCTS[f.pi];
+    // ad değiştiyse opsiyon/görsel anahtarlarını taşı
+    if(f.eskiAd!==yeniAd){
+      delete PRODUCT_OPTIONS[f.eskiAd];
+      delete URUN_GORSEL[f.eskiAd];
+    }
+    p.ad=yeniAd; p.aciklama=f.aciklama.trim(); p.emoji=f.emoji;
+    p.kat=f.kat; p.fiyat=fiyat; p.aktif=f.aktif;
+  } else {
+    // YENİ
+    DEMO_PRODUCTS.push({ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()});
+  }
+  // opsiyon grupları
+  if(temizGruplar.length>0) PRODUCT_OPTIONS[yeniAd]=temizGruplar;
+  else delete PRODUCT_OPTIONS[yeniAd];
+  // görsel
+  if(f.gorsel) URUN_GORSEL[yeniAd]=f.gorsel;
+  else delete URUN_GORSEL[yeniAd];
+
+  urunFormKapat();
+  note((f.pi!=null?"Ürün güncellendi: ":"Ürün oluşturuldu: ")+yeniAd);
+  menuKaydet();
+  go("fiyat", true);
+}
+
+
 
 
 // --- KAMPANYA YÖNETİMİ ---
@@ -7415,8 +8396,8 @@ function mutfakFisiBas(kaynak){
 function fisIcerikHtml(fis){
   const masaUrun=fis.kalemler.filter(it=>!it.paket);
   const paketUrun=fis.kalemler.filter(it=>it.paket);
-  const satir=(it)=>'<div class="fis-satir"><span>'+(it.kisi?it.kisi+' · ':'')+it.ad+'</span></div>'+
-    (it.secimler&&it.secimler.length?'<div class="fis-ops">+ '+it.secimler.join(', ')+'</div>':'');
+  const satir=(it)=>'<div class="fis-satir"><span class="fis-urun">'+it.ad+'</span>'+(it.kisi?'<span class="fis-kisi">'+it.kisi+'</span>':'')+'</div>'+
+    (it.secimler&&it.secimler.length?'<div class="fis-ops">'+it.secimler.map(s=>'+ '+s).join('<br>')+'</div>':'');
   let icerik='<div class="fis-kagit">'+
     '<div class="fis-baslik">MİNİPAN · MUTFAK FİŞİ</div>'+
     '<div class="fis-alt">'+fis.baslik+(fis.alt?' · '+fis.alt:'')+'</div>'+
@@ -8914,6 +9895,9 @@ window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi 
 // Uygulama açılışında başlat
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
+menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yükle
+if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
+if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
 initFirebase();
 
 </script>
