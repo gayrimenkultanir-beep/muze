@@ -377,6 +377,24 @@ tr:last-child td{border-bottom:none}
 /* Seçenek grupları */
 .sg-liste{display:flex; flex-direction:column; gap:10px}
 .sg-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px}
+.sg-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px}
+.sg-ad{font-size:16px; font-weight:800}
+.sg-aksiyon{display:flex; gap:5px}
+.sg-limit{margin-bottom:10px}
+.sg-limit-rozet{font-size:11.5px; font-weight:700; color:var(--ink-3); background:var(--surface-2); padding:4px 11px; border-radius:99px}
+.sg-limit-rozet.zor{color:var(--brand-d); background:var(--brand-soft)}
+.sg-secenek-liste{display:flex; flex-direction:column; gap:6px}
+.sg-sec-satir{display:flex; align-items:center; gap:10px; background:var(--surface-2); border-radius:9px; padding:9px 12px}
+.sg-sec-satir.sg-ist{background:#fff4e6; border:1px solid #f0c98a}
+.sg-sec-ad{flex:1; font-size:13.5px; font-weight:600}
+.sg-sec-ek{font-size:12.5px; font-weight:800; color:var(--brand-d)}
+.sg-sec-ek.bos{color:var(--ink-3); font-weight:400}
+.sg-sec-sil{width:24px; height:24px; min-width:24px; border-radius:6px; background:var(--err-soft); color:var(--err); border:none; font-size:10px; font-weight:800}
+.sg-sec-bos{font-size:12.5px; color:var(--ink-3); text-align:center; padding:10px}
+.sg-sec-ekle-row{display:flex; gap:8px; margin-top:8px; flex-wrap:wrap}
+.sg-sec-ekle{padding:8px 14px; border-radius:8px; background:var(--brand-soft); border:1.5px solid var(--brand); font-size:12.5px; font-weight:700; color:var(--brand-d)}
+.sg-ist-ekle{padding:8px 14px; border-radius:8px; background:#fff4e6; border:1.5px solid #f0c98a; font-size:12.5px; font-weight:700; color:#b06d10}
+.sga-govde{padding:18px 20px; display:flex; flex-direction:column; gap:14px}
 .sg-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
 .sg-ad{font-size:15px; font-weight:800}
 .sg-aksiyon{display:flex; gap:6px}
@@ -452,6 +470,9 @@ tr:last-child td{border-bottom:none}
 .gsm-bos-btn{margin:12px 20px 20px; padding:13px; border-radius:11px; background:var(--surface-2); border:1.5px dashed var(--line); font-size:13.5px; font-weight:800; color:var(--ink-2); width:calc(100% - 40px)}
 /* Seçenekler havuzu sekmesi */
 .sec-ara-kutu{margin-bottom:12px}
+.sec-sube-row{display:flex; align-items:center; gap:10px; margin-bottom:12px; background:var(--surface-2); padding:10px 14px; border-radius:10px}
+.sec-sube-row label{font-size:13px; font-weight:700; color:var(--ink-2)}
+.sec-sube-row .gf-select{flex:1; max-width:280px}
 .secpool-liste{display:flex; flex-direction:column; gap:7px}
 .secpool-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 14px}
 .sp-ad{flex:1; font-weight:700; font-size:13.5px}
@@ -459,6 +480,8 @@ tr:last-child td{border-bottom:none}
 .sp-ek.sp-ucretsiz{color:var(--ink-3); font-weight:600}
 .secpool-satir.sp-kapali{opacity:.7; background:var(--err-soft)}
 .sp-durum-acik{font-size:12px; font-weight:700; color:var(--ok)}
+.sp-fiyat{font-size:13px; font-weight:800; color:var(--brand-d); white-space:nowrap}
+.sp-fiyat .sp-ucretsiz2{color:var(--ink-3); font-weight:500}
 .sp-durum-kapali{font-size:11.5px; font-weight:700; color:var(--err)}
 .sp-kapat-btn{padding:6px 13px; border-radius:8px; background:var(--err-soft); border:1px solid #e8a59e; color:var(--err); font-size:12px; font-weight:800}
 .sp-kapat-btn.acik{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
@@ -847,6 +870,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .fis-urun{font-weight:800}
 .fis-kisi{font-weight:600; color:#555; font-size:13px; white-space:nowrap}
 .fis-ops{font-size:12px; color:#555; margin-bottom:7px; padding-left:12px; line-height:1.6}
+.fis-grup-ad{font-weight:800; color:#222; margin-top:4px}
+.fis-grup-sec{padding-left:10px}
 .fis-paket-uyari{margin-top:8px; font-size:12px; font-weight:800; color:#8e44ad; text-align:center; padding:6px; border:1.5px dashed #8e44ad; border-radius:6px}
 .fis-toplam{font-size:13px; font-weight:800; text-align:center}
 .fis-aksiyon{display:flex; gap:10px; padding:16px}
@@ -3955,7 +3980,7 @@ const NAV_META = {
   bayi:{ic:"📦", ad:"Bayi Kanalı"},
   canli:   {ic:"📡", ad:"Canlı"},
   recete:  {ic:"📖", ad:"Reçete"},
-  fiyat:   {ic:"🏷️", ad:"Fiyat"},
+  fiyat:   {ic:"🏷️", ad:"Ürün Yönetimi"},
   kampanya:{ic:"🎯", ad:"Kampanya"},
   personel:{ic:"👥", ad:"Personel"},
   subeler: {ic:"🏬", ad:"Şubeler"},
@@ -4551,30 +4576,50 @@ let FORCE_LOG = [];       // { urun, secenek, kim, zaman } denetim kaydı
 
 function optKey(urun, gi, si){ return urun+"|"+gi+"|"+si; }
 
-/* Bir seçenek ADI merkezi olarak kapalı mı? (sürekli / tarihe kadar / saate kadar) */
-function secAdiKapaliMi(ad){
-  const k = SEC_KAPALI[ad];
-  if(!k) return false;
+/* Bir sonraki 09:00'un zaman damgası (şu an 09:00'dan önceyse bugün, sonraysa yarın) */
+function sonraki0900(){
+  const simdi = new Date();
+  const hedef = new Date();
+  hedef.setHours(9,0,0,0);
+  if(simdi >= hedef) hedef.setDate(hedef.getDate()+1);  // 09:00 geçtiyse ertesi gün
+  return hedef.getTime();
+}
+/* Bir seçenek ADI, belirli bir ŞUBEDE merkezi olarak kapalı mı?
+   SEC_KAPALI[şube][ad] = {tip, ...}  ("hepsi" şubesi = tüm şubeler) */
+function secAdiKapaliMi(ad, sube){
+  sube = sube || AKTIF_SUBE;
+  // "hepsi" (tüm şubeler) kapatması veya bu şubeye özel kapatma
+  const kayit = (SEC_KAPALI["hepsi"] && SEC_KAPALI["hepsi"][ad]) || (SEC_KAPALI[sube] && SEC_KAPALI[sube][ad]);
+  if(!kayit) return false;
+  return kapatmaAktifMi(kayit, SEC_KAPALI["hepsi"]&&SEC_KAPALI["hepsi"][ad]?"hepsi":sube, ad);
+}
+function kapatmaAktifMi(k, sube, ad){
   if(k.tip==="surekli") return true;
+  if(k.tip==="sure"){
+    if(Date.now() >= k.bitis){ if(SEC_KAPALI[sube]) delete SEC_KAPALI[sube][ad]; return false; }
+    return true;
+  }
   if(k.tip==="tarih"){
-    // o tarihe kadar (dahil) kapalı → bugün <= deger ise kapalı
     const bugun = new Date(); bugun.setHours(0,0,0,0);
-    const hedef = new Date(k.deger+"T23:59:59");
-    return bugun <= hedef;
+    return bugun <= new Date(k.deger+"T23:59:59");
   }
-  if(k.tip==="saat"){
-    // bugün o saate kadar kapalı → şu an < deger ise kapalı
-    return suankiDakika() < saatDakika(k.deger);
-  }
+  if(k.tip==="saat"){ return suankiDakika() < saatDakika(k.deger); }
   return false;
 }
-/* Kapatma durumunun okunur metni */
-function secKapaliMetin(ad){
-  const k = SEC_KAPALI[ad];
+/* Kapatma durumunun okunur metni (şube bazlı) */
+function secKapaliMetin(ad, sube){
+  sube = sube || AKTIF_SUBE;
+  const hepsiVar = SEC_KAPALI["hepsi"] && SEC_KAPALI["hepsi"][ad];
+  const k = hepsiVar || (SEC_KAPALI[sube] && SEC_KAPALI[sube][ad]);
   if(!k) return "";
-  if(k.tip==="surekli") return "sürekli kapalı";
-  if(k.tip==="tarih") return k.deger+" tarihine kadar kapalı";
-  if(k.tip==="saat") return "bugün "+k.deger+"'e kadar kapalı";
+  const kapsamEk = hepsiVar ? " (tüm şubeler)" : "";
+  if(k.tip==="surekli") return "sürekli kapalı"+kapsamEk;
+  if(k.tip==="sure"){
+    const bitisStr = new Date(k.bitis).toLocaleString('tr',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    return bitisStr+"'e kadar kapalı"+kapsamEk;
+  }
+  if(k.tip==="tarih") return k.deger+" tarihine kadar kapalı"+kapsamEk;
+  if(k.tip==="saat") return "bugün "+k.deger+"'e kadar kapalı"+kapsamEk;
   return "";
 }
 
@@ -4586,11 +4631,11 @@ function secenekStokYeterli(sec){
 
 /* Seçenek kapalı mı? (manuel VEYA otomatik stok)
    Müdür force-open yaptıysa stok kapatması geçersiz olur. */
-function secenekKapali(urun, gi, si, sec){
+function secenekKapali(urun, gi, si, sec, sube){
   const k = optKey(urun,gi,si);
   if(OPTION_CLOSED[k]) return "manuel";
-  // merkezi seçenek-adı kapatması (havuzdan kapatıldıysa, tüm ürünlerde)
-  if(sec && secAdiKapaliMi(sec.ad)) return "merkez";
+  // merkezi seçenek-adı kapatması (ada göre, şube bazlı)
+  if(sec && secAdiKapaliMi(sec.ad, sube)) return "merkez";
   if(FORCE_OPEN[k]) return false;              // müdür zorla açtı
   if(!secenekStokYeterli(sec)) return "stok";
   return false;
@@ -4598,9 +4643,21 @@ function secenekKapali(urun, gi, si, sec){
 
 /* Manuel aç/kapa — kasa + müdür yetkili */
 function toggleSecenekKapat(urun, gi, si){
-  const k = optKey(urun,gi,si);
-  if(OPTION_CLOSED[k]) delete OPTION_CLOSED[k];
-  else OPTION_CLOSED[k]=true;
+  const sec = PRODUCT_OPTIONS[urun][gi].secenekler[si];
+  const ad = sec.ad;
+  const sube = AKTIF_SUBE;  // kasanın çalıştığı şube
+  if(secAdiKapaliMi(ad, sube)){
+    // açık duruma getir — bu şubenin kaydını sil (hepsi kaydı varsa ona dokunma)
+    if(SEC_KAPALI[sube]) delete SEC_KAPALI[sube][ad];
+    note("✓ "+ad+" açıldı ("+sube+")");
+  } else {
+    // ertesi gün 09:00'a kadar, SADECE bu şubede
+    if(!SEC_KAPALI[sube]) SEC_KAPALI[sube]={};
+    SEC_KAPALI[sube][ad] = { tip:"sure", bitis: sonraki0900() };
+    const saat = new Date(sonraki0900()).toLocaleString('tr',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+    note("⛔ "+ad+" kapatıldı ("+sube+") — "+saat+"'e kadar");
+  }
+  menuKaydet();
   renderOptionModal();
 }
 
@@ -4862,13 +4919,14 @@ function optAdet(gi, si, delta){
 function optGecerli(){
   const gruplar = PRODUCT_OPTIONS[OPT_STATE.p.ad];
   const urun = OPT_STATE.p.ad;
+  const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   return gruplar.every((grup,gi)=>{
     if(grup.tip!=="zorunlu") return true;   // isteğe bağlı her zaman geçerli
     const m = OPT_STATE.secim[gi]||{};
     // kapalı seçili varsa geçersiz
     const kapaliSecili = Object.keys(m).some(si=>{
       const sec=grup.secenekler[si];
-      return !secIstemiyorum(sec) && secenekKapali(urun,gi,+si,sec);
+      return !secIstemiyorum(sec) && secenekKapali(urun,gi,+si,sec,optSube);
     });
     if(kapaliSecili) return false;
     const n = grupSecimSayisi(gi);
@@ -4898,7 +4956,7 @@ function renderOptionModal(){
   const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   let html = '<div class="opt-head"><span class="opt-emoji">'+p.emoji+'</span>'+
     '<div><div class="opt-name">'+p.ad+'</div><div class="opt-base">'+urunGecerliFiyat(p.ad, optSube, optKanal)+' ₺ taban</div></div>'+
-    (OPT_STATE.qr ? '' : '<button class="opt-kapat-mod'+(OPT_STATE.kapatMod?' on':'')+'" onclick="toggleKapatMod()" title="Seçenek kapat/aç">'+
+    (OPT_STATE.qr || OPT_STATE.garson ? '' : '<button class="opt-kapat-mod'+(OPT_STATE.kapatMod?' on':'')+'" onclick="toggleKapatMod()" title="Seçenek kapat/aç">'+
     (OPT_STATE.kapatMod?'✓ Düzenleniyor':'⚙ Stok')+'</button>')+
     '<button class="opt-x" onclick="closeOpt()">✕</button></div>'+
     (OPT_STATE.kapatMod?'<div class="kapat-bilgi">Tükenen malzemeyi kapat — müşteri kalan seçeneklerle devam eder. Tekrar dokun: aç.</div>':'')+
@@ -4995,10 +5053,12 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
   const secili = adet>0;
   const fiyatTxt = sec.ek ? '+'+sec.ek+' ₺' : '';
   const ist = secIstemiyorum(sec) ? ' opt-ist' : '';
-  const kapali = secIstemiyorum(sec) ? false : secenekKapali(p.ad, gi, si, sec);
+  const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
+  const kapali = secIstemiyorum(sec) ? false : secenekKapali(p.ad, gi, si, sec, optSube);
 
   if(OPT_STATE.kapatMod && !secIstemiyorum(sec)){
-    const manuelKapali = OPTION_CLOSED[optKey(p.ad,gi,si)];
+    const manuelKapali = secAdiKapaliMi(sec.ad, optSube);
+    const kapaliMetin = manuelKapali ? secKapaliMetin(sec.ad, optSube) : "";
     const stokKapali = !secenekStokYeterli(sec);
     const forceAcik = FORCE_OPEN[optKey(p.ad,gi,si)];
     const mudurMu = state.role==="mudur" || state.role==="genel";
@@ -5012,7 +5072,7 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
             '<span class="os-ad">'+sec.ad+'</span>'+
             (stokKapali&&!forceAcik?'<span class="kapat-etiket stok">stok 0</span>':'')+
             (forceAcik?'<span class="kapat-etiket force">zorla açık</span>':'')+
-            (manuelKapali?'<span class="kapat-etiket">kapalı</span>':'')+
+            (manuelKapali?'<span class="kapat-etiket">'+(kapaliMetin||'kapalı')+'</span>':'')+
             forceBtn+'</button>';
   } else if(istege){
     const kapaliCls = kapali ? ' opt-kapali' : '';
@@ -5046,23 +5106,27 @@ function confirmOpt(){
   if(!optGecerli()) return;
   const p = OPT_STATE.p;
   const gruplar = PRODUCT_OPTIONS[p.ad];
-  const secimler=[]; const ekstraRecete=[]; let ekFiyat=0;
+  const secimler=[]; const secimGruplu=[]; const ekstraRecete=[]; let ekFiyat=0;
   gruplar.forEach((grup,gi)=>{
     const m = OPT_STATE.secim[gi]||{};
+    const grupSecimleri=[];
     Object.entries(m).forEach(([si,adet])=>{
       const sec=grup.secenekler[si];
       if(!secIstemiyorum(sec)){
-        secimler.push(adet>1 ? sec.ad+" ×"+adet : sec.ad);
+        const etiket = adet>1 ? sec.ad+" ×"+adet : sec.ad;
+        secimler.push(etiket);
+        grupSecimleri.push(etiket);
       }
       ekFiyat += (sec.ek||0)*adet;
       if(sec.recete) sec.recete.forEach(r=>{ if(r.g>0) for(let q=0;q<adet;q++) ekstraRecete.push(r); });
     });
+    if(grupSecimleri.length>0) secimGruplu.push({grup:grup.ad, secenekler:grupSecimleri});
   });
   const cKanal = OPT_STATE.qr ? aktifKanal() : "masa";
   const cSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const yeniKalem = {
     ad:p.ad, fiyat:urunGecerliFiyat(p.ad, cSube, cKanal)+ekFiyat, q:1,
-    secimler:secimler, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
+    secimler:secimler, secimGruplu:secimGruplu, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
   };
   if(OPT_STATE.qr){
     // QR menüden eklendi → müşteri sepetine
@@ -5074,14 +5138,14 @@ function confirmOpt(){
     if(GARSON.paketModu){
       // garson paket sepetine ekle
       if(!GARSON.paketSepet) GARSON.paketSepet=[];
-      GARSON.paketSepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler});
+      GARSON.paketSepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, secimGruplu:yeniKalem.secimGruplu});
       closeOpt();
       note(p.ad+" → Paket sepeti");
       renderGarson();
     } else {
       // Garson masa sepetine ekle (geçici, gönderince fiş)
       if(!GARSON.masaSepet) GARSON.masaSepet=[];
-      GARSON.masaSepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, paket:false});
+      GARSON.masaSepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, secimGruplu:yeniKalem.secimGruplu, paket:false});
       closeOpt();
       note(p.ad+" → sepet");
       GARSON.view="menu"; renderGarson();
@@ -6360,13 +6424,17 @@ let OPTION_POOL = [];     // [{ad,ek}] — tekil seçenek havuzu (Sütlü Pankek
 /* Ürünlerdeki/gruplardaki tüm tekil seçenekleri OPTION_POOL'a çıkar (benzersiz) */
 function secenekleriTopla(){
   const harita = {};
-  // gruplardan
-  Object.values(OPTION_GROUPS).forEach(secs=>{
-    secs.forEach(s=>{ if(!(s.ad in harita)) harita[s.ad]=s.ek||0; });
+  // gruplardan (yeni yapı: {secenekler:[...]})
+  Object.values(OPTION_GROUPS).forEach(g=>{
+    const secs = Array.isArray(g) ? g : (g.secenekler||[]);
+    secs.forEach(s=>{ if(!(s.ad in harita) || (s.ek>0 && !harita[s.ad])) harita[s.ad]=s.ek||0; });
   });
-  // ürünlerin gömülü gruplarından
+  // ürünlerin gömülü gruplarından (sıfır olmayan fiyatı tercih et)
   Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
-    gruplar.forEach(g=>g.secenekler.forEach(s=>{ if(!(s.ad in harita)) harita[s.ad]=s.ek||0; }));
+    gruplar.forEach(g=>g.secenekler.forEach(s=>{
+      if(!(s.ad in harita)) harita[s.ad]=s.ek||0;
+      else if(s.ek>0 && !harita[s.ad]) harita[s.ad]=s.ek;  // sıfırı sıfır-olmayanla güncelle
+    }));
   });
   OPTION_POOL = Object.entries(harita).map(([ad,ek])=>({ad,ek})).sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
 }
@@ -6381,10 +6449,24 @@ function secenekGruplariniTopla(){
       if(!ad) ad = g.ad.trim();
       const mevcut = OPTION_GROUPS[ad];
       // yoksa ekle, varsa daha çok seçenekli olanı tut
-      if(!mevcut || g.secenekler.length > mevcut.length){
-        OPTION_GROUPS[ad] = g.secenekler.map(s=>({ad:s.ad, ek:s.ek||0}));
+      if(!mevcut || g.secenekler.length > (mevcut.secenekler||[]).length){
+        OPTION_GROUPS[ad] = {
+          tip: g.tip || "zorunlu",
+          min: g.min!=null ? g.min : (g.tip==="istege"?0:1),
+          max: g.max!=null ? g.max : (g.tip==="istege"?99:1),
+          secenekler: g.secenekler.map(s=>({ad:s.ad, ek:s.ek||0}))
+        };
       }
     });
+  });
+}
+/* Eski formatı (düz dizi) yeni formata yükselt (geriye uyumluluk) */
+function optionGroupsNormalize(){
+  Object.keys(OPTION_GROUPS).forEach(ad=>{
+    const g = OPTION_GROUPS[ad];
+    if(Array.isArray(g)){
+      OPTION_GROUPS[ad] = { tip:"zorunlu", min:1, max:1, secenekler:g };
+    }
   });
 }
 let URUN_GORSEL = {};     // {"Pandio": "data:image/..."} — base64 ürün görselleri
@@ -6560,22 +6642,45 @@ function kategoriSiraTasi(i, yon){
   go("fiyat", true);
 }
 
-/* === SEÇENEK GRUPLARI (yeniden kullanılabilir listeler) === */
+/* === SEÇENEK GRUPLARI (tip + min/max + seçenek listesi) === */
 function secenekGrupHtml(){
   const adlar = Object.keys(OPTION_GROUPS);
-  let html = `<div class="fy-bilgi-not">🧩 Seçenek grupları sadece <strong>isim</strong>dir (örn. "Sos Seçimi", "Meyve Seçimi"). Ürün oluştururken bu isimlerden seçip içine "Seçenekler"den seçenek eklersiniz.</div>`;
+  let html = `<div class="fy-bilgi-not">🧩 Seçenek grupları (örn. "Sos Seçimi"). Her grupta zorunlu/isteğe bağlı, en az–en çok seçim ve seçenekleri belirleyebilirsiniz. Ürün oluştururken bu grubu seçince hepsi ürüne hazır gelir.</div>`;
   html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${adlar.length} seçenek grubu</div>
     <button class="bayi-ekle-btn" onclick="secGrupEkle()">+ Yeni grup</button></div>`;
   if(adlar.length===0){ return html+`<div class="bayi-bos">Henüz seçenek grubu yok.</div>`; }
-  html += `<div class="secpool-liste">`;
+  html += `<div class="sg-liste">`;
   adlar.forEach(ad=>{
-    html += `<div class="secpool-satir">
-      <span class="sp-ad">${ad}</span>
-      <div class="sp-aksiyon">
-        <button class="kys-btn" onclick="secGrupDuzenle('${ad.replace(/'/g,"\\'")}')">✏️</button>
-        <button class="kys-btn sil" onclick="secGrupSil('${ad.replace(/'/g,"\\'")}')">🗑️</button>
+    const g = OPTION_GROUPS[ad];
+    const istege = g.tip==="istege";
+    const limitMetin = istege
+      ? (g.max && g.max<99 ? "İsteğe bağlı · en fazla "+g.max : "İsteğe bağlı · sınırsız")
+      : "Zorunlu · "+(g.min===g.max ? g.min+" seçim" : g.min+"–"+g.max+" seçim");
+    html += `<div class="sg-kart">
+      <div class="sg-ust">
+        <span class="sg-ad">${ad}</span>
+        <div class="sg-aksiyon">
+          <button class="kys-btn" onclick="secGrupAyar('${ad.replace(/'/g,"\\'")}')">⚙️</button>
+          <button class="kys-btn" onclick="secGrupDuzenle('${ad.replace(/'/g,"\\'")}')">✏️</button>
+          <button class="kys-btn sil" onclick="secGrupSil('${ad.replace(/'/g,"\\'")}')">🗑️</button>
+        </div>
       </div>
-    </div>`;
+      <div class="sg-limit"><span class="sg-limit-rozet${istege?'':' zor'}">${limitMetin}</span></div>
+      <div class="sg-secenek-liste">`;
+    (g.secenekler||[]).forEach((s,si)=>{
+      const ist = secIstemiyorum(s);
+      html += `<div class="sg-sec-satir${ist?' sg-ist':''}">
+        <span class="sg-sec-ad">${ist?'🚫 ':''}${s.ad}</span>
+        ${s.ek?`<span class="sg-sec-ek">+${s.ek} ₺</span>`:`<span class="sg-sec-ek bos">—</span>`}
+        <button class="sg-sec-sil" onclick="secGrupSecenekSil('${ad.replace(/'/g,"\\'")}',${si})">✕</button>
+      </div>`;
+    });
+    if((g.secenekler||[]).length===0) html += `<div class="sg-sec-bos">Henüz seçenek yok</div>`;
+    html += `<div class="sg-sec-ekle-row">
+        <button class="sg-sec-ekle" onclick="secGrupSecenekEkle('${ad.replace(/'/g,"\\'")}')">+ seçenek ekle</button>
+        ${!istege?`<button class="sg-ist-ekle" onclick="secGrupIstemiyorum('${ad.replace(/'/g,"\\'")}')">+ "İstemiyorum" ekle</button>`:''}
+      </div>`;
+    html += `</div></div>`;
   });
   html += `</div>`;
   return html;
@@ -6584,7 +6689,7 @@ function secGrupEkle(){
   const ad = prompt("Seçenek grubu adı (örn. Sos Seçimi):");
   if(!ad||!ad.trim()) return;
   if(OPTION_GROUPS[ad.trim()]){ note("Bu grup zaten var"); return; }
-  OPTION_GROUPS[ad.trim()] = [];
+  OPTION_GROUPS[ad.trim()] = { tip:"zorunlu", min:1, max:1, secenekler:[] };
   note("Grup eklendi: "+ad.trim());
   menuKaydet();
   go("fiyat", true);
@@ -6606,15 +6711,70 @@ function secGrupSil(ad){
   menuKaydet();
   go("fiyat", true);
 }
+/* Grup ayarı: tip + min/max (modal) */
+function secGrupAyar(ad){
+  state._sgAyarHedef = ad;
+  renderSecGrupAyar();
+  document.getElementById("grupSecModal").classList.add("on");
+}
+function renderSecGrupAyar(){
+  const ad = state._sgAyarHedef;
+  const g = OPTION_GROUPS[ad];
+  let html = `<div class="gsm-head"><div class="gsm-baslik">⚙️ "${ad}" ayarları</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="sga-govde">
+      <div class="kmpf-alan"><label>Seçim tipi</label>
+        <div class="kmpf-secim-row">
+          <button class="kmpf-secim${g.tip!=='istege'?' on':''}" onclick="secGrupTipSet('zorunlu')">Zorunlu</button>
+          <button class="kmpf-secim${g.tip==='istege'?' on':''}" onclick="secGrupTipSet('istege')">İsteğe bağlı</button>
+        </div></div>`;
+  if(g.tip==="istege"){
+    html += `<div class="kmpf-alan"><label>En fazla seçim (boş = sınırsız)</label>
+      <input class="uf-input" inputmode="numeric" value="${g.max>=99?'':g.max}" placeholder="∞" oninput="secGrupMaxSet(this.value)"></div>`;
+  } else {
+    html += `<div class="uf-ikili">
+      <div class="kmpf-alan"><label>En az seçim</label>
+        <input class="uf-input" inputmode="numeric" value="${g.min}" oninput="secGrupMinSet(this.value)"></div>
+      <div class="kmpf-alan"><label>En çok seçim</label>
+        <input class="uf-input" inputmode="numeric" value="${g.max}" oninput="secGrupMaxSet(this.value)"></div>
+    </div>`;
+  }
+  html += `</div><button class="kmpf-kaydet" onclick="grupSecModalKapat();go('fiyat',true)">Tamam</button>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function secGrupTipSet(tip){
+  const g = OPTION_GROUPS[state._sgAyarHedef];
+  g.tip = tip;
+  if(tip==="istege"){ g.min=0; g.max=99; }
+  else { if(g.max>=99) g.max=1; if(g.min<1) g.min=1; if(g.min>g.max) g.min=g.max; }
+  menuKaydet(); renderSecGrupAyar();
+}
+function secGrupMinSet(v){ const g=OPTION_GROUPS[state._sgAyarHedef]; g.min=parseInt(v)||0; menuKaydet(); }
+function secGrupMaxSet(v){ const g=OPTION_GROUPS[state._sgAyarHedef]; g.max=parseInt(v)|| (g.tip==='istege'?99:1); menuKaydet(); }
+
 function secGrupSecenekEkle(ad){
   state._secGrupHedef = ad;
   renderSecPoolSecModal("");
   document.getElementById("grupSecModal").classList.add("on");
 }
+/* "İstemiyorum" seçeneği ekle (özel) */
+function secGrupIstemiyorum(ad){
+  const g = OPTION_GROUPS[ad];
+  if(g.secenekler.some(s=>secIstemiyorum(s))){ note("Zaten İstemiyorum seçeneği var"); return; }
+  // grup adından türet: "Sos Seçimi" → "Sos İstemiyorum"
+  const kok = ad.replace(/\s*seçimi?\s*$/i,"").trim();
+  g.secenekler.push({ad:(kok||ad)+" İstemiyorum", ek:0});
+  // istemiyorum varsa zorunlu grupta min 0 olur (seçmeyebilir)
+  if(g.tip==="zorunlu" && g.min>0) g.min=0;
+  note('"İstemiyorum" seçeneği eklendi');
+  menuKaydet();
+  go("fiyat", true);
+}
 /* Havuzdan seçenek seçme modalı (gruba seçenek eklerken) */
 function renderSecPoolSecModal(arama){
   const ad = state._secGrupHedef;
-  const mevcutAdlar = (OPTION_GROUPS[ad]||[]).map(s=>s.ad);
+  const g = OPTION_GROUPS[ad];
+  const mevcutAdlar = (g.secenekler||[]).map(s=>s.ad);
   const ara = (arama||"").toLocaleLowerCase("tr-TR");
   const liste = OPTION_POOL.filter(s=>!ara || s.ad.toLocaleLowerCase("tr-TR").includes(ara));
   let html = `<div class="gsm-head">
@@ -6628,7 +6788,7 @@ function renderSecPoolSecModal(arama){
     liste.forEach(s=>{
       const ekli = mevcutAdlar.includes(s.ad);
       html += `<button class="gsm-kart sp-sec-kart${ekli?' ekli':''}" ${ekli?'disabled':`onclick="secGrupSecenekHavuzdan('${s.ad.replace(/'/g,"\\'")}')"`}>
-        <div class="gsm-kart-ad">${s.ad} ${s.ek?`<span class="gsm-say">+${s.ek}₺</span>`:`<span class="gsm-say">ücretsiz</span>`}</div>
+        <div class="gsm-kart-ad">${s.ad}</div>
         ${ekli?'<div class="gsm-kart-ornek">✓ zaten ekli</div>':''}
       </button>`;
     });
@@ -6640,32 +6800,27 @@ function renderSecPoolSecModal(arama){
 function secGrupSecenekHavuzdan(secAd){
   const ad = state._secGrupHedef;
   const havuz = OPTION_POOL.find(s=>s.ad===secAd);
-  OPTION_GROUPS[ad].push({ad:havuz.ad, ek:havuz.ek||0});
+  OPTION_GROUPS[ad].secenekler.push({ad:secAd, ek:havuz?havuz.ek||0:0});
   menuKaydet();
-  renderSecPoolSecModal("");  // modal açık kalsın, birden fazla eklenebilsin
-  // arkadaki listeyi de güncelle
+  renderSecPoolSecModal("");
   const main=document.querySelector(".main"); if(main) viewFiyat(main);
 }
 function secGrupYeniSecenek(){
   const ad = state._secGrupHedef;
   const sad = prompt("Yeni seçenek adı:");
   if(!sad||!sad.trim()) return;
-  const ekV = prompt("Ek fiyat (₺, ücretsizse 0):", "0");
-  if(ekV==null) return;
-  const yeni = {ad:sad.trim(), ek:parseInt(ekV)||0};
-  // havuza ekle (yoksa)
+  const yeni = {ad:sad.trim(), ek:0};
   if(!OPTION_POOL.find(s=>s.ad===yeni.ad)){
     OPTION_POOL.push({...yeni});
     OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
   }
-  // gruba ekle
-  OPTION_GROUPS[ad].push({...yeni});
+  OPTION_GROUPS[ad].secenekler.push({...yeni});
   menuKaydet();
   renderSecPoolSecModal("");
   const main=document.querySelector(".main"); if(main) viewFiyat(main);
 }
 function secGrupSecenekSil(ad, si){
-  OPTION_GROUPS[ad].splice(si,1);
+  OPTION_GROUPS[ad].secenekler.splice(si,1);
   menuKaydet();
   go("fiyat", true);
 }
@@ -6673,20 +6828,41 @@ function secGrupSecenekSil(ad, si){
 /* === SEÇENEKLER (tekil havuz) === */
 function secenekPoolHtml(){
   if(!state.secAra) state.secAra="";
+  const isGenel = state.role==="genel";
+  // hedef şube: genel müdür seçer (varsayılan hepsi), müdür kendi şubesi
+  if(isGenel){ if(!state.secKapatSube) state.secKapatSube="hepsi"; }
+  else state.secKapatSube = AKTIF_SUBE;
+  const hedefSube = state.secKapatSube;
   const ara = state.secAra.toLocaleLowerCase("tr-TR");
   const liste = OPTION_POOL.map((s,i)=>({s,i})).filter(x=>!ara || x.s.ad.toLocaleLowerCase("tr-TR").includes(ara));
-  const kapaliSay = OPTION_POOL.filter(s=>secAdiKapaliMi(s.ad)).length;
-  let html = `<div class="fy-bilgi-not">🔘 Tekil seçenek havuzu (örn. "Sütlü Pankek", "Çilek", "Karamel Sos"). Bir seçeneği kapatırsanız, o seçeneği içeren <strong>tüm ürünlerde</strong> seçilemez olur.</div>`;
+  // kapalı kontrolü: hedef şubeye göre (hepsi seçiliyse "hepsi" kaydı + tüm şubelerde herhangi biri)
+  const kapaliKontrol = (ad)=> hedefSube==="hepsi" ? !!(SEC_KAPALI["hepsi"]&&SEC_KAPALI["hepsi"][ad]) : secAdiKapaliMi(ad, hedefSube);
+  const kapaliSay = OPTION_POOL.filter(s=>kapaliKontrol(s.ad)).length;
+
+  let html = `<div class="fy-bilgi-not">🔘 Tekil seçenek havuzu. Buradaki <strong>fiyat</strong>, seçeneği bir gruba/ürüne eklerken otomatik gelir. Bir seçeneğin fiyatını değiştirirseniz, onu kullanan tüm gruplara ve ürünlere yansır. Kapatma şube bazlıdır.</div>`;
+  // şube seçici (genel müdür)
+  if(isGenel){
+    html += `<div class="sec-sube-row"><label>Şube:</label>
+      <select class="gf-select" onchange="secKapatSubeSec(this.value)">
+        <option value="hepsi"${hedefSube==="hepsi"?' selected':''}>🏢 Tüm şubeler</option>
+        ${DEMO_BRANCHES.map(b=>`<option value="${b.ad}"${hedefSube===b.ad?' selected':''}>${b.ad}</option>`).join("")}
+      </select></div>`;
+  } else {
+    html += `<div class="sec-sube-row"><label>🏬 ${hedefSube}</label></div>`;
+  }
   html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${OPTION_POOL.length} seçenek${kapaliSay?` · <span style="color:var(--err)">${kapaliSay} kapalı</span>`:''}</div>
-    <button class="bayi-ekle-btn" onclick="secPoolEkle()">+ Yeni seçenek</button></div>`;
+    <div style="display:flex;gap:8px">
+    <button class="kys-btn" style="width:auto;padding:0 12px;font-size:12px" onclick="secHavuzTazele()" title="Ürünlerdeki fiyatları havuza çek">🔄 Fiyatları tazele</button>
+    <button class="bayi-ekle-btn" onclick="secPoolEkle()">+ Yeni seçenek</button></div></div>`;
   html += `<div class="sec-ara-kutu"><input class="uf-input" placeholder="🔍 Seçenek ara..." value="${(state.secAra||'').replace(/"/g,'&quot;')}" oninput="secPoolAra(this.value)"></div>`;
   if(liste.length===0){ return html+`<div class="bayi-bos">${ara?'Eşleşen seçenek yok.':'Henüz seçenek yok.'}</div>`; }
   html += `<div class="secpool-liste">`;
   liste.forEach(({s,i})=>{
-    const kapali = secAdiKapaliMi(s.ad);
-    const kapaliMetin = kapali ? secKapaliMetin(s.ad) : "";
+    const kapali = kapaliKontrol(s.ad);
+    const kapaliMetin = kapali ? (hedefSube==="hepsi" ? secKapaliMetin(s.ad,"hepsi") : secKapaliMetin(s.ad, hedefSube)) : "";
     html += `<div class="secpool-satir${kapali?' sp-kapali':''}">
       <span class="sp-ad">${s.ad}</span>
+      <span class="sp-fiyat">${s.ek?'+'+s.ek+' ₺':'<span class="sp-ucretsiz2">ücretsiz</span>'}</span>
       ${kapali?`<span class="sp-durum-kapali">⛔ ${kapaliMetin}</span>`:`<span class="sp-durum-acik">✓ açık</span>`}
       <div class="sp-aksiyon">
         <button class="sp-kapat-btn${kapali?' acik':''}" onclick="secPoolKapatAc(${i})">${kapali?'Aç':'Kapat'}</button>
@@ -6698,12 +6874,30 @@ function secenekPoolHtml(){
   html += `</div>`;
   return html;
 }
+function secKapatSubeSec(v){ state.secKapatSube=v; go("fiyat", true); }
+/* Havuzdaki fiyatları ürünlerdeki gerçek fiyatlardan tazele */
+function secHavuzTazele(){
+  if(!confirm("Havuzdaki fiyatlar, ürünlerde kullanılan gerçek fiyatlarla güncellenecek. Devam edilsin mi?")) return;
+  const fiyatHarita = {};
+  Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+    gruplar.forEach(g=>g.secenekler.forEach(s=>{
+      if(s.ek>0 && !fiyatHarita[s.ad]) fiyatHarita[s.ad]=s.ek;
+    }));
+  });
+  let say=0;
+  OPTION_POOL.forEach(s=>{ if(fiyatHarita[s.ad] && s.ek!==fiyatHarita[s.ad]){ s.ek=fiyatHarita[s.ad]; say++; } });
+  note(say+" seçeneğin fiyatı güncellendi");
+  menuKaydet();
+  go("fiyat", true);
+}
 function secPoolAra(v){ state.secAra=v; go("fiyat", true); }
 function secPoolEkle(){
   const ad = prompt("Seçenek adı (örn. Sütlü Pankek):");
   if(!ad||!ad.trim()) return;
   if(OPTION_POOL.find(s=>s.ad===ad.trim())){ note("Bu seçenek zaten var"); return; }
-  OPTION_POOL.push({ad:ad.trim(), ek:0});
+  const ekV = prompt("Ek fiyat (₺, ücretsizse 0):", "0");
+  if(ekV==null) return;
+  OPTION_POOL.push({ad:ad.trim(), ek:parseInt(ekV)||0});
   OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
   note("Seçenek eklendi: "+ad.trim());
   menuKaydet();
@@ -6713,55 +6907,83 @@ function secPoolDuzenle(i){
   const s = OPTION_POOL[i];
   const ad = prompt("Seçenek adı:", s.ad);
   if(ad==null) return;
+  const ekV = prompt("Ek fiyat (₺):", String(s.ek||0));
+  if(ekV==null) return;
   const eskiAd = s.ad;
-  s.ad = ad.trim()||s.ad;
-  // ad değiştiyse kapatma kaydını taşı
-  if(eskiAd!==s.ad && SEC_KAPALI[eskiAd]){ SEC_KAPALI[s.ad]=SEC_KAPALI[eskiAd]; delete SEC_KAPALI[eskiAd]; }
+  const yeniAd = ad.trim()||s.ad;
+  const yeniEk = parseInt(ekV)||0;
+  s.ad = yeniAd;
+  s.ek = yeniEk;
+  // ad değiştiyse tüm şubelerdeki kapatma kayıtlarını taşı
+  if(eskiAd!==yeniAd){
+    Object.keys(SEC_KAPALI).forEach(sb=>{
+      if(SEC_KAPALI[sb] && SEC_KAPALI[sb][eskiAd]){ SEC_KAPALI[sb][yeniAd]=SEC_KAPALI[sb][eskiAd]; delete SEC_KAPALI[sb][eskiAd]; }
+    });
+  }
+  // FİYAT/AD DEĞİŞİKLİĞİNİ kullanılan her yere yansıt (gruplar + ürünler)
+  secenekFiyatYansit(eskiAd, yeniAd, yeniEk);
   OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
-  note("Seçenek güncellendi");
+  note("Seçenek güncellendi — kullanan tüm ürünlere yansıdı");
   menuKaydet();
   go("fiyat", true);
+}
+/* Bir havuz seçeneğinin ad/fiyat değişikliğini gruplara ve ürünlere yansıt */
+function secenekFiyatYansit(eskiAd, yeniAd, yeniEk){
+  // seçenek gruplarında
+  Object.values(OPTION_GROUPS).forEach(g=>{
+    (g.secenekler||[]).forEach(s=>{ if(s.ad===eskiAd){ s.ad=yeniAd; s.ek=yeniEk; } });
+  });
+  // ürünlerin gömülü seçeneklerinde
+  Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+    gruplar.forEach(g=>g.secenekler.forEach(s=>{ if(s.ad===eskiAd){ s.ad=yeniAd; s.ek=yeniEk; } }));
+  });
 }
 function secPoolSil(i){
   const s = OPTION_POOL[i];
   if(!confirm('"'+s.ad+'" seçeneği havuzdan silinsin mi?')) return;
-  delete SEC_KAPALI[s.ad];
+  Object.keys(SEC_KAPALI).forEach(sb=>{ if(SEC_KAPALI[sb]) delete SEC_KAPALI[sb][s.ad]; });
   OPTION_POOL.splice(i,1);
   note("Seçenek silindi");
   menuKaydet();
   go("fiyat", true);
 }
-/* Seçenek aç/kapa modalı */
+/* Seçenek aç/kapa modalı (seçili şubede) */
 function secPoolKapatAc(i){
   const s = OPTION_POOL[i];
-  if(secAdiKapaliMi(s.ad)){
-    // açık duruma getir
-    delete SEC_KAPALI[s.ad];
-    note(s.ad+" açıldı");
+  const hedefSube = state.secKapatSube || AKTIF_SUBE;
+  const zatenKapali = hedefSube==="hepsi" ? !!(SEC_KAPALI["hepsi"]&&SEC_KAPALI["hepsi"][s.ad]) : secAdiKapaliMi(s.ad, hedefSube);
+  if(zatenKapali){
+    // aç (seçili şube kaydını sil)
+    if(SEC_KAPALI[hedefSube]) delete SEC_KAPALI[hedefSube][s.ad];
+    note(s.ad+" açıldı ("+(hedefSube==="hepsi"?"tüm şubeler":hedefSube)+")");
     menuKaydet();
     go("fiyat", true);
     return;
   }
-  // kapatma seçenekleri modalı
   state._kapatHedef = s.ad;
+  state._kapatSube = hedefSube;
   renderSecKapatModal();
   document.getElementById("grupSecModal").classList.add("on");
 }
 function renderSecKapatModal(){
   const ad = state._kapatHedef;
-  // bu seçeneği içeren ürün sayısı
+  const sube = state._kapatSube || AKTIF_SUBE;
   let urunSay=0;
   Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
     if(gruplar.some(g=>g.secenekler.some(sc=>sc.ad===ad))) urunSay++;
   });
+  const kapsamAd = sube==="hepsi" ? "tüm şubelerde" : sube+" şubesinde";
   let html = `<div class="gsm-head">
     <div class="gsm-baslik">⛔ "${ad}" kapat</div>
     <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
-    <div class="skm-bilgi">Bu seçenek <strong>${urunSay} üründe</strong> kullanılıyor. Kapatınca bu ürünlerin hepsinde seçilemez olur.</div>
+    <div class="skm-bilgi">Bu seçenek <strong>${urunSay} üründe</strong> kullanılıyor. <strong>${kapsamAd}</strong> bu ürünlerin hepsinde seçilemez olur.</div>
     <div class="skm-secenekler">
       <button class="skm-opt" onclick="secKapatUygula('surekli')">
         <span class="skm-opt-ad">🔒 Sürekli kapalı</span>
         <span class="skm-opt-not">Tekrar açana kadar kapalı kalır</span></button>
+      <button class="skm-opt" onclick="secKapatUygula('yarin0900')">
+        <span class="skm-opt-ad">🌅 Ertesi gün 09:00'a kadar</span>
+        <span class="skm-opt-not">Yarın sabah otomatik açılır</span></button>
       <button class="skm-opt" onclick="secKapatModalSaat()">
         <span class="skm-opt-ad">🕐 Saate kadar kapalı</span>
         <span class="skm-opt-not">Bugün belirli bir saate kadar</span></button>
@@ -6796,11 +7018,17 @@ function secKapatModalTarih(){
 }
 function secKapatUygula(tip, deger){
   const ad = state._kapatHedef;
+  const sube = state._kapatSube || AKTIF_SUBE;
   if(tip==="saat" && !deger){ note("Saat seçin"); return; }
   if(tip==="tarih" && !deger){ note("Tarih seçin"); return; }
-  SEC_KAPALI[ad] = {tip, deger:deger||""};
+  if(!SEC_KAPALI[sube]) SEC_KAPALI[sube]={};
+  if(tip==="yarin0900"){
+    SEC_KAPALI[sube][ad] = { tip:"sure", bitis: sonraki0900() };
+  } else {
+    SEC_KAPALI[sube][ad] = {tip, deger:deger||""};
+  }
   grupSecModalKapat();
-  note(ad+" kapatıldı ("+secKapaliMetin(ad)+")");
+  note(ad+" kapatıldı ("+secKapaliMetin(ad, sube)+")");
   menuKaydet();
   go("fiyat", true);
 }
@@ -7031,8 +7259,13 @@ function renderGrupSecModal(arama){
     html += `<div class="bayi-bos">Eşleşen grup yok.</div>`;
   } else {
     adlar.forEach(ad=>{
+      const g = OPTION_GROUPS[ad];
+      const secs = g.secenekler||[];
+      const ornek = secs.slice(0,4).map(s=>s.ad).join(", ")+(secs.length>4?"...":"");
+      const tipMetin = g.tip==="istege" ? "isteğe bağlı" : "zorunlu";
       html += `<button class="gsm-kart" onclick="ufHazirGrupEkle('${ad.replace(/'/g,"\\'")}')">
-        <div class="gsm-kart-ad">${ad}</div>
+        <div class="gsm-kart-ad">${ad} <span class="gsm-say">${secs.length} seçenek · ${tipMetin}</span></div>
+        ${ornek?`<div class="gsm-kart-ornek">${ornek}</div>`:''}
       </button>`;
     });
   }
@@ -7042,8 +7275,14 @@ function renderGrupSecModal(arama){
 }
 /* Seçilen grup ismini ürüne ekle — SADECE İSİM, seçenekler boş (sonra + seçenek ile eklenir) */
 function ufHazirGrupEkle(ad){
+  const g = OPTION_GROUPS[ad];
+  // grubun tip/min/max + tüm seçeneklerini ürüne kopyala
   state.urunForm.gruplar.push({
-    ad:ad, tip:"zorunlu", min:1, max:1, secenekler:[]
+    ad: ad,
+    tip: g.tip || "zorunlu",
+    min: g.min!=null ? g.min : (g.tip==="istege"?0:1),
+    max: g.max!=null ? g.max : (g.tip==="istege"?99:1),
+    secenekler: JSON.parse(JSON.stringify(g.secenekler||[]))
   });
   grupSecModalKapat();
   renderUrunForm();
@@ -7070,7 +7309,9 @@ function ufSecAdSec(gi, si, val){
   const s = state.urunForm.gruplar[gi].secenekler[si];
   if(val==="__ozel__"){ s.ad=""; renderUrunForm(); return; }
   s.ad = val;
-  // fiyat elle girilir; havuzdan otomatik fiyat getirilmez
+  // havuzdaki fiyatı otomatik getir (sağdaki kutuya)
+  const havuz = OPTION_POOL.find(x=>x.ad===val);
+  if(havuz) s.ek = havuz.ek||0;
   renderUrunForm();
 }
 function ufSecSil(gi,si){ state.urunForm.gruplar[gi].secenekler.splice(si,1); renderUrunForm(); }
@@ -8396,8 +8637,20 @@ function mutfakFisiBas(kaynak){
 function fisIcerikHtml(fis){
   const masaUrun=fis.kalemler.filter(it=>!it.paket);
   const paketUrun=fis.kalemler.filter(it=>it.paket);
-  const satir=(it)=>'<div class="fis-satir"><span class="fis-urun">'+it.ad+'</span>'+(it.kisi?'<span class="fis-kisi">'+it.kisi+'</span>':'')+'</div>'+
-    (it.secimler&&it.secimler.length?'<div class="fis-ops">'+it.secimler.map(s=>'+ '+s).join('<br>')+'</div>':'');
+  const satir=(it)=>{
+    let h='<div class="fis-satir"><span class="fis-urun">'+it.ad+'</span>'+(it.kisi?'<span class="fis-kisi">'+it.kisi+'</span>':'')+'</div>';
+    if(it.secimGruplu && it.secimGruplu.length){
+      // grup başlıklı: grup adı üstte, seçenekler altında
+      h += '<div class="fis-ops">'+it.secimGruplu.map(g=>
+        '<div class="fis-grup-ad">'+g.grup+':</div>'+
+        g.secenekler.map(s=>'<div class="fis-grup-sec">• '+s+'</div>').join('')
+      ).join('')+'</div>';
+    } else if(it.secimler && it.secimler.length){
+      // eski düz liste (geriye uyumluluk)
+      h += '<div class="fis-ops">'+it.secimler.map(s=>'+ '+s).join('<br>')+'</div>';
+    }
+    return h;
+  };
   let icerik='<div class="fis-kagit">'+
     '<div class="fis-baslik">MİNİPAN · MUTFAK FİŞİ</div>'+
     '<div class="fis-alt">'+fis.baslik+(fis.alt?' · '+fis.alt:'')+'</div>'+
@@ -9897,6 +10150,7 @@ b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
 menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
+optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
 initFirebase();
 
