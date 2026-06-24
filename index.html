@@ -368,6 +368,9 @@ tr:last-child td{border-bottom:none}
 .kat-yonetim-liste{display:flex; flex-direction:column; gap:8px}
 .kat-yonetim-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px}
 .kys-emoji{font-size:22px}
+.kys-gorsel-alan{width:46px; height:46px; min-width:46px; display:grid; place-items:center}
+.kys-gorsel{width:46px; height:46px; border-radius:9px; object-fit:cover; border:1px solid var(--line)}
+.kys-btn.gorsel{background:var(--brand-soft); color:var(--brand-d)}
 .kys-ad{flex:1; font-weight:700; font-size:14px}
 .kys-sayi{font-size:12px; color:var(--ink-3)}
 .kys-aksiyon{display:flex; gap:5px}
@@ -438,6 +441,12 @@ tr:last-child td{border-bottom:none}
 .uf-grup-ust{display:flex; gap:8px; align-items:center}
 .uf-grup-ad{flex:1; padding:9px 12px; border-radius:9px; border:1.5px solid var(--line); font-size:13.5px; font-weight:700; background:var(--surface)}
 .uf-grup-sil{width:34px; height:34px; min-width:34px; border-radius:9px; background:var(--err-soft); color:var(--err); border:none; font-size:14px}
+.uf-tasi-grup{display:flex; flex-direction:column; gap:2px; margin-right:2px}
+.uf-tasi-sec{display:flex; flex-direction:column; gap:1px; margin-right:2px}
+.uf-tasi-btn{width:26px; height:16px; min-width:26px; border-radius:5px; background:var(--surface-2); border:1px solid var(--line); color:var(--ink-2); font-size:8px; line-height:1; padding:0; cursor:pointer; display:flex; align-items:center; justify-content:center}
+.uf-tasi-btn.sm{width:22px; height:14px; min-width:22px; font-size:7px}
+.uf-tasi-btn:disabled{opacity:.25; cursor:default}
+.uf-tasi-btn:not(:disabled):active{background:var(--brand-soft); border-color:var(--brand)}
 .uf-grup-ayar{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
 .uf-tip-secim{display:flex; gap:6px}
 .uf-tip{padding:7px 12px; border-radius:8px; background:var(--surface); border:1.5px solid var(--line); font-size:12px; font-weight:700; color:var(--ink-2)}
@@ -819,6 +828,66 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-kat-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); text-align:left}
 .qr-kat-kart:active{transform:scale(.97)}
 .qkk-gorsel{aspect-ratio:4/3; display:grid; place-items:center}
+/* === ÜRÜN PUAN/YORUM === */
+.yld{color:#d8d2c4} .yld.dolu{color:#f5a623}
+.qr-puan-rozet{display:inline-flex; align-items:center; gap:3px; background:#fdeef0; color:#d8493f; border:none; border-radius:99px; padding:3px 10px; font-size:11.5px; font-weight:800; margin:3px 0 5px; cursor:pointer}
+.qr-puan-rozet.bos{background:var(--surface-2); color:var(--ink-3); font-weight:700}
+.qpr-yildiz{color:#f5a623}
+.qpr-adet{font-weight:600; opacity:.8}
+.qr-yorum-screen{background:var(--surface-2)}
+.qr-yorum-top{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; background:var(--brand); color:#fff}
+.qr-yorum-top .qr-close{background:rgba(255,255,255,.2); color:#fff}
+.qr-yorum-baslik{font-size:17px; font-weight:800}
+.qr-yorum-urunad{font-size:20px; font-weight:800; text-align:center; padding:18px 16px 14px}
+.qr-yorum-ozet{display:flex; gap:18px; background:var(--surface); margin:0 14px; border-radius:16px; padding:18px; box-shadow:var(--shadow)}
+.qyo-sol{text-align:center; display:flex; flex-direction:column; gap:3px; justify-content:center; min-width:90px}
+.qyo-puan{font-size:38px; font-weight:800; line-height:1}
+.qyo-yildiz{font-size:15px}
+.qyo-adet{font-size:12px; color:var(--ink-3); font-weight:600}
+.qyo-dagilim{flex:1; display:flex; flex-direction:column; gap:5px; justify-content:center}
+.qyo-satir{display:flex; align-items:center; gap:8px; font-size:12px}
+.qyo-y{color:#f5a623; font-weight:700; white-space:nowrap; min-width:26px}
+.qyo-bar{flex:1; height:8px; background:var(--surface-2); border-radius:99px; overflow:hidden}
+.qyo-bar-dolu{height:100%; background:var(--brand); border-radius:99px}
+.qyo-n{font-weight:700; color:var(--ink-2); min-width:14px; text-align:right}
+.qr-yorum-bos{text-align:center; color:var(--ink-3); padding:40px 20px; font-size:14px}
+.qr-yorum-liste{padding:16px 14px; display:flex; flex-direction:column; gap:10px}
+.qr-yorum-kart{background:var(--surface); border-radius:14px; padding:14px 16px; box-shadow:var(--shadow)}
+.qyk-ust{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px}
+.qyk-isim{font-weight:800; font-size:14px}
+.qyk-yildiz{font-size:13px}
+.qyk-metin{font-size:13.5px; color:var(--ink-2); line-height:1.5; margin-bottom:6px}
+.qyk-tarih{font-size:11.5px; color:var(--ink-3); text-align:right}
+.qr-yorum-ekle-btn{position:sticky; bottom:0; margin:14px; width:calc(100% - 28px); padding:16px; border-radius:14px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; box-shadow:var(--shadow-lg)}
+.qye-govde{padding:6px 16px; display:flex; flex-direction:column; gap:18px}
+.qye-alan{display:flex; flex-direction:column; gap:8px}
+.qye-alan label{font-size:13px; font-weight:800; color:var(--ink-2)}
+.qye-yildiz-sec{display:flex; gap:6px; justify-content:center}
+.qye-yld{font-size:38px; background:none; border:none; color:#d8d2c4; cursor:pointer; padding:0}
+.qye-yld.on{color:#f5a623}
+.qye-input,.qye-textarea{padding:13px 14px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; background:var(--surface); font-family:inherit}
+.qye-textarea{min-height:90px; resize:vertical}
+.qye-bilgi{font-size:12.5px; color:var(--ink-3); background:var(--surface-2); padding:11px 13px; border-radius:10px; line-height:1.5}
+/* Yorum yönetimi (müdür) */
+.yym-sekme-row{display:flex; gap:8px; margin-bottom:14px}
+.yym-sekme{flex:1; padding:11px; border-radius:10px; background:var(--surface-2); border:1.5px solid transparent; font-size:13px; font-weight:700; color:var(--ink-2)}
+.yym-sekme.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.yym-liste{display:flex; flex-direction:column; gap:10px}
+.yym-kart{background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:14px 16px}
+.yym-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
+.yym-urun{font-weight:800; font-size:14.5px}
+.yym-yildiz{font-size:14px}
+.yym-isim{font-size:12.5px; color:var(--ink-2); font-weight:600; margin-bottom:8px}
+.yym-tarih{color:var(--ink-3); font-weight:400}
+.yym-metin{font-size:13.5px; color:var(--ink); line-height:1.5; background:var(--surface-2); padding:10px 13px; border-radius:9px; margin-bottom:10px}
+.yym-metin.yym-bos{color:var(--ink-3); font-style:italic}
+.yym-aksiyon{display:flex; gap:8px}
+.yym-btn{flex:1; padding:10px; border-radius:9px; border:none; font-size:12.5px; font-weight:800; cursor:pointer}
+.yym-btn.onay{background:var(--ok-soft); color:var(--ok)}
+.yym-btn.gizle{background:var(--surface-2); color:var(--ink-2)}
+.yym-btn.red{background:var(--err-soft); color:var(--err)}
+.qkk-gorsel.qkk-foto{padding:0; overflow:hidden}
+.qkk-gorsel.qkk-foto img{width:100%; height:100%; object-fit:cover; display:block}
 .qkk-gorsel span{font-size:54px; opacity:.9}
 .qkk-bilgi{padding:12px 14px}
 .qkk-ad{font-size:15.5px; font-weight:800; line-height:1.2}
@@ -5152,14 +5221,14 @@ function confirmOpt(){
     }
   } else if(state.kasaPaket){
     // Kasa paket sepetine ekle
-    state.kasaPaket.sepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler});
+    state.kasaPaket.sepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, secimGruplu:yeniKalem.secimGruplu});
     closeOpt();
     note(p.ad+" → 🥡 Paket sepeti");
     go("satis");
   } else if(state.kasaEkle){
     // kasa masa sepetine ekle (geçici)
     if(!state.kasaEkle.sepet) state.kasaEkle.sepet=[];
-    state.kasaEkle.sepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, paket:false});
+    state.kasaEkle.sepet.push({ad:yeniKalem.ad, fiyat:yeniKalem.fiyat, secimler:yeniKalem.secimler, secimGruplu:yeniKalem.secimGruplu, paket:false});
     closeOpt();
     note(p.ad+" → sepet ("+state.kasaEkle.kisi+")");
     go("satis");
@@ -6183,14 +6252,14 @@ function kasaPaketGonder(){
   const takipId="S"+(_takipId++);
   PAKET_ORDERS.push({
     id:_paketId++, takipId:takipId, tip:"paket", musteri:kp.musteri, tel:null,
-    adres:null, masa:null, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, fiyat:c.fiyat})),
+    adres:null, masa:null, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat})),
     tutar:t, odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()
   });
   consumeRecipe(kp.sepet.map(c=>({...c, q:1, ekstraRecete:[]})));
   // OTOMATİK MUTFAK FİŞİ
   mutfakFisiBas({
     tip:"paket", baslik:"PAKET (GEL-AL)", alt:kp.musteri,
-    kisi:kp.musteri, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, paket:true}))
+    kisi:kp.musteri, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, paket:true}))
   });
   note("🥡 Paket sipariş mutfağa gönderildi · "+kp.musteri);
   state.kasaPaket=null; state.kasaSekme="paket"; go("masalar");
@@ -6298,13 +6367,13 @@ function kasaMasaGonder(){
   let k=s.kisiler.find(x=>x.ad===kisi);
   if(!k){ k={ad:kisi, kalemler:[]}; s.kisiler.push(k); }
   ke.sepet.forEach(c=>{
-    k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+    k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
   });
   consumeRecipe(ke.sepet.map(c=>({...c, q:1, ekstraRecete:[]})));
   // TEK FİŞ — sadece bu sepet
   mutfakFisiBas({
     tip:"masa", baslik:"MASA "+m, alt:kisi, kisi:kisi, masa:m,
-    kalemler:ke.sepet.map(c=>({ad:c.ad, secimler:c.secimler, kisi:kisi, paket:!!c.paket}))
+    kalemler:ke.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, kisi:kisi, paket:!!c.paket}))
   });
   // NOT: masadan paketli ürün masaya bağlı kalır (kalemde paket:true) —
   // ayrı PAKET_ORDERS oluşturulmaz, ödemesi masayla birlikte alınır.
@@ -6470,6 +6539,8 @@ function optionGroupsNormalize(){
   });
 }
 let URUN_GORSEL = {};     // {"Pandio": "data:image/..."} — base64 ürün görselleri
+let KAT_GORSEL = {};      // {"Tatlılar": "data:image/webp..."} — base64 kategori görselleri
+let YORUMLAR = {};        // {"Pandio": [{isim,puan,metin,tarih,onay}] } — ürün yorumları/puanları
 
 function viewFiyat(main){
   const isGenel = state.role==="genel";
@@ -6482,12 +6553,14 @@ function viewFiyat(main){
     <div class="sh-sub">${isGenel?'Merkez menü yönetimi':AKTIF_SUBE+' fiyatları'}</div></div></div>`;
 
   if(isGenel){
+    const bekleyenSay = bekleyenYorumlar().length;
     const sekmeler = [
       {k:"fiyatlar", ad:"💰 Genel Fiyatlar"},
       {k:"kategori", ad:"🗂️ Kategoriler"},
       {k:"secenek",  ad:"🧩 Seçenek Grupları"},
       {k:"secpool",  ad:"🔘 Seçenekler"},
       {k:"urun",     ad:"📦 Ürünler"},
+      {k:"yorum",    ad:"💬 Yorumlar"+(bekleyenSay?" ("+bekleyenSay+")":"")},
     ];
     html += `<div class="fyt-sekme-row">`;
     sekmeler.forEach(s=>{
@@ -6501,10 +6574,65 @@ function viewFiyat(main){
   else if(sekme==="secenek") html += secenekGrupHtml();
   else if(sekme==="secpool") html += secenekPoolHtml();
   else if(sekme==="urun") html += urunYonetimHtml();
+  else if(sekme==="yorum") html += yorumYonetimHtml();
   html += `</div>`;
   main.innerHTML = html;
 }
 function fiyatSekmeSec(k){ state.fiyatSekme=k; go("fiyat"); }
+
+/* === YORUM YÖNETİMİ (müdür/genel müdür onayı) === */
+function yorumYonetimHtml(){
+  if(!state.yorumSekme) state.yorumSekme="bekleyen";
+  const bekleyen = bekleyenYorumlar();
+  const tumOnayli=[];
+  Object.entries(YORUMLAR).forEach(([urun,ys])=>ys.forEach((y,i)=>{ if(y.onay) tumOnayli.push({urun,idx:i,...y}); }));
+  tumOnayli.sort((a,b)=>b.tarih-a.tarih);
+
+  let html = `<div class="fy-bilgi-not">💬 Müşterilerin QR menüde bıraktığı puan ve yorumlar. Onayladıklarınız menüde yayınlanır.</div>`;
+  html += `<div class="yym-sekme-row">
+    <button class="yym-sekme${state.yorumSekme==='bekleyen'?' on':''}" onclick="yorumSekmeSec('bekleyen')">⏳ Onay bekleyen${bekleyen.length?' ('+bekleyen.length+')':''}</button>
+    <button class="yym-sekme${state.yorumSekme==='onayli'?' on':''}" onclick="yorumSekmeSec('onayli')">✓ Yayında (${tumOnayli.length})</button>
+  </div>`;
+
+  const liste = state.yorumSekme==="bekleyen" ? bekleyen : tumOnayli;
+  if(liste.length===0){
+    html += `<div class="bayi-bos">${state.yorumSekme==="bekleyen"?'Onay bekleyen yorum yok.':'Yayında yorum yok.'}</div>`;
+    return html;
+  }
+  html += `<div class="yym-liste">`;
+  liste.forEach(y=>{
+    const tarih = new Date(y.tarih).toLocaleDateString('tr');
+    html += `<div class="yym-kart">
+      <div class="yym-ust">
+        <span class="yym-urun">${y.urun}</span>
+        <span class="yym-yildiz">${yildizHtml(y.puan)}</span>
+      </div>
+      <div class="yym-isim">👤 ${y.isim} · <span class="yym-tarih">${tarih}</span></div>
+      ${y.metin?`<div class="yym-metin">"${y.metin}"</div>`:`<div class="yym-metin yym-bos">(sadece puan, yorum yok)</div>`}
+      <div class="yym-aksiyon">`;
+    if(state.yorumSekme==="bekleyen"){
+      html += `<button class="yym-btn onay" onclick="yorumOnayla('${y.urun.replace(/'/g,"\\'")}',${y.idx})">✓ Onayla</button>
+        <button class="yym-btn red" onclick="yorumSil('${y.urun.replace(/'/g,"\\'")}',${y.idx})">🗑️ Reddet</button>`;
+    } else {
+      html += `<button class="yym-btn gizle" onclick="yorumGizle('${y.urun.replace(/'/g,"\\'")}',${y.idx})">⏸️ Yayından kaldır</button>
+        <button class="yym-btn red" onclick="yorumSil('${y.urun.replace(/'/g,"\\'")}',${y.idx})">🗑️ Sil</button>`;
+    }
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function yorumSekmeSec(k){ state.yorumSekme=k; go("fiyat", true); }
+function yorumOnayla(urun, idx){
+  if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=true; yorumKaydet(); note("✓ Yorum yayınlandı"); go("fiyat", true); }
+}
+function yorumGizle(urun, idx){
+  if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=false; yorumKaydet(); note("Yorum yayından kaldırıldı"); go("fiyat", true); }
+}
+function yorumSil(urun, idx){
+  if(!confirm("Bu yorum kalıcı olarak silinsin mi?")) return;
+  if(YORUMLAR[urun]){ YORUMLAR[urun].splice(idx,1); if(YORUMLAR[urun].length===0) delete YORUMLAR[urun]; yorumKaydet(); note("Yorum silindi"); go("fiyat", true); }
+}
 
 /* === GENEL FİYATLAR (şube bazlı) === */
 function fiyatGenelHtml(isGenel){
@@ -6583,11 +6711,18 @@ function kategoriYonetimHtml(){
   html += `<div class="kat-yonetim-liste">`;
   DEMO_KATEGORILER.forEach((k,i)=>{
     const urunSay = DEMO_PRODUCTS.filter(p=>p.kat===k.ad).length;
+    const gorsel = KAT_GORSEL[k.ad];
     html += `<div class="kat-yonetim-satir">
-      <span class="kys-emoji">${k.emoji}</span>
+      <div class="kys-gorsel-alan">
+        ${gorsel
+          ? `<img class="kys-gorsel" src="${gorsel}" alt="">`
+          : `<span class="kys-emoji">${k.emoji}</span>`}
+      </div>
       <span class="kys-ad">${k.ad}</span>
       <span class="kys-sayi">${urunSay} ürün</span>
       <div class="kys-aksiyon">
+        <button class="kys-btn gorsel" onclick="katGorselSec(${i})" title="${gorsel?'Görseli değiştir':'Görsel ekle'}">🖼️</button>
+        ${gorsel?`<button class="kys-btn sil" onclick="katGorselSil(${i})" title="Görseli kaldır">🚫</button>`:''}
         <button class="kys-btn" onclick="kategoriSiraTasi(${i},-1)" ${i===0?'disabled':''}>↑</button>
         <button class="kys-btn" onclick="kategoriSiraTasi(${i},1)" ${i===DEMO_KATEGORILER.length-1?'disabled':''}>↓</button>
         <button class="kys-btn" onclick="kategoriDuzenle(${i})">✏️</button>
@@ -6596,7 +6731,37 @@ function kategoriYonetimHtml(){
     </div>`;
   });
   html += `</div>`;
+  html += `<input type="file" id="katGorselInput" accept="image/*" style="display:none" onchange="katGorselYukle(event)">`;
   return html;
+}
+/* Kategori görseli seç (dosya iletişim kutusunu aç) */
+function katGorselSec(i){
+  state._katGorselHedef = i;
+  const inp = document.getElementById("katGorselInput");
+  if(inp){ inp.value=""; inp.click(); }
+}
+function katGorselYukle(ev){
+  const dosya = ev.target.files[0];
+  if(!dosya) return;
+  if(dosya.size > 2*1024*1024){ note("⛔ Görsel 2 MB'dan küçük olmalı"); return; }
+  const i = state._katGorselHedef;
+  const k = DEMO_KATEGORILER[i];
+  const okuyucu = new FileReader();
+  okuyucu.onload = (e)=>{
+    KAT_GORSEL[k.ad] = e.target.result;  // webp dahil base64 data URI
+    note("✓ "+k.ad+" görseli eklendi");
+    menuKaydet();
+    go("fiyat", true);
+  };
+  okuyucu.readAsDataURL(dosya);
+}
+function katGorselSil(i){
+  const k = DEMO_KATEGORILER[i];
+  if(!confirm('"'+k.ad+'" görseli kaldırılsın mı? (emoji ikona dönülür)')) return;
+  delete KAT_GORSEL[k.ad];
+  note("Görsel kaldırıldı");
+  menuKaydet();
+  go("fiyat", true);
 }
 function kategoriEkle(){
   const ad = prompt("Kategori adı:");
@@ -6619,7 +6784,11 @@ function kategoriDuzenle(i){
   k.ad = ad.trim()||k.ad;
   k.emoji = emoji.trim()||k.emoji;
   // ürünlerin kategori adını da güncelle
-  if(eskiAd!==k.ad) DEMO_PRODUCTS.forEach(p=>{ if(p.kat===eskiAd) p.kat=k.ad; });
+  if(eskiAd!==k.ad){
+    DEMO_PRODUCTS.forEach(p=>{ if(p.kat===eskiAd) p.kat=k.ad; });
+    // görseli yeni ada taşı
+    if(KAT_GORSEL[eskiAd]){ KAT_GORSEL[k.ad]=KAT_GORSEL[eskiAd]; delete KAT_GORSEL[eskiAd]; }
+  }
   note("Kategori güncellendi");
   menuKaydet();
   go("fiyat", true);
@@ -6629,6 +6798,7 @@ function kategoriSil(i){
   const urunSay = DEMO_PRODUCTS.filter(p=>p.kat===k.ad).length;
   if(urunSay>0){ note("⛔ Bu kategoride "+urunSay+" ürün var — önce ürünleri taşıyın/silin"); return; }
   if(!confirm('"'+k.ad+'" kategorisi silinsin mi?')) return;
+  delete KAT_GORSEL[k.ad];
   DEMO_KATEGORILER.splice(i,1);
   note("Kategori silindi");
   menuKaydet();
@@ -7081,7 +7251,7 @@ const MENU_KEY = "minipan_menu_v1";
 function menuKaydet(){
   try{
     localStorage.setItem(MENU_KEY, JSON.stringify({
-      DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_GORSEL, SUBE_FIYAT
+      DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_GORSEL, KAT_GORSEL, SUBE_FIYAT
     }));
   }catch(e){ /* kota dolabilir (base64 görseller) */ console.warn("menü kayıt hatası", e); }
 }
@@ -7097,8 +7267,47 @@ function menuYukle(){
     if(v.OPTION_POOL) OPTION_POOL = v.OPTION_POOL;
     if(v.SEC_KAPALI) SEC_KAPALI = v.SEC_KAPALI;
     if(v.URUN_GORSEL) URUN_GORSEL = v.URUN_GORSEL;
+    if(v.KAT_GORSEL) KAT_GORSEL = v.KAT_GORSEL;
     if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
   }catch(e){}
+}
+
+/* === ÜRÜN YORUM / PUANLAMA === */
+const YORUM_KEY = "minipan_yorum_v1";
+function yorumKaydet(){
+  try{ localStorage.setItem(YORUM_KEY, JSON.stringify(YORUMLAR)); }catch(e){}
+}
+function yorumYukle(){
+  try{ const raw=localStorage.getItem(YORUM_KEY); if(raw) YORUMLAR=JSON.parse(raw); }catch(e){}
+}
+/* Bir ürünün onaylı yorumları */
+function urunOnayliYorumlar(urunAd){ return (YORUMLAR[urunAd]||[]).filter(y=>y.onay); }
+/* Ortalama puan ve yorum sayısı (onaylılar) */
+function urunPuanOzet(urunAd){
+  const ys = urunOnayliYorumlar(urunAd);
+  if(ys.length===0) return {ort:0, adet:0};
+  const top = ys.reduce((s,y)=>s+y.puan,0);
+  return {ort: Math.round((top/ys.length)*10)/10, adet: ys.length};
+}
+/* Yıldız dağılımı: {5:n,4:n,...} */
+function urunPuanDagilim(urunAd){
+  const d={5:0,4:0,3:0,2:0,1:0};
+  urunOnayliYorumlar(urunAd).forEach(y=>{ if(d[y.puan]!=null) d[y.puan]++; });
+  return d;
+}
+/* Onay bekleyen tüm yorumlar (müdür paneli için) */
+function bekleyenYorumlar(){
+  const liste=[];
+  Object.entries(YORUMLAR).forEach(([urun,ys])=>{
+    ys.forEach((y,i)=>{ if(!y.onay) liste.push({urun, idx:i, ...y}); });
+  });
+  return liste.sort((a,b)=>b.tarih-a.tarih);
+}
+/* Yıldız HTML (dolu/boş) */
+function yildizHtml(puan, boyut){
+  let h='';
+  for(let i=1;i<=5;i++) h+='<span class="yld'+(i<=puan?' dolu':'')+'"'+(boyut?' style="font-size:'+boyut+'"':'')+'>★</span>';
+  return h;
 }
 
 /* === ÜRÜN OLUŞTURMA / DÜZENLEME FORMU === */
@@ -7169,6 +7378,10 @@ function renderUrunForm(){
     const ozelAd = !grupAdlar.includes(g.ad);
     html += `<div class="uf-grup-kart">
       <div class="uf-grup-ust">
+        <div class="uf-tasi-grup">
+          <button class="uf-tasi-btn" ${gi===0?'disabled':''} onclick="ufGrupTasi(${gi},-1)" title="Yukarı">▲</button>
+          <button class="uf-tasi-btn" ${gi===f.gruplar.length-1?'disabled':''} onclick="ufGrupTasi(${gi},1)" title="Aşağı">▼</button>
+        </div>
         <select class="uf-grup-ad" onchange="ufGrupAdSec(${gi},this.value)">
           ${grupAdlar.map(ga=>`<option value="${ga.replace(/"/g,'&quot;')}"${g.ad===ga?' selected':''}>${ga}</option>`).join("")}
           <option value="__ozel__"${ozelAd?' selected':''}>✏️ Özel ad gir...</option>
@@ -7199,6 +7412,10 @@ function renderUrunForm(){
       const havuzAdlar = OPTION_POOL.map(x=>x.ad);
       const ozelSec = s.ad && !havuzAdlar.includes(s.ad);
       html += `<div class="uf-secenek-satir">
+        <div class="uf-tasi-sec">
+          <button class="uf-tasi-btn sm" ${si===0?'disabled':''} onclick="ufSecTasi(${gi},${si},-1)" title="Yukarı">▲</button>
+          <button class="uf-tasi-btn sm" ${si===g.secenekler.length-1?'disabled':''} onclick="ufSecTasi(${gi},${si},1)" title="Aşağı">▼</button>
+        </div>
         <select class="uf-sec-ad" onchange="ufSecAdSec(${gi},${si},this.value)">
           <option value=""${!s.ad?' selected':''}>— seçenek seç —</option>
           ${OPTION_POOL.map(x=>`<option value="${x.ad.replace(/"/g,'&quot;')}"${s.ad===x.ad?' selected':''}>${x.ad}</option>`).join("")}
@@ -7288,6 +7505,20 @@ function ufHazirGrupEkle(ad){
   renderUrunForm();
 }
 function ufGrupSil(gi){ state.urunForm.gruplar.splice(gi,1); renderUrunForm(); }
+function ufGrupTasi(gi, yon){
+  const g = state.urunForm.gruplar;
+  const yeni = gi + yon;
+  if(yeni<0 || yeni>=g.length) return;
+  [g[gi], g[yeni]] = [g[yeni], g[gi]];
+  renderUrunForm();
+}
+function ufSecTasi(gi, si, yon){
+  const secs = state.urunForm.gruplar[gi].secenekler;
+  const yeni = si + yon;
+  if(yeni<0 || yeni>=secs.length) return;
+  [secs[si], secs[yeni]] = [secs[yeni], secs[si]];
+  renderUrunForm();
+}
 function ufGrupTip(gi, tip){
   const g=state.urunForm.gruplar[gi];
   g.tip=tip;
@@ -8760,6 +8991,8 @@ function renderQR(){
   else if(QR.view==="profil")   el.innerHTML = qrProfilHtml();
   else if(QR.view==="takip")    el.innerHTML = qrTakipHtml();
   else if(QR.view==="sepet")    el.innerHTML = qrSepetHtml();
+  else if(QR.view==="yorumlar")  el.innerHTML = qrYorumlarHtml();
+  else if(QR.view==="yorumEkle") el.innerHTML = qrYorumEkleHtml();
   else if(QR.view==="onay")     el.innerHTML = qrOnayHtml();
   el.scrollTop = 0;
 }
@@ -9097,8 +9330,11 @@ function qrKategorilerHtml(){
   kats.forEach(k=>{
     const kapak=katKapak(k);
     const adet=DEMO_PRODUCTS.filter(p=>p.kat===k).length;
+    const gorsel=KAT_GORSEL[k];
     html += '<button class="qr-kat-kart" onclick="qrKategoriAc(\''+k.replace(/'/g,"\\'")+'\')">'+
-      '<div class="qkk-gorsel" style="background:linear-gradient(135deg,'+kapak.ton+')"><span>'+kapak.emoji+'</span></div>'+
+      (gorsel
+        ? '<div class="qkk-gorsel qkk-foto"><img src="'+gorsel+'" alt=""></div>'
+        : '<div class="qkk-gorsel" style="background:linear-gradient(135deg,'+kapak.ton+')"><span>'+kapak.emoji+'</span></div>')+
       '<div class="qkk-bilgi"><div class="qkk-ad">'+k+'</div><div class="qkk-adet">'+adet+' ürün</div></div>'+
     '</button>';
   });
@@ -9230,6 +9466,7 @@ function qrMenuHtml(){
       '<div class="qr-card-body">'+
         '<div class="qr-card-info">'+
           '<div class="qr-card-ad">'+p.ad+'</div>'+
+          qrPuanRozetHtml(p.ad)+
           (p.aciklama?'<div class="qr-card-desc">'+p.aciklama+'</div>':'')+
           aciklamaHtml+
           fiyatHtml+
@@ -9249,6 +9486,104 @@ function qrMenuHtml(){
   return html;
 }
 function qrSetKat(k){ QR.aktifKat=k; renderQR(); }
+
+/* Ürün kartındaki puan rozeti (tıklanınca yorumlar açılır) */
+function qrPuanRozetHtml(urunAd){
+  const o = urunPuanOzet(urunAd);
+  if(o.adet===0){
+    return '<button class="qr-puan-rozet bos" onclick="event.stopPropagation();qrYorumlarAc(\''+urunAd.replace(/'/g,"\\'")+'\')">☆ Değerlendir</button>';
+  }
+  return '<button class="qr-puan-rozet" onclick="event.stopPropagation();qrYorumlarAc(\''+urunAd.replace(/'/g,"\\'")+'\')">'+
+    '<span class="qpr-yildiz">★</span> '+o.ort.toFixed(1)+' <span class="qpr-adet">· '+o.adet+' yorum</span></button>';
+}
+function qrYorumlarAc(urunAd){ QR.yorumUrun=urunAd; QR.view="yorumlar"; renderQR(); }
+
+/* Yorumlar ekranı */
+function qrYorumlarHtml(){
+  const urunAd = QR.yorumUrun;
+  const o = urunPuanOzet(urunAd);
+  const dagilim = urunPuanDagilim(urunAd);
+  const yorumlar = urunOnayliYorumlar(urunAd).sort((a,b)=>b.tarih-a.tarih);
+  const maxN = Math.max(1, ...Object.values(dagilim));
+  let html = '<div class="qr-screen qr-yorum-screen">'+
+    '<div class="qr-yorum-top"><button class="qr-close" onclick="QR.view=\'menu\';renderQR()">←</button>'+
+      '<div class="qr-yorum-baslik">Yorumlar</div><div style="width:34px"></div></div>'+
+    '<div class="qr-yorum-urunad">'+urunAd+'</div>';
+  // özet kartı
+  html += '<div class="qr-yorum-ozet">'+
+    '<div class="qyo-sol"><div class="qyo-puan">'+(o.adet?o.ort.toFixed(1):'—')+'</div>'+
+      '<div class="qyo-yildiz">'+yildizHtml(Math.round(o.ort))+'</div>'+
+      '<div class="qyo-adet">'+o.adet+' yorum</div></div>'+
+    '<div class="qyo-dagilim">';
+  [5,4,3,2,1].forEach(y=>{
+    const n=dagilim[y]; const yuzde=Math.round((n/maxN)*100);
+    html += '<div class="qyo-satir"><span class="qyo-y">★ '+y+'</span>'+
+      '<div class="qyo-bar"><div class="qyo-bar-dolu" style="width:'+yuzde+'%"></div></div>'+
+      '<span class="qyo-n">'+n+'</span></div>';
+  });
+  html += '</div></div>';
+  // yorum listesi
+  if(yorumlar.length===0){
+    html += '<div class="qr-yorum-bos">Henüz yorum yok. İlk yorumu sen yap!</div>';
+  } else {
+    html += '<div class="qr-yorum-liste">';
+    yorumlar.forEach(y=>{
+      const tarih = new Date(y.tarih).toLocaleDateString('tr');
+      html += '<div class="qr-yorum-kart">'+
+        '<div class="qyk-ust"><span class="qyk-isim">'+y.isim+'</span>'+
+          '<span class="qyk-yildiz">'+yildizHtml(y.puan)+'</span></div>'+
+        (y.metin?'<div class="qyk-metin">'+y.metin+'</div>':'')+
+        '<div class="qyk-tarih">'+tarih+'</div></div>';
+    });
+    html += '</div>';
+  }
+  html += '<button class="qr-yorum-ekle-btn" onclick="qrYorumEkleAc()">+ Yorum Ekle</button>';
+  html += '</div>';
+  return html;
+}
+/* Yorum ekleme formu */
+function qrYorumEkleAc(){
+  QR.yeniYorum = {puan:5, isim:QR.kisi||"", metin:""};
+  QR.view="yorumEkle"; renderQR();
+}
+function qrYorumEkleHtml(){
+  const urunAd = QR.yorumUrun;
+  const y = QR.yeniYorum;
+  let html = '<div class="qr-screen qr-yorum-screen">'+
+    '<div class="qr-yorum-top"><button class="qr-close" onclick="QR.view=\'yorumlar\';renderQR()">←</button>'+
+      '<div class="qr-yorum-baslik">Yorum Ekle</div><div style="width:34px"></div></div>'+
+    '<div class="qr-yorum-urunad">'+urunAd+'</div>'+
+    '<div class="qye-govde">'+
+      '<div class="qye-alan"><label>Puanın</label>'+
+        '<div class="qye-yildiz-sec">';
+  for(let i=1;i<=5;i++){
+    html += '<button class="qye-yld'+(i<=y.puan?' on':'')+'" onclick="qrYorumPuan('+i+')">★</button>';
+  }
+  html += '</div></div>'+
+      '<div class="qye-alan"><label>Adın</label>'+
+        '<input class="qye-input" id="qyeIsim" value="'+(y.isim||'').replace(/"/g,'&quot;')+'" placeholder="Adınız" oninput="QR.yeniYorum.isim=this.value"></div>'+
+      '<div class="qye-alan"><label>Yorumun (isteğe bağlı)</label>'+
+        '<textarea class="qye-textarea" placeholder="Bu ürün hakkındaki düşünceleriniz..." oninput="QR.yeniYorum.metin=this.value">'+(y.metin||'')+'</textarea></div>'+
+      '<div class="qye-bilgi">ℹ️ Yorumunuz onaylandıktan sonra yayınlanır.</div>'+
+    '</div>'+
+    '<button class="qr-yorum-ekle-btn" onclick="qrYorumKaydet()">Gönder</button>'+
+    '</div>';
+  return html;
+}
+function qrYorumPuan(p){ QR.yeniYorum.puan=p; renderQR(); }
+function qrYorumKaydet(){
+  const urunAd = QR.yorumUrun;
+  const y = QR.yeniYorum;
+  if(!y.isim || !y.isim.trim()){ note("Lütfen adınızı girin"); return; }
+  if(!YORUMLAR[urunAd]) YORUMLAR[urunAd]=[];
+  YORUMLAR[urunAd].push({
+    isim:y.isim.trim(), puan:y.puan, metin:(y.metin||"").trim(),
+    tarih:Date.now(), onay:false
+  });
+  yorumKaydet();
+  QR.view="yorumlar"; renderQR();
+  note("✓ Yorumunuz alındı — onaylandıktan sonra yayınlanacak");
+}
 
 function qrUrunSec(pi){
   const p = DEMO_PRODUCTS[pi];
@@ -9392,7 +9727,7 @@ function qrKalemPaket(i){
 function qrSiparisGonder(){
   const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
   consumeRecipe(QR.sepet);
-  const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, fiyat:c.fiyat*c.q, paket:!!c.paket}));
+  const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat*c.q, paket:!!c.paket}));
   let takipId = "S"+(_takipId++);
   // EVE TESLİMAT → adresli paket kaydı
   if(QR.siparisTipi==="eve" && QR.musteri){
@@ -9430,7 +9765,7 @@ function qrSiparisGonder(){
     if(!k){ k={ad:(QR.kisi||"Müşteri"), kalemler:[]}; s.kisiler.push(k); }
     QR.sepet.forEach(c=>{
       for(let n=0;n<c.q;n++){
-        k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+        k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
       }
     });
     // masadan paketli ürün masaya bağlı kalır (kalemde paket:true) — ayrı PAKET_ORDERS oluşturulmaz
@@ -10034,13 +10369,13 @@ function garsonMasaGonder(){
   if(!k){ k={ad:kisi, kalemler:[]}; s.kisiler.push(k); }
   // sadece bu sepet kalemleri masaya eklenir
   GARSON.masaSepet.forEach(c=>{
-    k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+    k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
   });
   consumeRecipe(GARSON.masaSepet.map(c=>({...c, q:1, ekstraRecete:[]})));
   // TEK FİŞ — sadece bu sepet (eski ürünler hariç)
   mutfakFisiBas({
     tip:"masa", baslik:"MASA "+m, alt:kisi, kisi:kisi, masa:m,
-    kalemler:GARSON.masaSepet.map(c=>({ad:c.ad, secimler:c.secimler, kisi:kisi, paket:!!c.paket}))
+    kalemler:GARSON.masaSepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, kisi:kisi, paket:!!c.paket}))
   });
   // paketli kalemler ayrıca paket ekranına
   // masadan paketli ürün masaya bağlı kalır (kalemde paket:true) — ayrı PAKET_ORDERS yok
@@ -10054,14 +10389,14 @@ function garsonPaketGonder(){
   const takipId="S"+(_takipId++);
   PAKET_ORDERS.push({
     id:_paketId++, takipId:takipId, tip:"paket", musteri:GARSON.paketMusteri||"Paket müşteri", tel:null,
-    adres:null, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, fiyat:c.fiyat})),
+    adres:null, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat})),
     tutar:t, odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()
   });
   consumeRecipe(GARSON.paketSepet.map(c=>({...c, q:1, ekstraRecete:[]})));
   // OTOMATİK MUTFAK FİŞİ
   mutfakFisiBas({
     tip:"paket", baslik:"PAKET (GEL-AL)", alt:GARSON.paketMusteri||"Paket müşteri",
-    kisi:GARSON.paketMusteri, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, paket:true}))
+    kisi:GARSON.paketMusteri, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, paket:true}))
   });
   note("🥡 Paket sipariş mutfağa gönderildi");
   GARSON.paketSepet=[]; GARSON.paketModu=false; GARSON.paketMusteri=null;
@@ -10149,6 +10484,7 @@ window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi 
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
 menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yükle
+yorumYukle();    // ürün yorum/puanlama verilerini geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
