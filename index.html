@@ -868,6 +868,39 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qye-input,.qye-textarea{padding:13px 14px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; background:var(--surface); font-family:inherit}
 .qye-textarea{min-height:90px; resize:vertical}
 .qye-bilgi{font-size:12.5px; color:var(--ink-3); background:var(--surface-2); padding:11px 13px; border-radius:10px; line-height:1.5}
+/* Genel Fiyatlar: tavsiye + şube */
+.fy-mudur-not{background:#fff7e6; border:1px solid #f0d9a8; color:#8a6212; padding:11px 14px; border-radius:11px; font-size:12.5px; line-height:1.5; margin-bottom:12px}
+.fy-urun-kart{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:14px; margin-bottom:14px; box-shadow:var(--shadow)}
+.fy-urun-bas{display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:10px; border-bottom:2px solid var(--surface-2)}
+.fy-urun-bas .fy-emoji{font-size:24px}
+.fy-urun-bas .fy-ad{font-size:17px; font-weight:800}
+.fy-blok{background:var(--surface-2); border-radius:12px; padding:11px 13px; margin-bottom:9px}
+.fy-blok.tavsiye-blok{background:var(--brand-soft); border:1px solid var(--brand)}
+.fy-blok-bas{font-size:12.5px; font-weight:800; color:var(--ink-2); text-align:center; margin-bottom:9px; letter-spacing:.2px}
+.fy-blok.tavsiye-blok .fy-blok-bas{color:var(--brand-d)}
+.fy-blok-govde{display:flex; gap:10px}
+.fyb-hucre{flex:1; display:flex; flex-direction:column; gap:6px; align-items:center; text-align:center}
+.fyb-kanal-ad{font-size:11px; font-weight:800; color:var(--cocoa); letter-spacing:.3px}
+.fyb-alt{display:flex; align-items:center; gap:7px; flex-wrap:wrap; justify-content:center}
+.fyb-fiyat{font-size:15px; font-weight:800; color:var(--ink)}
+.fyb-fiyat.tavsiye{color:var(--ink-3); font-weight:600}
+.fyb-fiyat-btn{padding:6px 11px; border-radius:8px; background:var(--surface); border:1.5px solid var(--brand); color:var(--brand-d); font-size:14px; font-weight:800; cursor:pointer}
+.fyb-fiyat-btn.tavsiye{border-color:var(--line); color:var(--ink-3); font-weight:600}
+.fyb-durum{width:30px; min-width:30px; height:30px; border-radius:8px; border:none; font-size:14px; font-weight:900; cursor:pointer; display:inline-flex; align-items:center; justify-content:center}
+.fyb-durum.acik{background:var(--ok-soft); color:var(--ok)}
+.fyb-durum.kapali{background:var(--err-soft); color:var(--err)}
+.fyb-durum.salt{cursor:default; opacity:.85}
+.fyb-kapali-not{font-size:10px; color:var(--err); font-weight:700; text-align:center}
+.fyb-fiyat.fy-dusuk,.fyb-fiyat.fy-yuksek{color:var(--err)}
+.fyb-fiyat-btn.fy-dusuk,.fyb-fiyat-btn.fy-yuksek{color:var(--err); border-color:var(--err)}
+.fyb-fark-not{font-size:10px; font-weight:800; text-align:center; padding:2px 7px; border-radius:99px; white-space:nowrap}
+.fyb-fark-not.dusuk{color:var(--err); background:var(--err-soft)}
+.fyb-fark-not.yuksek{color:#b06d10; background:#fff4e6}
+@media(max-width:430px){
+  .fy-blok-govde{flex-direction:column; gap:8px}
+  .fyb-hucre{flex-direction:row; justify-content:space-between; width:100%}
+  .fyb-kanal-ad{min-width:90px; text-align:left}
+}
 /* Yorum yönetimi (müdür) */
 .yym-sekme-row{display:flex; gap:8px; margin-bottom:14px}
 .yym-sekme{flex:1; padding:11px; border-radius:10px; background:var(--surface-2); border:1.5px solid transparent; font-size:13px; font-weight:700; color:var(--ink-2)}
@@ -4610,12 +4643,16 @@ function urunKampanya(ad, sube, kanal){
 function urunFiyatBilgi(ad, sube, kanal){
   sube = sube || AKTIF_SUBE;
   kanal = kanal || "masa";
+  const p = DEMO_PRODUCTS.find(x=>x.ad===ad);
+  const tavMasa = p ? (p.fiyat||0) : 0;
+  const tavEve = (p && p.fiyatEve!=null && p.fiyatEve>0) ? p.fiyatEve : tavMasa;  // eve tavsiye yoksa masa tavsiye
   const masaK = fiyatKayit(sube, ad, "masa");
-  const masaGenel = (masaK.genel!=null && masaK.genel>0) ? masaK.genel : urunVarsayilanFiyat(ad);
+  const masaGenel = (masaK.genel!=null && masaK.genel>0) ? masaK.genel : tavMasa;
   let k, genel;
   if(kanal==="eve"){
     k = fiyatKayit(sube, ad, "eve");
-    genel = (k.genel!=null && k.genel>0) ? k.genel : masaGenel;
+    // şube eve fiyatı > şube masa fiyatı girilmişse o > tavsiye eve
+    genel = (k.genel!=null && k.genel>0) ? k.genel : ((masaK.genel!=null && masaK.genel>0) ? masaGenel : tavEve);
   } else {
     k = masaK; genel = masaGenel;
   }
@@ -4629,8 +4666,30 @@ function urunFiyatBilgi(ad, sube, kanal){
     aciklama = kmp.ad; kampanyaAd = kmp.ad;
   }
   const indirimli = !!kmp && gecerli<genel;
-  const kapali = !!k.kapali;
+  const kapali = fiyatKapaliMi(k.kapali);
   return { genel, eski:genel, gecerli, indirimli, indOran, aciklama, kampanyaAd, kapali };
+}
+/* Ürün-kanal kapatma kaydı aktif mi? (true=sürekli ya da {tip,...} süreli) */
+function fiyatKapaliMi(kayit){
+  if(!kayit) return false;
+  if(kayit===true) return true;                 // eski format: sürekli
+  if(kayit.tip==="surekli") return true;
+  if(kayit.tip==="sure") return Date.now() < kayit.bitis;
+  if(kayit.tip==="tarih"){
+    const bugun=new Date(); bugun.setHours(0,0,0,0);
+    return bugun <= new Date(kayit.deger+"T23:59:59");
+  }
+  if(kayit.tip==="saat") return suankiDakika() < saatDakika(kayit.deger);
+  return false;
+}
+/* Kapatma durum metni (fiyat) */
+function fiyatKapaliMetin(kayit){
+  if(!kayit) return "";
+  if(kayit===true || kayit.tip==="surekli") return "sürekli kapalı";
+  if(kayit.tip==="sure") return new Date(kayit.bitis).toLocaleString('tr',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+"'e kadar";
+  if(kayit.tip==="tarih") return kayit.deger+" tarihine kadar";
+  if(kayit.tip==="saat") return "bugün "+kayit.deger+"'e kadar";
+  return "";
 }
 /* Satışta gösterilecek nihai fiyat */
 function urunGecerliFiyat(ad, sube, kanal){ return urunFiyatBilgi(ad, sube, kanal).gecerli; }
@@ -6545,23 +6604,24 @@ let YORUMLAR = {};        // {"Pandio": [{isim,puan,metin,tarih,onay}] } — ür
 function viewFiyat(main){
   const isGenel = state.role==="genel";
   if(!state.fiyatSekme) state.fiyatSekme = "fiyatlar";
-  // müdür sadece genel fiyatları görür
-  if(!isGenel) state.fiyatSekme = "fiyatlar";
+  // müdür yorumlar sekmesini göremez; oradaysa fiyatlara dön
+  if(!isGenel && state.fiyatSekme==="yorum") state.fiyatSekme = "fiyatlar";
   const sekme = state.fiyatSekme;
 
-  let html = `<div class="sec-head"><div><h2>🏷️ Fiyat & Ürün Yönetimi</h2>
-    <div class="sh-sub">${isGenel?'Merkez menü yönetimi':AKTIF_SUBE+' fiyatları'}</div></div></div>`;
+  let html = `<div class="sec-head"><div><h2>🏷️ ${isGenel?'Fiyat & Ürün Yönetimi':'Ürün & Fiyat Görüntüleme'}</h2>
+    <div class="sh-sub">${isGenel?'Merkez menü yönetimi':AKTIF_SUBE+' · görüntüleme'}</div></div></div>`;
 
-  if(isGenel){
+  {
     const bekleyenSay = bekleyenYorumlar().length;
     const sekmeler = [
-      {k:"fiyatlar", ad:"💰 Genel Fiyatlar"},
+      {k:"fiyatlar", ad:"💰 Fiyatlar"},
       {k:"kategori", ad:"🗂️ Kategoriler"},
       {k:"secenek",  ad:"🧩 Seçenek Grupları"},
       {k:"secpool",  ad:"🔘 Seçenekler"},
       {k:"urun",     ad:"📦 Ürünler"},
-      {k:"yorum",    ad:"💬 Yorumlar"+(bekleyenSay?" ("+bekleyenSay+")":"")},
     ];
+    // yorumlar sekmesi sadece genel müdürde
+    if(isGenel) sekmeler.push({k:"yorum", ad:"💬 Yorumlar"+(bekleyenSay?" ("+bekleyenSay+")":"")});
     html += `<div class="fyt-sekme-row">`;
     sekmeler.forEach(s=>{
       html += `<button class="fyt-sekme${sekme===s.k?' on':''}" onclick="fiyatSekmeSec('${s.k}')">${s.ad}</button>`;
@@ -6634,80 +6694,230 @@ function yorumSil(urun, idx){
   if(YORUMLAR[urun]){ YORUMLAR[urun].splice(idx,1); if(YORUMLAR[urun].length===0) delete YORUMLAR[urun]; yorumKaydet(); note("Yorum silindi"); go("fiyat", true); }
 }
 
-/* === GENEL FİYATLAR (şube bazlı) === */
+/* === FİYATLAR: tavsiye + şube kartları (görsel düzen) === */
 function fiyatGenelHtml(isGenel){
-  if(!state.fiyatHedef){ state.fiyatHedef = isGenel ? DEMO_BRANCHES[0].ad : AKTIF_SUBE; }
-  if(!state.fiyatKanal) state.fiyatKanal = "masa";
-  const hedef = state.fiyatHedef;
-  const kanal = state.fiyatKanal;
   const kategoriler = DEMO_KATEGORILER.map(k=>k.ad);
   if(!state.fiyatKat || !kategoriler.includes(state.fiyatKat)) state.fiyatKat = kategoriler[0];
   const prods = DEMO_PRODUCTS.filter(p=>p.kat===state.fiyatKat);
 
-  let html=`<div class="fy-bilgi-not">💡 İndirim ve kampanyalar <strong>Kampanyalar</strong> bölümünden tanımlanır. Burada sadece genel satış fiyatı belirlenir.</div>`;
-  if(isGenel){
-    html+=`<div class="fy-hedef-sec"><div class="fy-hs-row">`;
-    DEMO_BRANCHES.forEach(b=>{
-      html+=`<button class="fy-hs-btn${hedef===b.ad?' on':''}" onclick="fiyatHedefSec('${b.ad.replace(/'/g,"\\'")}')">${b.ad}</button>`;
-    });
-    html+=`</div></div>`;
+  let html = `<div class="fy-bilgi-not">💡 <strong>Tavsiye edilen fiyat</strong> tüm şubeler için başlangıç değeridir; şubeye özel fiyat girilmezse o şubede tavsiye fiyat geçerlidir. İndirimler <strong>Kampanyalar</strong> bölümünden tanımlanır.</div>`;
+  if(!isGenel){
+    html += `<div class="fy-mudur-not">👁️ Fiyatları görüntüleyebilir, <strong>${AKTIF_SUBE}</strong> şubesi için ürünleri açıp/kapatabilirsiniz. Fiyat değişikliği genel müdür yetkisindedir.</div>`;
   }
-  html+=`<div class="fy-kanal-row">
-    <button class="fy-kanal${kanal==="masa"?' on':''}" onclick="fiyatKanalSec('masa')">🍽️ Masada / Gel-Al</button>
-    <button class="fy-kanal${kanal==="eve"?' on':''}" onclick="fiyatKanalSec('eve')">🛵 Eve teslim</button>
-  </div>`;
-  if(kanal==="eve"){
-    html+=`<div class="fy-uyari">🛵 Eve teslim fiyatı girilmezse o ürün eve siparişinde <strong>masa fiyatıyla</strong> satılır.</div>`;
-  }
-  html+=`<div class="cat-row">`;
+  // kategori seçici
+  html += `<div class="cat-row">`;
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.fiyatKat===k?' on':''}" onclick="fiyatKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
-  html+=`</div>`;
-  html+=`<div class="fy-liste">`;
+  html += `</div>`;
+
+  html += `<div class="fy-liste">`;
   prods.forEach(p=>{
-    const k = fiyatKayit(hedef, p.ad, kanal);
-    const fb = urunFiyatBilgi(p.ad, hedef, kanal);
-    const masaGenel = urunFiyatBilgi(p.ad, hedef, "masa").genel;
-    const genelGoster = fb.genel;
-    const evMiras = (kanal==="eve" && (k.genel==null||k.genel<=0));
-    html+=`<div class="fy-satir-sade${fb.kapali?' fy-kapali':''}">
-      <div class="fy-urun"><span class="fy-emoji">${p.emoji}</span><span class="fy-ad">${p.ad}</span>
-        ${evMiras?`<span class="fy-genel-not">eve fiyatı girilmedi · masa: ${masaGenel} ₺</span>`:''}
-        ${fb.indirimli?`<span class="fy-kampanya-not">🔥 Kampanyalı: ${fb.gecerli} ₺ (${fb.kampanyaAd})</span>`:''}</div>
-      <div class="fy-sag-blok">
-        <button class="fy-genel-btn" onclick="fiyatGenelGir('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}','${kanal}')">${genelGoster} ₺ ✏️</button>
-        <button class="fy-btn ${fb.kapali?'kapali':'acik'}" onclick="fiyatKanalKapat('${hedef.replace(/'/g,"\\'")}','${p.ad.replace(/'/g,"\\'")}','${kanal}')">${fb.kapali?'⛔ Kapalı':'✓ Açık'}</button>
-      </div>
-    </div>`;
+    const pi = DEMO_PRODUCTS.indexOf(p);
+    html += `<div class="fy-urun-kart">
+      <div class="fy-urun-bas"><span class="fy-emoji">${p.emoji}</span><span class="fy-ad">${p.ad}</span></div>`;
+    // TAVSİYE bloğu (her iki rol de görür; sadece genel müdür düzenler)
+    html += fiyatBlokHtml(p, pi, null, isGenel, "📋 Tavsiye Edilen Fiyat");
+    // ŞUBE blokları
+    if(isGenel){
+      DEMO_BRANCHES.forEach(b=>{ html += fiyatBlokHtml(p, pi, b.ad, true, "🏬 "+b.ad); });
+    } else {
+      html += fiyatBlokHtml(p, pi, AKTIF_SUBE, false, "🏬 "+AKTIF_SUBE);
+    }
+    html += `</div>`;
   });
-  html+=`</div>`;
+  html += `</div>`;
   return html;
 }
-function fiyatHedefSec(h){ state.fiyatHedef=h; go("fiyat", true); }
-function fiyatKanalSec(k){ state.fiyatKanal=k; go("fiyat", true); }
+/* Tek bir fiyat bloğu (tavsiye için sube=null, şube için sube=ad)
+   duzenle: fiyatı değiştirebilir mi (genel müdür) */
+function fiyatBlokHtml(p, pi, sube, duzenle, baslik){
+  const tavMasa = p.fiyat||0;
+  const tavEve = (p.fiyatEve!=null && p.fiyatEve>0) ? p.fiyatEve : null;
+  let mFiyat, eFiyat, mKapali, eKapali, mTavsiyeMi, eTavsiyeMi, acKapatYetki;
+  if(sube===null){
+    // TAVSİYE bloğu
+    mFiyat = tavMasa; eFiyat = (tavEve!=null?tavEve:tavMasa);
+    mTavsiyeMi = false; eTavsiyeMi = (tavEve==null);
+    mKapali = false; eKapali = false;
+    acKapatYetki = false;  // tavsiyede aç/kapa yok
+  } else {
+    const sMasaK = fiyatKayit(sube, p.ad, "masa");
+    const sEveK = fiyatKayit(sube, p.ad, "eve");
+    const sMasa = (sMasaK.genel!=null && sMasaK.genel>0) ? sMasaK.genel : null;
+    const sEve = (sEveK.genel!=null && sEveK.genel>0) ? sEveK.genel : null;
+    mFiyat = sMasa!=null ? sMasa : tavMasa;
+    eFiyat = sEve!=null ? sEve : (tavEve!=null?tavEve:tavMasa);
+    mTavsiyeMi = sMasa==null; eTavsiyeMi = sEve==null;
+    mKapali = fiyatKapaliMi(sMasaK.kapali); eKapali = fiyatKapaliMi(sEveK.kapali);
+    acKapatYetki = true;  // şubelerde aç/kapa var (her iki rol)
+  }
+  const tavsiyeBlok = sube===null;
+  const subeArg = sube ? "'"+sube.replace(/'/g,"\\'")+"'" : "null";
+
+  // tek kanal (masa veya eve) için hücre html'i
+  const kanalHucre = (kanal, fiyat, tavsiyeMi, kapali, kapaliKayit)=>{
+    const etiket = kanal==="masa" ? "MASA/GEL-AL" : "EVE TESLİM";
+    // tavsiye fiyatı (karşılaştırma için)
+    const tavF = kanal==="masa" ? tavMasa : (tavEve!=null?tavEve:tavMasa);
+    // şube bloğunda + şubeye özel fiyat varsa, tavsiyeyle karşılaştır
+    const farkli = (!tavsiyeBlok && !tavsiyeMi && fiyat!==tavF);
+    const dusuk  = (!tavsiyeBlok && !tavsiyeMi && fiyat < tavF);
+    const yuksek = (!tavsiyeBlok && !tavsiyeMi && fiyat > tavF);
+    const farkCls = farkli ? (dusuk ? ' fy-dusuk' : ' fy-yuksek') : '';
+    // fiyat gösterimi
+    let fiyatGoster;
+    if(duzenle && tavsiyeBlok){
+      fiyatGoster = `<button class="fyb-fiyat-btn" onclick="tavsiyeFiyatGir(${pi},'${kanal}')">${fiyat} ₺ ✏️</button>`;
+    } else if(duzenle && !tavsiyeBlok){
+      fiyatGoster = `<button class="fyb-fiyat-btn${tavsiyeMi?' tavsiye':''}${farkCls}" onclick="subeFiyatGir(${subeArg},'${p.ad.replace(/'/g,"\\'")}','${kanal}',${kanal==='masa'?tavMasa:(tavEve!=null?tavEve:tavMasa)})">${fiyat} ₺${tavsiyeMi?' ↩':''} ✏️</button>`;
+    } else {
+      fiyatGoster = `<span class="fyb-fiyat${tavsiyeMi?' tavsiye':''}${farkCls}">${fiyat} ₺</span>`;
+    }
+    // aç/kapa (tavsiyede yok)
+    let durum = "";
+    if(!tavsiyeBlok){
+      if(acKapatYetki){
+        durum = `<button class="fyb-durum ${kapali?'kapali':'acik'}" onclick="fiyatKanalKapat(${subeArg},'${p.ad.replace(/'/g,"\\'")}','${kanal}')">${kapali?'✕':'✓'}</button>`;
+      } else {
+        durum = `<span class="fyb-durum ${kapali?'kapali':'acik'} salt">${kapali?'✕':'✓'}</span>`;
+      }
+    }
+    const kapaliNot = (kapali && kapaliKayit) ? `<div class="fyb-kapali-not">${fiyatKapaliMetin(kapaliKayit)}</div>` : "";
+    // fark ikazı
+    let farkNot = "";
+    if(dusuk) farkNot = `<div class="fyb-fark-not dusuk">⚠️ Tavsiyeden ${tavF-fiyat} ₺ düşük</div>`;
+    else if(yuksek) farkNot = `<div class="fyb-fark-not yuksek">▲ Tavsiyeden ${fiyat-tavF} ₺ yüksek</div>`;
+    return `<div class="fyb-hucre">
+      <div class="fyb-kanal-ad">${etiket}</div>
+      <div class="fyb-alt">${fiyatGoster}${durum}</div>
+      ${farkNot}
+      ${kapaliNot}
+    </div>`;
+  };
+
+  // şube bloğunda kapatma kayıtları
+  const mKayit = sube ? fiyatKayit(sube, p.ad, "masa").kapali : null;
+  const eKayit = sube ? fiyatKayit(sube, p.ad, "eve").kapali : null;
+
+  return `<div class="fy-blok${tavsiyeBlok?' tavsiye-blok':''}">
+    <div class="fy-blok-bas">${baslik}</div>
+    <div class="fy-blok-govde">
+      ${kanalHucre("masa", mFiyat, mTavsiyeMi, mKapali, mKayit)}
+      ${kanalHucre("eve", eFiyat, eTavsiyeMi, eKapali, eKayit)}
+    </div>
+  </div>`;
+}
 function fiyatKatSec(k){ state.fiyatKat=k; go("fiyat", true); }
-function fiyatGenelGir(sube, ad, kanal){
-  const mevcut = urunFiyatBilgi(ad, sube, kanal).genel;
-  const v=prompt((kanal==="eve"?"Eve teslim ":"")+"genel fiyatı (₺):", String(mevcut));
+/* Tavsiye fiyatı düzenle (ürünün temel fiyatı — ürün formuyla senkron) */
+function tavsiyeFiyatGir(pi, kanal){
+  const p = DEMO_PRODUCTS[pi];
+  const mevcut = kanal==="eve" ? (p.fiyatEve!=null?p.fiyatEve:"") : (p.fiyat||0);
+  const v = prompt((kanal==="eve"?"Eve teslim ":"")+"tavsiye fiyatı (₺)"+(kanal==="eve"?" — boş bırakırsan masa fiyatı kullanılır":"")+":", String(mevcut));
   if(v==null) return;
-  const f=parseInt(v);
-  if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
-  fiyatKayitYaz(sube, ad, kanal).genel = f||null;
-  note(ad+" genel fiyatı: "+f+" ₺");
+  if(kanal==="eve" && v.trim()===""){ delete p.fiyatEve; }
+  else {
+    const f=parseInt(v);
+    if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
+    if(kanal==="eve") p.fiyatEve=f; else p.fiyat=f;
+  }
+  note(p.ad+" tavsiye fiyatı güncellendi");
+  menuKaydet();
+  go("fiyat", true);
+}
+/* Şubeye özel fiyat gir */
+function subeFiyatGir(sube, ad, kanal, tavsiye){
+  const k = fiyatKayit(sube, ad, kanal);
+  const mevcut = (k.genel!=null && k.genel>0) ? k.genel : "";
+  const v = prompt(sube+" — "+(kanal==="eve"?"eve teslim ":"")+"fiyatı (₺)\nBoş bırakırsan tavsiye fiyat ("+tavsiye+"₺) geçerli olur:", String(mevcut));
+  if(v==null) return;
+  if(v.trim()===""){
+    // şube fiyatını sil → tavsiyeye dön
+    if(SUBE_FIYAT[sube] && SUBE_FIYAT[sube][ad] && SUBE_FIYAT[sube][ad][kanal]) SUBE_FIYAT[sube][ad][kanal].genel=null;
+    note(ad+" → tavsiye fiyata döndü ("+sube+")");
+  } else {
+    const f=parseInt(v);
+    if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
+    fiyatKayitYaz(sube, ad, kanal).genel = f;
+    note(ad+" "+sube+" fiyatı: "+f+" ₺");
+  }
   menuKaydet();
   go("fiyat", true);
 }
 function fiyatKanalKapat(sube, ad, kanal){
-  const rec=fiyatKayitYaz(sube,ad,kanal);
-  rec.kapali = !rec.kapali;
-  note(ad+(rec.kapali?" satışa kapatıldı":" açıldı"));
+  const rec = fiyatKayit(sube, ad, kanal);
+  if(fiyatKapaliMi(rec.kapali)){
+    // açık duruma getir
+    fiyatKayitYaz(sube, ad, kanal).kapali = null;
+    note(ad+" açıldı ("+sube+")");
+    menuKaydet();
+    go("fiyat", true);
+    return;
+  }
+  // kapatma modalı aç
+  state._fkHedef = {sube, ad, kanal};
+  renderFiyatKapatModal();
+  document.getElementById("grupSecModal").classList.add("on");
+}
+function renderFiyatKapatModal(){
+  const {sube, ad, kanal} = state._fkHedef;
+  const kanalAd = kanal==="eve" ? "Eve teslim" : "Masa/Gel-Al";
+  let html = `<div class="gsm-head">
+    <div class="gsm-baslik">⛔ "${ad}" kapat</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="skm-bilgi"><strong>${sube}</strong> şubesinde <strong>${kanalAd}</strong> kanalında bu ürün satışa kapatılacak. Kasada ve menüde seçilemez olur.</div>
+    <div class="skm-secenekler">
+      <button class="skm-opt" onclick="fiyatKapatUygula('surekli')">
+        <span class="skm-opt-ad">🔒 Sürekli kapalı</span>
+        <span class="skm-opt-not">Tekrar açana kadar kapalı kalır</span></button>
+      <button class="skm-opt" onclick="fiyatKapatUygula('yarin0900')">
+        <span class="skm-opt-ad">🌅 Ertesi gün 09:00'a kadar</span>
+        <span class="skm-opt-not">Yarın sabah otomatik açılır</span></button>
+      <button class="skm-opt" onclick="fiyatKapatModalSaat()">
+        <span class="skm-opt-ad">🕐 Saate kadar kapalı</span>
+        <span class="skm-opt-not">Bugün belirli bir saate kadar</span></button>
+      <button class="skm-opt" onclick="fiyatKapatModalTarih()">
+        <span class="skm-opt-ad">📅 Tarihe kadar kapalı</span>
+        <span class="skm-opt-not">Seçtiğiniz güne kadar</span></button>
+    </div>`;
+  document.getElementById("grupSecInner").innerHTML = html;
+}
+function fiyatKapatModalSaat(){
+  const {ad} = state._fkHedef;
+  document.getElementById("grupSecInner").innerHTML = `<div class="gsm-head"><div class="gsm-baslik">🕐 Saate kadar kapat</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="skm-bilgi">"${ad}" bugün seçtiğiniz saate kadar kapalı kalsın:</div>
+    <div class="skm-input-alan"><input type="time" class="uf-input" id="fkSaat" value="18:00">
+      <button class="skm-uygula" onclick="fiyatKapatUygula('saat',document.getElementById('fkSaat').value)">Kapat</button></div>`;
+}
+function fiyatKapatModalTarih(){
+  const {ad} = state._fkHedef;
+  const yarin = new Date(Date.now()+86400000).toISOString().slice(0,10);
+  document.getElementById("grupSecInner").innerHTML = `<div class="gsm-head"><div class="gsm-baslik">📅 Tarihe kadar kapat</div>
+    <button class="bom-kapat" onclick="grupSecModalKapat()">✕</button></div>
+    <div class="skm-bilgi">"${ad}" seçtiğiniz tarihe kadar (o gün dahil) kapalı kalsın:</div>
+    <div class="skm-input-alan"><input type="date" class="uf-input" id="fkTarih" value="${yarin}">
+      <button class="skm-uygula" onclick="fiyatKapatUygula('tarih',document.getElementById('fkTarih').value)">Kapat</button></div>`;
+}
+function fiyatKapatUygula(tip, deger){
+  const {sube, ad, kanal} = state._fkHedef;
+  if(tip==="saat" && !deger){ note("Saat seçin"); return; }
+  if(tip==="tarih" && !deger){ note("Tarih seçin"); return; }
+  let kayit;
+  if(tip==="yarin0900") kayit = {tip:"sure", bitis:sonraki0900()};
+  else if(tip==="surekli") kayit = {tip:"surekli"};
+  else kayit = {tip, deger};
+  fiyatKayitYaz(sube, ad, kanal).kapali = kayit;
+  grupSecModalKapat();
+  note(ad+" kapatıldı ("+sube+" · "+fiyatKapaliMetin(kayit)+")");
   menuKaydet();
   go("fiyat", true);
 }
 
 /* === KATEGORİLER === */
 function kategoriYonetimHtml(){
+  const isGenel = state.role==="genel";
   let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${DEMO_KATEGORILER.length} kategori</div>
-    <button class="bayi-ekle-btn" onclick="kategoriEkle()">+ Yeni kategori</button></div>`;
+    ${isGenel?`<button class="bayi-ekle-btn" onclick="kategoriEkle()">+ Yeni kategori</button>`:''}</div>`;
+  if(!isGenel) html += `<div class="fy-mudur-not">👁️ Görüntüleme modu — değişiklik yetkisi genel müdürdedir.</div>`;
   html += `<div class="kat-yonetim-liste">`;
   DEMO_KATEGORILER.forEach((k,i)=>{
     const urunSay = DEMO_PRODUCTS.filter(p=>p.kat===k.ad).length;
@@ -6720,14 +6930,14 @@ function kategoriYonetimHtml(){
       </div>
       <span class="kys-ad">${k.ad}</span>
       <span class="kys-sayi">${urunSay} ürün</span>
-      <div class="kys-aksiyon">
+      ${isGenel?`<div class="kys-aksiyon">
         <button class="kys-btn gorsel" onclick="katGorselSec(${i})" title="${gorsel?'Görseli değiştir':'Görsel ekle'}">🖼️</button>
         ${gorsel?`<button class="kys-btn sil" onclick="katGorselSil(${i})" title="Görseli kaldır">🚫</button>`:''}
         <button class="kys-btn" onclick="kategoriSiraTasi(${i},-1)" ${i===0?'disabled':''}>↑</button>
         <button class="kys-btn" onclick="kategoriSiraTasi(${i},1)" ${i===DEMO_KATEGORILER.length-1?'disabled':''}>↓</button>
         <button class="kys-btn" onclick="kategoriDuzenle(${i})">✏️</button>
         <button class="kys-btn sil" onclick="kategoriSil(${i})">🗑️</button>
-      </div>
+      </div>`:''}
     </div>`;
   });
   html += `</div>`;
@@ -6814,10 +7024,12 @@ function kategoriSiraTasi(i, yon){
 
 /* === SEÇENEK GRUPLARI (tip + min/max + seçenek listesi) === */
 function secenekGrupHtml(){
+  const isGenel = state.role==="genel";
   const adlar = Object.keys(OPTION_GROUPS);
   let html = `<div class="fy-bilgi-not">🧩 Seçenek grupları (örn. "Sos Seçimi"). Her grupta zorunlu/isteğe bağlı, en az–en çok seçim ve seçenekleri belirleyebilirsiniz. Ürün oluştururken bu grubu seçince hepsi ürüne hazır gelir.</div>`;
+  if(!isGenel) html += `<div class="fy-mudur-not">👁️ Görüntüleme modu — değişiklik yetkisi genel müdürdedir.</div>`;
   html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${adlar.length} seçenek grubu</div>
-    <button class="bayi-ekle-btn" onclick="secGrupEkle()">+ Yeni grup</button></div>`;
+    ${isGenel?`<button class="bayi-ekle-btn" onclick="secGrupEkle()">+ Yeni grup</button>`:''}</div>`;
   if(adlar.length===0){ return html+`<div class="bayi-bos">Henüz seçenek grubu yok.</div>`; }
   html += `<div class="sg-liste">`;
   adlar.forEach(ad=>{
@@ -6829,11 +7041,11 @@ function secenekGrupHtml(){
     html += `<div class="sg-kart">
       <div class="sg-ust">
         <span class="sg-ad">${ad}</span>
-        <div class="sg-aksiyon">
+        ${isGenel?`<div class="sg-aksiyon">
           <button class="kys-btn" onclick="secGrupAyar('${ad.replace(/'/g,"\\'")}')">⚙️</button>
           <button class="kys-btn" onclick="secGrupDuzenle('${ad.replace(/'/g,"\\'")}')">✏️</button>
           <button class="kys-btn sil" onclick="secGrupSil('${ad.replace(/'/g,"\\'")}')">🗑️</button>
-        </div>
+        </div>`:''}
       </div>
       <div class="sg-limit"><span class="sg-limit-rozet${istege?'':' zor'}">${limitMetin}</span></div>
       <div class="sg-secenek-liste">`;
@@ -6842,11 +7054,11 @@ function secenekGrupHtml(){
       html += `<div class="sg-sec-satir${ist?' sg-ist':''}">
         <span class="sg-sec-ad">${ist?'🚫 ':''}${s.ad}</span>
         ${s.ek?`<span class="sg-sec-ek">+${s.ek} ₺</span>`:`<span class="sg-sec-ek bos">—</span>`}
-        <button class="sg-sec-sil" onclick="secGrupSecenekSil('${ad.replace(/'/g,"\\'")}',${si})">✕</button>
+        ${isGenel?`<button class="sg-sec-sil" onclick="secGrupSecenekSil('${ad.replace(/'/g,"\\'")}',${si})">✕</button>`:''}
       </div>`;
     });
     if((g.secenekler||[]).length===0) html += `<div class="sg-sec-bos">Henüz seçenek yok</div>`;
-    html += `<div class="sg-sec-ekle-row">
+    if(isGenel) html += `<div class="sg-sec-ekle-row">
         <button class="sg-sec-ekle" onclick="secGrupSecenekEkle('${ad.replace(/'/g,"\\'")}')">+ seçenek ekle</button>
         ${!istege?`<button class="sg-ist-ekle" onclick="secGrupIstemiyorum('${ad.replace(/'/g,"\\'")}')">+ "İstemiyorum" ekle</button>`:''}
       </div>`;
@@ -7021,9 +7233,10 @@ function secenekPoolHtml(){
     html += `<div class="sec-sube-row"><label>🏬 ${hedefSube}</label></div>`;
   }
   html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${OPTION_POOL.length} seçenek${kapaliSay?` · <span style="color:var(--err)">${kapaliSay} kapalı</span>`:''}</div>
-    <div style="display:flex;gap:8px">
+    ${isGenel?`<div style="display:flex;gap:8px">
     <button class="kys-btn" style="width:auto;padding:0 12px;font-size:12px" onclick="secHavuzTazele()" title="Ürünlerdeki fiyatları havuza çek">🔄 Fiyatları tazele</button>
-    <button class="bayi-ekle-btn" onclick="secPoolEkle()">+ Yeni seçenek</button></div></div>`;
+    <button class="bayi-ekle-btn" onclick="secPoolEkle()">+ Yeni seçenek</button></div>`:''}</div>`;
+  if(!isGenel) html += `<div class="fy-mudur-not">🏬 <strong>${hedefSube}</strong> şubesi için seçenek açıp/kapatabilirsiniz (kasa ile koordineli). Seçenek ekleme/silme genel müdür yetkisindedir.</div>`;
   html += `<div class="sec-ara-kutu"><input class="uf-input" placeholder="🔍 Seçenek ara..." value="${(state.secAra||'').replace(/"/g,'&quot;')}" oninput="secPoolAra(this.value)"></div>`;
   if(liste.length===0){ return html+`<div class="bayi-bos">${ara?'Eşleşen seçenek yok.':'Henüz seçenek yok.'}</div>`; }
   html += `<div class="secpool-liste">`;
@@ -7036,8 +7249,8 @@ function secenekPoolHtml(){
       ${kapali?`<span class="sp-durum-kapali">⛔ ${kapaliMetin}</span>`:`<span class="sp-durum-acik">✓ açık</span>`}
       <div class="sp-aksiyon">
         <button class="sp-kapat-btn${kapali?' acik':''}" onclick="secPoolKapatAc(${i})">${kapali?'Aç':'Kapat'}</button>
-        <button class="kys-btn" onclick="secPoolDuzenle(${i})">✏️</button>
-        <button class="kys-btn sil" onclick="secPoolSil(${i})">🗑️</button>
+        ${isGenel?`<button class="kys-btn" onclick="secPoolDuzenle(${i})">✏️</button>
+        <button class="kys-btn sil" onclick="secPoolSil(${i})">🗑️</button>`:''}
       </div>
     </div>`;
   });
@@ -7205,11 +7418,13 @@ function secKapatUygula(tip, deger){
 
 /* === ÜRÜNLER === */
 function urunYonetimHtml(){
+  const isGenel = state.role==="genel";
   if(!state.urunKat) state.urunKat = DEMO_KATEGORILER[0]?.ad;
   const kategoriler = DEMO_KATEGORILER.map(k=>k.ad);
   const prods = DEMO_PRODUCTS.filter(p=>p.kat===state.urunKat);
   let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${DEMO_PRODUCTS.length} ürün</div>
-    <button class="bayi-ekle-btn" onclick="urunFormAc()">+ Yeni ürün</button></div>`;
+    ${isGenel?`<button class="bayi-ekle-btn" onclick="urunFormAc()">+ Yeni ürün</button>`:''}</div>`;
+  if(!isGenel) html += `<div class="fy-mudur-not">👁️ Görüntüleme modu — ürün oluşturma/düzenleme yetkisi genel müdürdedir.</div>`;
   html += `<div class="cat-row">`;
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.urunKat===k?' on':''}" onclick="urunKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
   html += `</div>`;
@@ -7224,10 +7439,10 @@ function urunYonetimHtml(){
         <div class="uy-ad">${p.ad}</div>
         <div class="uy-meta">${p.fiyat} ₺${opsSay?` · ${opsSay} seçenek grubu`:''}${p.aktif?'':' · ⛔ pasif'}</div>
       </div>
-      <div class="uy-aksiyon">
+      ${isGenel?`<div class="uy-aksiyon">
         <button class="kys-btn" onclick="urunFormAc(${pi})">✏️</button>
         <button class="kys-btn sil" onclick="urunSil(${pi})">🗑️</button>
-      </div>
+      </div>`:''}
     </div>`;
   });
   if(prods.length===0) html += `<div class="bayi-bos">Bu kategoride ürün yok.</div>`;
