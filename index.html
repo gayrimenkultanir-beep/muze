@@ -393,6 +393,13 @@ tr:last-child td{border-bottom:none}
 .sg-sec-ad{flex:1; font-size:13.5px; font-weight:600}
 .sg-sec-ek{font-size:12.5px; font-weight:800; color:var(--brand-d)}
 .sg-sec-ek.bos{color:var(--ink-3); font-weight:400}
+.sg-ucretsiz-rozet{display:inline-block; margin-left:8px; font-size:11px; font-weight:800; color:var(--ok); background:var(--ok-soft); border-radius:99px; padding:2px 9px}
+.sg-kart.sg-ucretsiz{border-color:#bfe3cd}
+.sga-ucret-not{font-size:11.5px; color:var(--ink-3); margin-top:7px; line-height:1.4}
+.uf-ucret-secim{display:flex; gap:7px; margin:8px 0}
+.uf-ucret{flex:1; padding:9px; border-radius:9px; background:var(--surface); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.uf-ucret.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.uf-sec-ek.ucretsiz{color:var(--ok); font-weight:700; font-size:11.5px; white-space:nowrap}
 .sg-sec-sil{width:24px; height:24px; min-width:24px; border-radius:6px; background:var(--err-soft); color:var(--err); border:none; font-size:10px; font-weight:800}
 .sg-sec-bos{font-size:12.5px; color:var(--ink-3); text-align:center; padding:10px}
 .sg-sec-ekle-row{display:flex; gap:8px; margin-top:8px; flex-wrap:wrap}
@@ -5301,12 +5308,18 @@ function optGecerli(){
     return n>=(grup.min||0) && n<=(grup.max||99);
   });
 }
+/* Bir grubun bir seçeneğinin geçerli ek fiyatı — grup ücretsizse 0 */
+function grupEk(grup, si){
+  if(!grup || grup.ucretsiz) return 0;
+  const s = (grup.secenekler||[])[si];
+  return s ? (s.ek||0) : 0;
+}
 /* Seçili opsiyonların toplam ek fiyatı (adet × ek) */
 function optEkFiyat(){
   let ek=0;
   PRODUCT_OPTIONS[OPT_STATE.p.ad].forEach((grup,gi)=>{
     const m = OPT_STATE.secim[gi]||{};
-    Object.entries(m).forEach(([si,adet])=>{ ek += (grup.secenekler[si].ek||0)*adet; });
+    Object.entries(m).forEach(([si,adet])=>{ ek += grupEk(grup, si)*adet; });
   });
   return ek;
 }
@@ -5419,7 +5432,8 @@ function optAccTogle(gi){
 function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
   const adet = m[si]||0;
   const secili = adet>0;
-  const fiyatTxt = sec.ek ? '+'+sec.ek+' ₺' : '';
+  const ekDeger = grup.ucretsiz ? 0 : (sec.ek||0);
+  const fiyatTxt = ekDeger ? '+'+ekDeger+' ₺' : '';
   const ist = secIstemiyorum(sec) ? ' opt-ist' : '';
   const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const kapali = secIstemiyorum(sec) ? false : secenekKapali(p.ad, gi, si, sec, optSube);
@@ -5485,7 +5499,7 @@ function confirmOpt(){
         secimler.push(etiket);
         grupSecimleri.push(etiket);
       }
-      ekFiyat += (sec.ek||0)*adet;
+      ekFiyat += grupEk(grup, si)*adet;
       if(sec.recete) sec.recete.forEach(r=>{ if(r.g>0) for(let q=0;q<adet;q++) ekstraRecete.push(r); });
     });
     if(grupSecimleri.length>0) secimGruplu.push({grup:grup.ad, secenekler:grupSecimleri});
@@ -8122,10 +8136,11 @@ function secenekGrupHtml(){
   adlar.forEach(ad=>{
     const g = OPTION_GROUPS[ad];
     const istege = g.tip==="istege";
+    const ucretsiz = !!g.ucretsiz;
     const limitMetin = istege
       ? (g.max && g.max<99 ? "İsteğe bağlı · en fazla "+g.max : "İsteğe bağlı · sınırsız")
       : "Zorunlu · "+(g.min===g.max ? g.min+" seçim" : g.min+"–"+g.max+" seçim");
-    html += `<div class="sg-kart">
+    html += `<div class="sg-kart${ucretsiz?' sg-ucretsiz':''}">
       <div class="sg-ust">
         <span class="sg-ad">${ad}</span>
         ${isGenel?`<div class="sg-aksiyon">
@@ -8134,13 +8149,18 @@ function secenekGrupHtml(){
           <button class="kys-btn sil" onclick="secGrupSil('${ad.replace(/'/g,"\\'")}')">🗑️</button>
         </div>`:''}
       </div>
-      <div class="sg-limit"><span class="sg-limit-rozet${istege?'':' zor'}">${limitMetin}</span></div>
+      <div class="sg-limit"><span class="sg-limit-rozet${istege?'':' zor'}">${limitMetin}</span>
+        ${ucretsiz?'<span class="sg-ucretsiz-rozet">🆓 Ücretsiz grup</span>':''}</div>
       <div class="sg-secenek-liste">`;
     (g.secenekler||[]).forEach((s,si)=>{
       const ist = secIstemiyorum(s);
+      // ücretsiz grupta fiyat gösterme/düzenleme pasif
+      let ekHtml;
+      if(ucretsiz){ ekHtml = `<span class="sg-sec-ek bos">ücretsiz</span>`; }
+      else { ekHtml = s.ek?`<span class="sg-sec-ek">+${s.ek} ₺</span>`:`<span class="sg-sec-ek bos">—</span>`; }
       html += `<div class="sg-sec-satir${ist?' sg-ist':''}">
         <span class="sg-sec-ad">${ist?'🚫 ':''}${s.ad}</span>
-        ${s.ek?`<span class="sg-sec-ek">+${s.ek} ₺</span>`:`<span class="sg-sec-ek bos">—</span>`}
+        ${ekHtml}
         ${isGenel?`<button class="sg-sec-sil" onclick="secGrupSecenekSil('${ad.replace(/'/g,"\\'")}',${si})">✕</button>`:''}
       </div>`;
     });
@@ -8208,8 +8228,24 @@ function renderSecGrupAyar(){
         <input class="uf-input" inputmode="numeric" value="${g.max}" oninput="secGrupMaxSet(this.value)"></div>
     </div>`;
   }
+  // ÜCRETLİ / ÜCRETSİZ seçimi
+  const ucretsiz = !!g.ucretsiz;
+  html += `<div class="kmpf-alan"><label>Ücretlendirme</label>
+    <div class="kmpf-secim-row">
+      <button class="kmpf-secim${!ucretsiz?' on':''}" onclick="secGrupUcretSet(false)">💰 Ücretli</button>
+      <button class="kmpf-secim${ucretsiz?' on':''}" onclick="secGrupUcretSet(true)">🆓 Ücretsiz</button>
+    </div>
+    <div class="sga-ucret-not">${ucretsiz
+      ? 'Bu gruptaki seçenekler fiyatsız uygulanır; fiyat girişi pasiftir. Müşteri ekranında fiyat görünmez.'
+      : 'Seçeneklerin ek fiyatları menüye ve kasaya yansır.'}</div>
+  </div>`;
   html += `</div><button class="kmpf-kaydet" onclick="grupSecModalKapat();go('fiyat',true)">Tamam</button>`;
   document.getElementById("grupSecInner").innerHTML = html;
+}
+function secGrupUcretSet(ucretsiz){
+  const g = OPTION_GROUPS[state._sgAyarHedef];
+  g.ucretsiz = !!ucretsiz;
+  menuKaydet(); renderSecGrupAyar();
 }
 function secGrupTipSet(tip){
   const g = OPTION_GROUPS[state._sgAyarHedef];
@@ -8732,6 +8768,10 @@ function renderUrunForm(){
       </div>`;
     }
     html += `</div>
+      <div class="uf-ucret-secim">
+        <button class="uf-ucret${!g.ucretsiz?' on':''}" onclick="ufGrupUcret(${gi},false)">💰 Ücretli</button>
+        <button class="uf-ucret${g.ucretsiz?' on':''}" onclick="ufGrupUcret(${gi},true)">🆓 Ücretsiz</button>
+      </div>
       <div class="uf-secenekler">`;
     (g.secenekler||[]).forEach((s,si)=>{
       // seçenek adı dropdown (havuzdan) + özel
@@ -8748,7 +8788,9 @@ function renderUrunForm(){
           <option value="__ozel__"${ozelSec?' selected':''}>✏️ Özel...</option>
         </select>
         ${ozelSec?`<input class="uf-sec-ozel" value="${(s.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ad=this.value" placeholder="Ad">`:''}
-        <span class="uf-sec-ek">+<input class="uf-sec-ek-input" inputmode="numeric" value="${s.ek||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ek=parseInt(this.value)||0">₺</span>
+        ${g.ucretsiz
+          ? `<span class="uf-sec-ek ucretsiz">🆓 ücretsiz</span>`
+          : `<span class="uf-sec-ek">+<input class="uf-sec-ek-input" inputmode="numeric" value="${s.ek||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ek=parseInt(this.value)||0">₺</span>`}
         <button class="uf-sec-sil" onclick="ufSecSil(${gi},${si})">✕</button>
       </div>`;
     });
@@ -8819,18 +8861,20 @@ function renderGrupSecModal(arama){
 /* Seçilen grup ismini ürüne ekle — SADECE İSİM, seçenekler boş (sonra + seçenek ile eklenir) */
 function ufHazirGrupEkle(ad){
   const g = OPTION_GROUPS[ad];
-  // grubun tip/min/max + tüm seçeneklerini ürüne kopyala
+  // grubun tip/min/max + ücretsiz + tüm seçeneklerini ürüne kopyala
   state.urunForm.gruplar.push({
     ad: ad,
     tip: g.tip || "zorunlu",
     min: g.min!=null ? g.min : (g.tip==="istege"?0:1),
     max: g.max!=null ? g.max : (g.tip==="istege"?99:1),
+    ucretsiz: !!g.ucretsiz,
     secenekler: JSON.parse(JSON.stringify(g.secenekler||[]))
   });
   grupSecModalKapat();
   renderUrunForm();
 }
 function ufGrupSil(gi){ state.urunForm.gruplar.splice(gi,1); renderUrunForm(); }
+function ufGrupUcret(gi, ucretsiz){ state.urunForm.gruplar[gi].ucretsiz = !!ucretsiz; renderUrunForm(); }
 function ufGrupTasi(gi, yon){
   const g = state.urunForm.gruplar;
   const yeni = gi + yon;
@@ -8921,6 +8965,7 @@ function urunKaydet(){
       tip:g.tip,
       min:g.tip==="istege"?0:Math.max(0,g.min||0),
       max:g.tip==="istege"?99:Math.max(1,g.max||1),
+      ucretsiz:!!g.ucretsiz,
       secenekler:g.secenekler.filter(s=>s.ad.trim()).map(s=>({ad:s.ad.trim(),ek:s.ek||0}))
     }))
     .filter(g=>g.secenekler.length>0);
