@@ -1571,6 +1571,125 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .sube-modal-foot{display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--line)}
 .sube-iptal-btn{flex:1; padding:13px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
 .sube-kaydet-btn{flex:1.6; padding:13px; border-radius:11px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+/* === MÜŞTERİ EKRANI === */
+.ode-head-sag{display:flex; gap:8px; align-items:center}
+.ode-musteri-btn{padding:9px 14px; border-radius:10px; background:var(--cocoa); color:#fff; border:none; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap}
+.mte-modal-ic{background:#fff; border-radius:18px; max-width:540px; width:94%; margin:auto; max-height:88vh; display:flex; flex-direction:column}
+.mte-modal-bas{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; font-weight:800; color:var(--cocoa)}
+.mte-modal-govde{padding:18px 20px; overflow-y:auto}
+.mte-durum{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:700; color:var(--ink-2); margin-bottom:12px}
+.mte-durum-nokta{width:11px; height:11px; border-radius:50%; background:var(--ink-3)}
+.mte-durum.acik{color:var(--ok)}
+.mte-durum.acik .mte-durum-nokta{background:var(--ok); box-shadow:0 0 0 4px var(--ok-soft)}
+.mte-buton-row{margin-bottom:12px}
+.mte-ac-btn{padding:12px 20px; border-radius:11px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+.mte-kapat-btn{padding:12px 20px; border-radius:11px; background:var(--err-soft); color:var(--err); border:none; font-size:14px; font-weight:700; cursor:pointer}
+.mte-not{font-size:12px; color:var(--ink-3); line-height:1.5; margin-bottom:16px}
+.mte-reklam-bas{font-size:14px; font-weight:800; color:var(--cocoa); margin-bottom:10px; padding-top:8px; border-top:1px solid var(--line)}
+.mte-reklam-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; margin-bottom:10px}
+.mte-reklam-kart{position:relative; aspect-ratio:16/9; border-radius:10px; overflow:hidden; border:1px solid var(--line)}
+.mte-reklam-kart img{width:100%; height:100%; object-fit:cover}
+.mte-reklam-sil{position:absolute; top:5px; right:5px; width:24px; height:24px; border-radius:50%; background:rgba(0,0,0,.6); color:#fff; border:none; font-size:13px; cursor:pointer}
+.mte-reklam-ekle{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; aspect-ratio:16/9; border-radius:10px; border:2px dashed var(--line); cursor:pointer; color:var(--ink-3); background:var(--surface-2)}
+.mte-reklam-ekle span:first-child{font-size:28px; font-weight:300; line-height:1}
+.mte-ekle-lbl{font-size:12px; font-weight:700}
+/* === SEÇENEK SİL ONAY MODALI === */
+.ssil-ic{background:#fff; border-radius:18px; padding:26px 24px; max-width:340px; width:90%; margin:auto; text-align:center}
+.ssil-ikon{font-size:42px; margin-bottom:10px}
+.ssil-bas{font-size:18px; font-weight:800; color:var(--ink); margin-bottom:6px}
+.ssil-urun{font-size:14px; color:var(--ink-2); font-weight:600}
+.ssil-sec{font-size:15px; color:var(--cocoa); font-weight:700; margin-top:8px}
+.ssil-fiyat{color:var(--err); font-weight:800}
+.ssil-not{font-size:12.5px; color:var(--ink-3); margin-top:12px; line-height:1.5; background:var(--surface-2); border-radius:10px; padding:10px 14px}
+.ssil-adet-blok{margin-top:14px; background:var(--surface-2); border-radius:12px; padding:12px}
+.ssil-adet-lbl{font-size:12.5px; font-weight:700; color:var(--ink-2); margin-bottom:10px}
+.ssil-adet-row{display:flex; align-items:center; justify-content:center; gap:10px}
+.ssil-adet-btn{width:38px; height:38px; border-radius:10px; background:#fff; border:1.5px solid var(--line); font-size:20px; font-weight:800; color:var(--cocoa); cursor:pointer}
+.ssil-adet-btn:disabled{opacity:.3; cursor:default}
+.ssil-adet-deger{font-size:24px; font-weight:900; color:var(--ink); min-width:36px; text-align:center}
+.ssil-adet-tum{padding:8px 14px; border-radius:9px; background:#fff; border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer; margin-left:4px}
+.ssil-adet-tum.on{background:var(--err-soft); border-color:var(--err); color:var(--err)}
+/* === MUTFAK MÜŞTERİ MESAJI (onay/red) === */
+.kds-mesaj{background:#2a2020; border-radius:10px; padding:11px 13px; margin-bottom:8px}
+.kds-mesaj-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
+.kds-mesaj-kisi{font-size:12px; font-weight:700; color:#e0c9a0}
+.kds-mesaj-rozet{font-size:10.5px; font-weight:800; border-radius:6px; padding:2px 8px}
+.kds-mesaj-rozet.bekle{background:#4a3a20; color:#f0c060}
+.kds-mesaj-rozet.ok{background:#1d4030; color:#5fd99a}
+.kds-mesaj-rozet.red{background:#4a2020; color:#e88}
+.kds-mesaj-metin{font-size:14px; color:#fff; line-height:1.4; margin-bottom:8px}
+.kds-mesaj-aksiyon{display:flex; gap:8px}
+.kds-mesaj-onay{flex:1.3; padding:9px; border-radius:8px; background:#1d7c4d; color:#fff; border:none; font-size:13px; font-weight:800; cursor:pointer}
+.kds-mesaj-red{flex:1; padding:9px; border-radius:8px; background:#5a2a2a; color:#f5b0a8; border:none; font-size:13px; font-weight:700; cursor:pointer}
+.kds-mesaj-onaylandi{opacity:.7}
+.kds-mesaj-reddedildi{opacity:.6}
+/* mutfak mesaj pop-up */
+.kmp-ic{background:#fff; border-radius:20px; padding:26px 24px; max-width:380px; width:92%; margin:auto; text-align:center}
+.kmp-ikon{font-size:48px; margin-bottom:8px}
+.kmp-bas{font-size:20px; font-weight:900; color:var(--ink); margin-bottom:8px}
+.kmp-masa{font-size:13px; font-weight:700; color:var(--cocoa); background:var(--surface-2); border-radius:8px; padding:6px 12px; display:inline-block; margin-bottom:14px}
+.kmp-mesaj{font-size:18px; color:var(--ink); line-height:1.5; background:#fff8ee; border:1px solid #f0d9b0; border-radius:12px; padding:16px; margin-bottom:18px}
+.kmp-butonlar{display:flex; gap:10px; margin-bottom:10px}
+.kmp-onay{flex:1.4; padding:15px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer}
+.kmp-red{flex:1; padding:15px; border-radius:12px; background:var(--err-soft); color:var(--err); border:none; font-size:15px; font-weight:700; cursor:pointer}
+.kmp-sonra{background:none; border:none; color:var(--ink-3); font-size:13px; font-weight:600; cursor:pointer; padding:6px}
+/* QR müşteri mesaj geçmişi */
+.qr-mesaj-gecmis{margin-top:14px; text-align:left}
+.qr-mg-baslik{font-size:13px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
+.qr-mg-satir{border-radius:11px; padding:11px 13px; margin-bottom:8px; border:1.5px solid var(--line)}
+.qr-mg-metin{font-size:14px; color:var(--ink); margin-bottom:5px}
+.qr-mg-durum{font-size:12.5px; font-weight:700}
+.qr-mg-bekliyor{background:#fff8ee; border-color:#f0d9b0}
+.qr-mg-bekliyor .qr-mg-durum{color:#b06d10}
+.qr-mg-onaylandi{background:var(--ok-soft); border-color:#bfe3cd}
+.qr-mg-onaylandi .qr-mg-durum{color:var(--ok)}
+.qr-mg-reddedildi{background:var(--err-soft); border-color:#f0c0ba}
+.qr-mg-reddedildi .qr-mg-durum{color:var(--err)}
+/* QR müşteri yanıt pop-up */
+.qyp-ic{background:#fff; border-radius:22px; padding:30px 26px; max-width:360px; width:90%; margin:auto; text-align:center}
+.qyp-ikon{width:72px; height:72px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:40px; font-weight:900; color:#fff; margin:0 auto 16px}
+.qyp-ic.onay .qyp-ikon{background:var(--ok)}
+.qyp-ic.red .qyp-ikon{background:var(--err)}
+.qyp-bas{font-size:21px; font-weight:900; color:var(--ink); margin-bottom:12px}
+.qyp-mesaj{font-size:15px; color:var(--ink-2); font-style:italic; margin-bottom:10px}
+.qyp-alt{font-size:14px; color:var(--ink-3); line-height:1.5; margin-bottom:20px}
+.qyp-tamam{width:100%; padding:15px; border-radius:13px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer}
+/* === QR MUTFAĞA MESAJ MODALI === */
+.qrm-ic{background:#fff; border-radius:20px; padding:24px 22px; max-width:380px; width:92%; margin:auto}
+.qrm-bas{font-size:19px; font-weight:900; color:var(--ink); margin-bottom:6px}
+.qrm-alt{font-size:13px; color:var(--ink-3); line-height:1.5; margin-bottom:16px}
+.qrm-text{width:100%; min-height:100px; border:1.5px solid var(--line); border-radius:12px; padding:13px; font-size:15px; font-family:inherit; resize:vertical; outline:none; color:var(--ink); background:var(--surface)}
+.qrm-text:focus{border-color:var(--brand)}
+.qrm-butonlar{display:flex; gap:10px; margin-top:16px}
+.qrm-vazgec{flex:1; padding:14px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
+.qrm-gonder{flex:1.5; padding:14px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+/* === GARSON ÇAĞRI ONAY POP-UP (personel) === */
+.gcp-ic{background:#fff; border-radius:20px; padding:26px 24px; max-width:380px; width:92%; margin:auto; text-align:center}
+.gcp-ikon{font-size:48px; margin-bottom:8px; animation:gcpZil .6s ease-in-out infinite}
+@keyframes gcpZil{0%,100%{transform:rotate(0)}25%{transform:rotate(-15deg)}75%{transform:rotate(15deg)}}
+.gcp-bas{font-size:21px; font-weight:900; color:var(--err); margin-bottom:8px}
+.gcp-masa{font-size:15px; font-weight:800; color:var(--ink); background:var(--err-soft); border-radius:9px; padding:8px 14px; display:inline-block; margin-bottom:6px}
+.gcp-sure{font-size:12.5px; color:var(--ink-3); margin-bottom:16px}
+.gcp-ad-alan{text-align:left; margin-bottom:16px}
+.gcp-ad-alan label{display:block; font-size:12.5px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
+.gcp-ad-input{width:100%; padding:12px 14px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; outline:none; color:var(--ink); background:var(--surface)}
+.gcp-ad-input:focus{border-color:var(--brand)}
+.gcp-butonlar{display:flex; gap:10px}
+.gcp-sonra{flex:1; padding:14px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
+.gcp-kabul{flex:2; padding:14px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
+/* müşteri çağrı onay pop-up */
+.qcp-ic{background:#fff; border-radius:22px; padding:30px 26px; max-width:360px; width:90%; margin:auto; text-align:center}
+.qcp-ikon{font-size:56px; margin-bottom:14px}
+.qcp-bas{font-size:21px; font-weight:900; color:var(--ok); margin-bottom:12px}
+.qcp-mesaj{font-size:16px; color:var(--ink-2); line-height:1.6; margin-bottom:20px}
+.qcp-tamam{width:100%; padding:15px; border-radius:13px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer}
+.ssil-butonlar{display:flex; gap:10px; margin-top:18px}
+.ssil-vazgec{flex:1; padding:13px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
+.ssil-onayla{flex:1.3; padding:13px; border-radius:11px; background:var(--err); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+/* seçenek ekle butonları */
+.kmd-k-aksiyon{display:flex; gap:8px; flex-wrap:wrap}
+.kmd-sec-ekle{padding:7px 13px; border-radius:9px; background:var(--ok-soft); color:var(--ok); border:none; font-size:12.5px; font-weight:700; cursor:pointer}
+.kak-btn.sec-ekle{background:var(--ok-soft); color:var(--ok)}
 /* === FİYAT DEĞİŞTİRME MODAL === */
 .fy-duz-ic{background:#fff; border-radius:20px; padding:22px; max-width:360px; width:92%; margin:auto}
 .fy-duz-bas{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px}
@@ -5413,6 +5532,23 @@ function openOptionModal(idx){
   document.getElementById("optModal").classList.add("on");
 }
 function closeOpt(){ document.getElementById("optModal").classList.remove("on"); OPT_STATE=null; }
+/* Mevcut bir kaleme seçenek ekle (kasa/mutfak/müdür) — opsiyon modalını ekleme modunda aç */
+function kalemSecenekEkle(masaNo, kalemId, kaynak){
+  const it = (function(){
+    const s=SESSIONS[masaNo]; if(!s) return null;
+    for(const k of s.kisiler) for(const x of k.kalemler) if(x.id===kalemId) return x;
+    return null;
+  })();
+  if(!it){ note("Kalem bulunamadı"); return; }
+  const idx = DEMO_PRODUCTS.findIndex(p=>p.ad===it.ad);
+  if(idx<0 || !(PRODUCT_OPTIONS[it.ad]||[]).length){ note("Bu ürünün seçeneği yok"); return; }
+  const p = DEMO_PRODUCTS[idx];
+  OPT_STATE = { idx:idx, p:p, secim:{}, not:"", ekleHedef:{masaNo, kalemId, kaynak} };
+  // ekleme modunda hiçbir şey önseçili gelmesin (sadece eklenmek istenenler)
+  PRODUCT_OPTIONS[p.ad].forEach((grup,gi)=>{ OPT_STATE.secim[gi]={}; });
+  renderOptionModal();
+  document.getElementById("optModal").classList.add("on");
+}
 /* "İstemiyorum" tipi seçenek mi? (Türkçe İ/I duyarlı) */
 function secIstemiyorum(sec){
   const t = (sec.ad||"").toLocaleLowerCase("tr-TR");
@@ -5522,14 +5658,15 @@ function renderOptionModal(){
     else zorunluGruplar.push({grup,gi});
   });
 
+  const ekModu = !!(OPT_STATE.ekleHedef);
   // ZORUNLU SEÇİMLER bölümü
   if(zorunluGruplar.length>0){
-    html += '<div class="opt-bolum-baslik">Zorunlu Seçimler</div>';
+    html += '<div class="opt-bolum-baslik">'+(ekModu?'Seçenekler':'Zorunlu Seçimler')+'</div>';
     zorunluGruplar.forEach(({grup,gi})=> html += optGrupAccordionHtml(p, grup, gi));
   }
   // İSTEĞE BAĞLI SEÇİMLER bölümü
   if(istegeGruplar.length>0){
-    html += '<div class="opt-bolum-baslik">İsteğe Bağlı Seçimler</div>';
+    html += '<div class="opt-bolum-baslik">'+(ekModu?'Ek Seçenekler':'İsteğe Bağlı Seçimler')+'</div>';
     istegeGruplar.forEach(({grup,gi})=> html += optGrupAccordionHtml(p, grup, gi));
   }
 
@@ -5538,12 +5675,16 @@ function renderOptionModal(){
           '<textarea class="opt-not" placeholder="Bu ürünle ilgili notunu buradan iletebilirsin." '+
           'oninput="OPT_STATE.not=this.value">'+(OPT_STATE.not||'')+'</textarea></div>';
   html += '</div>';
-  const gecerli = optGecerli();
+  const ekleModu = !!(OPT_STATE.ekleHedef);
+  // ekleme modunda zorunlu zorlaması yok — en az 1 seçim yeterli
+  let secimSayisi=0;
+  gruplar.forEach((grup,gi)=>{ secimSayisi += grupSecimSayisi(gi); });
+  const gecerli = ekleModu ? (secimSayisi>0) : optGecerli();
   const toplam = urunGecerliFiyat(p.ad, optSube, optKanal) + optEkFiyat();
   html += '<div class="opt-foot">'+
-    '<div class="opt-toplam"><div class="ot-l">Toplam</div><div class="ot-v">'+toplam+' ₺</div></div>'+
+    '<div class="opt-toplam"><div class="ot-l">'+(ekleModu?'Eklenecek':'Toplam')+'</div><div class="ot-v">'+(ekleModu?'+'+optEkFiyat():toplam)+' ₺</div></div>'+
     '<button class="btn btn-primary" '+(gecerli?'':'disabled style="opacity:.4;pointer-events:none"')+' onclick="confirmOpt()">'+
-    (gecerli?'Sepete ekle':'Zorunlu alanı seç')+'</button></div>';
+    (ekleModu ? (gecerli?'+ Seçeneği ekle':'Seçenek seçin') : (gecerli?'Sepete ekle':'Zorunlu alanı seç'))+'</button></div>';
   const inner = document.getElementById("optModalInner");
   const body = inner.querySelector(".opt-body");
   const scrollY = body ? body.scrollTop : 0;
@@ -5656,21 +5797,24 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
 
 /* Seçim onaylandı: fiyat + reçete ile sepete ekle */
 function confirmOpt(){
-  if(!optGecerli()) return;
+  if(!(OPT_STATE&&OPT_STATE.ekleHedef) && !optGecerli()) return;
   const p = OPT_STATE.p;
   const gruplar = PRODUCT_OPTIONS[p.ad];
   const secimler=[]; const secimGruplu=[]; const ekstraRecete=[]; let ekFiyat=0;
+  const secimEk=[];  // her secimler[] etiketinin ek fiyatı (silince düşmek için)
   gruplar.forEach((grup,gi)=>{
     const m = OPT_STATE.secim[gi]||{};
     const grupSecimleri=[];
     Object.entries(m).forEach(([si,adet])=>{
       const sec=grup.secenekler[si];
+      const birimEk = grupEk(grup, si);  // ücretsiz grupta 0
       if(!secIstemiyorum(sec)){
         const etiket = adet>1 ? sec.ad+" ×"+adet : sec.ad;
         secimler.push(etiket);
+        secimEk.push(birimEk*adet);  // bu seçimin toplam ek fiyatı
         grupSecimleri.push(etiket);
       }
-      ekFiyat += grupEk(grup, si)*adet;
+      ekFiyat += birimEk*adet;
       if(sec.recete) sec.recete.forEach(r=>{ if(r.g>0) for(let q=0;q<adet;q++) ekstraRecete.push(r); });
     });
     if(grupSecimleri.length>0) secimGruplu.push({grup:grup.ad, secenekler:grupSecimleri});
@@ -5679,8 +5823,28 @@ function confirmOpt(){
   const cSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const yeniKalem = {
     ad:p.ad, fiyat:urunGecerliFiyat(p.ad, cSube, cKanal)+ekFiyat, q:1,
-    secimler:secimler, secimGruplu:secimGruplu, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
+    secimler:secimler, secimEk:secimEk, secimGruplu:secimGruplu, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
   };
+  // === MEVCUT KALEME SEÇENEK EKLEME (kasa/mutfak/müdür) ===
+  if(OPT_STATE.ekleHedef){
+    const {masaNo, kalemId, kaynak} = OPT_STATE.ekleHedef;
+    if(secimler.length===0){ note("Seçenek seçilmedi"); closeOpt(); return; }
+    const s=SESSIONS[masaNo];
+    let hedef=null;
+    if(s) for(const k of s.kisiler) for(const x of k.kalemler) if(x.id===kalemId) hedef=x;
+    if(hedef){
+      if(!hedef.secimler) hedef.secimler=[];
+      if(!hedef.secimEk) hedef.secimEk=hedef.secimler.map(()=>0); // eski kalemlerde yoksa doldur
+      secimler.forEach((et,i)=>{ hedef.secimler.push(et); hedef.secimEk.push(secimEk[i]||0); });
+      if(secimGruplu.length){ if(!hedef.secimGruplu) hedef.secimGruplu=[]; secimGruplu.forEach(g=>hedef.secimGruplu.push(g)); }
+      if(ekstraRecete.length){ if(!hedef.ekstraRecete) hedef.ekstraRecete=[]; ekstraRecete.forEach(r=>hedef.ekstraRecete.push(r)); }
+      hedef.fiyat = Math.round((hedef.fiyat + ekFiyat)*100)/100;
+    }
+    closeOpt();
+    note("Seçenek eklendi"+(ekFiyat>0?" · +"+tl(ekFiyat)+" ₺":""));
+    ekranlariYenile(kaynak, masaNo);
+    return;
+  }
   if(OPT_STATE.qr){
     // QR menüden eklendi → müşteri sepetine
     QR.sepet.push(yeniKalem);
@@ -6462,8 +6626,11 @@ function kalemOpsiyonKaldir(masaNo, kalemId, opsIdx, opsFiyat){
   const s=SESSIONS[masaNo]; if(!s) return;
   s.kisiler.forEach(k=>k.kalemler.forEach(it=>{
     if(it.id===kalemId){
+      // bu seçimin ek fiyatı: önce kaydedilmiş secimEk, yoksa parametre
+      const dusulecek = (it.secimEk && it.secimEk[opsIdx]!=null) ? it.secimEk[opsIdx] : (opsFiyat||0);
       it.secimler.splice(opsIdx,1);
-      it.fiyat = Math.max(0, it.fiyat - (opsFiyat||0));
+      if(it.secimEk) it.secimEk.splice(opsIdx,1);
+      it.fiyat = Math.max(0, Math.round((it.fiyat - dusulecek)*100)/100);
     }
   }));
 }
@@ -6800,7 +6967,8 @@ function masaEtiket(id){
 function kasaMasaAc(m){
   // boş masa: sadece detayı göster, oturumu sipariş gelince aç (acik:false)
   if(!SESSIONS[m]){ SESSIONS[m]={masa:m, acik:false, zaman:Date.now(), kisiler:[]}; }
-  masaCagriTemizle(m);   // kasiyer ilgilendi → çağrı/mesaj rengi temizlenir
+  // garson çağrısı varsa önce onay pop-up'ı (kabul edilince temizlenir)
+  if(garsonCagriPopAc(m)){ return; }
   state.kasaMasa=m; go("masalar");
 }
 function kasaMasaKapat(){ state.kasaMasa=null; go("masalar"); }
@@ -6860,12 +7028,16 @@ function kasaMasaDetayHtml(m){
       if(it.secimler.length && !iptalli){
         html+='<div class="kmd-ops">';
         it.secimler.forEach((op,oi)=>{
-          html+=`<span class="kmd-op">${op}${tamOdendi?'':`<button class="kmd-op-x" onclick="kasaOpsKaldir(${mq},${it.id},${oi})" title="Stok bitti, kaldır">✕</button>`}</span>`;
+          html+=`<span class="kmd-op">${op}${tamOdendi?'':`<button class="kmd-op-x" onclick="kasaOpsKaldir(${mq},${it.id},${oi})" title="Seçeneği sil">✕</button>`}</span>`;
         });
         html+='</div>';
       }
       if(!iptalli && !kismiOdendi){
-        html+=`<div class="kmd-k-aksiyon"><button class="kmd-iptal" onclick="kasaKalemIptal(${mq},${it.id})">İptal et</button></div>`;
+        const opsVar = (PRODUCT_OPTIONS[it.ad]||[]).length>0;
+        html+=`<div class="kmd-k-aksiyon">
+          <button class="kmd-iptal" onclick="kasaKalemIptal(${mq},${it.id})">İptal et</button>
+          ${opsVar?`<button class="kmd-sec-ekle" onclick="kalemSecenekEkle(${mq},${it.id},'kasadetay')">+ Seçenek ekle</button>`:''}
+        </div>`;
       }
       html+='</div>';
     });
@@ -6906,6 +7078,7 @@ function odemeEkraniAc(m){
   };
   odeKlavyeBagla();
   go("odemeEkran");
+  musteriEkranGuncelle();  // müşteri ekranı açıksa ödeme moduna geç
 }
 /* Fiziksel klavye desteği — aktif kutuya yaz */
 function odeKlavyeBagla(){
@@ -6939,7 +7112,10 @@ function viewOdemeEkran(main){
     <div class="ode-head">
       <button class="ode-geri" onclick="odemeEkraniKapat()">← Masaya dön</button>
       <div class="ode-baslik">💳 ${masaEtiket(m)} · Ödeme</div>
-      <button class="ode-fis-yazdir" onclick="odemeFisYazdir()">🖨️ Fiş Yazdır</button>
+      <div class="ode-head-sag">
+        <button class="ode-musteri-btn" onclick="musteriEkranButon()">🖥️ Müşteri Ekranı</button>
+        <button class="ode-fis-yazdir" onclick="odemeFisYazdir()">🖨️ Fiş Yazdır</button>
+      </div>
     </div>`;
 
   html+=`<div class="ode-govde">`;
@@ -7309,6 +7485,7 @@ function odemeEkranYenile(){
   // her render öncesi denge yöntemini güncel tut (ürün/indirim/bölme değişmiş olabilir)
   if(state.odeme && state.odeme.dengeYontem) odeYontemDengeleSessiz();
   viewOdemeEkran(document.querySelector(".main"));
+  musteriEkranGuncelle();  // müşteri ekranı (varsa) anlık güncellensin
 }
 /* dengele ama render tetikleme (sonsuz döngü olmasın) */
 function odeYontemDengeleSessiz(){
@@ -7320,7 +7497,301 @@ function odeYontemDengeleSessiz(){
   ["nakit","kredi","diger"].forEach(k=>{ if(k!==o.dengeYontem) digerToplam+=o.yontem[k]; });
   o.yontem[o.dengeYontem]=Math.max(0, Math.round((odenecek-digerToplam)*100)/100);
 }
-function odemeEkraniKapat(){ state.odeme=null; odeKlavyeKaldir(); go("masalar"); }
+function odemeEkraniKapat(){ state.odeme=null; odeKlavyeKaldir(); musteriEkranBosa(); go("masalar"); }
+
+/* ============================================================
+   MÜŞTERİ EKRANI (çift ekranlı POS — arka/müşteri tarafı)
+   - Boş zamanda reklam/kampanya görselleri döner
+   - "Ödeme Al" ekranında ödeme özetini gösterir
+   - İletişim: BroadcastChannel (ana ekran → müşteri penceresi)
+   - Açılış: getScreenDetails() ile otomatik 2. ekran, yoksa ayrı pencere
+   ============================================================ */
+let MUSTERI_KANAL = null;
+let MUSTERI_PENCERE = null;
+const MUSTERI_REKLAM_KEY = "minipan_musteri_reklam_v1";
+let MUSTERI_REKLAMLAR = {};   // {sube:[dataURL,...]} şube bazlı reklam görselleri
+function musteriReklamYukle(){
+  try{ const j=localStorage.getItem(MUSTERI_REKLAM_KEY); if(j) MUSTERI_REKLAMLAR=JSON.parse(j); }catch(e){}
+}
+function musteriReklamKaydet(){
+  try{ localStorage.setItem(MUSTERI_REKLAM_KEY, JSON.stringify(MUSTERI_REKLAMLAR)); }catch(e){}
+}
+function musteriKanalAc(){
+  if(MUSTERI_KANAL) return MUSTERI_KANAL;
+  try{ MUSTERI_KANAL = new BroadcastChannel("minipan_musteri"); }catch(e){ MUSTERI_KANAL=null; }
+  return MUSTERI_KANAL;
+}
+/* Ödeme verisinden müşteri ekranı için snapshot üret */
+function musteriSnapshot(){
+  const o=state.odeme;
+  if(!o || !SESSIONS[o.masa]) return null;
+  const m=o.masa, s=SESSIONS[m];
+  // seçili kalemlerin ad+tutarı
+  const kalemler = o.secili.map(x=>{
+    const it=masaKalemBul(m,x.kalemId);
+    return { ad: it?it.ad:"", adet: it?(it.adet||1):1, tutar: x.tutar };
+  });
+  const hamToplam=o.secili.reduce((t,x)=>t+x.tutar,0);
+  const indirim=Math.min(o.indirim||0,hamToplam);
+  const odenecek=Math.round((hamToplam-indirim)*100)/100;
+  const girilen=(o.yontem.nakit||0)+(o.yontem.kredi||0)+(o.yontem.diger||0);
+  return {
+    tip:"odeme",
+    sube: AKTIF_SUBE,
+    masaAd: s.ad || m,
+    kalemler,
+    araToplam: hamToplam,
+    indirim,
+    odenecek,
+    yontemler: { nakit:o.yontem.nakit||0, kredi:o.yontem.kredi||0, diger:o.yontem.diger||0 },
+    girilen,
+    paraUstu: Math.max(0, Math.round((girilen-odenecek)*100)/100),
+    kalan: Math.max(0, Math.round((odenecek-girilen)*100)/100),
+  };
+}
+/* Müşteri ekranına ödeme durumunu yayınla */
+function musteriEkranGuncelle(){
+  const kanal=musteriKanalAc(); if(!kanal) return;
+  const snap=musteriSnapshot();
+  if(snap) kanal.postMessage(snap);
+}
+/* Müşteri ekranını boş/reklam moduna al */
+function musteriEkranBosa(){
+  const kanal=musteriKanalAc(); if(!kanal) return;
+  kanal.postMessage({ tip:"bos", sube:AKTIF_SUBE, reklamlar: MUSTERI_REKLAMLAR[AKTIF_SUBE]||[] });
+}
+/* Müşteri penceresini aç (otomatik 2. ekran veya ayrı pencere) */
+async function musteriEkranAc(){
+  // zaten açıksa öne getir
+  if(MUSTERI_PENCERE && !MUSTERI_PENCERE.closed){ MUSTERI_PENCERE.focus(); musteriEkranBosa(); return {ok:true}; }
+  const html = musteriEkranHTML();
+  let placed=false;
+  // 1) Modern çoklu ekran API
+  try{
+    if(window.getScreenDetails && (await navigator.permissions.query({name:"window-management"}).catch(()=>({state:"prompt"}))).state!=="denied"){
+      const sd = await window.getScreenDetails();
+      const ikinci = sd.screens.find(s=>!s.isPrimary) || sd.screens[1];
+      if(ikinci){
+        MUSTERI_PENCERE = window.open("", "minipanMusteri",
+          `left=${ikinci.availLeft},top=${ikinci.availTop},width=${ikinci.availWidth},height=${ikinci.availHeight}`);
+        if(MUSTERI_PENCERE){
+          MUSTERI_PENCERE.document.write(html);
+          MUSTERI_PENCERE.document.close();
+          // tam ekran dene
+          try{ setTimeout(()=>{ MUSTERI_PENCERE.document.documentElement.requestFullscreen&&MUSTERI_PENCERE.document.documentElement.requestFullscreen(); },300); }catch(e){}
+          placed=true;
+        }
+      }
+    }
+  }catch(e){ /* izin yok / desteklenmiyor → yedek yönteme düş */ }
+  // 2) Yedek: normal pencere (kasiyer 2. ekrana taşır)
+  if(!placed){
+    MUSTERI_PENCERE = window.open("", "minipanMusteri", "width=900,height=600");
+    if(MUSTERI_PENCERE){ MUSTERI_PENCERE.document.write(html); MUSTERI_PENCERE.document.close(); }
+    else return {ok:false, mesaj:"Pop-up engellendi — tarayıcıda izin verin"};
+  }
+  // pencere hazır olunca mevcut durumu yolla
+  setTimeout(()=>{ if(state.odeme) musteriEkranGuncelle(); else musteriEkranBosa(); }, 500);
+  return {ok:true};
+}
+function musteriEkranKapat(){
+  if(MUSTERI_PENCERE && !MUSTERI_PENCERE.closed) MUSTERI_PENCERE.close();
+  MUSTERI_PENCERE=null;
+}
+/* Ödeme ekranındaki "Müşteri Ekranı" butonu — açma/yönetim */
+async function musteriEkranButon(){
+  const acik = MUSTERI_PENCERE && !MUSTERI_PENCERE.closed;
+  if(!acik){
+    note("🖥️ Müşteri ekranı açılıyor...");
+    const r=await musteriEkranAc();
+    if(!r.ok){ note("⚠️ "+(r.mesaj||"Açılamadı")); return; }
+    if(state.odeme) musteriEkranGuncelle();
+  }
+  // her durumda yönetim modalını göster
+  musteriReklamModal();
+}
+function musteriReklamModal(){
+  let mdl=document.getElementById("musteriModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="musteriModal"; mdl.className="modal-bg"; mdl.style.zIndex="190"; document.body.appendChild(mdl); }
+  const acik = MUSTERI_PENCERE && !MUSTERI_PENCERE.closed;
+  const reklamlar = MUSTERI_REKLAMLAR[AKTIF_SUBE] || [];
+  let ic=`<div class="mte-modal-ic">
+    <div class="mte-modal-bas">
+      <span>🖥️ Müşteri Ekranı</span>
+      <button class="bom-kapat" onclick="musteriModalKapat()">✕</button>
+    </div>
+    <div class="mte-modal-govde">
+      <div class="mte-durum ${acik?'acik':''}">
+        <span class="mte-durum-nokta"></span>
+        ${acik?'Müşteri ekranı açık':'Müşteri ekranı kapalı'}
+      </div>
+      <div class="mte-buton-row">
+        ${acik
+          ? `<button class="mte-kapat-btn" onclick="musteriEkranKapat();musteriModalKapat()">Ekranı kapat</button>`
+          : `<button class="mte-ac-btn" onclick="musteriEkranAcModal()">🖥️ Ekranı aç</button>`}
+      </div>
+      <div class="mte-not">Çift ekranlı POS'ta müşteri tarafındaki ekranda görünür. Ödeme ekranındayken ödeme özetini, boş zamanda aşağıdaki reklam görsellerini gösterir.</div>
+
+      <div class="mte-reklam-bas">📢 Reklam Görselleri <span class="yzc-lbl-not">(${AKTIF_SUBE})</span></div>
+      <div class="mte-reklam-grid">`;
+  reklamlar.forEach((src,i)=>{
+    ic+=`<div class="mte-reklam-kart">
+      <img src="${src}" alt="">
+      <button class="mte-reklam-sil" onclick="musteriReklamSil(${i})">✕</button>
+    </div>`;
+  });
+  ic+=`<label class="mte-reklam-ekle">
+        <input type="file" accept="image/*" multiple style="display:none" onchange="musteriReklamEkle(this.files)">
+        <span>＋</span><span class="mte-ekle-lbl">Görsel ekle</span>
+      </label>`;
+  ic+=`</div>
+      <div class="mte-not">Görseller 5 saniyede bir döner. Yatay (16:9) görseller önerilir.</div>
+    </div>
+  </div>`;
+  mdl.innerHTML=ic;
+  mdl.classList.add("on");
+}
+function musteriModalKapat(){ const m=document.getElementById("musteriModal"); if(m) m.classList.remove("on"); }
+async function musteriEkranAcModal(){
+  const r=await musteriEkranAc();
+  if(!r.ok){ note("⚠️ "+(r.mesaj||"Açılamadı")); return; }
+  if(state.odeme) musteriEkranGuncelle(); else musteriEkranBosa();
+  musteriReklamModal();
+}
+function musteriReklamEkle(files){
+  if(!files||!files.length) return;
+  if(!MUSTERI_REKLAMLAR[AKTIF_SUBE]) MUSTERI_REKLAMLAR[AKTIF_SUBE]=[];
+  let kalan=files.length;
+  Array.from(files).forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      MUSTERI_REKLAMLAR[AKTIF_SUBE].push(e.target.result);
+      kalan--;
+      if(kalan===0){
+        musteriReklamKaydet();
+        if(!state.odeme) musteriEkranBosa();
+        musteriReklamModal();
+        note("📢 Reklam görseli eklendi");
+      }
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function musteriReklamSil(i){
+  if(MUSTERI_REKLAMLAR[AKTIF_SUBE]) MUSTERI_REKLAMLAR[AKTIF_SUBE].splice(i,1);
+  musteriReklamKaydet();
+  if(!state.odeme) musteriEkranBosa();
+  musteriReklamModal();
+}
+/* Müşteri penceresinin bağımsız HTML'i — BroadcastChannel dinler */
+function musteriEkranHTML(){
+  return `<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MİNİPAN — Müşteri Ekranı</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+html,body{height:100%;overflow:hidden;background:#1a1208;color:#fff}
+.me-wrap{height:100vh;display:flex;flex-direction:column}
+/* REKLAM MODU */
+.me-reklam{flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a1c0c,#1a1208)}
+.me-reklam img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s}
+.me-reklam img.on{opacity:1}
+.me-logo{position:relative;text-align:center;z-index:2}
+.me-logo .me-marka{font-size:72px;font-weight:900;letter-spacing:2px;color:#f0a728;text-shadow:0 4px 24px rgba(0,0,0,.5)}
+.me-logo .me-alt{font-size:24px;color:#e8d5b8;margin-top:12px;font-weight:500}
+.me-hos{position:absolute;bottom:48px;left:0;right:0;text-align:center;font-size:28px;color:#fff;opacity:.9;z-index:2}
+/* ÖDEME MODU */
+.me-odeme{flex:1;display:flex;flex-direction:column;background:#fff;color:#2a1c0c}
+.me-bas{background:#6b3f23;color:#fff;padding:28px 40px;display:flex;justify-content:space-between;align-items:center}
+.me-bas .me-marka2{font-size:38px;font-weight:900;color:#f0a728}
+.me-bas .me-masa{font-size:24px;font-weight:600}
+.me-kalemler{flex:1;overflow-y:auto;padding:24px 40px}
+.me-kalem{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #eee;font-size:26px}
+.me-kalem-ad{font-weight:600}
+.me-kalem-adet{color:#999;font-size:20px;margin-left:10px}
+.me-kalem-tutar{font-weight:800;font-variant-numeric:tabular-nums}
+.me-bos-odeme{flex:1;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:28px}
+.me-ozet{background:#faf6ef;padding:28px 40px;border-top:3px solid #f0a728}
+.me-ozet-satir{display:flex;justify-content:space-between;font-size:24px;padding:8px 0;color:#6b5a45}
+.me-ozet-satir.ara{color:#999}
+.me-ozet-satir.indirim{color:#d8493f}
+.me-ozet-toplam{display:flex;justify-content:space-between;font-size:42px;font-weight:900;color:#2a1c0c;padding:14px 0;margin-top:8px;border-top:2px dashed #ddd}
+.me-odendi{display:flex;justify-content:space-between;font-size:28px;font-weight:800;padding:10px 0}
+.me-odendi.kalan{color:#d8493f}
+.me-odendi.tamam{color:#1d7c4d}
+.me-tesekkur{text-align:center;font-size:32px;font-weight:800;color:#1d7c4d;padding:20px}
+</style></head><body>
+<div class="me-wrap" id="meWrap">
+  <div class="me-reklam" id="meReklam">
+    <div class="me-logo"><div class="me-marka">MİNİPAN</div><div class="me-alt">Waffle & Pancake</div></div>
+    <div class="me-hos">Hoş geldiniz 🧇</div>
+  </div>
+</div>
+<script>
+(function(){
+  var wrap=document.getElementById("meWrap");
+  var reklamlar=[], rIdx=0, rTimer=null;
+  function tl(n){ return (Math.round((n||0)*100)/100).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function reklamModu(liste){
+    reklamlar=liste||[];
+    var imgHtml=reklamlar.map(function(src,i){return '<img src="'+src+'" class="'+(i===0?'on':'')+'">';}).join('');
+    wrap.innerHTML='<div class="me-reklam" id="meReklam">'+imgHtml+
+      '<div class="me-logo"><div class="me-marka">MİNİPAN</div><div class="me-alt">Waffle & Pancake</div></div>'+
+      (reklamlar.length?'':'<div class="me-hos">Hoş geldiniz 🧇</div>')+'</div>';
+    if(rTimer) clearInterval(rTimer);
+    if(reklamlar.length>1){
+      rIdx=0;
+      rTimer=setInterval(function(){
+        var imgs=wrap.querySelectorAll('.me-reklam img');
+        if(!imgs.length) return;
+        imgs[rIdx].classList.remove('on');
+        rIdx=(rIdx+1)%imgs.length;
+        imgs[rIdx].classList.add('on');
+      },5000);
+    }
+  }
+  function odemeModu(d){
+    if(rTimer){ clearInterval(rTimer); rTimer=null; }
+    var kalemHtml = (d.kalemler&&d.kalemler.length)
+      ? d.kalemler.map(function(k){
+          return '<div class="me-kalem"><span class="me-kalem-ad">'+k.ad+
+            (k.adet>1?'<span class="me-kalem-adet">×'+k.adet+'</span>':'')+
+            '</span><span class="me-kalem-tutar">'+tl(k.tutar)+' ₺</span></div>';
+        }).join('')
+      : '<div class="me-bos-odeme">Ödenecek ürünleri seçin…</div>';
+    var indirimHtml = d.indirim>0 ? '<div class="me-ozet-satir indirim"><span>İndirim</span><span>−'+tl(d.indirim)+' ₺</span></div>' : '';
+    var araHtml = d.indirim>0 ? '<div class="me-ozet-satir ara"><span>Ara toplam</span><span>'+tl(d.araToplam)+' ₺</span></div>' : '';
+    var odemeBilgi='';
+    if(d.girilen>0){
+      if(d.kalan>0) odemeBilgi='<div class="me-odendi"><span>Ödenen</span><span>'+tl(d.girilen)+' ₺</span></div><div class="me-odendi kalan"><span>Kalan</span><span>'+tl(d.kalan)+' ₺</span></div>';
+      else if(d.paraUstu>0) odemeBilgi='<div class="me-odendi"><span>Ödenen</span><span>'+tl(d.girilen)+' ₺</span></div><div class="me-odendi tamam"><span>Para üstü</span><span>'+tl(d.paraUstu)+' ₺</span></div>';
+      else odemeBilgi='<div class="me-odendi tamam"><span>Ödendi</span><span>'+tl(d.girilen)+' ₺</span></div>';
+    }
+    wrap.innerHTML=
+      '<div class="me-odeme">'+
+        '<div class="me-bas"><span class="me-marka2">MİNİPAN</span><span class="me-masa">'+(d.masaAd||'')+'</span></div>'+
+        '<div class="me-kalemler">'+kalemHtml+'</div>'+
+        '<div class="me-ozet">'+araHtml+indirimHtml+
+          '<div class="me-ozet-toplam"><span>TOPLAM</span><span>'+tl(d.odenecek)+' ₺</span></div>'+
+          odemeBilgi+
+        '</div>'+
+      '</div>';
+  }
+  try{
+    var kanal=new BroadcastChannel("minipan_musteri");
+    kanal.onmessage=function(ev){
+      var d=ev.data;
+      if(!d) return;
+      if(d.tip==="odeme") odemeModu(d);
+      else reklamModu(d.reklamlar);
+    };
+  }catch(e){}
+  // ilk açılışta reklam modu
+  reklamModu([]);
+})();
+<\/script>
+</body></html>`;
+}
 function odeKlavyeKaldir(){ if(window._odeKlavye){ document.removeEventListener('keydown', window._odeKlavye); window._odeKlavye=null; } }
 /* Para üstü pop-up */
 function paraUstuModal(tutar){
@@ -7500,7 +7971,102 @@ function kasaMasaGonder(){
   state.kasaEkle=null; state.kasaMasa=m; go("masalar");
 }
 function kasaKalemIptal(m,id){ kalemIptal(m,id); note("Kalem iptal · tutar düştü"); go("masalar"); }
-function kasaOpsKaldir(m,id,oi){ kalemOpsiyonKaldir(m,id,oi,0); note("Opsiyon kaldırıldı (stok bitti)"); go("masalar"); }
+function kasaOpsKaldir(m,id,oi){ secenekSilOnay(m,id,oi,"kasa"); }
+
+/* === ONAYLI SEÇENEK SİLME (tüm ekranlar) === */
+function secenekSilOnay(masaNo, kalemId, opsIdx, kaynak){
+  const it = masaKalemBulId(masaNo, kalemId) || (function(){
+    const s=SESSIONS[masaNo]; if(!s) return null;
+    for(const k of s.kisiler) for(const x of k.kalemler) if(x.id===kalemId) return x;
+    return null;
+  })();
+  if(!it) return;
+  const opAd = it.secimler[opsIdx] || "seçenek";
+  const opFiyat = (it.secimEk && it.secimEk[opsIdx]) ? it.secimEk[opsIdx] : 0;
+  // "Ad ×N" formatından adet ayrıştır
+  const adetMatch = String(opAd).match(/\s×(\d+)\s*$/);
+  const toplamAdet = adetMatch ? parseInt(adetMatch[1]) : 1;
+  const birimFiyat = toplamAdet>0 ? Math.round((opFiyat/toplamAdet)*100)/100 : opFiyat;
+  state._secSil = {masaNo, kalemId, opsIdx, kaynak, opAd, opFiyat, urunAd:it.ad,
+                   toplamAdet, birimFiyat, silAdet:toplamAdet};
+  secenekSilModalCiz();
+}
+function secenekSilModalCiz(){
+  const d=state._secSil; if(!d) return;
+  let mdl=document.getElementById("secSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="secSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  const cokAdet = d.toplamAdet>1;
+  const adAcik = String(d.opAd).replace(/\s×\d+\s*$/,"");  // adet etiketsiz ad
+  const dusecek = Math.round(d.birimFiyat*d.silAdet*100)/100;
+  let adetBlok="";
+  if(cokAdet){
+    adetBlok=`<div class="ssil-adet-blok">
+      <div class="ssil-adet-lbl">Kaç adet silinsin? (toplam ${d.toplamAdet})</div>
+      <div class="ssil-adet-row">
+        <button class="ssil-adet-btn" onclick="secSilAdetSet(-1)" ${d.silAdet<=1?'disabled':''}>−</button>
+        <span class="ssil-adet-deger">${d.silAdet}</span>
+        <button class="ssil-adet-btn" onclick="secSilAdetSet(1)" ${d.silAdet>=d.toplamAdet?'disabled':''}>+</button>
+        <button class="ssil-adet-tum${d.silAdet===d.toplamAdet?' on':''}" onclick="secSilAdetTum()">Tümü</button>
+      </div>
+    </div>`;
+  }
+  mdl.innerHTML=`<div class="ssil-ic">
+    <div class="ssil-ikon">🗑️</div>
+    <div class="ssil-bas">Seçenek silinsin mi?</div>
+    <div class="ssil-urun">${d.urunAd}</div>
+    <div class="ssil-sec">"${adAcik}"${d.birimFiyat>0?` <span class="ssil-fiyat">${d.toplamAdet>1?d.silAdet+'×':''}−${tl(d.birimFiyat)} ₺</span>`:''}</div>
+    ${adetBlok}
+    ${d.birimFiyat>0?`<div class="ssil-not">Tutardan <strong>${tl(dusecek)} ₺</strong> düşülecek.</div>`:`<div class="ssil-not">Bu seçenek ücretsiz, tutar değişmeyecek.</div>`}
+    <div class="ssil-butonlar">
+      <button class="ssil-vazgec" onclick="secenekSilKapat()">Vazgeç</button>
+      <button class="ssil-onayla" onclick="secenekSilUygula()">🗑️ ${cokAdet?d.silAdet+' adet sil':'Sil'}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function secSilAdetSet(d){ const s=state._secSil; if(!s) return; s.silAdet=Math.max(1,Math.min(s.toplamAdet,s.silAdet+d)); secenekSilModalCiz(); }
+function secSilAdetTum(){ const s=state._secSil; if(!s) return; s.silAdet=s.toplamAdet; secenekSilModalCiz(); }
+function secenekSilKapat(){ const m=document.getElementById("secSilModal"); if(m) m.classList.remove("on"); state._secSil=null; }
+function secenekSilUygula(){
+  const d=state._secSil; if(!d) return;
+  const it = (function(){
+    const s=SESSIONS[d.masaNo]; if(!s) return null;
+    for(const k of s.kisiler) for(const x of k.kalemler) if(x.id===d.kalemId) return x;
+    return null;
+  })();
+  if(it){
+    const dusecek = Math.round(d.birimFiyat*d.silAdet*100)/100;
+    if(d.silAdet>=d.toplamAdet){
+      // tümünü sil → seçeneği komple kaldır
+      it.secimler.splice(d.opsIdx,1);
+      if(it.secimEk) it.secimEk.splice(d.opsIdx,1);
+    } else {
+      // kısmi sil → adeti azalt, etiketi güncelle
+      const kalanAdet = d.toplamAdet - d.silAdet;
+      const adAcik = String(d.opAd).replace(/\s×\d+\s*$/,"");
+      it.secimler[d.opsIdx] = kalanAdet>1 ? adAcik+" ×"+kalanAdet : adAcik;
+      if(it.secimEk) it.secimEk[d.opsIdx] = Math.round(d.birimFiyat*kalanAdet*100)/100;
+    }
+    it.fiyat = Math.max(0, Math.round((it.fiyat - dusecek)*100)/100);
+  }
+  const kaynak=d.kaynak, masaNo=d.masaNo, sAd=d.silAdet, bf=d.birimFiyat;
+  secenekSilKapat();
+  note("Seçenek silindi"+(bf>0?" · "+tl(Math.round(bf*sAd*100)/100)+" ₺ düştü":""));
+  ekranlariYenile(kaynak, masaNo);
+}
+/* Değişiklik sonrası ilgili ekranı yenile + açık ödeme/müşteri ekranını güncelle */
+function ekranlariYenile(kaynak, masaNo){
+  if(kaynak==="kds"){ if(typeof renderKDS==="function") renderKDS(); }
+  else if(kaynak==="kasadetay"){ go("masalar"); }
+  else { go("masalar"); }
+  // açık ödeme ekranı varsa onu da güncelle (seçili kalem tutarı değişmiş olabilir)
+  if(state.odeme && state.odeme.masa===masaNo){
+    // seçili kalemlerin tutarını güncel kalanla eşitle
+    state.odeme.secili.forEach(x=>{ const it=masaKalemBul(masaNo,x.kalemId); if(it) x.tutar=Math.min(x.tutar, kalemKalan(it)); });
+    if(state.odeme.dengeYontem) odeYontemDengeleSessiz();
+    musteriEkranGuncelle();
+  }
+}
 
 /* Tek kişinin siparişinin ödemesini al (masada kişi seçimi) */
 function kasaKisiOde(m, ki){
@@ -11843,7 +12409,30 @@ function qrOnayHtml(){
     '<button class="qr-btn-primary" onclick="QR.view=\'takip\';renderQR()">📍 Siparişi takip et</button>'+'<button class="qr-btn-ghost" onclick="QR.view=\'kategoriler\';renderQR()">Yeni sipariş ekle</button>'+
     '<button class="qr-btn-ghost" onclick="qrGarsonCagir()">🔔 Garson çağır</button>'+
     '<button class="qr-btn-ghost" onclick="qrMutfagaMesaj()">💬 Mutfağa mesaj</button>'+
+    qrMesajGecmisiHtml()+
     '</div></div>';
+}
+/* Müşterinin gönderdiği mesajlar + mutfak yanıt durumu */
+function qrMesajGecmisiHtml(){
+  const id=qrMasaId();
+  const s=SESSIONS[id];
+  if(!s || !s.mutfakMesajlari || !s.mutfakMesajlari.length) return '';
+  // sadece bu kişinin mesajları
+  const benim = s.mutfakMesajlari.filter(m=>(m.kisi||"Müşteri")===(QR.kisi||"Müşteri"));
+  if(!benim.length) return '';
+  let html='<div class="qr-mesaj-gecmis"><div class="qr-mg-baslik">💬 Mesajlarım</div>';
+  benim.slice().reverse().forEach(m=>{
+    const dur=m.durum||"bekliyor";
+    html+='<div class="qr-mg-satir qr-mg-'+dur+'">'+
+      '<div class="qr-mg-metin">"'+m.mesaj+'"</div>'+
+      '<div class="qr-mg-durum">'+
+        (dur==="onaylandi"?'✓ İsteğiniz onaylandı':
+         dur==="reddedildi"?'✕ İsteğiniz reddedildi':
+         '⏳ Mutfak değerlendiriyor...')+'</div>'+
+    '</div>';
+  });
+  html+='</div>';
+  return html;
 }
 /* QR çağrıları → masaya işlenir (kasa/garson/mutfak rengini değiştirir) */
 function qrMasaId(){
@@ -11854,20 +12443,256 @@ function qrGarsonCagir(){
   const id=qrMasaId();
   if(!SESSIONS[id]) SESSIONS[id]={masa:id, acik:false, zaman:Date.now(), kisiler:[]};
   SESSIONS[id].garsonCagri=true;
+  SESSIONS[id].garsonCagriBilgi={ kisi:QR.kisi||"Müşteri", zaman:Date.now(), durum:"bekliyor", onaylayan:null };
   note("🔔 Garson çağrıldı");
+  garsonCagriSesBaslat();   // personel ekranlarında sesli bildirim
+  qrCagriTakipBaslat();     // müşteri tarafı onay bekler
+  if(typeof renderQR==="function") renderQR();
 }
+/* Personel ekranlarında (kasa/garson/müdür) bekleyen garson çağrısı sesi */
+let GARSON_SES_TIMER=null;
+let GARSON_SES_CTX=null;
+function garsonCagriVarMi(){
+  return Object.keys(SESSIONS).some(id=>{
+    const s=SESSIONS[id];
+    return s && s.garsonCagri && s.garsonCagriBilgi && (s.garsonCagriBilgi.durum||"bekliyor")==="bekliyor";
+  });
+}
+function garsonCagriBip(){
+  try{
+    if(!GARSON_SES_CTX) GARSON_SES_CTX = new (window.AudioContext||window.webkitAudioContext)();
+    const ctx=GARSON_SES_CTX;
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type="sine"; o.frequency.value=880;
+    g.gain.setValueAtTime(0.001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime+0.05);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.4);
+    o.start(); o.stop(ctx.currentTime+0.42);
+    // çift bip
+    const o2=ctx.createOscillator(), g2=ctx.createGain();
+    o2.connect(g2); g2.connect(ctx.destination);
+    o2.type="sine"; o2.frequency.value=1100;
+    g2.gain.setValueAtTime(0.001, ctx.currentTime+0.5);
+    g2.gain.exponentialRampToValueAtTime(0.25, ctx.currentTime+0.55);
+    g2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.9);
+    o2.start(ctx.currentTime+0.5); o2.stop(ctx.currentTime+0.92);
+  }catch(e){}
+}
+function garsonCagriSesBaslat(){
+  if(GARSON_SES_TIMER) return;
+  garsonCagriBip();
+  GARSON_SES_TIMER=setInterval(()=>{
+    if(garsonCagriVarMi()) garsonCagriBip();
+    else garsonCagriSesDurdur();
+  }, 4000);
+}
+function garsonCagriSesDurdur(){ if(GARSON_SES_TIMER){ clearInterval(GARSON_SES_TIMER); GARSON_SES_TIMER=null; } }
+
+/* === GARSON ÇAĞRI ONAY (kasa/garson/müdür) === */
+let AKTIF_PERSONEL_AD = "";  // bu cihazdaki personelin adı (bir kez girilir)
+const PERSONEL_AD_KEY = "minipan_personel_ad_v1";
+function personelAdYukle(){ try{ AKTIF_PERSONEL_AD=localStorage.getItem(PERSONEL_AD_KEY)||""; }catch(e){} }
+/* Masaya tıklanınca çağrı varsa onay pop-up'ı göster (kasa/garson/müdür) */
+function garsonCagriPopAc(masaId){
+  const s=SESSIONS[masaId];
+  if(!s || !s.garsonCagri || !s.garsonCagriBilgi) return false;
+  if((s.garsonCagriBilgi.durum||"bekliyor")!=="bekliyor") return false;
+  state._cagriHedef=masaId;
+  garsonCagriPopCiz();
+  return true;
+}
+function garsonCagriPopCiz(){
+  const masaId=state._cagriHedef;
+  const s=SESSIONS[masaId]; if(!s||!s.garsonCagriBilgi) return;
+  const bilgi=s.garsonCagriBilgi;
+  let mdl=document.getElementById("garsonCagriPop");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="garsonCagriPop"; mdl.className="modal-bg"; mdl.style.zIndex="215"; document.body.appendChild(mdl); }
+  const dk=Math.floor((Date.now()-bilgi.zaman)/60000);
+  const sure=dk<1?"az önce":dk+" dk önce";
+  mdl.innerHTML=`<div class="gcp-ic">
+    <div class="gcp-ikon">🔔</div>
+    <div class="gcp-bas">Garson Çağrısı</div>
+    <div class="gcp-masa">${masaEtiket(masaId)} · 👤 ${bilgi.kisi}</div>
+    <div class="gcp-sure">${sure} çağırdı</div>
+    <div class="gcp-ad-alan">
+      <label>Adınız (çağrıyı kabul eden)</label>
+      <input class="gcp-ad-input" id="gcpAd" value="${(AKTIF_PERSONEL_AD||'').replace(/"/g,'&quot;')}" placeholder="örn. Mehmet" oninput="AKTIF_PERSONEL_AD=this.value">
+    </div>
+    <div class="gcp-butonlar">
+      <button class="gcp-sonra" onclick="garsonCagriPopKapat()">Sonra</button>
+      <button class="gcp-kabul" onclick="garsonCagriKabul('${masaId.replace(/'/g,"\\'")}')">✓ Çağrıyı kabul ediyorum</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("gcpAd"); if(i && !AKTIF_PERSONEL_AD) i.focus(); },100);
+}
+function garsonCagriPopKapat(){ const m=document.getElementById("garsonCagriPop"); if(m) m.classList.remove("on"); state._cagriHedef=null; }
+function garsonCagriKabul(masaId){
+  const ad=(AKTIF_PERSONEL_AD||"").trim();
+  if(!ad){ note("Lütfen adınızı girin"); const i=document.getElementById("gcpAd"); if(i) i.focus(); return; }
+  try{ localStorage.setItem(PERSONEL_AD_KEY, ad); }catch(e){}
+  const s=SESSIONS[masaId]; if(!s||!s.garsonCagriBilgi) return;
+  s.garsonCagriBilgi.durum="kabul";
+  s.garsonCagriBilgi.onaylayan=ad;
+  s.garsonCagriBilgi.onayZaman=Date.now();
+  s.garsonCagri=false;  // masa normale döner
+  garsonCagriSesDurdur();
+  garsonCagriPopKapat();
+  note("✓ Çağrı kabul edildi, müşteriye bildirildi");
+  // hangi ekrandaysak onu yenile
+  if(typeof renderKDS==="function" && document.getElementById("kdsApp") && document.getElementById("kdsApp").offsetParent!==null) renderKDS();
+  if(typeof renderGarson==="function" && document.getElementById("garsonApp") && document.getElementById("garsonApp").offsetParent!==null) renderGarson();
+  if(document.querySelector(".main")) { try{ go("masalar"); }catch(e){} }
+}
+
+/* === MÜŞTERİ TARAFI: çağrı onayı takibi === */
+let QR_CAGRI_TIMER=null;
+let QR_CAGRI_BILDIRILEN=false;
+function qrCagriTakipBaslat(){
+  QR_CAGRI_BILDIRILEN=false;
+  if(QR_CAGRI_TIMER) return;
+  QR_CAGRI_TIMER=setInterval(qrCagriKontrol, 2000);
+}
+function qrCagriTakipDurdur(){ if(QR_CAGRI_TIMER){ clearInterval(QR_CAGRI_TIMER); QR_CAGRI_TIMER=null; } }
+function qrCagriKontrol(){
+  const id=qrMasaId();
+  const s=SESSIONS[id];
+  if(!s||!s.garsonCagriBilgi){ qrCagriTakipDurdur(); return; }
+  if(s.garsonCagriBilgi.durum==="kabul" && !QR_CAGRI_BILDIRILEN){
+    QR_CAGRI_BILDIRILEN=true;
+    qrCagriOnayPop(s.garsonCagriBilgi.onaylayan);
+    qrCagriTakipDurdur();
+    if(typeof renderQR==="function") renderQR();
+  }
+}
+function qrCagriOnayPop(onaylayan){
+  let mdl=document.getElementById("qrCagriPop");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="qrCagriPop"; mdl.className="modal-bg"; mdl.style.zIndex="220"; document.body.appendChild(mdl); }
+  const ad=onaylayan||"Görevli";
+  mdl.innerHTML=`<div class="qcp-ic">
+    <div class="qcp-ikon">🙋</div>
+    <div class="qcp-bas">Çağrınız Kabul Edildi</div>
+    <div class="qcp-mesaj"><strong>${ad}</strong> çağrınızı kabul etti, birazdan masanıza geliyor.</div>
+    <button class="qcp-tamam" onclick="qrCagriPopKapat()">Tamam</button>
+  </div>`;
+  mdl.classList.add("on");
+}
+function qrCagriPopKapat(){ const m=document.getElementById("qrCagriPop"); if(m) m.classList.remove("on"); }
 function qrMutfagaMesaj(){
-  const mesaj=prompt("Mutfağa mesajınız (örn. az şekerli olsun, acele):");
-  if(!mesaj||!mesaj.trim()) return;
+  // mesaj giriş modalı (prompt yerine)
+  QR._mesajTaslak="";
+  qrMesajModalCiz();
+}
+function qrMesajModalCiz(){
+  let mdl=document.getElementById("qrMesajModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="qrMesajModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="qrm-ic">
+    <div class="qrm-bas">💬 Mutfağa Mesaj</div>
+    <div class="qrm-alt">İsteğinizi yazın, mutfak onaylayınca size bildirilecek.</div>
+    <textarea class="qrm-text" id="qrMesajText" placeholder="örn. az şekerli olsun · sos ayrı gelsin · acele edebilir misiniz" oninput="QR._mesajTaslak=this.value">${(QR._mesajTaslak||'').replace(/</g,'&lt;')}</textarea>
+    <div class="qrm-butonlar">
+      <button class="qrm-vazgec" onclick="qrMesajKapat()">Vazgeç</button>
+      <button class="qrm-gonder" onclick="qrMesajGonder()">📨 Gönder</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const t=document.getElementById("qrMesajText"); if(t) t.focus(); },100);
+}
+function qrMesajKapat(){ const m=document.getElementById("qrMesajModal"); if(m) m.classList.remove("on"); }
+/* Müşteri tarafı: gönderilen mesajlara mutfak yanıtını periyodik kontrol et */
+let QR_YANIT_TIMER=null;
+let QR_BILDIRILEN={};  // {msjId:true} — bir kez bildirilmiş yanıtlar
+function qrYanitTakipBaslat(){
+  if(QR_YANIT_TIMER) return;
+  QR_YANIT_TIMER=setInterval(qrYanitKontrol, 2000);
+}
+function qrYanitTakipDurdur(){ if(QR_YANIT_TIMER){ clearInterval(QR_YANIT_TIMER); QR_YANIT_TIMER=null; } }
+function qrYanitKontrol(){
+  const id=qrMasaId();
+  const s=SESSIONS[id];
+  if(!s || !s.mutfakMesajlari) return;
+  const benim=s.mutfakMesajlari.filter(m=>(m.kisi||"Müşteri")===(QR.kisi||"Müşteri"));
+  // yeni yanıtlanmış (onay/red) ve henüz bildirilmemiş mesaj
+  const yeniYanit=benim.find(m=>{
+    const d=m.durum||"bekliyor";
+    return (d==="onaylandi"||d==="reddedildi") && !QR_BILDIRILEN[m.id];
+  });
+  if(yeniYanit){
+    QR_BILDIRILEN[yeniYanit.id]=true;
+    qrYanitPop(yeniYanit);
+    if(typeof renderQR==="function" && (QR.view==="onay"||QR.view==="takip")) renderQR();
+  }
+  // hiç bekleyen kalmadıysa polling durdur
+  if(!benim.some(m=>(m.durum||"bekliyor")==="bekliyor")) qrYanitTakipDurdur();
+}
+function qrYanitPop(msj){
+  const onay=msj.durum==="onaylandi";
+  let mdl=document.getElementById("qrYanitPop");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="qrYanitPop"; mdl.className="modal-bg"; mdl.style.zIndex="220"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="qyp-ic ${onay?'onay':'red'}">
+    <div class="qyp-ikon">${onay?'✓':'✕'}</div>
+    <div class="qyp-bas">${onay?'İsteğiniz Onaylandı':'İsteğiniz Reddedildi'}</div>
+    <div class="qyp-mesaj">"${msj.mesaj}"</div>
+    <div class="qyp-alt">${onay?'Mutfak isteğinizi kabul etti 👨‍🍳':'Mutfak bu isteği karşılayamıyor. Anlayışınız için teşekkürler.'}</div>
+    <button class="qyp-tamam" onclick="qrYanitPopKapat()">Tamam</button>
+  </div>`;
+  mdl.classList.add("on");
+}
+function qrYanitPopKapat(){ const m=document.getElementById("qrYanitPop"); if(m) m.classList.remove("on"); }
+function qrMesajGonder(){
+  const mesaj=(QR._mesajTaslak||"").trim();
+  if(!mesaj){ note("Mesaj boş olamaz"); return; }
   const id=qrMasaId();
   if(!SESSIONS[id]) SESSIONS[id]={masa:id, acik:false, zaman:Date.now(), kisiler:[]};
   if(!SESSIONS[id].mutfakMesajlari) SESSIONS[id].mutfakMesajlari=[];
-  SESSIONS[id].mutfakMesajlari.push({mesaj:mesaj.trim(), kisi:QR.kisi||"Müşteri", zaman:Date.now()});
+  const msjId = "msj_"+Date.now()+"_"+Math.floor(Math.random()*1000);
+  SESSIONS[id].mutfakMesajlari.push({id:msjId, mesaj:mesaj, kisi:QR.kisi||"Müşteri", zaman:Date.now(), durum:"bekliyor"});
   SESSIONS[id].mesajVar=true;
-  // mutfağa anlık fiş olarak da bas
+  // mutfağa anlık fiş olarak ekrana bas
   mutfakFisiBas({tip:"masa", baslik:masaEtiket(id)+" · 💬 MESAJ", alt:QR.kisi, kisi:QR.kisi||"Müşteri", masa:id,
-    kalemler:[{ad:"💬 "+mesaj.trim(), secimler:[], kisi:QR.kisi||"Müşteri"}]});
+    kalemler:[{ad:"💬 "+mesaj, secimler:[], kisi:QR.kisi||"Müşteri"}]});
+  // gerçek mutfak yazıcısına mesaj bildirim fişi gönder
+  mesajFisiYazdir(id, mesaj, QR.kisi||"Müşteri");
+  qrMesajKapat();
   note("💬 Mesaj mutfağa iletildi");
+  qrYanitTakipBaslat();
+  if(typeof renderQR==="function") renderQR();
+}
+/* Müşteri mesajını mutfak yazıcısına bildirim fişi olarak yazdır */
+function mesajFisiYazdir(masaId, mesaj, kisi){
+  const sube = (QR && QR.sube) ? QR.sube : AKTIF_SUBE;
+  // mutfak rolündeki aktif yazıcıları bul (kategori ataması olmayanlar dahil)
+  let yazicilar = subeYazicilari(sube).filter(y=>y.aktif && y.rol==="mutfak");
+  if(!yazicilar.length){
+    // mutfak yazıcısı yoksa herhangi bir aktif yazıcıya düş
+    yazicilar = subeYazicilari(sube).filter(y=>y.aktif);
+  }
+  if(!yazicilar.length) return;  // tanımlı yazıcı yok
+  const metin = mesajFisiMetni(masaId, mesaj, kisi, sube);
+  yazicilar.forEach(y=>{
+    yaziciyaGonder(sube, y, metin).then(r=>{
+      if(r.ok){ const kdsAcik=document.getElementById("kdsApp")&&document.getElementById("kdsApp").style.display==="block"; if(kdsAcik) note("🖨️ Mesaj fişi yazdırıldı"); }
+    });
+  });
+}
+/* Mesaj bildirim fişi metni (ESC/POS düz metin) */
+function mesajFisiMetni(masaId, mesaj, kisi, sube){
+  const cizgi = "--------------------------------";
+  return "\n"+
+    "    *** MUSTERI MESAJI ***\n"+
+    "        MINIPAN\n"+
+    cizgi+"\n"+
+    "Sube : "+(sube||AKTIF_SUBE)+"\n"+
+    "Masa : "+masaEtiket(masaId)+"\n"+
+    "Kisi : "+(kisi||"Musteri")+"\n"+
+    "Saat : "+new Date().toLocaleString('tr')+"\n"+
+    cizgi+"\n"+
+    "MESAJ:\n"+
+    mesaj+"\n"+
+    cizgi+"\n"+
+    ">> Mutfak onayi bekleniyor <<\n"+
+    "\n\n\n";
 }
 
 /* ============================================================
@@ -11894,7 +12719,7 @@ function openKDS(){
 }
 function closeKDS(){ document.getElementById("kdsApp").style.display="none"; document.getElementById("login").style.display="flex"; }
 function kdsSekme(s){ KDS.sekme=s; KDS.acikMasa=null; renderKDS(); }
-function kdsMasaAc(m){ KDS.acikMasa=m; renderKDS(); }
+function kdsMasaAc(m){ if(garsonCagriPopAc(m)){ return; } KDS.acikMasa=m; renderKDS(); }
 function kdsGeri(){ KDS.acikMasa=null; renderKDS(); }
 
 function renderKDS(){
@@ -11914,6 +12739,9 @@ function renderKDS(){
   html += (KDS.sekme==="masalar") ? kdsMasalarHtml() : (KDS.sekme==="akis") ? kdsAkisHtml() : (KDS.sekme==="fisler") ? kdsFislerHtml() : kdsPaketHtml();
   html += '</div>';
   el.innerHTML=html;
+  // bekleyen müşteri mesajı varsa otomatik pop-up (zaten açık değilse)
+  const popAcik=document.getElementById("kdsMesajPop")&&document.getElementById("kdsMesajPop").classList.contains("on");
+  if(!popAcik) kdsBekleyenMesajGoster();
 }
 
 /* SEKME: Basılan fişler — mutfak tekrar yazdırabilir */
@@ -12042,9 +12870,22 @@ function kdsMasaDetayHtml(m){
   if(s.mutfakMesajlari && s.mutfakMesajlari.length){
     html+='<div class="kds-mesaj-blok"><div class="kds-mesaj-baslik">💬 Müşteri mesajları</div>';
     s.mutfakMesajlari.forEach(msj=>{
-      html+='<div class="kds-mesaj">'+msj.mesaj+' <small>· '+(msj.kisi||'')+'</small></div>';
+      const dur = msj.durum||"bekliyor";
+      html+='<div class="kds-mesaj kds-mesaj-'+dur+'">'+
+        '<div class="kds-mesaj-ust"><span class="kds-mesaj-kisi">👤 '+(msj.kisi||'Müşteri')+'</span>'+
+          (dur==="onaylandi"?'<span class="kds-mesaj-rozet ok">✓ Onaylandı</span>':
+           dur==="reddedildi"?'<span class="kds-mesaj-rozet red">✕ Reddedildi</span>':
+           '<span class="kds-mesaj-rozet bekle">Bekliyor</span>')+'</div>'+
+        '<div class="kds-mesaj-metin">'+msj.mesaj+'</div>';
+      if(dur==="bekliyor"){
+        html+='<div class="kds-mesaj-aksiyon">'+
+          '<button class="kds-mesaj-red" onclick="kdsMesajYanit('+mq+',\''+msj.id+'\',\'reddedildi\')">✕ Reddet</button>'+
+          '<button class="kds-mesaj-onay" onclick="kdsMesajYanit('+mq+',\''+msj.id+'\',\'onaylandi\')">✓ Onayla</button>'+
+        '</div>';
+      }
+      html+='</div>';
     });
-    html+='<button class="kds-mesaj-okundu" onclick="kdsMesajOkundu('+mq+')">✓ Okundu</button></div>';
+    html+='<button class="kds-mesaj-okundu" onclick="kdsMesajTemizle('+mq+')">Mesajları temizle</button></div>';
   }
   s.kisiler.forEach(k=>{
     html+='<div class="kds-kisi-blok"><div class="kds-kisi-ad">👤 '+k.ad+'</div>';
@@ -12055,21 +12896,23 @@ function kdsMasaDetayHtml(m){
         '<div class="kk-ust"><span class="kk-ad">'+(it.paket?'🥡 ':'')+it.ad+'</span>'+
           '<span class="kk-fiyat">'+it.fiyat+' ₺</span></div>'+
         '<div class="kk-durum" style="color:'+dm.renk+'">'+(it.paket?'PAKET · ':'')+dm.ad+'</div>';
-      // opsiyonlar — her biri kaldırılabilir (stok bitti)
+      // opsiyonlar — her biri onaylı silinebilir
       if(it.secimler.length && !iptalli){
         html+='<div class="kk-opsiyonlar">';
         it.secimler.forEach((op,oi)=>{
           html+='<span class="kk-ops">'+op+
-            '<button class="kk-ops-x" onclick="kdsOpsKaldir('+mq+','+it.id+','+oi+')" title="Stok bitti, kaldır">✕</button></span>';
+            '<button class="kk-ops-x" onclick="kdsOpsKaldir('+mq+','+it.id+','+oi+')" title="Seçeneği sil">✕</button></span>';
         });
         html+='</div>';
       }
       if(!iptalli){
+        const opsVarKds = (PRODUCT_OPTIONS[it.ad]||[]).length>0;
         html+='<div class="kk-aksiyon">'+
           (it.durum==="bekliyor"?'<button class="kak-btn haz" onclick="kdsDurum('+mq+','+it.id+',\'hazirlaniyor\')">Hazırla</button>':'')+
           (it.durum==="hazirlaniyor"?'<button class="kak-btn gonder" onclick="kdsDurum('+mq+','+it.id+',\'gonderildi\')">Gönderildi</button>':'')+
           (it.durum==="gonderildi"?'<span class="kk-tamam">✓ Teslim edildi</span>':'')+
           '<button class="kak-btn iptal" onclick="kdsIptal('+mq+','+it.id+')">İptal</button>'+
+          (opsVarKds?'<button class="kak-btn sec-ekle" onclick="kalemSecenekEkle('+mq+','+it.id+',\'kds\')">+ Seçenek</button>':'')+
         '</div>';
       }
       html+='</div>';
@@ -12082,6 +12925,60 @@ function kdsMasaDetayHtml(m){
 
 function kdsDurum(m,id,d){ kalemDurum(m,id,d); note(DURUM_META[d].ad); renderKDS(); }
 function kdsMesajOkundu(m){ const s=SESSIONS[m]; if(s){ s.mesajVar=false; s.mutfakMesajlari=[]; } note("Mesaj okundu"); renderKDS(); }
+/* Mutfak müşteri mesajını onayla/reddet → müşteriye bildirilir */
+function kdsMesajYanit(m, msjId, durum){
+  const s=SESSIONS[m]; if(!s||!s.mutfakMesajlari) return;
+  const msj=s.mutfakMesajlari.find(x=>x.id===msjId);
+  if(!msj) return;
+  msj.durum=durum;
+  msj.yanitZaman=Date.now();
+  // bekleyen başka mesaj yoksa masa mesaj bayrağını indir
+  s.mesajVar = s.mutfakMesajlari.some(x=>(x.durum||"bekliyor")==="bekliyor");
+  note(durum==="onaylandi"?"✓ İstek onaylandı, müşteriye bildirildi":"✕ İstek reddedildi, müşteriye bildirildi");
+  // açık mesaj pop-up'ı varsa kapat / güncelle
+  kdsMesajPopKapat();
+  renderKDS();
+  // sıradaki bekleyen mesaj varsa onu göster
+  kdsBekleyenMesajGoster();
+}
+function kdsMesajTemizle(m){
+  const s=SESSIONS[m]; if(!s) return;
+  s.mutfakMesajlari=[]; s.mesajVar=false;
+  note("Mesajlar temizlendi"); renderKDS();
+}
+/* Mutfakta bekleyen müşteri mesajı varsa otomatik pop-up göster */
+function kdsBekleyenMesajGoster(){
+  // tüm masalarda en eski bekleyen mesajı bul
+  let hedef=null;
+  Object.keys(SESSIONS).forEach(id=>{
+    const s=SESSIONS[id];
+    if(s && s.mutfakMesajlari){
+      s.mutfakMesajlari.forEach(msj=>{
+        if((msj.durum||"bekliyor")==="bekliyor"){
+          if(!hedef || msj.zaman<hedef.msj.zaman) hedef={masa:id, msj};
+        }
+      });
+    }
+  });
+  if(!hedef){ kdsMesajPopKapat(); return; }
+  const masaAd = masaEtiket(hedef.masa);
+  let mdl=document.getElementById("kdsMesajPop");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="kdsMesajPop"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
+  const mq="'"+String(hedef.masa).replace(/'/g,"\\'")+"'";
+  mdl.innerHTML=`<div class="kmp-ic">
+    <div class="kmp-ikon">💬</div>
+    <div class="kmp-bas">Müşteri Mesajı</div>
+    <div class="kmp-masa">${masaAd} · 👤 ${hedef.msj.kisi||'Müşteri'}</div>
+    <div class="kmp-mesaj">"${hedef.msj.mesaj}"</div>
+    <div class="kmp-butonlar">
+      <button class="kmp-red" onclick="kdsMesajYanit(${mq},'${hedef.msj.id}','reddedildi')">✕ Reddet</button>
+      <button class="kmp-onay" onclick="kdsMesajYanit(${mq},'${hedef.msj.id}','onaylandi')">✓ Onayla</button>
+    </div>
+    <button class="kmp-sonra" onclick="kdsMesajPopKapat()">Sonra bakarım</button>
+  </div>`;
+  mdl.classList.add("on");
+}
+function kdsMesajPopKapat(){ const m=document.getElementById("kdsMesajPop"); if(m) m.classList.remove("on"); }
 
 /* Mutfak fişi (KOT) — paketlenecekler AYRI gruplanır */
 function kdsFisYazdir(m){
@@ -12135,11 +13032,7 @@ function fisGoster(fis, otomatik){
   mdl.classList.add("on");
 }
 function kdsIptal(m,id){ kalemIptal(m,id); note("Kalem iptal edildi · tutar düştü"); renderKDS(); }
-function kdsOpsKaldir(m,id,oi){
-  kalemOpsiyonKaldir(m,id,oi,0);
-  note("Opsiyon kaldırıldı (stok bitti)");
-  renderKDS();
-}
+function kdsOpsKaldir(m,id,oi){ secenekSilOnay(m,id,oi,"kds"); }
 
 /* ============================================================
    GARSON EKRANI (tablet/mobil) — masaları gör, kişiye ürün ekle
@@ -12231,9 +13124,9 @@ function garsonPaketBasla(){
   GARSON.view="menu"; renderGarson();
 }
 function garsonMasaAc(m){
-  GARSON.masa=m; GARSON.view="masa";
   if(!SESSIONS[m]) SESSIONS[m]={masa:m, acik:false, zaman:Date.now(), kisiler:[]};
-  masaCagriTemizle(m);   // garson ilgilendi
+  if(garsonCagriPopAc(m)){ return; }
+  GARSON.masa=m; GARSON.view="masa";
   renderGarson();
 }
 
@@ -12514,6 +13407,8 @@ menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yü
 yorumYukle();    // ürün yorum/puanlama verilerini geri yükle
 posAyarYukle();  // yazarkasa entegrasyon ayarlarını geri yükle
 yaziciYukle();   // fiş yazıcı ayarlarını geri yükle
+musteriReklamYukle(); // müşteri ekranı reklam görsellerini geri yükle
+personelAdYukle();    // bu cihazdaki personel adını geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
