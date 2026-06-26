@@ -1489,6 +1489,80 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .fy-kanal-fil{display:flex; gap:0; background:var(--surface-2); border-radius:10px; padding:3px; flex-shrink:0}
 .fy-kf-btn{padding:8px 13px; border-radius:8px; background:none; border:none; font-size:12.5px; font-weight:700; color:var(--ink-2); cursor:pointer; white-space:nowrap}
 .fy-kf-btn.on{background:var(--brand); color:#fff}
+/* === YAZARKASA ENTEGRASYON EKRANI === */
+.yk-bilgi{background:var(--info-soft); border:1px solid #bcd9f5; border-radius:12px; padding:13px 16px; font-size:13px; line-height:1.6; margin-bottom:14px}
+.yk-bilgi code{background:rgba(0,0,0,.06); padding:1px 6px; border-radius:5px; font-size:12px}
+.yk-sube-sec{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+.yk-sube-btn{padding:9px 14px; border-radius:10px; background:var(--surface-2); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer; display:flex; align-items:center; gap:7px}
+.yk-sube-btn.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.yk-nokta{width:8px; height:8px; border-radius:50%; background:var(--ink-3); display:inline-block}
+.yk-nokta.acik{background:var(--ok)}
+.yk-kart{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px; box-shadow:var(--shadow)}
+.yk-kart-bas{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; padding-bottom:14px; border-bottom:1px solid var(--line)}
+.yk-kart-sube{font-size:16px; font-weight:800; color:var(--cocoa)}
+.yk-switch{display:flex; align-items:center; gap:8px; cursor:pointer}
+.yk-switch input{display:none}
+.yk-switch-yuva{width:44px; height:25px; border-radius:99px; background:var(--line); position:relative; transition:.2s}
+.yk-switch-yuva::after{content:''; position:absolute; top:3px; left:3px; width:19px; height:19px; border-radius:50%; background:#fff; transition:.2s}
+.yk-switch input:checked + .yk-switch-yuva{background:var(--ok)}
+.yk-switch input:checked + .yk-switch-yuva::after{left:22px}
+.yk-switch-lbl{font-size:13px; font-weight:700; color:var(--ink-2)}
+.yk-alan{margin-bottom:14px}
+.yk-alan label{display:block; font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
+.yk-select,.yk-input{width:100%; padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; background:var(--surface); color:var(--ink)}
+.yk-baglanti-row{display:flex; gap:8px; flex-wrap:wrap}
+.yk-bag-btn{flex:1; min-width:140px; padding:11px; border-radius:10px; background:var(--surface-2); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.yk-bag-btn.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.yk-ikili{display:flex; gap:12px}
+.yk-ikili .yk-alan{flex:1}
+.yk-port{max-width:120px}
+.yk-test-row{display:flex; align-items:center; gap:12px; margin-top:4px}
+.yk-test-btn{padding:11px 16px; border-radius:10px; background:var(--cocoa); color:#fff; border:none; font-size:13px; font-weight:700; cursor:pointer}
+.yk-test-sonuc{font-size:13px; font-weight:700; color:var(--ink-3)}
+.yk-test-sonuc.ok{color:var(--ok)}
+.yk-test-sonuc.hata{color:var(--err)}
+.yk-test-sonuc.pasif{color:#b06d10}
+.yk-ozet{background:var(--surface-2); border-radius:12px; padding:14px 16px; margin-bottom:14px}
+.yk-ozet-bas{font-size:13px; font-weight:800; color:var(--cocoa); margin-bottom:10px}
+.yk-ozet-satir{display:flex; justify-content:space-between; font-size:13px; padding:5px 0; color:var(--ink-2)}
+.yk-ozet-satir span:last-child{font-weight:700; color:var(--ink)}
+.yk-ok{color:var(--ok)!important}
+.yk-pasif{color:var(--ink-3)!important}
+.yk-not-alt{font-size:12px; color:var(--ink-3); line-height:1.5; padding:0 4px}
+/* === FİŞ YAZICILARI === */
+.yzc-say{background:var(--brand); color:#fff; border-radius:99px; padding:1px 7px; font-size:11px; font-weight:800}
+.yzc-bar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px}
+.yzc-bar-bilgi{font-size:13px; color:var(--ink-2); font-weight:600}
+.yzc-liste{display:flex; flex-direction:column; gap:12px}
+.yzc-kart{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:15px; box-shadow:var(--shadow)}
+.yzc-kart.yzc-pasif{opacity:.6}
+.yzc-kart-ust{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:11px}
+.yzc-kart-ad{display:flex; gap:12px; align-items:flex-start}
+.yzc-rol-ic{font-size:26px; line-height:1}
+.yzc-ad{font-size:15px; font-weight:800; color:var(--ink)}
+.yzc-kapali-rozet{font-size:10px; font-weight:800; color:var(--err); background:var(--err-soft); border-radius:5px; padding:1px 6px; margin-left:5px; vertical-align:middle}
+.yzc-rol-ad{font-size:12px; color:var(--ink-3); margin-top:2px}
+.yzc-kart-aksiyon{display:flex; gap:5px}
+.yzc-kart-meta{display:flex; gap:7px; flex-wrap:wrap}
+.yzc-meta-cip{font-size:11.5px; font-weight:700; color:var(--ink-2); background:var(--surface-2); border-radius:7px; padding:5px 10px}
+.yzc-meta-cip.yonlendirme{background:var(--brand-soft); color:var(--brand-d)}
+/* yazıcı modal */
+.yzc-modal-ic{background:#fff; border-radius:18px; max-width:480px; width:94%; margin:auto; max-height:88vh; display:flex; flex-direction:column}
+.yzc-modal-bas{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; font-weight:800; color:var(--cocoa)}
+.yzc-modal-govde{padding:18px 20px; overflow-y:auto; flex:1}
+.yzc-rol-row{display:flex; gap:7px; flex-wrap:wrap}
+.yzc-rol-btn{padding:9px 13px; border-radius:9px; background:var(--surface-2); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.yzc-rol-btn.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.yzc-bag-row{display:flex; gap:7px}
+.yzc-bag-btn{flex:1; padding:11px; border-radius:9px; background:var(--surface-2); border:1.5px solid var(--line); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.yzc-bag-btn.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.yzc-lbl-not{font-weight:400; color:var(--ink-3); font-size:11px}
+.yzc-kat-grid{display:flex; gap:7px; flex-wrap:wrap}
+.yzc-kat-cip{padding:7px 12px; border-radius:8px; background:var(--surface-2); border:1.5px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.yzc-kat-cip.on{background:var(--ok-soft); border-color:var(--ok); color:var(--ok)}
+.yzc-modal-foot{display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--line)}
+.yzc-test-btn{flex:1; padding:13px; border-radius:11px; background:var(--cocoa); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer}
+.yzc-kaydet-btn{flex:1.5; padding:13px; border-radius:11px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
 /* === FİYAT DEĞİŞTİRME MODAL === */
 .fy-duz-ic{background:#fff; border-radius:20px; padding:22px; max-width:360px; width:92%; margin:auto}
 .fy-duz-bas{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px}
@@ -4303,9 +4377,9 @@ const ROLES = {
   kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", subeSec:true,
            nav:["satis","masalar"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
-           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","personel","rapor"] },
+           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","personel","yazarkasa","yazicilar","rapor"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","subeler","rapor","denetim"] },
+           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","subeler","yazarkasa","yazicilar","rapor","denetim"] },
 };
 
 // Yetki kontrolü: belirli aksiyon bu role açık mı?
@@ -4321,6 +4395,92 @@ const CAN = {
 };
 function can(role, action){ return (CAN[action]||[]).includes(role); }
 
+/* ============================================================
+   YAZARKASA-POS ENTEGRASYONU (GMP-3 köprüsü)
+   POS_AYAR[sube] = {marka, model, baglanti, ip, port, kosfPort, aktif}
+   Gerçek cihaz: kasa bilgisayarında çalışan yerel köprü servisi
+   (örn. http://localhost:9000) GMP-3 paketine çevirip cihaza iletir.
+   Cihaz yokken: simülasyon modu (fiş üretildi varsayılır).
+   ============================================================ */
+let POS_AYAR = {};   // şube bazlı yazarkasa ayarı
+const POS_AYAR_KEY = "minipan_pos_ayar_v1";
+/* Desteklenen marka/modeller (araştırma: GMP-3 protokolü) */
+const YAZARKASA_MARKALAR = {
+  "Ingenico": { modeller:["IDE280","IWE280","MOVE5000F","PAX A910SF"], baglanti:["kablolu","kablosuz"] },
+  "PAVO":     { modeller:["N86","N96"], baglanti:["kablosuz"] },
+  "PAX":      { modeller:["A910","A920","A77"], baglanti:["kablolu","kablosuz"] },
+  "Beko":     { modeller:["300TR","350TR"], baglanti:["kablolu","kablosuz"] },
+  "Inpos":    { modeller:["A8","A9"], baglanti:["kablolu"] },
+  "PayGo":    { modeller:["PG-100","PG-200"], baglanti:["kablolu"] },
+  "Hugin":    { modeller:["T300","T100"], baglanti:["kablolu"] },
+};
+function posAyarYukle(){
+  try{ const j=localStorage.getItem(POS_AYAR_KEY); if(j) POS_AYAR=JSON.parse(j); }catch(e){}
+}
+function posAyarKaydet(){
+  try{ localStorage.setItem(POS_AYAR_KEY, JSON.stringify(POS_AYAR)); }catch(e){}
+}
+function posAyarAl(sube){
+  return POS_AYAR[sube] || {marka:"", model:"", baglanti:"kablolu", ip:"", port:"9000", aktif:false};
+}
+function ykYontemAd(y){ return y==="nakit"?"Nakit":y==="kredi"?"Kredi Kartı":"Diğer/QR"; }
+
+/* ============================================================
+   FİŞ YAZICILARI
+   YAZICILAR[sube] = [{id, ad, rol, baglanti, ip, port, usbAygit, btAdres,
+                       kopya, genislik, aktif, kategoriler:[...]}]
+   ============================================================ */
+let YAZICILAR = {};
+const YAZICI_KEY = "minipan_yazicilar_v1";
+const YAZICI_ROLLER = {
+  mutfak: {ad:"Mutfak", ic:"🍳", aciklama:"Sipariş/hazırlama fişi"},
+  kasa:   {ad:"Kasa / Adisyon", ic:"🧾", aciklama:"Hesap/adisyon fişi"},
+  bar:    {ad:"Bar", ic:"🥤", aciklama:"İçecek hazırlama fişi"},
+  paket:  {ad:"Paket", ic:"📦", aciklama:"Paket/gel-al etiketi"},
+  ozel:   {ad:"Özel", ic:"⚙️", aciklama:"Özel amaçlı yazıcı"},
+};
+function yaziciYukle(){
+  try{ const j=localStorage.getItem(YAZICI_KEY); if(j) YAZICILAR=JSON.parse(j); }catch(e){}
+}
+function yaziciKaydet(){
+  try{ localStorage.setItem(YAZICI_KEY, JSON.stringify(YAZICILAR)); }catch(e){}
+}
+function subeYazicilari(sube){ return YAZICILAR[sube] || []; }
+function yaziciIdUret(){ return "yzc_"+Date.now()+"_"+Math.floor(Math.random()*1000); }
+function kategoriYazicilari(sube, kategori, rol){
+  const liste = subeYazicilari(sube).filter(y=>y.aktif);
+  const ozel = liste.filter(y=>(y.kategoriler||[]).includes(kategori));
+  if(ozel.length) return ozel;
+  return liste.filter(y=>y.rol===rol && (!y.kategoriler||y.kategoriler.length===0));
+}
+/* Köprüye tahsilat gönder (gerçek cihaz veya simülasyon).
+   veri: {tutar, kdv, yontem, kalemler}. Promise döner. */
+async function yazarkasayaGonder(sube, veri){
+  const ay = posAyarAl(sube);
+  if(!ay.aktif){
+    // entegrasyon kapalı — sadece kayıt, fiş cihazsız
+    return {ok:true, simulasyon:true, mesaj:"Yazarkasa entegrasyonu kapalı (cihaza gönderilmedi)"};
+  }
+  const kopruUrl = "http://"+(ay.ip||"localhost")+":"+(ay.port||"9000")+"/gmp3/tahsilat";
+  const govde = {
+    marka: ay.marka, model: ay.model, baglanti: ay.baglanti,
+    tutar: veri.tutar, kdv: veri.kdv||0, yontem: veri.yontem,
+    kalemler: veri.kalemler||[], zaman: Date.now()
+  };
+  try{
+    const r = await fetch(kopruUrl, {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify(govde)
+    });
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    const sonuc = await r.json();
+    return {ok:true, fisNo:sonuc.fisNo, mesaj:"Mali fiş üretildi"};
+  }catch(e){
+    // köprüye ulaşılamadı — cihaz bağlı değil
+    return {ok:false, hata:e.message, mesaj:"Yazarkasa köprüsüne ulaşılamadı ("+kopruUrl+")"};
+  }
+}
+
 const NAV_META = {
   satis:   {ic:"🧇", ad:"Satış"},
   masalar: {ic:"🪑", ad:"Masalar"},
@@ -4335,6 +4495,8 @@ const NAV_META = {
   rapor:   {ic:"📊", ad:"Rapor"},
   denetim: {ic:"🔍", ad:"Denetim"},
   stok:    {ic:"📦", ad:"Stok"},
+  yazarkasa:{ic:"🧾", ad:"Yazarkasa"},
+  yazicilar:{ic:"🖨️", ad:"Yazıcılar"},
 };
 
 /* ============================================================
@@ -5136,7 +5298,8 @@ function go(key, scrollKoru){
   ({
     satis:viewSatis, masalar:viewMasalar, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
     fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel, bayi:viewBayi,
-    subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, odemeEkran:viewOdemeEkran
+    subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, odemeEkran:viewOdemeEkran,
+    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar
   }[key] || viewSatis)(main);
   if(scrollKoru) main.scrollTop = eskiScroll;
 }
@@ -7207,6 +7370,22 @@ function odemeTahsilEt(veri){
     }
   });
   masaOdemeKaydet(m, yontemler, dagitim, veri.indirim);
+  // YAZARKASA-POS'a gönder (her yöntem ayrı mali fiş — GMP-3)
+  const sube = AKTIF_SUBE;
+  const posAy = posAyarAl(sube);
+  if(posAy.aktif){
+    yontemler.forEach(y=>{
+      yazarkasayaGonder(sube, {
+        tutar: y.tutar,
+        kdv: Math.round((y.tutar - y.tutar/1.10)*100)/100,  // %10 KDV varsayım (tatlı/gıda)
+        yontem: y.yontem,
+        kalemler: dagitim.map(dd=>{ const it=masaKalemBul(m,dd.kalemId); return {ad:it?it.ad:"", tutar:dd.tutar}; })
+      }).then(r=>{
+        if(r.ok && !r.simulasyon) note("🧾 "+ykYontemAd(y.yontem)+" "+tl(y.tutar)+"₺ → mali fiş üretildi");
+        else if(!r.ok) note("⚠️ Yazarkasa: "+r.mesaj);
+      });
+    });
+  }
   const kalan=masaKalan(m);
   if(kalan<=0.01){
     note("✓ Tüm ödeme tamamlandı · masa kapandı");
@@ -9968,6 +10147,371 @@ function bayiStokAktar(id){
   go("bayi", true);
 }
 
+/* ============================================================
+   FİŞ YAZICILARI AYAR EKRANI
+   ============================================================ */
+function viewYazicilar(main){
+  const isGenel = state.role==="genel";
+  const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
+  if(!state.yzcSube || !subeler.includes(state.yzcSube)) state.yzcSube = subeler[0];
+  const sube = state.yzcSube;
+  const liste = subeYazicilari(sube);
+
+  let html = `<div class="sec-head"><div><h2>🖨️ Fiş Yazıcıları</h2>
+    <div class="sh-sub">Mutfak, kasa, bar ve özel yazıcı yönetimi</div></div></div>`;
+
+  html += `<div class="yk-bilgi">
+    <strong>Nasıl çalışır?</strong> Yazarkasanın yanında ekstra termal yazıcılar tanımlayabilirsiniz. Sipariş onaylandığında ürünler, kategorisine atanmış yazıcıya otomatik düşer (örn. tatlılar mutfağa, içecekler bara). Yazdırma, kasa bilgisayarındaki yazıcı köprüsü üzerinden ESC/POS komutlarıyla yapılır.
+  </div>`;
+
+  if(isGenel && subeler.length>1){
+    html += `<div class="yk-sube-sec">`;
+    subeler.forEach(sb=>{
+      const adet=subeYazicilari(sb).filter(y=>y.aktif).length;
+      html += `<button class="yk-sube-btn${state.yzcSube===sb?' on':''}" onclick="yzcSubeSec('${sb.replace(/'/g,"\\'")}')">
+        ${sb} ${adet>0?`<span class="yzc-say">${adet}</span>`:''}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `<div class="yzc-bar">
+    <div class="yzc-bar-bilgi">${liste.length} yazıcı tanımlı · ${liste.filter(y=>y.aktif).length} aktif</div>
+    <button class="bayi-ekle-btn" onclick="yzcEkle()">+ Yazıcı ekle</button>
+  </div>`;
+
+  if(liste.length===0){
+    html += `<div class="bayi-bos">Bu şubede henüz yazıcı tanımlı değil. "+ Yazıcı ekle" ile başlayın.</div>`;
+  } else {
+    html += `<div class="yzc-liste">`;
+    liste.forEach((y,yi)=>{
+      const rol = YAZICI_ROLLER[y.rol] || YAZICI_ROLLER.ozel;
+      const bagMetin = y.baglanti==="ag" ? `🌐 Ağ · ${y.ip||'?'}:${y.port||'9100'}`
+                     : y.baglanti==="usb" ? `🔌 USB · ${y.usbAygit||'varsayılan'}`
+                     : `📶 Bluetooth · ${y.btAdres||'eşleşmemiş'}`;
+      const katMetin = (y.kategoriler&&y.kategoriler.length)
+        ? y.kategoriler.length+" kategori" : "rolüne göre tümü";
+      html += `<div class="yzc-kart${y.aktif?'':' yzc-pasif'}">
+        <div class="yzc-kart-ust">
+          <div class="yzc-kart-ad">
+            <span class="yzc-rol-ic">${rol.ic}</span>
+            <div>
+              <div class="yzc-ad">${y.ad||rol.ad} ${y.aktif?'':'<span class="yzc-kapali-rozet">KAPALI</span>'}</div>
+              <div class="yzc-rol-ad">${rol.ad} · ${rol.aciklama}</div>
+            </div>
+          </div>
+          <div class="yzc-kart-aksiyon">
+            <button class="kys-btn" onclick="yzcTest('${sube.replace(/'/g,"\\'")}','${y.id}')" title="Test fişi">🖨️</button>
+            <button class="kys-btn" onclick="yzcDuzenle('${y.id}')">✏️</button>
+            <button class="kys-btn sil" onclick="yzcSil('${y.id}')">🗑️</button>
+          </div>
+        </div>
+        <div class="yzc-kart-meta">
+          <span class="yzc-meta-cip">${bagMetin}</span>
+          <span class="yzc-meta-cip">📄 ${y.kopya||1} kopya</span>
+          <span class="yzc-meta-cip">📐 ${y.genislik||80}mm</span>
+          <span class="yzc-meta-cip yonlendirme">🎯 ${katMetin}</span>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `<div class="yk-not-alt">⚙️ Yazdırma, kasa bilgisayarında çalışan yazıcı köprüsü (ESC/POS) üzerinden yapılır. Ağ yazıcıları doğrudan IP'ye, USB/Bluetooth yazıcılar köprü aracılığıyla bağlanır.</div>`;
+
+  main.innerHTML = html;
+}
+function yzcSubeSec(sb){ state.yzcSube=sb; viewYazicilar(document.querySelector(".main")); }
+function yzcEkle(){
+  state._yzcForm = {
+    id: yaziciIdUret(), ad:"", rol:"mutfak", baglanti:"ag",
+    ip:"", port:"9100", usbAygit:"", btAdres:"",
+    kopya:1, genislik:80, aktif:true, kategoriler:[], yeni:true
+  };
+  renderYaziciModal();
+}
+function yzcDuzenle(id){
+  const y = subeYazicilari(state.yzcSube).find(x=>x.id===id);
+  if(!y) return;
+  state._yzcForm = JSON.parse(JSON.stringify(y));
+  state._yzcForm.yeni = false;
+  renderYaziciModal();
+}
+function yzcSil(id){
+  const liste = subeYazicilari(state.yzcSube);
+  const y = liste.find(x=>x.id===id);
+  if(!y) return;
+  if(!confirm('"'+(y.ad||YAZICI_ROLLER[y.rol].ad)+'" yazıcısı silinsin mi?')) return;
+  YAZICILAR[state.yzcSube] = liste.filter(x=>x.id!==id);
+  yaziciKaydet();
+  note("Yazıcı silindi");
+  viewYazicilar(document.querySelector(".main"));
+}
+function renderYaziciModal(){
+  const f = state._yzcForm;
+  let mdl=document.getElementById("yaziciModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="yaziciModal"; mdl.className="modal-bg"; mdl.style.zIndex="180"; document.body.appendChild(mdl); }
+  const kategoriler = DEMO_KATEGORILER.map(k=>k.ad);
+  let ic = `<div class="yzc-modal-ic">
+    <div class="yzc-modal-bas">
+      <span>${f.yeni?'➕ Yeni Yazıcı':'✏️ Yazıcı Düzenle'}</span>
+      <button class="bom-kapat" onclick="yzcModalKapat()">✕</button>
+    </div>
+    <div class="yzc-modal-govde">`;
+
+  // ad
+  ic += `<div class="yk-alan"><label>Yazıcı adı</label>
+    <input class="yk-input" value="${(f.ad||'').replace(/"/g,'&quot;')}" placeholder="örn. Mutfak Yazıcı 1" oninput="state._yzcForm.ad=this.value"></div>`;
+
+  // rol
+  ic += `<div class="yk-alan"><label>Rol</label>
+    <div class="yzc-rol-row">`;
+  Object.entries(YAZICI_ROLLER).forEach(([k,r])=>{
+    ic += `<button class="yzc-rol-btn${f.rol===k?' on':''}" onclick="yzcFormSet('rol','${k}')">${r.ic} ${r.ad}</button>`;
+  });
+  ic += `</div></div>`;
+
+  // bağlantı türü
+  ic += `<div class="yk-alan"><label>Bağlantı türü</label>
+    <div class="yzc-bag-row">
+      <button class="yzc-bag-btn${f.baglanti==='ag'?' on':''}" onclick="yzcFormSet('baglanti','ag')">🌐 Ağ (IP)</button>
+      <button class="yzc-bag-btn${f.baglanti==='usb'?' on':''}" onclick="yzcFormSet('baglanti','usb')">🔌 USB</button>
+      <button class="yzc-bag-btn${f.baglanti==='bluetooth'?' on':''}" onclick="yzcFormSet('baglanti','bluetooth')">📶 Bluetooth</button>
+    </div></div>`;
+
+  // bağlantı detayı
+  if(f.baglanti==="ag"){
+    ic += `<div class="yk-ikili">
+      <div class="yk-alan"><label>IP adresi</label>
+        <input class="yk-input" value="${(f.ip||'').replace(/"/g,'&quot;')}" placeholder="192.168.1.100" oninput="state._yzcForm.ip=this.value"></div>
+      <div class="yk-alan yk-port"><label>Port</label>
+        <input class="yk-input" inputmode="numeric" value="${f.port||'9100'}" oninput="state._yzcForm.port=this.value"></div>
+    </div>`;
+  } else if(f.baglanti==="usb"){
+    ic += `<div class="yk-alan"><label>USB aygıt adı (köprüde tanımlı)</label>
+      <input class="yk-input" value="${(f.usbAygit||'').replace(/"/g,'&quot;')}" placeholder="örn. POS-80 / EPSON TM-T20" oninput="state._yzcForm.usbAygit=this.value"></div>`;
+  } else {
+    ic += `<div class="yk-alan"><label>Bluetooth adresi / ad</label>
+      <input class="yk-input" value="${(f.btAdres||'').replace(/"/g,'&quot;')}" placeholder="örn. 00:11:22:33:44:55 veya cihaz adı" oninput="state._yzcForm.btAdres=this.value"></div>`;
+  }
+
+  // kopya + genişlik
+  ic += `<div class="yk-ikili">
+    <div class="yk-alan"><label>Kopya sayısı</label>
+      <input class="yk-input" inputmode="numeric" value="${f.kopya||1}" oninput="state._yzcForm.kopya=parseInt(this.value)||1"></div>
+    <div class="yk-alan"><label>Kağıt genişliği</label>
+      <select class="yk-select" onchange="state._yzcForm.genislik=parseInt(this.value)">
+        <option value="58"${f.genislik===58?' selected':''}>58 mm</option>
+        <option value="80"${f.genislik===80||!f.genislik?' selected':''}>80 mm</option>
+      </select></div>
+  </div>`;
+
+  // kategori yönlendirme
+  ic += `<div class="yk-alan"><label>Kategori yönlendirme <span class="yzc-lbl-not">(seçilmezse rolüne göre tüm ürünler)</span></label>
+    <div class="yzc-kat-grid">`;
+  kategoriler.forEach(k=>{
+    const sec = (f.kategoriler||[]).includes(k);
+    ic += `<button class="yzc-kat-cip${sec?' on':''}" onclick="yzcFormKat('${k.replace(/'/g,"\\'")}')">${sec?'✓ ':''}${k}</button>`;
+  });
+  ic += `</div></div>`;
+
+  // aktif
+  ic += `<div class="yk-alan">
+    <label class="yk-switch" style="cursor:pointer">
+      <input type="checkbox" ${f.aktif?'checked':''} onchange="state._yzcForm.aktif=this.checked;renderYaziciModal()">
+      <span class="yk-switch-yuva"></span>
+      <span class="yk-switch-lbl">${f.aktif?'Aktif':'Kapalı'}</span>
+    </label></div>`;
+
+  ic += `</div>
+    <div class="yzc-modal-foot">
+      <button class="yzc-test-btn" onclick="yzcTestForm()">🖨️ Test fişi</button>
+      <button class="yzc-kaydet-btn" onclick="yzcKaydet()">✓ Kaydet</button>
+    </div>
+  </div>`;
+  mdl.innerHTML = ic;
+  mdl.classList.add("on");
+}
+function yzcFormSet(alan, deger){ state._yzcForm[alan]=deger; renderYaziciModal(); }
+function yzcFormKat(kat){
+  const f=state._yzcForm;
+  if(!f.kategoriler) f.kategoriler=[];
+  const i=f.kategoriler.indexOf(kat);
+  if(i>=0) f.kategoriler.splice(i,1); else f.kategoriler.push(kat);
+  renderYaziciModal();
+}
+function yzcModalKapat(){ const m=document.getElementById("yaziciModal"); if(m) m.classList.remove("on"); state._yzcForm=null; }
+function yzcKaydet(){
+  const f = state._yzcForm; if(!f) return;
+  if(!f.ad || !f.ad.trim()) f.ad = YAZICI_ROLLER[f.rol].ad;
+  const sube = state.yzcSube;
+  if(!YAZICILAR[sube]) YAZICILAR[sube]=[];
+  const temiz = {
+    id:f.id, ad:f.ad.trim(), rol:f.rol, baglanti:f.baglanti,
+    ip:f.ip||"", port:f.port||"9100", usbAygit:f.usbAygit||"", btAdres:f.btAdres||"",
+    kopya:f.kopya||1, genislik:f.genislik||80, aktif:!!f.aktif, kategoriler:f.kategoriler||[]
+  };
+  const idx = YAZICILAR[sube].findIndex(x=>x.id===f.id);
+  if(idx>=0) YAZICILAR[sube][idx]=temiz; else YAZICILAR[sube].push(temiz);
+  yaziciKaydet();
+  yzcModalKapat();
+  note((f.yeni?"Yazıcı eklendi: ":"Yazıcı güncellendi: ")+temiz.ad);
+  viewYazicilar(document.querySelector(".main"));
+}
+/* Yazıcıya gönder (köprü/ESC-POS) — gerçek cihaz yoksa simülasyon */
+async function yaziciyaGonder(sube, yazici, fisMetni){
+  if(!yazici || !yazici.aktif) return {ok:false, mesaj:"Yazıcı kapalı"};
+  if(yazici.baglanti==="ag" && yazici.ip){
+    const url = "http://"+yazici.ip+":"+(yazici.port||"9100")+"/escpos";
+    try{
+      const r = await fetch(url, {method:"POST", headers:{"Content-Type":"text/plain"}, body:fisMetni});
+      if(!r.ok) throw new Error("HTTP "+r.status);
+      return {ok:true, mesaj:"Yazdırıldı"};
+    }catch(e){ return {ok:false, mesaj:"Yazıcıya ulaşılamadı ("+url+")"}; }
+  }
+  // USB/Bluetooth → yerel köprü servisi gerekir
+  const kopru = "http://localhost:9000/yazici";
+  try{
+    const r = await fetch(kopru, {method:"POST", headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({yazici, metin:fisMetni})});
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    return {ok:true, mesaj:"Köprüye gönderildi"};
+  }catch(e){ return {ok:false, mesaj:"Yazıcı köprüsüne ulaşılamadı"}; }
+}
+function yzcTestFisMetni(yazici){
+  const rol = YAZICI_ROLLER[yazici.rol]||YAZICI_ROLLER.ozel;
+  return "*** MİNİPAN TEST FİŞİ ***\n"+rol.ad+" — "+(yazici.ad||"")+"\n"+
+    state.yzcSube+"\n"+new Date().toLocaleString('tr')+"\n"+
+    "------------------------\nÖrnek ürün ×1\nÖrnek ürün 2 ×2\n------------------------\nBağlantı: "+yazici.baglanti+"\nTest başarılı ✓\n\n\n";
+}
+async function yzcTest(sube, id){
+  const y = subeYazicilari(sube).find(x=>x.id===id);
+  if(!y) return;
+  note("🖨️ Test fişi gönderiliyor...");
+  const r = await yaziciyaGonder(sube, y, yzcTestFisMetni(y));
+  note(r.ok ? "✓ "+r.mesaj : "⚠️ "+r.mesaj);
+}
+async function yzcTestForm(){
+  const f=state._yzcForm; if(!f) return;
+  note("🖨️ Test fişi gönderiliyor...");
+  const r = await yaziciyaGonder(state.yzcSube, f, yzcTestFisMetni(f));
+  note(r.ok ? "✓ "+r.mesaj : "⚠️ "+r.mesaj);
+}
+
+/* ============================================================
+   YAZARKASA-POS ENTEGRASYON AYAR EKRANI
+   ============================================================ */
+function viewYazarkasa(main){
+  const isGenel = state.role==="genel";
+  // genel müdür tüm şubeleri, müdür/kasa kendi şubesini yönetir
+  const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
+  if(!state.ykSube || !subeler.includes(state.ykSube)) state.ykSube = subeler[0];
+  const sube = state.ykSube;
+  const ay = posAyarAl(sube);
+
+  let html = `<div class="sec-head"><div><h2>🧾 Yazarkasa Entegrasyonu</h2>
+    <div class="sh-sub">GMP-3 protokolü ile yeni nesil ÖKC bağlantısı</div></div></div>`;
+
+  html += `<div class="yk-bilgi">
+    <strong>Nasıl çalışır?</strong> Kasada ödeme alındığında tutar, kasa bilgisayarında çalışan yerel köprü servisine (GMP-3) gönderilir; köprü bunu yazarkasaya iletir ve cihaz mali fişi basar. Köprü servisi <code>http://[ip]:[port]/gmp3/tahsilat</code> adresini dinler. Cihaz bağlı değilken sistem ödemeyi kaydeder ama mali fiş üretmez.
+  </div>`;
+
+  // şube seçici (genel müdür)
+  if(isGenel && subeler.length>1){
+    html += `<div class="yk-sube-sec">`;
+    subeler.forEach(sb=>{
+      const a=posAyarAl(sb);
+      html += `<button class="yk-sube-btn${state.ykSube===sb?' on':''}" onclick="ykSubeSec('${sb.replace(/'/g,"\\'")}')">
+        ${sb} ${a.aktif?'<span class="yk-nokta acik"></span>':'<span class="yk-nokta"></span>'}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  // ayar kartı
+  html += `<div class="yk-kart">
+    <div class="yk-kart-bas">
+      <span class="yk-kart-sube">🏬 ${sube}</span>
+      <label class="yk-switch">
+        <input type="checkbox" ${ay.aktif?'checked':''} onchange="ykAyarSet('aktif', this.checked)">
+        <span class="yk-switch-yuva"></span>
+        <span class="yk-switch-lbl">${ay.aktif?'Aktif':'Kapalı'}</span>
+      </label>
+    </div>`;
+
+  // marka
+  html += `<div class="yk-alan"><label>Marka</label>
+    <select class="yk-select" onchange="ykAyarSet('marka', this.value)">
+      <option value="">— marka seç —</option>
+      ${Object.keys(YAZARKASA_MARKALAR).map(m=>`<option value="${m}"${ay.marka===m?' selected':''}>${m}</option>`).join("")}
+    </select></div>`;
+
+  // model + bağlantı (markaya göre)
+  if(ay.marka && YAZARKASA_MARKALAR[ay.marka]){
+    const mk = YAZARKASA_MARKALAR[ay.marka];
+    html += `<div class="yk-alan"><label>Model</label>
+      <select class="yk-select" onchange="ykAyarSet('model', this.value)">
+        <option value="">— model seç —</option>
+        ${mk.modeller.map(md=>`<option value="${md}"${ay.model===md?' selected':''}>${md}</option>`).join("")}
+      </select></div>`;
+    html += `<div class="yk-alan"><label>Bağlantı tipi</label>
+      <div class="yk-baglanti-row">
+        ${mk.baglanti.map(b=>`<button class="yk-bag-btn${ay.baglanti===b?' on':''}" onclick="ykAyarSet('baglanti','${b}')">${b==='kablolu'?'🔌 Kablolu (USB/Ethernet)':'📶 Kablosuz (Wi-Fi)'}</button>`).join("")}
+      </div></div>`;
+  }
+
+  // köprü ip/port
+  html += `<div class="yk-ikili">
+    <div class="yk-alan"><label>Köprü IP adresi</label>
+      <input class="yk-input" value="${(ay.ip||'localhost').replace(/"/g,'&quot;')}" placeholder="localhost veya 192.168.1.50" oninput="ykAyarSet('ip', this.value)"></div>
+    <div class="yk-alan yk-port"><label>Port</label>
+      <input class="yk-input" inputmode="numeric" value="${ay.port||'9000'}" oninput="ykAyarSet('port', this.value)"></div>
+  </div>`;
+
+  // bağlantı testi
+  html += `<div class="yk-test-row">
+    <button class="yk-test-btn" onclick="ykBaglantiTest()">🔍 Bağlantıyı test et</button>
+    <span class="yk-test-sonuc" id="ykTestSonuc"></span>
+  </div>`;
+
+  html += `</div>`;  // yk-kart
+
+  // durum özeti
+  html += `<div class="yk-ozet">
+    <div class="yk-ozet-bas">📋 Entegrasyon durumu</div>
+    <div class="yk-ozet-satir"><span>Marka / Model</span><span>${ay.marka?ay.marka+' '+(ay.model||''):'—'}</span></div>
+    <div class="yk-ozet-satir"><span>Bağlantı</span><span>${ay.marka?(ay.baglanti==='kablolu'?'Kablolu':'Kablosuz'):'—'}</span></div>
+    <div class="yk-ozet-satir"><span>Köprü adresi</span><span>http://${ay.ip||'localhost'}:${ay.port||'9000'}</span></div>
+    <div class="yk-ozet-satir"><span>Durum</span><span class="${ay.aktif?'yk-ok':'yk-pasif'}">${ay.aktif?'✓ Aktif — fişler cihaza gönderilir':'○ Kapalı — sadece kayıt'}</span></div>
+  </div>`;
+
+  html += `<div class="yk-not-alt">⚙️ Köprü servisi ayrı bir uygulamadır (kasa bilgisayarına kurulur). Marka entegrasyon lisansı ve GMP-3 SDK üreticiden (örn. iKasa, PAVO) temin edilir. Bu ekran köprüyle haberleşme ayarlarını tutar.</div>`;
+
+  main.innerHTML = html;
+}
+function ykSubeSec(sb){ state.ykSube=sb; document.querySelector(".main").innerHTML=''; viewYazarkasa(document.querySelector(".main")); }
+function ykAyarSet(alan, deger){
+  const sube = state.ykSube;
+  if(!POS_AYAR[sube]) POS_AYAR[sube] = posAyarAl(sube);
+  POS_AYAR[sube][alan] = deger;
+  // marka değişince model/bağlantı sıfırla
+  if(alan==="marka"){
+    POS_AYAR[sube].model="";
+    const mk=YAZARKASA_MARKALAR[deger];
+    POS_AYAR[sube].baglanti = mk ? mk.baglanti[0] : "kablolu";
+  }
+  posAyarKaydet();
+  viewYazarkasa(document.querySelector(".main"));
+}
+async function ykBaglantiTest(){
+  const sonuc = document.getElementById("ykTestSonuc");
+  if(sonuc){ sonuc.textContent = "⏳ test ediliyor..."; sonuc.className="yk-test-sonuc"; }
+  const r = await yazarkasayaGonder(state.ykSube, {tutar:0, kdv:0, yontem:"test", kalemler:[], test:true});
+  if(sonuc){
+    if(r.ok && !r.simulasyon){ sonuc.textContent = "✓ Köprüye bağlanıldı"; sonuc.className="yk-test-sonuc ok"; }
+    else if(r.simulasyon){ sonuc.textContent = "○ Entegrasyon kapalı (önce Aktif edin)"; sonuc.className="yk-test-sonuc pasif"; }
+    else { sonuc.textContent = "✕ "+(r.mesaj||"Bağlantı yok"); sonuc.className="yk-test-sonuc hata"; }
+  }
+}
+
 function viewSubeler(main){
   const aktifSayi=DEMO_BRANCHES.filter(b=>!b.kapali).length;
   let html=`<div class="sec-head"><div><h2>🏬 Şubeler</h2>
@@ -11888,6 +12432,8 @@ b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
 menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yükle
 yorumYukle();    // ürün yorum/puanlama verilerini geri yükle
+posAyarYukle();  // yazarkasa entegrasyon ayarlarını geri yükle
+yaziciYukle();   // fiş yazıcı ayarlarını geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
