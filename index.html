@@ -417,6 +417,11 @@ tr:last-child td{border-bottom:none}
 .uy-ad{font-weight:700; font-size:14px}
 .uy-meta{font-size:12px; color:var(--ink-3); margin-top:2px}
 .uy-aksiyon{display:flex; gap:5px}
+.uy-sira{display:flex; flex-direction:column; gap:3px; flex-shrink:0}
+.uy-sira-btn{width:30px; height:24px; border-radius:7px; background:var(--surface-2); border:1px solid var(--line); color:var(--cocoa); font-size:11px; font-weight:800; cursor:pointer; line-height:1; display:flex; align-items:center; justify-content:center}
+.uy-sira-btn:active:not(:disabled){background:var(--brand-soft); border-color:var(--brand)}
+.uy-sira-btn:disabled{opacity:.3; cursor:default}
+.uy-sira-not{font-size:12px; color:var(--ink-3); background:var(--surface-2); border-radius:9px; padding:8px 12px; margin-bottom:4px}
 /* Ürün formu */
 .uf-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
 .uf-baslik{font-size:17px; font-weight:800}
@@ -1434,6 +1439,68 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .go-xls:disabled{opacity:.5}
 /* Sade fiyat ekranı */
 .fy-bilgi-not{background:var(--info-soft); border:1px solid #bcd9f5; border-radius:var(--radius); padding:11px 14px; font-size:12.5px; margin-bottom:12px; line-height:1.5}
+/* === FİYAT TABLOSU === */
+.fy-ust-bar{display:flex; gap:10px; align-items:center; margin-bottom:12px; flex-wrap:wrap}
+.fy-arama-kutu{flex:1; min-width:200px; display:flex; align-items:center; gap:8px; background:var(--surface); border:1.5px solid var(--line); border-radius:11px; padding:9px 13px}
+.fy-arama-input{flex:1; border:none; background:none; font-size:14px; outline:none; color:var(--ink)}
+.fy-excel-btn{padding:10px 16px; border-radius:11px; background:#1d7c4d; color:#fff; border:none; font-size:13.5px; font-weight:800; cursor:pointer; white-space:nowrap}
+.fy-excel-btn:active{background:#176140}
+.fy-tablo-sar{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--surface)}
+.fy-tablo{border-collapse:collapse; width:100%; font-size:13px}
+.fy-tablo th{background:var(--surface-2); padding:11px 12px; text-align:center; font-weight:800; font-size:12px; color:var(--cocoa); position:sticky; top:0; z-index:3; border-bottom:2px solid var(--cocoa); white-space:nowrap}
+.fy-th-urun{text-align:left!important; position:sticky; left:0; z-index:4; min-width:190px}
+.fy-th-tavsiye{background:#fff4e6!important; color:#8a6212!important}
+.fy-th-sube{min-width:118px}
+/* her ürün satırı 2 satır yüksekliğinde, kalın alt çizgi */
+.fy-tablo tbody tr{border-bottom:2.5px solid var(--cocoa-soft, #e6d3c0)}
+.fy-tablo td{padding:0; vertical-align:middle; height:62px}
+.fy-td-urun{padding:8px 12px!important; position:sticky; left:0; background:var(--surface); z-index:2; border-right:2px solid var(--line)}
+.fy-td-urun-ic{display:flex; align-items:center; gap:9px}
+.fy-td-urun .fy-emoji{font-size:17px; flex-shrink:0}
+.fy-td-urun .fy-ad{font-weight:700; font-size:13px; line-height:1.25}
+.fy-kat-ayrac td{background:var(--cocoa); color:#fff; font-weight:800; font-size:12px; padding:7px 12px!important; position:sticky; left:0; height:auto; letter-spacing:.3px}
+.fy-bos{text-align:center; padding:24px!important; color:var(--ink-3); height:auto}
+.fy-td-fiyat{border-left:1px solid var(--line); min-width:114px}
+.fy-td-fiyat.tavsiye{background:#fffaf0}
+.fy-h-satir{display:flex; align-items:center; gap:5px; padding:0 10px; justify-content:space-between; height:31px; box-sizing:border-box}
+.fy-h-satir:first-child{border-bottom:1px dashed #d8c4ae}
+.fy-td-fiyat.tek-kanal .fy-h-satir{height:62px}
+.fy-h-satir.kapali{opacity:.45}
+.fy-h-etk{font-size:9px; font-weight:800; color:#fff; background:var(--cocoa); border-radius:4px; padding:1px 5px; flex-shrink:0}
+.fy-h-fiyat{font-weight:800; font-size:13px; color:var(--ink); cursor:pointer; flex:1; text-align:right; padding:2px 4px; border-radius:4px}
+.fy-h-fiyat:hover{background:var(--brand-soft)}
+.fy-h-fiyat.fy-tav{color:var(--ink-3); font-weight:600; font-style:italic}
+.fy-h-fiyat.fy-dusuk{color:var(--err)}
+.fy-h-fiyat.fy-yuksek{color:#b06d10}
+.fy-h-tik{width:21px; height:21px; border-radius:5px; border:none; font-size:11px; font-weight:800; cursor:pointer; flex-shrink:0}
+.fy-h-tik.acik{background:var(--ok-soft); color:var(--ok)}
+.fy-h-tik.kapali{background:var(--err-soft); color:var(--err)}
+/* satır hover — tüm satırı vurgula (sağa kaydırınca kaybolmasın) */
+.fy-tablo tbody tr:not(.fy-kat-ayrac):hover td{background:#fdf6ec}
+.fy-tablo tbody tr:not(.fy-kat-ayrac):hover .fy-td-urun{background:#faecd6}
+/* kanal filtresi */
+.fy-kanal-fil{display:flex; gap:0; background:var(--surface-2); border-radius:10px; padding:3px; flex-shrink:0}
+.fy-kf-btn{padding:8px 13px; border-radius:8px; background:none; border:none; font-size:12.5px; font-weight:700; color:var(--ink-2); cursor:pointer; white-space:nowrap}
+.fy-kf-btn.on{background:var(--brand); color:#fff}
+/* === FİYAT DEĞİŞTİRME MODAL === */
+.fy-duz-ic{background:#fff; border-radius:20px; padding:22px; max-width:360px; width:92%; margin:auto}
+.fy-duz-bas{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px}
+.fy-duz-urun{font-size:16px; font-weight:800; color:var(--ink)}
+.fy-duz-x{background:none; border:none; font-size:18px; color:var(--ink-3); cursor:pointer; font-weight:800}
+.fy-duz-alt-bas{font-size:12.5px; color:var(--ink-2); margin-bottom:16px}
+.fy-duz-ekran{background:var(--surface-2); border:2px solid var(--brand); border-radius:13px; padding:16px 20px; display:flex; align-items:baseline; justify-content:flex-end; gap:6px; margin-bottom:7px}
+.fy-duz-deger{font-size:34px; font-weight:900; color:var(--ink)}
+.fy-duz-deger.bos{color:var(--ink-3)}
+.fy-duz-tl{font-size:20px; font-weight:700; color:var(--ink-3)}
+.fy-duz-bilgi{font-size:11.5px; color:var(--ink-3); text-align:center; margin-bottom:16px; line-height:1.4}
+.fy-duz-numpad{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px}
+.fy-duz-tus{padding:16px 0; border-radius:11px; background:var(--surface-2); border:1px solid var(--line); font-size:20px; font-weight:800; color:var(--ink); cursor:pointer}
+.fy-duz-tus:active{background:var(--brand-soft); border-color:var(--brand)}
+.fy-duz-tus.sil{background:var(--err-soft); color:var(--err)}
+.fy-duz-tus.virgul{font-size:24px}
+.fy-duz-butonlar{display:flex; gap:10px}
+.fy-duz-temizle{flex:1; padding:14px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:13px; font-weight:800; cursor:pointer}
+.fy-duz-kaydet{flex:1.4; padding:14px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
 .fy-satir-sade{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px; margin-bottom:8px}
 .fy-satir-sade.fy-kapali{opacity:.55}
 .fy-kampanya-not{display:block; font-size:11.5px; color:var(--err); font-weight:700; margin-top:3px}
@@ -7489,35 +7556,124 @@ function yorumSil(urun, idx){
 /* === FİYATLAR: tavsiye + şube kartları (görsel düzen) === */
 function fiyatGenelHtml(isGenel){
   const kategoriler = DEMO_KATEGORILER.map(k=>k.ad);
-  if(!state.fiyatKat || !kategoriler.includes(state.fiyatKat)) state.fiyatKat = kategoriler[0];
-  const prods = DEMO_PRODUCTS.filter(p=>p.kat===state.fiyatKat);
+  // "Tümü" sekmesi varsayılan
+  if(!state.fiyatKat || (state.fiyatKat!=="__tum" && !kategoriler.includes(state.fiyatKat))) state.fiyatKat = "__tum";
+  const arama = (state.fiyatArama||"").toLocaleLowerCase("tr");
+  let prods = (state.fiyatKat==="__tum") ? DEMO_PRODUCTS.slice() : DEMO_PRODUCTS.filter(p=>p.kat===state.fiyatKat);
+  if(arama) prods = prods.filter(p=>p.ad.toLocaleLowerCase("tr").includes(arama));
 
-  let html = `<div class="fy-bilgi-not">💡 <strong>Tavsiye edilen fiyat</strong> tüm şubeler için başlangıç değeridir; şubeye özel fiyat girilmezse o şubede tavsiye fiyat geçerlidir. İndirimler <strong>Kampanyalar</strong> bölümünden tanımlanır.</div>`;
+  // gösterilecek şube sütunları
+  const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
+
+  let html = `<div class="fy-bilgi-not">💡 <strong>Tavsiye edilen fiyat</strong> tüm şubeler için başlangıç değeridir; şubeye özel fiyat girilmezse o şubede tavsiye fiyat geçerlidir. Her hücrede üstte <strong>masa/gel-al</strong>, altta <strong>eve teslim</strong> fiyatı gösterilir.</div>`;
   if(!isGenel){
     html += `<div class="fy-mudur-not">👁️ Fiyatları görüntüleyebilir, <strong>${AKTIF_SUBE}</strong> şubesi için ürünleri açıp/kapatabilirsiniz. Fiyat değişikliği genel müdür yetkisindedir.</div>`;
   }
-  // kategori seçici
+
+  // üst bar: arama + kanal filtresi + excel
+  if(!state.fiyatKanal) state.fiyatKanal="tum";
+  html += `<div class="fy-ust-bar">
+    <div class="fy-arama-kutu">🔎 <input class="fy-arama-input" id="fyArama" placeholder="Ürün ara..." value="${(state.fiyatArama||'').replace(/"/g,'&quot;')}" oninput="fiyatAramaYaz(this.value)"></div>
+    <div class="fy-kanal-fil">
+      <button class="fy-kf-btn${state.fiyatKanal==='tum'?' on':''}" onclick="fiyatKanalFil('tum')">Tüm Fiyatlar</button>
+      <button class="fy-kf-btn${state.fiyatKanal==='masa'?' on':''}" onclick="fiyatKanalFil('masa')">Masa / Gel-Al</button>
+      <button class="fy-kf-btn${state.fiyatKanal==='eve'?' on':''}" onclick="fiyatKanalFil('eve')">Eve Teslim</button>
+    </div>
+    <button class="fy-excel-btn" onclick="fiyatExcelIndir(${isGenel})">⬇️ Excel'e indir</button>
+  </div>`;
+
+  // kategori sekmeleri (başta Tümü)
   html += `<div class="cat-row">`;
+  html += `<button class="cat-pill${state.fiyatKat==="__tum"?' on':''}" onclick="fiyatKatSec('__tum')">📋 Tümü</button>`;
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.fiyatKat===k?' on':''}" onclick="fiyatKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
   html += `</div>`;
 
-  html += `<div class="fy-liste">`;
+  // TABLO
+  html += `<div class="fy-tablo-sar"><table class="fy-tablo"><thead><tr>`;
+  html += `<th class="fy-th-urun">Ürün</th>`;
+  html += `<th class="fy-th-tavsiye">📋 Tavsiye</th>`;
+  subeler.forEach(sb=>{ html += `<th class="fy-th-sube">${sb}</th>`; });
+  html += `</tr></thead><tbody>`;
+
+  if(prods.length===0){
+    html += `<tr><td colspan="${2+subeler.length}" class="fy-bos">Eşleşen ürün yok.</td></tr>`;
+  }
+  let sonKat="";
   prods.forEach(p=>{
     const pi = DEMO_PRODUCTS.indexOf(p);
-    html += `<div class="fy-urun-kart">
-      <div class="fy-urun-bas"><span class="fy-emoji">${p.emoji}</span><span class="fy-ad">${p.ad}</span></div>`;
-    // TAVSİYE bloğu (her iki rol de görür; sadece genel müdür düzenler)
-    html += fiyatBlokHtml(p, pi, null, isGenel, "📋 Tavsiye Edilen Fiyat");
-    // ŞUBE blokları
-    if(isGenel){
-      DEMO_BRANCHES.forEach(b=>{ html += fiyatBlokHtml(p, pi, b.ad, true, "🏬 "+b.ad); });
-    } else {
-      html += fiyatBlokHtml(p, pi, AKTIF_SUBE, false, "🏬 "+AKTIF_SUBE);
+    // Tümü görünümünde kategori ayırıcı satır
+    if(state.fiyatKat==="__tum" && p.kat!==sonKat){
+      sonKat=p.kat;
+      html += `<tr class="fy-kat-ayrac"><td colspan="${2+subeler.length}">${p.kat}</td></tr>`;
     }
-    html += `</div>`;
+    html += `<tr>`;
+    html += `<td class="fy-td-urun"><div class="fy-td-urun-ic"><span class="fy-emoji">${p.emoji||'🍽️'}</span><span class="fy-ad">${p.ad}</span></div></td>`;
+    // Tavsiye hücresi
+    html += fiyatHucre(p, pi, null, isGenel, state.fiyatKanal);
+    // Şube hücreleri
+    subeler.forEach(sb=>{ html += fiyatHucre(p, pi, sb, isGenel, state.fiyatKanal); });
+    html += `</tr>`;
   });
-  html += `</div>`;
+  html += `</tbody></table></div>`;
   return html;
+}
+/* Tek hücre (tavsiye için sube=null) — 2 satır: masa/gel-al üstte, eve altta
+   kanalFil: "tum" | "masa" | "eve" */
+function fiyatHucre(p, pi, sube, isGenel, kanalFil){
+  kanalFil = kanalFil || "tum";
+  const tavMasa = p.fiyat||0;
+  const tavEve = (p.fiyatEve!=null && p.fiyatEve>0) ? p.fiyatEve : null;
+  const duzenle = isGenel; // sadece genel müdür düzenler
+  const tavsiyeBlok = (sube===null);
+  let mFiyat, eFiyat, mTavsiyeMi, eTavsiyeMi, mKapali, eKapali;
+  if(tavsiyeBlok){
+    mFiyat = tavMasa; eFiyat = (tavEve!=null?tavEve:tavMasa);
+    mTavsiyeMi=false; eTavsiyeMi=(tavEve==null); mKapali=false; eKapali=false;
+  } else {
+    const sMasaK = fiyatKayit(sube, p.ad, "masa");
+    const sEveK = fiyatKayit(sube, p.ad, "eve");
+    const sMasa = (sMasaK.genel!=null && sMasaK.genel>0) ? sMasaK.genel : null;
+    const sEve = (sEveK.genel!=null && sEveK.genel>0) ? sEveK.genel : null;
+    mFiyat = sMasa!=null ? sMasa : tavMasa;
+    eFiyat = sEve!=null ? sEve : (tavEve!=null?tavEve:tavMasa);
+    mTavsiyeMi = sMasa==null; eTavsiyeMi = sEve==null;
+    mKapali = fiyatKapaliMi(sMasaK.kapali); eKapali = fiyatKapaliMi(sEveK.kapali);
+  }
+  const subeArg = sube ? "'"+sube.replace(/'/g,"\\'")+"'" : "null";
+  const farkCls = (kanal,fiyat,tavsiyeMi)=>{
+    if(tavsiyeBlok||tavsiyeMi) return '';
+    const tavF = kanal==="masa" ? tavMasa : (tavEve!=null?tavEve:tavMasa);
+    if(fiyat<tavF) return ' fy-dusuk';
+    if(fiyat>tavF) return ' fy-yuksek';
+    return '';
+  };
+  const satir=(kanal,fiyat,tavsiyeMi,kapali)=>{
+    const etk = kanal==="masa" ? "M" : "E";
+    const fc = farkCls(kanal,fiyat,tavsiyeMi);
+    let ic = `<span class="fy-h-etk">${etk}</span>`;
+    if(duzenle){
+      ic += `<span class="fy-h-fiyat${fc}${tavsiyeMi?' fy-tav':''}" onclick="fiyatHucreDuzenle(${pi},${subeArg},'${kanal}')">${tl(fiyat)}</span>`;
+    } else {
+      ic += `<span class="fy-h-fiyat${fc}${tavsiyeMi?' fy-tav':''}">${tl(fiyat)}</span>`;
+    }
+    if(!tavsiyeBlok){
+      ic += `<button class="fy-h-tik ${kapali?'kapali':'acik'}" onclick="fiyatKanalKapat(${subeArg},'${p.ad.replace(/'/g,"\\'")}','${kanal}')" title="${kapali?'Kapalı — aç':'Açık — kapat'}">${kapali?'✕':'✓'}</button>`;
+    }
+    return `<div class="fy-h-satir${kapali?' kapali':''}">${ic}</div>`;
+  };
+  let hucreIc="";
+  if(kanalFil==="masa") hucreIc = satir("masa",mFiyat,mTavsiyeMi,mKapali);
+  else if(kanalFil==="eve") hucreIc = satir("eve",eFiyat,eTavsiyeMi,eKapali);
+  else hucreIc = satir("masa",mFiyat,mTavsiyeMi,mKapali) + satir("eve",eFiyat,eTavsiyeMi,eKapali);
+  return `<td class="fy-td-fiyat${tavsiyeBlok?' tavsiye':''}${kanalFil!=='tum'?' tek-kanal':''}">${hucreIc}</td>`;
+}
+function fiyatKanalFil(k){ state.fiyatKanal=k; go("fiyat", true); }
+function fiyatAramaYaz(v){
+  state.fiyatArama=v;
+  // odak kaybolmadan tabloyu güncelle
+  go("fiyat", true);
+  const inp=document.getElementById("fyArama");
+  if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
 }
 /* Tek bir fiyat bloğu (tavsiye için sube=null, şube için sube=ad)
    duzenle: fiyatı değiştirebilir mi (genel müdür) */
@@ -7599,6 +7755,145 @@ function fiyatBlokHtml(p, pi, sube, duzenle, baslik){
   </div>`;
 }
 function fiyatKatSec(k){ state.fiyatKat=k; go("fiyat", true); }
+/* Tablo hücresi düzenleme — tavsiye veya şube fiyatı */
+function fiyatHucreDuzenle(pi, sube, kanal){
+  fiyatDuzenleModal(pi, sube, kanal);
+}
+/* === FİYAT DEĞİŞTİRME POP-UP === */
+function fiyatDuzenleModal(pi, sube, kanal){
+  const p = DEMO_PRODUCTS[pi];
+  const tavsiyeBlok = (sube===null);
+  const tavMasa = p.fiyat||0;
+  const tavEve = (p.fiyatEve!=null&&p.fiyatEve>0)?p.fiyatEve:tavMasa;
+  const tavF = kanal==="eve" ? tavEve : tavMasa;
+  // mevcut değer
+  let mevcut;
+  if(tavsiyeBlok){
+    mevcut = kanal==="eve" ? (p.fiyatEve!=null?p.fiyatEve:"") : (p.fiyat||0);
+  } else {
+    const k = fiyatKayit(sube, p.ad, kanal);
+    mevcut = (k.genel!=null && k.genel>0) ? k.genel : "";
+  }
+  state._fyDuz = { pi, sube, kanal, deger: String(mevcut), tavsiye: tavsiyeBlok };
+  fiyatDuzenleModalCiz();
+}
+function fiyatDuzenleModalCiz(){
+  const d=state._fyDuz; if(!d) return;
+  const p=DEMO_PRODUCTS[d.pi];
+  const kanalAd = d.kanal==="eve" ? "Eve Teslim" : "Masa / Gel-Al";
+  const yerAd = d.tavsiye ? "📋 Tavsiye Edilen Fiyat" : "🏬 "+d.sube;
+  const tavMasa=p.fiyat||0, tavEve=(p.fiyatEve!=null&&p.fiyatEve>0)?p.fiyatEve:tavMasa;
+  const tavF = d.kanal==="eve"?tavEve:tavMasa;
+  let mdl=document.getElementById("fyDuzModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="fyDuzModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  const gosterilen = d.deger===""? "" : d.deger;
+  // şubede ve boşsa tavsiyeye dönecek bilgisi
+  const altBilgi = d.tavsiye
+    ? (d.kanal==="eve" ? "Boş bırakırsan masa/gel-al fiyatı kullanılır" : "Tüm şubeler için başlangıç fiyatı")
+    : "Boş bırakırsan tavsiye fiyat ("+tl(tavF)+" ₺) geçerli olur";
+  let ic=`<div class="fy-duz-ic">
+    <div class="fy-duz-bas">
+      <span class="fy-duz-urun">${p.emoji||'🍽️'} ${p.ad}</span>
+      <button class="fy-duz-x" onclick="fiyatDuzModalKapat()">✕</button>
+    </div>
+    <div class="fy-duz-alt-bas">${yerAd} · <strong>${kanalAd}</strong></div>
+    <div class="fy-duz-ekran">
+      <span class="fy-duz-deger ${gosterilen===''?'bos':''}">${gosterilen===''?'0':gosterilen}</span><span class="fy-duz-tl">₺</span>
+    </div>
+    <div class="fy-duz-bilgi">${altBilgi}</div>
+    <div class="fy-duz-numpad">`;
+  ['7','8','9','4','5','6','1','2','3',',','0','⌫'].forEach(t=>{
+    ic+=`<button class="fy-duz-tus${t==='⌫'?' sil':''}${t===','?' virgul':''}" onclick="fiyatDuzTus('${t}')">${t}</button>`;
+  });
+  ic+=`</div>
+    <div class="fy-duz-butonlar">
+      ${!d.tavsiye || d.kanal==="eve" ? `<button class="fy-duz-temizle" onclick="fiyatDuzTemizle()">${d.tavsiye?'Masa fiyatını kullan':'Tavsiyeye dön'}</button>`:''}
+      <button class="fy-duz-kaydet" onclick="fiyatDuzKaydet()">✓ Kaydet</button>
+    </div>
+  </div>`;
+  mdl.innerHTML=ic;
+  mdl.classList.add("on");
+}
+function fiyatDuzTus(t){
+  const d=state._fyDuz; if(!d) return;
+  let s=d.deger||"";
+  if(t==="⌫"){ s=s.slice(0,-1); }
+  else if(t===","){ if(s.indexOf(",")<0) s=(s||"0")+","; }
+  else {
+    const vi=s.indexOf(",");
+    if(vi>=0 && s.length-vi>2){ /* max 2 kuruş */ }
+    else s=s+t;
+  }
+  d.deger=s;
+  fiyatDuzenleModalCiz();
+}
+function fiyatDuzTemizle(){ state._fyDuz.deger=""; fiyatDuzenleModalCiz(); }
+function fiyatDuzModalKapat(){ document.getElementById("fyDuzModal").classList.remove("on"); state._fyDuz=null; }
+function fiyatDuzKaydet(){
+  const d=state._fyDuz; if(!d) return;
+  const p=DEMO_PRODUCTS[d.pi];
+  const bos = (d.deger===""||d.deger==null);
+  if(d.tavsiye){
+    if(d.kanal==="eve"){
+      if(bos) delete p.fiyatEve;
+      else { const f=parseFloat(d.deger.replace(",",".")); if(isNaN(f)||f<0){note("Geçersiz fiyat");return;} p.fiyatEve=Math.round(f*100)/100; }
+    } else {
+      const f=parseFloat((d.deger||"0").replace(",",".")); if(isNaN(f)||f<0){note("Geçersiz fiyat");return;} p.fiyat=Math.round(f*100)/100;
+    }
+    note(p.ad+" tavsiye fiyatı güncellendi");
+  } else {
+    if(bos){
+      if(SUBE_FIYAT[d.sube] && SUBE_FIYAT[d.sube][p.ad] && SUBE_FIYAT[d.sube][p.ad][d.kanal]) SUBE_FIYAT[d.sube][p.ad][d.kanal].genel=null;
+      note(p.ad+" → tavsiye fiyata döndü ("+d.sube+")");
+    } else {
+      const f=parseFloat(d.deger.replace(",",".")); if(isNaN(f)||f<0){note("Geçersiz fiyat");return;}
+      fiyatKayitYaz(d.sube, p.ad, d.kanal).genel=Math.round(f*100)/100;
+      note(p.ad+" "+d.sube+" fiyatı güncellendi");
+    }
+  }
+  menuKaydet();
+  fiyatDuzModalKapat();
+  go("fiyat", true);
+}
+/* Fiyat tablosunu Excel (CSV) olarak indir */
+function fiyatExcelIndir(isGenel){
+  const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
+  const arama = (state.fiyatArama||"").toLocaleLowerCase("tr");
+  let prods = (state.fiyatKat==="__tum") ? DEMO_PRODUCTS.slice() : DEMO_PRODUCTS.filter(p=>p.kat===state.fiyatKat);
+  if(arama) prods = prods.filter(p=>p.ad.toLocaleLowerCase("tr").includes(arama));
+  const esc=(v)=>{ v=String(v==null?"":v); return /[",;\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
+  const kf=state.fiyatKanal||"tum";
+  const masaVar = (kf==="tum"||kf==="masa");
+  const eveVar = (kf==="tum"||kf==="eve");
+  const bas=["Ürün","Kategori"];
+  if(masaVar) bas.push("Tavsiye Masa/Gel-Al"); if(eveVar) bas.push("Tavsiye Eve");
+  subeler.forEach(sb=>{ if(masaVar) bas.push(sb+" Masa/Gel-Al"); if(eveVar) bas.push(sb+" Eve"); });
+  const satirlar=[bas.map(esc).join(";")];
+  prods.forEach(p=>{
+    const tavMasa=p.fiyat||0;
+    const tavEve=(p.fiyatEve!=null&&p.fiyatEve>0)?p.fiyatEve:tavMasa;
+    const row=[p.ad, p.kat];
+    if(masaVar) row.push(tavMasa); if(eveVar) row.push(tavEve);
+    subeler.forEach(sb=>{
+      const mK=fiyatKayit(sb,p.ad,"masa"), eK=fiyatKayit(sb,p.ad,"eve");
+      const m=(mK.genel!=null&&mK.genel>0)?mK.genel:tavMasa;
+      const e=(eK.genel!=null&&eK.genel>0)?eK.genel:tavEve;
+      const mKap=fiyatKapaliMi(mK.kapali)?" (KAPALI)":"";
+      const eKap=fiyatKapaliMi(eK.kapali)?" (KAPALI)":"";
+      if(masaVar) row.push(m+mKap); if(eveVar) row.push(e+eKap);
+    });
+    satirlar.push(row.map(esc).join(";"));
+  });
+  const csv="\uFEFF"+satirlar.join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  const katAd = state.fiyatKat==="__tum" ? "Tum" : state.fiyatKat.replace(/[^\wğüşıöçĞÜŞİÖÇ]/g,"_");
+  a.href=url; a.download="MINIPAN_Fiyatlar_"+katAd+"_"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  note("📥 Fiyat listesi indirildi");
+}
 /* Tavsiye fiyatı düzenle (ürünün temel fiyatı — ürün formuyla senkron) */
 function tavsiyeFiyatGir(pi, kanal){
   const p = DEMO_PRODUCTS[pi];
@@ -8221,11 +8516,17 @@ function urunYonetimHtml(){
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.urunKat===k?' on':''}" onclick="urunKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
   html += `</div>`;
   html += `<div class="uy-liste">`;
-  prods.forEach(p=>{
+  if(isGenel && prods.length>1) html += `<div class="uy-sira-not">↕️ Oklarla sırayı değiştirin — bu sıra QR menü ve kasa ekranına yansır.</div>`;
+  prods.forEach((p,sira)=>{
     const pi = DEMO_PRODUCTS.indexOf(p);
     const opsSay = (PRODUCT_OPTIONS[p.ad]||[]).length;
     const gorsel = URUN_GORSEL[p.ad];
+    const ilk = sira===0, son = sira===prods.length-1;
     html += `<div class="uy-satir${p.aktif?'':' uy-pasif'}">
+      ${isGenel?`<div class="uy-sira">
+        <button class="uy-sira-btn" onclick="urunSiraTasi(${pi},-1)" ${ilk?'disabled':''} title="Yukarı">▲</button>
+        <button class="uy-sira-btn" onclick="urunSiraTasi(${pi},1)" ${son?'disabled':''} title="Aşağı">▼</button>
+      </div>`:''}
       <div class="uy-gorsel">${gorsel?`<img src="${gorsel}" alt="">`:`<span>${p.emoji}</span>`}</div>
       <div class="uy-bilgi">
         <div class="uy-ad">${p.ad}</div>
@@ -8242,6 +8543,24 @@ function urunYonetimHtml(){
   return html;
 }
 function urunKatSec(k){ state.urunKat=k; go("fiyat", true); }
+/* Ürünü kategori içinde yukarı/aşağı taşı (DEMO_PRODUCTS dizisinde takas) */
+function urunSiraTasi(pi, yon){
+  const p = DEMO_PRODUCTS[pi];
+  if(!p) return;
+  // aynı kategorideki ürünlerin global indexleri
+  const katIdx = [];
+  DEMO_PRODUCTS.forEach((x,i)=>{ if(x.kat===p.kat) katIdx.push(i); });
+  const yer = katIdx.indexOf(pi);
+  const hedefYer = yer + yon;  // yon: -1 yukarı, +1 aşağı
+  if(hedefYer<0 || hedefYer>=katIdx.length) return;  // sınır
+  const a = katIdx[yer], b = katIdx[hedefYer];
+  // dizide takas
+  const tmp = DEMO_PRODUCTS[a];
+  DEMO_PRODUCTS[a] = DEMO_PRODUCTS[b];
+  DEMO_PRODUCTS[b] = tmp;
+  menuKaydet();
+  go("fiyat", true);
+}
 function urunSil(pi){
   const p = DEMO_PRODUCTS[pi];
   if(!confirm('"'+p.ad+'" ürünü silinsin mi?')) return;
