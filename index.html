@@ -1563,6 +1563,14 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yzc-modal-foot{display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--line)}
 .yzc-test-btn{flex:1; padding:13px; border-radius:11px; background:var(--cocoa); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer}
 .yzc-kaydet-btn{flex:1.5; padding:13px; border-radius:11px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+/* şube ekle/düzenle modal */
+.sube-modal-ic{background:#fff; border-radius:18px; max-width:460px; width:94%; margin:auto; max-height:88vh; display:flex; flex-direction:column}
+.sube-modal-bas{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; font-weight:800; color:var(--cocoa)}
+.sube-modal-govde{padding:18px 20px; overflow-y:auto; flex:1}
+.sube-modal-not{font-size:11.5px; color:var(--ink-3); margin-top:6px; line-height:1.4}
+.sube-modal-foot{display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--line)}
+.sube-iptal-btn{flex:1; padding:13px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
+.sube-kaydet-btn{flex:1.6; padding:13px; border-radius:11px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
 /* === FİYAT DEĞİŞTİRME MODAL === */
 .fy-duz-ic{background:#fff; border-radius:20px; padding:22px; max-width:360px; width:92%; margin:auto}
 .fy-duz-bas{display:flex; justify-content:space-between; align-items:center; margin-bottom:4px}
@@ -6639,14 +6647,14 @@ function myKatEkle(){
   if(BRANCH_TABLES[sube].find(k=>k.kat===ad.trim())){ note("Bu kategori zaten var"); return; }
   BRANCH_TABLES[sube].push({kat:ad.trim(), masalar:[]});
   note("Kategori eklendi: "+ad.trim());
-  go("masayonetim", true);
+  subeKaydet(); go("masayonetim", true);
 }
 function myKatYenidenAdlandir(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
   const ad=prompt("Kategori adı:", k.kat);
   if(!ad||!ad.trim()) return;
   k.kat=ad.trim();
-  go("masayonetim", true);
+  subeKaydet(); go("masayonetim", true);
 }
 function myKatSil(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
@@ -6656,7 +6664,7 @@ function myKatSil(ki){
   if(!confirm(k.kat+" kategorisi ve içindeki "+k.masalar.length+" masa silinecek. Emin misiniz?")) return;
   BRANCH_TABLES[sube].splice(ki,1);
   note("Kategori silindi");
-  go("masayonetim", true);
+  subeKaydet(); go("masayonetim", true);
 }
 function myMasaEkle(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
@@ -6668,7 +6676,7 @@ function myMasaEkle(ki){
   if(k.masalar.includes(ad.trim())){ note("Bu masa zaten var"); return; }
   k.masalar.push(ad.trim());
   note(k.kat+"-"+ad.trim()+" eklendi");
-  go("masayonetim", true);
+  subeKaydet(); go("masayonetim", true);
 }
 function myMasaSil(ki,mi){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki]; const ad=k.masalar[mi];
@@ -6677,7 +6685,7 @@ function myMasaSil(ki,mi){
   if(!confirm(k.kat+"-"+ad+" masası silinecek?")) return;
   k.masalar.splice(mi,1);
   note("Masa silindi");
-  go("masayonetim", true);
+  subeKaydet(); go("masayonetim", true);
 }
 
 // --- MASALAR ---
@@ -8813,6 +8821,26 @@ function menuYukle(){
   }catch(e){}
 }
 
+/* === ŞUBE VERİLERİ KALICILIĞI === */
+const SUBE_KEY = "minipan_subeler_v1";
+function subeKaydet(){
+  try{
+    localStorage.setItem(SUBE_KEY, JSON.stringify({
+      DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES
+    }));
+  }catch(e){ console.warn("şube kayıt hatası", e); }
+}
+function subeYukle(){
+  try{
+    const raw = localStorage.getItem(SUBE_KEY);
+    if(!raw) return;
+    const v = JSON.parse(raw);
+    if(v.DEMO_BRANCHES) DEMO_BRANCHES = v.DEMO_BRANCHES;
+    if(v.BRANCH_INFO) BRANCH_INFO = v.BRANCH_INFO;
+    if(v.BRANCH_TABLES) BRANCH_TABLES = v.BRANCH_TABLES;
+  }catch(e){}
+}
+
 /* === ÜRÜN YORUM / PUANLAMA === */
 const YORUM_KEY = "minipan_yorum_v1";
 function yorumKaydet(){
@@ -10542,36 +10570,83 @@ function viewSubeler(main){
 }
 /* Yeni şube — ad + adres, mevcut şubeyi kopyala */
 function subeYeniAc(){
-  const ad=prompt("Yeni şube adı (örn. Keşan Merkez):");
-  if(!ad||!ad.trim()) return;
-  if(DEMO_BRANCHES.find(b=>b.ad===ad.trim())){ note("Bu isimde şube zaten var"); return; }
-  const adres=prompt("Şube adresi:");
-  if(adres==null) return;
-  // hangi şubeden kopyalansın
-  const kaynaklar=DEMO_BRANCHES.map(b=>b.ad);
-  const kaynak=prompt("Masa düzeni ve fiyatlar hangi şubeden kopyalansın?\n\nMevcut şubeler:\n"+kaynaklar.join("\n")+"\n\n(boş bırakırsanız ilk şube kopyalanır)", kaynaklar[0]);
-  const kopyaSube = (kaynak && DEMO_BRANCHES.find(b=>b.ad===kaynak.trim())) ? kaynak.trim() : kaynaklar[0];
-  const yeniAd=ad.trim();
-  // şube kaydı
-  DEMO_BRANCHES.push({ad:yeniAd, ciro:0, masa:0, bekleyen:0, durum:"green", fire:"normal"});
-  BRANCH_INFO[yeniAd]={sehir:"", adres:adres.trim(), tel:""};
-  // masa düzenini kopyala (derin kopya)
-  BRANCH_TABLES[yeniAd]=JSON.parse(JSON.stringify(BRANCH_TABLES[kopyaSube]||[]));
-  DEMO_BRANCHES.find(b=>b.ad===yeniAd).masa=subeMasalari(yeniAd).length;
-  // fiyatları kopyala
-  if(SUBE_FIYAT[kopyaSube]) SUBE_FIYAT[yeniAd]=JSON.parse(JSON.stringify(SUBE_FIYAT[kopyaSube]));
-  note("🏬 "+yeniAd+" açıldı · "+kopyaSube+" düzeni kopyalandı");
-  go("subeler");
+  state._subeForm = { yeni:true, ad:"", sehir:"", adres:"", tel:"", kaynak:DEMO_BRANCHES[0]?DEMO_BRANCHES[0].ad:"" };
+  renderSubeModal();
 }
 function subeDuzenle(ad){
   const info=BRANCH_INFO[ad]||{};
-  const yeniAdres=prompt(ad+" adresi:", info.adres||"");
-  if(yeniAdres==null) return;
-  if(!BRANCH_INFO[ad]) BRANCH_INFO[ad]={};
-  BRANCH_INFO[ad].adres=yeniAdres.trim();
-  const yeniTel=prompt(ad+" telefon:", info.tel||"");
-  if(yeniTel!=null) BRANCH_INFO[ad].tel=yeniTel.trim();
-  note(ad+" bilgileri güncellendi");
+  state._subeForm = { yeni:false, eskiAd:ad, ad:ad, sehir:info.sehir||"", adres:info.adres||"", tel:info.tel||"" };
+  renderSubeModal();
+}
+function renderSubeModal(){
+  const f=state._subeForm;
+  let mdl=document.getElementById("subeModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="subeModal"; mdl.className="modal-bg"; mdl.style.zIndex="180"; document.body.appendChild(mdl); }
+  let ic=`<div class="sube-modal-ic">
+    <div class="sube-modal-bas">
+      <span>${f.yeni?'🏬 Yeni Şube Aç':'✏️ Şube Düzenle'}</span>
+      <button class="bom-kapat" onclick="subeModalKapat()">✕</button>
+    </div>
+    <div class="sube-modal-govde">
+      <div class="yk-alan"><label>Şube adı</label>
+        <input class="yk-input" value="${(f.ad||'').replace(/"/g,'&quot;')}" placeholder="örn. Keşan Merkez" oninput="state._subeForm.ad=this.value"></div>
+      <div class="yk-ikili">
+        <div class="yk-alan"><label>Şehir</label>
+          <input class="yk-input" value="${(f.sehir||'').replace(/"/g,'&quot;')}" placeholder="örn. Edirne" oninput="state._subeForm.sehir=this.value"></div>
+        <div class="yk-alan"><label>Telefon</label>
+          <input class="yk-input" value="${(f.tel||'').replace(/"/g,'&quot;')}" placeholder="0284 ..." oninput="state._subeForm.tel=this.value"></div>
+      </div>
+      <div class="yk-alan"><label>Adres</label>
+        <input class="yk-input" value="${(f.adres||'').replace(/"/g,'&quot;')}" placeholder="Açık adres" oninput="state._subeForm.adres=this.value"></div>`;
+  if(f.yeni){
+    ic += `<div class="yk-alan"><label>Masa düzeni ve fiyatları kopyala</label>
+      <select class="yk-select" onchange="state._subeForm.kaynak=this.value">
+        ${DEMO_BRANCHES.map(b=>`<option value="${b.ad.replace(/"/g,'&quot;')}"${f.kaynak===b.ad?' selected':''}>${b.ad}</option>`).join("")}
+      </select>
+      <div class="sube-modal-not">Seçilen şubenin masa düzeni ve şube fiyatları yeni şubeye kopyalanır.</div>
+    </div>`;
+  }
+  ic += `</div>
+    <div class="sube-modal-foot">
+      <button class="sube-iptal-btn" onclick="subeModalKapat()">İptal</button>
+      <button class="sube-kaydet-btn" onclick="subeFormKaydet()">${f.yeni?'🏬 Şubeyi Aç':'✓ Kaydet'}</button>
+    </div>
+  </div>`;
+  mdl.innerHTML=ic;
+  mdl.classList.add("on");
+}
+function subeModalKapat(){ const m=document.getElementById("subeModal"); if(m) m.classList.remove("on"); state._subeForm=null; }
+function subeFormKaydet(){
+  const f=state._subeForm; if(!f) return;
+  const yeniAd=(f.ad||"").trim();
+  if(!yeniAd){ note("Şube adı gerekli"); return; }
+  if(f.yeni){
+    if(DEMO_BRANCHES.find(b=>b.ad===yeniAd)){ note("Bu isimde şube zaten var"); return; }
+    const kopyaSube = (f.kaynak && DEMO_BRANCHES.find(b=>b.ad===f.kaynak)) ? f.kaynak : (DEMO_BRANCHES[0]?DEMO_BRANCHES[0].ad:"");
+    DEMO_BRANCHES.push({ad:yeniAd, ciro:0, masa:0, bekleyen:0, durum:"green", fire:"normal"});
+    BRANCH_INFO[yeniAd]={sehir:(f.sehir||"").trim(), adres:(f.adres||"").trim(), tel:(f.tel||"").trim()};
+    BRANCH_TABLES[yeniAd]=JSON.parse(JSON.stringify(BRANCH_TABLES[kopyaSube]||[]));
+    DEMO_BRANCHES.find(b=>b.ad===yeniAd).masa=subeMasalari(yeniAd).length;
+    if(SUBE_FIYAT[kopyaSube]) SUBE_FIYAT[yeniAd]=JSON.parse(JSON.stringify(SUBE_FIYAT[kopyaSube]));
+    subeKaydet(); menuKaydet();
+    note("🏬 "+yeniAd+" açıldı"+(kopyaSube?" · "+kopyaSube+" düzeni kopyalandı":""));
+  } else {
+    const eski=f.eskiAd;
+    // ad değiştiyse tüm şube-bağlı verileri taşı
+    if(eski!==yeniAd){
+      if(DEMO_BRANCHES.find(b=>b.ad===yeniAd)){ note("Bu isimde şube zaten var"); return; }
+      const b=DEMO_BRANCHES.find(x=>x.ad===eski); if(b) b.ad=yeniAd;
+      if(BRANCH_TABLES[eski]){ BRANCH_TABLES[yeniAd]=BRANCH_TABLES[eski]; delete BRANCH_TABLES[eski]; }
+      if(SUBE_FIYAT[eski]){ SUBE_FIYAT[yeniAd]=SUBE_FIYAT[eski]; delete SUBE_FIYAT[eski]; }
+      if(POS_AYAR[eski]){ POS_AYAR[yeniAd]=POS_AYAR[eski]; delete POS_AYAR[eski]; posAyarKaydet(); }
+      if(YAZICILAR[eski]){ YAZICILAR[yeniAd]=YAZICILAR[eski]; delete YAZICILAR[eski]; yaziciKaydet(); }
+      delete BRANCH_INFO[eski];
+    }
+    BRANCH_INFO[yeniAd]={sehir:(f.sehir||"").trim(), adres:(f.adres||"").trim(), tel:(f.tel||"").trim()};
+    subeKaydet(); menuKaydet();
+    note(yeniAd+" bilgileri güncellendi");
+  }
+  subeModalKapat();
   go("subeler");
 }
 function subeKapatAc(i){
@@ -10585,6 +10660,7 @@ function subeKapatAc(i){
   } else {
     b.kapali=false; note("✓ "+b.ad+" yeniden açıldı");
   }
+  subeKaydet();
   go("subeler");
 }
 function subeSil(i){
@@ -10597,7 +10673,10 @@ function subeSil(i){
   delete BRANCH_TABLES[b.ad];
   delete BRANCH_INFO[b.ad];
   delete SUBE_FIYAT[b.ad];
+  delete POS_AYAR[b.ad];
+  delete YAZICILAR[b.ad];
   DEMO_BRANCHES.splice(i,1);
+  subeKaydet(); menuKaydet(); posAyarKaydet(); yaziciKaydet();
   note("🗑️ "+b.ad+" kalıcı olarak silindi");
   go("subeler");
 }
@@ -12428,6 +12507,7 @@ window.addEventListener("online",  ()=>{ setConnState(!!window.__db, window.__db
 window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi · offline kuyruk"));
 
 // Uygulama açılışında başlat
+subeYukle();     // şube verilerini (yeni eklenenler dahil) geri yükle
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
 menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yükle
