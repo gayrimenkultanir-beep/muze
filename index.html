@@ -952,8 +952,9 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ode-ind-deger.aktif{border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
 .ode-ind-val{font-size:18px; font-weight:800; color:#8a6212}
 /* girilen özet */
-.ode-girilen-ozet{text-align:center; font-size:14px; font-weight:700; padding:11px; border-radius:9px; margin-bottom:12px; background:var(--surface-2); color:var(--ink-2)}
-.ode-go-not{font-size:13px; margin-top:3px}
+.ode-girilen-ozet{text-align:center; font-size:14px; font-weight:700; padding:9px 11px; border-radius:9px; margin-bottom:12px; background:var(--surface-2); color:var(--ink-2)}
+.ode-go-satir1{font-size:14px}
+.ode-go-not{font-size:12.5px; margin-top:3px; min-height:16px}
 .ode-girilen-ozet.tam{background:var(--ok-soft); color:var(--ok)}
 .ode-girilen-ozet.eksik{background:#fff4e6; color:#b06d10}
 .ode-girilen-ozet.fazla{background:var(--err-soft); color:var(--err)}
@@ -973,6 +974,18 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .pust-lbl{font-size:15px; font-weight:700; color:var(--ink-3); margin-top:6px}
 .pust-tutar{font-size:38px; font-weight:900; color:var(--ok); margin:8px 0 20px}
 .pust-btn{width:100%; padding:14px; border-radius:11px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer}
+/* tahsilat onay modal */
+.ode-onay-ic{background:#fff; border-radius:18px; padding:26px 28px; text-align:center; max-width:340px; margin:auto}
+.ode-onay-ikon{font-size:44px}
+.ode-onay-ikon.eksik{font-size:44px}
+.ode-onay-baslik{font-size:19px; font-weight:800; margin-top:6px}
+.ode-onay-aciklama{font-size:14px; color:var(--ink-2); margin-top:8px; line-height:1.5}
+.ode-onay-yontemler{background:var(--surface-2); border-radius:11px; padding:13px; margin:16px 0; text-align:left}
+.ode-onay-yt-bas{font-size:11.5px; font-weight:800; color:var(--ink-3); margin-bottom:8px; text-transform:uppercase; letter-spacing:.3px}
+.ode-onay-yt-satir{display:flex; justify-content:space-between; font-size:15px; font-weight:700; padding:4px 0}
+.ode-onay-butonlar{display:flex; gap:10px}
+.ode-onay-iptal{flex:1; padding:14px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
+.ode-onay-tamam{flex:2; padding:14px; border-radius:11px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
 .ode-onayla{margin-top:auto; padding:16px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer}
 .ode-onayla:disabled{opacity:.4; cursor:default}
 /* 1/N birleşik */
@@ -6716,8 +6729,8 @@ function viewOdemeEkran(main){
   });
   html+=`</div>
     <div class="ode-girilen-ozet ${Math.abs(girilen-odenecek)<0.01?'tam':(girilen>odenecek?'fazla':'eksik')}">
-      Girilen: <strong>${tl(girilen)} ₺</strong> / ${tl(odenecek)} ₺
-      ${girilen>odenecek+0.01?`<div class="ode-go-not">💰 Para üstü ${tl(girilen-odenecek)} ₺</div>`:(girilen<odenecek-0.01&&girilen>0?`<div class="ode-go-not">⚠️ Eksik ${tl(odenecek-girilen)} ₺</div>`:'')}
+      <div class="ode-go-satir1">Girilen: <strong>${tl(girilen)} ₺</strong> / ${tl(odenecek)} ₺</div>
+      <div class="ode-go-not">${girilen>odenecek+0.01?`💰 Para üstü ${tl(girilen-odenecek)} ₺`:(girilen<odenecek-0.01&&girilen>0?`⚠️ Eksik ${tl(odenecek-girilen)} ₺ masada kalır`:'&nbsp;')}</div>
     </div>
     <button class="ode-onayla" ${(odenecek<=0||girilen<=0)?'disabled':''} onclick="odemeOnayla(${mq})">
       ✓ Ödemeyi Al
@@ -7079,50 +7092,83 @@ function odemeOnayla(m){
   const girilen=Math.round((o.yontem.nakit+o.yontem.kredi+o.yontem.diger)*100)/100;
   if(girilen<=0){ note("Ödeme yöntemine tutar girin"); return; }
 
-  // gerçekte tahsil edilen (ödenecek kadar; fazlası para üstü)
-  const tahsil=Math.min(girilen, odenecek);
   const paraUstu=Math.round((girilen-odenecek)*100)/100;
+  // girilen yöntemler (POS'a ayrı ayrı gönderilecek)
+  const aktifYontemler=[];
+  if(o.yontem.nakit>0) aktifYontemler.push({yontem:"nakit", ad:"Nakit", tutar:o.yontem.nakit});
+  if(o.yontem.kredi>0) aktifYontemler.push({yontem:"kredi", ad:"Kredi Kartı", tutar:o.yontem.kredi});
+  if(o.yontem.diger>0) aktifYontemler.push({yontem:"diger", ad:"Diğer / QR", tutar:o.yontem.diger});
 
-  // EKSİK ödeme onayı
-  if(girilen < odenecek - 0.01){
-    const eksik=(odenecek-girilen).toFixed(0);
-    if(!confirm("⚠️ Eksik ödeme!\n\nÖdenecek: "+odenecek.toFixed(0)+" ₺\nGirilen: "+girilen.toFixed(0)+" ₺\nKalan "+eksik+" ₺ masada kalacak.\n\nOnaylıyor musun?")) return;
-  }
-  // FAZLA (para üstü) bilgisi
-  if(paraUstu > 0.01){
-    paraUstuModal(paraUstu);
-  }
-
-  // tahsil edilen tutarı kalemlere oransal dağıt (girilen eksikse o oranda)
-  const tahsilOran = tahsil/hamToplam;  // ham üzerinden (indirim+eksik dahil)
-  const dagitim=o.secili.map(x=>({
-    kalemId:x.kalemId,
-    tutar: Math.round((x.tutar*tahsilOran)*100)/100
-  }));
-  // yöntem dağılımı (gerçek tahsil edilen, para üstü düşülmüş — nakitten düş)
-  const yontemler=[];
+  // ONAY POP-UP — her tahsilat ayrı işlem, POS'a yöntem yöntem gönderilir
+  odemeOnayModal({
+    masa:m, odenecek, girilen, paraUstu,
+    eksik: girilen < odenecek-0.01 ? Math.round((odenecek-girilen)*100)/100 : 0,
+    yontemler: aktifYontemler,
+    hamToplam, indirim
+  });
+}
+/* Tahsilatı gerçekten işle (pop-up onayından sonra) */
+function odemeTahsilEt(veri){
+  const m=veri.masa, o=state.odeme;
+  const tahsil=Math.min(veri.girilen, veri.odenecek);  // fazlası para üstü
+  const tahsilOran = tahsil/veri.hamToplam;
+  const dagitim=o.secili.map(x=>({ kalemId:x.kalemId, tutar:Math.round((x.tutar*tahsilOran)*100)/100 }));
+  // yöntem dağılımı (para üstü nakitten düşülür) — her yöntem ayrı kayıt (POS ayrı gönderim)
   let kalanTahsil=tahsil;
-  // önce kredi/diğer (tam), sonra nakit (para üstü nakitten düşülür)
+  const yontemler=[];
+  const puPozitif=Math.max(0, veri.paraUstu);
   ["kredi","diger","nakit"].forEach(y=>{
     if(o.yontem[y]>0){
       let t=o.yontem[y];
-      if(y==="nakit") t=Math.max(0, t-paraUstu); // para üstü nakitten
-      t=Math.min(t, kalanTahsil);
-      if(t>0){ yontemler.push({yontem:y, tutar:Math.round(t*100)/100}); kalanTahsil-=t; }
+      if(y==="nakit") t=Math.max(0, Math.round((t-puPozitif)*100)/100);
+      t=Math.min(t, Math.round(kalanTahsil*100)/100);
+      if(t>0){ yontemler.push({yontem:y, tutar:Math.round(t*100)/100}); kalanTahsil=Math.round((kalanTahsil-t)*100)/100; }
     }
   });
-  masaOdemeKaydet(m, yontemler, dagitim, indirim);
-
+  masaOdemeKaydet(m, yontemler, dagitim, veri.indirim);
   const kalan=masaKalan(m);
   if(kalan<=0.01){
-    note("✓ Ödeme tamamlandı · masa kapandı");
+    note("✓ Tüm ödeme tamamlandı · masa kapandı");
     state.odeme=null; state.kasaMasa=null; odeKlavyeKaldir(); go("masalar");
   } else {
-    note("✓ Ödeme alındı · kalan "+kalan.toFixed(0)+" ₺ · ekran açık");
-    // EKRAN AÇIK KALIR — yeni tur, kullanıcı kapatana kadar
+    note("✓ Tahsil edildi · kalan "+tl(kalan)+" ₺");
+    // EKRAN AÇIK KALIR — kalan tahsilatlar için yeni tur
     state.odeme={masa:m, secili:[], indirim:0, yontem:{nakit:0,kredi:0,diger:0}, aktifKutu:"kredi"};
     go("odemeEkran");
   }
+}
+/* Tahsilat onay pop-up'ı */
+function odemeOnayModal(veri){
+  let mdl=document.getElementById("odeOnayModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="odeOnayModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  let ic=`<div class="ode-onay-ic">`;
+  if(veri.eksik>0){
+    ic+=`<div class="ode-onay-ikon eksik">⚠️</div>
+      <div class="ode-onay-baslik">Eksik Tahsilat</div>
+      <div class="ode-onay-aciklama">Girilen tutar ödenecekten az. <strong>${tl(veri.eksik)} ₺</strong> masada kalacak.</div>`;
+  } else if(veri.paraUstu>0){
+    ic+=`<div class="ode-onay-ikon">💰</div>
+      <div class="ode-onay-baslik">Tahsilat Onayı</div>
+      <div class="ode-onay-aciklama">Para üstü: <strong>${tl(veri.paraUstu)} ₺</strong></div>`;
+  } else {
+    ic+=`<div class="ode-onay-ikon">✓</div>
+      <div class="ode-onay-baslik">Tahsilat Onayı</div>`;
+  }
+  // POS'a gönderilecek yöntemler
+  ic+=`<div class="ode-onay-yontemler"><div class="ode-onay-yt-bas">Yazarkasa-POS'a gönderilecek:</div>`;
+  const puPozitif=Math.max(0, veri.paraUstu);
+  veri.yontemler.forEach(y=>{
+    const tahsilEdilen = y.yontem==="nakit" ? Math.max(0, y.tutar-puPozitif) : y.tutar;
+    ic+=`<div class="ode-onay-yt-satir"><span>${y.ad}</span><span>${tl(tahsilEdilen)} ₺</span></div>`;
+  });
+  ic+=`</div>`;
+  ic+=`<div class="ode-onay-butonlar">
+    <button class="ode-onay-iptal" onclick="document.getElementById('odeOnayModal').classList.remove('on')">İptal</button>
+    <button class="ode-onay-tamam" onclick="document.getElementById('odeOnayModal').classList.remove('on'); odemeTahsilEt(window.__odeVeri)">${veri.eksik>0?'Eksik Tahsil Et':'Tahsil Et'}</button>
+  </div></div>`;
+  mdl.innerHTML=ic;
+  mdl.classList.add("on");
+  window.__odeVeri=veri;
 }
 /* Kısmi ödeme fişi yazdır (o anki seçili dağılım) */
 function odemeFisYazdir(){
