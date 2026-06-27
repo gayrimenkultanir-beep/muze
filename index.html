@@ -1164,10 +1164,15 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ode-not-giris{display:flex; gap:8px; align-items:stretch}
 .ode-not-ta{flex:1; padding:9px 11px; border-radius:9px; border:1.5px solid var(--line); font-size:13.5px; font-family:inherit; resize:none}
 .ode-not-btn{padding:0 16px; border-radius:9px; background:var(--brand); color:#fff; border:none; font-weight:800; font-size:14px; cursor:pointer}
-.ode-urun-kart{background:var(--surface-2); border:1.5px solid var(--line); border-radius:10px; padding:11px 13px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; transition:.12s}
+.ode-urun-kart{background:var(--surface-2); border:1.5px solid var(--line); border-radius:10px; padding:11px 13px; cursor:pointer; display:flex; flex-direction:column; gap:0; transition:.12s}
 .ode-urun-kart:active{transform:scale(.98)}
 .ode-urun-kart.secili{background:var(--brand-soft); border-color:var(--brand)}
 .ode-urun-kart.odendi{opacity:.5; cursor:default; background:var(--ok-soft)}
+.ode-urun-bas{display:flex; justify-content:space-between; align-items:center; gap:8px; width:100%}
+.ode-urun-secimler{display:flex; flex-wrap:wrap; gap:5px; margin-top:7px}
+.ode-urun-sec{display:inline-flex; align-items:center; gap:4px; background:var(--surface); border:1px solid var(--line); border-radius:7px; padding:3px 8px; font-size:11px; color:var(--ink-2); font-weight:600}
+.ode-sec-x{width:16px; height:16px; border-radius:50%; background:var(--err-soft); color:var(--err); border:none; font-size:9px; font-weight:800; cursor:pointer; display:grid; place-items:center; padding:0; flex:none}
+.ode-sec-ekle{margin-top:7px; width:100%; padding:7px; border-radius:8px; background:var(--ok-soft); color:var(--ok); border:1px dashed var(--ok); font-size:12px; font-weight:700; cursor:pointer}
 .ode-urun-ad{font-weight:700; font-size:13.5px}
 .ode-urun-fiyat{font-weight:800; font-size:14px; color:var(--brand-d); white-space:nowrap}
 .ode-urun-fiyat small{font-weight:600; color:var(--ink-3); font-size:10px}
@@ -7416,10 +7421,26 @@ function viewOdemeEkran(main){
       urunVar=true;
       const kk=kalemKalan(it);
       const seciliMi=o.secili.some(x=>x.kalemId===it.id);
+      const opsVar=(PRODUCT_OPTIONS[it.ad]||[]).length>0;
+      const kismiOdenmis=(it.odenenTutar||0)>0;
       html+=`<div class="ode-urun-kart${seciliMi?' secili':''}" onclick="odeUrunSec(${it.id})">
-        <div class="ode-urun-ad">${seciliMi?'✓ ':''}${it.ad}</div>
-        <div class="ode-urun-fiyat">${tl(kk)} ₺${(it.odenenTutar||0)>0?` <small>(${tl(it.fiyat)}₺)</small>`:''}</div>
-      </div>`;
+        <div class="ode-urun-bas">
+          <div class="ode-urun-ad">${seciliMi?'✓ ':''}${it.ad}</div>
+          <div class="ode-urun-fiyat">${tl(kk)} ₺${(it.odenenTutar||0)>0?` <small>(${tl(it.fiyat)}₺)</small>`:''}</div>
+        </div>`;
+      // seçenekler (varsa) — her biri silinebilir
+      if(it.secimler && it.secimler.length){
+        html+=`<div class="ode-urun-secimler">`;
+        it.secimler.forEach((op,oi)=>{
+          html+=`<span class="ode-urun-sec">${op}${kismiOdenmis?'':`<button class="ode-sec-x" onclick="event.stopPropagation();secenekSilOnay(${mq},${it.id},${oi},'odeme')" title="Seçeneği sil">✕</button>`}</span>`;
+        });
+        html+=`</div>`;
+      }
+      // + Seçenek ekle butonu (ödenmemiş ve opsiyonu olan ürünlerde)
+      if(opsVar && !kismiOdenmis){
+        html+=`<button class="ode-sec-ekle" onclick="event.stopPropagation();kalemSecenekEkle(${mq},${it.id},'odeme')">+ Seçenek ekle</button>`;
+      }
+      html+=`</div>`;
     });
     odenmisKalemler.forEach(it=>{
       html+=`<div class="ode-urun-kart odendi"><div class="ode-urun-ad">✓ ${it.ad}</div>
@@ -8255,6 +8276,15 @@ function secenekSilUygula(){
 }
 /* Değişiklik sonrası ilgili ekranı yenile + açık ödeme/müşteri ekranını güncelle */
 function ekranlariYenile(kaynak, masaNo){
+  if(kaynak==="odeme"){
+    // ödeme ekranındayız → ödeme ekranını yenile (masalar'a atma)
+    if(state.odeme && state.odeme.masa===masaNo){
+      state.odeme.secili.forEach(x=>{ const it=masaKalemBul(masaNo,x.kalemId); if(it) x.tutar=Math.min(x.tutar, kalemKalan(it)); });
+      if(state.odeme.dengeYontem) odeYontemDengeleSessiz();
+      odemeEkranYenile();
+    }
+    return;
+  }
   if(kaynak==="kds"){ if(typeof renderKDS==="function") renderKDS(); }
   else if(kaynak==="kasadetay"){ go("masalar"); }
   else { go("masalar"); }
