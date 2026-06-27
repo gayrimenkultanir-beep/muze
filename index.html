@@ -12508,8 +12508,7 @@ function openQR(){
   QR = { masa:"1", masaKat:"İç Salon", sube:"Edirne Atatürk", kisi:"", tel:"", musteri:null, sepet:[], view:"splash", aktifKat:"Tatlılar" };
   renderQR();
   document.getElementById("qrApp").style.display="block";
-  // splash 3sn sonra otomatik geçer
-  QR._splashTimer = setTimeout(splashGec, 3000);
+  // splash sadece "Devam et" butonuyla geçer (otomatik geçiş yok)
 }
 function closeQR(){
   clearTimeout(QR._splashTimer);
@@ -12579,23 +12578,6 @@ function qrSplashHtml(){
     kmpHtml += '</div>';
   }
 
-  // ALT: öne çıkan normal ürünler (kampanyasız, ilk birkaç)
-  const oneCikan = DEMO_PRODUCTS.filter(p=>p.aktif!==false).slice(0,8);
-  let urunHtml = '';
-  if(oneCikan.length){
-    urunHtml = '<div class="qr-splash-urunler-bas">Lezzetlerimiz</div><div class="qr-splash-urunler">';
-    oneCikan.forEach(p=>{
-      const magP=urunMagPuan(p);
-      urunHtml += '<div class="qr-splash-urun">'+
-        '<div class="qr-splash-urun-emoji">'+(p.emoji||"🍽️")+'</div>'+
-        '<div class="qr-splash-urun-ad">'+p.ad+'</div>'+
-        '<div class="qr-splash-urun-fiyat">'+urunVarsayilanFiyat(p.ad)+' ₺</div>'+
-        (magP>0?'<div class="qr-splash-urun-mag">🎁 +'+magP+'</div>':'')+
-      '</div>';
-    });
-    urunHtml += '</div>';
-  }
-
   // DUYURULAR
   let duyuruHtml='';
   if(SPLASH.duyurular && SPLASH.duyurular.length){
@@ -12614,9 +12596,8 @@ function qrSplashHtml(){
         '<div class="qr-splash-baslik">'+SPLASH.baslik+'</div>'+
         '<div class="qr-splash-altyazi">'+SPLASH.altyazi+'</div>'+
       '</div>'+
-      (kmpHtml ? '<div class="qr-splash2-bolum"><div class="qr-splash2-bolum-bas">🔥 Kampanyalı Ürünler</div>'+kmpHtml+'</div>' : '')+
-      (urunHtml ? '<div class="qr-splash2-bolum">'+urunHtml+'</div>' : '')+
       duyuruHtml+
+      (kmpHtml ? '<div class="qr-splash2-bolum"><div class="qr-splash2-bolum-bas">🔥 Kampanyalı Ürünler</div>'+kmpHtml+'</div>' : '')+
       '<div class="qr-splash2-bosluk"></div>'+
     '</div>'+
     // sabit alt bar: Devam et + çekmece tetik
