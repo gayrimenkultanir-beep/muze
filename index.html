@@ -1235,6 +1235,110 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-anamenu-btn{padding:10px 16px; border-radius:99px; background:var(--cocoa); color:#fff; font-size:13.5px; font-weight:800; flex:none}
 .qr-anamenu-btn:active{transform:scale(.96)}
 .qr-anamenu-kat{font-size:16px; font-weight:800; color:var(--ink)}
+/* === YENİ İNTRO (splash2) === */
+.qr-splash2{position:absolute; inset:0; overflow:hidden; background:#1a1208}
+.qr-splash2-bg{position:absolute; inset:0; z-index:0}
+.qr-splash-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.qr-splash2-bg .qr-splash-img{position:absolute; inset:0; background-size:cover; background-position:center}
+.qr-splash2-bg .qr-splash-veil{position:absolute; inset:0; background:linear-gradient(180deg,rgba(26,18,8,.45) 0%,rgba(26,18,8,.75) 55%,rgba(26,18,8,.95) 100%)}
+.qr-splash2-scroll{position:absolute; inset:0; z-index:1; overflow-y:auto; padding:24px 16px 0; -webkit-overflow-scrolling:touch}
+.qr-splash2-hero{text-align:center; padding:30px 10px 24px; color:#fff}
+.qr-splash2-hero .qr-splash-rozet{display:inline-block; background:var(--brand); color:#fff; font-size:12px; font-weight:800; letter-spacing:1px; border-radius:99px; padding:5px 14px; margin-bottom:12px}
+.qr-splash2-hero .qr-splash-baslik{font-size:28px; font-weight:900; margin-bottom:6px; text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.qr-splash2-hero .qr-splash-altyazi{font-size:14px; opacity:.9}
+.qr-splash2-bolum{margin-bottom:20px}
+.qr-splash2-bolum-bas{font-size:15px; font-weight:800; color:#fff; margin-bottom:10px; padding-left:2px}
+.qr-splash-kampanyalar{display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch}
+.qr-splash-kmp{flex:none; width:200px; background:rgba(255,255,255,.97); border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:5px; box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.qsk-ust{display:flex; justify-content:space-between; align-items:center; gap:6px}
+.qsk-ad{font-size:13px; font-weight:800; color:var(--err)}
+.qsk-oran{font-size:12px; font-weight:900; background:var(--err); color:#fff; border-radius:7px; padding:1px 7px}
+.qsk-urun{font-size:13px; font-weight:700; color:var(--ink)}
+.qsk-fiyat{display:flex; align-items:center; gap:7px}
+.qsk-eski{font-size:12px; color:var(--ink-3); text-decoration:line-through}
+.qsk-yeni{font-size:17px; font-weight:900; color:var(--brand-d)}
+.qsk-zaman{font-size:10.5px; color:var(--ink-3)}
+.qsk-simdi{background:var(--ok-soft); color:var(--ok); border-radius:5px; padding:1px 5px; font-weight:700}
+.qr-splash-urunler-bas{font-size:15px; font-weight:800; color:#fff; margin-bottom:10px}
+.qr-splash-urunler{display:grid; grid-template-columns:repeat(2,1fr); gap:10px}
+.qr-splash-urun{background:rgba(255,255,255,.95); border-radius:12px; padding:12px; text-align:center; box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.qr-splash-urun-emoji{font-size:30px}
+.qr-splash-urun-ad{font-size:13px; font-weight:700; color:var(--ink); margin:4px 0}
+.qr-splash-urun-fiyat{font-size:15px; font-weight:900; color:var(--brand-d)}
+.qr-splash-urun-mag{display:inline-block; margin-top:4px; font-size:11px; font-weight:800; color:#9a6212; background:#ffe8c0; border-radius:99px; padding:2px 8px}
+.qr-splash-duyurular{margin-bottom:20px}
+.qr-splash-duyuru-bas{font-size:15px; font-weight:800; color:#fff; margin-bottom:10px}
+.qr-splash-duyuru{background:rgba(255,255,255,.95); border-radius:12px; padding:13px 15px; margin-bottom:8px; box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.qsd-bas{font-size:14px; font-weight:800; color:var(--cocoa); margin-bottom:4px}
+.qsd-metin{font-size:13px; color:var(--ink-2); line-height:1.5}
+.qr-splash2-bosluk{height:120px}
+/* alt sabit bar */
+.qr-splash2-altbar{position:absolute; bottom:0; left:0; right:0; z-index:3; padding:14px 16px calc(14px + env(safe-area-inset-bottom)); background:linear-gradient(180deg,transparent,rgba(26,18,8,.9) 30%); display:flex; flex-direction:column; align-items:center; gap:8px}
+.qr-splash2-devam{width:100%; max-width:420px; padding:16px; border-radius:14px; background:var(--brand); color:#fff; border:none; font-size:17px; font-weight:900; cursor:pointer; box-shadow:0 6px 20px rgba(216,133,26,.5)}
+.qr-splash2-devam:active{transform:scale(.98)}
+.qr-splash2-cekmece-tetik{background:none; border:none; cursor:pointer; padding:6px 40px}
+.qr-cekmece-cizgi{display:block; width:44px; height:5px; border-radius:99px; background:rgba(255,255,255,.6)}
+.qr-cekmece-ipucu{font-size:11.5px; color:rgba(255,255,255,.7); font-weight:600}
+/* yukarı açılır çekmece */
+.qr-cekmece-bg{position:absolute; inset:0; z-index:8; background:rgba(0,0,0,0); visibility:hidden; transition:.3s}
+.qr-cekmece-bg.acik{background:rgba(0,0,0,.5); visibility:visible}
+.qr-cekmece{position:absolute; left:0; right:0; bottom:0; z-index:9; background:#fff; border-radius:22px 22px 0 0; transform:translateY(100%); transition:transform .32s cubic-bezier(.3,.8,.3,1); max-height:70%; display:flex; flex-direction:column; box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+.qr-cekmece.acik{transform:translateY(0)}
+.qr-cekmece-tut{width:44px; height:5px; border-radius:99px; background:var(--line); margin:12px auto 8px; cursor:pointer; flex:none}
+.qr-cekmece-sekme-bar{display:flex; gap:8px; padding:4px 18px 14px; border-bottom:1px solid var(--line)}
+.qr-cekmece-sekme{flex:1; padding:11px; border-radius:11px; background:var(--surface-2); border:1.5px solid var(--line); font-size:14px; font-weight:800; color:var(--ink-2); cursor:pointer}
+.qr-cekmece-sekme.on{background:var(--brand); border-color:var(--brand); color:#fff}
+.qr-cekmece-ic{padding:18px; overflow-y:auto}
+.qr-cek-baslik{font-size:16px; font-weight:800; color:var(--cocoa); margin-bottom:12px}
+.qr-cek-metin{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin-bottom:16px}
+.qr-wifi-kart{background:var(--surface-2); border-radius:12px; padding:14px; margin-bottom:14px}
+.qr-wifi-satir{display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--line)}
+.qr-wifi-satir:last-child{border-bottom:none}
+.qr-wifi-lbl{font-size:13px; color:var(--ink-2); font-weight:600}
+.qr-wifi-deger{font-size:15px; font-weight:800; color:var(--ink); font-family:monospace}
+.qr-wifi-sifre{color:var(--brand-d); letter-spacing:1px}
+.qr-wifi-kopya{width:100%; padding:13px; border-radius:11px; background:var(--cocoa); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer}
+.qr-cek-kabul-btn{width:100%; padding:14px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+.qr-cek-kabul-ok{text-align:center; padding:14px; background:var(--ok-soft); color:var(--ok); border-radius:12px; font-size:14px; font-weight:800}
+/* bildirim ekranı */
+.qr-bildirim{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg,#3a2410,#1a1208); padding:24px}
+.qr-bildirim-ic{text-align:center; max-width:440px; color:#fff; animation:qrBildirimGir .5s ease}
+@keyframes qrBildirimGir{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
+.qr-bildirim-logo{font-size:64px; margin-bottom:14px}
+.qr-bildirim-logo-img{width:120px; height:120px; border-radius:50%; object-fit:cover; margin:0 auto 18px; display:block; border:3px solid rgba(240,167,40,.5); box-shadow:0 6px 24px rgba(0,0,0,.4); animation:qrLogoNabiz 2.4s ease-in-out infinite}
+@keyframes qrLogoNabiz{0%,100%{transform:scale(1);box-shadow:0 6px 24px rgba(0,0,0,.4)}50%{transform:scale(1.05);box-shadow:0 8px 32px rgba(240,167,40,.4)}}
+.intro-logo-onizle{position:relative; width:96px; height:96px; border-radius:50%; overflow:hidden; margin-bottom:12px; background:#1a1208; border:2px solid var(--line)}
+.intro-logo-onizle video,.intro-logo-onizle img{width:100%; height:100%; object-fit:cover}
+.intro-logo-onizle .intro-video-sil{top:2px; right:2px; padding:3px 7px; font-size:10px}
+.qr-bildirim-marka{font-size:32px; font-weight:900; color:var(--brand); letter-spacing:1px; margin-bottom:18px}
+.qr-bildirim-metin{font-size:16px; line-height:1.6; color:#f0e2cc; margin-bottom:22px}
+.qr-bildirim-alerjen{font-size:13.5px; line-height:1.5; color:#ffd9a8; background:rgba(216,133,26,.18); border:1px solid rgba(240,167,40,.4); border-radius:12px; padding:14px 16px; margin-bottom:26px}
+.qr-bildirim-devam{padding:15px 40px; border-radius:13px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 6px 20px rgba(216,133,26,.4)}
+.qr-bildirim-bar{width:140px; height:4px; border-radius:99px; background:rgba(255,255,255,.2); margin:22px auto 0; overflow:hidden}
+.qr-bildirim-bar-fill{height:100%; background:var(--brand); animation:qrBildirimBar 4.5s linear forwards}
+@keyframes qrBildirimBar{0%{width:0}100%{width:100%}}
+/* === İNTRO YÖNETİM SEKMESİ === */
+.intro-onizle-btn{padding:10px 16px; border-radius:11px; background:var(--cocoa); color:#fff; border:none; font-size:13.5px; font-weight:700; cursor:pointer}
+.intro-kart-bas{font-size:16px; font-weight:800; color:var(--cocoa); margin-bottom:6px}
+.intro-kart-ac{font-size:12.5px; color:var(--ink-3); line-height:1.5; margin-bottom:14px}
+.intro-alan{margin-bottom:12px}
+.intro-alan label{display:block; font-size:12.5px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
+.intro-input{width:100%; padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; outline:none; color:var(--ink); background:var(--surface)}
+.intro-input:focus{border-color:var(--brand)}
+.intro-ta{width:100%; padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; font-family:inherit; resize:vertical; outline:none; color:var(--ink); background:var(--surface)}
+.intro-ta:focus{border-color:var(--brand)}
+.intro-ikili{display:flex; gap:12px}
+.intro-ikili .intro-alan{flex:1}
+.intro-video-onizle{position:relative; border-radius:12px; overflow:hidden; margin-bottom:12px; background:#1a1208; aspect-ratio:16/9}
+.intro-video-onizle video,.intro-video-onizle img{width:100%; height:100%; object-fit:cover}
+.intro-video-sil{position:absolute; top:8px; right:8px; background:rgba(0,0,0,.65); color:#fff; border:none; border-radius:8px; padding:6px 11px; font-size:12px; font-weight:700; cursor:pointer}
+.intro-yukle-btn{display:block; text-align:center; padding:13px; border-radius:11px; border:2px dashed var(--line); background:var(--surface-2); color:var(--ink-2); font-size:14px; font-weight:700; cursor:pointer}
+.intro-duyuru-liste{display:flex; flex-direction:column; gap:12px; margin-bottom:12px}
+.intro-duyuru-kart{background:var(--surface-2); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:8px}
+.intro-duyuru-bas-input{font-weight:700}
+.intro-duyuru-sil{align-self:flex-start; padding:7px 13px; border-radius:9px; background:var(--err-soft); color:var(--err); border:none; font-size:12.5px; font-weight:700; cursor:pointer}
+.intro-duyuru-ekle{width:100%; padding:12px; border-radius:11px; border:2px dashed var(--line); background:none; color:var(--ink-2); font-size:14px; font-weight:700; cursor:pointer}
+.intro-kaydet-btn{width:100%; padding:15px; border-radius:13px; background:var(--ok); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer; margin-top:8px; margin-bottom:20px}
 .kp-paketrozet{display:inline-block; background:#f3e8fa; color:#8e44ad; font-size:12px; font-weight:800; padding:5px 12px; border-radius:99px; margin-bottom:8px}
 .kp-gelal{background:#2a2230}
 /* Paket işaretleri (mutfak/kasa) */
@@ -4651,9 +4755,9 @@ const ROLES = {
   kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", subeSec:true,
            nav:["satis","masalar"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
-           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","magpuan","personel","yazarkasa","yazicilar","musteriekran","rapor"] },
+           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","magpuan","intro","personel","yazarkasa","yazicilar","musteriekran","rapor"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","magpuan","subeler","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
+           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","magpuan","intro","subeler","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
 };
 
 // Yetki kontrolü: belirli aksiyon bu role açık mı?
@@ -4773,6 +4877,7 @@ const NAV_META = {
   yazicilar:{ic:"🖨️", ad:"Yazıcılar"},
   musteriekran:{ic:"🖥️", ad:"Müşteri Ekranı"},
   magpuan:{ic:"🎁", ad:"Mag Puan"},
+  intro:{ic:"📱", ad:"QR İntro"},
 };
 
 /* ============================================================
@@ -5575,7 +5680,7 @@ function go(key, scrollKoru){
     satis:viewSatis, masalar:viewMasalar, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
     fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel, bayi:viewBayi,
     subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, odemeEkran:viewOdemeEkran,
-    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan
+    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan, intro:viewIntro
   }[key] || viewSatis)(main);
   if(scrollKoru) main.scrollTop = eskiScroll;
 }
@@ -11001,6 +11106,123 @@ function bayiStokAktar(id){
    - Raporlama (toplam üye, dağıtılan/bozdurulan Mag, TL karşılığı)
    - Üye listesi (ad, mail, tel, Mag, TL) + detay (işlem geçmişi)
    ============================================================ */
+/* ============================================================
+   QR İNTRO YÖNETİMİ (müdür + genel müdür)
+   - arka plan video, hero, WiFi, çerez, bildirim metni, duyurular
+   ============================================================ */
+function viewIntro(main){
+  let html = `<div class="sec-head"><div><h2>📱 QR İntro / Tanıtım</h2>
+    <div class="sh-sub">Müşteri QR menüsü açılış ekranı yönetimi</div></div>
+    <button class="intro-onizle-btn" onclick="introOnizle()">👁️ Önizle</button></div>`;
+
+  // ARKA PLAN VİDEO
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">🎬 Arka Plan (Hareketli WebP / Video)</div>
+    <div class="intro-kart-ac">Açılış ekranının arka planında oynar. WebP, MP4 veya WebM. Yatay, yüksek çözünürlüklü önerilir.</div>
+    ${SPLASH.video ? `<div class="intro-video-onizle">${/\.(mp4|webm)$/i.test(SPLASH.video)||SPLASH.video.startsWith('data:video')?`<video src="${SPLASH.video}" autoplay loop muted playsinline></video>`:`<img src="${SPLASH.video}">`}<button class="intro-video-sil" onclick="introVideoSil()">✕ Kaldır</button></div>` : ''}
+    <label class="intro-yukle-btn">
+      <input type="file" accept="video/*,image/webp,image/*" style="display:none" onchange="introVideoYukle(this.files[0])">
+      <span>${SPLASH.video?'🔄 Değiştir':'＋ Video/Görsel yükle'}</span>
+    </label>
+  </div>`;
+
+  // HERO METİNLERİ
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">✨ Açılış Başlığı</div>
+    <div class="intro-alan"><label>Rozet (küçük etiket)</label>
+      <input class="intro-input" value="${(SPLASH.rozet||'').replace(/"/g,'&quot;')}" oninput="SPLASH.rozet=this.value"></div>
+    <div class="intro-alan"><label>Başlık</label>
+      <input class="intro-input" value="${(SPLASH.baslik||'').replace(/"/g,'&quot;')}" oninput="SPLASH.baslik=this.value"></div>
+    <div class="intro-alan"><label>Alt yazı</label>
+      <input class="intro-input" value="${(SPLASH.altyazi||'').replace(/"/g,'&quot;')}" oninput="SPLASH.altyazi=this.value"></div>
+  </div>`;
+
+  // BİLDİRİM EKRANI
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">📣 Bildirim Ekranı (Devam et sonrası)</div>
+    <div class="intro-kart-ac">"Devam et"e basınca menüye geçmeden önce kısa süre görünür.</div>
+    <div class="intro-alan"><label>🔵 Yuvarlak Logo (hareketli WebP / video / görsel)</label>
+      ${SPLASH.logo ? `<div class="intro-logo-onizle">${/\.(mp4|webm)$/i.test(SPLASH.logo)||SPLASH.logo.startsWith('data:video')?`<video src="${SPLASH.logo}" autoplay loop muted playsinline></video>`:`<img src="${SPLASH.logo}">`}<button class="intro-video-sil" onclick="introLogoSil()">✕</button></div>` : ''}
+      <label class="intro-yukle-btn">
+        <input type="file" accept="video/*,image/webp,image/*" style="display:none" onchange="introLogoYukle(this.files[0])">
+        <span>${SPLASH.logo?'🔄 Logoyu değiştir':'＋ Logo yükle'}</span>
+      </label>
+    </div>
+    <div class="intro-alan"><label>Marka başlığı</label>
+      <input class="intro-input" value="${(SPLASH.bildirimBaslik||'').replace(/"/g,'&quot;')}" oninput="SPLASH.bildirimBaslik=this.value"></div>
+    <div class="intro-alan"><label>Tanıtım metni</label>
+      <textarea class="intro-ta" rows="3" oninput="SPLASH.bildirimMetin=this.value">${SPLASH.bildirimMetin||''}</textarea></div>
+    <div class="intro-alan"><label>⚠️ Alerjen / uyarı metni</label>
+      <textarea class="intro-ta" rows="2" oninput="SPLASH.alerjenUyari=this.value">${SPLASH.alerjenUyari||''}</textarea></div>
+  </div>`;
+
+  // WIFI
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">📶 WiFi Bilgisi</div>
+    <div class="intro-kart-ac">İntro alt çekmecesinde müşteriye gösterilir.</div>
+    <div class="intro-ikili">
+      <div class="intro-alan"><label>Ağ adı (SSID)</label>
+        <input class="intro-input" value="${(SPLASH.wifiAd||'').replace(/"/g,'&quot;')}" oninput="SPLASH.wifiAd=this.value"></div>
+      <div class="intro-alan"><label>Parola</label>
+        <input class="intro-input" value="${(SPLASH.wifiSifre||'').replace(/"/g,'&quot;')}" oninput="SPLASH.wifiSifre=this.value"></div>
+    </div>
+  </div>`;
+
+  // ÇEREZ
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">🍪 Çerez Politikası</div>
+    <div class="intro-alan"><label>Çerez metni</label>
+      <textarea class="intro-ta" rows="3" oninput="SPLASH.cerezMetni=this.value">${SPLASH.cerezMetni||''}</textarea></div>
+  </div>`;
+
+  // DUYURULAR
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">📢 Duyurular</div>
+    <div class="intro-kart-ac">İntro ekranının altında listelenir.</div>
+    <div class="intro-duyuru-liste">`;
+  (SPLASH.duyurular||[]).forEach((d,i)=>{
+    html += `<div class="intro-duyuru-kart">
+      <input class="intro-input intro-duyuru-bas-input" placeholder="Başlık" value="${(d.baslik||'').replace(/"/g,'&quot;')}" oninput="introDuyuruSet(${i},'baslik',this.value)">
+      <textarea class="intro-ta" rows="2" placeholder="Duyuru metni" oninput="introDuyuruSet(${i},'metin',this.value)">${d.metin||''}</textarea>
+      <button class="intro-duyuru-sil" onclick="introDuyuruSil(${i})">🗑️ Sil</button>
+    </div>`;
+  });
+  html += `</div>
+    <button class="intro-duyuru-ekle" onclick="introDuyuruEkle()">＋ Duyuru ekle</button>
+  </div>`;
+
+  html += `<button class="intro-kaydet-btn" onclick="introKaydet()">✓ Tüm Değişiklikleri Kaydet</button>`;
+
+  main.innerHTML = html;
+}
+function introVideoYukle(file){
+  if(!file) return;
+  if(file.size > 8*1024*1024){ note("⚠️ Dosya çok büyük (max 8MB)"); return; }
+  const reader=new FileReader();
+  reader.onload=e=>{ SPLASH.video=e.target.result; splashKaydet(); viewIntro(document.querySelector(".main")); note("🎬 Arka plan yüklendi"); };
+  reader.readAsDataURL(file);
+}
+function introVideoSil(){ SPLASH.video=""; splashKaydet(); viewIntro(document.querySelector(".main")); note("Arka plan kaldırıldı"); }
+function introLogoYukle(file){
+  if(!file) return;
+  if(file.size > 5*1024*1024){ note("⚠️ Logo çok büyük (max 5MB)"); return; }
+  const reader=new FileReader();
+  reader.onload=e=>{ SPLASH.logo=e.target.result; splashKaydet(); viewIntro(document.querySelector(".main")); note("🔵 Logo yüklendi"); };
+  reader.readAsDataURL(file);
+}
+function introLogoSil(){ SPLASH.logo=""; splashKaydet(); viewIntro(document.querySelector(".main")); note("Logo kaldırıldı"); }
+function introDuyuruEkle(){ if(!SPLASH.duyurular) SPLASH.duyurular=[]; SPLASH.duyurular.push({baslik:"",metin:""}); viewIntro(document.querySelector(".main")); }
+function introDuyuruSet(i,alan,v){ if(SPLASH.duyurular&&SPLASH.duyurular[i]) SPLASH.duyurular[i][alan]=v; }
+function introDuyuruSil(i){ if(SPLASH.duyurular) SPLASH.duyurular.splice(i,1); splashKaydet(); viewIntro(document.querySelector(".main")); note("Duyuru silindi"); }
+function introKaydet(){ splashKaydet(); note("✓ İntro ayarları kaydedildi"); }
+function introOnizle(){
+  splashKaydet();
+  // QR önizleme: yeni sekmede değil, mevcut QR motorunu splash'tan başlat
+  QR = { masa:"1", masaKat:"İç Salon", sube:AKTIF_SUBE, kisi:"", tel:"", musteri:null, sepet:[], view:"splash", aktifKat:DEMO_KATEGORILER[0]?.ad||"Tatlılar" };
+  document.getElementById("qrApp").style.display="block";
+  renderQR();
+}
+
 function viewMagPuan(main){
   if(!state.magSekme) state.magSekme="uyeler";
   let html = `<div class="sec-head"><div><h2>🎁 ${SADAKAT.ad} Puan</h2>
@@ -12226,11 +12448,33 @@ const PUAN_ORANI = SADAKAT.kazancOrani;
 
 /* Reklam (splash) — gerçekte WebP/GIF/MP4 URL'i buraya */
 const SPLASH = {
-  // gorsel: "https://.../kampanya.webp",   // gerçek görsel eklenince
   baslik: "Lotus Bisküvili Mag",
   altyazi: "Yeni! Sınırlı süre · kavanozda servis",
   rozet: "YENİ ÜRÜN",
+  video: "",        // arka plan WebP/video URL (data: veya http)
+  gorsel: "",       // video yoksa sabit görsel
+  // alt çekmece: WiFi + çerez
+  wifiAd: "MINIPAN_Misafir",
+  wifiSifre: "minipan2024",
+  cerezMetni: "Bu menü deneyiminizi iyileştirmek için çerezler kullanır. Sipariş ve tercihlerinizi hatırlamak için gereklidir. Devam ederek çerez kullanımını kabul etmiş olursunuz.",
+  // bildirim ekranı (devam et sonrası)
+  logo: "",         // bildirim ekranı yuvarlak hareketli logo (webp/video/görsel)
+  bildirimBaslik: "MİNİPAN",
+  bildirimMetin: "Türkiye'nin ilk ve tek tescilli pankek markası. %100 doğal, katkısız imza reçeteli mini pankekler ve premium gurme çikolatalar.",
+  alerjenUyari: "Seçenekler arasında alerjen içeren ürünler bulunmaktadır. Lütfen sipariş vermeden önce ürün içeriklerini kontrol ediniz.",
+  // duyurular (intro altında)
+  duyurular: [],    // [{baslik, metin}]
 };
+const SPLASH_KEY = "minipan_splash_v1";
+function splashYukle(){
+  try{
+    const j=localStorage.getItem(SPLASH_KEY);
+    if(j){ Object.assign(SPLASH, JSON.parse(j)); }
+  }catch(e){}
+}
+function splashKaydet(){
+  try{ localStorage.setItem(SPLASH_KEY, JSON.stringify(SPLASH)); }catch(e){}
+}
 
 /* Mail ile bul (asıl kimlik) */
 function musteriBulMail(mail){ return CUSTOMERS[(mail||"").toLowerCase().trim()] || null; }
@@ -12275,6 +12519,7 @@ function closeQR(){
 function renderQR(){
   const el = document.getElementById("qrApp");
   if(QR.view==="splash")        el.innerHTML = qrSplashHtml();
+  else if(QR.view==="bildirim") el.innerHTML = qrBildirimHtml();
   else if(QR.view==="karsilama")el.innerHTML = qrKarsilamaHtml();
   else if(QR.view==="kayit")    el.innerHTML = qrKayitHtml();
   else if(QR.view==="kurtarma") el.innerHTML = qrKurtarmaHtml();
@@ -12292,31 +12537,36 @@ function renderQR(){
 
 /* 0) SPLASH — açılış reklamı (WebP/GIF/MP4) */
 function qrSplashHtml(){
-  const gorsel = SPLASH.gorsel
-    ? '<div class="qr-splash-img qr-splash-anim" style="background-image:url('+SPLASH.gorsel+')"></div>'
-    : '<div class="qr-splash-img qr-splash-ph qr-splash-anim"><span style="font-size:120px">🍫</span></div>';
-  // bu şubeye ait DURAKLATILMAMIŞ kampanyalar (gün/saat kısıtı introda uygulanmaz — tanıtım amaçlı)
   const sube = QR.sube || AKTIF_SUBE;
+  // ARKA PLAN: video (webp/mp4) > görsel > placeholder
+  let arkaplan;
+  if(SPLASH.video){
+    const isVid = /\.(mp4|webm)$/i.test(SPLASH.video) || SPLASH.video.startsWith("data:video");
+    arkaplan = isVid
+      ? '<video class="qr-splash-video" autoplay loop muted playsinline><source src="'+SPLASH.video+'"></video>'
+      : '<div class="qr-splash-img qr-splash-anim" style="background-image:url('+SPLASH.video+')"></div>';
+  } else if(SPLASH.gorsel){
+    arkaplan = '<div class="qr-splash-img qr-splash-anim" style="background-image:url('+SPLASH.gorsel+')"></div>';
+  } else {
+    arkaplan = '<div class="qr-splash-img qr-splash-ph qr-splash-anim"><span style="font-size:120px">🍫</span></div>';
+  }
+
+  // ÜST: kampanyalı ürünler
   const aktifKmp = KAMPANYALAR.filter(k=>
-    k.aktif &&
-    (k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(sube)))
+    k.aktif && (k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(sube)))
   );
   let kmpHtml = "";
   if(aktifKmp.length>0){
     kmpHtml = '<div class="qr-splash-kampanyalar">';
-    aktifKmp.slice(0,4).forEach(k=>{
-      // genel fiyat (kampanyasız taban)
-      const genelK = fiyatKayit(sube, k.urun, k.kanal);
+    aktifKmp.slice(0,6).forEach(k=>{
       const masaK = fiyatKayit(sube, k.urun, "masa");
       const masaGenel = (masaK.genel!=null&&masaK.genel>0)?masaK.genel:urunVarsayilanFiyat(k.urun);
+      const genelK = fiyatKayit(sube, k.urun, k.kanal);
       const genel = (k.kanal==="eve") ? ((genelK.genel!=null&&genelK.genel>0)?genelK.genel:masaGenel) : masaGenel;
-      // kampanya fiyatını doğrudan kampanyadan hesapla
-      let yeni = genel;
-      if(k.tip==="oran") yeni = Math.round(genel*(1-k.deger/100));
-      else yeni = k.deger;
+      let yeni = k.tip==="oran" ? Math.round(genel*(1-k.deger/100)) : k.deger;
       if(yeni<0) yeni=0;
       const indEtiket = k.tip==="oran" ? "%"+k.deger : "";
-      const aktifSimdi = kampanyaAktifMi(k);  // şu an saat/gün uygun mu → rozet
+      const aktifSimdi = kampanyaAktifMi(k);
       kmpHtml += '<div class="qr-splash-kmp glow">'+
         '<div class="qsk-ust"><span class="qsk-ad">🔥 '+k.ad+'</span>'+
         (indEtiket?'<span class="qsk-oran">'+indEtiket+'</span>':'')+'</div>'+
@@ -12328,21 +12578,134 @@ function qrSplashHtml(){
     });
     kmpHtml += '</div>';
   }
-  return '<div class="qr-screen qr-splash">'+
-    gorsel+
-    '<div class="qr-splash-veil"></div>'+
-    '<button class="qr-splash-atla" onclick="splashGec()">Atla ✕</button>'+
-    (kmpHtml ? '<div class="qr-splash-kmp-wrap">'+kmpHtml+'</div>' : '')+
-    '<div class="qr-splash-alt">'+
-      '<div class="qr-splash-rozet glow-soft">'+SPLASH.rozet+'</div>'+
-      '<div class="qr-splash-baslik">'+SPLASH.baslik+'</div>'+
-      '<div class="qr-splash-altyazi">'+SPLASH.altyazi+'</div>'+
-      '<div class="qr-splash-bar"><div class="qr-splash-bar-fill"></div></div>'+
-    '</div></div>';
+
+  // ALT: öne çıkan normal ürünler (kampanyasız, ilk birkaç)
+  const oneCikan = DEMO_PRODUCTS.filter(p=>p.aktif!==false).slice(0,8);
+  let urunHtml = '';
+  if(oneCikan.length){
+    urunHtml = '<div class="qr-splash-urunler-bas">Lezzetlerimiz</div><div class="qr-splash-urunler">';
+    oneCikan.forEach(p=>{
+      const magP=urunMagPuan(p);
+      urunHtml += '<div class="qr-splash-urun">'+
+        '<div class="qr-splash-urun-emoji">'+(p.emoji||"🍽️")+'</div>'+
+        '<div class="qr-splash-urun-ad">'+p.ad+'</div>'+
+        '<div class="qr-splash-urun-fiyat">'+urunVarsayilanFiyat(p.ad)+' ₺</div>'+
+        (magP>0?'<div class="qr-splash-urun-mag">🎁 +'+magP+'</div>':'')+
+      '</div>';
+    });
+    urunHtml += '</div>';
+  }
+
+  // DUYURULAR
+  let duyuruHtml='';
+  if(SPLASH.duyurular && SPLASH.duyurular.length){
+    duyuruHtml = '<div class="qr-splash-duyurular"><div class="qr-splash-duyuru-bas">📢 Duyurular</div>';
+    SPLASH.duyurular.forEach(d=>{
+      duyuruHtml += '<div class="qr-splash-duyuru"><div class="qsd-bas">'+(d.baslik||'')+'</div><div class="qsd-metin">'+(d.metin||'')+'</div></div>';
+    });
+    duyuruHtml += '</div>';
+  }
+
+  return '<div class="qr-screen qr-splash2">'+
+    '<div class="qr-splash2-bg">'+arkaplan+'<div class="qr-splash-veil"></div></div>'+
+    '<div class="qr-splash2-scroll">'+
+      '<div class="qr-splash2-hero">'+
+        '<div class="qr-splash-rozet glow-soft">'+SPLASH.rozet+'</div>'+
+        '<div class="qr-splash-baslik">'+SPLASH.baslik+'</div>'+
+        '<div class="qr-splash-altyazi">'+SPLASH.altyazi+'</div>'+
+      '</div>'+
+      (kmpHtml ? '<div class="qr-splash2-bolum"><div class="qr-splash2-bolum-bas">🔥 Kampanyalı Ürünler</div>'+kmpHtml+'</div>' : '')+
+      (urunHtml ? '<div class="qr-splash2-bolum">'+urunHtml+'</div>' : '')+
+      duyuruHtml+
+      '<div class="qr-splash2-bosluk"></div>'+
+    '</div>'+
+    // sabit alt bar: Devam et + çekmece tetik
+    '<div class="qr-splash2-altbar">'+
+      '<button class="qr-splash2-devam" onclick="splashGec()">Devam et →</button>'+
+      '<button class="qr-splash2-cekmece-tetik" onclick="splashCekmeceAc()"><span class="qr-cekmece-cizgi"></span></button>'+
+      '<div class="qr-cekmece-ipucu">⌃ Bilgi için yukarı çek</div>'+
+    '</div>'+
+    // yukarı açılır çekmece (WiFi + Çerez)
+    qrSplashCekmeceHtml()+
+  '</div>';
+}
+function qrSplashCekmeceHtml(){
+  return '<div class="qr-cekmece-bg" id="qrCekmeceBg" onclick="splashCekmeceKapat()"></div>'+
+    '<div class="qr-cekmece" id="qrCekmece">'+
+      '<div class="qr-cekmece-tut" onclick="splashCekmeceKapat()"></div>'+
+      '<div class="qr-cekmece-sekme-bar">'+
+        '<button class="qr-cekmece-sekme on" id="qrCekWifiBtn" onclick="splashCekmeceSekme(\'wifi\')">📶 WiFi</button>'+
+        '<button class="qr-cekmece-sekme" id="qrCekCerezBtn" onclick="splashCekmeceSekme(\'cerez\')">🍪 Çerezler</button>'+
+      '</div>'+
+      '<div class="qr-cekmece-ic" id="qrCekmeceIc">'+splashCekmeceIcHtml("wifi")+'</div>'+
+    '</div>';
+}
+function splashCekmeceIcHtml(sekme){
+  if(sekme==="cerez"){
+    const kabul = QR._cerezKabul;
+    return '<div class="qr-cek-bolum">'+
+      '<div class="qr-cek-baslik">🍪 Çerez Politikası</div>'+
+      '<div class="qr-cek-metin">'+SPLASH.cerezMetni+'</div>'+
+      (kabul
+        ? '<div class="qr-cek-kabul-ok">✓ Çerezleri kabul ettiniz</div>'
+        : '<button class="qr-cek-kabul-btn" onclick="splashCerezKabul()">Çerezleri Kabul Et</button>')+
+    '</div>';
+  }
+  // wifi
+  return '<div class="qr-cek-bolum">'+
+    '<div class="qr-cek-baslik">📶 Ücretsiz WiFi</div>'+
+    '<div class="qr-wifi-kart">'+
+      '<div class="qr-wifi-satir"><span class="qr-wifi-lbl">Ağ Adı</span><span class="qr-wifi-deger">'+(SPLASH.wifiAd||'—')+'</span></div>'+
+      '<div class="qr-wifi-satir"><span class="qr-wifi-lbl">Parola</span><span class="qr-wifi-deger qr-wifi-sifre">'+(SPLASH.wifiSifre||'—')+'</span></div>'+
+    '</div>'+
+    '<button class="qr-wifi-kopya" onclick="splashWifiKopya()">📋 Parolayı kopyala</button>'+
+  '</div>';
+}
+function splashCekmeceAc(){ document.getElementById("qrCekmece").classList.add("acik"); document.getElementById("qrCekmeceBg").classList.add("acik"); }
+function splashCekmeceKapat(){ document.getElementById("qrCekmece").classList.remove("acik"); document.getElementById("qrCekmeceBg").classList.remove("acik"); }
+function splashCekmeceSekme(s){
+  document.getElementById("qrCekmeceIc").innerHTML=splashCekmeceIcHtml(s);
+  document.getElementById("qrCekWifiBtn").classList.toggle("on", s==="wifi");
+  document.getElementById("qrCekCerezBtn").classList.toggle("on", s==="cerez");
+}
+function splashCerezKabul(){ QR._cerezKabul=true; splashCekmeceSekme("cerez"); note("✓ Çerezler kabul edildi"); }
+function splashWifiKopya(){
+  try{ navigator.clipboard.writeText(SPLASH.wifiSifre||""); note("📋 Parola kopyalandı"); }catch(e){ note("Parola: "+SPLASH.wifiSifre); }
 }
 function splashGec(){
   clearTimeout(QR._splashTimer);
-  // cihaz hafızası varsa → tanı, yoksa → karşılama (kayıt/atla)
+  // Devam et → bildirim ekranı (tescilli marka + alerjen)
+  QR.view = "bildirim";
+  renderQR();
+}
+/* Bildirim ekranı — tescilli marka + alerjen ikazı (otomatik + atlanabilir) */
+function qrBildirimHtml(){
+  clearTimeout(QR._bildirimTimer);
+  QR._bildirimTimer=setTimeout(()=>{ bildirimGec(); }, 4500);
+  // yuvarlak hareketli logo (webp/video/görsel) veya emoji
+  let logoHtml;
+  if(SPLASH.logo){
+    const isVid = /\.(mp4|webm)$/i.test(SPLASH.logo) || SPLASH.logo.startsWith("data:video");
+    logoHtml = isVid
+      ? '<video class="qr-bildirim-logo-img" autoplay loop muted playsinline><source src="'+SPLASH.logo+'"></video>'
+      : '<img class="qr-bildirim-logo-img" src="'+SPLASH.logo+'">';
+  } else {
+    logoHtml = '<div class="qr-bildirim-logo">🥞</div>';
+  }
+  return '<div class="qr-screen qr-bildirim">'+
+    '<div class="qr-bildirim-ic">'+
+      logoHtml+
+      '<div class="qr-bildirim-marka">'+SPLASH.bildirimBaslik+'</div>'+
+      '<div class="qr-bildirim-metin">'+SPLASH.bildirimMetin+'</div>'+
+      '<div class="qr-bildirim-alerjen">⚠️ '+SPLASH.alerjenUyari+'</div>'+
+      '<button class="qr-bildirim-devam" onclick="bildirimGec()">Devam et →</button>'+
+      '<div class="qr-bildirim-bar"><div class="qr-bildirim-bar-fill"></div></div>'+
+    '</div>'+
+  '</div>';
+}
+function bildirimGec(){
+  clearTimeout(QR._bildirimTimer);
+  // cihaz hafızası varsa → tanı, yoksa → karşılama
   if(DEVICE_MEMORY && musteriBul(DEVICE_MEMORY)){
     QR.musteri = musteriBul(DEVICE_MEMORY);
     QR.kisi = QR.musteri.ad; QR.tel = QR.musteri.tel;
@@ -14171,6 +14534,7 @@ yaziciYukle();   // fiş yazıcı ayarlarını geri yükle
 musteriReklamYukle(); // müşteri ekranı reklam görsellerini geri yükle
 personelAdYukle();    // bu cihazdaki personel adını geri yükle
 sadakatYukle();       // Mag puan kuru/oran ayarlarını geri yükle
+splashYukle();        // QR intro ayarlarını geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
