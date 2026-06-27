@@ -43,15 +43,10 @@ nav{
 }
 .nav-social a:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ── İLK EKRAN (hero + kartlar + istatistik tek viewport'ta) ── */
-.hero-screen{
-  display:flex;flex-direction:column;
-  height:100vh;
-}
 /* ── HERO ── */
 .hero{
   position:relative;
-  flex:1 1 auto;min-height:0;
+  min-height:100vh;
   overflow:hidden;
   display:flex;align-items:center;
 }
@@ -74,13 +69,13 @@ nav{
 .hero-left{
   position:relative;z-index:2;
   display:flex;flex-direction:column;justify-content:center;
-  padding:86px 56px 22px 72px;
+  padding:140px 56px 80px 72px;
   max-width:680px;
   width:55%;
 }
 /* Sağ alıntı overlay */
 .hero-right-quote{
-  position:absolute;bottom:30px;right:48px;z-index:2;
+  position:absolute;bottom:80px;right:48px;z-index:2;
   max-width:200px;text-align:right;
 }
 .hero-right-quote p{
@@ -94,50 +89,50 @@ nav{
 
 /* içerik sol */
 .hero-eyebrow{
-  display:flex;align-items:center;gap:12px;margin-bottom:12px;
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
 }
 .hero-eyebrow::before{content:'';width:36px;height:1px;background:var(--gold);}
 .hero-eyebrow span{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
 
 .hero-name{
   font-family:'Playfair Display',serif;
-  font-size:clamp(36px,3.8vw,64px);font-weight:900;
-  line-height:.95;letter-spacing:-1px;color:var(--white);
-  margin-bottom:8px;
+  font-size:clamp(56px,5.5vw,92px);font-weight:900;
+  line-height:.92;letter-spacing:-1px;color:var(--white);
+  margin-bottom:18px;
 }
 .hero-name span{color:var(--gold);display:block;}
 
 .hero-titles{
-  font-size:10.5px;font-weight:500;letter-spacing:1.5px;
+  font-size:11px;font-weight:500;letter-spacing:2px;
   color:var(--gold-light);text-transform:uppercase;
-  margin-bottom:14px;line-height:1.9;
+  margin-bottom:36px;line-height:2.2;
 }
 .hero-titles b{color:var(--cream);}
 
 /* büyük tırnak işareti */
 .hero-quote-mark{
   font-family:'Cormorant Garamond',serif;
-  font-size:44px;line-height:.5;color:var(--gold);
-  margin-bottom:2px;display:block;opacity:.7;
+  font-size:80px;line-height:.5;color:var(--gold);
+  margin-bottom:8px;display:block;opacity:.7;
 }
 .hero-quote{
   font-family:'Cormorant Garamond',serif;
-  font-size:17px;font-style:italic;font-weight:300;
-  line-height:1.4;color:var(--cream);
-  margin-bottom:12px;
-  padding-left:16px;
+  font-size:22px;font-style:italic;font-weight:300;
+  line-height:1.5;color:var(--cream);
+  margin-bottom:28px;
+  padding-left:20px;
   border-left:2px solid var(--gold);
 }
 .hero-bio{
-  font-size:12.5px;line-height:1.55;color:var(--muted);
-  max-width:460px;margin-bottom:8px;
+  font-size:13.5px;line-height:1.85;color:var(--muted);
+  max-width:460px;margin-bottom:16px;
 }
-.hero-bio + .hero-bio{margin-bottom:16px;}
+.hero-bio + .hero-bio{margin-bottom:44px;}
 
 .hero-cta{display:flex;gap:14px;}
 .btn-gold{
   display:inline-flex;align-items:center;gap:8px;
-  padding:11px 26px;background:var(--gold);
+  padding:14px 30px;background:var(--gold);
   color:var(--dark);font-size:10px;font-weight:700;letter-spacing:2px;
   text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;
   transition:all .3s;
@@ -145,7 +140,7 @@ nav{
 .btn-gold:hover{background:var(--gold-light);transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,168,76,.3);}
 .btn-outline{
   display:inline-flex;align-items:center;gap:8px;
-  padding:11px 26px;border:1px solid rgba(201,168,76,.4);
+  padding:14px 30px;border:1px solid rgba(201,168,76,.4);
   color:var(--gold-light);font-size:10px;font-weight:700;letter-spacing:2px;
   text-transform:uppercase;text-decoration:none;transition:all .3s;
 }
@@ -154,12 +149,11 @@ nav{
 /* ── 5 KART GRID ── */
 .cards-section{
   display:grid;grid-template-columns:repeat(5,1fr);
-  grid-auto-rows:215px;
   border-top:1px solid rgba(201,168,76,.15);
 }
 .card{
   position:relative;overflow:hidden;
-  height:100%;
+  min-height:340px;
   display:flex;flex-direction:column;justify-content:flex-end;
   padding:0;
   border-right:1px solid rgba(201,168,76,.12);
@@ -201,13 +195,13 @@ nav{
 
 .card-content{
   position:relative;z-index:2;
-  padding:22px 22px 24px;
+  padding:36px 28px 36px;
   display:flex;flex-direction:column;
   align-items:flex-start;
   height:100%;justify-content:space-between;
 }
-.card-top{padding-top:16px;}
-.card-icon{font-size:30px;color:var(--gold);margin-bottom:10px;display:block;}
+.card-top{padding-top:36px;}
+.card-icon{font-size:40px;color:var(--gold);margin-bottom:16px;display:block;}
 .card-title{
   font-family:'Raleway',sans-serif;
   font-size:11px;font-weight:700;letter-spacing:2.5px;
@@ -231,7 +225,6 @@ nav{
   margin-top:24px;
 }
 .card-link:hover{background:var(--gold);color:var(--dark);}
-.card-link{margin-top:12px;padding:9px 18px;}
 
 /* kitap görselleri placeholder — kart 2 */
 .card-books{
@@ -252,27 +245,27 @@ nav{
   background:var(--dark3);
   border-top:1px solid rgba(201,168,76,.18);
   border-bottom:1px solid rgba(201,168,76,.1);
-  padding:10px 48px;
+  padding:24px 48px;
   display:flex;justify-content:space-between;align-items:center;
   flex-wrap:wrap;gap:20px;
 }
-.stat{display:flex;align-items:center;gap:12px;}
+.stat{display:flex;align-items:center;gap:16px;}
 .stat-icon-wrap{
-  width:36px;height:36px;
+  width:44px;height:44px;
   border:1px solid rgba(201,168,76,.25);border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-size:15px;color:var(--gold);flex-shrink:0;
+  font-size:18px;color:var(--gold);flex-shrink:0;
 }
 .stat-texts{}
 .stat-main{
-  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:700;
-  color:var(--gold-light);display:block;line-height:1.15;
+  font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;
+  color:var(--gold-light);display:block;line-height:1.2;
 }
 .stat-sub{
-  font-size:8.5px;font-weight:600;letter-spacing:1.2px;
+  font-size:9px;font-weight:600;letter-spacing:1.5px;
   text-transform:uppercase;color:var(--muted);
 }
-.stat-sep{width:1px;height:30px;background:rgba(201,168,76,.15);}
+.stat-sep{width:1px;height:36px;background:rgba(201,168,76,.15);}
 
 /* ── SECTIONS ── */
 .section{position:relative;}
@@ -528,46 +521,172 @@ footer{
 .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
 .d4{transition-delay:.4s;}.d5{transition-delay:.5s;}
 
-@media(min-width:1101px) and (max-height:760px){
-  .hero-bio + .hero-bio{display:none;}
-  .hero-right-quote{display:none;}
-  .hero-name{font-size:clamp(30px,3.2vw,52px);margin-bottom:4px;}
-  .hero-quote{margin-bottom:8px;}
-  .hero-left{padding-top:74px;padding-bottom:14px;}
-  .cards-section{grid-auto-rows:160px;}
+/* ── HAMBURGER ── */
+.hamburger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;cursor:pointer;z-index:200;background:none;border:none;padding:4px;
 }
+.hamburger span{
+  display:block;height:2px;background:var(--gold);border-radius:2px;
+  transition:all .3s;transform-origin:center;
+}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* MOBİL MENÜ DRAWER */
+.mobile-menu{
+  display:none;position:fixed;inset:0;z-index:150;
+  background:rgba(13,11,8,.98);
+  flex-direction:column;align-items:center;justify-content:center;gap:0;
+  backdrop-filter:blur(12px);
+}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{
+  font-family:'Cormorant Garamond',serif;font-size:32px;font-style:italic;font-weight:600;
+  color:var(--cream2);text-decoration:none;
+  padding:18px 0;width:100%;text-align:center;
+  border-bottom:1px solid rgba(201,168,76,.08);
+  transition:color .3s;
+}
+.mobile-menu a:hover{color:var(--gold);}
+.mobile-menu-social{
+  display:flex;gap:16px;margin-top:40px;
+}
+.mobile-menu-social a{
+  width:44px;height:44px;border:1px solid rgba(201,168,76,.3);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--cream2);font-size:16px;text-decoration:none;border-bottom:none;
+  padding:0;width:44px;
+}
+
 @media(max-width:1100px){
-  .hero-screen{min-height:auto;}
-  .hero{flex:none;min-height:88vh;}
-  .hero-left{width:70%;padding:110px 32px 50px 40px;}
-  .cards-section{grid-template-columns:repeat(2,1fr);grid-auto-rows:auto;}
-  .card{height:auto;min-height:260px;}
+  nav{padding:16px 24px;}
+  .hero-left{width:70%;padding:120px 32px 80px 40px;}
+  .cards-section{grid-template-columns:repeat(2,1fr);}
   .about-grid,.heritage-grid,.contact-grid{grid-template-columns:1fr;}
   .books-grid{grid-template-columns:1fr 1fr;}
-  .nav{padding:16px 24px;}
   .section-inner{padding:64px 24px;}
-  .stats-bar{padding:18px 24px;}
+  .stats-bar{padding:20px 24px;}
   .press-grid{grid-template-columns:repeat(2,1fr);}
   .edu-grid{grid-template-columns:1fr;}
   footer{flex-direction:column;text-align:center;padding:32px 24px;}
 }
-@media(max-width:720px){
-  .hero{min-height:74vh;}
-  .hero-left{width:100%;padding:100px 24px 60px;}
-  .hero-right-quote{display:none;}
-  .cards-section{grid-template-columns:1fr;grid-auto-rows:auto;}
-  .card{height:auto;min-height:160px;}
-  .books-grid{grid-template-columns:1fr;}
-  .portfolio-grid{grid-template-columns:repeat(2,1fr);}
-  .world-grid{grid-template-columns:repeat(3,1fr);}
+
+@media(max-width:768px){
+  /* NAV */
+  nav{padding:14px 20px;}
   .nav-links{display:none;}
+  .nav-social{display:none;}
+  .hamburger{display:flex;}
+
+  /* HERO */
+  .hero{min-height:100svh;}
+  .hero::before{
+    background:
+      linear-gradient(to bottom, rgba(13,11,8,0.55) 0%, rgba(13,11,8,0.85) 60%, rgba(13,11,8,0.98) 100%);
+  }
+  .hero-left{
+    width:100%;padding:90px 20px 60px;
+    justify-content:flex-end;
+    min-height:100svh;
+  }
+  .hero-name{font-size:clamp(52px,14vw,80px);}
+  .hero-titles{font-size:10px;letter-spacing:1.5px;margin-bottom:24px;}
+  .hero-quote{font-size:17px;margin-bottom:20px;}
+  .hero-quote-mark{font-size:60px;}
+  .hero-bio{font-size:13px;max-width:100%;}
+  .hero-cta{flex-direction:column;gap:10px;}
+  .btn-gold,.btn-outline{width:100%;justify-content:center;padding:16px 20px;font-size:11px;}
+  .hero-right-quote{display:none;}
+
+  /* KARTLAR — dikey scroll */
+  .cards-section{
+    grid-template-columns:1fr;
+    border-top:1px solid rgba(201,168,76,.15);
+  }
+  .card{
+    min-height:200px;
+    border-right:none;
+    border-bottom:1px solid rgba(201,168,76,.1);
+  }
+  .card:last-child{border-bottom:none;}
+  .card-content{padding:28px 20px;}
+  .card-icon{font-size:32px;margin-bottom:10px;}
+  .card-desc{display:block !important;}/* mobilde her zaman göster */
+  .card-books{display:none;}
+
+  /* İSTATİSTİK BAR */
+  .stats-bar{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:0;padding:0;
+  }
+  .stat{
+    padding:20px 16px;
+    border-bottom:1px solid rgba(201,168,76,.1);
+    border-right:1px solid rgba(201,168,76,.1);
+  }
+  .stat:nth-child(even){border-right:none;}
+  .stat-sep{display:none;}
+  .stat-icon-wrap{width:36px;height:36px;font-size:15px;}
+  .stat-main{font-size:13px;}
+  .stat-sub{font-size:8px;}
+
+  /* SECTION GENEL */
+  .section-inner{padding:48px 20px;}
+  .section-title{font-size:clamp(28px,8vw,44px);margin-bottom:36px;}
+
+  /* HAKKIMDA */
+  .about-grid{grid-template-columns:1fr;gap:40px;}
+  .about-photo-frame::before,.about-photo-frame::after{display:none;}
+  .about-photo-frame img{width:100%;}
+  .award-badge{width:80px;height:80px;bottom:-12px;right:-12px;}
+  .award-badge .aw-year{font-size:16px;}
+  .award-badge .aw-label{font-size:6px;}
+  .roles-grid{grid-template-columns:1fr 1fr;gap:8px;}
+  .about-intro{font-size:18px;}
+
+  /* FOTOĞRAFÇILIK */
+  .tabs{overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+  .tab{white-space:nowrap;padding:12px 16px;font-size:9px;}
+  .portfolio-grid{grid-template-columns:1fr 1fr;gap:2px;}
+  .p-item.big{grid-column:span 2;}
+  .world-grid{grid-template-columns:repeat(2,1fr);gap:8px;}
+
+  /* YAZARLIK */
+  .books-grid{grid-template-columns:1fr;gap:24px;}
+  .book-cover{aspect-ratio:16/9;}
+
+  /* KÜLTÜREL MİRAS */
+  .heritage-grid{grid-template-columns:1fr;gap:40px;}
+  .af-year{font-size:48px;}
+  .award-feature-box{padding:32px 24px;}
+
+  /* EĞİTİM */
+  .edu-grid{grid-template-columns:1fr;gap:2px;}
+  .edu-card{padding:32px 24px;}
+  .edu-num{font-size:60px;}
+
+  /* GAZETECİLİK */
+  .press-grid{grid-template-columns:1fr 1fr;gap:2px;}
+  .press-item{padding:24px 16px;}
+  .press-name{font-size:15px;}
+
+  /* İLETİŞİM */
+  .contact-grid{grid-template-columns:1fr;gap:40px;}
+  .contact-intro{font-size:17px;}
+  .cform input,.cform textarea{font-size:16px;/* iOS zoom engelle */}
+
+  /* FOOTER */
+  footer{flex-direction:column;text-align:center;padding:32px 20px;gap:16px;}
+  .footer-links{flex-wrap:wrap;justify-content:center;gap:16px;}
 }
 </style>
 </head>
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="mainNav">
   <a href="#" class="nav-logo">Enver Şengül</a>
   <ul class="nav-links">
     <li><a href="#hakkimda">Hakkımda</a></li>
@@ -582,10 +701,29 @@ footer{
     <a href="#" title="YouTube">▷</a>
     <a href="#" title="E-posta">✉</a>
   </div>
+  <button class="hamburger" id="hamburger" aria-label="Menü">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
+<!-- MOBİL MENÜ -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hakkimda" onclick="closeMenu()">Hakkımda</a>
+  <a href="#fotografcilik" onclick="closeMenu()">Fotoğrafçılığım</a>
+  <a href="#yazarlik" onclick="closeMenu()">Yazarlığım</a>
+  <a href="#kulturel" onclick="closeMenu()">Kültürel Miras</a>
+  <a href="#egitim" onclick="closeMenu()">Eğitim</a>
+  <a href="#gazetecilik" onclick="closeMenu()">Gazetecilik</a>
+  <a href="#iletisim" onclick="closeMenu()">İletişim</a>
+  <div class="mobile-menu-social">
+    <a href="#">&#9651;</a>
+    <a href="#">f</a>
+    <a href="#">▷</a>
+    <a href="#">✉</a>
+  </div>
+</div>
+
 <!-- HERO: Sol metin | Sağ fotoğraf -->
-<div class="hero-screen">
 <section class="hero">
   <!-- SOL -->
   <div class="hero-left">
@@ -621,7 +759,7 @@ footer{
     <div class="card-bottom-line"></div>
     <div class="card-content">
       <div class="card-top">
-       
+        <span class="card-icon">📷</span>
         <h3 class="card-title">Fotoğrafçılığım</h3>
         <p class="card-desc">Portfolyolar, yurt içi ve yurt dışı fotoğraf çalışmaları, yazılar, sunumlar, atölyeler ve daha fazlası.</p>
       </div>
@@ -637,10 +775,14 @@ footer{
     <div class="card-bottom-line"></div>
     <div class="card-content">
       <div class="card-top">
-       
+        <span class="card-icon">✍️</span>
         <h3 class="card-title">Yazarlığım</h3>
         <p class="card-desc">Romanlarım, imza günlerim, söyleşilerim ve yazdığım eserler.</p>
-        
+        <div class="card-books">
+          <div class="mini-book mini-book-1">Darüşşifa<br>Delilik<br>Mevsimi</div>
+          <div class="mini-book mini-book-2">Kayıp<br>Zamanın<br>Bekçisi</div>
+          <div class="mini-book mini-book-3">Kuşatma</div>
+        </div>
       </div>
       <div class="card-bottom">
         <a href="#yazarlik" class="card-link">İncele →</a>
@@ -654,7 +796,7 @@ footer{
     <div class="card-bottom-line"></div>
     <div class="card-content">
       <div class="card-top">
-      
+        <span class="card-icon">🏛️</span>
         <h3 class="card-title">Kültürel Miras</h3>
         <p class="card-desc">Müze yöneticiliğim, Avrupa Müze Ödülü hikâyesi ve kültürel miras çalışmalarım.</p>
       </div>
@@ -670,7 +812,7 @@ footer{
     <div class="card-bottom-line"></div>
     <div class="card-content">
       <div class="card-top">
-       
+        <span class="card-icon">🎓</span>
         <h3 class="card-title">Eğitim & Atölyeler</h3>
         <p class="card-desc">Eğitmenliğim, atölyelerim, eğitici videolar ve fotoğraf paylaşımlarım.</p>
       </div>
@@ -686,7 +828,7 @@ footer{
     <div class="card-bottom-line"></div>
     <div class="card-content">
       <div class="card-top">
-    
+        <span class="card-icon">📰</span>
         <h3 class="card-title">Gazetecilik & Yazılar</h3>
         <p class="card-desc">Muhabirlik, köşe yazarlığı, yazılarım ve basında yer alan çalışmalarım.</p>
       </div>
@@ -739,7 +881,6 @@ footer{
     </div>
   </div>
 </div>
-</div><!-- /.hero-screen -->
 
 <div class="gold-line"></div>
 
@@ -1056,7 +1197,7 @@ footer{
 <script>
 // Nav scroll
 window.addEventListener('scroll',()=>{
-  const n=document.querySelector('nav');
+  const n=document.getElementById('mainNav');
   if(window.scrollY>50){
     n.style.background='rgba(13,11,8,0.96)';
     n.style.borderBottom='1px solid rgba(201,168,76,.15)';
@@ -1069,6 +1210,20 @@ window.addEventListener('scroll',()=>{
     n.style.position='absolute';
   }
 });
+
+// Hamburger
+const ham=document.getElementById('hamburger');
+const mob=document.getElementById('mobileMenu');
+ham.addEventListener('click',()=>{
+  ham.classList.toggle('open');
+  mob.classList.toggle('open');
+  document.body.style.overflow=mob.classList.contains('open')?'hidden':'';
+});
+function closeMenu(){
+  ham.classList.remove('open');
+  mob.classList.remove('open');
+  document.body.style.overflow='';
+}
 
 // AOS
 const obs=new IntersectionObserver(entries=>{
