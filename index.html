@@ -446,6 +446,123 @@ tr:last-child td{border-bottom:none}
 .uf-textarea{min-height:60px; resize:vertical; font-family:inherit}
 .uf-ikili{display:flex; gap:12px}
 .uf-ikili .uf-alan{flex:1}
+.uf-mag-alan{margin-top:12px}
+.uf-mag-not{font-weight:400; color:var(--ink-3); font-size:11px}
+.uf-mag-row{display:flex; align-items:center; gap:12px}
+.uf-mag-input{max-width:120px}
+.uf-mag-kars{font-size:13px; font-weight:700; color:var(--brand-d)}
+/* QR menü Mag puan rozeti (dikkat çekici) */
+.qr-mag-rozet{display:inline-flex; align-items:center; gap:3px; background:linear-gradient(135deg,#fff0d6,#ffe0a8); color:#9a6212; border:1px solid #f0c878; border-radius:99px; padding:3px 9px; font-size:11.5px; font-weight:800; white-space:nowrap; box-shadow:0 1px 4px rgba(240,167,40,.25); animation:magPulse 2s ease-in-out infinite}
+@keyframes magPulse{0%,100%{transform:scale(1);box-shadow:0 1px 4px rgba(240,167,40,.25)}50%{transform:scale(1.04);box-shadow:0 2px 10px rgba(240,167,40,.45)}}
+/* === MAG PUAN SEKMESİ === */
+.mag-sekme-bar{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap}
+.mag-sekme{padding:10px 16px; border-radius:11px; background:var(--surface-2); border:1.5px solid var(--line); font-size:14px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.mag-sekme.on{background:var(--brand); border-color:var(--brand); color:#fff}
+.mag-ayar-baslik{font-size:16px; font-weight:800; color:var(--cocoa); margin-bottom:6px}
+.mag-ayar-aciklama{font-size:12.5px; color:var(--ink-3); line-height:1.5; margin-bottom:16px}
+.mag-kur-row{display:flex; align-items:center; gap:12px; margin-bottom:10px}
+.mag-kur-lbl{font-size:18px; font-weight:800; color:var(--ink)}
+.mag-kur-input{width:120px; padding:12px 14px; border-radius:11px; border:2px solid var(--brand); font-size:20px; font-weight:800; text-align:center; color:var(--ink); background:var(--surface)}
+.mag-kur-tl{font-size:18px; font-weight:700; color:var(--ink-2)}
+.mag-kur-ornek{font-size:13px; color:var(--brand-d); font-weight:700; background:var(--brand-soft); border-radius:9px; padding:9px 13px; margin-bottom:16px; display:inline-block}
+.mag-kur-kaydet{padding:13px 22px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer; display:block}
+/* raporlama */
+.mag-rapor-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-bottom:14px}
+.mag-rapor-kart{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px; box-shadow:var(--shadow)}
+.mag-rapor-kart.yesil{background:var(--ok-soft); border-color:#bfe3cd}
+.mag-rapor-kart.kirmizi{background:var(--err-soft); border-color:#f0c0ba}
+.mrk-ust{font-size:12.5px; font-weight:700; color:var(--ink-2); margin-bottom:8px}
+.mrk-deger{font-size:32px; font-weight:900; color:var(--cocoa); line-height:1}
+.mrk-alt{font-size:12px; color:var(--ink-3); margin-top:4px; font-weight:600}
+.mag-rapor-not{font-size:12.5px; color:var(--ink-3); line-height:1.6; background:var(--surface-2); border-radius:10px; padding:12px 14px; margin-bottom:18px}
+.mag-top-baslik{font-size:15px; font-weight:800; color:var(--cocoa); margin-bottom:10px}
+.mag-top-liste{display:flex; flex-direction:column; gap:8px}
+.mag-top-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:11px 14px}
+.mag-top-no{width:26px; height:26px; border-radius:50%; background:var(--brand-soft); color:var(--brand-d); font-weight:800; font-size:13px; display:grid; place-items:center}
+.mag-top-ad{flex:1; font-weight:700; font-size:14px}
+.mag-top-mag{font-weight:800; color:var(--brand-d); font-size:14px; text-align:right}
+.mag-top-mag small{display:block; font-size:11px; color:var(--ink-3); font-weight:600}
+/* üye tablosu */
+.mag-uye-bilgi{font-size:13px; color:var(--ink-2); font-weight:600; margin-bottom:10px}
+.mag-uye-tablo-sar{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--surface)}
+.mag-uye-tablo{width:100%; border-collapse:collapse; font-size:13.5px}
+.mag-uye-tablo th{background:var(--surface-2); padding:12px 14px; text-align:left; font-weight:800; font-size:12px; color:var(--cocoa); border-bottom:2px solid var(--line); white-space:nowrap}
+.mag-uye-tablo th.sag{text-align:right}
+.mag-uye-tablo td{padding:12px 14px; border-bottom:1px solid var(--line); vertical-align:middle}
+.mag-uye-tablo td.sag{text-align:right}
+.mag-uye-satir{cursor:pointer}
+.mag-uye-satir:hover td{background:#fdf6ec}
+.mag-uye-ad{font-weight:700}
+.mag-uye-mail{font-size:12.5px; color:var(--ink-2)}
+.mag-uye-tel{font-size:12px; color:var(--ink-3)}
+.mag-uye-mag{font-weight:800; color:var(--brand-d); font-size:15px}
+.mag-uye-tl{font-weight:700; color:var(--ink)}
+.mag-uye-ok{color:var(--ink-3); font-size:18px; font-weight:800}
+.mag-uye-bos{text-align:center; padding:24px; color:var(--ink-3)}
+/* üye detay modal */
+.mag-uye-modal-ic{background:#fff; border-radius:18px; max-width:480px; width:94%; margin:auto; max-height:88vh; display:flex; flex-direction:column}
+.mag-uye-modal-bas{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; font-weight:800; color:var(--cocoa)}
+.mag-uye-modal-govde{padding:18px 20px; overflow-y:auto}
+.mag-uye-ozet{display:flex; gap:12px; margin-bottom:14px}
+.muo-kart{flex:1; background:var(--brand-soft); border-radius:12px; padding:14px; text-align:center}
+.muo-lbl{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:5px}
+.muo-deger{font-size:26px; font-weight:900; color:var(--brand-d); line-height:1}
+.muo-alt{font-size:12px; color:var(--ink-3); margin-top:3px; font-weight:600}
+.mag-uye-iletisim{display:flex; flex-direction:column; gap:5px; font-size:13.5px; color:var(--ink-2); background:var(--surface-2); border-radius:10px; padding:12px 14px; margin-bottom:16px}
+.mag-islem-baslik{font-size:14px; font-weight:800; color:var(--cocoa); margin-bottom:10px}
+.mag-islem-liste{display:flex; flex-direction:column; gap:8px}
+.mag-islem-bos{text-align:center; padding:20px; color:var(--ink-3); font-size:13px}
+.mag-islem-satir{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:11px; padding:11px 13px}
+.mag-islem-tip{font-size:12.5px; font-weight:800}
+.mag-islem-tip.kazanim{color:var(--ok)}
+.mag-islem-tip.harcama{color:var(--err)}
+.mag-islem-ac{font-size:13px; color:var(--ink); margin-top:3px}
+.mag-islem-tarih{font-size:11px; color:var(--ink-3); margin-top:3px}
+.mag-islem-deger{font-weight:800; font-size:15px; text-align:right; white-space:nowrap}
+.mag-islem-deger.kazanim{color:var(--ok)}
+.mag-islem-deger.harcama{color:var(--err)}
+.mag-islem-deger small{display:block; font-size:11px; color:var(--ink-3); font-weight:600}
+/* === KADEME (Bronz/Gümüş/Altın) === */
+.mag-kademe-rozet{display:inline-flex; align-items:center; gap:3px; border:1.5px solid; border-radius:99px; padding:3px 10px; font-size:12px; font-weight:800; white-space:nowrap}
+.mag-kademe-blok{border:1.5px solid; border-radius:14px; padding:14px 16px; margin-bottom:14px}
+.mag-kademe-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:6px}
+.mag-kademe-ad{font-size:18px; font-weight:900}
+.mag-kademe-carpan{font-size:12.5px; font-weight:700; color:var(--ink-2); background:rgba(0,0,0,.05); border-radius:99px; padding:4px 11px}
+.mag-kademe-ilerleme{height:8px; background:rgba(0,0,0,.08); border-radius:99px; overflow:hidden; margin-bottom:7px}
+.mag-kademe-bar{height:100%; border-radius:99px; transition:width .4s}
+.mag-kademe-kalan{font-size:12.5px; font-weight:700; color:var(--ink-2)}
+/* kademe ayar tablosu */
+.mag-kademe-tablo{margin:14px 0}
+.mag-kademe-th,.mag-kademe-tr{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:10px; align-items:center}
+.mag-kademe-th{font-size:11.5px; font-weight:800; color:var(--ink-3); padding:0 0 8px; border-bottom:1px solid var(--line); margin-bottom:8px}
+.mag-kademe-tr{padding:7px 0}
+.mag-kademe-isim{font-size:14px; font-weight:800}
+.mag-kademe-input{width:100%; padding:9px 11px; border-radius:9px; border:1.5px solid var(--line); font-size:14px; font-weight:700; text-align:center; background:var(--surface); color:var(--ink)}
+.mag-kademe-input:disabled{opacity:.5; background:var(--surface-2)}
+.mag-kademe-carpan-row{display:flex; align-items:center; gap:6px}
+.mag-kademe-x{font-size:14px; font-weight:800; color:var(--ink-3)}
+.mag-kademe-not{font-size:11.5px; color:var(--ink-3); line-height:1.5; margin-bottom:14px}
+/* kademe dağılım kartları */
+.mag-kademe-dagilim{display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:12px}
+.mag-kdg-kart{background:var(--surface); border:1.5px solid var(--line); border-radius:13px; padding:14px; text-align:center}
+.mag-kdg-ust{font-size:14px; font-weight:800; margin-bottom:6px}
+.mag-kdg-say{font-size:28px; font-weight:900; color:var(--cocoa); line-height:1}
+.mag-kdg-alt{font-size:11.5px; color:var(--ink-3); margin-top:4px; font-weight:600}
+/* === MAG KUTLAMA POP-UP (sepete ekleme patlaması) === */
+.mag-kutlama-bg{position:fixed; inset:0; z-index:300; display:none; align-items:center; justify-content:center; pointer-events:none; background:rgba(28,20,8,0)}
+.mag-kutlama-bg.on{display:flex; animation:magBgFade 1.8s ease}
+@keyframes magBgFade{0%{background:rgba(28,20,8,0)}15%{background:rgba(28,20,8,.35)}80%{background:rgba(28,20,8,.35)}100%{background:rgba(28,20,8,0)}}
+.mag-kutlama-ic{position:relative; width:100%; max-width:420px; height:100%; display:flex; align-items:center; justify-content:center}
+.mag-kutlama-patlama{position:relative; z-index:2; text-align:center; background:linear-gradient(135deg,#fff8ec,#ffeccb); border:2px solid #f0c878; border-radius:24px; padding:30px 36px; box-shadow:0 20px 60px rgba(180,120,20,.5); animation:magPatla .55s cubic-bezier(.18,1.5,.4,1)}
+@keyframes magPatla{0%{transform:scale(.2) rotate(-12deg);opacity:0}60%{transform:scale(1.12) rotate(4deg);opacity:1}100%{transform:scale(1) rotate(0)}}
+.mag-kutlama-ikon{font-size:60px; animation:magZipla .6s ease infinite alternate}
+@keyframes magZipla{0%{transform:translateY(0) scale(1)}100%{transform:translateY(-8px) scale(1.08)}}
+.mag-kutlama-puan{font-size:34px; font-weight:900; color:#d8851a; margin-top:6px; text-shadow:0 2px 8px rgba(216,133,26,.3); letter-spacing:.5px}
+.mag-kutlama-slogan{font-size:17px; font-weight:800; color:#9a6212; margin-top:8px; letter-spacing:1px}
+.mag-kutlama-alt{font-size:14px; font-weight:700; color:#b8841a; margin-top:10px; background:rgba(240,167,40,.18); border-radius:99px; padding:6px 16px; display:inline-block}
+.mag-konfeti-kat{position:absolute; inset:0; overflow:hidden; z-index:1; pointer-events:none}
+.mag-konfeti{position:absolute; top:-20px; width:11px; height:11px; border-radius:2px; opacity:.95; animation:magKonfetiDus linear forwards}
+@keyframes magKonfetiDus{0%{top:-20px;opacity:1}100%{top:105%;opacity:.3}}
 .uf-aktif{display:flex; align-items:center; gap:10px; cursor:pointer; background:var(--surface-2); padding:11px 14px; border-radius:10px}
 .uf-aktif span{font-size:13px; font-weight:600; color:var(--ink-2)}
 .uf-grup-baslik{font-size:14px; font-weight:800; margin-top:8px; padding-top:14px; border-top:1px solid var(--line)}
@@ -1683,6 +1800,28 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qcp-bas{font-size:21px; font-weight:900; color:var(--ok); margin-bottom:12px}
 .qcp-mesaj{font-size:16px; color:var(--ink-2); line-height:1.6; margin-bottom:20px}
 .qcp-tamam{width:100%; padding:15px; border-radius:13px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer}
+/* === MÜŞTERİ EKRANI SEKMESİ === */
+.me-durum-row{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap}
+.me-reklam-bolum{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px; box-shadow:var(--shadow)}
+.me-reklam-bolum-bas{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
+.me-reklam-bolum-bas span:first-child{font-size:16px; font-weight:800; color:var(--cocoa)}
+.me-reklam-say{font-size:12px; font-weight:700; color:var(--ink-3)}
+.me-reklam-aciklama{font-size:12.5px; color:var(--ink-3); line-height:1.5; margin-bottom:14px}
+.me-reklam-bos{font-size:13px; color:var(--ink-3); background:var(--surface-2); border-radius:10px; padding:12px 14px; margin-top:12px; line-height:1.5}
+.mte-reklam-kart .me-reklam-no{position:absolute; bottom:6px; left:6px; background:rgba(0,0,0,.6); color:#fff; font-size:11px; font-weight:800; border-radius:5px; padding:2px 7px}
+.me-onizle-row{margin-bottom:14px}
+.me-onizle-btn{padding:12px 18px; border-radius:11px; background:var(--cocoa); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer}
+/* önizleme modalı */
+.meo-ic{background:#fff; border-radius:18px; padding:18px; max-width:560px; width:94%; margin:auto}
+.meo-ekran{position:relative; aspect-ratio:16/9; border-radius:12px; overflow:hidden; background:linear-gradient(135deg,#2a1c0c,#1a1208); display:flex; align-items:center; justify-content:center}
+.meo-img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .8s}
+.meo-img.on{opacity:1}
+.meo-logo{position:relative; text-align:center; z-index:2}
+.meo-marka{font-size:44px; font-weight:900; letter-spacing:1px; color:#f0a728; text-shadow:0 3px 16px rgba(0,0,0,.5)}
+.meo-alt{font-size:16px; color:#e8d5b8; margin-top:6px}
+.meo-hos{position:absolute; bottom:24px; left:0; right:0; text-align:center; font-size:18px; color:#fff; opacity:.9; z-index:2}
+.meo-bilgi{font-size:12.5px; color:var(--ink-3); text-align:center; margin:14px 0; line-height:1.5}
+.meo-kapat{width:100%; padding:13px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
 .ssil-butonlar{display:flex; gap:10px; margin-top:18px}
 .ssil-vazgec{flex:1; padding:13px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:700; cursor:pointer}
 .ssil-onayla{flex:1.3; padding:13px; border-radius:11px; background:var(--err); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
@@ -1814,7 +1953,10 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-img-ph{display:grid; place-items:center}
 .qr-card-body{display:flex; align-items:center; gap:12px; padding:14px 16px}
 .qr-card-info{flex:1; min-width:0}
-.qr-card-ad{font-weight:800; font-size:17px; line-height:1.25; margin-bottom:3px}
+.qr-card-ad{font-weight:800; font-size:17px; line-height:1.25}
+.qr-card-ad-row{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:3px}
+.qr-card-ad-row .qr-card-ad{flex:1; margin-bottom:0}
+.qr-card-ad-row .qr-mag-rozet{flex:none; margin-top:0}
 .qr-card-desc{font-size:12.5px; color:var(--ink-2); line-height:1.4; margin-bottom:7px}
 .qr-card-fiyat{font-weight:800; font-size:18px; color:var(--brand-d)}
 .qr-card-add{flex:none; width:46px; height:46px; border-radius:99px; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-size:28px; font-weight:700; box-shadow:var(--shadow)}
@@ -4504,9 +4646,9 @@ const ROLES = {
   kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", subeSec:true,
            nav:["satis","masalar"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
-           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","personel","yazarkasa","yazicilar","rapor"] },
+           nav:["satis","masalar","masayonetim","stok","fiyat","bayi","kampanya","magpuan","personel","yazarkasa","yazicilar","musteriekran","rapor"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","subeler","yazarkasa","yazicilar","rapor","denetim"] },
+           nav:["canli","masayonetim","recete","stok","fiyat","bayi","kampanya","magpuan","subeler","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
 };
 
 // Yetki kontrolü: belirli aksiyon bu role açık mı?
@@ -4624,6 +4766,8 @@ const NAV_META = {
   stok:    {ic:"📦", ad:"Stok"},
   yazarkasa:{ic:"🧾", ad:"Yazarkasa"},
   yazicilar:{ic:"🖨️", ad:"Yazıcılar"},
+  musteriekran:{ic:"🖥️", ad:"Müşteri Ekranı"},
+  magpuan:{ic:"🎁", ad:"Mag Puan"},
 };
 
 /* ============================================================
@@ -5426,7 +5570,7 @@ function go(key, scrollKoru){
     satis:viewSatis, masalar:viewMasalar, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
     fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel, bayi:viewBayi,
     subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, odemeEkran:viewOdemeEkran,
-    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar
+    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan
   }[key] || viewSatis)(main);
   if(scrollKoru) main.scrollTop = eskiScroll;
 }
@@ -5849,7 +5993,8 @@ function confirmOpt(){
     // QR menüden eklendi → müşteri sepetine
     QR.sepet.push(yeniKalem);
     closeOpt();
-    note(p.ad+" eklendi");
+    const magP = urunMagPuan(p);
+    if(magP>0) magKutlamaPop(magP); else note(p.ad+" eklendi");
     renderQR();
   } else if(OPT_STATE.garson){
     if(GARSON.paketModu){
@@ -6202,7 +6347,7 @@ function renderOdemeYontem(){
   const ki = ob.ki;
   const m = ob.musteri;
   // bozdurma sonrası tahsil edilecek
-  const indirim = ob.kullanilanMag * SADAKAT.bozdurmaKuru;
+  const indirim = ob.kullanilanMag * SADAKAT.magTl;
   const tahsil = Math.max(0, ob.tutar - indirim);
 
   let html = '<div class="opt-head"><span class="opt-emoji">'+(m?'🎁':'👤')+'</span>'+
@@ -6253,7 +6398,7 @@ function renderOdemeYontem(){
         }
       } else {
         // Kod doğrulandı → Mag kullanım kontrolü açık
-        const maxBoz = Math.min(m.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+        const maxBoz = Math.min(m.mag, Math.floor(ob.tutar/SADAKAT.magTl));
         html += '<div class="od-bozdurma od-bz-acik">'+
           '<div class="od-bz-baslik">✓ Doğrulandı · '+SADAKAT.ad+' kullan ('+ob.kullanilanMag+'/'+maxBoz+')</div>'+
           '<div class="od-bz-kontrol">'+
@@ -6296,16 +6441,27 @@ function renderOdemeYontem(){
 
 /* Ödenecek tutara göre kazanılacak Mag (oran + ürün bonusu) */
 function odKazanilacakMag(tutar, ki){
-  let mag = Math.round(tutar * SADAKAT.kazancOrani);
-  // ürün bonusu: bu kişiye atanan ürünlerden (kesir/ürün modunda) veya tüm sepetten
-  // basitlik: sepetteki ürün bonuslarını toplam paya oranla — burada sadece oran + sabit bonusları ekle
-  state.cart.forEach(c=>{
-    if(SADAKAT.urunBonus[c.ad]){
-      // eşit/kişi modunda herkese değil; demo: bonusu hesabı ödeyene ekle (ilk ödeyen)
-      // gerçekte ürün kime aitse ona — şimdilik oransal
-    }
+  // ürün bazlı: ödenen kişinin/sepetin ürünlerinin mag puanlarını topla
+  let mag = 0;
+  const kalemler = (ki && ki.kalemler) ? ki.kalemler : (state.cart||[]);
+  kalemler.forEach(c=>{
+    const p = DEMO_PRODUCTS.find(x=>x.ad===c.ad);
+    const adet = c.adet || c.q || 1;
+    mag += urunMagPuan(p) * adet;
   });
-  return mag;
+  // hiç ürün yoksa (veri eksik) orana düş
+  if(mag===0 && tutar>0) mag = Math.round(tutar * SADAKAT.kazancOrani);
+  return Math.round(mag);
+}
+/* Bir masa/kişi listesi için kazanılacak toplam Mag (ödeme ekranı) */
+function magKazanimHesapla(kalemler){
+  let mag=0;
+  (kalemler||[]).forEach(c=>{
+    const p=DEMO_PRODUCTS.find(x=>x.ad===c.ad);
+    const adet=c.adet||c.q||1;
+    mag += urunMagPuan(p)*adet;
+  });
+  return Math.round(mag);
 }
 
 /* Telefonla müşteri tanı */
@@ -6343,13 +6499,13 @@ function odKodDogrula(){
 /* Mag bozdurma ayarla */
 function odMagAyarla(d){
   const ob = BOL.odemeBekleyen;
-  const maxBoz = Math.min(ob.musteri.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+  const maxBoz = Math.min(ob.musteri.mag, Math.floor(ob.tutar/SADAKAT.magTl));
   ob.kullanilanMag = Math.max(0, Math.min(maxBoz, ob.kullanilanMag + d));
   renderOdemeYontem();
 }
 function odMagMax(){
   const ob = BOL.odemeBekleyen;
-  ob.kullanilanMag = Math.min(ob.musteri.mag, Math.floor(ob.tutar/SADAKAT.bozdurmaKuru));
+  ob.kullanilanMag = Math.min(ob.musteri.mag, Math.floor(ob.tutar/SADAKAT.magTl));
   renderOdemeYontem();
 }
 function odemeKapat(){ document.getElementById("odemeModal").classList.remove("on"); BOL.odemeBekleyen=null; }
@@ -6359,21 +6515,34 @@ function odemeTamamla(yontem, yontemAd){
   const ob = BOL.odemeBekleyen;
   const ki = ob.ki;
   const m = ob.musteri;
-  const indirim = ob.kullanilanMag * SADAKAT.bozdurmaKuru;
+  const indirim = ob.kullanilanMag * SADAKAT.magTl;
   const tahsil = Math.max(0, ob.tutar - indirim);
 
   let sadakatNot = "";
   if(m){
     // KULLANIM: bozdurulan Mag düşülür
-    if(ob.kullanilanMag>0){ m.mag -= ob.kullanilanMag; }
-    // KAZANIM: ödenen tutara göre yeni Mag (bir sonraki birikime dahil)
-    const kazanc = odKazanilacakMag(ob.tutar, ki);
+    if(ob.kullanilanMag>0){
+      m.mag -= ob.kullanilanMag;
+      magIslemEkle(m, "harcama", -ob.kullanilanMag, "Puanla ödeme indirimi");
+    }
+    // KAZANIM: ürün bazlı + kademe çarpanı
+    const hamKazanc = odKazanilacakMag(ob.tutar, ki);
+    const kademe = uyeKademe(m);
+    const kazanc = Math.round(hamKazanc * (kademe.carpan||1));
     m.mag += kazanc;
+    m.toplamKazanim = (m.toplamKazanim||0) + kazanc;  // ömür-boyu (kademe için)
     m.damga += 1;
+    if(kazanc>0){
+      const carpanNot = (kademe.carpan && kademe.carpan!==1) ? " ×"+kademe.carpan+" ("+kademe.ad+")" : "";
+      magIslemEkle(m, "kazanim", kazanc, "Alışveriş ("+tl(ob.tutar)+" ₺)"+carpanNot);
+    }
+    // kademe atladı mı kontrol
+    const yeniKademe = uyeKademe(m);
+    let kademeNot="";
+    if(yeniKademe.ad!==kademe.ad){ kademeNot=" · "+yeniKademe.ic+" "+yeniKademe.ad+" oldunuz!"; }
     let bedava=false;
     if(m.damga>=DAMGA_HEDEF){ m.damga-=DAMGA_HEDEF; bedava=true; }
-    sadakatNot = " · +"+kazanc+" "+SADAKAT.ad+(bedava?" · 🎉 bedava hak!":"");
-    // gerçekte: customers/{tel} güncellenir (zincir geneli)
+    sadakatNot = " · +"+kazanc+" "+SADAKAT.ad+(bedava?" · 🎉 bedava hak!":"")+kademeNot;
   }
 
   BOL.odenenler[ki] = {tutar:ob.tutar, tahsil:tahsil, yontem:yontemAd, mag:m?m.ad:null};
@@ -7274,6 +7443,7 @@ function viewOdemeEkran(main){
 
   html+=`</div></div>`;
   main.innerHTML=html;
+  window.__odemeHTML = html;  // müşteri ekranı canlı ayna için
 }
 function masaKalemBul(m, kalemId){ return masaKalemBulId(m,kalemId); }
 function masaKalemBulId(m, kalemId){
@@ -7539,6 +7709,7 @@ function musteriSnapshot(){
     tip:"odeme",
     sube: AKTIF_SUBE,
     masaAd: s.ad || m,
+    tamHTML: window.__odemeHTML || "",   // 3 sütun canlı ayna
     kalemler,
     araToplam: hamToplam,
     indirim,
@@ -7590,9 +7761,22 @@ async function musteriEkranAc(){
     if(MUSTERI_PENCERE){ MUSTERI_PENCERE.document.write(html); MUSTERI_PENCERE.document.close(); }
     else return {ok:false, mesaj:"Pop-up engellendi — tarayıcıda izin verin"};
   }
-  // pencere hazır olunca mevcut durumu yolla
-  setTimeout(()=>{ if(state.odeme) musteriEkranGuncelle(); else musteriEkranBosa(); }, 500);
+  // pencere hazır olunca: ana CSS'i aktar + mevcut durumu yolla
+  setTimeout(()=>{
+    musteriCssAktar();
+    if(state.odeme) musteriEkranGuncelle(); else musteriEkranBosa();
+  }, 500);
   return {ok:true};
+}
+/* Ana sayfanın tüm <style> içeriğini müşteri penceresine aktar (3 sütun ayna için) */
+function musteriCssAktar(){
+  if(!MUSTERI_PENCERE || MUSTERI_PENCERE.closed) return;
+  try{
+    let css="";
+    document.querySelectorAll("style").forEach(s=>{ css += s.textContent + "\n"; });
+    const hedef = MUSTERI_PENCERE.document.getElementById("meAnaStil");
+    if(hedef) hedef.textContent = css;
+  }catch(e){}
 }
 function musteriEkranKapat(){
   if(MUSTERI_PENCERE && !MUSTERI_PENCERE.closed) MUSTERI_PENCERE.close();
@@ -7720,7 +7904,13 @@ html,body{height:100%;overflow:hidden;background:#1a1208;color:#fff}
 .me-odendi.kalan{color:#d8493f}
 .me-odendi.tamam{color:#1d7c4d}
 .me-tesekkur{text-align:center;font-size:32px;font-weight:800;color:#1d7c4d;padding:20px}
-</style></head><body>
+/* 3 SÜTUN CANLI AYNA */
+.me-ayna{height:100vh;display:flex;flex-direction:column;background:#faf7f2}
+.me-ayna-bar{background:#6b3f23;color:#fff;text-align:center;padding:10px;font-size:15px;font-weight:800;letter-spacing:.5px;flex-shrink:0}
+.me-ayna-ic{flex:1;min-height:0;overflow:hidden;padding:10px}
+.me-ayna-ic .ode-ekran{height:100%}
+.me-ayna-ic .ode-geri,.me-ayna-ic .ode-fis-yazdir,.me-ayna-ic .ode-musteri-btn,.me-ayna-ic .ode-head-sag{display:none!important}
+</style><style id="meAnaStil"></style></head><body>
 <div class="me-wrap" id="meWrap">
   <div class="me-reklam" id="meReklam">
     <div class="me-logo"><div class="me-marka">MİNİPAN</div><div class="me-alt">Waffle & Pancake</div></div>
@@ -7752,6 +7942,15 @@ html,body{height:100%;overflow:hidden;background:#1a1208;color:#fff}
   }
   function odemeModu(d){
     if(rTimer){ clearInterval(rTimer); rTimer=null; }
+    // 3 SÜTUN CANLI AYNA: kasadaki ödeme ekranının birebir HTML'i
+    if(d.tamHTML){
+      wrap.innerHTML='<div class="me-ayna"><div class="me-ayna-bar">👁️ Ödeme Ekranı</div><div class="me-ayna-ic main">'+d.tamHTML+'</div></div>';
+      // müşteri dokunamasın — tüm etkileşimi kapat
+      var ic=wrap.querySelector('.me-ayna-ic');
+      if(ic){ ic.style.pointerEvents='none'; ic.style.userSelect='none'; }
+      return;
+    }
+    // YEDEK: sade özet (tamHTML yoksa)
     var kalemHtml = (d.kalemler&&d.kalemler.length)
       ? d.kalemler.map(function(k){
           return '<div class="me-kalem"><span class="me-kalem-ad">'+k.ad+
@@ -9455,12 +9654,12 @@ function urunFormAc(pi){
     gruplar = JSON.parse(JSON.stringify(PRODUCT_OPTIONS[p.ad]||[]));
     state.urunForm = {
       pi:pi, eskiAd:p.ad, ad:p.ad, aciklama:p.aciklama||"", emoji:p.emoji,
-      kat:p.kat, fiyat:p.fiyat, aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar
+      kat:p.kat, fiyat:p.fiyat, mag:(p.mag!=null?p.mag:""), aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar
     };
   } else {
     state.urunForm = {
       pi:null, eskiAd:null, ad:"", aciklama:"", emoji:"🍽️",
-      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", aktif:true, gorsel:"", gruplar:[]
+      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", mag:"", aktif:true, gorsel:"", gruplar:[]
     };
   }
   renderUrunForm();
@@ -9500,6 +9699,15 @@ function renderUrunForm(){
       </select></div>
     <div class="uf-alan"><label>Temel fiyat (₺)</label>
       <input class="uf-input" inputmode="numeric" placeholder="0" value="${f.fiyat||''}" oninput="state.urunForm.fiyat=this.value"></div>
+  </div>`;
+  // MAG PUAN alanı
+  const magTlKars = f.mag ? magToTl(parseInt(f.mag)||0) : 0;
+  html += `<div class="uf-alan uf-mag-alan">
+    <label>🎁 Mag Puan <span class="uf-mag-not">(bu ürünü alan ${SADAKAT.ad} puanı kazanır · boş = orana göre)</span></label>
+    <div class="uf-mag-row">
+      <input class="uf-input uf-mag-input" inputmode="numeric" placeholder="${Math.round((parseFloat(f.fiyat)||0)*SADAKAT.kazancOrani)}" value="${f.mag!=null?f.mag:''}" oninput="state.urunForm.mag=this.value;ufMagOnizle(this.value)">
+      <span class="uf-mag-kars" id="ufMagKars">${f.mag?('= '+tl(magTlKars)+' ₺ değerinde'):''}</span>
+    </div>
   </div>`;
   html += `<div class="uf-aktif" onclick="state.urunForm.aktif=!state.urunForm.aktif;renderUrunForm()">
     <div class="kmpf-check${f.aktif?' on':''}">${f.aktif?'✓':''}</div><span>Satışta aktif</span></div>`;
@@ -9647,6 +9855,12 @@ function ufHazirGrupEkle(ad){
   renderUrunForm();
 }
 function ufGrupSil(gi){ state.urunForm.gruplar.splice(gi,1); renderUrunForm(); }
+function ufMagOnizle(v){
+  const el=document.getElementById("ufMagKars");
+  if(!el) return;
+  const mag=parseInt(v)||0;
+  el.textContent = mag>0 ? ("= "+tl(magToTl(mag))+" ₺ değerinde") : "";
+}
 function ufGrupUcret(gi, ucretsiz){ state.urunForm.gruplar[gi].ucretsiz = !!ucretsiz; renderUrunForm(); }
 function ufGrupTasi(gi, yon){
   const g = state.urunForm.gruplar;
@@ -9744,6 +9958,7 @@ function urunKaydet(){
     .filter(g=>g.secenekler.length>0);
 
   const yeniAd = f.ad.trim();
+  const magDeger = (f.mag===""||f.mag==null) ? null : Math.max(0, parseInt(f.mag)||0);
   if(f.pi!=null){
     // DÜZENLE
     const p = DEMO_PRODUCTS[f.pi];
@@ -9754,9 +9969,12 @@ function urunKaydet(){
     }
     p.ad=yeniAd; p.aciklama=f.aciklama.trim(); p.emoji=f.emoji;
     p.kat=f.kat; p.fiyat=fiyat; p.aktif=f.aktif;
+    if(magDeger!=null) p.mag=magDeger; else delete p.mag;
   } else {
     // YENİ
-    DEMO_PRODUCTS.push({ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()});
+    const yeni={ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()};
+    if(magDeger!=null) yeni.mag=magDeger;
+    DEMO_PRODUCTS.push(yeni);
   }
   // opsiyon grupları
   if(temizGruplar.length>0) PRODUCT_OPTIONS[yeniAd]=temizGruplar;
@@ -10744,6 +10962,421 @@ function bayiStokAktar(id){
 /* ============================================================
    FİŞ YAZICILARI AYAR EKRANI
    ============================================================ */
+/* ============================================================
+   MÜŞTERİ EKRANI AYAR SEKMESİ (çift ekranlı POS — reklam yönetimi)
+   ============================================================ */
+/* ============================================================
+   MAG PUAN YÖNETİM SEKMESİ (müdür + genel müdür)
+   - Mag→TL kuru ayarı
+   - Raporlama (toplam üye, dağıtılan/bozdurulan Mag, TL karşılığı)
+   - Üye listesi (ad, mail, tel, Mag, TL) + detay (işlem geçmişi)
+   ============================================================ */
+function viewMagPuan(main){
+  if(!state.magSekme) state.magSekme="uyeler";
+  let html = `<div class="sec-head"><div><h2>🎁 ${SADAKAT.ad} Puan</h2>
+    <div class="sh-sub">Sadakat puanı yönetimi · üyeler · raporlama</div></div></div>`;
+
+  // sekme barı
+  html += `<div class="mag-sekme-bar">
+    <button class="mag-sekme${state.magSekme==='uyeler'?' on':''}" onclick="magSekmeSec('uyeler')">👥 Üyeler</button>
+    <button class="mag-sekme${state.magSekme==='rapor'?' on':''}" onclick="magSekmeSec('rapor')">📊 Raporlama</button>
+    <button class="mag-sekme${state.magSekme==='ayar'?' on':''}" onclick="magSekmeSec('ayar')">⚙️ Ayarlar</button>
+  </div>`;
+
+  if(state.magSekme==="ayar") html += magAyarHtml();
+  else if(state.magSekme==="rapor") html += magRaporHtml();
+  else html += magUyelerHtml();
+
+  main.innerHTML = html;
+}
+function magSekmeSec(k){ state.magSekme=k; viewMagPuan(document.querySelector(".main")); }
+
+/* --- AYARLAR --- */
+function magAyarHtml(){
+  let h = `<div class="yk-kart">
+    <div class="mag-ayar-baslik">💱 ${SADAKAT.ad} Puan Karşılığı</div>
+    <div class="mag-ayar-aciklama">1 ${SADAKAT.ad} puanının kaç TL değerinde olduğunu belirleyin. Müşteriler puanlarını bu kura göre indirim olarak kullanır.</div>
+    <div class="mag-kur-row">
+      <span class="mag-kur-lbl">1 ${SADAKAT.ad} =</span>
+      <input class="mag-kur-input" inputmode="decimal" id="magKurInput" value="${SADAKAT.magTl}" oninput="magKurOnizle(this.value)">
+      <span class="mag-kur-tl">₺</span>
+    </div>
+    <div class="mag-kur-ornek" id="magKurOrnek">Örnek: 100 ${SADAKAT.ad} = ${tl(magToTl(100))} ₺ indirim</div>
+    <button class="mag-kur-kaydet" onclick="magKurKaydet()">✓ Kuru Kaydet</button>
+  </div>`;
+  h += `<div class="yk-kart">
+    <div class="mag-ayar-baslik">📊 Varsayılan Kazanç Oranı</div>
+    <div class="mag-ayar-aciklama">Mag puanı girilmemiş ürünler için: her 1 ₺ harcama kaç ${SADAKAT.ad} kazandırsın. (Ürüne özel Mag puanı girilmişse o geçerli olur.)</div>
+    <div class="mag-kur-row">
+      <span class="mag-kur-lbl">1 ₺ =</span>
+      <input class="mag-kur-input" inputmode="decimal" id="magOranInput" value="${SADAKAT.kazancOrani}" oninput="magOranOnizle(this.value)">
+      <span class="mag-kur-tl">${SADAKAT.ad}</span>
+    </div>
+    <div class="mag-kur-ornek" id="magOranOrnek">Örnek: 100 ₺ harcama = ${Math.round(100*SADAKAT.kazancOrani)} ${SADAKAT.ad}</div>
+    <button class="mag-kur-kaydet" onclick="magOranKaydet()">✓ Oranı Kaydet</button>
+  </div>`;
+  // KADEME YÖNETİMİ
+  h += `<div class="yk-kart">
+    <div class="mag-ayar-baslik">🏅 Üyelik Kademeleri</div>
+    <div class="mag-ayar-aciklama">Üyeler ${SADAKAT.kademeOlcut==="bakiye"?"güncel Mag bakiyesine":"toplam kazandıkları Mag'a"} göre kademe atlar. Üst kademeler daha çok ${SADAKAT.ad} kazanır (çarpan).</div>
+    <div class="mag-kademe-tablo">
+      <div class="mag-kademe-th"><span>Kademe</span><span>Eşik (${SADAKAT.ad})</span><span>Çarpan</span></div>`;
+  SADAKAT.kademeler.forEach((k,i)=>{
+    h += `<div class="mag-kademe-tr">
+      <span class="mag-kademe-isim" style="color:${k.renk}">${k.ic} ${k.ad}</span>
+      <input class="mag-kademe-input" inputmode="numeric" value="${k.esik}" ${i===0?'disabled':''} onchange="magKademeSet(${i},'esik',this.value)">
+      <div class="mag-kademe-carpan-row">
+        <input class="mag-kademe-input" inputmode="decimal" value="${k.carpan}" onchange="magKademeSet(${i},'carpan',this.value)">
+        <span class="mag-kademe-x">×</span>
+      </div>
+    </div>`;
+  });
+  h += `</div>
+    <div class="mag-kademe-not">İlk kademenin eşiği her zaman 0'dır (başlangıç). Çarpan 1.0 = normal, 1.5 = %50 fazla ${SADAKAT.ad}.</div>
+    <button class="mag-kur-kaydet" onclick="magKademeKaydet()">✓ Kademeleri Kaydet</button>
+  </div>`;
+  return h;
+}
+function magKademeSet(i, alan, deger){
+  if(!SADAKAT.kademeler[i]) return;
+  const v = parseFloat(String(deger).replace(",","."));
+  if(isNaN(v)) return;
+  if(alan==="esik") SADAKAT.kademeler[i].esik = Math.max(0, Math.round(v));
+  else if(alan==="carpan") SADAKAT.kademeler[i].carpan = Math.max(0, v);
+}
+function magKademeKaydet(){
+  // eşikleri sıralı tut
+  SADAKAT.kademeler.sort((a,b)=>a.esik-b.esik);
+  if(SADAKAT.kademeler[0]) SADAKAT.kademeler[0].esik=0;
+  sadakatKaydet();
+  note("✓ Üyelik kademeleri güncellendi");
+  viewMagPuan(document.querySelector(".main"));
+}
+function magKurOnizle(v){ const el=document.getElementById("magKurOrnek"); if(el){ const k=parseFloat(String(v).replace(",","."))||0; el.textContent="Örnek: 100 "+SADAKAT.ad+" = "+tl(100*k)+" ₺ indirim"; } }
+function magKurKaydet(){
+  const v=parseFloat(String(document.getElementById("magKurInput").value).replace(",","."));
+  if(isNaN(v)||v<=0){ note("Geçerli bir kur girin"); return; }
+  SADAKAT.magTl=Math.round(v*100)/100; sadakatKaydet();
+  note("✓ "+SADAKAT.ad+" kuru güncellendi: 1 "+SADAKAT.ad+" = "+tl(SADAKAT.magTl)+" ₺");
+  viewMagPuan(document.querySelector(".main"));
+}
+function magOranOnizle(v){ const el=document.getElementById("magOranOrnek"); if(el){ const k=parseFloat(String(v).replace(",","."))||0; el.textContent="Örnek: 100 ₺ harcama = "+Math.round(100*k)+" "+SADAKAT.ad; } }
+function magOranKaydet(){
+  const v=parseFloat(String(document.getElementById("magOranInput").value).replace(",","."));
+  if(isNaN(v)||v<0){ note("Geçerli bir oran girin"); return; }
+  SADAKAT.kazancOrani=v; sadakatKaydet();
+  note("✓ Kazanç oranı güncellendi");
+  viewMagPuan(document.querySelector(".main"));
+}
+
+/* --- RAPORLAMA --- */
+function magRaporHtml(){
+  const uyeler = Object.values(CUSTOMERS);
+  const toplamUye = uyeler.length;
+  let toplamMag=0, toplamKazanim=0, toplamHarcama=0, islemSayi=0;
+  uyeler.forEach(u=>{
+    toplamMag += u.mag||0;
+    (u.islemler||[]).forEach(i=>{
+      islemSayi++;
+      if(i.tip==="kazanim") toplamKazanim += i.mag;
+      else if(i.tip==="harcama") toplamHarcama += Math.abs(i.mag);
+    });
+  });
+  let h = `<div class="mag-rapor-grid">
+    <div class="mag-rapor-kart"><div class="mrk-ust">👥 Toplam Üye</div><div class="mrk-deger">${toplamUye}</div></div>
+    <div class="mag-rapor-kart"><div class="mrk-ust">🎁 Dolaşımdaki ${SADAKAT.ad}</div><div class="mrk-deger">${toplamMag}</div><div class="mrk-alt">${tl(magToTl(toplamMag))} ₺ değerinde</div></div>
+    <div class="mag-rapor-kart yesil"><div class="mrk-ust">⬆️ Toplam Kazandırılan</div><div class="mrk-deger">${toplamKazanim}</div><div class="mrk-alt">${tl(magToTl(toplamKazanim))} ₺</div></div>
+    <div class="mag-rapor-kart kirmizi"><div class="mrk-ust">⬇️ Toplam Bozdurulan</div><div class="mrk-deger">${toplamHarcama}</div><div class="mrk-alt">${tl(magToTl(toplamHarcama))} ₺ indirim</div></div>
+  </div>`;
+  h += `<div class="mag-rapor-not">📌 Dolaşımdaki ${SADAKAT.ad}, üyelerin kullanmayı beklediği toplam puan yükümlülüğüdür (${tl(magToTl(toplamMag))} ₺ karşılık). ${islemSayi} işlem kayıtlı.</div>`;
+  // KADEME DAĞILIMI
+  const dagilim={};
+  SADAKAT.kademeler.forEach(k=>dagilim[k.ad]=0);
+  uyeler.forEach(u=>{ const kd=uyeKademe(u); dagilim[kd.ad]=(dagilim[kd.ad]||0)+1; });
+  h += `<div class="mag-top-baslik">🏅 Kademe Dağılımı</div><div class="mag-kademe-dagilim">`;
+  SADAKAT.kademeler.forEach(k=>{
+    const say=dagilim[k.ad]||0;
+    const yuzde=toplamUye>0?Math.round(say/toplamUye*100):0;
+    h += `<div class="mag-kdg-kart" style="border-color:${k.renk}55">
+      <div class="mag-kdg-ust" style="color:${k.renk}">${k.ic} ${k.ad}</div>
+      <div class="mag-kdg-say">${say}</div>
+      <div class="mag-kdg-alt">üye · %${yuzde} · ${k.carpan}×</div>
+    </div>`;
+  });
+  h += `</div>`;
+  // en çok puanı olan üyeler
+  const top = uyeler.slice().sort((a,b)=>(b.mag||0)-(a.mag||0)).slice(0,5);
+  if(top.length){
+    h += `<div class="mag-top-baslik">🏆 En Çok ${SADAKAT.ad} Biriktiren Üyeler</div><div class="mag-top-liste">`;
+    top.forEach((u,i)=>{
+      h += `<div class="mag-top-satir"><span class="mag-top-no">${i+1}</span><span class="mag-top-ad">${u.ad||u.mail}</span><span class="mag-top-mag">${u.mag||0} ${SADAKAT.ad}<small>${tl(magToTl(u.mag||0))} ₺</small></span></div>`;
+    });
+    h += `</div>`;
+  }
+  return h;
+}
+
+/* --- ÜYELER --- */
+function magUyelerHtml(){
+  const arama=(state.magArama||"").toLocaleLowerCase("tr");
+  let uyeler = Object.values(CUSTOMERS);
+  if(arama) uyeler = uyeler.filter(u=>(u.ad||"").toLocaleLowerCase("tr").includes(arama)||(u.mail||"").includes(arama)||(u.tel||"").includes(arama));
+  uyeler.sort((a,b)=>(b.mag||0)-(a.mag||0));
+
+  let h = `<div class="fy-ust-bar">
+    <div class="fy-arama-kutu">🔎 <input class="fy-arama-input" id="magArama" placeholder="Üye ara (ad / mail / telefon)..." value="${(state.magArama||'').replace(/"/g,'&quot;')}" oninput="magAramaYaz(this.value)"></div>
+    <button class="fy-excel-btn" onclick="magUyeExcel()">⬇️ Excel'e indir</button>
+  </div>`;
+  h += `<div class="mag-uye-bilgi">${uyeler.length} üye</div>`;
+  h += `<div class="mag-uye-tablo-sar"><table class="mag-uye-tablo"><thead><tr>
+    <th>Üye</th><th>Kademe</th><th>İletişim</th><th class="sag">${SADAKAT.ad}</th><th class="sag">TL Karşılığı</th><th class="sag">Damga</th><th></th>
+  </tr></thead><tbody>`;
+  if(uyeler.length===0){
+    h += `<tr><td colspan="7" class="mag-uye-bos">Üye bulunamadı.</td></tr>`;
+  }
+  uyeler.forEach(u=>{
+    const mailKey=(u.mail||"").replace(/'/g,"\\'");
+    const kad=uyeKademe(u);
+    h += `<tr onclick="magUyeDetay('${mailKey}')" class="mag-uye-satir">
+      <td><div class="mag-uye-ad">${u.ad||'—'}</div></td>
+      <td><span class="mag-kademe-rozet" style="background:${kad.renk}22;color:${kad.renk};border-color:${kad.renk}55">${kad.ic} ${kad.ad}</span></td>
+      <td><div class="mag-uye-mail">${u.mail||''}</div><div class="mag-uye-tel">${u.tel||''}</div></td>
+      <td class="sag"><span class="mag-uye-mag">${u.mag||0}</span></td>
+      <td class="sag mag-uye-tl">${tl(magToTl(u.mag||0))} ₺</td>
+      <td class="sag">${u.damga||0}/${SADAKAT.damgaHedef}</td>
+      <td class="sag"><span class="mag-uye-ok">›</span></td>
+    </tr>`;
+  });
+  h += `</tbody></table></div>`;
+  return h;
+}
+function magAramaYaz(v){ state.magArama=v; viewMagPuan(document.querySelector(".main")); const i=document.getElementById("magArama"); if(i){ i.focus(); i.setSelectionRange(i.value.length,i.value.length); } }
+
+/* Üye detayı — işlem geçmişi */
+function magUyeDetay(mailKey){
+  const u = CUSTOMERS[mailKey] || Object.values(CUSTOMERS).find(x=>x.mail===mailKey);
+  if(!u) return;
+  let mdl=document.getElementById("magUyeModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="magUyeModal"; mdl.className="modal-bg"; mdl.style.zIndex="190"; document.body.appendChild(mdl); }
+  const islemler=(u.islemler||[]).slice().reverse();
+  let islemHtml="";
+  if(islemler.length===0){
+    islemHtml = `<div class="mag-islem-bos">Henüz işlem kaydı yok.</div>`;
+  } else {
+    islemler.forEach(i=>{
+      const kazanim = i.tip==="kazanim";
+      const tarih = new Date(i.zaman).toLocaleString('tr');
+      islemHtml += `<div class="mag-islem-satir">
+        <div class="mag-islem-sol">
+          <div class="mag-islem-tip ${kazanim?'kazanim':'harcama'}">${kazanim?'⬆️ Kazanım':'⬇️ Harcama'}</div>
+          <div class="mag-islem-ac">${i.aciklama||''}</div>
+          <div class="mag-islem-tarih">${tarih}</div>
+        </div>
+        <div class="mag-islem-deger ${kazanim?'kazanim':'harcama'}">${kazanim?'+':'−'}${Math.abs(i.mag)} ${SADAKAT.ad}<small>${tl(i.tl)} ₺</small></div>
+      </div>`;
+    });
+  }
+  const kad=uyeKademe(u);
+  const sonraki=uyeKademeSonraki(u);
+  let kademeBlok=`<div class="mag-kademe-blok" style="background:linear-gradient(135deg,${kad.renk}18,${kad.renk}08);border-color:${kad.renk}44">
+    <div class="mag-kademe-ust">
+      <span class="mag-kademe-ad" style="color:${kad.renk}">${kad.ic} ${kad.ad} Üye</span>
+      <span class="mag-kademe-carpan">${kad.carpan}× ${SADAKAT.ad} kazanır</span>
+    </div>`;
+  if(sonraki){
+    const deger=uyeKademeDeger(u);
+    const oncekiEsik=kad.esik;
+    const oran=Math.min(100, Math.round(((deger-oncekiEsik)/(sonraki.kademe.esik-oncekiEsik))*100));
+    kademeBlok+=`<div class="mag-kademe-ilerleme"><div class="mag-kademe-bar" style="width:${oran}%;background:${sonraki.kademe.renk}"></div></div>
+      <div class="mag-kademe-kalan">${sonraki.kademe.ic} ${sonraki.kademe.ad} için ${sonraki.kalan} ${SADAKAT.ad} daha</div>`;
+  } else {
+    kademeBlok+=`<div class="mag-kademe-kalan">🏆 En üst kademe!</div>`;
+  }
+  kademeBlok+=`</div>`;
+  mdl.innerHTML=`<div class="mag-uye-modal-ic">
+    <div class="mag-uye-modal-bas">
+      <span>👤 ${u.ad||u.mail}</span>
+      <button class="bom-kapat" onclick="magUyeModalKapat()">✕</button>
+    </div>
+    <div class="mag-uye-modal-govde">
+      ${kademeBlok}
+      <div class="mag-uye-ozet">
+        <div class="muo-kart"><div class="muo-lbl">${SADAKAT.ad} Bakiye</div><div class="muo-deger">${u.mag||0}</div><div class="muo-alt">${tl(magToTl(u.mag||0))} ₺</div></div>
+        <div class="muo-kart"><div class="muo-lbl">Damga</div><div class="muo-deger">${u.damga||0}/${SADAKAT.damgaHedef}</div></div>
+      </div>
+      <div class="mag-uye-iletisim">
+        <div>📧 ${u.mail||'—'}</div>
+        <div>📞 ${u.tel||'—'}</div>
+      </div>
+      <div class="mag-islem-baslik">📜 İşlem Geçmişi (${islemler.length})</div>
+      <div class="mag-islem-liste">${islemHtml}</div>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function magUyeModalKapat(){ const m=document.getElementById("magUyeModal"); if(m) m.classList.remove("on"); }
+/* Üye listesini Excel (CSV) indir */
+function magUyeExcel(){
+  const esc=(v)=>{ v=String(v==null?"":v); return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; };
+  const bas=["Ad Soyad","E-posta","Telefon",SADAKAT.ad+" Puan","TL Karşılığı","Damga"];
+  const satirlar=[bas.map(esc).join(";")];
+  Object.values(CUSTOMERS).forEach(u=>{
+    satirlar.push([u.ad||"", u.mail||"", u.tel||"", u.mag||0, magToTl(u.mag||0), (u.damga||0)+"/"+SADAKAT.damgaHedef].map(esc).join(";"));
+  });
+  const csv="\uFEFF"+satirlar.join("\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="MINIPAN_"+SADAKAT.ad+"_Uyeler_"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  note("📥 Üye listesi indirildi");
+}
+
+function viewMusteriEkran(main){
+  const isGenel = state.role==="genel";
+  const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
+  if(!state.meSube || !subeler.includes(state.meSube)) state.meSube = subeler[0];
+  const sube = state.meSube;
+  const acik = MUSTERI_PENCERE && !MUSTERI_PENCERE.closed;
+  const reklamlar = MUSTERI_REKLAMLAR[sube] || [];
+
+  let html = `<div class="sec-head"><div><h2>🖥️ Müşteri Ekranı</h2>
+    <div class="sh-sub">Çift ekranlı POS — arka (müşteri) ekran yönetimi</div></div></div>`;
+
+  html += `<div class="yk-bilgi">
+    <strong>Nasıl çalışır?</strong> Çift ekranlı POS bilgisayarında müşteri tarafındaki arka ekranı yönetir. Boş zamanda buradaki reklam görselleri döner; kasada "Ödeme Al" ekranına geçince müşteri ekranı otomatik ödeme özetini (ürünler, tutar, ödenen/kalan) gösterir. Ekranı bir kez açın; ödeme ekranına her geçişte otomatik güncellenir.
+  </div>`;
+
+  // şube seçici (genel müdür)
+  if(isGenel && subeler.length>1){
+    html += `<div class="yk-sube-sec">`;
+    subeler.forEach(sb=>{
+      const adet=(MUSTERI_REKLAMLAR[sb]||[]).length;
+      html += `<button class="yk-sube-btn${state.meSube===sb?' on':''}" onclick="meSubeSec('${sb.replace(/'/g,"\\'")}')">
+        ${sb}${adet>0?` <span class="yzc-say">${adet}</span>`:''}</button>`;
+    });
+    html += `</div>`;
+  }
+
+  // durum + aç/kapat kartı
+  html += `<div class="yk-kart">
+    <div class="me-durum-row">
+      <div class="mte-durum ${acik?'acik':''}" style="margin:0">
+        <span class="mte-durum-nokta"></span>
+        ${acik?'Müşteri ekranı açık':'Müşteri ekranı kapalı'}
+      </div>
+      ${acik
+        ? `<button class="mte-kapat-btn" onclick="musteriEkranKapat();go('musteriekran',true)">Ekranı kapat</button>`
+        : `<button class="mte-ac-btn" onclick="meEkranAc()">🖥️ Müşteri ekranını aç</button>`}
+    </div>
+    <div class="mte-not" style="margin:12px 0 0">Açtığınızda otomatik ikinci ekranda tam ekran açılır (tarayıcı izin isteyebilir). Algılanamazsa ayrı pencere açılır; ikinci ekrana sürükleyip tam ekran (F11) yapın.</div>
+  </div>`;
+
+  // reklam görselleri
+  html += `<div class="me-reklam-bolum">
+    <div class="me-reklam-bolum-bas">
+      <span>📢 Reklam Görselleri</span>
+      <span class="me-reklam-say">${reklamlar.length} görsel · ${sube}</span>
+    </div>
+    <div class="me-reklam-aciklama">Boş zamanda müşteri ekranında 5 saniyede bir döner. Yatay (16:9) yüksek çözünürlüklü görseller önerilir.</div>
+    <div class="mte-reklam-grid">`;
+  reklamlar.forEach((src,i)=>{
+    html+=`<div class="mte-reklam-kart">
+      <img src="${src}" alt="">
+      <button class="mte-reklam-sil" onclick="meReklamSil(${i})">✕</button>
+      <span class="me-reklam-no">${i+1}</span>
+    </div>`;
+  });
+  html+=`<label class="mte-reklam-ekle">
+        <input type="file" accept="image/*" multiple style="display:none" onchange="meReklamEkle(this.files)">
+        <span>＋</span><span class="mte-ekle-lbl">Görsel ekle</span>
+      </label>`;
+  html+=`</div>`;
+  if(reklamlar.length===0){
+    html+=`<div class="me-reklam-bos">Henüz reklam görseli yok. Görsel eklemezseniz müşteri ekranında MİNİPAN logosu ve "Hoş geldiniz" görünür.</div>`;
+  }
+  html+=`</div>`;
+
+  // önizleme butonu
+  html += `<div class="me-onizle-row">
+    <button class="me-onizle-btn" onclick="meOnizle()">👁️ Reklam akışını önizle</button>
+  </div>`;
+
+  main.innerHTML = html;
+}
+function meSubeSec(sb){ state.meSube=sb; viewMusteriEkran(document.querySelector(".main")); }
+async function meEkranAc(){
+  note("🖥️ Müşteri ekranı açılıyor...");
+  const r=await musteriEkranAc();
+  if(!r.ok){ note("⚠️ "+(r.mesaj||"Açılamadı")); return; }
+  // boş moda reklamları yolla
+  const eskiAktif=AKTIF_SUBE;
+  musteriEkranBosa();
+  go("musteriekran", true);
+}
+function meReklamEkle(files){
+  if(!files||!files.length) return;
+  const sube=state.meSube;
+  if(!MUSTERI_REKLAMLAR[sube]) MUSTERI_REKLAMLAR[sube]=[];
+  let kalan=files.length;
+  Array.from(files).forEach(f=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      MUSTERI_REKLAMLAR[sube].push(e.target.result);
+      kalan--;
+      if(kalan===0){
+        musteriReklamKaydet();
+        if(!state.odeme && state.meSube===AKTIF_SUBE) musteriEkranBosa();
+        viewMusteriEkran(document.querySelector(".main"));
+        note("📢 Reklam görseli eklendi");
+      }
+    };
+    reader.readAsDataURL(f);
+  });
+}
+function meReklamSil(i){
+  const sube=state.meSube;
+  if(MUSTERI_REKLAMLAR[sube]) MUSTERI_REKLAMLAR[sube].splice(i,1);
+  musteriReklamKaydet();
+  if(!state.odeme && state.meSube===AKTIF_SUBE) musteriEkranBosa();
+  viewMusteriEkran(document.querySelector(".main"));
+  note("Görsel silindi");
+}
+/* Reklam akışını mevcut sekmede önizle (modal) */
+function meOnizle(){
+  const sube=state.meSube;
+  const reklamlar=MUSTERI_REKLAMLAR[sube]||[];
+  let mdl=document.getElementById("meOnizleModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="meOnizleModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  const imgHtml = reklamlar.length
+    ? reklamlar.map((src,i)=>`<img src="${src}" class="meo-img${i===0?' on':''}">`).join('')
+    : '';
+  mdl.innerHTML=`<div class="meo-ic">
+    <div class="meo-ekran">
+      ${imgHtml}
+      <div class="meo-logo"><div class="meo-marka">MİNİPAN</div><div class="meo-alt">Waffle & Pancake</div></div>
+      ${reklamlar.length?'':'<div class="meo-hos">Hoş geldiniz 🧇</div>'}
+    </div>
+    <div class="meo-bilgi">Müşteri ekranı boş zamanda böyle görünür${reklamlar.length>1?' · görseller 5 sn\'de bir döner':''}</div>
+    <button class="meo-kapat" onclick="meOnizleKapat()">Kapat</button>
+  </div>`;
+  mdl.classList.add("on");
+  // slayt animasyonu
+  if(reklamlar.length>1){
+    let idx=0;
+    if(window._meoTimer) clearInterval(window._meoTimer);
+    window._meoTimer=setInterval(()=>{
+      const imgs=mdl.querySelectorAll('.meo-img');
+      if(!imgs.length || !mdl.classList.contains('on')){ clearInterval(window._meoTimer); return; }
+      imgs[idx].classList.remove('on');
+      idx=(idx+1)%imgs.length;
+      imgs[idx].classList.add('on');
+    },2000);
+  }
+}
+function meOnizleKapat(){ const m=document.getElementById("meOnizleModal"); if(m) m.classList.remove("on"); if(window._meoTimer) clearInterval(window._meoTimer); }
+
 function viewYazicilar(main){
   const isGenel = state.role==="genel";
   const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
@@ -11369,8 +12002,20 @@ let QR = { masa:7, sube:"Edirne Atatürk", kisi:"", sepet:[], view:"giris", akti
    Cihaz hafızası: gerçekte localStorage (artifact'te oturum içi simüle)
    ============================================================ */
 let CUSTOMERS = {                       // mail → ÜYE (asıl kimlik mail, telefon ikincil)
-  "zeynep@mail.com": {mail:"zeynep@mail.com", ad:"Zeynep", tel:"5551112233", mag:240, damga:7, adresler:[
+  "zeynep@mail.com": {mail:"zeynep@mail.com", ad:"Zeynep Kaya", tel:"5551112233", mag:240, damga:7, toplamKazanim:280, adresler:[
     {ad:"Ev", adres:"Atatürk Mah. Cumhuriyet Cad. No:12 D:4, Edirne"},
+  ], islemler:[
+    {tip:"kazanim", mag:50, tl:50, aciklama:"Alışveriş (333,00 ₺)", zaman:Date.now()-86400000*5},
+    {tip:"kazanim", mag:30, tl:30, aciklama:"Alışveriş (195,00 ₺)", zaman:Date.now()-86400000*3},
+    {tip:"harcama", mag:-40, tl:40, aciklama:"Puanla ödeme indirimi", zaman:Date.now()-86400000*2},
+    {tip:"kazanim", mag:200, tl:200, aciklama:"Alışveriş (665,00 ₺)", zaman:Date.now()-86400000},
+  ]},
+  "mehmet@mail.com": {mail:"mehmet@mail.com", ad:"Mehmet Demir", tel:"5559876543", mag:85, damga:3, toplamKazanim:85, adresler:[], islemler:[
+    {tip:"kazanim", mag:85, tl:85, aciklama:"Alışveriş (420,00 ₺)", zaman:Date.now()-86400000*4},
+  ]},
+  "ayse@mail.com": {mail:"ayse@mail.com", ad:"Ayşe Yıldız", tel:"5553334455", mag:510, damga:9, toplamKazanim:1620, adresler:[], islemler:[
+    {tip:"kazanim", mag:300, tl:300, aciklama:"Alışveriş (1.250,00 ₺)", zaman:Date.now()-86400000*10},
+    {tip:"kazanim", mag:210, tl:210, aciklama:"Alışveriş (890,00 ₺)", zaman:Date.now()-86400000*6},
   ]},
 };
 const ADRES_LIMIT = 3;                  // üye başına en fazla 3 adres
@@ -11478,16 +12123,74 @@ let DEVICE_MEMORY = null;               // bu cihazda hatırlanan telefon (local
    ============================================================ */
 const SADAKAT = {
   ad: "Mag",                  // puan birimi adı
-  kazancOrani: 0.1,           // her 1₺ → 0.1 Mag (100₺ = 10 Mag)
-  bozdurmaKuru: 1,            // 1 Mag = 1 ₺ (puanla ödeme kuru)
+  magTl: 1,                   // 1 Mag = kaç ₺ (varsayılan 1₺); Mag Puan sekmesinden ayarlanır
+  kazancOrani: 0.1,           // ürüne özel mag girilmemişse fallback oran (1₺→0.1 Mag)
+  bozdurmaKuru: 1,            // (eski uyumluluk — magTl ile aynı tutulur)
   damgaHedef: 10,             // 10 damga = 1 bedava ürün
-  // ürün bazlı bonus Mag (belirli ürün alınca ekstra)
-  urunBonus: {
-    "Minipan (18 Adet)": 15,  // bu ürün → +15 Mag bonus
-    "Minipan (14 Adet)": 10,
-    "Lotus Bisküvili Mag": 8,
-  },
+  urunBazli: true,            // true: kazanım ürünlerin kendi mag puanından toplanır
+  // KADEME SİSTEMİ — toplam kazanılan Mag'a göre seviye + kazanç çarpanı
+  kademeOlcut: "toplamKazanim",  // "toplamKazanim" (ömür boyu) veya "bakiye"
+  kademeler: [
+    { ad:"Bronz",  esik:0,    carpan:1.0,  renk:"#cd7f32", ic:"🥉" },
+    { ad:"Gümüş",  esik:500,  carpan:1.25, renk:"#9aa0a6", ic:"🥈" },
+    { ad:"Altın",  esik:1500, carpan:1.5,  renk:"#e0a800", ic:"🥇" },
+  ],
 };
+const SADAKAT_KEY = "minipan_sadakat_v1";
+function sadakatYukle(){
+  try{
+    const j=localStorage.getItem(SADAKAT_KEY);
+    if(j){ const v=JSON.parse(j);
+      if(v.magTl!=null) SADAKAT.magTl=v.magTl;
+      if(v.kazancOrani!=null) SADAKAT.kazancOrani=v.kazancOrani;
+      if(v.kademeler && Array.isArray(v.kademeler) && v.kademeler.length) SADAKAT.kademeler=v.kademeler;
+      if(v.kademeOlcut) SADAKAT.kademeOlcut=v.kademeOlcut;
+    }
+  }catch(e){}
+}
+function sadakatKaydet(){
+  try{ localStorage.setItem(SADAKAT_KEY, JSON.stringify({magTl:SADAKAT.magTl, kazancOrani:SADAKAT.kazancOrani, kademeler:SADAKAT.kademeler, kademeOlcut:SADAKAT.kademeOlcut})); }catch(e){}
+}
+/* Üyenin kademe ölçüt değeri (toplam ömür-boyu kazanım veya güncel bakiye) */
+function uyeKademeDeger(uye){
+  if(!uye) return 0;
+  if(SADAKAT.kademeOlcut==="bakiye") return uye.mag||0;
+  // toplam ömür-boyu kazanım: işlem geçmişindeki kazanımların toplamı (yoksa bakiye)
+  if(uye.toplamKazanim!=null) return uye.toplamKazanim;
+  let t=0;
+  (uye.islemler||[]).forEach(i=>{ if(i.tip==="kazanim") t+=i.mag; });
+  return t>0 ? t : (uye.mag||0);
+}
+/* Üyenin mevcut kademesi */
+function uyeKademe(uye){
+  const deger = uyeKademeDeger(uye);
+  let sec = SADAKAT.kademeler[0];
+  SADAKAT.kademeler.forEach(k=>{ if(deger>=k.esik) sec=k; });
+  return sec;
+}
+/* Üyenin bir üst kademeye kalan Mag'ı (yoksa null = en üst) */
+function uyeKademeSonraki(uye){
+  const deger = uyeKademeDeger(uye);
+  const ust = SADAKAT.kademeler.filter(k=>k.esik>deger).sort((a,b)=>a.esik-b.esik)[0];
+  if(!ust) return null;
+  return { kademe:ust, kalan: ust.esik-deger };
+}
+/* Bir ürünün kazandıracağı Mag puanı (ürüne özel; yoksa orandan) */
+function urunMagPuan(p){
+  if(!p) return 0;
+  if(p.mag!=null && p.mag!=="") return Math.max(0, Math.round(p.mag));
+  // ürüne mag girilmemişse: fiyattan orana göre türet
+  return Math.round((p.fiyat||0) * SADAKAT.kazancOrani);
+}
+/* Mag puanının TL karşılığı */
+function magToTl(mag){ return Math.round((mag||0) * SADAKAT.magTl * 100)/100; }
+/* Üyeye işlem geçmişi kaydı ekle */
+function magIslemEkle(uye, tip, mag, aciklama){
+  if(!uye) return;
+  if(!uye.islemler) uye.islemler=[];
+  uye.islemler.push({ tip:tip, mag:mag, tl:magToTl(Math.abs(mag)), aciklama:aciklama||"", zaman:Date.now() });
+  if(uye.islemler.length>200) uye.islemler=uye.islemler.slice(-200);
+}
 const DAMGA_HEDEF = SADAKAT.damgaHedef;
 const PUAN_ORANI = SADAKAT.kazancOrani;
 
@@ -12017,6 +12720,8 @@ function qrMenuHtml(){
     const pi = DEMO_PRODUCTS.indexOf(p);
     const satilir = urunSatilabilir(p, kanal, QR.sube||AKTIF_SUBE);
     const fb = urunFiyatBilgi(p.ad, QR.sube||AKTIF_SUBE, kanal);
+    const magP = urunMagPuan(p);
+    const magRozet = magP>0 ? '<span class="qr-mag-rozet">🎁 +'+magP+' '+SADAKAT.ad+'</span>' : '';
     const fiyatHtml = fb.indirimli
       ? '<div class="qr-card-fiyat indirimli"><span class="qr-eski">'+fb.eski+' ₺</span><span class="qr-yeni blink">'+fb.gecerli+' ₺</span>'+(fb.indOran>0?'<span class="qr-ind-rozet">%'+fb.indOran+'</span>':'')+'</div>'
       : '<div class="qr-card-fiyat">'+fb.gecerli+' ₺</div>';
@@ -12025,7 +12730,7 @@ function qrMenuHtml(){
       urunGorsel(p,true)+
       '<div class="qr-card-body">'+
         '<div class="qr-card-info">'+
-          '<div class="qr-card-ad">'+p.ad+'</div>'+
+          '<div class="qr-card-ad-row"><span class="qr-card-ad">'+p.ad+'</span>'+magRozet+'</div>'+
           qrPuanRozetHtml(p.ad)+
           (p.aciklama?'<div class="qr-card-desc">'+p.aciklama+'</div>':'')+
           aciklamaHtml+
@@ -12152,8 +12857,34 @@ function qrUrunSec(pi){
   if(opts && opts.length){ openOptionModalQR(pi); }
   else {
     QR.sepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad, QR.sube||AKTIF_SUBE, aktifKanal()), q:1, secimler:[], ekstraRecete:[], not:""});
-    note(p.ad+" eklendi"); renderQR();
+    const magP = urunMagPuan(p);
+    if(magP>0) magKutlamaPop(magP); else note(p.ad+" eklendi");
+    renderQR();
   }
+}
+/* Mag puanlı ürün sepete eklenince kutlama pop-up'ı (patlama efekti) */
+function magKutlamaPop(magP){
+  let mdl=document.getElementById("magKutlamaPop");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="magKutlamaPop"; mdl.className="mag-kutlama-bg"; document.body.appendChild(mdl); }
+  // konfeti parçacıkları
+  let konfeti="";
+  const renkler=["#f0a728","#e0a800","#d8851a","#ffd966","#cd7f32","#5fd99a"];
+  for(let i=0;i<18;i++){
+    const sol=Math.random()*100, gecikme=Math.random()*0.3, sure=0.8+Math.random()*0.6, renk=renkler[i%renkler.length], donme=Math.random()*360;
+    konfeti+='<span class="mag-konfeti" style="left:'+sol+'%;background:'+renk+';animation-delay:'+gecikme+'s;animation-duration:'+sure+'s;transform:rotate('+donme+'deg)"></span>';
+  }
+  mdl.innerHTML='<div class="mag-kutlama-ic">'+
+    '<div class="mag-konfeti-kat">'+konfeti+'</div>'+
+    '<div class="mag-kutlama-patlama">'+
+      '<div class="mag-kutlama-ikon">🎁</div>'+
+      '<div class="mag-kutlama-puan">+'+magP+' '+SADAKAT.ad+' Puan</div>'+
+      '<div class="mag-kutlama-slogan">Biriktir · Kazan · Harca</div>'+
+      '<div class="mag-kutlama-alt">🌟 Sadakat üyelerine özel</div>'+
+    '</div>'+
+  '</div>';
+  mdl.classList.add("on");
+  if(window._magKutlamaTimer) clearTimeout(window._magKutlamaTimer);
+  window._magKutlamaTimer=setTimeout(()=>{ mdl.classList.remove("on"); }, 1800);
 }
 function openOptionModalQR(idx){
   const p = DEMO_PRODUCTS[idx];
@@ -13409,6 +14140,7 @@ posAyarYukle();  // yazarkasa entegrasyon ayarlarını geri yükle
 yaziciYukle();   // fiş yazıcı ayarlarını geri yükle
 musteriReklamYukle(); // müşteri ekranı reklam görsellerini geri yükle
 personelAdYukle();    // bu cihazdaki personel adını geri yükle
+sadakatYukle();       // Mag puan kuru/oran ayarlarını geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
