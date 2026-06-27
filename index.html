@@ -154,6 +154,8 @@ input,select{font-family:inherit; font-size:15px}
 .main > *{flex:none}
 .main > .pos-grid{flex:1; min-height:0}
 .main > .ode-ekran{flex:1; min-height:0}
+/* Ödeme ekranındayken main scroll etmesin — taşma sütunların kendi içinde scroll olsun */
+.main:has(> .ode-ekran){overflow:hidden}
 
 /* ---------- POS satış ekranı ---------- */
 .pos-grid{display:grid; grid-template-columns:1fr 380px; gap:22px; height:100%; min-height:0; overflow:hidden}
@@ -933,6 +935,12 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-btn-primary:active{transform:scale(.98); background:var(--brand-d); color:#fff}
 .qr-btn-ghost{width:100%; padding:14px; border-radius:var(--radius-sm); background:var(--surface-2); color:var(--ink-2); font-size:14px; font-weight:700; margin-top:10px}
 
+/* === MOBİL DOKUNMA DÜZELTMESİ — buton ölü bölge giderme === */
+/* Tüm QR butonları: dokunma her noktada algılansın, child elementler tıklamayı yutmasın */
+#qrApp button{touch-action:manipulation; -webkit-tap-highlight-color:transparent; position:relative; cursor:pointer; -webkit-user-select:none; user-select:none}
+#qrApp button > *{pointer-events:none}
+/* + ekle ve kapat gibi buton-İÇİ-buton istisnaları korunur (kendileri buton, ayrı algılanır) */
+
 /* Menü üst bar */
 .qr-topbar{position:sticky; top:0; z-index:4; display:flex; align-items:center; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line)}
 .qr-topbar .qr-close{position:static; box-shadow:none; background:var(--surface-2)}
@@ -955,9 +963,9 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* Kategori ızgarası (2'li büyük kartlar) */
 .qr-kat-baslik{font-size:20px; font-weight:800; padding:18px 18px 12px}
 .qr-kat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px 16px}
-.qr-kat-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); text-align:left}
+.qr-kat-kart{width:100%; padding:0; margin:0; box-sizing:border-box; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); text-align:left; display:flex; flex-direction:column}
 .qr-kat-kart:active{transform:scale(.97)}
-.qkk-gorsel{aspect-ratio:4/3; display:grid; place-items:center}
+.qkk-gorsel{width:100%; aspect-ratio:4/3; flex:0 0 auto; display:grid; place-items:center}
 /* === ÜRÜN PUAN/YORUM === */
 .yld{color:#d8d2c4} .yld.dolu{color:#f5a623}
 .qr-puan-rozet{display:inline-flex; align-items:center; gap:3px; background:#fdeef0; color:#d8493f; border:none; border-radius:99px; padding:3px 10px; font-size:11.5px; font-weight:800; margin:3px 0 5px; cursor:pointer}
@@ -1053,6 +1061,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ode-govde{display:grid; grid-template-columns:1.1fr 1.1fr 1fr; gap:12px; flex:1; min-height:0}
 .ode-kol-bas{font-size:13px; font-weight:800; color:var(--cocoa); margin-bottom:10px; text-align:center; padding-bottom:8px; border-bottom:2px solid var(--surface-2)}
 .ode-sol,.ode-orta,.ode-sag{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px; display:flex; flex-direction:column; min-height:0}
+.ode-sol{overflow-y:auto; overflow-x:hidden}
 /* SOL: yöntemler */
 .ode-ozet-kutu{background:var(--surface-2); border-radius:11px; padding:12px; margin-bottom:12px}
 .ode-ozet-satir{display:flex; justify-content:space-between; font-size:13.5px; padding:3px 0; color:var(--ink-2)}
@@ -1080,6 +1089,49 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ode-ind-deger{display:flex; align-items:center; justify-content:flex-end; gap:4px; background:var(--surface); border:1.5px solid #e0c890; border-radius:9px; padding:0 12px; min-width:100px; cursor:pointer}
 .ode-ind-deger.aktif{border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
 .ode-ind-val{font-size:18px; font-weight:800; color:#8a6212}
+/* === MAG PUAN ÖDEME BÖLÜMÜ === */
+.ode-mag-bolum{border:1.5px solid #e8d9b8; border-radius:13px; padding:13px 14px; margin-bottom:14px; background:linear-gradient(180deg,#fffaf0,#fff6e6)}
+.ode-mag-bolum.tanindi{border-color:#d4a93a; background:linear-gradient(180deg,#fff8e8,#fdf0d2)}
+.ode-mag-bas{font-size:14px; font-weight:900; color:#8a6212; display:flex; align-items:center; gap:6px}
+.ode-mag-alt{font-size:11.5px; color:#a98a4e; margin:3px 0 10px; line-height:1.35}
+.ode-mag-sorgu{display:flex; gap:7px}
+.ode-mag-input{flex:1; min-width:0; border:1.5px solid #e0c890; border-radius:9px; padding:10px 12px; font-size:13.5px; background:#fff; color:var(--ink); outline:none}
+.ode-mag-input:focus{border-color:#d4a93a; box-shadow:0 0 0 3px rgba(212,169,58,.18)}
+.ode-mag-sorgu-btn{flex:none; border:none; border-radius:9px; padding:0 16px; font-size:13px; font-weight:800; background:#d4a93a; color:#fff; cursor:pointer; white-space:nowrap}
+.ode-mag-sorgu-btn:active{transform:scale(.96)}
+.ode-mag-uye{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px}
+.ode-mag-uye-ad{font-size:14.5px; font-weight:900; color:#7a5610}
+.ode-mag-uye-bakiye{font-size:13px; font-weight:800; color:#b8860b; margin-top:2px}
+.ode-mag-kademe{margin:4px 0 11px; padding:10px 11px 9px; background:#fff; border:1px solid #efe2c6; border-radius:10px}
+.ode-mag-tl{font-size:11.5px; font-weight:700; color:#a98a4e; margin-left:4px}
+.ode-mag-cikar{flex:none; width:28px; height:28px; border:none; border-radius:8px; background:#f0e2c4; color:#8a6212; font-size:13px; font-weight:800; cursor:pointer}
+.ode-mag-cikar:active{transform:scale(.92)}
+.ode-mag-bilgi-kucuk{font-size:11.5px; color:#a98a4e; line-height:1.4; padding:2px 0}
+.ode-mag-kilit{background:#fff; border:1px dashed #e0c890; border-radius:10px; padding:11px}
+.ode-mag-kilit-bilgi{font-size:12px; color:#8a6212; line-height:1.4; margin-bottom:9px}
+.ode-mag-kod-gonder{width:100%; border:none; border-radius:9px; padding:11px; font-size:13px; font-weight:800; background:#8a6212; color:#fff; cursor:pointer}
+.ode-mag-kod-gonder:active{transform:scale(.97)}
+.ode-mag-kod-row{display:flex; gap:7px; margin-bottom:8px}
+.ode-mag-kod-input{flex:1; min-width:0; border:1.5px solid #e0c890; border-radius:9px; padding:11px 12px; font-size:17px; font-weight:800; letter-spacing:3px; text-align:center; background:#fff; color:var(--ink); outline:none}
+.ode-mag-kod-input:focus{border-color:#d4a93a; box-shadow:0 0 0 3px rgba(212,169,58,.18)}
+.ode-mag-kod-dogrula{flex:none; border:none; border-radius:9px; padding:0 18px; font-size:13px; font-weight:800; background:#2e9e5b; color:#fff; cursor:pointer}
+.ode-mag-kod-dogrula:active{transform:scale(.96)}
+.ode-mag-kod-tekrar{width:100%; border:none; background:none; color:#a98a4e; font-size:11.5px; font-weight:700; cursor:pointer; padding:3px}
+.ode-mag-kullan{background:#fff; border:1.5px solid #d4a93a; border-radius:10px; padding:11px 12px}
+.ode-mag-kullan-bas{font-size:12.5px; font-weight:900; color:#2e9e5b; margin-bottom:9px}
+.ode-mag-kullan-kontrol{display:flex; align-items:center; gap:5px; justify-content:center; flex-wrap:wrap}
+.ode-mag-adim{flex:none; min-width:40px; border:1.5px solid #e0c890; border-radius:8px; padding:8px 4px; font-size:13px; font-weight:800; background:#fffaf0; color:#8a6212; cursor:pointer}
+.ode-mag-adim:active{transform:scale(.94)}
+.ode-mag-deger{flex:none; min-width:44px; text-align:center; font-size:18px; font-weight:900; color:#7a5610}
+.ode-mag-max{flex:none; border:none; border-radius:8px; padding:8px 13px; font-size:12.5px; font-weight:800; background:#d4a93a; color:#fff; cursor:pointer}
+.ode-mag-max:active{transform:scale(.94)}
+.ode-mag-kullan-ind{margin-top:9px; text-align:center; font-size:13px; font-weight:800; color:#2e9e5b; background:#eafaf0; border-radius:8px; padding:7px}
+.ode-mag-kullan-ipuc{margin-top:8px; text-align:center; font-size:11px; color:#a98a4e}
+.ode-ozet-satir.mag{color:#b8860b; font-weight:700}
+/* kazanılacak mag notu (Ödemeyi Al üstü) */
+.ode-kazanc-not{text-align:center; font-size:12.5px; font-weight:700; color:#8a6212; background:linear-gradient(180deg,#fff8e8,#fdf0d2); border:1px solid #e8d9b8; border-radius:9px; padding:8px 10px; margin-bottom:10px}
+.ode-kazanc-carpan{display:inline-block; background:#d4a93a; color:#fff; font-size:10.5px; font-weight:800; padding:1px 6px; border-radius:6px; margin-left:3px}
+.ode-onay-mag{text-align:center; font-size:13px; font-weight:800; color:#b8860b; background:#fdf0d2; border-radius:9px; padding:9px; margin-bottom:12px}
 /* girilen özet */
 .ode-girilen-ozet{text-align:center; font-size:14px; font-weight:700; padding:9px 11px; border-radius:9px; margin-bottom:12px; background:var(--surface-2); color:var(--ink-2)}
 .ode-go-satir1{font-size:14px}
@@ -1228,7 +1280,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qkk-gorsel.qkk-foto{padding:0; overflow:hidden}
 .qkk-gorsel.qkk-foto img{width:100%; height:100%; object-fit:cover; display:block}
 .qkk-gorsel span{font-size:54px; opacity:.9}
-.qkk-bilgi{padding:12px 14px}
+.qkk-bilgi{flex:1 1 auto; padding:12px 14px}
 .qkk-ad{font-size:15.5px; font-weight:800; line-height:1.2}
 .qkk-adet{font-size:12px; color:var(--ink-2); margin-top:3px}
 .qr-anamenu-row{position:sticky; top:57px; z-index:4; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--surface); border-bottom:1px solid var(--line)}
@@ -2056,16 +2108,16 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 
 /* Ürün kartları (dikey · tam genişlik görsel üstte) */
 .qr-menu-list{flex:1; padding:14px; display:flex; flex-direction:column; gap:18px}
-.qr-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow)}
+.qr-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column}
 .qr-card.qr-out{opacity:.55}
-.qr-img{width:100%; aspect-ratio:16/10; background-size:cover; background-position:center; display:block}
+.qr-img{width:100%; aspect-ratio:16/10; flex:0 0 auto; background-size:cover; background-position:center; display:block}
 .qr-img-ph{display:grid; place-items:center}
-.qr-card-body{display:flex; align-items:center; gap:12px; padding:14px 16px}
+.qr-card-body{flex:1 1 auto; display:flex; align-items:center; gap:12px; padding:14px 16px}
 .qr-card-info{flex:1; min-width:0}
 .qr-card-ad{font-weight:800; font-size:17px; line-height:1.25}
-.qr-card-ad-row{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:3px}
-.qr-card-ad-row .qr-card-ad{flex:1; margin-bottom:0}
-.qr-card-ad-row .qr-mag-rozet{flex:none; margin-top:0}
+.qr-card-ad-row{display:flex; align-items:flex-start; gap:8px; margin-bottom:3px}
+.qr-card-ad-row .qr-card-ad{flex:1 1 auto; min-width:0; margin-bottom:0}
+.qr-card-ad-row .qr-mag-rozet{flex:0 0 auto; margin-top:0; margin-left:auto; align-self:flex-start}
 .qr-card-desc{font-size:12.5px; color:var(--ink-2); line-height:1.4; margin-bottom:7px}
 .qr-card-fiyat{font-weight:800; font-size:18px; color:var(--brand-d)}
 .qr-card-add{flex:none; width:46px; height:46px; border-radius:99px; background:var(--brand); color:var(--brand-ink); display:grid; place-items:center; font-size:28px; font-weight:700; box-shadow:var(--shadow)}
@@ -2154,9 +2206,47 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-damga{flex:1; aspect-ratio:1; max-width:30px; border-radius:8px; background:#fff; border:1.5px dashed var(--line-2); display:grid; place-items:center; font-size:14px}
 .qr-damga.dolu{background:var(--brand-soft); border-style:solid; border-color:var(--brand)}
 
+/* ============================================================
+   KADEME İLERLEME ÇUBUĞU (Bronz → Gümüş → Altın)
+   ============================================================ */
+.kademe-ilerleme{--kad-bar-h:8px}
+.kad-bar-row{margin-bottom:0}
+.kad-bar{position:relative; height:var(--kad-bar-h); background:rgba(0,0,0,.08); border-radius:99px; overflow:hidden}
+.kad-bar-dolu{position:absolute; left:0; top:0; height:100%; border-radius:99px; transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.kad-noktalar{display:flex; justify-content:space-between; margin-top:9px}
+.kad-nokta{display:flex; flex-direction:column; align-items:center; gap:3px; opacity:.4; transition:opacity .3s, transform .3s; flex:1}
+.kad-nokta.ulasildi{opacity:1}
+.kad-nokta.aktif{transform:scale(1.12)}
+.kad-nokta-ic{width:30px; height:30px; border-radius:50%; display:grid; place-items:center; font-size:15px; background:#fff; border:2px solid rgba(0,0,0,.1)}
+.kad-nokta.ulasildi .kad-nokta-ic{border-color:var(--kad-renk); box-shadow:0 2px 8px color-mix(in srgb,var(--kad-renk) 35%,transparent)}
+.kad-nokta.aktif .kad-nokta-ic{border-width:2.5px; background:color-mix(in srgb,var(--kad-renk) 14%,#fff)}
+.kad-nokta-ad{font-size:10px; font-weight:800; color:var(--ink-2)}
+.kad-nokta.ulasildi .kad-nokta-ad{color:var(--kad-renk)}
+.kad-kalan{text-align:center; font-size:12.5px; color:var(--ink-2); font-weight:600; margin-top:8px; line-height:1.4}
+.kad-kalan strong{color:var(--ink)}
+/* boyut: büyük (profil) */
+.kad-buyuk{--kad-bar-h:11px}
+.kad-buyuk .kad-nokta-ic{width:38px; height:38px; font-size:19px}
+.kad-buyuk .kad-nokta-ad{font-size:11.5px}
+.kad-buyuk .kad-kalan{font-size:13.5px}
+/* boyut: küçük (QR şerit / dar alan) */
+.kad-kucuk{--kad-bar-h:6px}
+.kad-kucuk .kad-nokta-ic{width:24px; height:24px; font-size:12px; border-width:1.5px}
+.kad-kucuk .kad-nokta-ad{font-size:9px}
+.kad-kucuk .kad-noktalar{margin-top:6px}
+.kad-kucuk .kad-kalan{font-size:11.5px; margin-top:6px}
+/* kademe rozeti (madalya + ad etiketi) */
+.kademe-rozet{display:inline-flex; align-items:center; gap:3px; font-size:11.5px; font-weight:800; color:var(--kad-renk); background:color-mix(in srgb,var(--kad-renk) 13%,#fff); border:1px solid color-mix(in srgb,var(--kad-renk) 35%,transparent); border-radius:99px; padding:2px 9px; white-space:nowrap}
+/* QR kademe şeridi (damga şeridinin yerine) */
+.qr-kademe-serit{padding:13px 16px; background:linear-gradient(135deg,var(--cocoa-soft),#f7ede4); border-bottom:1px solid var(--line)}
+.qr-kademe-serit-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px}
+.qr-kademe-serit-ad{font-weight:800; color:var(--cocoa); font-size:13px; display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+.qr-kademe-serit-mag{font-weight:800; color:var(--brand-d); font-size:13px; white-space:nowrap}
+
 /* Onay sadakat bloğu */
 .qr-onay-sadakat{background:var(--cocoa-soft); border-radius:var(--radius); padding:16px; margin-bottom:18px}
 .qr-os-puan{font-weight:800; font-size:16px; color:var(--cocoa); margin-bottom:4px}
+.qr-os-carpan{display:inline-block; background:var(--brand); color:#fff; font-size:11px; font-weight:800; padding:1px 7px; border-radius:6px; margin-left:4px}
 .qr-os-bedava{font-size:13px; font-weight:700; color:var(--brand-d); line-height:1.4}
 .qr-os-kalan{font-size:13px; color:var(--ink-2); font-weight:600}
 
@@ -2165,6 +2255,10 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qpr-ozet{display:flex; gap:12px; margin-bottom:12px}
 .qpr-mag, .qpr-damga{flex:1; background:var(--brand-soft); border-radius:var(--radius); padding:18px; text-align:center}
 .qpr-damga{background:var(--cocoa-soft)}
+.qpr-kademe{flex:1; background:color-mix(in srgb,var(--kad-renk) 13%,#fff); border:1.5px solid color-mix(in srgb,var(--kad-renk) 30%,transparent); border-radius:var(--radius); padding:14px; text-align:center}
+.qpr-kademe-ic{font-size:30px; line-height:1}
+.qpr-kademe-ad{font-size:16px; font-weight:800; color:var(--kad-renk); margin-top:4px}
+.qpr-kademe-ilerleme{background:var(--surface-2); border-radius:var(--radius-sm); padding:16px 16px 14px; margin-bottom:22px}
 .qpr-mag-deger{font-size:30px; font-weight:800; color:var(--brand-d); line-height:1}
 .qpr-damga-deger{font-size:30px; font-weight:800; color:var(--cocoa); line-height:1}
 .qpr-mag-lbl{font-size:12px; color:var(--ink-2); font-weight:700; margin-top:6px}
@@ -6482,9 +6576,9 @@ function renderOdemeYontem(){
     // müşteri tanındı — Mag puanı görünür
     const kazanacak = odKazanilacakMag(ob.tutar, ki);
     html += '<div class="od-musteri">'+
-      '<div class="od-m-ust"><div class="od-m-ad">🎁 '+m.ad+'</div>'+
+      '<div class="od-m-ust"><div class="od-m-ad">🎁 '+m.ad+' '+kademeRozetHtml(m)+'</div>'+
         '<div class="od-m-mag">'+m.mag+' '+SADAKAT.ad+'</div></div>'+
-      '<div class="od-m-damga">'+m.damga+'/'+DAMGA_HEDEF+' damga</div>';
+      '<div class="od-m-damga">'+(function(){const s=uyeKademeSonraki(m);return s?s.kademe.ic+' '+s.kademe.ad+' olmaya '+s.kalan+' '+SADAKAT.ad:'👑 En yüksek seviye';})()+'</div>';
     // Mag kullanımı: önce kod doğrulaması gerekir
     if(m.mag>0){
       if(!ob.otpOnayli){
@@ -6523,7 +6617,7 @@ function renderOdemeYontem(){
         '</div>';
       }
     }
-    html += '<div class="od-kazanc">Bu ödemeyle <strong>+'+kazanacak+' '+SADAKAT.ad+'</strong> + 1 damga kazanacak</div>';
+    html += '<div class="od-kazanc">Bu ödemeyle <strong>+'+kazanacak+' '+SADAKAT.ad+'</strong> kazanacak</div>';
     html += '</div>';
   }
 
@@ -6641,7 +6735,6 @@ function odemeTamamla(yontem, yontemAd){
     const kazanc = Math.round(hamKazanc * (kademe.carpan||1));
     m.mag += kazanc;
     m.toplamKazanim = (m.toplamKazanim||0) + kazanc;  // ömür-boyu (kademe için)
-    m.damga += 1;
     if(kazanc>0){
       const carpanNot = (kademe.carpan && kademe.carpan!==1) ? " ×"+kademe.carpan+" ("+kademe.ad+")" : "";
       magIslemEkle(m, "kazanim", kazanc, "Alışveriş ("+tl(ob.tutar)+" ₺)"+carpanNot);
@@ -6650,9 +6743,7 @@ function odemeTamamla(yontem, yontemAd){
     const yeniKademe = uyeKademe(m);
     let kademeNot="";
     if(yeniKademe.ad!==kademe.ad){ kademeNot=" · "+yeniKademe.ic+" "+yeniKademe.ad+" oldunuz!"; }
-    let bedava=false;
-    if(m.damga>=DAMGA_HEDEF){ m.damga-=DAMGA_HEDEF; bedava=true; }
-    sadakatNot = " · +"+kazanc+" "+SADAKAT.ad+(bedava?" · 🎉 bedava hak!":"")+kademeNot;
+    sadakatNot = " · +"+kazanc+" "+SADAKAT.ad+kademeNot;
   }
 
   BOL.odenenler[ki] = {tutar:ob.tutar, tahsil:tahsil, yontem:yontemAd, mag:m?m.ad:null};
@@ -6731,14 +6822,26 @@ function consumeRecipe(cart){
   return {dusenler, uyari};
 }
 
+const HIZLI_SATIS_ID = "__hizlisatis";
 function checkout(total){
   if(total===0){ note("Adisyon boş"); return; }
-  // Bölmesiz tek ödeme — aynı zengin ödeme ekranını kullan (tek "kişi")
-  BOL = {
-    total: total, mod:"tek", kisiler:["Adisyon"], atama:[{}], odenenler:{},
-    tekOdeme: true,   // bölme değil, direkt adisyon ödemesi
+  // Satış sepetini geçici "Hızlı Satış" oturumuna aktar → masalardaki ile AYNI ödeme ekranı
+  const kalemler = state.cart.map(c=>{
+    const out=[];
+    for(let n=0;n<(c.q||1);n++){
+      out.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:(c.secimler||[]).slice(),
+                secimEk:(c.secimEk||[]).slice(), ekstraRecete:(c.ekstraRecete||[]).slice(),
+                durum:"hazirlaniyor"});
+    }
+    return out;
+  }).flat();
+  SESSIONS[HIZLI_SATIS_ID] = {
+    masa: HIZLI_SATIS_ID, acik:true, zaman:Date.now(), hizliSatis:true,
+    kisiler: [{ad:"Hızlı Satış", kalemler:kalemler}]
   };
-  bolPayAl(0, total);
+  // bu oturumdan dönülecek ekran + reçete tüketimi için sepet referansı sakla
+  state._hizliSatisCart = state.cart.slice();
+  odemeEkraniAc(HIZLI_SATIS_ID);
 }
 
 /* Direkt adisyon ödemesi tamamlandı → adisyonu kapat */
@@ -7237,6 +7340,7 @@ function kasaPaketIptal(){ state.kasaPaket=null; go("masalar"); }
 /* Masa id'sinden görünen etiket: "sube::Balkon|1" → "Balkon-1" (eski sayısal → "Masa 7") */
 function masaEtiket(id){
   const s = String(id);
+  if(s===HIZLI_SATIS_ID) return "Hızlı Satış";
   if(s.includes("|")){
     const son = s.split("::").pop();      // "Balkon|1"
     return son.replace("|","-");          // "Balkon-1"
@@ -7349,15 +7453,31 @@ function tl(n){
   return (Math.round((n||0)*100)/100).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 function odemeEkraniAc(m){
+  // masada QR'dan sipariş vermiş sadakat üyesi var mı? (otomatik tanı)
+  const bagliUye = masadakiUyeyiBul(m);
   state.odeme = {
     masa: m,
     secili: [],     // [{kalemId, tutar}] — bu ödemeye dahil edilen kısımlar
     indirim: 0,     // ₺ indirim
     yontem: { nakit:0, kredi:0, diger:0 },  // her yöntemden girilen tutar
+    musteri: bagliUye,    // QR'dan bağlanmış üye (yoksa null — kasiyer manuel sorgular)
+    kullanilanMag: 0,     // bu ödemede harcanan Mag puanı
+    magOtpGonderildi: false,
+    magOtpOnayli: false,
   };
   odeKlavyeBagla();
   go("odemeEkran");
+  if(bagliUye) note("🎁 "+bagliUye.ad+" QR'dan sipariş verdi · sadakat üyesi otomatik tanındı");
   musteriEkranGuncelle();  // müşteri ekranı açıksa ödeme moduna geç
+}
+/* Masada QR'dan sipariş vermiş sadakat üyesini bul (kisilerden ilk uyeMail) */
+function masadakiUyeyiBul(m){
+  const s = SESSIONS[m];
+  if(!s || !s.kisiler) return null;
+  for(const k of s.kisiler){
+    if(k.uyeMail && CUSTOMERS[k.uyeMail]) return CUSTOMERS[k.uyeMail];
+  }
+  return null;
 }
 /* Fiziksel klavye desteği — aktif kutuya yaz */
 function odeKlavyeBagla(){
@@ -7376,6 +7496,160 @@ function odeKlavyeBagla(){
   };
   document.addEventListener('keydown', window._odeKlavye);
 }
+/* === ÖDEME EKRANI · MAG PUAN SADAKAT BÖLÜMÜ === */
+function odeMagBolumHtml(o, hamToplam, elleInd){
+  const m=o.musteri;
+  if(!m){
+    // üye henüz tanınmadı — sorgulama
+    return `<div class="ode-mag-bolum">
+      <div class="ode-mag-bas">🎁 ${SADAKAT.ad} Sadakat</div>
+      <div class="ode-mag-alt">Üyeyi tanıt, ${SADAKAT.ad} puanını sorgula ve indirim olarak kullan</div>
+      <div class="ode-mag-sorgu">
+        <input class="ode-mag-input" id="odeMagSorguInput" placeholder="E-posta veya telefon" onkeydown="if(event.key==='Enter')odeMagSorgula()">
+        <button class="ode-mag-sorgu-btn" onclick="odeMagSorgula()">Sorgula</button>
+      </div>
+    </div>`;
+  }
+  // üye tanındı
+  const kademe = (typeof uyeKademe==="function") ? uyeKademe(m) : {ad:"",ic:""};
+  const tlKarsilik = magToTl(m.mag);
+  let ic = `<div class="ode-mag-bolum tanindi">
+    <div class="ode-mag-uye">
+      <div class="ode-mag-uye-sol">
+        <div class="ode-mag-uye-ad">🎁 ${m.ad} ${kademeRozetHtml(m)}</div>
+        <div class="ode-mag-uye-bakiye">${m.mag} ${SADAKAT.ad} <span class="ode-mag-tl">≈ ${tl(tlKarsilik)} ₺</span></div>
+      </div>
+      <button class="ode-mag-cikar" onclick="odeMagCikar()" title="Üyeyi kaldır">✕</button>
+    </div>
+    <div class="ode-mag-kademe">${kademeIlerlemeHtml(m, "kucuk")}</div>`;
+
+  if(m.mag>0){
+    const kalanOdenecek = Math.max(0, hamToplam - elleInd);
+    const maxBoz = Math.min(m.mag, Math.floor(kalanOdenecek/SADAKAT.magTl));
+    if(maxBoz<=0){
+      ic += `<div class="ode-mag-bilgi-kucuk">Bu tutar için kullanılabilir ${SADAKAT.ad} yok.</div>`;
+    } else if(!o.magOtpOnayli){
+      // kod doğrulaması gerekiyor
+      if(!o.magOtpGonderildi){
+        ic += `<div class="ode-mag-kilit">
+          <div class="ode-mag-kilit-bilgi">🔒 ${SADAKAT.ad} kullanmak için müşteri doğrulaması gerekir.</div>
+          <button class="ode-mag-kod-gonder" onclick="odeMagKodGonder()">📧 Müşteriye kod gönder</button>
+        </div>`;
+      } else {
+        ic += `<div class="ode-mag-kilit">
+          <div class="ode-mag-kilit-bilgi">📧 ${m.ad} adına kod gönderildi. Müşteriden 6 haneli kodu isteyin:</div>
+          <div class="ode-mag-kod-row">
+            <input class="ode-mag-kod-input" id="odeMagKodInput" inputmode="numeric" maxlength="6" placeholder="• • • • • •" onkeydown="if(event.key==='Enter')odeMagKodDogrula()">
+            <button class="ode-mag-kod-dogrula" onclick="odeMagKodDogrula()">Doğrula</button>
+          </div>
+          <button class="ode-mag-kod-tekrar" onclick="odeMagKodGonder()">↻ Kodu tekrar gönder</button>
+        </div>`;
+      }
+    } else {
+      // doğrulandı — Mag kullanım kontrolü
+      const indDeger = o.kullanilanMag * SADAKAT.magTl;
+      ic += `<div class="ode-mag-kullan">
+        <div class="ode-mag-kullan-bas">✓ Doğrulandı · ${SADAKAT.ad} kullan (${o.kullanilanMag}/${maxBoz})</div>
+        <div class="ode-mag-kullan-kontrol">
+          <button class="ode-mag-adim" onclick="odeMagAyarla(-10)">−10</button>
+          <button class="ode-mag-adim" onclick="odeMagAyarla(-1)">−1</button>
+          <span class="ode-mag-deger">${o.kullanilanMag}</span>
+          <button class="ode-mag-adim" onclick="odeMagAyarla(1)">+1</button>
+          <button class="ode-mag-adim" onclick="odeMagAyarla(10)">+10</button>
+          <button class="ode-mag-max" onclick="odeMagMax()">Max</button>
+        </div>
+        ${indDeger>0?`<div class="ode-mag-kullan-ind">−${tl(indDeger)} ₺ ${SADAKAT.ad} indirimi uygulanıyor</div>`:`<div class="ode-mag-kullan-ipuc">+/− ile kullanılacak ${SADAKAT.ad} miktarını ayarlayın</div>`}
+      </div>`;
+    }
+  } else {
+    ic += `<div class="ode-mag-bilgi-kucuk">Henüz harcanabilir ${SADAKAT.ad} puanı yok. Bu alışverişle kazanmaya başlayacak.</div>`;
+  }
+  ic += `</div>`;
+  return ic;
+}
+/* Üye sorgula (e-posta/telefon) */
+function odeMagSorgula(){
+  const girdi=(document.getElementById("odeMagSorguInput").value||"").trim();
+  if(!girdi){ note("E-posta veya telefon girin"); return; }
+  const m=musteriBul(girdi);
+  if(!m){ note("Kayıt bulunamadı — üyelik QR menüden yapılabilir"); return; }
+  const o=state.odeme;
+  o.musteri=m; o.kullanilanMag=0; o.magOtpGonderildi=false; o.magOtpOnayli=false;
+  note("✓ "+m.ad+" tanındı · "+m.mag+" "+SADAKAT.ad);
+  odemeEkranYenile();
+}
+/* Üyeyi kaldır */
+function odeMagCikar(){
+  const o=state.odeme;
+  o.musteri=null; o.kullanilanMag=0; o.magOtpGonderildi=false; o.magOtpOnayli=false;
+  odemeEkranYenile();
+}
+/* Doğrulama kodu gönder */
+function odeMagKodGonder(){
+  const o=state.odeme, m=o.musteri;
+  if(!m){ return; }
+  if(!m.mail){ note("Bu üyenin e-postası yok — puan kullanımı için e-posta gerekli"); return; }
+  otpGonder(m, "harcama");
+  o.magOtpGonderildi=true;
+  note("📧 Doğrulama kodu gönderildi");
+  odemeEkranYenile();
+}
+/* Kod doğrula */
+function odeMagKodDogrula(){
+  const kod=(document.getElementById("odeMagKodInput").value||"").trim();
+  if(!otpDogrula(kod)){ note("Kod hatalı"); return; }
+  const o=state.odeme;
+  o.magOtpOnayli=true; OTP_AKTIF=null;
+  note("✓ Doğrulandı · "+SADAKAT.ad+" kullanılabilir");
+  odemeEkranYenile();
+}
+/* Kullanılacak Mag miktarını ayarla */
+function odeMagAyarla(d){
+  const o=state.odeme, m=o.musteri;
+  if(!m) return;
+  const hamToplam=Math.round(o.secili.reduce((t,x)=>t+x.tutar,0)*100)/100;
+  const elleInd=Math.min(o.indirim,hamToplam);
+  const kalanOdenecek=Math.max(0, hamToplam-elleInd);
+  const maxBoz=Math.min(m.mag, Math.floor(kalanOdenecek/SADAKAT.magTl));
+  o.kullanilanMag=Math.max(0, Math.min(maxBoz, o.kullanilanMag+d));
+  odemeEkranYenile();
+}
+function odeMagMax(){
+  const o=state.odeme, m=o.musteri;
+  if(!m) return;
+  const hamToplam=Math.round(o.secili.reduce((t,x)=>t+x.tutar,0)*100)/100;
+  const elleInd=Math.min(o.indirim,hamToplam);
+  const kalanOdenecek=Math.max(0, hamToplam-elleInd);
+  o.kullanilanMag=Math.min(m.mag, Math.floor(kalanOdenecek/SADAKAT.magTl));
+  odemeEkranYenile();
+}
+/* Bu ödemeyle kazanılacak Mag (seçili kalemler bazında + kademe çarpanı) */
+function odeSeciliKazanilacakMag(o){
+  let ham=0;
+  o.secili.forEach(x=>{
+    const it=masaKalemBul(o.masa, x.kalemId);
+    if(!it) return;
+    const p=DEMO_PRODUCTS.find(pp=>pp.ad===it.ad);
+    const birim=urunMagPuan(p);
+    // kısmi ödemede oransal kazanım
+    const tamKalan=kalemKalan(it);
+    const oran = tamKalan>0 ? Math.min(1, x.tutar/tamKalan) : 1;
+    ham += birim * oran;
+  });
+  ham=Math.round(ham);
+  let carpan=1, kademeAd="";
+  if(o.musteri && typeof uyeKademe==="function"){
+    const k=uyeKademe(o.musteri); carpan=k.carpan||1; kademeAd=k.ad||"";
+  }
+  return { ham, kazanc:Math.round(ham*carpan), carpan, kademeAd };
+}
+function odeKazanilacakMagHtml(o, hamToplam){
+  if(!o.musteri || o.secili.length===0) return '';
+  const k=odeSeciliKazanilacakMag(o);
+  if(k.kazanc<=0) return '';
+  const carpanNot=(k.carpan&&k.carpan!==1)?` <span class="ode-kazanc-carpan">×${k.carpan} ${k.kademeAd}</span>`:'';
+  return `<div class="ode-kazanc-not">🎁 Bu ödemeyle <strong>+${k.kazanc} ${SADAKAT.ad}</strong> kazanacak${carpanNot}</div>`;
+}
 function viewOdemeEkran(main){
   const o=state.odeme;
   if(!o || !SESSIONS[o.masa]){ go("masalar"); return; }
@@ -7383,13 +7657,17 @@ function viewOdemeEkran(main){
   const mq="'"+String(m).replace(/'/g,"\\'")+"'";
   // bu ödemenin ham toplamı (seçili kısımlar)
   const hamToplam = Math.round(o.secili.reduce((t,x)=>t+x.tutar,0)*100)/100;
-  const indirim = Math.min(o.indirim, hamToplam);
+  // Mag puan indirimi (kullanılan Mag × kur) — ödenecek tutarı geçemez
+  const magIndirimHam = (o.musteri && o.kullanilanMag>0) ? o.kullanilanMag * SADAKAT.magTl : 0;
+  const elleInd = Math.min(o.indirim, hamToplam);
+  const magIndirim = Math.min(magIndirimHam, Math.max(0, hamToplam - elleInd));
+  const indirim = Math.round((elleInd + magIndirim)*100)/100;
   const odenecek = Math.round((hamToplam - indirim)*100)/100;
   const girilen = Math.round((o.yontem.nakit + o.yontem.kredi + o.yontem.diger)*100)/100;
 
   let html=`<div class="ode-ekran">
     <div class="ode-head">
-      <button class="ode-geri" onclick="odemeEkraniKapat()">← Masaya dön</button>
+      <button class="ode-geri" onclick="odemeEkraniKapat()">← ${m===HIZLI_SATIS_ID?'Satışa dön':'Masaya dön'}</button>
       <div class="ode-baslik">💳 ${masaEtiket(m)} · Ödeme</div>
       <div class="ode-head-sag">
         <button class="ode-musteri-btn" onclick="musteriEkranButon()">🖥️ Müşteri Ekranı</button>
@@ -7405,7 +7683,8 @@ function viewOdemeEkran(main){
     <div class="ode-kol-bas">Ödeme Yöntemi</div>
     <div class="ode-ozet-kutu">
       <div class="ode-ozet-satir"><span>Seçilen tutar</span><span>${tl(hamToplam)} ₺</span></div>
-      <div class="ode-ozet-satir ind"><span>İndirim</span><span>${indirim>0?'−'+tl(indirim):'0,00'} ₺</span></div>
+      <div class="ode-ozet-satir ind"><span>İndirim</span><span>${elleInd>0?'−'+tl(elleInd):'0,00'} ₺</span></div>
+      ${magIndirim>0?`<div class="ode-ozet-satir mag"><span>🎁 ${SADAKAT.ad} indirimi</span><span>−${tl(magIndirim)} ₺</span></div>`:''}
       <div class="ode-ozet-satir ana"><span>Ödenecek</span><span>${tl(odenecek)} ₺</span></div>
     </div>
     <div class="ode-ind-row">
@@ -7414,6 +7693,7 @@ function viewOdemeEkran(main){
         <span class="ode-ind-val">${o.indirim?tl(o.indirim):'0,00'}</span><span class="ode-bk">₺</span>
       </div>
     </div>
+    ${odeMagBolumHtml(o, hamToplam, elleInd)}
     <div class="ode-yontem-liste">`;
   const yontemler=[
     {k:"nakit", ad:"💵 Nakit"},
@@ -7439,6 +7719,7 @@ function viewOdemeEkran(main){
       <div class="ode-go-satir1">Girilen: <strong>${tl(girilen)} ₺</strong> / ${tl(odenecek)} ₺</div>
       <div class="ode-go-not">${girilen>odenecek+0.01?`💰 Para üstü ${tl(girilen-odenecek)} ₺`:(girilen<odenecek-0.01&&girilen>0?`⚠️ Eksik ${tl(odenecek-girilen)} ₺ masada kalır`:'&nbsp;')}</div>
     </div>
+    ${odeKazanilacakMagHtml(o, hamToplam)}
     <button class="ode-onayla" ${(odenecek<=0||girilen<=0)?'disabled':''} onclick="odemeOnayla(${mq})">
       ✓ Ödemeyi Al
     </button>
@@ -7793,7 +8074,12 @@ function odeYontemDengeleSessiz(){
   ["nakit","kredi","diger"].forEach(k=>{ if(k!==o.dengeYontem) digerToplam+=o.yontem[k]; });
   o.yontem[o.dengeYontem]=Math.max(0, Math.round((odenecek-digerToplam)*100)/100);
 }
-function odemeEkraniKapat(){ state.odeme=null; odeKlavyeKaldir(); musteriEkranBosa(); go("masalar"); }
+function odemeEkraniKapat(){
+  const hizli = state.odeme && state.odeme.masa===HIZLI_SATIS_ID;
+  state.odeme=null; odeKlavyeKaldir(); musteriEkranBosa();
+  if(hizli){ delete SESSIONS[HIZLI_SATIS_ID]; go("satis"); return; }  // cart korunur, ödeme iptal
+  go("masalar");
+}
 
 /* ============================================================
    MÜŞTERİ EKRANI (çift ekranlı POS — arka/müşteri tarafı)
@@ -8135,7 +8421,11 @@ function odemeOnayla(m){
   const o=state.odeme;
   const hamToplam=o.secili.reduce((t,x)=>t+x.tutar,0);
   if(hamToplam<=0){ note("Önce ürün/tutar seçin"); return; }
-  const indirim=Math.min(o.indirim,hamToplam);
+  const elleInd=Math.min(o.indirim,hamToplam);
+  // Mag indirimi (kullanılan Mag × kur), elle indirimden sonra kalan tutarı geçemez
+  const magIndirimHam=(o.musteri && o.kullanilanMag>0) ? o.kullanilanMag*SADAKAT.magTl : 0;
+  const magIndirim=Math.round(Math.min(magIndirimHam, Math.max(0, hamToplam-elleInd))*100)/100;
+  const indirim=Math.round((elleInd+magIndirim)*100)/100;
   const odenecek=Math.round((hamToplam-indirim)*100)/100;
   const girilen=Math.round((o.yontem.nakit+o.yontem.kredi+o.yontem.diger)*100)/100;
   if(girilen<=0){ note("Ödeme yöntemine tutar girin"); return; }
@@ -8152,7 +8442,7 @@ function odemeOnayla(m){
     masa:m, odenecek, girilen, paraUstu,
     eksik: girilen < odenecek-0.01 ? Math.round((odenecek-girilen)*100)/100 : 0,
     yontemler: aktifYontemler,
-    hamToplam, indirim
+    hamToplam, indirim, magIndirim, kullanilanMag:(o.musteri?o.kullanilanMag:0)
   });
 }
 /* Tahsilatı gerçekten işle (pop-up onayından sonra) */
@@ -8174,6 +8464,36 @@ function odemeTahsilEt(veri){
     }
   });
   masaOdemeKaydet(m, yontemler, dagitim, veri.indirim);
+  // === MAG PUAN İŞLE (üye tanındıysa) ===
+  let magBildirim="";
+  if(o.musteri){
+    const mus=o.musteri;
+    // 1) HARCAMA: kullanılan Mag düşülür
+    const kullanilan=Math.min(veri.kullanilanMag||0, mus.mag);
+    if(kullanilan>0){
+      mus.mag-=kullanilan;
+      if(typeof magIslemEkle==="function") magIslemEkle(mus,"harcama",-kullanilan,"Kasada puanla ödeme indirimi ("+tl(kullanilan*SADAKAT.magTl)+" ₺)");
+      magBildirim+=" · −"+kullanilan+" "+SADAKAT.ad+" kullanıldı";
+    }
+    // 2) KAZANIM: bu tahsilatın kalemlerinden (kademe çarpanı dahil)
+    const k=odeSeciliKazanilacakMag(o);
+    if(k.kazanc>0){
+      const eskiKademe=(typeof uyeKademe==="function")?uyeKademe(mus):{ad:""};
+      mus.mag+=k.kazanc;
+      mus.toplamKazanim=(mus.toplamKazanim||0)+k.kazanc;
+      if(typeof magIslemEkle==="function"){
+        const carpanNot=(k.carpan&&k.carpan!==1)?" ×"+k.carpan+" ("+k.kademeAd+")":"";
+        magIslemEkle(mus,"kazanim",k.kazanc,"Kasada alışveriş ("+tl(veri.odenecek)+" ₺)"+carpanNot);
+      }
+      magBildirim+=" · +"+k.kazanc+" "+SADAKAT.ad+" kazandı";
+      // kademe atladı mı
+      if(typeof uyeKademe==="function"){
+        const yeniKademe=uyeKademe(mus);
+        if(yeniKademe.ad!==eskiKademe.ad) magBildirim+=" · "+(yeniKademe.ic||"")+" "+yeniKademe.ad+" oldu!";
+      }
+    }
+    if(typeof sadakatKaydet==="function") sadakatKaydet();
+  }
   // YAZARKASA-POS'a gönder (her yöntem ayrı mali fiş — GMP-3)
   const sube = AKTIF_SUBE;
   const posAy = posAyarAl(sube);
@@ -8192,12 +8512,23 @@ function odemeTahsilEt(veri){
   }
   const kalan=masaKalan(m);
   if(kalan<=0.01){
-    note("✓ Tüm ödeme tamamlandı · masa kapandı");
+    // HIZLI SATIŞ → reçete tüket, geçici oturumu temizle, satış ekranına dön
+    if(m===HIZLI_SATIS_ID){
+      if(state._hizliSatisCart){ try{ consumeRecipe(state._hizliSatisCart); saveOrder(state._hizliSatisCart, veri.hamToplam); }catch(e){} }
+      delete SESSIONS[HIZLI_SATIS_ID];
+      state._hizliSatisCart=null; state.cart=[]; state.odenen=0; state.bolDurum=null;
+      state.odeme=null; state.kasaMasa=null; odeKlavyeKaldir();
+      note("✓ Satış tamamlandı"+magBildirim);
+      go("satis");
+      return;
+    }
+    note("✓ Tüm ödeme tamamlandı · masa kapandı"+magBildirim);
     state.odeme=null; state.kasaMasa=null; odeKlavyeKaldir(); go("masalar");
   } else {
-    note("✓ Tahsil edildi · kalan "+tl(kalan)+" ₺");
-    // EKRAN AÇIK KALIR — kalan tahsilatlar için yeni tur
-    state.odeme={masa:m, secili:[], indirim:0, yontem:{nakit:0,kredi:0,diger:0}, aktifKutu:"kredi"};
+    note("✓ Tahsil edildi · kalan "+tl(kalan)+" ₺"+magBildirim);
+    // EKRAN AÇIK KALIR — kalan tahsilatlar için yeni tur (müşteri tanımı korunur)
+    state.odeme={masa:m, secili:[], indirim:0, yontem:{nakit:0,kredi:0,diger:0}, aktifKutu:"kredi",
+      musteri:o.musteri||null, kullanilanMag:0, magOtpGonderildi:false, magOtpOnayli:!!(o.musteri&&o.magOtpOnayli)};
     go("odemeEkran");
   }
 }
@@ -8226,6 +8557,9 @@ function odemeOnayModal(veri){
     ic+=`<div class="ode-onay-yt-satir"><span>${y.ad}</span><span>${tl(tahsilEdilen)} ₺</span></div>`;
   });
   ic+=`</div>`;
+  if(veri.magIndirim>0){
+    ic+=`<div class="ode-onay-mag">🎁 ${veri.kullanilanMag} ${SADAKAT.ad} indirimi: −${tl(veri.magIndirim)} ₺</div>`;
+  }
   ic+=`<div class="ode-onay-butonlar">
     <button class="ode-onay-iptal" onclick="document.getElementById('odeOnayModal').classList.remove('on')">İptal</button>
     <button class="ode-onay-tamam" onclick="document.getElementById('odeOnayModal').classList.remove('on'); odemeTahsilEt(window.__odeVeri)">${veri.eksik>0?'Eksik Tahsil Et':'Tahsil Et'}</button>
@@ -8295,7 +8629,7 @@ function kasaMasaGonder(){
   note("✓ Sipariş gönderildi · fiş çıktı ("+kisi+")");
   state.kasaEkle=null; state.kasaMasa=m; go("masalar");
 }
-function kasaKalemIptal(m,id){ kalemIptal(m,id); note("Kalem iptal · tutar düştü"); go("masalar"); }
+function kasaKalemIptal(m,id){ kalemIptalOnay(m,id,"kasa"); }
 function kasaOpsKaldir(m,id,oi){ secenekSilOnay(m,id,oi,"kasa"); }
 
 /* === ONAYLI SEÇENEK SİLME (tüm ekranlar) === */
@@ -8348,6 +8682,47 @@ function secenekSilModalCiz(){
     </div>
   </div>`;
   mdl.classList.add("on");
+}
+/* === KALEM İPTAL ONAYI (pop-up) — seçenek silme gibi onaylı === */
+function kalemIptalOnay(masaNo, kalemId, kaynak){
+  const it = (function(){
+    const s=SESSIONS[masaNo]; if(!s) return null;
+    for(const k of s.kisiler) for(const x of k.kalemler) if(x.id===kalemId) return x;
+    return null;
+  })();
+  if(!it) return;
+  state._kalemIptal = {masaNo, kalemId, kaynak, urunAd:it.ad, fiyat:it.fiyat||0,
+                       secimSayi:(it.secimler||[]).length};
+  kalemIptalModalCiz();
+}
+function kalemIptalModalCiz(){
+  const d=state._kalemIptal; if(!d) return;
+  let mdl=document.getElementById("kalemIptalModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="kalemIptalModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="ssil-ic">
+    <div class="ssil-ikon">🗑️</div>
+    <div class="ssil-bas">Ürün iptal edilsin mi?</div>
+    <div class="ssil-urun">${d.urunAd}</div>
+    ${d.secimSayi>0?`<div class="ssil-sec">${d.secimSayi} seçenek dahil tüm ürün kaldırılacak</div>`:''}
+    ${d.fiyat>0?`<div class="ssil-not">Adisyondan <strong>${tl(d.fiyat)} ₺</strong> düşülecek.</div>`:`<div class="ssil-not">Bu ürün adisyondan kaldırılacak.</div>`}
+    <div class="ssil-butonlar">
+      <button class="ssil-vazgec" onclick="kalemIptalKapat()">Vazgeç</button>
+      <button class="ssil-onayla" onclick="kalemIptalUygula()">🗑️ İptal et</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function kalemIptalKapat(){ const m=document.getElementById("kalemIptalModal"); if(m) m.classList.remove("on"); state._kalemIptal=null; }
+function kalemIptalUygula(){
+  const d=state._kalemIptal; if(!d) return;
+  const masaNo=d.masaNo, kalemId=d.kalemId, kaynak=d.kaynak;
+  kalemIptalKapat();
+  kalemIptal(masaNo, kalemId);
+  note("Ürün iptal edildi · tutar düştü");
+  // kaynağa göre ekran yenile
+  if(kaynak==="kds"){ renderKDS(); }
+  else if(kaynak==="odeme"){ ekranlariYenile("odeme", masaNo); }
+  else { go("masalar"); }
 }
 function secSilAdetSet(d){ const s=state._secSil; if(!s) return; s.silAdet=Math.max(1,Math.min(s.toplamAdet,s.silAdet+d)); secenekSilModalCiz(); }
 function secSilAdetTum(){ const s=state._secSil; if(!s) return; s.silAdet=s.toplamAdet; secenekSilModalCiz(); }
@@ -11381,7 +11756,7 @@ function magUyelerHtml(){
   </div>`;
   h += `<div class="mag-uye-bilgi">${uyeler.length} üye</div>`;
   h += `<div class="mag-uye-tablo-sar"><table class="mag-uye-tablo"><thead><tr>
-    <th>Üye</th><th>Kademe</th><th>İletişim</th><th class="sag">${SADAKAT.ad}</th><th class="sag">TL Karşılığı</th><th class="sag">Damga</th><th></th>
+    <th>Üye</th><th>Kademe</th><th>İletişim</th><th class="sag">${SADAKAT.ad}</th><th class="sag">TL Karşılığı</th><th class="sag">Toplam Kazanım</th><th></th>
   </tr></thead><tbody>`;
   if(uyeler.length===0){
     h += `<tr><td colspan="7" class="mag-uye-bos">Üye bulunamadı.</td></tr>`;
@@ -11395,7 +11770,7 @@ function magUyelerHtml(){
       <td><div class="mag-uye-mail">${u.mail||''}</div><div class="mag-uye-tel">${u.tel||''}</div></td>
       <td class="sag"><span class="mag-uye-mag">${u.mag||0}</span></td>
       <td class="sag mag-uye-tl">${tl(magToTl(u.mag||0))} ₺</td>
-      <td class="sag">${u.damga||0}/${SADAKAT.damgaHedef}</td>
+      <td class="sag">${uyeKademeDeger(u)} ${SADAKAT.ad}</td>
       <td class="sag"><span class="mag-uye-ok">›</span></td>
     </tr>`;
   });
@@ -11454,7 +11829,7 @@ function magUyeDetay(mailKey){
       ${kademeBlok}
       <div class="mag-uye-ozet">
         <div class="muo-kart"><div class="muo-lbl">${SADAKAT.ad} Bakiye</div><div class="muo-deger">${u.mag||0}</div><div class="muo-alt">${tl(magToTl(u.mag||0))} ₺</div></div>
-        <div class="muo-kart"><div class="muo-lbl">Damga</div><div class="muo-deger">${u.damga||0}/${SADAKAT.damgaHedef}</div></div>
+        <div class="muo-kart"><div class="muo-lbl">Toplam Kazanım</div><div class="muo-deger">${uyeKademeDeger(u)}</div><div class="muo-alt">ömür boyu ${SADAKAT.ad}</div></div>
       </div>
       <div class="mag-uye-iletisim">
         <div>📧 ${u.mail||'—'}</div>
@@ -11470,10 +11845,10 @@ function magUyeModalKapat(){ const m=document.getElementById("magUyeModal"); if(
 /* Üye listesini Excel (CSV) indir */
 function magUyeExcel(){
   const esc=(v)=>{ v=String(v==null?"":v); return /[",;\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; };
-  const bas=["Ad Soyad","E-posta","Telefon",SADAKAT.ad+" Puan","TL Karşılığı","Damga"];
+  const bas=["Ad Soyad","E-posta","Telefon",SADAKAT.ad+" Puan","TL Karşılığı","Kademe","Toplam Kazanım"];
   const satirlar=[bas.map(esc).join(";")];
   Object.values(CUSTOMERS).forEach(u=>{
-    satirlar.push([u.ad||"", u.mail||"", u.tel||"", u.mag||0, magToTl(u.mag||0), (u.damga||0)+"/"+SADAKAT.damgaHedef].map(esc).join(";"));
+    satirlar.push([u.ad||"", u.mail||"", u.tel||"", u.mag||0, magToTl(u.mag||0), uyeKademe(u).ad, uyeKademeDeger(u)].map(esc).join(";"));
   });
   const csv="\uFEFF"+satirlar.join("\n");
   const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
@@ -12254,7 +12629,7 @@ let QR = { masa:7, sube:"Edirne Atatürk", kisi:"", sepet:[], view:"giris", akti
    Cihaz hafızası: gerçekte localStorage (artifact'te oturum içi simüle)
    ============================================================ */
 let CUSTOMERS = {                       // mail → ÜYE (asıl kimlik mail, telefon ikincil)
-  "zeynep@mail.com": {mail:"zeynep@mail.com", ad:"Zeynep Kaya", tel:"5551112233", mag:240, damga:7, toplamKazanim:280, adresler:[
+  "zeynep@mail.com": {mail:"zeynep@mail.com", ad:"Zeynep Kaya", tel:"5551112233", mag:240, toplamKazanim:280, adresler:[
     {ad:"Ev", adres:"Atatürk Mah. Cumhuriyet Cad. No:12 D:4, Edirne"},
   ], islemler:[
     {tip:"kazanim", mag:50, tl:50, aciklama:"Alışveriş (333,00 ₺)", zaman:Date.now()-86400000*5},
@@ -12262,10 +12637,10 @@ let CUSTOMERS = {                       // mail → ÜYE (asıl kimlik mail, tel
     {tip:"harcama", mag:-40, tl:40, aciklama:"Puanla ödeme indirimi", zaman:Date.now()-86400000*2},
     {tip:"kazanim", mag:200, tl:200, aciklama:"Alışveriş (665,00 ₺)", zaman:Date.now()-86400000},
   ]},
-  "mehmet@mail.com": {mail:"mehmet@mail.com", ad:"Mehmet Demir", tel:"5559876543", mag:85, damga:3, toplamKazanim:85, adresler:[], islemler:[
+  "mehmet@mail.com": {mail:"mehmet@mail.com", ad:"Mehmet Demir", tel:"5559876543", mag:85, toplamKazanim:85, adresler:[], islemler:[
     {tip:"kazanim", mag:85, tl:85, aciklama:"Alışveriş (420,00 ₺)", zaman:Date.now()-86400000*4},
   ]},
-  "ayse@mail.com": {mail:"ayse@mail.com", ad:"Ayşe Yıldız", tel:"5553334455", mag:510, damga:9, toplamKazanim:1620, adresler:[], islemler:[
+  "ayse@mail.com": {mail:"ayse@mail.com", ad:"Ayşe Yıldız", tel:"5553334455", mag:510, toplamKazanim:1620, adresler:[], islemler:[
     {tip:"kazanim", mag:300, tl:300, aciklama:"Alışveriş (1.250,00 ₺)", zaman:Date.now()-86400000*10},
     {tip:"kazanim", mag:210, tl:210, aciklama:"Alışveriş (890,00 ₺)", zaman:Date.now()-86400000*6},
   ]},
@@ -12378,7 +12753,6 @@ const SADAKAT = {
   magTl: 1,                   // 1 Mag = kaç ₺ (varsayılan 1₺); Mag Puan sekmesinden ayarlanır
   kazancOrani: 0.1,           // ürüne özel mag girilmemişse fallback oran (1₺→0.1 Mag)
   bozdurmaKuru: 1,            // (eski uyumluluk — magTl ile aynı tutulur)
-  damgaHedef: 10,             // 10 damga = 1 bedava ürün
   urunBazli: true,            // true: kazanım ürünlerin kendi mag puanından toplanır
   // KADEME SİSTEMİ — toplam kazanılan Mag'a göre seviye + kazanç çarpanı
   kademeOlcut: "toplamKazanim",  // "toplamKazanim" (ömür boyu) veya "bakiye"
@@ -12427,6 +12801,49 @@ function uyeKademeSonraki(uye){
   if(!ust) return null;
   return { kademe:ust, kalan: ust.esik-deger };
 }
+/* ============================================================
+   KADEME İLERLEME ÇUBUĞU — ortak HTML üreticisi
+   boyut: "buyuk" (profil/üye detay) | "orta" (kasa) | "kucuk" (QR şerit)
+   ============================================================ */
+function kademeIlerlemeHtml(uye, boyut){
+  boyut = boyut || "orta";
+  const deger = uyeKademeDeger(uye);
+  const suanki = uyeKademe(uye);
+  const sonraki = uyeKademeSonraki(uye);
+  // mevcut kademenin alt eşiği
+  const altEsik = suanki.esik || 0;
+  let yuzde, kalanMetin;
+  if(sonraki){
+    const aralik = sonraki.kademe.esik - altEsik;
+    yuzde = aralik>0 ? Math.min(100, Math.max(0, Math.round(((deger-altEsik)/aralik)*100))) : 0;
+    kalanMetin = sonraki.kademe.ic+" <strong>"+sonraki.kademe.ad+"</strong> olmaya <strong>"+sonraki.kalan+" "+SADAKAT.ad+"</strong> kaldı";
+  } else {
+    yuzde = 100;
+    kalanMetin = "👑 En yüksek seviye · <strong>"+suanki.ad+"</strong>";
+  }
+  // kademe noktaları (madalyalar)
+  let noktalar = '';
+  SADAKAT.kademeler.forEach(k=>{
+    const ulasildi = deger>=k.esik;
+    const aktif = k.ad===suanki.ad;
+    noktalar += '<div class="kad-nokta'+(ulasildi?' ulasildi':'')+(aktif?' aktif':'')+'" style="--kad-renk:'+k.renk+'">'+
+      '<span class="kad-nokta-ic">'+k.ic+'</span>'+
+      '<span class="kad-nokta-ad">'+k.ad+'</span>'+
+    '</div>';
+  });
+  return '<div class="kademe-ilerleme kad-'+boyut+'">'+
+    '<div class="kad-bar-row">'+
+      '<div class="kad-bar"><div class="kad-bar-dolu" style="width:'+yuzde+'%; background:'+suanki.renk+'"></div></div>'+
+    '</div>'+
+    '<div class="kad-noktalar">'+noktalar+'</div>'+
+    '<div class="kad-kalan">'+kalanMetin+'</div>'+
+  '</div>';
+}
+/* Üyenin kademe rozeti (madalya + ad) — küçük etiket */
+function kademeRozetHtml(uye){
+  const k = uyeKademe(uye);
+  return '<span class="kademe-rozet" style="--kad-renk:'+k.renk+'">'+k.ic+' '+k.ad+'</span>';
+}
 /* Bir ürünün kazandıracağı Mag puanı (ürüne özel; yoksa orandan) */
 function urunMagPuan(p){
   if(!p) return 0;
@@ -12443,7 +12860,6 @@ function magIslemEkle(uye, tip, mag, aciklama){
   uye.islemler.push({ tip:tip, mag:mag, tl:magToTl(Math.abs(mag)), aciklama:aciklama||"", zaman:Date.now() });
   if(uye.islemler.length>200) uye.islemler=uye.islemler.slice(-200);
 }
-const DAMGA_HEDEF = SADAKAT.damgaHedef;
 const PUAN_ORANI = SADAKAT.kazancOrani;
 
 /* Reklam (splash) — gerçekte WebP/GIF/MP4 URL'i buraya */
@@ -12707,7 +13123,7 @@ function qrKarsilamaHtml(){
     '<div class="qr-giris-kart">'+
       '<div class="qr-sadakat-ikon">🎁</div>'+
       '<div class="qr-g-baslik">MİNİPAN Sadakat</div>'+
-      '<div class="qr-g-alt">Kaydol, her siparişte puan ve damga kazan. '+DAMGA_HEDEF+' damgaya 1 ürün bedava! Tüm MİNİPAN şubelerinde geçerli.</div>'+
+      '<div class="qr-g-alt">Kaydol, her siparişte Mag puan kazan. Puanların biriktikçe '+SADAKAT.kademeler.map(k=>k.ic+k.ad).join(" → ")+' seviyelerine yüksel, daha çok kazan! Tüm MİNİPAN şubelerinde geçerli.</div>'+
       '<button class="qr-btn-primary" onclick="QR.view=\'kayit\';renderQR()">🎁 Sadakate kaydol</button>'+
       '<button class="qr-btn-ghost" onclick="QR.view=\'kurtarma\';renderQR()">Hesabım var · giriş yap</button>'+
       '<button class="qr-btn-ghost" onclick="QR.view=\'giris\';renderQR()">Şimdilik atla, isimle sipariş ver</button>'+
@@ -12752,12 +13168,12 @@ function qrKaydol(){
   if(!m){
     let kanal = QR._kayitKanal||"mail";
     if(!OTP_KANALLAR[kanal] || !OTP_KANALLAR[kanal].aktif) kanal="mail";  // disabled ise mail
-    m = {mail:mail, ad:ad, tel:tel, mag:0, damga:0, adresler:[], otpKanal:kanal};
+    m = {mail:mail, ad:ad, tel:tel, mag:0, toplamKazanim:0, adresler:[], islemler:[], otpKanal:kanal};
     CUSTOMERS[mail] = m;   // gerçekte customers/{mail} — mail asıl kimlik
   }
   QR.musteri = m; QR.kisi = m.ad; QR.tel = m.tel||"";
   DEVICE_MEMORY = mail;    // cihaz hafızası artık mail ile
-  note("Hoş geldin "+m.ad+"! "+(m.damga>0?m.damga+" damgan var":"İlk siparişinle kazanmaya başla"));
+  note("Hoş geldin "+m.ad+"! "+(m.mag>0?m.mag+" "+SADAKAT.ad+" puanın var":"İlk siparişinle kazanmaya başla"));
   QR.view = "kategoriler"; renderQR();
 }
 
@@ -12820,23 +13236,24 @@ function qrGirisYap(){
   QR.kisi = ad; QR.view="kategoriler"; renderQR();
 }
 
-/* Damga şeridi (10 damga görseli) */
+/* Kademe şeridi (Bronz→Gümüş→Altın ilerleme + Mag bakiyesi) */
 function qrDamgaSeritHtml(){
   const m = QR.musteri;
-  let dots = '';
-  for(let i=0;i<DAMGA_HEDEF;i++){
-    dots += '<span class="qr-damga'+(i<m.damga?' dolu':'')+'">'+(i<m.damga?'🧇':'')+'</span>';
-  }
-  const kalan = DAMGA_HEDEF - m.damga;
-  return '<div class="qr-damga-serit">'+
-    '<div class="qr-damga-ust"><span>'+m.ad+' · '+m.mag+' '+SADAKAT.ad+'</span>'+
-    '<span class="qr-damga-kalan">'+(kalan>0?kalan+' damga sonra bedava!':'🎉 Bedava ürün hakkın var!')+'</span></div>'+
-    '<div class="qr-damga-dots">'+dots+'</div></div>';
+  const kademe = uyeKademe(m);
+  return '<div class="qr-kademe-serit">'+
+    '<div class="qr-kademe-serit-ust">'+
+      '<span class="qr-kademe-serit-ad">'+m.ad+' '+kademeRozetHtml(m)+'</span>'+
+      '<span class="qr-kademe-serit-mag">'+m.mag+' '+SADAKAT.ad+'</span>'+
+    '</div>'+
+    kademeIlerlemeHtml(m, "kucuk")+
+  '</div>';
 }
 function qrSadakatGoster(){
   const m = QR.musteri;
-  const kalan = DAMGA_HEDEF - m.damga;
-  note("🎁 "+m.ad+" · "+m.mag+" "+SADAKAT.ad+" · "+m.damga+"/"+DAMGA_HEDEF+" damga"+(kalan>0?" ("+kalan+" kaldı)":" · bedava hakkın var!"));
+  const kademe = uyeKademe(m);
+  const sonraki = uyeKademeSonraki(m);
+  const kalanMetin = sonraki ? (sonraki.kademe.ad+" olmaya "+sonraki.kalan+" "+SADAKAT.ad+" kaldı") : "En yüksek seviye";
+  note("🎁 "+m.ad+" · "+m.mag+" "+SADAKAT.ad+" · "+kademe.ic+" "+kademe.ad+" · "+kalanMetin);
 }
 
 /* ============================================================
@@ -12846,19 +13263,19 @@ function qrSadakatGoster(){
 function qrProfilHtml(){
   const m = QR.musteri;
   if(!m.adresler) m.adresler=[];
-  const kalan = DAMGA_HEDEF - m.damga;
+  const kademe = uyeKademe(m);
   let html='<div class="qr-screen"><div class="qr-topbar">'+
     '<button class="qr-close" onclick="QR.view=\'menu\';renderQR()">←</button>'+
     '<div class="qr-tb-mid"><div class="qr-tb-brand">Üyeliğim</div>'+
     '<div class="qr-tb-masa">'+m.ad+'</div></div>'+
     '<div style="width:34px"></div></div>'+
     '<div class="qr-profil">';
-  // Sadakat özeti
+  // Sadakat özeti — Mag bakiyesi + kademe madalyası
   html+='<div class="qpr-ozet">'+
     '<div class="qpr-mag"><div class="qpr-mag-deger">'+m.mag+'</div><div class="qpr-mag-lbl">'+SADAKAT.ad+' puan</div></div>'+
-    '<div class="qpr-damga"><div class="qpr-damga-deger">'+m.damga+'/'+DAMGA_HEDEF+'</div><div class="qpr-mag-lbl">damga</div></div>'+
+    '<div class="qpr-kademe" style="--kad-renk:'+kademe.renk+'"><div class="qpr-kademe-ic">'+kademe.ic+'</div><div class="qpr-kademe-ad">'+kademe.ad+'</div><div class="qpr-mag-lbl">üyelik</div></div>'+
     '</div>'+
-    '<div class="qpr-kalan">'+(kalan>0?'🧇 '+kalan+' damga sonra 1 ürün bedava':'🎉 Bedava ürün hakkın var!')+'</div>';
+    '<div class="qpr-kademe-ilerleme">'+kademeIlerlemeHtml(m, "buyuk")+'</div>';
   // Adres defteri
   html+='<div class="qpr-adres-bolum">'+
     '<div class="qpr-baslik">📍 Adreslerim <small>('+m.adresler.length+'/'+ADRES_LIMIT+')</small></div>'+
@@ -12958,7 +13375,7 @@ function qrKategorilerHtml(){
       '<div class="qr-tb-mid"><div class="qr-tb-brand">MİNİPAN</div>'+
       '<div class="qr-tb-masa">'+(QR.servis==="eve"?'🛵 Eve teslimat':'🍽️ Masa '+QR.masa)+' · '+QR.kisi+'</div></div>'+
       (QR.musteri
-        ? '<button class="qr-tb-sadakat" onclick="QR.view=\'profil\';renderQR()">🎁<span>'+QR.musteri.damga+'</span></button>'
+        ? '<button class="qr-tb-sadakat" onclick="QR.view=\'profil\';renderQR()">'+uyeKademe(QR.musteri).ic+'<span>'+QR.musteri.mag+'</span></button>'
         : '<div style="width:34px"></div>')+
     '</div>'+
     (QR.musteri ? qrDamgaSeritHtml() : '')+
@@ -13075,7 +13492,7 @@ function qrMenuHtml(){
       '<div class="qr-tb-mid"><div class="qr-tb-brand">'+QR.aktifKat+'</div>'+
       '<div class="qr-tb-masa">'+(QR.servis==="eve"?'🛵 Eve':'🍽️ Masa '+QR.masa)+' · '+QR.kisi+'</div></div>'+
       (QR.musteri
-        ? '<button class="qr-tb-sadakat" onclick="QR.view=\'profil\';renderQR()">🎁<span>'+QR.musteri.damga+'</span></button>'
+        ? '<button class="qr-tb-sadakat" onclick="QR.view=\'profil\';renderQR()">'+uyeKademe(QR.musteri).ic+'<span>'+QR.musteri.mag+'</span></button>'
         : '<div style="width:34px"></div>')+
     '</div>'+
     // Ana menü butonu — kategorilere dön
@@ -13417,6 +13834,7 @@ function qrSiparisGonder(){
       if(!s){ s=SESSIONS[masaNo]={masa:masaNo, acik:true, zaman:Date.now(), kisiler:[]}; }
       let k=s.kisiler.find(x=>x.ad===(QR.kisi||"Müşteri"));
       if(!k){ k={ad:(QR.kisi||"Müşteri"), kalemler:[]}; s.kisiler.push(k); }
+      if(QR.musteri && QR.musteri.mail) k.uyeMail = QR.musteri.mail;  // sadakat üyesi → kişiye bağla
       kalemlerKopya.forEach(it=>{
         k.kalemler.push({id:_kalemId++, ad:it.ad, fiyat:it.fiyat, secimler:it.secimler, ekstraRecete:[], durum:"hazirlaniyor", paket:true});
       });
@@ -13428,6 +13846,7 @@ function qrSiparisGonder(){
     if(!s){ s=SESSIONS[QR.masa]={masa:QR.masa, acik:true, zaman:Date.now(), kisiler:[]}; }
     let k=s.kisiler.find(x=>x.ad===(QR.kisi||"Müşteri"));
     if(!k){ k={ad:(QR.kisi||"Müşteri"), kalemler:[]}; s.kisiler.push(k); }
+    if(QR.musteri && QR.musteri.mail) k.uyeMail = QR.musteri.mail;  // sadakat üyesi → kişiye bağla
     QR.sepet.forEach(c=>{
       for(let n=0;n<c.q;n++){
         k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
@@ -13452,26 +13871,34 @@ function qrSiparisGonder(){
     kalemler: kalemlerKopya
   });
   QR.sonTutar = t; QR.sonAdet = QR.sepet.reduce((s,c)=>s+c.q,0);
-  // SADAKAT KAZANIMI (kayıtlıysa)
+  // SADAKAT ÖNİZLEMESİ (kayıtlıysa) — PUAN HENÜZ EKLENMEZ!
+  // Puan, kasada ödeme alındığında eklenir (iptal durumunda puan eklenmiş olmaz).
   QR.kazanim = null;
   if(QR.musteri){
-    const puanKazanc = Math.round(t * PUAN_ORANI);
-    QR.musteri.mag += puanKazanc;
-    QR.musteri.damga += 1;
-    let bedava = false;
-    if(QR.musteri.damga >= DAMGA_HEDEF){ QR.musteri.damga -= DAMGA_HEDEF; bedava = true; }
-    QR.kazanim = {puan:puanKazanc, bedava:bedava, damga:QR.musteri.damga};
+    const mus = QR.musteri;
+    // ürün bazlı ham kazanım (sadece gösterim için)
+    let hamKazanc = 0;
+    QR.sonSepetKopya = kalemlerKopya;
+    kalemlerKopya.forEach(c=>{
+      const p = DEMO_PRODUCTS.find(x=>x.ad===c.ad);
+      hamKazanc += urunMagPuan(p) * (c.q||c.adet||1);
+    });
+    hamKazanc = Math.round(hamKazanc);
+    const kademe = uyeKademe(mus);
+    const puanKazanc = Math.round(hamKazanc * (kademe.carpan||1));
+    // NOT: mus.mag ve toplamKazanim DEĞİŞTİRİLMEZ — ödeme alınınca eklenecek
+    QR.kazanim = {puan:puanKazanc, carpan:kademe.carpan, kademeAd:kademe.ad, beklemede:true};
   }
   QR.sepet = []; QR.view = "onay"; renderQR();
 }
 function qrOnayHtml(){
   let sadakatBlok = '';
-  if(QR.kazanim){
+  if(QR.kazanim && QR.kazanim.puan>0){
+    const k = QR.kazanim;
+    const carpanNot = (k.carpan&&k.carpan!==1) ? ' <span class="qr-os-carpan">×'+k.carpan+' '+k.kademeAd+'</span>' : '';
     sadakatBlok = '<div class="qr-onay-sadakat">'+
-      '<div class="qr-os-puan">+'+QR.kazanim.puan+' '+SADAKAT.ad+' · +1 damga 🧇</div>'+
-      (QR.kazanim.bedava
-        ? '<div class="qr-os-bedava">🎉 Tebrikler! '+DAMGA_HEDEF+' damga doldu — sıradaki siparişte 1 ürün bedava!</div>'
-        : '<div class="qr-os-kalan">'+(DAMGA_HEDEF-QR.kazanim.damga)+' damga sonra bedava ürün</div>')+
+      '<div class="qr-os-puan">🎁 +'+k.puan+' '+SADAKAT.ad+' kazanacaksın'+carpanNot+'</div>'+
+      '<div class="qr-os-kalan">⏳ Puanların <strong>ödeme tamamlandığında</strong> hesabına eklenir</div>'+
       '</div>';
   }
   // PAKET TESLİMAT onayı (takipli)
@@ -14136,7 +14563,7 @@ function fisGoster(fis, otomatik){
     '<button class="kak-btn iptal" onclick="document.getElementById(\'fisModal\').classList.remove(\'on\')">Kapat</button></div></div>';
   mdl.classList.add("on");
 }
-function kdsIptal(m,id){ kalemIptal(m,id); note("Kalem iptal edildi · tutar düştü"); renderKDS(); }
+function kdsIptal(m,id){ kalemIptalOnay(m,id,"kds"); }
 function kdsOpsKaldir(m,id,oi){ secenekSilOnay(m,id,oi,"kds"); }
 
 /* ============================================================
