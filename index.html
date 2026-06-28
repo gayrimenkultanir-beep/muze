@@ -355,6 +355,7 @@ tr:last-child td{border-bottom:none}
 .opt-sec.on .os-mark{background:var(--brand); border-color:var(--brand); color:var(--brand-ink)}
 .os-ad{flex:1; font-size:14px; font-weight:600}
 .os-fiyat{font-weight:800; font-size:13px; color:var(--brand-d); flex:none}
+.os-kcal{font-weight:700; font-size:11.5px; color:#c0392b; flex:none; white-space:nowrap; margin-right:2px}
 /* İsteğe bağlı adetli seçenek */
 .opt-adetli{display:flex; align-items:center; gap:10px; cursor:default}
 .opt-adetli.on{border-color:var(--brand); background:var(--brand-soft)}
@@ -622,6 +623,12 @@ tr:last-child td{border-bottom:none}
 .secpool-satir.sp-kapali{opacity:.7; background:var(--err-soft)}
 .sp-durum-acik{font-size:12px; font-weight:700; color:var(--ok)}
 .sp-fiyat{font-size:13px; font-weight:800; color:var(--brand-d); white-space:nowrap}
+.sp-kcal{font-size:12px; font-weight:700; color:#c0392b; white-space:nowrap}
+.kalem-kcal{display:inline-block; font-size:11px; font-weight:700; color:#c0392b; background:#fdecea; border-radius:6px; padding:1px 6px; margin-left:4px; white-space:nowrap; vertical-align:middle}
+.opt-kcal{display:inline-block; font-size:11.5px; font-weight:700; color:#c0392b; margin-left:6px}
+.qr-card-kcal{display:inline-flex; align-items:center; gap:3px; font-size:11.5px; font-weight:700; color:#c0392b; background:#fdecea; border-radius:99px; padding:2px 9px; white-space:nowrap}
+.qr-card-kcal-row{margin:2px 0 4px}
+.qr-si-ad .kalem-kcal{font-size:10.5px}
 .sp-fiyat .sp-ucretsiz2{color:var(--ink-3); font-weight:500}
 .sp-durum-kapali{font-size:11.5px; font-weight:700; color:var(--err)}
 .sp-kapat-btn{padding:6px 13px; border-radius:8px; background:var(--err-soft); border:1px solid #e8a59e; color:var(--err); font-size:12px; font-weight:800}
@@ -2125,8 +2132,11 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-card-tukendi{flex:none; font-size:11.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:8px 13px; border-radius:9px}
 
 /* Sepet bar (yüzen) */
-.qr-sepet-bar{position:sticky; bottom:0; display:flex; align-items:center; gap:12px; margin:14px; padding:15px 18px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); box-shadow:var(--shadow-lg); width:calc(100% - 28px); cursor:pointer}
+.qr-sepet-bar{position:fixed; bottom:14px; left:0; right:0; margin:0 auto; z-index:100; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); box-shadow:var(--shadow-lg); width:calc(min(480px,100vw) - 28px); box-sizing:border-box; cursor:pointer; border:none}
 .qr-sepet-bar > *{pointer-events:none}
+.qr-menu-list.has-sepet, .qr-kat-grid.has-sepet{padding-bottom:90px}
+/* Modal açıkken sabit sepet bar gizlenir (modalın altında kalmasın) */
+body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
 .qr-sb-n{width:26px; height:26px; border-radius:99px; background:var(--brand-ink); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:800}
 .qr-sb-t{flex:1; font-weight:800; font-size:15px}
 .qr-sb-f{font-weight:800; font-size:16px}
@@ -5049,262 +5059,262 @@ let DEMO_KATEGORILER = [
 ];
 
 let DEMO_PRODUCTS = [
-  {ad:"Pandio", emoji:"✨", kat:"Yeni Ürün", fiyat:249, aktif:true, aciklama:"Tek bardakta iki büyük keyif! Altında ister buz gibi bir limonata ister canlandırıcı bir soğuk kahve; üstünde ise taze m"},
-  {ad:"Cookie Menü", emoji:"🎫", kat:"Ekonomik Menüler", fiyat:140, aktif:true, aciklama:"Seçeceğiniz bir adet cookie ve bir adet fincan çay"},
-  {ad:"Kanka Menü", emoji:"🎫", kat:"Ekonomik Menüler", fiyat:390, aktif:true, aciklama:"2 Adet 8'li Minipan + 2 Çay"},
-  {ad:"8'li Minipan + Kahve Menü", emoji:"🎫", kat:"Ekonomik Menüler", fiyat:255, aktif:true, aciklama:"8'li Minipan + Türk Kahvesi"},
-  {ad:"Pasta + Kahve Menü", emoji:"🎫", kat:"Ekonomik Menüler", fiyat:215, aktif:true, aciklama:"Seçeceğiniz Pasta + Kahve"},
-  {ad:"8'li Minipan + Gazoz Menü", emoji:"🎫", kat:"Ekonomik Menüler", fiyat:245, aktif:true, aciklama:"245.00 ₺"},
-  {ad:"Cheesecake + Kahve Menü", emoji:"🎫", kat:"Ekonomik Menüler", fiyat:165, aktif:true, aciklama:"165.00 ₺"},
-  {ad:"Sütlü Çikolatalı Sos 300 gr", emoji:"🍫", kat:"Çikolata Sosları 300 gr", fiyat:175, aktif:true, aciklama:"Glutensiz,katkısız,Gimdes sertifikalı özel çikolata sosları"},
-  {ad:"Bitter Çikolatalı Sos 300 gr", emoji:"🍫", kat:"Çikolata Sosları 300 gr", fiyat:175, aktif:true, aciklama:"Glutensiz,katkısız,Gimdes sertifikalı özel çikolata sosları"},
-  {ad:"Beyaz Çikolatalı Sos 300 gr", emoji:"🍫", kat:"Çikolata Sosları 300 gr", fiyat:175, aktif:true, aciklama:"Glutensiz,katkısız,Gimdes sertifikalı özel çikolata sosları"},
-  {ad:"Minipan Maraşlım", emoji:"🧇", kat:"Tatlılar", fiyat:295, aktif:true, aciklama:"Kesme Maraş Dondurma, Sütlü Pankek, Sütlü Çikolata, Çilek, Muz, İsteğe göre Antep Fıstığı ya da Fıstık parçacıkları"},
-  {ad:"Minipan ( 8 Adet )", emoji:"🧇", kat:"Tatlılar", fiyat:205, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
-  {ad:"Minipan ( 10 Adet )", emoji:"🧇", kat:"Tatlılar", fiyat:230, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
-  {ad:"Minipan ( 12 Adet )", emoji:"🧇", kat:"Tatlılar", fiyat:255, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
-  {ad:"Minipan ( 14 Adet )", emoji:"🧇", kat:"Tatlılar", fiyat:280, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
-  {ad:"Minipan Dubai", emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"230.00 ₺"},
-  {ad:"Dolunay", emoji:"🧇", kat:"Tatlılar", fiyat:280, aktif:true, aciklama:"Sütlü Pankek, Beyaz Çikolata, Çilek, Muz, Kivi, Oreo, Beyaz Damla Çikolata, Beyaz Pirinç Patlağı"},
-  {ad:"Fıstık Gibi", emoji:"🧇", kat:"Tatlılar", fiyat:280, aktif:true, aciklama:"Sütlü Pankek, Sütlü Çikolata, Antep Fıstığı Çikolata, Çilek, Muz, Antep Fıstığı Parçacıkları, Krep Kırığı"},
-  {ad:"Kara Sevda", emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"Kakaolu Pankek, Sütlü Çikolata, Bitter Çikolata, Çilek, Muz, Krep Kırığı, Bitter Damla Çikolata, Bitter Pirinç Patlağı"},
-  {ad:"Karamelim", emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"Sütlü Pankek, Sütlü Çikolata, Karamel Çikolata, Çilek, Muz, Lotus Biscoff, Fındık Parçacıkları"},
-  {ad:"Kafam Karışık", emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"Karışık Pankek, Sütlü Çikolata, Beyaz Çikolata, Frambuaz Çikolata, Antep Fıstığı Çikolata, Çilek, Muz, Kivi, Karışık Pir"},
-  {ad:"Minipan Fondue", emoji:"🧇", kat:"Tatlılar", fiyat:350, aktif:true, aciklama:"Sütlü Çikolata, Pankek, Browni, Çilek,Muz"},
-  {ad:"Minipan Fondue XL", emoji:"🧇", kat:"Tatlılar", fiyat:420, aktif:true, aciklama:"Sütlü Çikolata,Beyaz ya da Bitter Çikolata, Pankek, Browni, Çilek, Muz"},
-  {ad:"Spoonful Cup", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"205.00 ₺"},
-  {ad:"Dubai Cup", emoji:"🧇", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"210.00 ₺"},
-  {ad:"Kadayıflı Magnolia", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"205.00 ₺"},
-  {ad:"Kit Kat'lı Magnolia", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"205.00 ₺"},
-  {ad:"Bisküvili Magnolia", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Seçeceğiniz bisküvi ve çilek ya da muz ile anlık olarak siparişinize özel hazırlanır."},
-  {ad:"Brownili Magnolia", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Seçeceğiniz meyve ile anlık olarak siparişinize özel hazırlanır."},
-  {ad:"Çikolatalı Magnolia", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Seçeceğiniz çikolata, meyve ve isteğe göre bisküvi ile anlık olarak siparişinize özel hazırlanır."},
-  {ad:"Bihter", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Bitter Çikolata ile kusursuzca harmanlanmış krema, tercihinize göre fındık ya da antep fıstığı parçacıkları, kakao"},
-  {ad:"Fruitmix", emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"215.00 ₺"},
-  {ad:"Minicup", emoji:"🧇", kat:"Tatlılar", fiyat:150, aktif:true, aciklama:"215.00 ₺"},
-  {ad:"Oreolu Kakaolu Cookie", emoji:"🍰", kat:"Pastalar", fiyat:105, aktif:true, aciklama:"105.00 ₺"},
-  {ad:"Cookie Klasik", emoji:"🍰", kat:"Pastalar", fiyat:105, aktif:true, aciklama:"105.00 ₺"},
-  {ad:"Limonlu Mono Cheesecake", emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"185.00 ₺"},
-  {ad:"Siyah Profiterollü Pasta", emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
-  {ad:"Beyaz Profiterol Pasta", emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"185.00 ₺"},
-  {ad:"Tiramisu", emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
-  {ad:"Bella Vista Siyah Çikolatalı Pasta", emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
-  {ad:"Red Velvet", emoji:"🍰", kat:"Pastalar", fiyat:175, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
-  {ad:"Karamelli Mono Latte Pasta", emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
-  {ad:"Goca Moğla Gazozu Lavanta-Şeftali", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true, aciklama:"60.00 ₺"},
-  {ad:"Bor Gazozu Yaban Mersini", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Zafer Gazozu Klasik", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Bağlar Gazozu Egzotik", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Bor Gazozu Hindistan Cevizi", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Bodrum Mandalinalı", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Bor Bubble Gum", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Marmaris Narlı", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Kabarcık Kırmızı Frambuaz", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Salda Vişne & Nane Aromalı", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Şirince Gazoz Şeftali & Mürver", emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
-  {ad:"Limonata", emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true, aciklama:"110.00 ₺"},
-  {ad:"Naneli Limonata", emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
-  {ad:"Kırmızı Orman Meyveli Limonata", emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
-  {ad:"Hibiscus Limonata", emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
-  {ad:"Frambuazlı Limonata", emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
-  {ad:"Çilekli Limonata", emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
-  {ad:"Ice Americano", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:110, aktif:true, aciklama:"110.00 ₺"},
-  {ad:"Ice Latte", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:120, aktif:true},
-  {ad:"Ice Caramel Latte", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
-  {ad:"Ice Toffee Nut Latte", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
-  {ad:"Ice Coconut Latte", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
-  {ad:"Ice Irish Cream Latte", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
-  {ad:"Ice White Chocolate Mocha", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
-  {ad:"Ice Mocha", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
-  {ad:"Ice Muzlu Süt", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:110, aktif:true},
-  {ad:"Ice Çilekli Süt", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:115, aktif:true},
-  {ad:"Ice Chocolate", emoji:"🧊", kat:"Soğuk Kahveler", fiyat:115, aktif:true},
-  {ad:"Su", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:20, aktif:true, aciklama:"20.00 ₺"},
-  {ad:"Churchill", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
-  {ad:"Kutu Kola 33 cl", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
-  {ad:"Kutu Fanta 33 cl", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
-  {ad:"Kutu Kola Şekersiz 33 cl", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
-  {ad:"Sprite 33 cl", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
-  {ad:"Şişe Kola 20 cl", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:60, aktif:true},
-  {ad:"Soğuk Çay 33 cl", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
-  {ad:"Maden Suyu", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:30, aktif:true},
-  {ad:"Meyveli Maden Suyu", emoji:"🥤", kat:"Soğuk İçecekler", fiyat:35, aktif:true},
-  {ad:"Çay", emoji:"☕", kat:"Sıcak İçecekler", fiyat:30, aktif:true, aciklama:"30.00 ₺"},
-  {ad:"Fincan Çay", emoji:"☕", kat:"Sıcak İçecekler", fiyat:50, aktif:true},
-  {ad:"Adaçayı", emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
-  {ad:"Ihlamur", emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
-  {ad:"Papatya", emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
-  {ad:"Yeşilçay", emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
-  {ad:"Sıcak Çikolata", emoji:"☕", kat:"Sıcak İçecekler", fiyat:125, aktif:true},
-  {ad:"Beyaz Sıcak Çikolata", emoji:"☕", kat:"Sıcak İçecekler", fiyat:125, aktif:true},
-  {ad:"Frambuaz Sıcak Çikolata", emoji:"☕", kat:"Sıcak İçecekler", fiyat:130, aktif:true},
-  {ad:"Salep", emoji:"☕", kat:"Sıcak İçecekler", fiyat:125, aktif:true},
-  {ad:"Fincan Süt", emoji:"☕", kat:"Sıcak İçecekler", fiyat:75, aktif:true},
-  {ad:"Ballı Süt", emoji:"☕", kat:"Sıcak İçecekler", fiyat:95, aktif:true},
-  {ad:"Türk Kahvesi", emoji:"☕", kat:"Kahveler", fiyat:85, aktif:true, aciklama:"85.00 ₺"},
-  {ad:"Single Espresso", emoji:"☕", kat:"Kahveler", fiyat:75, aktif:true},
-  {ad:"Double Espresso", emoji:"☕", kat:"Kahveler", fiyat:120, aktif:true},
-  {ad:"Americano", emoji:"☕", kat:"Kahveler", fiyat:120, aktif:true},
-  {ad:"Cappuccino", emoji:"☕", kat:"Kahveler", fiyat:125, aktif:true},
-  {ad:"Latte", emoji:"☕", kat:"Kahveler", fiyat:125, aktif:true},
-  {ad:"Caramel Latte", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Toffee Nut Latte", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Irish Cream Latte", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Latte Macchiato", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Caramel Latte Macchiato", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Toffee Nut Latte Macchiato", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Irish Cream Latte Macchiato", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Mocha", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"White Chocolate Mocha", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Filtre Kahve", emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
-  {ad:"Sütlü Filtre Kahve", emoji:"☕", kat:"Kahveler", fiyat:145, aktif:true},
-  {ad:"Menengiç Kahvesi", emoji:"☕", kat:"Kahveler", fiyat:95, aktif:true},
-  {ad:"Dibek Kahvesi", emoji:"☕", kat:"Kahveler", fiyat:95, aktif:true},
-  {ad:"Gold Kahve", emoji:"☕", kat:"Kahveler", fiyat:95, aktif:true},
-  {ad:"Sütlü Gold Kahve", emoji:"☕", kat:"Kahveler", fiyat:110, aktif:true},
-  {ad:"Brownili Milkshake", emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true, aciklama:"110.00 ₺"},
-  {ad:"Çikolatalı Milkshake", emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
-  {ad:"Vanilyalı Milkshake", emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
-  {ad:"Lotuslu Milkshake", emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
-  {ad:"Blue Dream", emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
-  {ad:"Oreolu Milkshake", emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
-  {ad:"Vanilya (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true, aciklama:"50.00 ₺"},
-  {ad:"Kakao (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Karamel (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"İtalyan Karamel (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Limon (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Çilek (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Kavun (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Mango (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Oreo (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Balbadem (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Yaban Mersini (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Vişne (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Antep Fıstığı (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Karadut (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Böğürtlen (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
-  {ad:"Portakal (Top)", emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Pandio", kcal:250, emoji:"✨", kat:"Yeni Ürün", fiyat:249, aktif:true, aciklama:"Tek bardakta iki büyük keyif! Altında ister buz gibi bir limonata ister canlandırıcı bir soğuk kahve; üstünde ise taze m"},
+  {ad:"Cookie Menü", kcal:550, emoji:"🎫", kat:"Ekonomik Menüler", fiyat:140, aktif:true, aciklama:"Seçeceğiniz bir adet cookie ve bir adet fincan çay"},
+  {ad:"Kanka Menü", kcal:550, emoji:"🎫", kat:"Ekonomik Menüler", fiyat:390, aktif:true, aciklama:"2 Adet 8'li Minipan + 2 Çay"},
+  {ad:"8'li Minipan + Kahve Menü", kcal:550, emoji:"🎫", kat:"Ekonomik Menüler", fiyat:255, aktif:true, aciklama:"8'li Minipan + Türk Kahvesi"},
+  {ad:"Pasta + Kahve Menü", kcal:550, emoji:"🎫", kat:"Ekonomik Menüler", fiyat:215, aktif:true, aciklama:"Seçeceğiniz Pasta + Kahve"},
+  {ad:"8'li Minipan + Gazoz Menü", kcal:550, emoji:"🎫", kat:"Ekonomik Menüler", fiyat:245, aktif:true, aciklama:"245.00 ₺"},
+  {ad:"Cheesecake + Kahve Menü", kcal:550, emoji:"🎫", kat:"Ekonomik Menüler", fiyat:165, aktif:true, aciklama:"165.00 ₺"},
+  {ad:"Sütlü Çikolatalı Sos 300 gr", kcal:1450, emoji:"🍫", kat:"Çikolata Sosları 300 gr", fiyat:175, aktif:true, aciklama:"Glutensiz,katkısız,Gimdes sertifikalı özel çikolata sosları"},
+  {ad:"Bitter Çikolatalı Sos 300 gr", kcal:1380, emoji:"🍫", kat:"Çikolata Sosları 300 gr", fiyat:175, aktif:true, aciklama:"Glutensiz,katkısız,Gimdes sertifikalı özel çikolata sosları"},
+  {ad:"Beyaz Çikolatalı Sos 300 gr", kcal:1500, emoji:"🍫", kat:"Çikolata Sosları 300 gr", fiyat:175, aktif:true, aciklama:"Glutensiz,katkısız,Gimdes sertifikalı özel çikolata sosları"},
+  {ad:"Minipan Maraşlım", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:295, aktif:true, aciklama:"Kesme Maraş Dondurma, Sütlü Pankek, Sütlü Çikolata, Çilek, Muz, İsteğe göre Antep Fıstığı ya da Fıstık parçacıkları"},
+  {ad:"Minipan ( 8 Adet )", kcal:260, emoji:"🧇", kat:"Tatlılar", fiyat:205, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
+  {ad:"Minipan ( 10 Adet )", kcal:320, emoji:"🧇", kat:"Tatlılar", fiyat:230, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
+  {ad:"Minipan ( 12 Adet )", kcal:380, emoji:"🧇", kat:"Tatlılar", fiyat:255, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
+  {ad:"Minipan ( 14 Adet )", kcal:440, emoji:"🧇", kat:"Tatlılar", fiyat:280, aktif:true, aciklama:"Seçimlerinize göre size özel hazırlanır. Karton tabakta servis edilir."},
+  {ad:"Minipan Dubai", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"230.00 ₺"},
+  {ad:"Dolunay", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:280, aktif:true, aciklama:"Sütlü Pankek, Beyaz Çikolata, Çilek, Muz, Kivi, Oreo, Beyaz Damla Çikolata, Beyaz Pirinç Patlağı"},
+  {ad:"Fıstık Gibi", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:280, aktif:true, aciklama:"Sütlü Pankek, Sütlü Çikolata, Antep Fıstığı Çikolata, Çilek, Muz, Antep Fıstığı Parçacıkları, Krep Kırığı"},
+  {ad:"Kara Sevda", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"Kakaolu Pankek, Sütlü Çikolata, Bitter Çikolata, Çilek, Muz, Krep Kırığı, Bitter Damla Çikolata, Bitter Pirinç Patlağı"},
+  {ad:"Karamelim", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"Sütlü Pankek, Sütlü Çikolata, Karamel Çikolata, Çilek, Muz, Lotus Biscoff, Fındık Parçacıkları"},
+  {ad:"Kafam Karışık", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:270, aktif:true, aciklama:"Karışık Pankek, Sütlü Çikolata, Beyaz Çikolata, Frambuaz Çikolata, Antep Fıstığı Çikolata, Çilek, Muz, Kivi, Karışık Pir"},
+  {ad:"Minipan Fondue", kcal:350, emoji:"🧇", kat:"Tatlılar", fiyat:350, aktif:true, aciklama:"Sütlü Çikolata, Pankek, Browni, Çilek,Muz"},
+  {ad:"Minipan Fondue XL", kcal:520, emoji:"🧇", kat:"Tatlılar", fiyat:420, aktif:true, aciklama:"Sütlü Çikolata,Beyaz ya da Bitter Çikolata, Pankek, Browni, Çilek, Muz"},
+  {ad:"Spoonful Cup", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"205.00 ₺"},
+  {ad:"Dubai Cup", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:250, aktif:true, aciklama:"210.00 ₺"},
+  {ad:"Kadayıflı Magnolia", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"205.00 ₺"},
+  {ad:"Kit Kat'lı Magnolia", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"205.00 ₺"},
+  {ad:"Bisküvili Magnolia", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Seçeceğiniz bisküvi ve çilek ya da muz ile anlık olarak siparişinize özel hazırlanır."},
+  {ad:"Brownili Magnolia", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Seçeceğiniz meyve ile anlık olarak siparişinize özel hazırlanır."},
+  {ad:"Çikolatalı Magnolia", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Seçeceğiniz çikolata, meyve ve isteğe göre bisküvi ile anlık olarak siparişinize özel hazırlanır."},
+  {ad:"Bihter", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"Bitter Çikolata ile kusursuzca harmanlanmış krema, tercihinize göre fındık ya da antep fıstığı parçacıkları, kakao"},
+  {ad:"Fruitmix", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:200, aktif:true, aciklama:"215.00 ₺"},
+  {ad:"Minicup", kcal:280, emoji:"🧇", kat:"Tatlılar", fiyat:150, aktif:true, aciklama:"215.00 ₺"},
+  {ad:"Oreolu Kakaolu Cookie", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:105, aktif:true, aciklama:"105.00 ₺"},
+  {ad:"Cookie Klasik", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:105, aktif:true, aciklama:"105.00 ₺"},
+  {ad:"Limonlu Mono Cheesecake", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"185.00 ₺"},
+  {ad:"Siyah Profiterollü Pasta", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
+  {ad:"Beyaz Profiterol Pasta", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"185.00 ₺"},
+  {ad:"Tiramisu", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
+  {ad:"Bella Vista Siyah Çikolatalı Pasta", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
+  {ad:"Red Velvet", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:175, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
+  {ad:"Karamelli Mono Latte Pasta", kcal:340, emoji:"🍰", kat:"Pastalar", fiyat:185, aktif:true, aciklama:"Tüm pastalarımız el yapımı olup, taze servis edilmektedir."},
+  {ad:"Goca Moğla Gazozu Lavanta-Şeftali", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true, aciklama:"60.00 ₺"},
+  {ad:"Bor Gazozu Yaban Mersini", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Zafer Gazozu Klasik", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Bağlar Gazozu Egzotik", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Bor Gazozu Hindistan Cevizi", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Bodrum Mandalinalı", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Bor Bubble Gum", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Marmaris Narlı", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Kabarcık Kırmızı Frambuaz", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Salda Vişne & Nane Aromalı", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Şirince Gazoz Şeftali & Mürver", kcal:90, emoji:"🥤", kat:"Gazozlar", fiyat:60, aktif:true},
+  {ad:"Limonata", kcal:120, emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true, aciklama:"110.00 ₺"},
+  {ad:"Naneli Limonata", kcal:120, emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
+  {ad:"Kırmızı Orman Meyveli Limonata", kcal:120, emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
+  {ad:"Hibiscus Limonata", kcal:120, emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
+  {ad:"Frambuazlı Limonata", kcal:120, emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
+  {ad:"Çilekli Limonata", kcal:120, emoji:"🍋", kat:"Limonatalar", fiyat:110, aktif:true},
+  {ad:"Ice Americano", kcal:10, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:110, aktif:true, aciklama:"110.00 ₺"},
+  {ad:"Ice Latte", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:120, aktif:true},
+  {ad:"Ice Caramel Latte", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
+  {ad:"Ice Toffee Nut Latte", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
+  {ad:"Ice Coconut Latte", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
+  {ad:"Ice Irish Cream Latte", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
+  {ad:"Ice White Chocolate Mocha", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
+  {ad:"Ice Mocha", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:125, aktif:true},
+  {ad:"Ice Muzlu Süt", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:110, aktif:true},
+  {ad:"Ice Çilekli Süt", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:115, aktif:true},
+  {ad:"Ice Chocolate", kcal:160, emoji:"🧊", kat:"Soğuk Kahveler", fiyat:115, aktif:true},
+  {ad:"Su", kcal:0, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:20, aktif:true, aciklama:"20.00 ₺"},
+  {ad:"Churchill", kcal:110, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
+  {ad:"Kutu Kola 33 cl", kcal:139, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
+  {ad:"Kutu Fanta 33 cl", kcal:160, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
+  {ad:"Kutu Kola Şekersiz 33 cl", kcal:1, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
+  {ad:"Sprite 33 cl", kcal:140, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
+  {ad:"Şişe Kola 20 cl", kcal:85, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:60, aktif:true},
+  {ad:"Soğuk Çay 33 cl", kcal:90, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:70, aktif:true},
+  {ad:"Maden Suyu", kcal:0, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:30, aktif:true},
+  {ad:"Meyveli Maden Suyu", kcal:40, emoji:"🥤", kat:"Soğuk İçecekler", fiyat:35, aktif:true},
+  {ad:"Çay", kcal:2, emoji:"☕", kat:"Sıcak İçecekler", fiyat:30, aktif:true, aciklama:"30.00 ₺"},
+  {ad:"Fincan Çay", kcal:2, emoji:"☕", kat:"Sıcak İçecekler", fiyat:50, aktif:true},
+  {ad:"Adaçayı", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
+  {ad:"Ihlamur", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
+  {ad:"Papatya", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
+  {ad:"Yeşilçay", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:145, aktif:true},
+  {ad:"Sıcak Çikolata", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:125, aktif:true},
+  {ad:"Beyaz Sıcak Çikolata", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:125, aktif:true},
+  {ad:"Frambuaz Sıcak Çikolata", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:130, aktif:true},
+  {ad:"Salep", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:125, aktif:true},
+  {ad:"Fincan Süt", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:75, aktif:true},
+  {ad:"Ballı Süt", kcal:80, emoji:"☕", kat:"Sıcak İçecekler", fiyat:95, aktif:true},
+  {ad:"Türk Kahvesi", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:85, aktif:true, aciklama:"85.00 ₺"},
+  {ad:"Single Espresso", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:75, aktif:true},
+  {ad:"Double Espresso", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:120, aktif:true},
+  {ad:"Americano", kcal:10, emoji:"☕", kat:"Kahveler", fiyat:120, aktif:true},
+  {ad:"Cappuccino", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:125, aktif:true},
+  {ad:"Latte", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:125, aktif:true},
+  {ad:"Caramel Latte", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Toffee Nut Latte", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Irish Cream Latte", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Latte Macchiato", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Caramel Latte Macchiato", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Toffee Nut Latte Macchiato", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Irish Cream Latte Macchiato", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Mocha", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"White Chocolate Mocha", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Filtre Kahve", kcal:5, emoji:"☕", kat:"Kahveler", fiyat:130, aktif:true},
+  {ad:"Sütlü Filtre Kahve", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:145, aktif:true},
+  {ad:"Menengiç Kahvesi", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:95, aktif:true},
+  {ad:"Dibek Kahvesi", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:95, aktif:true},
+  {ad:"Gold Kahve", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:95, aktif:true},
+  {ad:"Sütlü Gold Kahve", kcal:120, emoji:"☕", kat:"Kahveler", fiyat:110, aktif:true},
+  {ad:"Brownili Milkshake", kcal:350, emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true, aciklama:"110.00 ₺"},
+  {ad:"Çikolatalı Milkshake", kcal:350, emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
+  {ad:"Vanilyalı Milkshake", kcal:350, emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
+  {ad:"Lotuslu Milkshake", kcal:350, emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
+  {ad:"Blue Dream", kcal:350, emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
+  {ad:"Oreolu Milkshake", kcal:350, emoji:"🥤", kat:"Milkshakeler", fiyat:110, aktif:true},
+  {ad:"Vanilya (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true, aciklama:"50.00 ₺"},
+  {ad:"Kakao (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Karamel (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"İtalyan Karamel (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Limon (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Çilek (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Kavun (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Mango (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Oreo (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Balbadem (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Yaban Mersini (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Vişne (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Antep Fıstığı (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Karadut (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Böğürtlen (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
+  {ad:"Portakal (Top)", kcal:200, emoji:"🍨", kat:"Dondurma", fiyat:50, aktif:true},
 ];
 
 let PRODUCT_OPTIONS = {
   "Pandio": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Ücretsiz Süsleme Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Süsleme İstemiyorum", ek:0}, {ad:"Çakıltaşı", ek:0}, {ad:"Bonibon", ek:0}, {ad:"Karışık Pirinç Patlağı", ek:0}, {ad:"Altın Pirinç Patlağı", ek:0}, {ad:"Beyaz Pirinç Patlağı", ek:0}, {ad:"Bitter Pirinç Patlağı", ek:0}, {ad:"Frambuaz Pirinç Patlağı", ek:0}, {ad:"Sütlü Pirinç Patlağı", ek:0}]},
-    {ad:"İçecek Tercihiniz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Ice Latte", ek:0}, {ad:"Ice Americano", ek:0}, {ad:"Limonata", ek:0}, {ad:"Naneli Limonata", ek:0}, {ad:"Çilekli Limonata", ek:0}, {ad:"Frambuazlı Limonata", ek:0}, {ad:"Hibiscus Limonata", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Ücretsiz Süsleme Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Süsleme İstemiyorum", ek:0, kcal:0}, {ad:"Çakıltaşı", ek:0, kcal:75}, {ad:"Bonibon", ek:0, kcal:75}, {ad:"Karışık Pirinç Patlağı", ek:0, kcal:70}, {ad:"Altın Pirinç Patlağı", ek:0, kcal:72}, {ad:"Beyaz Pirinç Patlağı", ek:0, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:0, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:0, kcal:70}, {ad:"Sütlü Pirinç Patlağı", ek:0, kcal:70}]},
+    {ad:"İçecek Tercihiniz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Ice Latte", ek:0, kcal:130}, {ad:"Ice Americano", ek:0, kcal:10}, {ad:"Limonata", ek:0, kcal:120}, {ad:"Naneli Limonata", ek:0, kcal:115}, {ad:"Çilekli Limonata", ek:0, kcal:130}, {ad:"Frambuazlı Limonata", ek:0, kcal:130}, {ad:"Hibiscus Limonata", ek:0, kcal:110}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
   ],
   "Cookie Menü": [
-    {ad:"Cookie Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Klasik Cookie", ek:0}, {ad:"Oreolu Kakaolu Cookie", ek:0}]},
+    {ad:"Cookie Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Klasik Cookie", ek:0, kcal:110}, {ad:"Oreolu Kakaolu Cookie", ek:0, kcal:120}]},
   ],
   "Kanka Menü": [
-    {ad:"1.Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü-Kakaolu", ek:0}]},
-    {ad:"1. Çikolata Sos Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"1. Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"1.Ekstra Süslemeler", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Ekstra Süsleme İstemiyorum", ek:0}, {ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:14}, {ad:"Cicibebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıltaşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
-    {ad:"1. Kanka Menü Çay", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Çay", ek:0}, {ad:"Fincan Çay", ek:20}]},
-    {ad:"2.Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü-Kakaolu", ek:0}]},
-    {ad:"2. Çikolata Sos Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"2. Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"2.Ekstra Süslemeler", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Ekstra Süsleme İstemiyorum", ek:0}, {ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cicibebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıltaşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
-    {ad:"2. Kanka Menü Çay", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Çay", ek:0}, {ad:"Fincan Çay", ek:20}]},
+    {ad:"1.Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü", ek:0, kcal:120}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü-Kakaolu", ek:0, kcal:140}]},
+    {ad:"1. Çikolata Sos Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"1. Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"1.Ekstra Süslemeler", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Ekstra Süsleme İstemiyorum", ek:0, kcal:0}, {ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:14, kcal:100}, {ad:"Cicibebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıltaşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
+    {ad:"1. Kanka Menü Çay", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Çay", ek:0, kcal:2}, {ad:"Fincan Çay", ek:20, kcal:2}]},
+    {ad:"2.Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü", ek:0, kcal:120}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü-Kakaolu", ek:0, kcal:140}]},
+    {ad:"2. Çikolata Sos Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"2. Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"2.Ekstra Süslemeler", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Ekstra Süsleme İstemiyorum", ek:0, kcal:0}, {ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cicibebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıltaşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
+    {ad:"2. Kanka Menü Çay", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Çay", ek:0, kcal:2}, {ad:"Fincan Çay", ek:20, kcal:2}]},
   ],
   "8'li Minipan + Kahve Menü": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Türk Kahvesi Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sade Türk Kahvesi", ek:0}, {ad:"Orta Şekerli Türk Kahvesi", ek:0}, {ad:"Şekerli Türk Kahvesi", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Türk Kahvesi Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sade Türk Kahvesi", ek:0, kcal:5}, {ad:"Orta Şekerli Türk Kahvesi", ek:0, kcal:25}, {ad:"Şekerli Türk Kahvesi", ek:0, kcal:40}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
   ],
   "Pasta + Kahve Menü": [
-    {ad:"Pasta Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Karamel Latte Mono", ek:0}, {ad:"Siyah Profiterollü Pasta", ek:0}, {ad:"Beyaz Profiterollü Pasta", ek:0}, {ad:"Frambuazlı Mono Cheesecake", ek:0}, {ad:"Limonlu Mono Cheesecake", ek:0}, {ad:"Bella Vista", ek:0}]},
-    {ad:"Kahve Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Latte", ek:0}, {ad:"Cappuccino", ek:0}, {ad:"Americano", ek:0}, {ad:"Filtre Kahve", ek:0}]},
+    {ad:"Pasta Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Karamel Latte Mono", ek:0, kcal:300}, {ad:"Siyah Profiterollü Pasta", ek:0, kcal:330}, {ad:"Beyaz Profiterollü Pasta", ek:0, kcal:320}, {ad:"Frambuazlı Mono Cheesecake", ek:0, kcal:340}, {ad:"Limonlu Mono Cheesecake", ek:0, kcal:330}, {ad:"Bella Vista", ek:0, kcal:310}]},
+    {ad:"Kahve Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Latte", ek:0, kcal:150}, {ad:"Cappuccino", ek:0, kcal:120}, {ad:"Americano", ek:0, kcal:10}, {ad:"Filtre Kahve", ek:0, kcal:5}]},
   ],
   "8'li Minipan + Gazoz Menü": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Gazoz Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Goca Moğla Gazozu Lavanta-Şeftali", ek:0}, {ad:"Kabarcık Ekşi Elma Ekşilim (Şeker İlavesiz)", ek:0}, {ad:"Beyoğlu Gazozu Limon-Nane", ek:0}, {ad:"Bor Gazozu Yaban Mersini", ek:0}, {ad:"Çankırı Gazozu Kızılcık", ek:0}, {ad:"Zafer Gazozu Klasik", ek:0}, {ad:"Bağlar Gazozu Egzotik", ek:0}, {ad:"Bor Gazozu Hindistan Cevizi", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Gazoz Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Goca Moğla Gazozu Lavanta-Şeftali", ek:0, kcal:90}, {ad:"Kabarcık Ekşi Elma Ekşilim (Şeker İlavesiz)", ek:0, kcal:15}, {ad:"Beyoğlu Gazozu Limon-Nane", ek:0, kcal:85}, {ad:"Bor Gazozu Yaban Mersini", ek:0, kcal:90}, {ad:"Çankırı Gazozu Kızılcık", ek:0, kcal:88}, {ad:"Zafer Gazozu Klasik", ek:0, kcal:85}, {ad:"Bağlar Gazozu Egzotik", ek:0, kcal:90}, {ad:"Bor Gazozu Hindistan Cevizi", ek:0, kcal:90}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
   ],
   "Cheesecake + Kahve Menü": [
-    {ad:"Cheesecake Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Frambuazlu Cheesecake", ek:0}, {ad:"Limonlu Cheesecake", ek:0}]},
-    {ad:"Kahve Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Americano", ek:0}, {ad:"Latte", ek:0}, {ad:"Cappuccino", ek:0}, {ad:"Ice Latte", ek:0}, {ad:"Ice Americano", ek:0}]},
+    {ad:"Cheesecake Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Frambuazlu Cheesecake", ek:0, kcal:350}, {ad:"Limonlu Cheesecake", ek:0, kcal:340}]},
+    {ad:"Kahve Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Americano", ek:0, kcal:10}, {ad:"Latte", ek:0, kcal:150}, {ad:"Cappuccino", ek:0, kcal:120}, {ad:"Ice Latte", ek:0, kcal:130}, {ad:"Ice Americano", ek:0, kcal:10}]},
   ],
   "Minipan ( 8 Adet )": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}]},
   ],
   "Minipan ( 10 Adet )": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
   ],
   "Minipan ( 12 Adet )": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
   ],
   "Minipan ( 14 Adet )": [
-    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0}, {ad:"Kakaolu", ek:0}, {ad:"Sütlü - Kakaolu", ek:0}]},
-    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0}, {ad:"Sütlü Çikolatalı Sos", ek:0}, {ad:"Beyaz Çikolatalı Sos", ek:0}, {ad:"Bitter Çikolatalı Sos", ek:0}, {ad:"Karamel Sos", ek:0}, {ad:"Frambuaz Sos", ek:0}, {ad:"Antep Fıstığı Sos", ek:0}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Kivi", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20}, {ad:"Beyaz Çikolatalı Sos", ek:20}, {ad:"Bitter Çikolatalı Sos", ek:20}, {ad:"Frambuaz Sos", ek:20}, {ad:"Karamel Sos", ek:20}, {ad:"Sütlü Çikolatalı Sos", ek:20}]},
-    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35}, {ad:"Ekstra Muz", ek:35}]},
-    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25}, {ad:"Black Cookies (Çekilmiş)", ek:15}, {ad:"Cici Bebe (Çekilmiş)", ek:8}, {ad:"Rulokat (Çekilmiş)", ek:8}, {ad:"Toz Antep Fıstığı", ek:35}, {ad:"Toz Fındık", ek:20}, {ad:"Bonibon", ek:8}, {ad:"Çakıl Taşı", ek:8}, {ad:"Hindistan Cevizi", ek:5}, {ad:"Kit Kat Kırıntısı", ek:15}, {ad:"Altın Pirinç Patlağı", ek:5}, {ad:"Krep Kırığı", ek:10}, {ad:"Mısır Gevreği", ek:10}, {ad:"Sütlü Pirinç Patlağı", ek:5}, {ad:"Beyaz Pirinç Patlağı", ek:5}, {ad:"Bitter Pirinç Patlağı", ek:5}, {ad:"Frambuaz Pirinç Patlağı", ek:5}, {ad:"Karışık Pirinç Patlağı", ek:5}, {ad:"Bitter Damla Çikolata", ek:8}, {ad:"Beyaz Damla Çikolata", ek:8}, {ad:"Frambuaz Damla Çikolata", ek:8}]},
+    {ad:"Pankek Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Pankek", ek:0, kcal:180}, {ad:"Kakaolu", ek:0, kcal:130}, {ad:"Sütlü - Kakaolu", ek:0, kcal:140}]},
+    {ad:"Sos Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Sos İstemiyorum", ek:0, kcal:0}, {ad:"Sütlü Çikolatalı Sos", ek:0, kcal:140}, {ad:"Beyaz Çikolatalı Sos", ek:0, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:0, kcal:130}, {ad:"Karamel Sos", ek:0, kcal:150}, {ad:"Frambuaz Sos", ek:0, kcal:90}, {ad:"Antep Fıstığı Sos", ek:0, kcal:160}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Kivi", ek:0, kcal:30}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Ekstra Sos Seçimi", tip:"istege", min:0, max:99, secenekler:[{ad:"Antep Fıstığı Sos", ek:20, kcal:160}, {ad:"Beyaz Çikolatalı Sos", ek:20, kcal:150}, {ad:"Bitter Çikolatalı Sos", ek:20, kcal:130}, {ad:"Frambuaz Sos", ek:20, kcal:90}, {ad:"Karamel Sos", ek:20, kcal:150}, {ad:"Sütlü Çikolatalı Sos", ek:20, kcal:140}]},
+    {ad:"Ekstra Meyve", tip:"istege", min:0, max:99, secenekler:[{ad:"Ekstra Kivi", ek:35, kcal:30}, {ad:"Ekstra Muz", ek:35, kcal:45}]},
+    {ad:"Ekstra Süslemeler", tip:"istege", min:0, max:99, secenekler:[{ad:"Lotus (Çekilmiş)", ek:25, kcal:80}, {ad:"Black Cookies (Çekilmiş)", ek:15, kcal:100}, {ad:"Cici Bebe (Çekilmiş)", ek:8, kcal:70}, {ad:"Rulokat (Çekilmiş)", ek:8, kcal:85}, {ad:"Toz Antep Fıstığı", ek:35, kcal:85}, {ad:"Toz Fındık", ek:20, kcal:90}, {ad:"Bonibon", ek:8, kcal:75}, {ad:"Çakıl Taşı", ek:8, kcal:75}, {ad:"Hindistan Cevizi", ek:5, kcal:60}, {ad:"Kit Kat Kırıntısı", ek:15, kcal:95}, {ad:"Altın Pirinç Patlağı", ek:5, kcal:72}, {ad:"Krep Kırığı", ek:10, kcal:80}, {ad:"Mısır Gevreği", ek:10, kcal:55}, {ad:"Sütlü Pirinç Patlağı", ek:5, kcal:70}, {ad:"Beyaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Pirinç Patlağı", ek:5, kcal:68}, {ad:"Frambuaz Pirinç Patlağı", ek:5, kcal:70}, {ad:"Karışık Pirinç Patlağı", ek:5, kcal:70}, {ad:"Bitter Damla Çikolata", ek:8, kcal:100}, {ad:"Beyaz Damla Çikolata", ek:8, kcal:110}, {ad:"Frambuaz Damla Çikolata", ek:8, kcal:105}]},
   ],
   "Dolunay": [
-    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0}, {ad:"XL ( 1-2 Kişilik )", ek:50}]},
+    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0, kcal:250}, {ad:"XL ( 1-2 Kişilik )", ek:50, kcal:420}]},
   ],
   "Fıstık Gibi": [
-    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0}, {ad:"XL ( 1-2 Kişilik )", ek:50}]},
+    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0, kcal:250}, {ad:"XL ( 1-2 Kişilik )", ek:50, kcal:420}]},
   ],
   "Kara Sevda": [
-    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0}, {ad:"XL ( 1-2 Kişilik )", ek:50}]},
+    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0, kcal:250}, {ad:"XL ( 1-2 Kişilik )", ek:50, kcal:420}]},
   ],
   "Karamelim": [
-    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0}, {ad:"XL ( 1-2 Kişilik )", ek:50}]},
+    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0, kcal:250}, {ad:"XL ( 1-2 Kişilik )", ek:50, kcal:420}]},
   ],
   "Kafam Karışık": [
-    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0}, {ad:"XL ( 1-2 Kişilik )", ek:50}]},
+    {ad:"Porsiyon Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Standart ( 1 Kişilik )", ek:0, kcal:250}, {ad:"XL ( 1-2 Kişilik )", ek:50, kcal:420}]},
   ],
   "Kadayıflı Magnolia": [
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
   ],
   "Kit Kat'lı Magnolia": [
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
   ],
   "Bisküvili Magnolia": [
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
-    {ad:"Bisküvi Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Lotus Biscoff", ek:25}, {ad:"Black Cookies", ek:15}, {ad:"Rulokat", ek:0}, {ad:"Cicibebe", ek:0}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
+    {ad:"Bisküvi Seçiminiz", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Lotus Biscoff", ek:25, kcal:85}, {ad:"Black Cookies", ek:15, kcal:100}, {ad:"Rulokat", ek:0, kcal:85}, {ad:"Cicibebe", ek:0, kcal:70}]},
   ],
   "Brownili Magnolia": [
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
   ],
   "Çikolatalı Magnolia": [
-    {ad:"Çikolata Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Çikolata", ek:0}, {ad:"Beyaz Çikolata", ek:0}, {ad:"Bitter Çikolata", ek:0}, {ad:"Frambuazlı Çikolata", ek:0}, {ad:"Karamelli Çikolata", ek:0}]},
-    {ad:"Bisküvi Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Oreo", ek:15}, {ad:"Lotus", ek:25}, {ad:"Rulokat", ek:8}, {ad:"Cicibebe", ek:8}, {ad:"Brownie", ek:15}, {ad:"Bisküvi İstemiyorum", ek:0}, {ad:"Kıtır Kadayıf", ek:15}, {ad:"Kit-Kat Kırıntısı", ek:15}]},
-    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0}, {ad:"Muz", ek:0}, {ad:"Meyve İstemiyorum", ek:0}]},
+    {ad:"Çikolata Seçimi", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Sütlü Çikolata", ek:0, kcal:105}, {ad:"Beyaz Çikolata", ek:0, kcal:110}, {ad:"Bitter Çikolata", ek:0, kcal:100}, {ad:"Frambuazlı Çikolata", ek:0, kcal:105}, {ad:"Karamelli Çikolata", ek:0, kcal:110}]},
+    {ad:"Bisküvi Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Oreo", ek:15, kcal:90}, {ad:"Lotus", ek:25, kcal:80}, {ad:"Rulokat", ek:8, kcal:85}, {ad:"Cicibebe", ek:8, kcal:70}, {ad:"Brownie", ek:15, kcal:140}, {ad:"Bisküvi İstemiyorum", ek:0, kcal:0}, {ad:"Kıtır Kadayıf", ek:15, kcal:90}, {ad:"Kit-Kat Kırıntısı", ek:15, kcal:95}]},
+    {ad:"Meyve Seçimi", tip:"zorunlu", min:0, max:1, secenekler:[{ad:"Çilek", ek:0, kcal:20}, {ad:"Muz", ek:0, kcal:45}, {ad:"Meyve İstemiyorum", ek:0, kcal:0}]},
   ],
   "Bihter": [
-    {ad:"Lütfen seçim yapınız", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Antep Fıstığı Parçacıkları", ek:0}, {ad:"Fındık Parçacıkları", ek:0}]},
+    {ad:"Lütfen seçim yapınız", tip:"zorunlu", min:1, max:1, secenekler:[{ad:"Antep Fıstığı Parçacıkları", ek:0, kcal:90}, {ad:"Fındık Parçacıkları", ek:0, kcal:95}]},
   ],
 };
 
@@ -5841,18 +5851,18 @@ function addToCart(idx){
     openOptionModal(idx);          // opsiyonlu ürün → modal aç
   } else if(state.kasaPaket){
     // kasa paket sepetine ekle
-    state.kasaPaket.sepet.push({ad:p.ad, fiyat:fiyat, secimler:[]});
+    state.kasaPaket.sepet.push({ad:p.ad, fiyat:fiyat, secimler:[], kcal:urunTemelKcal(p.ad)});
     note(p.ad+" → 🥡 Paket sepeti");
     go("satis");
   } else if(state.kasaEkle){
     // kasa masa sepetine ekle (geçici, gönderince tek fiş)
     if(!state.kasaEkle.sepet) state.kasaEkle.sepet=[];
-    state.kasaEkle.sepet.push({ad:p.ad, fiyat:fiyat, secimler:[], paket:false});
+    state.kasaEkle.sepet.push({ad:p.ad, fiyat:fiyat, secimler:[], paket:false, kcal:urunTemelKcal(p.ad)});
     note(p.ad+" → sepet ("+state.kasaEkle.kisi+")");
     go("satis");
   } else {
     // opsiyonsuz ürün → direkt adisyona
-    state.cart.push({ad:p.ad, fiyat:fiyat, q:1, secimler:[], ekstraRecete:[]});
+    state.cart.push({ad:p.ad, fiyat:fiyat, q:1, secimler:[], ekstraRecete:[], kcal:urunTemelKcal(p.ad)});
     go("satis");
   }
 }
@@ -5878,8 +5888,14 @@ function openOptionModal(idx){
   });
   renderOptionModal();
   document.getElementById("optModal").classList.add("on");
+  qrSepetBarGizle(true);
 }
-function closeOpt(){ document.getElementById("optModal").classList.remove("on"); OPT_STATE=null; }
+function closeOpt(){ document.getElementById("optModal").classList.remove("on"); OPT_STATE=null; qrSepetBarGizle(false); }
+/* Sabit sepet bar'ı geçici gizle/göster (modal açılınca örtmesin) */
+function qrSepetBarGizle(gizle){
+  const bar=document.getElementById("qrSepetBarSabit");
+  if(bar) bar.style.display = gizle ? "none" : "flex";
+}
 /* Mevcut bir kaleme seçenek ekle (kasa/mutfak/müdür) — opsiyon modalını ekleme modunda aç */
 function kalemSecenekEkle(masaNo, kalemId, kaynak){
   const it = (function(){
@@ -5969,6 +5985,11 @@ function grupEk(grup, si){
   const s = (grup.secenekler||[])[si];
   return s ? (s.ek||0) : 0;
 }
+/* Ürünün temel kalorisi (seçeneksiz, kendi kalorisi) */
+function urunTemelKcal(urunAd){
+  const p = DEMO_PRODUCTS.find(x=>x.ad===urunAd);
+  return p && p.kcal ? (parseInt(p.kcal)||0) : 0;
+}
 /* Seçili opsiyonların toplam ek fiyatı (adet × ek) */
 function optEkFiyat(){
   let ek=0;
@@ -5977,6 +5998,18 @@ function optEkFiyat(){
     Object.entries(m).forEach(([si,adet])=>{ ek += grupEk(grup, si)*adet; });
   });
   return ek;
+}
+/* Seçili opsiyonların toplam kcal'i (adet × kcal) */
+function optToplamKcal(){
+  let kc=0;
+  PRODUCT_OPTIONS[OPT_STATE.p.ad].forEach((grup,gi)=>{
+    const m = OPT_STATE.secim[gi]||{};
+    Object.entries(m).forEach(([si,adet])=>{
+      const sec=grup.secenekler[si];
+      if(sec && !secIstemiyorum(sec)) kc += (sec.kcal||0)*adet;
+    });
+  });
+  return kc;
 }
 
 function renderOptionModal(){
@@ -6029,8 +6062,9 @@ function renderOptionModal(){
   gruplar.forEach((grup,gi)=>{ secimSayisi += grupSecimSayisi(gi); });
   const gecerli = ekleModu ? (secimSayisi>0) : optGecerli();
   const toplam = urunGecerliFiyat(p.ad, optSube, optKanal) + optEkFiyat();
+  const toplamKcal = (ekleModu ? 0 : urunTemelKcal(p.ad)) + optToplamKcal();
   html += '<div class="opt-foot">'+
-    '<div class="opt-toplam"><div class="ot-l">'+(ekleModu?'Eklenecek':'Toplam')+'</div><div class="ot-v">'+(ekleModu?'+'+optEkFiyat():toplam)+' ₺</div></div>'+
+    '<div class="opt-toplam"><div class="ot-l">'+(ekleModu?'Eklenecek':'Toplam')+(toplamKcal>0?' <span class="opt-kcal">🔥 '+toplamKcal+' kcal</span>':'')+'</div><div class="ot-v">'+(ekleModu?'+'+optEkFiyat():toplam)+' ₺</div></div>'+
     '<button class="btn btn-primary" '+(gecerli?'':'disabled style="opacity:.4;pointer-events:none"')+' onclick="confirmOpt()">'+
     (ekleModu ? (gecerli?'+ Seçeneği ekle':'Seçenek seçin') : (gecerli?'Sepete ekle':'Zorunlu alanı seç'))+'</button></div>';
   const inner = document.getElementById("optModalInner");
@@ -6094,6 +6128,7 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
   const secili = adet>0;
   const ekDeger = grup.ucretsiz ? 0 : (sec.ek||0);
   const fiyatTxt = ekDeger ? '+'+ekDeger+' ₺' : '';
+  const kcalTxt = (sec.kcal && !secIstemiyorum(sec)) ? '🔥 '+sec.kcal : '';
   const ist = secIstemiyorum(sec) ? ' opt-ist' : '';
   const optSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const kapali = secIstemiyorum(sec) ? false : secenekKapali(p.ad, gi, si, sec, optSube);
@@ -6123,6 +6158,7 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
                    : kapali==='manuel' ? '<span class="kapat-etiket">bugün yok</span>' : '';
     return '<div class="opt-sec opt-adetli'+(secili?' on':'')+kapaliCls+'">'+
             '<span class="os-ad">'+sec.ad+'</span>'+kapaliEt+
+            (kcalTxt?'<span class="os-kcal">'+kcalTxt+'</span>':'')+
             (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+
             '<span class="os-adet-kontrol">'+
               (secili?'<button class="osa-btn" onclick="optAdet('+gi+','+si+',-1)">−</button><span class="osa-n">'+adet+'</span>':'')+
@@ -6139,6 +6175,7 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
             '<span class="os-mark '+(tekli?'radio':'check')+'">'+(secili?(tekli?'●':'✓'):'')+'</span>'+
             '<span class="os-ad">'+sec.ad+'</span>'+
             kapaliEt+
+            (kcalTxt?'<span class="os-kcal">'+kcalTxt+'</span>':'')+
             (fiyatTxt?'<span class="os-fiyat">'+fiyatTxt+'</span>':'')+'</button>';
   }
 }
@@ -6150,19 +6187,23 @@ function confirmOpt(){
   const gruplar = PRODUCT_OPTIONS[p.ad];
   const secimler=[]; const secimGruplu=[]; const ekstraRecete=[]; let ekFiyat=0;
   const secimEk=[];  // her secimler[] etiketinin ek fiyatı (silince düşmek için)
+  const secimKcal=[]; let toplamKcal=0;  // her secimler[] etiketinin kcal'i (silince düşmek için)
   gruplar.forEach((grup,gi)=>{
     const m = OPT_STATE.secim[gi]||{};
     const grupSecimleri=[];
     Object.entries(m).forEach(([si,adet])=>{
       const sec=grup.secenekler[si];
       const birimEk = grupEk(grup, si);  // ücretsiz grupta 0
+      const birimKcal = sec.kcal||0;
       if(!secIstemiyorum(sec)){
         const etiket = adet>1 ? sec.ad+" ×"+adet : sec.ad;
         secimler.push(etiket);
         secimEk.push(birimEk*adet);  // bu seçimin toplam ek fiyatı
+        secimKcal.push(birimKcal*adet);  // bu seçimin toplam kcal'i
         grupSecimleri.push(etiket);
       }
       ekFiyat += birimEk*adet;
+      toplamKcal += birimKcal*adet;
       if(sec.recete) sec.recete.forEach(r=>{ if(r.g>0) for(let q=0;q<adet;q++) ekstraRecete.push(r); });
     });
     if(grupSecimleri.length>0) secimGruplu.push({grup:grup.ad, secenekler:grupSecimleri});
@@ -6171,7 +6212,8 @@ function confirmOpt(){
   const cSube = OPT_STATE.qr ? (QR.sube||AKTIF_SUBE) : AKTIF_SUBE;
   const yeniKalem = {
     ad:p.ad, fiyat:urunGecerliFiyat(p.ad, cSube, cKanal)+ekFiyat, q:1,
-    secimler:secimler, secimEk:secimEk, secimGruplu:secimGruplu, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
+    secimler:secimler, secimEk:secimEk, secimKcal:secimKcal, kcal:urunTemelKcal(p.ad)+toplamKcal,
+    secimGruplu:secimGruplu, ekstraRecete:ekstraRecete, not:OPT_STATE.not||""
   };
   // === MEVCUT KALEME SEÇENEK EKLEME (kasa/mutfak/müdür) ===
   if(OPT_STATE.ekleHedef){
@@ -6183,10 +6225,17 @@ function confirmOpt(){
     if(hedef){
       if(!hedef.secimler) hedef.secimler=[];
       if(!hedef.secimEk) hedef.secimEk=hedef.secimler.map(()=>0); // eski kalemlerde yoksa doldur
-      secimler.forEach((et,i)=>{ hedef.secimler.push(et); hedef.secimEk.push(secimEk[i]||0); });
+      if(!hedef.secimKcal) hedef.secimKcal=hedef.secimler.map(()=>0);
+      secimler.forEach((et,i)=>{ hedef.secimler.push(et); hedef.secimEk.push(secimEk[i]||0); hedef.secimKcal.push(secimKcal[i]||0); });
       if(secimGruplu.length){ if(!hedef.secimGruplu) hedef.secimGruplu=[]; secimGruplu.forEach(g=>hedef.secimGruplu.push(g)); }
       if(ekstraRecete.length){ if(!hedef.ekstraRecete) hedef.ekstraRecete=[]; ekstraRecete.forEach(r=>hedef.ekstraRecete.push(r)); }
       hedef.fiyat = Math.round((hedef.fiyat + ekFiyat)*100)/100;
+      hedef.kcal = (hedef.kcal||0) + toplamKcal;
+    }
+    // mutfağa bildirilecek değişiklik kaydı (eklenen seçenekler)
+    if(hedef){
+      const kisiAd=kalemKisiAd(masaNo, kalemId);
+      degisiklikKaydet(masaNo, kisiAd, "secenekEkle", hedef.ad, secimler.join(", "));
     }
     closeOpt();
     note("Seçenek eklendi"+(ekFiyat>0?" · +"+tl(ekFiyat)+" ₺":""));
@@ -7010,9 +7059,12 @@ function kalemOpsiyonKaldir(masaNo, kalemId, opsIdx, opsFiyat){
     if(it.id===kalemId){
       // bu seçimin ek fiyatı: önce kaydedilmiş secimEk, yoksa parametre
       const dusulecek = (it.secimEk && it.secimEk[opsIdx]!=null) ? it.secimEk[opsIdx] : (opsFiyat||0);
+      const dusulecekKcal = (it.secimKcal && it.secimKcal[opsIdx]!=null) ? it.secimKcal[opsIdx] : 0;
       it.secimler.splice(opsIdx,1);
       if(it.secimEk) it.secimEk.splice(opsIdx,1);
+      if(it.secimKcal) it.secimKcal.splice(opsIdx,1);
       it.fiyat = Math.max(0, Math.round((it.fiyat - dusulecek)*100)/100);
+      it.kcal = Math.max(0, (it.kcal||0) - dusulecekKcal);
     }
   }));
 }
@@ -7400,7 +7452,7 @@ function kasaMasaDetayHtml(m){
       const kismiOdendi=(it.odenenTutar||0)>0;
       const tamOdendi=kismiOdendi && kk<=0.01;
       html+=`<div class="kmd-kalem${iptalli?' iptal':''}${tamOdendi?' kmd-kalem-odendi':''}${it.paket?' kmd-kalem-paket':''}">
-        <div class="kmd-k-ust"><span class="kmd-k-ad">${it.paket?'📦 ':''}${tamOdendi?'✓ ':''}${it.ad}${it.paket?' <span class="kmd-paket-rozet">PAKET</span>':''}</span>
+        <div class="kmd-k-ust"><span class="kmd-k-ad">${it.paket?'📦 ':''}${tamOdendi?'✓ ':''}${it.ad}${it.kcal?` <span class="kalem-kcal">🔥 ${it.kcal} kcal</span>`:''}${it.paket?' <span class="kmd-paket-rozet">PAKET</span>':''}</span>
           <span class="kmd-k-fiyat">${it.fiyat} ₺</span></div>
         <div class="kmd-k-durum" style="color:${dm.renk}">${dm.ad}</div>`;
       if(kismiOdendi && !tamOdendi){
@@ -7811,7 +7863,7 @@ function viewOdemeEkran(main){
       const kismiOdenmis=(it.odenenTutar||0)>0;
       html+=`<div class="ode-urun-kart${seciliMi?' secili':''}" onclick="odeUrunSec(${it.id})">
         <div class="ode-urun-bas">
-          <div class="ode-urun-ad">${seciliMi?'✓ ':''}${it.ad}</div>
+          <div class="ode-urun-ad">${seciliMi?'✓ ':''}${it.ad}${it.kcal?` <span class="kalem-kcal">🔥 ${it.kcal}</span>`:''}</div>
           <div class="ode-urun-fiyat">${tl(kk)} ₺${(it.odenenTutar||0)>0?` <small>(${tl(it.fiyat)}₺)</small>`:''}</div>
         </div>`;
       // seçenekler (varsa) — her biri silinebilir
@@ -8642,12 +8694,14 @@ function secenekSilOnay(masaNo, kalemId, opsIdx, kaynak){
   if(!it) return;
   const opAd = it.secimler[opsIdx] || "seçenek";
   const opFiyat = (it.secimEk && it.secimEk[opsIdx]) ? it.secimEk[opsIdx] : 0;
+  const opKcal = (it.secimKcal && it.secimKcal[opsIdx]) ? it.secimKcal[opsIdx] : 0;
   // "Ad ×N" formatından adet ayrıştır
   const adetMatch = String(opAd).match(/\s×(\d+)\s*$/);
   const toplamAdet = adetMatch ? parseInt(adetMatch[1]) : 1;
   const birimFiyat = toplamAdet>0 ? Math.round((opFiyat/toplamAdet)*100)/100 : opFiyat;
+  const birimKcal = toplamAdet>0 ? Math.round(opKcal/toplamAdet) : opKcal;
   state._secSil = {masaNo, kalemId, opsIdx, kaynak, opAd, opFiyat, urunAd:it.ad,
-                   toplamAdet, birimFiyat, silAdet:toplamAdet};
+                   toplamAdet, birimFiyat, birimKcal, silAdet:toplamAdet};
   secenekSilModalCiz();
 }
 function secenekSilModalCiz(){
@@ -8715,9 +8769,12 @@ function kalemIptalModalCiz(){
 function kalemIptalKapat(){ const m=document.getElementById("kalemIptalModal"); if(m) m.classList.remove("on"); state._kalemIptal=null; }
 function kalemIptalUygula(){
   const d=state._kalemIptal; if(!d) return;
-  const masaNo=d.masaNo, kalemId=d.kalemId, kaynak=d.kaynak;
+  const masaNo=d.masaNo, kalemId=d.kalemId, kaynak=d.kaynak, urunAd=d.urunAd;
+  const kisiAd=kalemKisiAd(masaNo, kalemId);
   kalemIptalKapat();
   kalemIptal(masaNo, kalemId);
+  // mutfağa bildirilecek değişiklik kaydı (kasa/kds/ödeme kaynaklı)
+  degisiklikKaydet(masaNo, kisiAd, "iptal", urunAd, "");
   note("Ürün iptal edildi · tutar düştü");
   // kaynağa göre ekran yenile
   if(kaynak==="kds"){ renderKDS(); }
@@ -8736,20 +8793,29 @@ function secenekSilUygula(){
   })();
   if(it){
     const dusecek = Math.round(d.birimFiyat*d.silAdet*100)/100;
+    const dusecekKcal = (d.birimKcal||0)*d.silAdet;
     if(d.silAdet>=d.toplamAdet){
       // tümünü sil → seçeneği komple kaldır
       it.secimler.splice(d.opsIdx,1);
       if(it.secimEk) it.secimEk.splice(d.opsIdx,1);
+      if(it.secimKcal) it.secimKcal.splice(d.opsIdx,1);
     } else {
       // kısmi sil → adeti azalt, etiketi güncelle
       const kalanAdet = d.toplamAdet - d.silAdet;
       const adAcik = String(d.opAd).replace(/\s×\d+\s*$/,"");
       it.secimler[d.opsIdx] = kalanAdet>1 ? adAcik+" ×"+kalanAdet : adAcik;
       if(it.secimEk) it.secimEk[d.opsIdx] = Math.round(d.birimFiyat*kalanAdet*100)/100;
+      if(it.secimKcal) it.secimKcal[d.opsIdx] = (d.birimKcal||0)*kalanAdet;
     }
     it.fiyat = Math.max(0, Math.round((it.fiyat - dusecek)*100)/100);
+    it.kcal = Math.max(0, (it.kcal||0) - dusecekKcal);
   }
   const kaynak=d.kaynak, masaNo=d.masaNo, sAd=d.silAdet, bf=d.birimFiyat;
+  // mutfağa bildirilecek değişiklik kaydı
+  const kisiAd=kalemKisiAd(masaNo, d.kalemId);
+  const adAcik = String(d.opAd).replace(/\s×\d+\s*$/,"");
+  const detayMetin = (d.toplamAdet>1 && sAd<d.toplamAdet) ? adAcik+" ×"+sAd : adAcik;
+  degisiklikKaydet(masaNo, kisiAd, "secenekSil", d.urunAd, detayMetin);
   secenekSilKapat();
   note("Seçenek silindi"+(bf>0?" · "+tl(Math.round(bf*sAd*100)/100)+" ₺ düştü":""));
   ekranlariYenile(kaynak, masaNo);
@@ -9767,7 +9833,7 @@ function renderSecPoolSecModal(arama){
 function secGrupSecenekHavuzdan(secAd){
   const ad = state._secGrupHedef;
   const havuz = OPTION_POOL.find(s=>s.ad===secAd);
-  OPTION_GROUPS[ad].secenekler.push({ad:secAd, ek:havuz?havuz.ek||0:0});
+  OPTION_GROUPS[ad].secenekler.push({ad:secAd, ek:havuz?havuz.ek||0:0, kcal:havuz?havuz.kcal||0:0});
   menuKaydet();
   renderSecPoolSecModal("");
   const main=document.querySelector(".main"); if(main) viewFiyat(main);
@@ -9831,6 +9897,7 @@ function secenekPoolHtml(){
     html += `<div class="secpool-satir${kapali?' sp-kapali':''}">
       <span class="sp-ad">${s.ad}</span>
       <span class="sp-fiyat">${s.ek?'+'+s.ek+' ₺':'<span class="sp-ucretsiz2">ücretsiz</span>'}</span>
+      ${s.kcal?`<span class="sp-kcal">🔥 ${s.kcal} kcal</span>`:''}
       ${kapali?`<span class="sp-durum-kapali">⛔ ${kapaliMetin}</span>`:`<span class="sp-durum-acik">✓ açık</span>`}
       <div class="sp-aksiyon">
         <button class="sp-kapat-btn${kapali?' acik':''}" onclick="secPoolKapatAc(${i})">${kapali?'Aç':'Kapat'}</button>
@@ -9865,7 +9932,9 @@ function secPoolEkle(){
   if(OPTION_POOL.find(s=>s.ad===ad.trim())){ note("Bu seçenek zaten var"); return; }
   const ekV = prompt("Ek fiyat (₺, ücretsizse 0):", "0");
   if(ekV==null) return;
-  OPTION_POOL.push({ad:ad.trim(), ek:parseInt(ekV)||0});
+  const kcalV = prompt("Kalori (kcal, yoksa 0):", "0");
+  if(kcalV==null) return;
+  OPTION_POOL.push({ad:ad.trim(), ek:parseInt(ekV)||0, kcal:parseInt(kcalV)||0});
   OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
   note("Seçenek eklendi: "+ad.trim());
   menuKaydet();
@@ -9877,42 +9946,79 @@ function secPoolDuzenle(i){
   if(ad==null) return;
   const ekV = prompt("Ek fiyat (₺):", String(s.ek||0));
   if(ekV==null) return;
+  const kcalV = prompt("Kalori (kcal):", String(s.kcal||0));
+  if(kcalV==null) return;
   const eskiAd = s.ad;
   const yeniAd = ad.trim()||s.ad;
   const yeniEk = parseInt(ekV)||0;
+  const yeniKcal = parseInt(kcalV)||0;
   s.ad = yeniAd;
   s.ek = yeniEk;
+  s.kcal = yeniKcal;
   // ad değiştiyse tüm şubelerdeki kapatma kayıtlarını taşı
   if(eskiAd!==yeniAd){
     Object.keys(SEC_KAPALI).forEach(sb=>{
       if(SEC_KAPALI[sb] && SEC_KAPALI[sb][eskiAd]){ SEC_KAPALI[sb][yeniAd]=SEC_KAPALI[sb][eskiAd]; delete SEC_KAPALI[sb][eskiAd]; }
     });
   }
-  // FİYAT/AD DEĞİŞİKLİĞİNİ kullanılan her yere yansıt (gruplar + ürünler)
-  secenekFiyatYansit(eskiAd, yeniAd, yeniEk);
+  // FİYAT/AD/KCAL DEĞİŞİKLİĞİNİ kullanılan her yere yansıt (gruplar + ürünler)
+  secenekFiyatYansit(eskiAd, yeniAd, yeniEk, yeniKcal);
   OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
   note("Seçenek güncellendi — kullanan tüm ürünlere yansıdı");
   menuKaydet();
   go("fiyat", true);
 }
-/* Bir havuz seçeneğinin ad/fiyat değişikliğini gruplara ve ürünlere yansıt */
-function secenekFiyatYansit(eskiAd, yeniAd, yeniEk){
+/* Bir havuz seçeneğinin ad/fiyat/kcal değişikliğini gruplara ve ürünlere yansıt */
+function secenekFiyatYansit(eskiAd, yeniAd, yeniEk, yeniKcal){
   // seçenek gruplarında
   Object.values(OPTION_GROUPS).forEach(g=>{
-    (g.secenekler||[]).forEach(s=>{ if(s.ad===eskiAd){ s.ad=yeniAd; s.ek=yeniEk; } });
+    (g.secenekler||[]).forEach(s=>{ if(s.ad===eskiAd){ s.ad=yeniAd; s.ek=yeniEk; if(yeniKcal!=null) s.kcal=yeniKcal; } });
   });
   // ürünlerin gömülü seçeneklerinde
   Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
-    gruplar.forEach(g=>g.secenekler.forEach(s=>{ if(s.ad===eskiAd){ s.ad=yeniAd; s.ek=yeniEk; } }));
+    gruplar.forEach(g=>g.secenekler.forEach(s=>{ if(s.ad===eskiAd){ s.ad=yeniAd; s.ek=yeniEk; if(yeniKcal!=null) s.kcal=yeniKcal; } }));
   });
 }
 function secPoolSil(i){
   const s = OPTION_POOL[i];
-  if(!confirm('"'+s.ad+'" seçeneği havuzdan silinsin mi?')) return;
-  Object.keys(SEC_KAPALI).forEach(sb=>{ if(SEC_KAPALI[sb]) delete SEC_KAPALI[sb][s.ad]; });
-  OPTION_POOL.splice(i,1);
+  if(!s) return;
+  // kullanan grup/ürün sayısını bul (bilgi için)
+  let kullananGrup=0, kullananUrun=0;
+  Object.values(OPTION_GROUPS).forEach(g=>{ if((g.secenekler||[]).some(x=>x.ad===s.ad)) kullananGrup++; });
+  Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{ if(gruplar.some(g=>g.secenekler.some(x=>x.ad===s.ad))) kullananUrun++; });
+  state._secPoolSil = {idx:i, ad:s.ad, ek:s.ek||0, kcal:s.kcal||0, kullananGrup, kullananUrun};
+  secPoolSilModalCiz();
+}
+function secPoolSilModalCiz(){
+  const d=state._secPoolSil; if(!d) return;
+  let mdl=document.getElementById("secPoolSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="secPoolSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  const kullanim = (d.kullananGrup||d.kullananUrun)
+    ? `<div class="ssil-sec">${d.kullananGrup?d.kullananGrup+' grup':''}${d.kullananGrup&&d.kullananUrun?' · ':''}${d.kullananUrun?d.kullananUrun+' üründe':''} kullanılıyor</div>` : '';
+  mdl.innerHTML=`<div class="ssil-ic">
+    <div class="ssil-ikon">🗑️</div>
+    <div class="ssil-bas">Seçenek silinsin mi?</div>
+    <div class="ssil-urun">${d.ad}${d.kcal?` · ${d.kcal} kcal`:''}${d.ek?` · +${d.ek} ₺`:''}</div>
+    ${kullanim}
+    <div class="ssil-not">Bu seçenek havuzdan kaldırılacak. Gruplardan/ürünlerden kaldırmak istiyorsanız ayrıca düzenlemeniz gerekebilir.</div>
+    <div class="ssil-butonlar">
+      <button class="ssil-vazgec" onclick="secPoolSilKapat()">Vazgeç</button>
+      <button class="ssil-onayla" onclick="secPoolSilUygula()">🗑️ Sil</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function secPoolSilKapat(){ const m=document.getElementById("secPoolSilModal"); if(m) m.classList.remove("on"); state._secPoolSil=null; }
+function secPoolSilUygula(){
+  const d=state._secPoolSil; if(!d) return;
+  const s=OPTION_POOL[d.idx];
+  if(s && s.ad===d.ad){
+    Object.keys(SEC_KAPALI).forEach(sb=>{ if(SEC_KAPALI[sb]) delete SEC_KAPALI[sb][s.ad]; });
+    OPTION_POOL.splice(d.idx,1);
+    menuKaydet();
+  }
+  secPoolSilKapat();
   note("Seçenek silindi");
-  menuKaydet();
   go("fiyat", true);
 }
 /* Seçenek aç/kapa modalı (seçili şubede) */
@@ -10071,6 +10177,11 @@ function urunSil(pi){
 }
 
 /* === MENÜ KALICILIK === */
+
+/* Kod-içi orijinal kcal referansları (localStorage migrasyonu için) */
+const KOD_URUN_KCAL = {"Pandio":250,"Cookie Menü":550,"Kanka Menü":550,"8'li Minipan + Kahve Menü":550,"Pasta + Kahve Menü":550,"8'li Minipan + Gazoz Menü":550,"Cheesecake + Kahve Menü":550,"Sütlü Çikolatalı Sos 300 gr":1450,"Bitter Çikolatalı Sos 300 gr":1380,"Beyaz Çikolatalı Sos 300 gr":1500,"Minipan Maraşlım":280,"Minipan ( 8 Adet )":260,"Minipan ( 10 Adet )":320,"Minipan ( 12 Adet )":380,"Minipan ( 14 Adet )":440,"Minipan Dubai":280,"Dolunay":280,"Fıstık Gibi":280,"Kara Sevda":280,"Karamelim":280,"Kafam Karışık":280,"Minipan Fondue":350,"Minipan Fondue XL":520,"Spoonful Cup":280,"Dubai Cup":280,"Kadayıflı Magnolia":280,"Kit Kat'lı Magnolia":280,"Bisküvili Magnolia":280,"Brownili Magnolia":280,"Çikolatalı Magnolia":280,"Bihter":280,"Fruitmix":280,"Minicup":280,"Oreolu Kakaolu Cookie":340,"Cookie Klasik":340,"Limonlu Mono Cheesecake":340,"Siyah Profiterollü Pasta":340,"Beyaz Profiterol Pasta":340,"Tiramisu":340,"Bella Vista Siyah Çikolatalı Pasta":340,"Red Velvet":340,"Karamelli Mono Latte Pasta":340,"Goca Moğla Gazozu Lavanta-Şeftali":90,"Bor Gazozu Yaban Mersini":90,"Zafer Gazozu Klasik":90,"Bağlar Gazozu Egzotik":90,"Bor Gazozu Hindistan Cevizi":90,"Bodrum Mandalinalı":90,"Bor Bubble Gum":90,"Marmaris Narlı":90,"Kabarcık Kırmızı Frambuaz":90,"Salda Vişne & Nane Aromalı":90,"Şirince Gazoz Şeftali & Mürver":90,"Limonata":120,"Naneli Limonata":120,"Kırmızı Orman Meyveli Limonata":120,"Hibiscus Limonata":120,"Frambuazlı Limonata":120,"Çilekli Limonata":120,"Ice Americano":10,"Ice Latte":160,"Ice Caramel Latte":160,"Ice Toffee Nut Latte":160,"Ice Coconut Latte":160,"Ice Irish Cream Latte":160,"Ice White Chocolate Mocha":160,"Ice Mocha":160,"Ice Muzlu Süt":160,"Ice Çilekli Süt":160,"Ice Chocolate":160,"Su":0,"Churchill":110,"Kutu Kola 33 cl":139,"Kutu Fanta 33 cl":160,"Kutu Kola Şekersiz 33 cl":1,"Sprite 33 cl":140,"Şişe Kola 20 cl":85,"Soğuk Çay 33 cl":90,"Maden Suyu":0,"Meyveli Maden Suyu":40,"Çay":2,"Fincan Çay":2,"Adaçayı":80,"Ihlamur":80,"Papatya":80,"Yeşilçay":80,"Sıcak Çikolata":80,"Beyaz Sıcak Çikolata":80,"Frambuaz Sıcak Çikolata":80,"Salep":80,"Fincan Süt":80,"Ballı Süt":80,"Türk Kahvesi":120,"Single Espresso":120,"Double Espresso":120,"Americano":10,"Cappuccino":120,"Latte":120,"Caramel Latte":120,"Toffee Nut Latte":120,"Irish Cream Latte":120,"Latte Macchiato":120,"Caramel Latte Macchiato":120,"Toffee Nut Latte Macchiato":120,"Irish Cream Latte Macchiato":120,"Mocha":120,"White Chocolate Mocha":120,"Filtre Kahve":5,"Sütlü Filtre Kahve":120,"Menengiç Kahvesi":120,"Dibek Kahvesi":120,"Gold Kahve":120,"Sütlü Gold Kahve":120,"Brownili Milkshake":350,"Çikolatalı Milkshake":350,"Vanilyalı Milkshake":350,"Lotuslu Milkshake":350,"Blue Dream":350,"Oreolu Milkshake":350,"Vanilya (Top)":200,"Kakao (Top)":200,"Karamel (Top)":200,"İtalyan Karamel (Top)":200,"Limon (Top)":200,"Çilek (Top)":200,"Kavun (Top)":200,"Mango (Top)":200,"Oreo (Top)":200,"Balbadem (Top)":200,"Yaban Mersini (Top)":200,"Vişne (Top)":200,"Antep Fıstığı (Top)":200,"Karadut (Top)":200,"Böğürtlen (Top)":200,"Portakal (Top)":200};
+const KOD_SEC_KCAL = {"Sütlü Pankek":180,"Kakaolu":130,"Sütlü - Kakaolu":140,"Sos İstemiyorum":0,"Sütlü Çikolatalı Sos":140,"Beyaz Çikolatalı Sos":150,"Bitter Çikolatalı Sos":130,"Karamel Sos":150,"Frambuaz Sos":90,"Antep Fıstığı Sos":160,"Çilek":20,"Muz":45,"Kivi":30,"Meyve İstemiyorum":0,"Süsleme İstemiyorum":0,"Çakıltaşı":75,"Bonibon":75,"Karışık Pirinç Patlağı":70,"Altın Pirinç Patlağı":72,"Beyaz Pirinç Patlağı":70,"Bitter Pirinç Patlağı":68,"Frambuaz Pirinç Patlağı":70,"Sütlü Pirinç Patlağı":70,"Ice Latte":130,"Ice Americano":10,"Limonata":120,"Naneli Limonata":115,"Çilekli Limonata":130,"Frambuazlı Limonata":130,"Hibiscus Limonata":110,"Ekstra Kivi":30,"Ekstra Muz":45,"Lotus (Çekilmiş)":80,"Black Cookies (Çekilmiş)":100,"Cici Bebe (Çekilmiş)":70,"Rulokat (Çekilmiş)":85,"Toz Antep Fıstığı":85,"Toz Fındık":90,"Çakıl Taşı":75,"Hindistan Cevizi":60,"Kit Kat Kırıntısı":95,"Krep Kırığı":80,"Mısır Gevreği":55,"Bitter Damla Çikolata":100,"Beyaz Damla Çikolata":110,"Frambuaz Damla Çikolata":105,"Klasik Cookie":110,"Oreolu Kakaolu Cookie":120,"Sütlü":120,"Sütlü-Kakaolu":140,"Ekstra Süsleme İstemiyorum":0,"Cicibebe (Çekilmiş)":70,"Çay":2,"Fincan Çay":2,"Sade Türk Kahvesi":5,"Orta Şekerli Türk Kahvesi":25,"Şekerli Türk Kahvesi":40,"Karamel Latte Mono":300,"Siyah Profiterollü Pasta":330,"Beyaz Profiterollü Pasta":320,"Frambuazlı Mono Cheesecake":340,"Limonlu Mono Cheesecake":330,"Bella Vista":310,"Latte":150,"Cappuccino":120,"Americano":10,"Filtre Kahve":5,"Goca Moğla Gazozu Lavanta-Şeftali":90,"Kabarcık Ekşi Elma Ekşilim (Şeker İlavesiz)":15,"Beyoğlu Gazozu Limon-Nane":85,"Bor Gazozu Yaban Mersini":90,"Çankırı Gazozu Kızılcık":88,"Zafer Gazozu Klasik":85,"Bağlar Gazozu Egzotik":90,"Bor Gazozu Hindistan Cevizi":90,"Frambuazlu Cheesecake":350,"Limonlu Cheesecake":340,"Standart ( 1 Kişilik )":250,"XL ( 1-2 Kişilik )":420,"Lotus Biscoff":85,"Black Cookies":100,"Rulokat":85,"Cicibebe":70,"Sütlü Çikolata":105,"Beyaz Çikolata":110,"Bitter Çikolata":100,"Frambuazlı Çikolata":105,"Karamelli Çikolata":110,"Oreo":90,"Lotus":80,"Brownie":140,"Bisküvi İstemiyorum":0,"Kıtır Kadayıf":90,"Kit-Kat Kırıntısı":95,"Antep Fıstığı Parçacıkları":90,"Fındık Parçacıkları":95};
+
 const MENU_KEY = "minipan_menu_v1";
 function menuKaydet(){
   try{
@@ -10093,7 +10204,25 @@ function menuYukle(){
     if(v.URUN_GORSEL) URUN_GORSEL = v.URUN_GORSEL;
     if(v.KAT_GORSEL) KAT_GORSEL = v.KAT_GORSEL;
     if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
+    kcalMigrasyon();   // eski kayıtta kcal eksikse koddaki varsayılanlardan doldur
   }catch(e){}
+}
+/* Eski localStorage menüsünde kcal alanı yoksa, koddaki orijinal değerlerden doldur.
+   (Daha önce kaydedilmiş menü kcal'siz olduğu için tek seferlik migrasyon.) */
+function kcalMigrasyon(){
+  try{
+    let degisti=false;
+    // ürün temel kcal — KOD_URUN_KCAL referansından
+    DEMO_PRODUCTS.forEach(p=>{
+      if((p.kcal==null) && KOD_URUN_KCAL[p.ad]!=null){ p.kcal = KOD_URUN_KCAL[p.ad]; degisti=true; }
+    });
+    // seçenek kcal — KOD_SEC_KCAL referansından (ürün opsiyonları + gruplar + havuz)
+    const dolKcal = (sec)=>{ if(sec && sec.kcal==null && KOD_SEC_KCAL[sec.ad]!=null){ sec.kcal=KOD_SEC_KCAL[sec.ad]; degisti=true; } };
+    Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{ (gruplar||[]).forEach(g=>(g.secenekler||[]).forEach(dolKcal)); });
+    Object.values(OPTION_GROUPS).forEach(g=>{ (g.secenekler||[]).forEach(dolKcal); });
+    (OPTION_POOL||[]).forEach(dolKcal);
+    if(degisti) menuKaydet();   // migrasyonu kalıcı yap
+  }catch(e){ console.warn("kcal migrasyon hatası", e); }
 }
 
 /* === ŞUBE VERİLERİ KALICILIĞI === */
@@ -10164,12 +10293,12 @@ function urunFormAc(pi){
     gruplar = JSON.parse(JSON.stringify(PRODUCT_OPTIONS[p.ad]||[]));
     state.urunForm = {
       pi:pi, eskiAd:p.ad, ad:p.ad, aciklama:p.aciklama||"", emoji:p.emoji,
-      kat:p.kat, fiyat:p.fiyat, mag:(p.mag!=null?p.mag:""), aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar
+      kat:p.kat, fiyat:p.fiyat, mag:(p.mag!=null?p.mag:""), kcal:(p.kcal!=null?p.kcal:""), aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar
     };
   } else {
     state.urunForm = {
       pi:null, eskiAd:null, ad:"", aciklama:"", emoji:"🍽️",
-      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", mag:"", aktif:true, gorsel:"", gruplar:[]
+      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", mag:"", kcal:"", aktif:true, gorsel:"", gruplar:[]
     };
   }
   renderUrunForm();
@@ -10217,6 +10346,13 @@ function renderUrunForm(){
     <div class="uf-mag-row">
       <input class="uf-input uf-mag-input" inputmode="numeric" placeholder="${Math.round((parseFloat(f.fiyat)||0)*SADAKAT.kazancOrani)}" value="${f.mag!=null?f.mag:''}" oninput="state.urunForm.mag=this.value;ufMagOnizle(this.value)">
       <span class="uf-mag-kars" id="ufMagKars">${f.mag?('= '+tl(magTlKars)+' ₺ değerinde'):''}</span>
+    </div>
+  </div>`;
+  html += `<div class="uf-alan uf-kcal-alan">
+    <label>🔥 Temel Kalori <span class="uf-mag-not">(ürünün kendi kalorisi · seçenekler eklendikçe üstüne eklenir · boş = 0)</span></label>
+    <div class="uf-mag-row">
+      <input class="uf-input uf-mag-input" inputmode="numeric" placeholder="0" value="${f.kcal!=null?f.kcal:''}" oninput="state.urunForm.kcal=this.value">
+      <span class="uf-mag-kars">kcal</span>
     </div>
   </div>`;
   html += `<div class="uf-aktif" onclick="state.urunForm.aktif=!state.urunForm.aktif;renderUrunForm()">
@@ -10469,6 +10605,7 @@ function urunKaydet(){
 
   const yeniAd = f.ad.trim();
   const magDeger = (f.mag===""||f.mag==null) ? null : Math.max(0, parseInt(f.mag)||0);
+  const kcalDeger = (f.kcal===""||f.kcal==null) ? null : Math.max(0, parseInt(f.kcal)||0);
   if(f.pi!=null){
     // DÜZENLE
     const p = DEMO_PRODUCTS[f.pi];
@@ -10480,10 +10617,12 @@ function urunKaydet(){
     p.ad=yeniAd; p.aciklama=f.aciklama.trim(); p.emoji=f.emoji;
     p.kat=f.kat; p.fiyat=fiyat; p.aktif=f.aktif;
     if(magDeger!=null) p.mag=magDeger; else delete p.mag;
+    if(kcalDeger!=null) p.kcal=kcalDeger; else delete p.kcal;
   } else {
     // YENİ
     const yeni={ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()};
     if(magDeger!=null) yeni.mag=magDeger;
+    if(kcalDeger!=null) yeni.kcal=kcalDeger;
     DEMO_PRODUCTS.push(yeni);
   }
   // opsiyon grupları
@@ -12696,6 +12835,90 @@ function mutfakFisiBas(kaynak){
   if(kdsAcik) note("🖨️ Mutfak fişi yazdırıldı · Fiş #"+fis.no);
   return fis;
 }
+/* ============================================================
+   SİPARİŞ DEĞİŞİKLİK BİLDİRİMİ — kasada değişiklik → mutfağa bildir
+   Kasada ürün iptal / seçenek silme / seçenek ekleme yapılınca
+   değişiklik bekleyen listeye yazılır; "Mutfağa gönder" ile
+   mutfakta pop-up + değişiklik fişi otomatik basılır.
+   ============================================================ */
+function degisiklikKaydet(masaNo, kisiAd, tip, urunAd, detay){
+  const s=SESSIONS[masaNo]; if(!s) return;
+  if(!s.bekleyenDegisiklikler) s.bekleyenDegisiklikler=[];
+  s.bekleyenDegisiklikler.push({
+    tip:tip,            // "iptal" | "secenekSil" | "secenekEkle"
+    urunAd:urunAd||"",
+    kisi:kisiAd||"",
+    detay:detay||"",    // ör. silinen/eklenen seçenek adı
+    zaman:Date.now()
+  });
+}
+/* Masada bekleyen değişiklik var mı */
+function bekleyenDegisiklikVar(masaNo){
+  const s=SESSIONS[masaNo];
+  return !!(s && s.bekleyenDegisiklikler && s.bekleyenDegisiklikler.length);
+}
+/* Kalemin sahibi kişi adını bul */
+function kalemKisiAd(masaNo, kalemId){
+  const s=SESSIONS[masaNo]; if(!s) return "";
+  for(const k of s.kisiler) for(const it of k.kalemler) if(it.id===kalemId) return k.ad;
+  return "";
+}
+/* "Mutfağa gönder" — bekleyen değişiklikleri mutfağa bildir + fiş bas */
+function degisiklikleriMutfagaGonder(masaNo){
+  const s=SESSIONS[masaNo]; if(!s) return;
+  const degisiklikler = (s.bekleyenDegisiklikler||[]).slice();
+  if(!degisiklikler.length){ note("Bildirilecek değişiklik yok"); return; }
+  // mutfak bildirimi (pop-up için) — masaya bağlı
+  if(!s.degisiklikBildirimleri) s.degisiklikBildirimleri=[];
+  const bildirimId = "dg_"+Date.now();
+  s.degisiklikBildirimleri.push({
+    id:bildirimId, degisiklikler:degisiklikler, zaman:Date.now(), durum:"bekliyor", personel:AKTIF_PERSONEL_AD||""
+  });
+  s.degisiklikVar = true;
+  s.bekleyenDegisiklikler = [];   // gönderildi, temizle
+  // DEĞİŞİKLİK FİŞİ otomatik yazdır (mutfak yazıcısı)
+  degisiklikFisiYazdir(masaNo, degisiklikler);
+  // mutfak ekranı açıksa hemen pop-up + yenile
+  const kdsAcik = document.getElementById("kdsApp") && document.getElementById("kdsApp").style.display==="block";
+  if(kdsAcik){ renderKDS(); }
+  note("✓ Değişiklikler mutfağa gönderildi · fiş basıldı");
+  // kasa ekranını yenile (buton kalksın)
+  if(state.kasaMasa===masaNo) go("masalar"); else if(state.odeme && state.odeme.masa===masaNo) ekranlariYenile("odeme", masaNo);
+}
+/* Değişiklik fişi — mutfak rolündeki yazıcıya ESC/POS bildirim fişi */
+function degisiklikFisiYazdir(masaNo, degisiklikler){
+  const tipEtiket = {iptal:"!! IPTAL", secenekSil:"-- CIKARILDI", secenekEkle:"++ EKLENDI"};
+  const cizgi = "--------------------------------";
+  const satirlar = degisiklikler.map(d=>{
+    const t = tipEtiket[d.tip] || "* DEGISIKLIK";
+    const det = d.detay ? " ("+d.detay+")" : "";
+    return t+": "+d.urunAd+det+(d.kisi?" / "+d.kisi:"");
+  });
+  const metin = "\n    *** SIPARIS DEGISIKLIGI ***\n        MINIPAN\n"+cizgi+"\n"+
+    "Sube : "+AKTIF_SUBE+"\n"+
+    "Masa : "+masaEtiket(masaNo)+"\n"+
+    "Saat : "+new Date().toLocaleString('tr')+"\n"+
+    cizgi+"\n"+
+    satirlar.join("\n")+"\n"+
+    cizgi+"\n"+
+    (AKTIF_PERSONEL_AD?"Personel: "+AKTIF_PERSONEL_AD+"\n":"")+
+    ">> Hazirlamayi guncelleyin <<\n\n\n\n";
+  // mutfak rolündeki aktif yazıcıya gönder (yoksa herhangi aktif yazıcı)
+  const sube = AKTIF_SUBE;
+  let yazicilar = subeYazicilari(sube).filter(y=>y.aktif && y.rol==="mutfak");
+  if(!yazicilar.length) yazicilar = subeYazicilari(sube).filter(y=>y.aktif);
+  if(yazicilar.length){
+    yazicilar.forEach(y=>{ try{ yaziciyaGonder(sube, y, metin).then(r=>{
+      if(r&&r.ok){ const kdsAcik=document.getElementById("kdsApp")&&document.getElementById("kdsApp").style.display==="block"; if(kdsAcik) note("🖨️ Değişiklik fişi yazdırıldı"); }
+    }); }catch(e){} });
+  }
+  // mutfak fiş listesine de kayıt (Fişler sekmesinde görünür)
+  mutfakFisiBas({
+    tip:"degisiklik", baslik:masaEtiket(masaNo)+" · 🔄 DEĞİŞİKLİK", alt:sube,
+    kisi:"", masa:masaNo,
+    kalemler: degisiklikler.map(d=>({ad:(tipEtiket[d.tip]||"*")+" "+d.urunAd+(d.detay?" ("+d.detay+")":""), secimler:[], kisi:d.kisi||""}))
+  });
+}
 /* Fiş içeriğini üret (HTML) — paketlenecekler ayrı grup */
 function fisIcerikHtml(fis){
   const masaUrun=fis.kalemler.filter(it=>!it.paket);
@@ -12930,6 +13153,7 @@ function closeQR(){
   clearTimeout(QR._splashTimer);
   document.getElementById("qrApp").style.display="none";
   document.getElementById("login").style.display="flex";
+  const bar=document.getElementById("qrSepetBarSabit"); if(bar) bar.remove();
 }
 function renderQR(){
   const el = document.getElementById("qrApp");
@@ -12948,6 +13172,27 @@ function renderQR(){
   else if(QR.view==="yorumEkle") el.innerHTML = qrYorumEkleHtml();
   else if(QR.view==="onay")     el.innerHTML = qrOnayHtml();
   el.scrollTop = 0;
+  qrSepetBarGuncelle();   // body-seviyesi sabit sepet bar (viewport altında)
+}
+/* Sabit sepet bar — #qrApp DIŞINDA, body'ye eklenir ki scroll'dan etkilenmesin */
+function qrSepetBarGuncelle(){
+  const app = document.getElementById("qrApp");
+  const acik = app && app.style.display==="block";
+  let bar = document.getElementById("qrSepetBarSabit");
+  // sepet bar sadece menü ve kategoriler ekranında, sepet doluyken görünür
+  const sepetN = (QR.sepet||[]).reduce((s,c)=>s+c.q,0);
+  const sepetT = (QR.sepet||[]).reduce((s,c)=>s+c.fiyat*c.q,0);
+  const goster = acik && sepetN>0 && (QR.view==="menu" || QR.view==="kategoriler");
+  if(!goster){ if(bar) bar.remove(); return; }
+  if(!bar){
+    bar = document.createElement("button");
+    bar.id = "qrSepetBarSabit";
+    bar.className = "qr-sepet-bar";
+    bar.onclick = ()=>{ QR.view="sepet"; renderQR(); };
+    document.body.appendChild(bar);
+  }
+  bar.innerHTML = '<span class="qr-sb-n">'+sepetN+'</span><span class="qr-sb-t">Sepetim</span>'+
+    '<span class="qr-sb-f">'+sepetT+' ₺</span>';
 }
 
 /* 0) SPLASH — açılış reklamı (WebP/GIF/MP4) */
@@ -13404,11 +13649,6 @@ function qrKategorilerHtml(){
       '<button class="qr-yardim" onclick="qrMutfagaMesaj()">💬 Mutfağa mesaj</button>':'')+
       '<button class="qr-yardim" onclick="QR.view=\'takip\';renderQR()">📍 Siparişlerim</button>'+
     '</div>';
-  if(sepetN>0){
-    html += '<button class="qr-sepet-bar" onclick="QR.view=\'sepet\';renderQR()">'+
-      '<span class="qr-sb-n">'+sepetN+'</span><span class="qr-sb-t">Sepetim</span>'+
-      '<span class="qr-sb-f">'+sepetT+' ₺</span></button>';
-  }
   html += '</div>';
   return html;
 }
@@ -13499,7 +13739,7 @@ function qrMenuHtml(){
     '<div class="qr-anamenu-row">'+
       '<button class="qr-anamenu-btn" onclick="QR.view=\'kategoriler\';renderQR()">☰ Ana menü</button>'+
       '<span class="qr-anamenu-kat">'+QR.aktifKat+'</span>'+
-    '</div><div class="qr-menu-list">';
+    '</div><div class="qr-menu-list'+(sepetN>0?' has-sepet':'')+'">';
   const kanal = aktifKanal();
   // indirimli ürünler ilk sırada
   const sirali = prods.slice().sort((a,b)=>{
@@ -13513,6 +13753,8 @@ function qrMenuHtml(){
     const fb = urunFiyatBilgi(p.ad, QR.sube||AKTIF_SUBE, kanal);
     const magP = urunMagPuan(p);
     const magRozet = magP>0 ? '<span class="qr-mag-rozet">🎁 +'+magP+' '+SADAKAT.ad+'</span>' : '';
+    const tKcal = urunTemelKcal(p.ad);
+    const kcalRozet = tKcal>0 ? '<span class="qr-card-kcal">🔥 '+tKcal+' kcal</span>' : '';
     const fiyatHtml = fb.indirimli
       ? '<div class="qr-card-fiyat indirimli"><span class="qr-eski">'+fb.eski+' ₺</span><span class="qr-yeni blink">'+fb.gecerli+' ₺</span>'+(fb.indOran>0?'<span class="qr-ind-rozet">%'+fb.indOran+'</span>':'')+'</div>'
       : '<div class="qr-card-fiyat">'+fb.gecerli+' ₺</div>';
@@ -13522,6 +13764,7 @@ function qrMenuHtml(){
       '<div class="qr-card-body">'+
         '<div class="qr-card-info">'+
           '<div class="qr-card-ad-row"><span class="qr-card-ad">'+p.ad+'</span>'+magRozet+'</div>'+
+          (kcalRozet?'<div class="qr-card-kcal-row">'+kcalRozet+'</div>':'')+
           qrPuanRozetHtml(p.ad)+
           (p.aciklama?'<div class="qr-card-desc">'+p.aciklama+'</div>':'')+
           aciklamaHtml+
@@ -13533,11 +13776,6 @@ function qrMenuHtml(){
       '</div></div>';
   });
   html += '</div>';
-  if(sepetN>0){
-    html += '<button class="qr-sepet-bar" onclick="QR.view=\'sepet\';renderQR()">'+
-      '<span class="qr-sb-n">'+sepetN+'</span><span class="qr-sb-t">Sepetim</span>'+
-      '<span class="qr-sb-f">'+sepetT+' ₺</span></button>';
-  }
   html += '</div>';
   return html;
 }
@@ -13647,7 +13885,7 @@ function qrUrunSec(pi){
   const opts = PRODUCT_OPTIONS[p.ad];
   if(opts && opts.length){ openOptionModalQR(pi); }
   else {
-    QR.sepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad, QR.sube||AKTIF_SUBE, aktifKanal()), q:1, secimler:[], ekstraRecete:[], not:""});
+    QR.sepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad, QR.sube||AKTIF_SUBE, aktifKanal()), q:1, secimler:[], ekstraRecete:[], kcal:urunTemelKcal(p.ad), not:""});
     const magP = urunMagPuan(p);
     if(magP>0) magKutlamaPop(magP); else note(p.ad+" eklendi");
     renderQR();
@@ -13685,6 +13923,7 @@ function openOptionModalQR(idx){
   });
   renderOptionModal();
   document.getElementById("optModal").classList.add("on");
+  qrSepetBarGizle(true);
 }
 
 function qrSepetHtml(){
@@ -13703,7 +13942,7 @@ function qrSepetHtml(){
       const paketToggle = (QR.siparisTipi==="masa"||!QR.siparisTipi)
         ? '<button class="qr-si-paketle'+(c.paket?' on':'')+'" onclick="qrKalemPaket('+i+')">'+(c.paket?'📦 Paket':'📦 Paketle')+'</button>'
         : '';
-      html += '<div class="qr-si'+(c.paket?' qr-si-paketli':'')+'"><div class="qr-si-info"><div class="qr-si-ad">'+(c.paket?'📦 ':'')+c.ad+'</div>'+secim+notT+paketToggle+'</div>'+
+      html += '<div class="qr-si'+(c.paket?' qr-si-paketli':'')+'"><div class="qr-si-info"><div class="qr-si-ad">'+(c.paket?'📦 ':'')+c.ad+(c.kcal?' <span class="kalem-kcal">🔥 '+c.kcal+' kcal</span>':'')+'</div>'+secim+notT+paketToggle+'</div>'+
         '<div class="qr-si-sag"><div class="qr-si-fiyat">'+(c.fiyat*c.q)+' ₺</div>'+
           '<div class="qr-si-adet"><button onclick="qrAdet('+i+',-1)">−</button><span>'+c.q+'</span>'+
           '<button onclick="qrAdet('+i+',1)">+</button></div></div></div>';
@@ -13822,7 +14061,7 @@ function qrSiparisGonder(){
     QR.sonPaket = true;
   } else if(QR.siparisTipi==="paket"){
     // PAKET (gel-al) → mutfak paket ekranına düşer
-    const masaNo = QR.icerideMi ? QR.masa : null;   // içerideyse masaya da bağlı
+    const masaNo = QR.icerideMi ? qrMasaId() : null;   // içerideyse masaya da bağlı (doğru format)
     PAKET_ORDERS.push({
       id:_paketId++, takipId:takipId, tip:"paket", musteri:QR.kisi||"Müşteri", tel:QR.musteri?QR.musteri.tel:null,
       adres:null, masa:masaNo, kalemler:kalemlerKopya,
@@ -13832,6 +14071,7 @@ function qrSiparisGonder(){
     if(masaNo){
       let s=SESSIONS[masaNo];
       if(!s){ s=SESSIONS[masaNo]={masa:masaNo, acik:true, zaman:Date.now(), kisiler:[]}; }
+      s.acik=true;
       let k=s.kisiler.find(x=>x.ad===(QR.kisi||"Müşteri"));
       if(!k){ k={ad:(QR.kisi||"Müşteri"), kalemler:[]}; s.kisiler.push(k); }
       if(QR.musteri && QR.musteri.mail) k.uyeMail = QR.musteri.mail;  // sadakat üyesi → kişiye bağla
@@ -13842,14 +14082,16 @@ function qrSiparisGonder(){
     QR.sonPaket = true;
   } else {
     // MASADA sipariş → SESSIONS'a kişi kalemleri olarak (kalem bazında paket işareti)
-    let s=SESSIONS[QR.masa];
-    if(!s){ s=SESSIONS[QR.masa]={masa:QR.masa, acik:true, zaman:Date.now(), kisiler:[]}; }
+    const masaId = qrMasaId();   // şube::kat|ad formatı — kasa bu formatta arar
+    let s=SESSIONS[masaId];
+    if(!s){ s=SESSIONS[masaId]={masa:masaId, acik:true, zaman:Date.now(), kisiler:[]}; }
+    s.acik=true;
     let k=s.kisiler.find(x=>x.ad===(QR.kisi||"Müşteri"));
     if(!k){ k={ad:(QR.kisi||"Müşteri"), kalemler:[]}; s.kisiler.push(k); }
     if(QR.musteri && QR.musteri.mail) k.uyeMail = QR.musteri.mail;  // sadakat üyesi → kişiye bağla
     QR.sepet.forEach(c=>{
       for(let n=0;n<c.q;n++){
-        k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+        k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], secimEk:c.secimEk||[], secimKcal:c.secimKcal||[], kcal:c.kcal||0, ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
       }
     });
     // masadan paketli ürün masaya bağlı kalır (kalemde paket:true) — ayrı PAKET_ORDERS oluşturulmaz
@@ -14799,13 +15041,13 @@ function garsonUrunSec(pi){
   } else if(GARSON.paketModu){
     // paket sepetine ekle
     if(!GARSON.paketSepet) GARSON.paketSepet=[];
-    GARSON.paketSepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad), secimler:[]});
+    GARSON.paketSepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad), secimler:[], kcal:urunTemelKcal(p.ad)});
     note(p.ad+" → Paket sepeti");
     renderGarson();
   } else {
     // MASA sepeti — geçici, "Siparişi gönder" ile masaya+mutfağa gider (tek fiş)
     if(!GARSON.masaSepet) GARSON.masaSepet=[];
-    GARSON.masaSepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad), secimler:[], paket:false});
+    GARSON.masaSepet.push({ad:p.ad, fiyat:urunGecerliFiyat(p.ad), secimler:[], paket:false, kcal:urunTemelKcal(p.ad)});
     note(p.ad+" → sepet");
     renderGarson();
   }
