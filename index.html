@@ -4878,6 +4878,53 @@ const CAN = {
 function can(role, action){ return (CAN[action]||[]).includes(role); }
 
 /* ============================================================
+   MERKEZİ DEPOLAMA KATMANI — MPStore
+   ------------------------------------------------------------
+   Aşağıdaki tüm "xxxYukle / xxxKaydet" çiftleri artık bu tek
+   noktadan geçiyor. Amaç: try/catch tekrarını kaldırmak ve her
+   kayda bir ŞEMA SÜRÜMÜ eklemek, böylece yarın bir alan eklenip
+   eski cihazların verisi okunduğunda sessizce bozulmasın.
+
+   Kayıt formatı:  {"__v": <sürüm>, "data": {...}}
+   Eski (sürümsüz) kayıtlar otomatik olarak v0 kabul edilip
+   verilen migrations zinciriyle hedef sürüme yükseltilir.
+
+   Yeni alan eklerken yapılacaklar:
+     1) İlgili modülün version sayısını +1 yap
+     2) migrations dizisine [v0→v1, v1→v2, ...] sırayla bir
+        dönüştürücü fonksiyon ekle (data alıp yeni data döner)
+   Eski sürüm kayıtlar geldiğinde zincir otomatik uygulanır.
+   ============================================================ */
+const MPStore = {
+  get(key, fallback, opts){
+    opts = opts || {};
+    try{
+      const raw = localStorage.getItem(key);
+      if(!raw) return fallback;
+      const parsed = JSON.parse(raw);
+      const sarmali = parsed && typeof parsed==="object" && Object.prototype.hasOwnProperty.call(parsed,"__v");
+      let v = sarmali ? (parsed.__v||0) : 0;
+      let data = sarmali ? parsed.data : parsed;   // eski (sürümsüz) kayıtlar ham veri olarak gelir
+      const migs = opts.migrations || [];
+      const hedef = opts.version || 0;
+      while(v < hedef && typeof migs[v]==="function"){ data = migs[v](data); v++; }
+      return (data==null) ? fallback : data;
+    }catch(e){ return fallback; }
+  },
+  set(key, data, version){
+    try{ localStorage.setItem(key, JSON.stringify({__v: version||0, data})); }
+    catch(e){ /* kota dolu / localStorage yok — satış durmasın, sessiz geç */ }
+  },
+  /* Düz metin (JSON olmayan) tekil değerler için — örn. personel adı */
+  getRaw(key, fallback){
+    try{ const v = localStorage.getItem(key); return (v==null) ? fallback : v; }catch(e){ return fallback; }
+  },
+  setRaw(key, value){
+    try{ localStorage.setItem(key, value); }catch(e){}
+  }
+};
+
+/* ============================================================
    YAZARKASA-POS ENTEGRASYONU (GMP-3 köprüsü)
    POS_AYAR[sube] = {marka, model, baglanti, ip, port, kosfPort, aktif}
    Gerçek cihaz: kasa bilgisayarında çalışan yerel köprü servisi
@@ -4896,12 +4943,8 @@ const YAZARKASA_MARKALAR = {
   "PayGo":    { modeller:["PG-100","PG-200"], baglanti:["kablolu"] },
   "Hugin":    { modeller:["T300","T100"], baglanti:["kablolu"] },
 };
-function posAyarYukle(){
-  try{ const j=localStorage.getItem(POS_AYAR_KEY); if(j) POS_AYAR=JSON.parse(j); }catch(e){}
-}
-function posAyarKaydet(){
-  try{ localStorage.setItem(POS_AYAR_KEY, JSON.stringify(POS_AYAR)); }catch(e){}
-}
+function posAyarYukle(){ POS_AYAR = MPStore.get(POS_AYAR_KEY, {}, {version:1}); }
+function posAyarKaydet(){ MPStore.set(POS_AYAR_KEY, POS_AYAR, 1); }
 function posAyarAl(sube){
   return POS_AYAR[sube] || {marka:"", model:"", baglanti:"kablolu", ip:"", port:"9000", aktif:false};
 }
@@ -4921,12 +4964,8 @@ const YAZICI_ROLLER = {
   paket:  {ad:"Paket", ic:"📦", aciklama:"Paket/gel-al etiketi"},
   ozel:   {ad:"Özel", ic:"⚙️", aciklama:"Özel amaçlı yazıcı"},
 };
-function yaziciYukle(){
-  try{ const j=localStorage.getItem(YAZICI_KEY); if(j) YAZICILAR=JSON.parse(j); }catch(e){}
-}
-function yaziciKaydet(){
-  try{ localStorage.setItem(YAZICI_KEY, JSON.stringify(YAZICILAR)); }catch(e){}
-}
+function yaziciYukle(){ YAZICILAR = MPStore.get(YAZICI_KEY, {}, {version:1}); }
+function yaziciKaydet(){ MPStore.set(YAZICI_KEY, YAZICILAR, 1); }
 function subeYazicilari(sube){ return YAZICILAR[sube] || []; }
 function yaziciIdUret(){ return "yzc_"+Date.now()+"_"+Math.floor(Math.random()*1000); }
 function kategoriYazicilari(sube, kategori, rol){
@@ -5396,48 +5435,40 @@ function siparisTutar(sp){
 /* === B2B KALICILIK — roller arası geçişte (sayfa yenilenince) veri korunur === */
 const B2B_KEY = "minipan_b2b_v1";
 function b2bKaydet(){
-  try{
-    const veri = {
-      BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER,
-      _irsaliyeId, _siparisId,
-      // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
-      STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut]))
-    };
-    localStorage.setItem(B2B_KEY, JSON.stringify(veri));
-  }catch(e){ /* localStorage yoksa sessiz geç */ }
+  MPStore.set(B2B_KEY, {
+    BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER,
+    _irsaliyeId, _siparisId,
+    // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
+    STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut]))
+  }, 1);
 }
 function b2bYukle(){
-  try{
-    const raw = localStorage.getItem(B2B_KEY);
-    if(!raw) return;
-    const v = JSON.parse(raw);
-    if(v.BAYI_STOK) BAYI_STOK = v.BAYI_STOK;
-    if(v.BAYI_FIYAT) BAYI_FIYAT = v.BAYI_FIYAT;
-    if(v.BAYI_ISKONTO) BAYI_ISKONTO = v.BAYI_ISKONTO;
-    if(v.IRSALIYELER) IRSALIYELER = v.IRSALIYELER;
-    if(v.BAYI_SIPARISLER) BAYI_SIPARISLER = v.BAYI_SIPARISLER;
-    if(v._irsaliyeId) _irsaliyeId = v._irsaliyeId;
-    if(v._siparisId) _siparisId = v._siparisId;
-    if(v.STOCK_MEVCUT){ Object.entries(v.STOCK_MEVCUT).forEach(([k,m])=>{ if(STOCK[k]) STOCK[k].mevcut=m; }); }
-  }catch(e){ /* bozuk veri → yoksay */ }
+  const v = MPStore.get(B2B_KEY, {}, {version:1});
+  if(v.BAYI_STOK) BAYI_STOK = v.BAYI_STOK;
+  if(v.BAYI_FIYAT) BAYI_FIYAT = v.BAYI_FIYAT;
+  if(v.BAYI_ISKONTO) BAYI_ISKONTO = v.BAYI_ISKONTO;
+  if(v.IRSALIYELER) IRSALIYELER = v.IRSALIYELER;
+  if(v.BAYI_SIPARISLER) BAYI_SIPARISLER = v.BAYI_SIPARISLER;
+  if(v._irsaliyeId) _irsaliyeId = v._irsaliyeId;
+  if(v._siparisId) _siparisId = v._siparisId;
+  if(v.STOCK_MEVCUT){ Object.entries(v.STOCK_MEVCUT).forEach(([k,m])=>{ if(STOCK[k]) STOCK[k].mevcut=m; }); }
 }
 
-/* === KAMPANYA + GENEL FİYAT KALICILIĞI === */
+/* === KAMPANYA + GENEL FİYAT KALICILIĞI ===
+   NOT: SUBE_FIYAT burada YÜKLENMİYOR artık — eskiden buradaki
+   kampanyaYukle() v.SUBE_FIYAT diye bir alan okuyordu ama
+   kampanyaKaydet_persist() o alanı hiç yazmıyordu (ölü kod, hep
+   undefined dönüyordu). SUBE_FIYAT'ın gerçek kaynağı MENU_KEY —
+   fiyatDuzKaydet()/subeFiyatGir() değişiklik sonrası menuKaydet()
+   çağırıyor. Tek kaynak burada netleştirildi. */
 const KMP_KEY = "minipan_kmp_v1";
 function kampanyaKaydet_persist(){
-  try{
-    localStorage.setItem(KMP_KEY, JSON.stringify({ KAMPANYALAR, _kampanyaId }));
-  }catch(e){}
+  MPStore.set(KMP_KEY, { KAMPANYALAR, _kampanyaId }, 1);
 }
 function kampanyaYukle(){
-  try{
-    const raw = localStorage.getItem(KMP_KEY);
-    if(!raw) return;
-    const v = JSON.parse(raw);
-    if(v.KAMPANYALAR) KAMPANYALAR = v.KAMPANYALAR;
-    if(v._kampanyaId) _kampanyaId = v._kampanyaId;
-    if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
-  }catch(e){}
+  const v = MPStore.get(KMP_KEY, {}, {version:1});
+  if(v.KAMPANYALAR) KAMPANYALAR = v.KAMPANYALAR;
+  if(v._kampanyaId) _kampanyaId = v._kampanyaId;
 }
 
 /* Bugünkü kümülatif tüketim (denetim için) */
@@ -5776,6 +5807,7 @@ function buildNav(){
 }
 
 function go(key, scrollKoru){
+  sessionsKaydet();
   document.querySelectorAll(".nav-item").forEach(n=>n.classList.toggle("active", n.dataset.k===key));
   const main = document.getElementById("main");
   const eskiScroll = main.scrollTop;
@@ -6939,6 +6971,24 @@ function tekOdemeTamamla(){
    ============================================================ */
 let SESSIONS = {};   // masaNo → {masa, acik, kisiler:[{ad, kalemler:[...]}], zaman}
 let _kalemId = 1;
+
+/* ============================================================
+   SESSIONS KALICILIK — masa/sipariş verisi artık tarayıcı
+   kapansa/yenilense de kaybolmuyor. Gerçek ortamda bu katmanın
+   yerini Firestore/Supabase realtime senkron alacak; bu yama
+   o ana kadar tek terminalde veri kaybını önler.
+   ============================================================ */
+const SESSIONS_KEY = "minipan_sessions_v1";
+const KALEM_ID_KEY = "minipan_kalemid_v1";
+function sessionsKaydet(){
+  MPStore.set(SESSIONS_KEY, SESSIONS, 1);
+  MPStore.setRaw(KALEM_ID_KEY, String(_kalemId));
+}
+function sessionsYukle(){
+  SESSIONS = MPStore.get(SESSIONS_KEY, {}, {version:1});
+  const ki = MPStore.getRaw(KALEM_ID_KEY, null);
+  if(ki) _kalemId = Math.max(_kalemId, parseInt(ki)||1);
+}
 
 /* Demo oturumları kur (gerçekte Firestore'dan canlı gelir) */
 function seedSessions(){
@@ -8144,12 +8194,8 @@ let MUSTERI_KANAL = null;
 let MUSTERI_PENCERE = null;
 const MUSTERI_REKLAM_KEY = "minipan_musteri_reklam_v1";
 let MUSTERI_REKLAMLAR = {};   // {sube:[dataURL,...]} şube bazlı reklam görselleri
-function musteriReklamYukle(){
-  try{ const j=localStorage.getItem(MUSTERI_REKLAM_KEY); if(j) MUSTERI_REKLAMLAR=JSON.parse(j); }catch(e){}
-}
-function musteriReklamKaydet(){
-  try{ localStorage.setItem(MUSTERI_REKLAM_KEY, JSON.stringify(MUSTERI_REKLAMLAR)); }catch(e){}
-}
+function musteriReklamYukle(){ MUSTERI_REKLAMLAR = MPStore.get(MUSTERI_REKLAM_KEY, {}, {version:1}); }
+function musteriReklamKaydet(){ MPStore.set(MUSTERI_REKLAM_KEY, MUSTERI_REKLAMLAR, 1); }
 function musteriKanalAc(){
   if(MUSTERI_KANAL) return MUSTERI_KANAL;
   try{ MUSTERI_KANAL = new BroadcastChannel("minipan_musteri"); }catch(e){ MUSTERI_KANAL=null; }
@@ -10184,28 +10230,22 @@ const KOD_SEC_KCAL = {"Sütlü Pankek":180,"Kakaolu":130,"Sütlü - Kakaolu":140
 
 const MENU_KEY = "minipan_menu_v1";
 function menuKaydet(){
-  try{
-    localStorage.setItem(MENU_KEY, JSON.stringify({
-      DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_GORSEL, KAT_GORSEL, SUBE_FIYAT
-    }));
-  }catch(e){ /* kota dolabilir (base64 görseller) */ console.warn("menü kayıt hatası", e); }
+  MPStore.set(MENU_KEY, {
+    DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_GORSEL, KAT_GORSEL, SUBE_FIYAT
+  }, 1);
 }
 function menuYukle(){
-  try{
-    const raw = localStorage.getItem(MENU_KEY);
-    if(!raw) return;
-    const v = JSON.parse(raw);
-    if(v.DEMO_KATEGORILER) DEMO_KATEGORILER = v.DEMO_KATEGORILER;
-    if(v.DEMO_PRODUCTS) DEMO_PRODUCTS = v.DEMO_PRODUCTS;
-    if(v.PRODUCT_OPTIONS) PRODUCT_OPTIONS = v.PRODUCT_OPTIONS;
-    if(v.OPTION_GROUPS) OPTION_GROUPS = v.OPTION_GROUPS;
-    if(v.OPTION_POOL) OPTION_POOL = v.OPTION_POOL;
-    if(v.SEC_KAPALI) SEC_KAPALI = v.SEC_KAPALI;
-    if(v.URUN_GORSEL) URUN_GORSEL = v.URUN_GORSEL;
-    if(v.KAT_GORSEL) KAT_GORSEL = v.KAT_GORSEL;
-    if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
-    kcalMigrasyon();   // eski kayıtta kcal eksikse koddaki varsayılanlardan doldur
-  }catch(e){}
+  const v = MPStore.get(MENU_KEY, {}, {version:1});
+  if(v.DEMO_KATEGORILER) DEMO_KATEGORILER = v.DEMO_KATEGORILER;
+  if(v.DEMO_PRODUCTS) DEMO_PRODUCTS = v.DEMO_PRODUCTS;
+  if(v.PRODUCT_OPTIONS) PRODUCT_OPTIONS = v.PRODUCT_OPTIONS;
+  if(v.OPTION_GROUPS) OPTION_GROUPS = v.OPTION_GROUPS;
+  if(v.OPTION_POOL) OPTION_POOL = v.OPTION_POOL;
+  if(v.SEC_KAPALI) SEC_KAPALI = v.SEC_KAPALI;
+  if(v.URUN_GORSEL) URUN_GORSEL = v.URUN_GORSEL;
+  if(v.KAT_GORSEL) KAT_GORSEL = v.KAT_GORSEL;
+  if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
+  kcalMigrasyon();   // eski kayıtta kcal eksikse koddaki varsayılanlardan doldur
 }
 /* Eski localStorage menüsünde kcal alanı yoksa, koddaki orijinal değerlerden doldur.
    (Daha önce kaydedilmiş menü kcal'siz olduğu için tek seferlik migrasyon.) */
@@ -10228,31 +10268,19 @@ function kcalMigrasyon(){
 /* === ŞUBE VERİLERİ KALICILIĞI === */
 const SUBE_KEY = "minipan_subeler_v1";
 function subeKaydet(){
-  try{
-    localStorage.setItem(SUBE_KEY, JSON.stringify({
-      DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES
-    }));
-  }catch(e){ console.warn("şube kayıt hatası", e); }
+  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES }, 1);
 }
 function subeYukle(){
-  try{
-    const raw = localStorage.getItem(SUBE_KEY);
-    if(!raw) return;
-    const v = JSON.parse(raw);
-    if(v.DEMO_BRANCHES) DEMO_BRANCHES = v.DEMO_BRANCHES;
-    if(v.BRANCH_INFO) BRANCH_INFO = v.BRANCH_INFO;
-    if(v.BRANCH_TABLES) BRANCH_TABLES = v.BRANCH_TABLES;
-  }catch(e){}
+  const v = MPStore.get(SUBE_KEY, {}, {version:1});
+  if(v.DEMO_BRANCHES) DEMO_BRANCHES = v.DEMO_BRANCHES;
+  if(v.BRANCH_INFO) BRANCH_INFO = v.BRANCH_INFO;
+  if(v.BRANCH_TABLES) BRANCH_TABLES = v.BRANCH_TABLES;
 }
 
 /* === ÜRÜN YORUM / PUANLAMA === */
 const YORUM_KEY = "minipan_yorum_v1";
-function yorumKaydet(){
-  try{ localStorage.setItem(YORUM_KEY, JSON.stringify(YORUMLAR)); }catch(e){}
-}
-function yorumYukle(){
-  try{ const raw=localStorage.getItem(YORUM_KEY); if(raw) YORUMLAR=JSON.parse(raw); }catch(e){}
-}
+function yorumKaydet(){ MPStore.set(YORUM_KEY, YORUMLAR, 1); }
+function yorumYukle(){ YORUMLAR = MPStore.get(YORUM_KEY, {}, {version:1}); }
 /* Bir ürünün onaylı yorumları */
 function urunOnayliYorumlar(urunAd){ return (YORUMLAR[urunAd]||[]).filter(y=>y.onay); }
 /* Ortalama puan ve yorum sayısı (onaylılar) */
@@ -12987,18 +13015,16 @@ const SADAKAT = {
 };
 const SADAKAT_KEY = "minipan_sadakat_v1";
 function sadakatYukle(){
-  try{
-    const j=localStorage.getItem(SADAKAT_KEY);
-    if(j){ const v=JSON.parse(j);
-      if(v.magTl!=null) SADAKAT.magTl=v.magTl;
-      if(v.kazancOrani!=null) SADAKAT.kazancOrani=v.kazancOrani;
-      if(v.kademeler && Array.isArray(v.kademeler) && v.kademeler.length) SADAKAT.kademeler=v.kademeler;
-      if(v.kademeOlcut) SADAKAT.kademeOlcut=v.kademeOlcut;
-    }
-  }catch(e){}
+  const v = MPStore.get(SADAKAT_KEY, null, {version:1});
+  if(v){
+    if(v.magTl!=null) SADAKAT.magTl=v.magTl;
+    if(v.kazancOrani!=null) SADAKAT.kazancOrani=v.kazancOrani;
+    if(v.kademeler && Array.isArray(v.kademeler) && v.kademeler.length) SADAKAT.kademeler=v.kademeler;
+    if(v.kademeOlcut) SADAKAT.kademeOlcut=v.kademeOlcut;
+  }
 }
 function sadakatKaydet(){
-  try{ localStorage.setItem(SADAKAT_KEY, JSON.stringify({magTl:SADAKAT.magTl, kazancOrani:SADAKAT.kazancOrani, kademeler:SADAKAT.kademeler, kademeOlcut:SADAKAT.kademeOlcut})); }catch(e){}
+  MPStore.set(SADAKAT_KEY, {magTl:SADAKAT.magTl, kazancOrani:SADAKAT.kazancOrani, kademeler:SADAKAT.kademeler, kademeOlcut:SADAKAT.kademeOlcut}, 1);
 }
 /* Üyenin kademe ölçüt değeri (toplam ömür-boyu kazanım veya güncel bakiye) */
 function uyeKademeDeger(uye){
@@ -13106,14 +13132,10 @@ const SPLASH = {
 };
 const SPLASH_KEY = "minipan_splash_v1";
 function splashYukle(){
-  try{
-    const j=localStorage.getItem(SPLASH_KEY);
-    if(j){ Object.assign(SPLASH, JSON.parse(j)); }
-  }catch(e){}
+  const v = MPStore.get(SPLASH_KEY, null, {version:1});
+  if(v) Object.assign(SPLASH, v);
 }
-function splashKaydet(){
-  try{ localStorage.setItem(SPLASH_KEY, JSON.stringify(SPLASH)); }catch(e){}
-}
+function splashKaydet(){ MPStore.set(SPLASH_KEY, SPLASH, 1); }
 
 /* Mail ile bul (asıl kimlik) */
 function musteriBulMail(mail){ return CUSTOMERS[(mail||"").toLowerCase().trim()] || null; }
@@ -13156,6 +13178,7 @@ function closeQR(){
   const bar=document.getElementById("qrSepetBarSabit"); if(bar) bar.remove();
 }
 function renderQR(){
+  sessionsKaydet();
   const el = document.getElementById("qrApp");
   if(QR.view==="splash")        el.innerHTML = qrSplashHtml();
   else if(QR.view==="bildirim") el.innerHTML = qrBildirimHtml();
@@ -14266,7 +14289,8 @@ function garsonCagriSesDurdur(){ if(GARSON_SES_TIMER){ clearInterval(GARSON_SES_
 /* === GARSON ÇAĞRI ONAY (kasa/garson/müdür) === */
 let AKTIF_PERSONEL_AD = "";  // bu cihazdaki personelin adı (bir kez girilir)
 const PERSONEL_AD_KEY = "minipan_personel_ad_v1";
-function personelAdYukle(){ try{ AKTIF_PERSONEL_AD=localStorage.getItem(PERSONEL_AD_KEY)||""; }catch(e){} }
+function personelAdYukle(){ AKTIF_PERSONEL_AD = MPStore.getRaw(PERSONEL_AD_KEY, ""); }
+function personelAdKaydet(ad){ AKTIF_PERSONEL_AD = ad; MPStore.setRaw(PERSONEL_AD_KEY, ad); }
 /* Masaya tıklanınca çağrı varsa onay pop-up'ı göster (kasa/garson/müdür) */
 function garsonCagriPopAc(masaId){
   const s=SESSIONS[masaId];
@@ -14305,7 +14329,7 @@ function garsonCagriPopKapat(){ const m=document.getElementById("garsonCagriPop"
 function garsonCagriKabul(masaId){
   const ad=(AKTIF_PERSONEL_AD||"").trim();
   if(!ad){ note("Lütfen adınızı girin"); const i=document.getElementById("gcpAd"); if(i) i.focus(); return; }
-  try{ localStorage.setItem(PERSONEL_AD_KEY, ad); }catch(e){}
+  personelAdKaydet(ad);
   const s=SESSIONS[masaId]; if(!s||!s.garsonCagriBilgi) return;
   s.garsonCagriBilgi.durum="kabul";
   s.garsonCagriBilgi.onaylayan=ad;
@@ -14497,6 +14521,7 @@ function kdsMasaAc(m){ if(garsonCagriPopAc(m)){ return; } KDS.acikMasa=m; render
 function kdsGeri(){ KDS.acikMasa=null; renderKDS(); }
 
 function renderKDS(){
+  sessionsKaydet();
   const el=document.getElementById("kdsApp");
   if(KDS.acikMasa!=null){ el.innerHTML=kdsMasaDetayHtml(KDS.acikMasa); return; }
   let html='<div class="kds-screen"><div class="kds-top">'+
@@ -14824,6 +14849,7 @@ function openGarson(){
 function closeGarson(){ document.getElementById("garsonApp").style.display="none"; document.getElementById("login").style.display="flex"; }
 
 function renderGarson(){
+  sessionsKaydet();
   const el=document.getElementById("garsonApp");
   if(GARSON.view==="masalar")    el.innerHTML=garsonMasalarHtml();
   else if(GARSON.view==="masa")  el.innerHTML=garsonMasaHtml();
@@ -15174,6 +15200,7 @@ window.addEventListener("online",  ()=>{ setConnState(!!window.__db, window.__db
 window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi · offline kuyruk"));
 
 // Uygulama açılışında başlat
+sessionsYukle();   // masa/oturum/sipariş verilerini geri yükle (artık kalıcı)
 subeYukle();     // şube verilerini (yeni eklenenler dahil) geri yükle
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
@@ -15189,6 +15216,12 @@ if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünle
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
 initFirebase();
+
+// Güvenlik ağı: render hook'larının kaçırdığı ara durumlar için 4 sn'de bir otomatik kayıt
+setInterval(sessionsKaydet, 4000);
+// Sekme/uygulama kapanırken son hali kesin kaydet
+window.addEventListener("beforeunload", sessionsKaydet);
+window.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="hidden") sessionsKaydet(); });
 
 </script>
 </body>
