@@ -1211,6 +1211,43 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .obn-iptal{flex:1; padding:14px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
 .obn-bol{flex:2; padding:14px; border-radius:11px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
 .obn-bol:disabled{opacity:.4; cursor:default}
+/* Masa Yönetimi — kategori/masa ekleme pop-up'ı (prompt() yerine) */
+.myp-ic{max-width:340px; width:92%; background:var(--surface); border-radius:16px; padding:22px; margin:auto}
+.myp-baslik{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:14px; text-align:center}
+.myp-input{width:100%; padding:14px 16px; border-radius:11px; border:1.5px solid var(--line); font-size:16px; font-weight:700; background:var(--surface-2); color:var(--ink); margin-bottom:16px; box-sizing:border-box}
+.myp-input:focus{outline:none; border-color:var(--brand)}
+.myp-btn-row{display:flex; gap:10px}
+.myp-iptal{flex:1; padding:14px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
+.myp-onayla{flex:2; padding:14px; border-radius:11px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+/* Fiyat/Ürün kategorisi popup */
+.fkp-ic{max-width:380px; width:94%; background:var(--surface); border-radius:16px; padding:22px; margin:auto}
+.fkp-baslik{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:16px; text-align:center}
+.fkp-gorsel-onizleme{width:72px; height:72px; border-radius:12px; object-fit:cover; margin:0 auto 12px; display:block; border:2px solid var(--line)}
+.fkp-gorsel-emoji{font-size:48px; text-align:center; margin-bottom:12px}
+.fkp-etiket{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:5px}
+.fkp-input{width:100%; padding:13px 14px; border-radius:10px; border:1.5px solid var(--line); font-size:15px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box; margin-bottom:10px}
+.fkp-input:focus{outline:none; border-color:var(--brand)}
+.fkp-gorsel-row{display:flex; gap:8px; margin-bottom:16px}
+.fkp-gorsel-sec{flex:1; padding:11px; border-radius:10px; border:1.5px dashed var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:700; cursor:pointer; text-align:center}
+.fkp-gorsel-sec:hover{border-color:var(--brand); color:var(--brand)}
+.fkp-gorsel-kaldir{padding:11px 14px; border-radius:10px; border:1.5px solid var(--err-soft); background:var(--err-soft); color:var(--err); font-size:13px; font-weight:700; cursor:pointer}
+.fkp-btn-row{display:flex; gap:10px; margin-top:4px}
+.fkp-iptal{flex:1; padding:13px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:800; cursor:pointer}
+.fkp-onayla{flex:2; padding:13px; border-radius:10px; background:var(--brand); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
+.fkp-sil{flex:2; padding:13px; border-radius:10px; background:var(--err); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
+/* Seçenek grubu popup */
+.sgp-ic{max-width:360px; width:94%; background:var(--surface); border-radius:16px; padding:22px; margin:auto}
+.sgp-baslik{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:16px; text-align:center}
+.sgp-etiket{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:5px; margin-top:10px}
+.sgp-input{width:100%; padding:13px 14px; border-radius:10px; border:1.5px solid var(--line); font-size:15px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box}
+.sgp-input:focus{outline:none; border-color:var(--brand)}
+.sgp-tip-row{display:flex; gap:8px; margin-top:6px; margin-bottom:4px}
+.sgp-tip-btn{flex:1; padding:10px; border-radius:9px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:700; cursor:pointer}
+.sgp-tip-btn.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.sgp-btn-row{display:flex; gap:10px; margin-top:16px}
+.sgp-iptal{flex:1; padding:13px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:800; cursor:pointer}
+.sgp-onayla{flex:2; padding:13px; border-radius:10px; background:var(--brand); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
+.sgp-sil-btn{flex:2; padding:13px; border-radius:10px; background:var(--err); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
 /* ORTA: fiş */
 .ode-fis-liste{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:9px; min-height:120px}
 .ode-fis-bos{text-align:center; color:var(--ink-3); padding:30px 12px; font-size:14px; line-height:1.6}
@@ -7451,7 +7488,9 @@ function subeQrTopluIndir(sube){
 }
 
 function myKatEkle(){
-  const ad=prompt("Yeni kategori adı (örn. Balkon, Teras, Bahçe):");
+  myPopupAc('kategori', null, "");
+}
+function myKatEkleOnayla(ad){
   if(!ad||!ad.trim()) return;
   const sube=state.myHedefSube;
   if(!BRANCH_TABLES[sube]) BRANCH_TABLES[sube]=[];
@@ -7462,10 +7501,16 @@ function myKatEkle(){
 }
 function myKatYenidenAdlandir(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
-  const ad=prompt("Kategori adı:", k.kat);
-  if(!ad||!ad.trim()) return;
-  k.kat=ad.trim();
-  subeKaydet(); go("masayonetim", true);
+  myPopupDuzenleAc('katad', ki, k.kat);
+}
+function myKatYenidenAdlandirOnayla(ki, yeniAd){
+  if(!yeniAd||!yeniAd.trim()) return;
+  const sube=state.myHedefSube;
+  const k=BRANCH_TABLES[sube][ki];
+  if(yeniAd.trim()===k.kat){ myPopupKapat(); return; }
+  if(BRANCH_TABLES[sube].find((x,i)=>i!==ki && x.kat===yeniAd.trim())){ note("Bu isimde kategori zaten var"); return; }
+  k.kat=yeniAd.trim();
+  subeKaydet(); myPopupKapat(); go("masayonetim", true);
 }
 function myKatSil(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
@@ -7482,21 +7527,122 @@ function myMasaEkle(ki){
   // sonraki numarayı öner
   const sayilar=k.masalar.map(x=>parseInt(x)).filter(n=>!isNaN(n));
   const oneri=sayilar.length?Math.max(...sayilar)+1:1;
-  const ad=prompt(k.kat+" için masa adı/numarası:", String(oneri));
+  myPopupAc('masa', ki, String(oneri));
+}
+function myMasaEkleOnayla(ki, ad){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
   if(!ad||!ad.trim()) return;
   if(k.masalar.includes(ad.trim())){ note("Bu masa zaten var"); return; }
   k.masalar.push(ad.trim());
   note(k.kat+"-"+ad.trim()+" eklendi");
   subeKaydet(); go("masayonetim", true);
 }
+/* Kategori/masa ekleme metin giriş pop-up'ı (prompt() yerine — tutarlı görünüm + dokunmatikte daha rahat) */
+function myPopupAc(tip, ki, onerilenDeger){
+  state._myPopup = {tip, ki, deger:onerilenDeger||""};
+  myPopupCiz();
+}
+function myPopupDuzenleAc(tip, ki, mevcutDeger){
+  state._myPopup = {tip, ki, deger:mevcutDeger||"", duzenle:true};
+  myPopupCiz();
+}
+function myPopupKapat(){
+  state._myPopup = null;
+  const mdl=document.getElementById("myPopup");
+  if(mdl) mdl.classList.remove("on");
+}
+function myPopupOnayla(){
+  const p = state._myPopup; if(!p) return;
+  const inp = document.getElementById("mypInput");
+  const deger = inp ? inp.value : "";
+  if(!deger || !deger.trim()) { note("Bir değer girin"); return; }
+  if(p.tip==='kategori') myKatEkleOnayla(deger);
+  else if(p.tip==='katad') myKatYenidenAdlandirOnayla(p.ki, deger);
+  else myMasaEkleOnayla(p.ki, deger);
+  myPopupKapat();
+}
+function myPopupCiz(){
+  const p = state._myPopup;
+  let mdl=document.getElementById("myPopup");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="myPopup"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  const sube=state.myHedefSube;
+  let baslik, placeholder;
+  if(p.tip==='kategori'){
+    baslik = "🗂️ Yeni Kategori";
+    placeholder = "örn. Balkon, Teras, Bahçe";
+  } else if(p.tip==='katad'){
+    baslik = "✏️ Kategori Adını Değiştir";
+    placeholder = "Yeni kategori adı";
+  } else {
+    const k = BRANCH_TABLES[sube] ? BRANCH_TABLES[sube][p.ki] : null;
+    baslik = "🪑 "+(k?k.kat:"")+" için Masa Ekle";
+    placeholder = "Masa adı/numarası";
+  }
+  const butonAdi = p.duzenle ? "Kaydet" : "Ekle";
+  mdl.innerHTML = `<div class="myp-ic">
+    <div class="myp-baslik">${baslik}</div>
+    <input class="myp-input" id="mypInput" type="text" value="${(p.deger||'').replace(/"/g,'&quot;')}" placeholder="${placeholder}" onkeydown="if(event.key==='Enter') myPopupOnayla()">
+    <div class="myp-btn-row">
+      <button class="myp-iptal" onclick="myPopupKapat()">İptal</button>
+      <button class="myp-onayla" onclick="myPopupOnayla()">${butonAdi}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("mypInput"); if(i){ i.focus(); i.select(); } }, 60);
+}
+function myKatSil(ki){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
+  const dolu = k.masalar.some(ad=>{ const id=sube+"::"+k.kat+"|"+ad; return SESSIONS[id]&&SESSIONS[id].acik; });
+  if(dolu){ note("Bu kategoride dolu masa var — önce hesapları kapatın"); return; }
+  const mesaj = k.masalar.length>0
+    ? `"${k.kat}" kategorisi ve içindeki ${k.masalar.length} masa kalıcı olarak silinecek.`
+    : `"${k.kat}" kategorisi silinecek.`;
+  mySilOnayAc('kat', ki, null, mesaj);
+}
 function myMasaSil(ki,mi){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki]; const ad=k.masalar[mi];
   const id=sube+"::"+k.kat+"|"+ad;
   if(SESSIONS[id]&&SESSIONS[id].acik){ note("Dolu masa silinemez — önce hesabı kapatın"); return; }
-  if(!confirm(k.kat+"-"+ad+" masası silinecek?")) return;
-  k.masalar.splice(mi,1);
-  note("Masa silindi");
+  mySilOnayAc('masa', ki, mi, `"${k.kat}-${ad}" masası kalıcı olarak silinecek.`);
+}
+function mySilOnayAc(tip, ki, mi, mesaj){
+  state._mySilOnay = {tip, ki, mi, mesaj};
+  mySilOnayPopupCiz();
+}
+function mySilOnayKapat(){
+  state._mySilOnay = null;
+  const mdl=document.getElementById("mySilPopup");
+  if(mdl) mdl.classList.remove("on");
+}
+function mySilOnayUygula(){
+  const p = state._mySilOnay; if(!p) return;
+  const sube=state.myHedefSube;
+  if(p.tip==='kat'){
+    BRANCH_TABLES[sube].splice(p.ki,1);
+    note("Kategori silindi");
+  } else {
+    const k=BRANCH_TABLES[sube][p.ki];
+    k.masalar.splice(p.mi,1);
+    note("Masa silindi");
+  }
+  mySilOnayKapat();
   subeKaydet(); go("masayonetim", true);
+}
+function mySilOnayPopupCiz(){
+  const p = state._mySilOnay;
+  let mdl=document.getElementById("mySilPopup");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="mySilPopup"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  mdl.innerHTML = `<div class="myp-ic">
+    <div class="myp-baslik">🗑️ ${p.tip==='kat'?'Kategoriyi Sil':'Masayı Sil'}</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.5">${p.mesaj}<br><strong style="color:var(--err)">Bu işlem geri alınamaz.</strong></div>
+    <div class="myp-btn-row">
+      <button class="myp-iptal" onclick="mySilOnayKapat()">İptal</button>
+      <button class="myp-onayla" style="background:var(--err)" onclick="mySilOnayUygula()">Evet, Sil</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
 }
 
 // --- MASALAR ---
@@ -10001,9 +10147,10 @@ function kategoriYonetimHtml(){
   html += `<input type="file" id="katGorselInput" accept="image/*" style="display:none" onchange="katGorselYukle(event)">`;
   return html;
 }
-/* Kategori görseli seç (dosya iletişim kutusunu aç) */
+/* Kategori görseli seç (popup içinden hidden input'a yönlendirme) */
 function katGorselSec(i){
-  state._katGorselHedef = i;
+  // popup açıksa state'e hedefi yaz (yoksa normal i kullan)
+  state._katGorselHedef = state._fkpPopup ? (state._fkpPopup.i!=null?state._fkpPopup.i:i) : i;
   const inp = document.getElementById("katGorselInput");
   if(inp){ inp.value=""; inp.click(); }
 }
@@ -10012,64 +10159,175 @@ function katGorselYukle(ev){
   if(!dosya) return;
   if(dosya.size > 2*1024*1024){ note("⛔ Görsel 2 MB'dan küçük olmalı"); return; }
   const i = state._katGorselHedef;
-  const k = DEMO_KATEGORILER[i];
   const okuyucu = new FileReader();
   okuyucu.onload = (e)=>{
-    KAT_GORSEL[k.ad] = e.target.result;  // webp dahil base64 data URI
-    note("✓ "+k.ad+" görseli eklendi");
-    menuKaydet();
-    go("fiyat", true);
+    // popup açıksa sadece geçici state'e yaz — kayıt Ekle/Kaydet'te olur
+    if(state._fkpPopup){
+      state._fkpPopup.gorselOnizleme = e.target.result;
+      fkpCiz();
+    } else {
+      // popup kapalıysa (eski akış uyumluluğu) doğrudan kaydet
+      const k = DEMO_KATEGORILER[i];
+      KAT_GORSEL[k.ad] = e.target.result;
+      note("✓ "+k.ad+" görseli eklendi");
+      menuKaydet(); go("fiyat", true);
+    }
   };
   okuyucu.readAsDataURL(dosya);
 }
 function katGorselSil(i){
+  // popup açıksa sadece önizlemeyi sıfırla (henüz kaydedilmedi)
+  if(state._fkpPopup){ state._fkpPopup.gorselOnizleme=null; state._fkpPopup.gorselSilindi=true; fkpCiz(); return; }
+  // popup dışından (liste üzerindeki 🚫 butonu) → görseli sil, kategoriyi dokunma
   const k = DEMO_KATEGORILER[i];
-  if(!confirm('"'+k.ad+'" görseli kaldırılsın mı? (emoji ikona dönülür)')) return;
-  delete KAT_GORSEL[k.ad];
-  note("Görsel kaldırıldı");
-  menuKaydet();
-  go("fiyat", true);
+  state._fkpGorselSilOnay = {i, katAd:k.ad};
+  let mdl=document.getElementById("fkpGorselSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="fkpGorselSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="fkp-ic">
+    <div class="fkp-baslik">🖼️ Görseli Kaldır</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.6">
+      <strong>"${k.ad}"</strong> kategorisinin görseli kaldırılacak.<br>Emoji ikona geri dönülür.
+    </div>
+    <div class="fkp-btn-row">
+      <button class="fkp-iptal" onclick="fkpGorselSilKapat()">İptal</button>
+      <button class="fkp-sil" onclick="fkpGorselSilOnayla()">Evet, Kaldır</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
 }
+function fkpGorselSilKapat(){
+  state._fkpGorselSilOnay=null;
+  const mdl=document.getElementById("fkpGorselSilModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function fkpGorselSilOnayla(){
+  const p=state._fkpGorselSilOnay; if(!p) return;
+  delete KAT_GORSEL[p.katAd];
+  note("Görsel kaldırıldı");
+  fkpGorselSilKapat(); menuKaydet(); go("fiyat", true);
+}
+
 function kategoriEkle(){
-  const ad = prompt("Kategori adı:");
-  if(!ad||!ad.trim()) return;
-  if(DEMO_KATEGORILER.find(k=>k.ad===ad.trim())){ note("Bu kategori zaten var"); return; }
-  const emoji = prompt("Kategori ikonu (emoji):", "🍽️");
-  if(emoji==null) return;
-  DEMO_KATEGORILER.push({ad:ad.trim(), emoji:emoji.trim()||"🍽️"});
-  note("Kategori eklendi: "+ad.trim());
-  menuKaydet();
-  go("fiyat", true);
+  state._fkpPopup = {mod:'ekle', i:null, ad:"", emoji:"🍽️", gorselOnizleme:null, gorselSilindi:false};
+  fkpCiz();
 }
 function kategoriDuzenle(i){
   const k = DEMO_KATEGORILER[i];
-  const eskiAd = k.ad;
-  const ad = prompt("Kategori adı:", k.ad);
-  if(ad==null) return;
-  const emoji = prompt("Kategori ikonu:", k.emoji);
-  if(emoji==null) return;
-  k.ad = ad.trim()||k.ad;
-  k.emoji = emoji.trim()||k.emoji;
-  // ürünlerin kategori adını da güncelle
-  if(eskiAd!==k.ad){
-    DEMO_PRODUCTS.forEach(p=>{ if(p.kat===eskiAd) p.kat=k.ad; });
-    // görseli yeni ada taşı
-    if(KAT_GORSEL[eskiAd]){ KAT_GORSEL[k.ad]=KAT_GORSEL[eskiAd]; delete KAT_GORSEL[eskiAd]; }
-  }
-  note("Kategori güncellendi");
-  menuKaydet();
-  go("fiyat", true);
+  state._fkpPopup = {mod:'duzenle', i, ad:k.ad, emoji:k.emoji||"🍽️",
+    gorselOnizleme: KAT_GORSEL[k.ad]||null, gorselSilindi:false};
+  fkpCiz();
 }
 function kategoriSil(i){
   const k = DEMO_KATEGORILER[i];
   const urunSay = DEMO_PRODUCTS.filter(p=>p.kat===k.ad).length;
   if(urunSay>0){ note("⛔ Bu kategoride "+urunSay+" ürün var — önce ürünleri taşıyın/silin"); return; }
-  if(!confirm('"'+k.ad+'" kategorisi silinsin mi?')) return;
+  fkpSilOnayAc(i);
+}
+
+/* ============================================================
+   FİYAT/ÜRÜN KATEGORİ POPUP MOTORU
+   mod: 'ekle' | 'duzenle'
+   ============================================================ */
+function fkpKapat(){
+  state._fkpPopup = null;
+  const mdl=document.getElementById("fkpModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function fkpCiz(){
+  const p = state._fkpPopup;
+  let mdl=document.getElementById("fkpModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="fkpModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  const goster = p.gorselOnizleme;
+  const k = p.i!=null ? DEMO_KATEGORILER[p.i] : null;
+  const gorselBtnAdi = goster ? "🖼️ Görseli değiştir" : "🖼️ Görsel ekle";
+  mdl.innerHTML = `<div class="fkp-ic">
+    <div class="fkp-baslik">${p.mod==='ekle'?'✨ Yeni Kategori':'✏️ Kategoriyi Düzenle'}</div>
+    ${goster
+      ? `<img class="fkp-gorsel-onizleme" src="${goster}" alt="önizleme">`
+      : `<div class="fkp-gorsel-emoji">${p.emoji||'🍽️'}</div>`}
+    <div class="fkp-gorsel-row">
+      <button class="fkp-gorsel-sec" onclick="katGorselSec(${p.i!=null?p.i:9999})">${gorselBtnAdi}</button>
+      ${goster?`<button class="fkp-gorsel-kaldir" onclick="fkpGorselKaldir()">🚫 Kaldır</button>`:''}
+    </div>
+    <div class="fkp-etiket">Kategori adı</div>
+    <input class="fkp-input" id="fkpAd" type="text" value="${(p.ad||'').replace(/"/g,'&quot;')}" placeholder="örn. Tatlılar, Soğuk Kahveler" onkeydown="if(event.key==='Enter') fkpOnayla()">
+    <div class="fkp-etiket">Emoji ikonu <span style="color:var(--ink-3);font-weight:400">(görsel yoksa gösterilir)</span></div>
+    <input class="fkp-input" id="fkpEmoji" type="text" value="${(p.emoji||'🍽️').replace(/"/g,'&quot;')}" placeholder="🍽️" style="font-size:22px;width:80px;text-align:center;display:inline-block">
+    <div class="fkp-btn-row">
+      <button class="fkp-iptal" onclick="fkpKapat()">İptal</button>
+      <button class="fkp-onayla" onclick="fkpOnayla()">${p.mod==='ekle'?'Ekle':'Kaydet'}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("fkpAd"); if(i){ i.focus(); if(p.mod==='duzenle') i.select(); } }, 60);
+}
+function fkpGorselKaldir(){
+  if(!state._fkpPopup) return;
+  state._fkpPopup.gorselOnizleme = null;
+  state._fkpPopup.gorselSilindi = true;
+  fkpCiz();
+}
+function fkpOnayla(){
+  const p = state._fkpPopup; if(!p) return;
+  const adEl = document.getElementById("fkpAd");
+  const emojiEl = document.getElementById("fkpEmoji");
+  const ad = adEl ? adEl.value.trim() : "";
+  const emoji = (emojiEl ? emojiEl.value.trim() : "") || "🍽️";
+  if(!ad){ note("Kategori adı boş olamaz"); return; }
+  if(p.mod==='ekle'){
+    if(DEMO_KATEGORILER.find(k=>k.ad===ad)){ note("Bu kategori zaten var"); return; }
+    DEMO_KATEGORILER.push({ad, emoji});
+    if(p.gorselOnizleme) KAT_GORSEL[ad] = p.gorselOnizleme;
+    note("Kategori eklendi: "+ad);
+  } else {
+    const k = DEMO_KATEGORILER[p.i];
+    const eskiAd = k.ad;
+    k.ad = ad; k.emoji = emoji;
+    if(eskiAd!==ad){
+      DEMO_PRODUCTS.forEach(pr=>{ if(pr.kat===eskiAd) pr.kat=ad; });
+      if(KAT_GORSEL[eskiAd]){ KAT_GORSEL[ad]=KAT_GORSEL[eskiAd]; delete KAT_GORSEL[eskiAd]; }
+    }
+    if(p.gorselOnizleme) KAT_GORSEL[ad] = p.gorselOnizleme;
+    else if(p.gorselSilindi) delete KAT_GORSEL[ad];
+    note("Kategori güncellendi");
+  }
+  fkpKapat();
+  menuKaydet(); go("fiyat", true);
+}
+
+/* Silme onay popup'ı (görsel kaldır dahil) */
+function fkpSilOnayAc(i){
+  state._fkpSilOnay = {i};
+  let mdl=document.getElementById("fkpSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="fkpSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
+  const k = DEMO_KATEGORILER[i];
+  mdl.innerHTML = `<div class="fkp-ic">
+    <div class="fkp-baslik">🗑️ Kategoriyi Sil</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.6">
+      <strong>"${k.ad}"</strong> kategorisi silinecek.<br>
+      <span style="color:var(--err);font-weight:700">Bu işlem geri alınamaz.</span>
+    </div>
+    <div class="fkp-btn-row">
+      <button class="fkp-iptal" onclick="fkpSilOnayKapat()">İptal</button>
+      <button class="fkp-sil" onclick="fkpSilOnayla()">Evet, Sil</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function fkpSilOnayKapat(){
+  state._fkpSilOnay = null;
+  const mdl=document.getElementById("fkpSilModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function fkpSilOnayla(){
+  const p = state._fkpSilOnay; if(!p) return;
+  const k = DEMO_KATEGORILER[p.i];
   delete KAT_GORSEL[k.ad];
-  DEMO_KATEGORILER.splice(i,1);
+  DEMO_KATEGORILER.splice(p.i,1);
   note("Kategori silindi");
-  menuKaydet();
-  go("fiyat", true);
+  fkpSilOnayKapat();
+  menuKaydet(); go("fiyat", true);
 }
 function kategoriSiraTasi(i, yon){
   const j=i+yon;
@@ -10131,32 +10389,180 @@ function secenekGrupHtml(){
   return html;
 }
 function secGrupEkle(){
-  const ad = prompt("Seçenek grubu adı (örn. Sos Seçimi):");
-  if(!ad||!ad.trim()) return;
-  if(OPTION_GROUPS[ad.trim()]){ note("Bu grup zaten var"); return; }
-  OPTION_GROUPS[ad.trim()] = { tip:"zorunlu", min:1, max:1, secenekler:[] };
-  note("Grup eklendi: "+ad.trim());
-  menuKaydet();
-  go("fiyat", true);
+  state._sgPopup = {mod:'ekle', eskiAd:null, ad:"", tip:"zorunlu", ucretsiz:false, min:1, max:1};
+  sgpCiz();
 }
 function secGrupDuzenle(ad){
-  const yeni = prompt("Grup adı:", ad);
-  if(yeni==null || !yeni.trim() || yeni.trim()===ad) return;
-  if(OPTION_GROUPS[yeni.trim()]){ note("Bu isimde grup zaten var"); return; }
-  OPTION_GROUPS[yeni.trim()] = OPTION_GROUPS[ad];
-  delete OPTION_GROUPS[ad];
-  note("Grup adı güncellendi");
-  menuKaydet();
-  go("fiyat", true);
+  const g = OPTION_GROUPS[ad];
+  state._sgPopup = {mod:'duzenle', eskiAd:ad, ad:ad, tip:g.tip||"zorunlu", ucretsiz:!!g.ucretsiz,
+    min:g.min||0, max:(g.max>=99?0:g.max)||1};
+  sgpCiz();
 }
 function secGrupSil(ad){
-  if(!confirm('"'+ad+'" grubu silinsin mi?')) return;
-  delete OPTION_GROUPS[ad];
-  note("Grup silindi");
-  menuKaydet();
-  go("fiyat", true);
+  state._sgSilOnay = {ad};
+  sgpSilCiz();
 }
-/* Grup ayarı: tip + min/max (modal) */
+function secGrupSecenekSil(ad, si){
+  const s = OPTION_GROUPS[ad].secenekler[si];
+  state._sgSecSilOnay = {ad, si, secAd:s.ad};
+  let mdl=document.getElementById("sgSecSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="sgSecSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="220"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="sgp-ic">
+    <div class="sgp-baslik">✕ Seçeneği Kaldır</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.6">
+      <strong>"${s.ad}"</strong> seçeneği <strong>"${ad}"</strong> grubundan kaldırılacak.<br>
+      <span style="color:var(--err);font-weight:700">Bu işlem geri alınamaz.</span>
+    </div>
+    <div class="sgp-btn-row">
+      <button class="sgp-iptal" onclick="sgSecSilKapat()">İptal</button>
+      <button class="sgp-sil-btn" onclick="sgSecSilOnayla()">Evet, Kaldır</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function sgSecSilKapat(){
+  state._sgSecSilOnay=null;
+  const mdl=document.getElementById("sgSecSilModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function sgSecSilOnayla(){
+  const p=state._sgSecSilOnay; if(!p) return;
+  OPTION_GROUPS[p.ad].secenekler.splice(p.si,1);
+  menuKaydet(); sgSecSilKapat(); go("fiyat", true);
+}
+
+/* ============================================================
+   SEÇENEK GRUBU POPUP — ekle / düzenle
+   ============================================================ */
+function sgpKapat(){
+  state._sgPopup = null;
+  const mdl=document.getElementById("sgpModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function sgpTipSec(tip){
+  if(!state._sgPopup) return;
+  state._sgPopup.tip = tip;
+  // tip değişince min/max makul varsayılanlara sıfırla
+  if(tip==='zorunlu'){ state._sgPopup.min=1; state._sgPopup.max=1; }
+  else { state._sgPopup.min=0; state._sgPopup.max=0; } // 0=sınırsız
+  sgpCiz();
+}
+function sgpUcretSec(ucretsiz){
+  if(state._sgPopup) state._sgPopup.ucretsiz = ucretsiz;
+  sgpCiz();
+}
+function sgpOnayla(){
+  const p = state._sgPopup; if(!p) return;
+  const adEl = document.getElementById("sgpAd");
+  const ad = adEl ? adEl.value.trim() : "";
+  if(!ad){ note("Grup adı boş olamaz"); return; }
+  // min/max inputlarını oku
+  const minEl = document.getElementById("sgpMin");
+  const maxEl = document.getElementById("sgpMax");
+  const minVal = minEl ? Math.max(0, parseInt(minEl.value)||0) : (p.min||1);
+  const maxVal = maxEl ? Math.max(0, parseInt(maxEl.value)||0) : (p.max||1);
+  const minSon = p.tip==='zorunlu' ? Math.max(1, minVal) : 0;
+  const maxSon = p.tip==='zorunlu' ? Math.max(minSon, maxVal||minSon) : (maxVal||99);
+  if(p.mod==='ekle'){
+    if(OPTION_GROUPS[ad]){ note("Bu grup zaten var"); return; }
+    OPTION_GROUPS[ad] = {tip:p.tip, min:minSon, max:maxSon, ucretsiz:p.ucretsiz, secenekler:[]};
+    note("Grup eklendi: "+ad);
+  } else {
+    if(ad!==p.eskiAd && OPTION_GROUPS[ad]){ note("Bu isimde grup zaten var"); return; }
+    const g = OPTION_GROUPS[p.eskiAd];
+    g.tip=p.tip; g.ucretsiz=p.ucretsiz; g.min=minSon; g.max=maxSon;
+    if(ad!==p.eskiAd){
+      OPTION_GROUPS[ad] = g;
+      delete OPTION_GROUPS[p.eskiAd];
+      Object.values(PRODUCT_OPTIONS||{}).forEach(arr=>{
+        if(Array.isArray(arr)) arr.forEach(gr=>{ if(gr===p.eskiAd) arr[arr.indexOf(gr)]=ad; });
+      });
+    }
+    note("Grup güncellendi");
+  }
+  sgpKapat(); menuKaydet(); go("fiyat", true);
+}
+function sgpCiz(){
+  const p = state._sgPopup;
+  let mdl=document.getElementById("sgpModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="sgpModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  const istege = p.tip==='istege';
+  // min/max alan HTML'i — tipe göre değişir
+  const minMaxHtml = istege
+    ? `<div class="sgp-etiket">En fazla seçim <span style="color:var(--ink-3);font-weight:400">(boş bırak = sınırsız)</span></div>
+       <input class="sgp-input" id="sgpMax" type="number" inputmode="numeric" min="0"
+         value="${p.max||''}" placeholder="∞  sınırsız" style="width:120px">`
+    : `<div style="display:flex;gap:10px">
+         <div style="flex:1">
+           <div class="sgp-etiket">En az seçim</div>
+           <input class="sgp-input" id="sgpMin" type="number" inputmode="numeric" min="1"
+             value="${p.min||1}" placeholder="1">
+         </div>
+         <div style="flex:1">
+           <div class="sgp-etiket">En çok seçim</div>
+           <input class="sgp-input" id="sgpMax" type="number" inputmode="numeric" min="1"
+             value="${p.max||1}" placeholder="1">
+         </div>
+       </div>`;
+  mdl.innerHTML=`<div class="sgp-ic">
+    <div class="sgp-baslik">${p.mod==='ekle'?'🧩 Yeni Seçenek Grubu':'✏️ Grubu Düzenle'}</div>
+    <div class="sgp-etiket">Grup adı</div>
+    <input class="sgp-input" id="sgpAd" type="text" value="${(p.ad||'').replace(/"/g,'&quot;')}"
+      placeholder="örn. Sos Seçimi, Pişirme Derecesi" onkeydown="if(event.key==='Enter') sgpOnayla()">
+    <div class="sgp-etiket">Seçim tipi</div>
+    <div class="sgp-tip-row">
+      <button class="sgp-tip-btn${!istege?' on':''}" onclick="sgpTipSec('zorunlu')">⚡ Zorunlu</button>
+      <button class="sgp-tip-btn${istege?' on':''}" onclick="sgpTipSec('istege')">✔️ İsteğe bağlı</button>
+    </div>
+    ${minMaxHtml}
+    <div class="sgp-etiket">Ücretlendirme</div>
+    <div class="sgp-tip-row">
+      <button class="sgp-tip-btn${!p.ucretsiz?' on':''}" onclick="sgpUcretSec(false)">💰 Ücretli</button>
+      <button class="sgp-tip-btn${p.ucretsiz?' on':''}" onclick="sgpUcretSec(true)">🆓 Ücretsiz</button>
+    </div>
+    <div style="font-size:12px;color:var(--ink-3);margin-top:6px;margin-bottom:2px">
+      ${istege?'Müşteri istediği kadar seçebilir.':'Müşterinin bu gruptan seçim yapması zorunludur.'}
+      ${p.ucretsiz?' Seçenekler fiyatsız uygulanır.':' Seçeneklerin ek fiyatları hesaba yansır.'}
+    </div>
+    <div class="sgp-btn-row">
+      <button class="sgp-iptal" onclick="sgpKapat()">İptal</button>
+      <button class="sgp-onayla" onclick="sgpOnayla()">${p.mod==='ekle'?'Ekle':'Kaydet'}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("sgpAd"); if(i){ i.focus(); if(p.mod==='duzenle') i.select(); } }, 60);
+}
+
+/* Grup silme onay popup'ı */
+function sgpSilCiz(){
+  const p = state._sgSilOnay;
+  let mdl=document.getElementById("sgpSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="sgpSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="sgp-ic">
+    <div class="sgp-baslik">🗑️ Grubu Sil</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.6">
+      <strong>"${p.ad}"</strong> grubu ve içindeki tüm seçenekler silinecek.<br>
+      <span style="color:var(--err);font-weight:700">Bu işlem geri alınamaz.</span>
+    </div>
+    <div class="sgp-btn-row">
+      <button class="sgp-iptal" onclick="sgpSilKapat()">İptal</button>
+      <button class="sgp-sil-btn" onclick="sgpSilOnayla()">Evet, Sil</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function sgpSilKapat(){
+  state._sgSilOnay=null;
+  const mdl=document.getElementById("sgpSilModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function sgpSilOnayla(){
+  const p = state._sgSilOnay; if(!p) return;
+  delete OPTION_GROUPS[p.ad];
+  note("Grup silindi");
+  sgpSilKapat(); menuKaydet(); go("fiyat", true);
+}
 function secGrupAyar(ad){
   state._sgAyarHedef = ad;
   renderSecGrupAyar();
@@ -10280,12 +10686,6 @@ function secGrupYeniSecenek(){
   renderSecPoolSecModal("");
   const main=document.querySelector(".main"); if(main) viewFiyat(main);
 }
-function secGrupSecenekSil(ad, si){
-  OPTION_GROUPS[ad].secenekler.splice(si,1);
-  menuKaydet();
-  go("fiyat", true);
-}
-
 /* === SEÇENEKLER (tekil havuz) === */
 function secenekPoolHtml(){
   if(!state.secAra) state.secAra="";
