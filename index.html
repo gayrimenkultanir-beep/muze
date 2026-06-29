@@ -1754,6 +1754,10 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .mg-orta{font-size:12.5px; color:var(--ink-2); margin-top:4px}
 .mg-alt{font-size:12.5px; color:var(--ink-3); margin-top:6px; font-weight:600}
 .mgd-kisi-bas{font-size:12.5px; font-weight:800; color:var(--cocoa); margin:10px 0 4px}
+.mgd-tahsilat{background:var(--surface-2); border-radius:10px; padding:10px 12px; margin-bottom:8px}
+.mgd-tahsilat-bas{display:flex; justify-content:space-between; font-size:12px; font-weight:800; color:var(--ink-2); margin-bottom:6px}
+.mgd-yontem-rozet{display:inline-block; background:var(--brand-soft); color:var(--brand-d); font-size:11.5px; font-weight:700; border-radius:20px; padding:3px 10px; margin:3px 4px 0 0}
+.mgd-indirim-not{font-size:11.5px; color:#b5651d; font-weight:700; margin-top:4px}
 .go-xls:disabled{opacity:.5}
 /* Sade fiyat ekranı */
 .fy-bilgi-not{background:var(--info-soft); border:1px solid #bcd9f5; border-radius:var(--radius); padding:11px 14px; font-size:12.5px; margin-bottom:12px; line-height:1.5}
@@ -6854,7 +6858,7 @@ function odemeTamamla(yontem, yontemAd){
     sadakatNot = " · +"+kazanc+" "+SADAKAT.ad+kademeNot;
   }
 
-  BOL.odenenler[ki] = {tutar:ob.tutar, tahsil:tahsil, yontem:yontemAd, mag:m?m.ad:null};
+  BOL.odenenler[ki] = {tutar:ob.tutar, tahsil:tahsil, yontem:yontemAd, mag:m?m.ad:null, zaman:Date.now()};
   odemeKapat();
   // TEK ÖDEME (bölmesiz) → adisyonu direkt kapat
   if(BOL.tekOdeme){
@@ -6884,7 +6888,7 @@ function bolTamamla(){
   const {uyari} = consumeRecipe(state.cart);
   saveOrder(state.cart, BOL.total);
   const kasaMasaKapat = BOL.kasaMasaKapat;
-  const odemeGecmisi = Object.values(BOL.odenenler||{});
+  const odemeGecmisi = Object.entries(BOL.odenenler||{}).map(([ki,o])=>({...o, kisi:(BOL.kisiler&&BOL.kisiler[ki])||("Kişi "+(parseInt(ki)+1))}));
   state.cart=[]; state.odenen=0; state.bolDurum=null;
   bolKapat();
   if(kasaMasaKapat!=null){
@@ -6961,7 +6965,7 @@ function tekOdemeTamamla(){
   // Masada kişi ödemesi ise → o kişiyi ödendi işaretle, masaya dön
   const kasaKisi = BOL.kasaKisi;
   const kasaMasaKapat = BOL.kasaMasaKapat;
-  const odemeGecmisi = Object.values(BOL.odenenler||{});
+  const odemeGecmisi = Object.entries(BOL.odenenler||{}).map(([ki,o])=>({...o, kisi:(BOL.kisiler&&BOL.kisiler[ki])||("Kişi "+(parseInt(ki)+1))}));
   state.cart=[]; state.odenen=0; state.bolDurum=null;
   BOL=null;
   if(kasaKisi){
@@ -7057,6 +7061,30 @@ function odemeOzetiCikar(s, ekOdemeler){
   if(ekOdemeler && ekOdemeler.length) ekOdemeler.forEach(o=>ekle(o.yontem||"Diğer", o.tahsil!=null?o.tahsil:o.tutar));
   return Object.entries(toplamlar).map(([ad,tutar])=>({ad, tutar}));
 }
+/* Her tahsilatı (her "fiş"i) AYRI bir kayıt olarak çıkarır — kim, neyi, hangi
+   yöntemle ödedi bilgisi burada birleştirilmeden korunur. masaGecmisDetay()
+   bu listeyi fiş fiş gösterir. */
+function odemeIslemleriCikar(s, ekOdemeler){
+  const out = [];
+  if(s && s.odemeler) s.odemeler.forEach(o=>{
+    out.push({
+      zaman:o.zaman, tip:'kalem',
+      kalemler:(o.kalemler||[]).map(k=>({ad:k.ad||"Ürün", kisi:k.kisi||"", tutar:k.tutar||0})),
+      yontemler:(o.yontemler||[]).map(y=>({ad:YONTEM_AD_MAP[y.yontem]||y.yontem, tutar:y.tutar||0})),
+      indirim:o.indirim||0
+    });
+  });
+  (ekOdemeler||[]).forEach(o=>{
+    const tahsil = (o.tahsil!=null?o.tahsil:o.tutar)||0;
+    out.push({
+      zaman:o.zaman||Date.now(), tip:'kisi',
+      kisi:o.kisi||"Müşteri", tutar:tahsil, yontem:o.yontem||"Diğer",
+      indirim:(o.tutar!=null && o.tahsil!=null) ? Math.max(0, Math.round((o.tutar-o.tahsil)*100)/100) : 0,
+      magAd:o.mag||null
+    });
+  });
+  return out.sort((a,b)=>(a.zaman||0)-(b.zaman||0));
+}
 /* Masa hesabı tamamen kapanırken çağrılır: arşivle + oturumu temizle */
 function masaGecmiseArsivle(masaNo, ekOdemeler){
   const s = SESSIONS[masaNo];
@@ -7073,13 +7101,14 @@ function masaGecmiseArsivle(masaNo, ekOdemeler){
   const gecerli = kalemler.filter(it=>it.durum!=="iptal");
   const toplam = Math.round(gecerli.reduce((t,it)=>t+(it.fiyat||0),0)*100)/100;
   const odemeOzet = odemeOzetiCikar(s, ekOdemeler);
+  const odemeIslemleri = odemeIslemleriCikar(s, ekOdemeler);
   const fisNolari = MUTFAK_FISLER.filter(f=>f.masa===masaNo).map(f=>f.no);
   MASA_GECMISI.push({
     id:_gecmisId++, sube, masaId:masaNo, masaEtiket:masaEtiket(masaNo),
     acilis:s.zaman||Date.now(), kapanis:Date.now(),
     kisiler:(s.kisiler||[]).map(k=>k.ad),
     kalemler, urunSayisi:gecerli.length, toplam,
-    odemeler:odemeOzet, fisNo:fisNolari
+    odemeler:odemeOzet, odemeIslemleri, fisNo:fisNolari
   });
   masaGecmisKaydet();
   // oturumu sıfırla — bir sonraki müşteri eski kalemlerle karışmasın
@@ -7170,12 +7199,17 @@ function masaOdemeKaydet(masaNo, odemeler, dagitim, indirim){
       if(it.id===d.kalemId){ it.odenenTutar = Math.round(((it.odenenTutar||0)+d.tutar)*100)/100; }
     }));
   });
-  // ödeme kaydı (yöntem dağılımı)
+  // ödeme kaydı (yöntem dağılımı) — kalem adı/kişi bilgisi de eklenir, geçmiş ekranında
+  // "kim neyi nasıl ödedi" tahsilat bazlı gösterilebilsin
   s.odemeler.push({
     zaman: Date.now(),
     yontemler: odemeler,       // [{yontem:"nakit",tutar:50},...]
     indirim: indirim||0,
-    kalemler: (dagitim||[]).map(d=>({kalemId:d.kalemId, tutar:d.tutar}))
+    kalemler: (dagitim||[]).map(d=>{
+      let ad="Ürün", kisi="";
+      s.kisiler.forEach(k=>k.kalemler.forEach(it=>{ if(it.id===d.kalemId){ ad=it.ad; kisi=k.ad; } }));
+      return {kalemId:d.kalemId, ad, kisi, tutar:d.tutar};
+    })
   });
   // hepsi ödendiyse masayı kapat
   if(masaKalan(masaNo)<=0.01){
@@ -7634,6 +7668,26 @@ function masaGecmisDetay(id){
   const odemeHtml = (k.odemeler||[]).length
     ? k.odemeler.map(o=>`<div class="fis-satir"><span>${o.ad}</span><span>${tl(o.tutar)} ₺</span></div>`).join("")
     : '<div style="color:var(--ink-2);font-size:13px;padding:6px 0">Ödeme kaydı bulunamadı</div>';
+  // FİŞ BAZLI TAHSİLAT DETAYI — her tahsilat (her "fiş") ayrı kart: kim, ne, hangi yöntemle
+  const islemler = k.odemeIslemleri||[];
+  const tahsilatHtml = islemler.length
+    ? islemler.map((isl,i)=>{
+        const saat = new Date(isl.zaman||k.kapanis).toLocaleTimeString('tr',{hour:'2-digit',minute:'2-digit'});
+        let icerik = "";
+        if(isl.tip==='kalem'){
+          icerik = (isl.kalemler||[]).map(kl=>
+            `<div class="fis-satir"><span>${kl.ad}${kl.kisi?' <small style="color:var(--ink-3)">('+kl.kisi+')</small>':''}</span><span>${tl(kl.tutar)} ₺</span></div>`
+          ).join("");
+          icerik += (isl.yontemler||[]).map(y=>`<span class="mgd-yontem-rozet">${y.ad} · ${tl(y.tutar)} ₺</span>`).join("");
+        } else {
+          icerik = `<div class="fis-satir"><span>👤 ${isl.kisi}</span><span>${tl(isl.tutar)} ₺</span></div>`+
+            `<span class="mgd-yontem-rozet">${isl.yontem} · ${tl(isl.tutar)} ₺</span>`+
+            (isl.magAd?`<span class="mgd-yontem-rozet">${isl.magAd}</span>`:'');
+        }
+        const indirimNot = isl.indirim>0 ? `<div class="mgd-indirim-not">🏷️ İndirim: ${tl(isl.indirim)} ₺</div>` : '';
+        return `<div class="mgd-tahsilat"><div class="mgd-tahsilat-bas"><span>🧾 Fiş #${i+1}</span><span>${saat}</span></div>${icerik}${indirimNot}</div>`;
+      }).join("")
+    : '<div style="color:var(--ink-2);font-size:13px;padding:6px 0">Tahsilat detayı kaydı yok (eski kayıt)</div>';
   const fisHtml = (k.fisNo||[]).length
     ? k.fisNo.map(no=>`<button class="kak-btn gonder" style="margin:4px 6px 0 0;display:inline-block;width:auto" onclick="masaGecmisFisAc(${no})">🖨️ Fiş #${no}</button>`).join("")
     : '<div style="color:var(--ink-2);font-size:13px">Bu hesapta mutfak fişi kaydı yok</div>';
@@ -7643,7 +7697,10 @@ function masaGecmisDetay(id){
     ${kisiHtml || '<div style="color:var(--ink-2);font-size:13px">Kalem kaydı yok</div>'}
     <div class="fis-cizgi"></div>
     <div class="fis-satir fis-toplam"><span>TOPLAM</span><span>${tl(k.toplam)} ₺</span></div>
-    <div class="fis-not-bas">Ödeme dağılımı:</div>
+    <div class="fis-cizgi"></div>
+    <div class="fis-not-bas">Tahsilat detayı (fiş bazlı):</div>
+    ${tahsilatHtml}
+    <div class="fis-not-bas">Ödeme dağılımı (toplam):</div>
     ${odemeHtml}
     <div class="fis-cizgi"></div>
     <div class="fis-not-bas">Mutfak fişleri:</div>
