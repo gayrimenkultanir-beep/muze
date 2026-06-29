@@ -21,9 +21,12 @@ body{font-family:'Raleway',sans-serif;background:var(--dark);color:var(--cream);
 
 /* ── NAV ── */
 nav{
-  position:absolute;top:0;left:0;right:0;z-index:100;
+  position:fixed;top:0;left:0;right:0;z-index:1000;
   display:flex;align-items:center;justify-content:space-between;
-  padding:22px 48px;
+  padding:18px 48px;
+  background:rgba(13,11,8,0.92);
+  border-bottom:1px solid rgba(201,168,76,.15);
+  backdrop-filter:blur(12px);
 }
 .nav-logo{
   font-family:'Cormorant Garamond',serif;font-size:28px;font-style:italic;
@@ -50,6 +53,7 @@ nav{
   min-height:420px;
   overflow:hidden;
   display:flex;align-items:center;
+  background:linear-gradient(135deg,#0D0B08 0%,#1C1608 60%,#2A2010 100%);
 }
 /* TAM SAYFA ARKA PLAN FOTOĞRAF */
 .hero-photo{
@@ -331,11 +335,12 @@ nav{
 
 /* FOTOĞRAFÇILIK */
 .photo-bg{background:var(--dark2);}
-.tabs{display:flex;border-bottom:1px solid rgba(201,168,76,.18);margin-bottom:44px;flex-wrap:wrap;}
+.tabs{display:flex;border-bottom:1px solid rgba(201,168,76,.18);margin-bottom:44px;flex-wrap:wrap;position:sticky;top:72px;z-index:100;background:var(--dark2);padding:4px 0;}
 .tab{
   padding:13px 22px;background:none;border:none;border-bottom:2px solid transparent;
   font-family:'Raleway',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;
   text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .3s;margin-bottom:-1px;
+  position:relative;z-index:100;
 }
 .tab.active,.tab:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .portfolio-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;}
@@ -520,10 +525,10 @@ footer{
 .gold-line{height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:.25;}
 
 /* AOS */
-.aos{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.aos{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease;}
 .aos.in{opacity:1;transform:none;}
-.d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
-.d4{transition-delay:.4s;}.d5{transition-delay:.5s;}
+.d1{transition-delay:0s;}.d2{transition-delay:0s;}.d3{transition-delay:0s;}
+.d4{transition-delay:0s;}.d5{transition-delay:0s;}
 
 /* ── HAMBURGER ── */
 .hamburger{
@@ -712,6 +717,263 @@ nav, .nav-links, .nav-logo,
 .press-item, .bc-title, .bc-author, .book-cover-inner,
 footer { text-align:center; }
 
+
+/* ═══════════════════════════════════
+   PORTFOLYo SİSTEMİ
+═══════════════════════════════════ */
+
+/* KAPAK KARTLARı */
+.gallery-cats { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; position:relative; z-index:1; }
+.gallery-cats.two-col { grid-template-columns:repeat(2,1fr); }
+.gallery-cat-card {
+  position:relative; aspect-ratio:3/2; overflow:hidden;
+  cursor:pointer; background:var(--dark3);
+  z-index:1;
+  isolation:isolate;
+}
+.gallery-cat-card img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .5s ease, filter .4s;
+  filter:brightness(.75) sepia(10%);
+  pointer-events:none; user-select:none;
+  -webkit-user-drag:none;
+}
+.gallery-cat-card:hover img { transform:scale(1.06); filter:brightness(.55) sepia(20%); }
+.gallery-cat-card::after {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(13,11,8,.9) 0%, rgba(13,11,8,.3) 50%, transparent 100%);
+  transition:background .4s;
+}
+.gallery-cat-card:hover::after {
+  background:linear-gradient(to top, rgba(13,11,8,.97) 0%, rgba(13,11,8,.5) 60%, rgba(13,11,8,.1) 100%);
+}
+.gallery-cat-info {
+  position:absolute; bottom:0; left:0; right:0; z-index:2;
+  padding:24px 28px 22px;
+}
+.gallery-cat-title {
+  font-family:'Playfair Display',serif; font-size:22px; font-weight:700;
+  color:var(--white); margin-bottom:6px; text-align:left;
+}
+.gallery-cat-count {
+  font-size:10px; font-weight:600; letter-spacing:2px;
+  text-transform:uppercase; color:var(--gold); text-align:left;
+}
+.gallery-cat-arrow {
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:52px; height:52px; border:2px solid var(--gold); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; color:var(--gold);
+  opacity:0; transition:opacity .3s;
+  z-index:3;
+}
+.gallery-cat-card:hover .gallery-cat-arrow { opacity:1; }
+
+/* BÖLÜM SAYFASI (galeri açıldığında) */
+.gallery-page {
+  display:none; position:fixed; inset:0; z-index:500;
+  background:var(--dark); overflow-y:auto;
+}
+.gallery-page.open { display:block; }
+.gallery-page-header {
+  position:sticky; top:0; z-index:10;
+  background:rgba(13,11,8,.97);
+  border-bottom:1px solid rgba(201,168,76,.15);
+  padding:20px 48px;
+  display:flex; align-items:center; justify-content:space-between;
+  backdrop-filter:blur(12px);
+}
+.gallery-page-back {
+  display:flex; align-items:center; gap:12px;
+  font-size:11px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--gold);
+  cursor:pointer; background:none; border:none;
+  font-family:'Raleway',sans-serif;
+}
+.gallery-page-back:hover { color:var(--gold-light); }
+.gallery-page-title {
+  font-family:'Playfair Display',serif;
+  font-size:22px; font-weight:700; color:var(--white);
+  text-align:center;
+}
+.gallery-page-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-style:italic; color:var(--gold);
+}
+.gallery-page-body { padding:48px; max-width:1400px; margin:0 auto; }
+.gallery-page-desc {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-style:italic; font-weight:300;
+  line-height:1.7; color:var(--cream2);
+  margin-bottom:48px; text-align:justify;
+  padding-bottom:32px; border-bottom:1px solid rgba(201,168,76,.15);
+}
+
+/* GÖRSEL GRID */
+.photo-masonry {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:4px;
+}
+.photo-thumb {
+  position:relative; aspect-ratio:3/2; overflow:hidden;
+  cursor:pointer; background:var(--dark3);
+}
+.photo-thumb img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .4s, filter .4s;
+  pointer-events:none; user-select:none; -webkit-user-drag:none;
+}
+.photo-thumb:hover img { transform:scale(1.05); filter:brightness(.8); }
+.photo-thumb-overlay {
+  position:absolute; inset:0;
+  background:rgba(13,11,8,0); transition:background .3s;
+  display:flex; align-items:center; justify-content:center;
+}
+.photo-thumb:hover .photo-thumb-overlay { background:rgba(13,11,8,.35); }
+.photo-thumb-zoom {
+  font-size:28px; color:var(--gold); opacity:0;
+  transition:opacity .3s; filter:drop-shadow(0 2px 8px rgba(0,0,0,.8));
+}
+.photo-thumb:hover .photo-thumb-zoom { opacity:1; }
+
+/* FİLİGRAN */
+.photo-thumb::after {
+  content:'Enver ŞENGÜL\A © Tüm Hakları Saklıdır';
+  white-space:pre;
+  position:absolute; bottom:10px; right:12px; z-index:3;
+  font-family:'Cormorant Garamond',serif;
+  font-size:9px; font-style:italic; line-height:1.4;
+  color:rgba(255,255,255,.55);
+  text-shadow:0 1px 3px rgba(0,0,0,.9);
+  text-align:right;
+  pointer-events:none;
+}
+
+/* LIGHTBOX */
+.lightbox {
+  display:none; position:fixed; inset:0; z-index:1000;
+  background:rgba(0,0,0,.97);
+  flex-direction:column; align-items:center; justify-content:center;
+}
+.lightbox.open { display:flex; }
+.lightbox-img-wrap {
+  position:relative; width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+}
+.lightbox-img {
+  max-width:92vw; max-height:88vh;
+  object-fit:contain;
+  pointer-events:none; user-select:none; -webkit-user-drag:none;
+  border:1px solid rgba(201,168,76,.2);
+  box-shadow:0 0 0 1px rgba(201,168,76,.1), 0 0 60px rgba(0,0,0,.8);
+  position:relative;
+}
+/* Lightbox filigran */
+.lightbox-watermark {
+  position:absolute; bottom:24px; right:28px; z-index:5;
+  font-family:'Cormorant Garamond',serif;
+  font-size:13px; font-style:italic; line-height:1.5;
+  color:rgba(255,255,255,.5);
+  text-shadow:0 2px 8px rgba(0,0,0,1);
+  text-align:right; pointer-events:none;
+}
+/* GOLD FRAME */
+.lightbox-frame {
+  position:absolute; inset:0; pointer-events:none;
+  border:2px solid rgba(201,168,76,.4);
+  box-shadow:
+    inset 0 0 0 6px rgba(13,11,8,.8),
+    inset 0 0 0 8px rgba(201,168,76,.15),
+    0 0 40px rgba(201,168,76,.15);
+}
+/* Köşe kabartmalar */
+.lightbox-frame::before,.lightbox-frame::after {
+  content:'';position:absolute;
+  width:32px; height:32px;
+  border-color:var(--gold); border-style:solid;
+}
+.lightbox-frame::before {
+  top:-2px; left:-2px;
+  border-width:3px 0 0 3px;
+}
+.lightbox-frame::after {
+  bottom:-2px; right:-2px;
+  border-width:0 3px 3px 0;
+}
+.lb-corner-tr,.lb-corner-bl {
+  position:absolute; width:32px; height:32px;
+  border-color:var(--gold); border-style:solid; pointer-events:none;
+}
+.lb-corner-tr { top:-2px; right:-2px; border-width:3px 3px 0 0; }
+.lb-corner-bl { bottom:-2px; left:-2px; border-width:0 0 3px 3px; }
+
+/* NAV BUTONLARI */
+.lb-btn {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:52px; height:52px; z-index:10;
+  background:rgba(13,11,8,.7); border:1px solid rgba(201,168,76,.4);
+  border-radius:50%; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; color:var(--gold);
+  transition:all .3s; backdrop-filter:blur(4px);
+}
+.lb-btn:hover { background:rgba(201,168,76,.2); border-color:var(--gold); }
+.lb-prev { left:20px; }
+.lb-next { right:20px; }
+.lb-close {
+  position:absolute; top:20px; right:20px; z-index:10;
+  width:44px; height:44px; background:rgba(13,11,8,.8);
+  border:1px solid rgba(201,168,76,.3); border-radius:50%;
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+  font-size:18px; color:var(--cream2); transition:all .3s;
+}
+.lb-close:hover { border-color:var(--gold); color:var(--gold); }
+.lb-counter {
+  position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+  font-size:11px; font-weight:600; letter-spacing:2px;
+  color:var(--gold); text-transform:uppercase;
+}
+.lb-title {
+  position:absolute; top:20px; left:50%; transform:translateX(-50%);
+  font-family:'Cormorant Garamond',serif;
+  font-size:16px; font-style:italic; color:var(--cream2);
+  white-space:nowrap;
+}
+
+/* YÜKLENİYOR */
+.gallery-loading {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:80px 0; gap:16px; color:var(--muted);
+}
+.gallery-loading-spinner {
+  width:40px; height:40px; border-radius:50%;
+  border:2px solid rgba(201,168,76,.2);
+  border-top-color:var(--gold);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* KOPYALAMA ENGEL */
+.photo-thumb, .lightbox-img, .gallery-cat-card img {
+  -webkit-user-select:none; user-select:none;
+  -webkit-touch-callout:none;
+}
+
+/* MOBİL */
+@media(max-width:768px){
+  .gallery-cats { grid-template-columns:1fr 1fr; }
+  .gallery-cats.two-col { grid-template-columns:1fr; }
+  .gallery-page-header { padding:14px 16px; }
+  .gallery-page-body { padding:16px; }
+  .gallery-page-title { font-size:16px; }
+  .gallery-page-logo { display:none; }
+  .gallery-page-desc { font-size:16px; margin-bottom:24px; }
+  .photo-masonry { grid-template-columns:repeat(2,1fr); gap:2px; }
+  .lb-btn { width:40px; height:40px; font-size:16px; }
+  .lb-prev { left:8px; } .lb-next { right:8px; }
+  .lightbox-img { max-width:98vw; max-height:80vh; }
+  .gallery-cat-title { font-size:16px; }
+}
+
 </style>
 </head>
 <body>
@@ -755,6 +1017,26 @@ footer { text-align:center; }
 </div>
 
 <!-- HERO: Sol metin | Sağ fotoğraf -->
+
+<!-- MOBİL MENÜ -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#hakkimda" onclick="closeMenu()">Hakkımda</a>
+  <a href="#fotografcilik" onclick="closeMenu()">Fotoğrafçılığım</a>
+  <a href="#yazarlik" onclick="closeMenu()">Yazarlığım</a>
+  <a href="#kulturel" onclick="closeMenu()">Kültürel Miras</a>
+  <a href="#egitim" onclick="closeMenu()">Eğitim</a>
+  <a href="#gazetecilik" onclick="closeMenu()">Gazetecilik</a>
+  <a href="#iletisim" onclick="closeMenu()">İletişim</a>
+  <div class="mobile-menu-social">
+    <a href="#">&#9651;</a>
+    <a href="#">f</a>
+    <a href="#">▷</a>
+    <a href="#">✉</a>
+  </div>
+</div>
+
+<!-- HERO: Sol metin | Sağ fotoğraf -->
+
 <section class="hero">
   <!-- SOL -->
   <div class="hero-left">
@@ -871,6 +1153,7 @@ footer { text-align:center; }
 </div>
 
 <!-- İSTATİSTİK BAR -->
+
 <div class="stats-bar">
   <div class="stat">
     <div class="stat-icon-wrap">🏆</div>
@@ -913,6 +1196,12 @@ footer { text-align:center; }
   </div>
 </div>
 
+
+
+<div class="gold-line"></div>
+
+
+
 <!-- HAKKIMDA -->
 <section class="section about-bg" id="hakkimda">
   <div class="section-inner">
@@ -951,67 +1240,188 @@ footer { text-align:center; }
 
 <div class="gold-line"></div>
 
+
+
+<div class="gold-line"></div>
+
+
+
 <!-- FOTOĞRAFÇILIK -->
 <section class="section photo-bg" id="fotografcilik">
   <div class="section-inner">
     <div class="section-eyebrow aos"><span>Fotoğrafçılığım</span></div>
     <h2 class="section-title aos">Objektifin <em>Gözüyle</em></h2>
+
     <div class="tabs">
-      <button class="tab active" onclick="switchTab(this,'pt-portfolyo')">Portfolyolarım</button>
-      <button class="tab" onclick="switchTab(this,'pt-turkiye')">Türkiye'nin Güzellikleri</button>
-      <button class="tab" onclick="switchTab(this,'pt-dunya')">Dünyadan Fotoğraflar</button>
-      <button class="tab" onclick="switchTab(this,'pt-tfsf')">TFSF Yöneticiliğim</button>
-      <button class="tab" onclick="switchTab(this,'pt-yazi')">Fotoğraf Yazılarım</button>
+      <button class="tab active" id="tab-portfolyo">Portfolyolarım</button>
+      <button class="tab" id="tab-turkiye">Türkiye'nin Güzellikleri</button>
+      <button class="tab" id="tab-dunya">Dünyadan Fotoğraflar</button>
+      <button class="tab" id="tab-tfsf">TFSF Yöneticiliğim</button>
+      <button class="tab" id="tab-yazi">Fotoğraf Yazılarım</button>
     </div>
+
+    <!-- PORTFOLYOLARIM -->
     <div id="pt-portfolyo">
-      <div class="portfolio-grid">
-        <div class="p-item big" style="background:url('p-dunya-inanclar.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">🌍</div><div class="p-item-label">Dünya İnançları</div>
-          <div class="p-item-hover"><span>Dünya İnançları</span></div>
+      <div class="gallery-cats">
+        <div class="gallery-cat-card" onclick="openGallery('dunya-inanclar')">
+          <img src="p-dunya-inanclar.jpg" alt="Dünya İnançları">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Dünya İnançları</div>
+            <div class="gallery-cat-count" id="count-dunya-inanclar">Fotoğrafları Keşfet</div>
+          </div>
         </div>
-        <div class="p-item" style="background:url('p-portreler.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">👤</div><div class="p-item-label">Portreler</div>
-          <div class="p-item-hover"><span>Portreler</span></div>
+        <div class="gallery-cat-card" onclick="openGallery('portreler')">
+          <img src="p-portreler.jpg" alt="Portreler">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Portreler</div>
+            <div class="gallery-cat-count" id="count-portreler">Fotoğrafları Keşfet</div>
+          </div>
         </div>
-        <div class="p-item" style="background:url('p-kurgusal.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">🎭</div><div class="p-item-label">Kurgusal</div>
-          <div class="p-item-hover"><span>Kurgusal Çalışmalar</span></div>
+        <div class="gallery-cat-card" onclick="openGallery('kurgusal')">
+          <img src="p-kurgusal.jpg" alt="Kurgusal">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Kurgusal</div>
+            <div class="gallery-cat-count" id="count-kurgusal">Fotoğrafları Keşfet</div>
+          </div>
         </div>
-        <div class="p-item" style="background:url('p-edirne.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">🕌</div><div class="p-item-label">Edirne</div>
-          <div class="p-item-hover"><span>Edirne</span></div>
+        <div class="gallery-cat-card" onclick="openGallery('edirne')">
+          <img src="p-edirne.jpg" alt="Edirne">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Edirne</div>
+            <div class="gallery-cat-count" id="count-edirne">Fotoğrafları Keşfet</div>
+          </div>
         </div>
-        <div class="p-item" style="background:url('p-dans.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">💃</div><div class="p-item-label">Dans</div>
-          <div class="p-item-hover"><span>Dans</span></div>
+        <div class="gallery-cat-card" onclick="openGallery('dans')">
+          <img src="p-dans.jpg" alt="Dans">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Dans</div>
+            <div class="gallery-cat-count" id="count-dans">Fotoğrafları Keşfet</div>
+          </div>
         </div>
-        <div class="p-item" style="background:url('p-muzisyenler.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">🎵</div><div class="p-item-label">Müzisyenler</div>
-          <div class="p-item-hover"><span>Müzisyenler</span></div>
+        <div class="gallery-cat-card" onclick="openGallery('muzisyenler')">
+          <img src="p-muzisyenler.jpg" alt="Müzisyenler">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Müzisyenler</div>
+            <div class="gallery-cat-count" id="count-muzisyenler">Fotoğrafları Keşfet</div>
+          </div>
         </div>
-        <div class="p-item" style="background:url('p-minimal.jpg') center/cover no-repeat;">
-          <div class="p-item-icon">◻</div><div class="p-item-label">Minimal</div>
-          <div class="p-item-hover"><span>Minimal Fotoğraflar</span></div>
+        <div class="gallery-cat-card" onclick="openGallery('minimal')">
+          <img src="p-minimal.jpg" alt="Minimal">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Minimal</div>
+            <div class="gallery-cat-count" id="count-minimal">Fotoğrafları Keşfet</div>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- TÜRKİYE -->
     <div id="pt-turkiye" style="display:none;">
-      <p style="text-align:center;padding:80px 0;font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--muted);">Türkiye'nin dört bir yanından seçme fotoğraflar yakında…</p>
-    </div>
-    <div id="pt-dunya" style="display:none;">
-      <div class="world-grid">
-        <div class="w-item" style="background:url('dunya-newyork.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🗽</div><div class="w-city" style="position:relative;z-index:1;">New York</div></div>
-        <div class="w-item" style="background:url('dunya-zambiya.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🌍</div><div class="w-city" style="position:relative;z-index:1;">Zambiya</div></div>
-        <div class="w-item" style="background:url('dunya-paris.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🗼</div><div class="w-city" style="position:relative;z-index:1;">Paris</div></div>
-        <div class="w-item" style="background:url('dunya-endulus.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🕌</div><div class="w-city" style="position:relative;z-index:1;">Endülüs</div></div>
-        <div class="w-item" style="background:url('dunya-italya.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🏛️</div><div class="w-city" style="position:relative;z-index:1;">İtalya</div></div>
-        <div class="w-item" style="background:url('dunya-prag.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🏰</div><div class="w-city" style="position:relative;z-index:1;">Prag</div></div>
-        <div class="w-item" style="background:url('dunya-riga.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🌊</div><div class="w-city" style="position:relative;z-index:1;">Riga</div></div>
-        <div class="w-item" style="background:url('dunya-kudus.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">✡️</div><div class="w-city" style="position:relative;z-index:1;">Kudüs</div></div>
-        <div class="w-item" style="background:url('dunya-halep.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🕊️</div><div class="w-city" style="position:relative;z-index:1;">Halep</div></div>
-        <div class="w-item" style="background:url('dunya-balkanlar.jpg') center/cover no-repeat;position:relative;"><div class="w-item-overlay" style="position:absolute;inset:0;background:rgba(13,11,8,.6);"></div><div class="w-flag" style="position:relative;z-index:1;">🌄</div><div class="w-city" style="position:relative;z-index:1;">Balkanlar</div></div>
+      <div class="gallery-cats two-col">
+        <div class="gallery-cat-card" onclick="openGallery('turkiyenin-guzellikleri')">
+          <img src="p-turkiye-kapak.jpg" alt="Türkiye'nin Güzellikleri">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Türkiye'nin Güzellikleri</div>
+            <div class="gallery-cat-count" id="count-turkiyenin-guzellikleri">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- DÜNYADAN FOTOĞRAFLAR -->
+    <div id="pt-dunya" style="display:none;">
+      <div class="gallery-cats">
+        <div class="gallery-cat-card" onclick="openGallery('dunya-newyork')">
+          <img src="dunya-newyork.jpg" alt="New York">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">New York</div>
+            <div class="gallery-cat-count" id="count-dunya-newyork">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-zambiya')">
+          <img src="dunya-zambiya.jpg" alt="Zambiya">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Zambiya</div>
+            <div class="gallery-cat-count" id="count-dunya-zambiya">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-paris')">
+          <img src="dunya-paris.jpg" alt="Paris">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Paris</div>
+            <div class="gallery-cat-count" id="count-dunya-paris">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-endulus')">
+          <img src="dunya-endulus.jpg" alt="Endülüs">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Endülüs</div>
+            <div class="gallery-cat-count" id="count-dunya-endulus">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-italya')">
+          <img src="dunya-italya.jpg" alt="İtalya">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">İtalya</div>
+            <div class="gallery-cat-count" id="count-dunya-italya">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-prag')">
+          <img src="dunya-prag.jpg" alt="Prag">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Prag</div>
+            <div class="gallery-cat-count" id="count-dunya-prag">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-riga')">
+          <img src="dunya-riga.jpg" alt="Riga">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Riga</div>
+            <div class="gallery-cat-count" id="count-dunya-riga">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-kudus')">
+          <img src="dunya-kudus.jpg" alt="Kudüs">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Kudüs</div>
+            <div class="gallery-cat-count" id="count-dunya-kudus">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-halep')">
+          <img src="dunya-halep.jpg" alt="Halep">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Halep</div>
+            <div class="gallery-cat-count" id="count-dunya-halep">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+        <div class="gallery-cat-card" onclick="openGallery('dunya-balkanlar')">
+          <img src="dunya-balkanlar.jpg" alt="Balkanlar">
+          <div class="gallery-cat-arrow">→</div>
+          <div class="gallery-cat-info">
+            <div class="gallery-cat-title">Balkanlar</div>
+            <div class="gallery-cat-count" id="count-dunya-balkanlar">Fotoğrafları Keşfet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="pt-tfsf" style="display:none;">
       <p style="text-align:center;padding:80px 0;font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:var(--muted);">TFSF yöneticilik çalışmaları ve organizasyonlar yakında…</p>
     </div>
@@ -1022,6 +1432,12 @@ footer { text-align:center; }
 </section>
 
 <div class="gold-line"></div>
+
+
+
+<div class="gold-line"></div>
+
+
 
 <!-- YAZARLIK -->
 <section class="section books-bg" id="yazarlik">
@@ -1081,6 +1497,12 @@ footer { text-align:center; }
 
 <div class="gold-line"></div>
 
+
+
+<div class="gold-line"></div>
+
+
+
 <!-- KÜLTÜREL MİRAS -->
 <section class="section heritage-bg" id="kulturel">
   <div class="section-inner">
@@ -1113,6 +1535,12 @@ footer { text-align:center; }
 </section>
 
 <div class="gold-line"></div>
+
+
+
+<div class="gold-line"></div>
+
+
 
 <!-- EĞİTİM -->
 <section class="section edu-bg" id="egitim">
@@ -1150,6 +1578,12 @@ footer { text-align:center; }
 
 <div class="gold-line"></div>
 
+
+
+<div class="gold-line"></div>
+
+
+
 <!-- GAZETECİLİK -->
 <section class="section press-bg" id="gazetecilik">
   <div class="section-inner">
@@ -1169,6 +1603,12 @@ footer { text-align:center; }
 </section>
 
 <div class="gold-line"></div>
+
+
+
+<div class="gold-line"></div>
+
+
 
 <!-- İLETİŞİM -->
 <section class="section contact-bg" id="iletisim">
@@ -1223,21 +1663,47 @@ footer { text-align:center; }
   </div>
 </footer>
 
+<!-- GALERİ SAYFASI (overlay) -->
+<div class="gallery-page" id="galleryPage">
+  <div class="gallery-page-header">
+    <button class="gallery-page-back" onclick="closeGallery()">← Geri</button>
+    <div class="gallery-page-title" id="galleryPageTitle"></div>
+    <div class="gallery-page-logo">Enver Şengül</div>
+  </div>
+  <div class="gallery-page-body">
+    <p class="gallery-page-desc" id="galleryPageDesc"></p>
+    <div class="gallery-loading" id="galleryLoading">
+      <div class="gallery-loading-spinner"></div>
+      <span>Fotoğraflar yükleniyor…</span>
+    </div>
+    <div class="photo-masonry" id="photoMasonry"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <div class="lb-title" id="lbTitle"></div>
+  <div class="lightbox-img-wrap">
+    <button class="lb-btn lb-prev" onclick="lbNav(-1)">&#8249;</button>
+    <div style="position:relative;">
+      <img class="lightbox-img" id="lbImg" src="" alt="">
+      <div class="lightbox-frame">
+        <div class="lb-corner-tr"></div>
+        <div class="lb-corner-bl"></div>
+      </div>
+      <div class="lightbox-watermark">Enver ŞENGÜL<br>© Tüm Hakları Saklıdır</div>
+    </div>
+    <button class="lb-btn lb-next" onclick="lbNav(1)">&#8250;</button>
+  </div>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
 <script>
-// Nav scroll
+// Nav scroll - opacity effect
 window.addEventListener('scroll',()=>{
   const n=document.getElementById('mainNav');
-  if(window.scrollY>50){
-    n.style.background='rgba(13,11,8,0.96)';
-    n.style.borderBottom='1px solid rgba(201,168,76,.15)';
-    n.style.backdropFilter='blur(12px)';
-    n.style.position='fixed';
-  } else {
-    n.style.background='';
-    n.style.borderBottom='';
-    n.style.backdropFilter='';
-    n.style.position='absolute';
-  }
+  n.style.background = window.scrollY > 30 ? 'rgba(13,11,8,0.97)' : 'rgba(13,11,8,0.92)';
 });
 
 // Hamburger
@@ -1260,15 +1726,248 @@ const obs=new IntersectionObserver(entries=>{
 },{threshold:0.1});
 document.querySelectorAll('.aos').forEach(el=>obs.observe(el));
 
+
+// ═══════════════════════════════════
+// GALERİ SİSTEMİ — Google Drive API
+// ═══════════════════════════════════
+
+// !! BURAYA KENDİ BİLGİLERİNİZİ GİRİN !!
+const DRIVE_API_KEY    = 'BURAYA_API_KEY';
+const DRIVE_ROOT_ID    = 'BURAYA_PORTFOLYOM_KLASOR_ID'; // webpage/portfolyom klasör ID
+
+// Kategori yapılandırması
+const GALLERY_CATS = {
+  // portfolyom alt klasörleri
+  'dunya-inanclar':     { title:'Dünya İnançları',   desc:'İnanç, ritüel ve kutsallık… Dünyanın dört bir yanından inanç mekânlarında yakalanmış anlık kareler.', folder:'dunya-inanclar' },
+  'portreler':          { title:'Portreler',          desc:'Yüzlerde okunan hikâyeler. Her bir portre, hayatın izlerini taşıyan özgün bir yaşam kesiti.', folder:'portreler' },
+  'kurgusal':           { title:'Kurgusal',           desc:'Gerçeklikle hayal arasında. Sahnelenen anlar, kurulan dünyalar ve görsel anlatı denemeleri.', folder:'kurgusal' },
+  'edirne':             { title:'Edirne',             desc:'Tarihin ve mimarinin ic ice gectigi Edirne sokaklarindan, camilerinden ve yasamından kareler.', folder:'edirne' },
+  'dans':               { title:'Dans',               desc:'Hareketin şiiri. Sahne ışıklarında, sokak köşelerinde, doğanın içinde dans eden insanlar.', folder:'dans' },
+  'muzisyenler':        { title:'Müzisyenler',        desc:'Notaların görüntüye dönüştüğü anlar. Sahne arkası ve sahnede müziğin insanları.', folder:'muzisyenler' },
+  'minimal':            { title:'Minimal',            desc:'Az ile çok söylemek. Sadeliğin içindeki derinliği arayan minimal fotoğraf çalışmaları.', folder:'minimal' },
+  // türkiye
+  'turkiyenin-guzellikleri': { title:"Türkiye'nin Güzellikleri", desc:"Anadolu'nun dört mevsimi, eşsiz coğrafyası ve zengin kültürel mirası.", folder:'turkiyenin-guzellikleri' },
+  // dünya şehirleri
+  'dunya-newyork':  { title:'New York',   desc:'Metropolün nabzı, New York sokaklarından dünya şehrine dair gözlemler.', folder:'dunya-newyork' },
+  'dunya-zambiya':  { title:'Zambiya',    desc:'Afrikadan yasam, renk ve insanlik uzerine kareler.', folder:'dunya-zambiya' },
+  'dunya-paris':    { title:'Paris',      desc:'Isin sehri Paristen sokak koseleri, mimari ve anlik yasam.', folder:'dunya-paris' },
+  'dunya-endulus':  { title:'Endülüs',    desc:'Islam ve Avrupa medeniyetlerinin bulustugu Endulusten tarihi kareler.', folder:'dunya-endulus' },
+  'dunya-italya':   { title:'İtalya',     desc:'Ronesansin, sanatin ve lezzetin ulkesinden gozlem kareleri.', folder:'dunya-italya' },
+  'dunya-prag':     { title:'Prag',       desc:'Orta Avrupanin en buyuleyici sehri Pragdan gotik ve barok kareler.', folder:'dunya-prag' },
+  'dunya-riga':     { title:'Riga',       desc:'Baltikin incisi Rigadan mimari ve insan portreleri.', folder:'dunya-riga' },
+  'dunya-kudus':    { title:'Kudüs',      desc:'Uc dinin kutsal sehri Kudusten ruhani ve insani kareler.', folder:'dunya-kudus' },
+  'dunya-halep':    { title:'Halep',      desc:'Tarihin acisini ve direncini tasıyan Halepten belgesel kareler.', folder:'dunya-halep' },
+  'dunya-balkanlar':{ title:'Balkanlar',  desc:'Osmanlı mirasının ve Balkan ruhunun yaşadığı coğrafyadan kareler.', folder:'dunya-balkanlar' },
+};
+
+let currentPhotos  = [];
+let currentIndex   = 0;
+let currentCatKey  = '';
+let folderCache    = {}; // klasör ID cache
+let photosCache    = {}; // fotoğraf listesi cache
+
+// Klasör ID bul (parent altında)
+async function getFolderIdByName(parentId, name) {
+  const cacheKey = parentId + '/' + name;
+  if (folderCache[cacheKey]) return folderCache[cacheKey];
+  const q = encodeURIComponent(`'${parentId}' in parents and name='${name}' and mimeType='application/vnd.google-apps.folder' and trashed=false`);
+  const url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name)&key=${DRIVE_API_KEY}`;
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    if (d.files && d.files.length > 0) {
+      folderCache[cacheKey] = d.files[0].id;
+      return d.files[0].id;
+    }
+  } catch(e) { console.warn('Klasör bulunamadı:', name, e); }
+  return null;
+}
+
+// Klasördeki tüm görselleri listele (sayfalama ile sınırsız)
+async function getPhotosInFolder(folderId) {
+  if (photosCache[folderId]) return photosCache[folderId];
+  let all = [], pageToken = null;
+  do {
+    const q = encodeURIComponent(`'${folderId}' in parents and (mimeType contains 'image/jpeg' or mimeType contains 'image/webp' or mimeType contains 'image/png') and trashed=false`);
+    let url = `https://www.googleapis.com/drive/v3/files?q=${q}&fields=nextPageToken,files(id,name,mimeType)&pageSize=100&key=${DRIVE_API_KEY}`;
+    if (pageToken) url += '&pageToken=' + pageToken;
+    try {
+      const r = await fetch(url);
+      const d = await r.json();
+      if (d.files) all = all.concat(d.files);
+      pageToken = d.nextPageToken || null;
+    } catch(e) { break; }
+  } while (pageToken);
+  photosCache[folderId] = all;
+  return all;
+}
+
+// Drive görsel URL'si
+function driveImgUrl(fileId) {
+  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1200`;
+}
+
+// Galeriyi aç
+async function openGallery(catKey) {
+  const cat = GALLERY_CATS[catKey];
+  if (!cat) return;
+  currentCatKey = catKey;
+
+  const page = document.getElementById('galleryPage');
+  document.getElementById('galleryPageTitle').textContent = cat.title;
+  document.getElementById('galleryPageDesc').textContent  = cat.desc;
+  document.getElementById('photoMasonry').innerHTML = '';
+  document.getElementById('galleryLoading').style.display = 'flex';
+  page.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  page.scrollTop = 0;
+
+  // portfolyom ana klasörünü bul, sonra alt klasörü
+  let folderId = null;
+  try {
+    const portfolyomId = await getFolderIdByName(DRIVE_ROOT_ID, 'portfolyom');
+    if (portfolyomId) {
+      // dunya-newyork gibi dünya alt klasörleri için önce dunya klasörü
+      if (cat.folder.startsWith('dunya-') && cat.folder !== 'dunya-inanclar') {
+        const dunyaId = await getFolderIdByName(portfolyomId, 'dunyadan-fotograflar');
+        if (dunyaId) folderId = await getFolderIdByName(dunyaId, cat.folder.replace('dunya-',''));
+      } else {
+        folderId = await getFolderIdByName(portfolyomId, cat.folder);
+      }
+    }
+  } catch(e) {}
+
+  document.getElementById('galleryLoading').style.display = 'none';
+
+  if (!folderId) {
+    const msg = DRIVE_API_KEY === 'BURAYA_API_KEY'
+      ? 'Google Drive bağlantısı henüz kurulmadı. API Key ve Klasör ID girildikten sonra fotoğraflar burada görünecek.'
+      : 'Bu klasör bulunamadı. Drive klasör adını kontrol edin.';
+    document.getElementById('photoMasonry').innerHTML =
+      `<p style="text-align:center;padding:60px;color:var(--muted);font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;">${msg}</p>`;
+    return;
+  }
+
+  const photos = await getPhotosInFolder(folderId);
+  currentPhotos = photos;
+
+  // Sayaç güncelle
+  const countEl = document.getElementById('count-' + catKey);
+  if (countEl) countEl.textContent = photos.length + ' Fotoğraf';
+
+  // Grid'i doldur
+  const masonry = document.getElementById('photoMasonry');
+  photos.forEach((photo, idx) => {
+    const div = document.createElement('div');
+    div.className = 'photo-thumb';
+    div.innerHTML = `
+      <img src="${driveImgUrl(photo.id)}" alt="${photo.name}" loading="lazy">
+      <div class="photo-thumb-overlay">
+        <div class="photo-thumb-zoom">⊕</div>
+      </div>`;
+    div.onclick = () => openLightbox(idx);
+    // Sağ tık engel
+    div.oncontextmenu = e => e.preventDefault();
+    masonry.appendChild(div);
+  });
+
+  if (photos.length === 0) {
+    masonry.innerHTML = '<p style="text-align:center;padding:60px;color:var(--muted);font-family:Cormorant Garamond,serif;font-size:20px;font-style:italic;">Bu klasörde henüz fotoğraf yok.</p>';
+  }
+}
+
+function closeGallery() {
+  document.getElementById('galleryPage').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// Lightbox
+function openLightbox(idx) {
+  currentIndex = idx;
+  const photo = currentPhotos[idx];
+  document.getElementById('lbImg').src = driveImgUrl(photo.id);
+  document.getElementById('lbTitle').textContent = GALLERY_CATS[currentCatKey]?.title || '';
+  document.getElementById('lbCounter').textContent = (idx+1) + ' / ' + currentPhotos.length;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+function lbNav(dir) {
+  currentIndex = (currentIndex + dir + currentPhotos.length) % currentPhotos.length;
+  openLightbox(currentIndex);
+}
+
+// Klavye navigasyonu
+document.addEventListener('keydown', e => {
+  const lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'ArrowLeft')  lbNav(-1);
+  if (e.key === 'Escape')     closeLightbox();
+});
+
+// Lightbox dışına tıkla kapat
+document.getElementById('lightbox').addEventListener('click', function(e) {
+  if (e.target === this) closeLightbox();
+});
+
+// Sağ tık engeli global
+document.addEventListener('contextmenu', e => {
+  if (e.target.tagName === 'IMG') e.preventDefault();
+});
+
+// Sayaçları yükle (sayfa açılınca arka planda)
+async function preloadCounts() {
+  if (DRIVE_API_KEY === 'BURAYA_API_KEY') return;
+  for (const key of Object.keys(GALLERY_CATS)) {
+    const el = document.getElementById('count-' + key);
+    if (el) el.textContent = '…';
+  }
+}
+// Sayfa yüklenince çalıştır
+window.addEventListener('load', preloadCounts);
+
 // Tabs
 function switchTab(btn,id){
+  console.log('switchTab called:', id);
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   ['pt-portfolyo','pt-turkiye','pt-dunya','pt-tfsf','pt-yazi'].forEach(t=>{
     const el=document.getElementById(t);
-    if(el) el.style.display=(t===id)?'':'none';
+    console.log('tab el:', t, el ? 'found' : 'NOT FOUND');
+    if(el) el.style.display=(t===id)?'block':'none';
   });
 }
+
+
+// Tab event listeners - doğrudan bağla
+document.addEventListener('DOMContentLoaded', function(){
+  const tabMap = {
+    'tab-portfolyo': 'pt-portfolyo',
+    'tab-turkiye':   'pt-turkiye',
+    'tab-dunya':     'pt-dunya',
+    'tab-tfsf':      'pt-tfsf',
+    'tab-yazi':      'pt-yazi'
+  };
+  Object.keys(tabMap).forEach(function(tabId){
+    const btn = document.getElementById(tabId);
+    if(!btn) return;
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const targetId = tabMap[tabId];
+      document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      ['pt-portfolyo','pt-turkiye','pt-dunya','pt-tfsf','pt-yazi'].forEach(function(t){
+        const el = document.getElementById(t);
+        if(el) el.style.display = (t===targetId) ? 'block' : 'none';
+      });
+    });
+  });
+});
 
 // Smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
