@@ -1248,6 +1248,16 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .sgp-iptal{flex:1; padding:13px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:800; cursor:pointer}
 .sgp-onayla{flex:2; padding:13px; border-radius:10px; background:var(--brand); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
 .sgp-sil-btn{flex:2; padding:13px; border-radius:10px; background:var(--err); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
+/* Seçenek (tekil havuz) ekle/düzenle popup */
+.spp-ic{max-width:360px; width:94%; background:var(--surface); border-radius:16px; padding:22px; margin:auto}
+.spp-baslik{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:16px; text-align:center}
+.spp-etiket{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:5px; margin-top:10px}
+.spp-input{width:100%; padding:13px 14px; border-radius:10px; border:1.5px solid var(--line); font-size:15px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box}
+.spp-input:focus{outline:none; border-color:var(--brand)}
+.spp-row{display:flex; gap:10px}
+.spp-btn-row{display:flex; gap:10px; margin-top:18px}
+.spp-iptal{flex:1; padding:13px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:14px; font-weight:800; cursor:pointer}
+.spp-onayla{flex:2; padding:13px; border-radius:10px; background:var(--brand); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer}
 /* ORTA: fiş */
 .ode-fis-liste{flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:9px; min-height:120px}
 .ode-fis-bos{text-align:center; color:var(--ink-3); padding:30px 12px; font-size:14px; line-height:1.6}
@@ -10755,46 +10765,77 @@ function secHavuzTazele(){
 }
 function secPoolAra(v){ state.secAra=v; go("fiyat", true); }
 function secPoolEkle(){
-  const ad = prompt("Seçenek adı (örn. Sütlü Pankek):");
-  if(!ad||!ad.trim()) return;
-  if(OPTION_POOL.find(s=>s.ad===ad.trim())){ note("Bu seçenek zaten var"); return; }
-  const ekV = prompt("Ek fiyat (₺, ücretsizse 0):", "0");
-  if(ekV==null) return;
-  const kcalV = prompt("Kalori (kcal, yoksa 0):", "0");
-  if(kcalV==null) return;
-  OPTION_POOL.push({ad:ad.trim(), ek:parseInt(ekV)||0, kcal:parseInt(kcalV)||0});
-  OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
-  note("Seçenek eklendi: "+ad.trim());
-  menuKaydet();
-  go("fiyat", true);
+  state._sppPopup = {mod:'ekle', i:null, ad:"", ek:0, kcal:0};
+  sppCiz();
 }
 function secPoolDuzenle(i){
   const s = OPTION_POOL[i];
-  const ad = prompt("Seçenek adı:", s.ad);
-  if(ad==null) return;
-  const ekV = prompt("Ek fiyat (₺):", String(s.ek||0));
-  if(ekV==null) return;
-  const kcalV = prompt("Kalori (kcal):", String(s.kcal||0));
-  if(kcalV==null) return;
-  const eskiAd = s.ad;
-  const yeniAd = ad.trim()||s.ad;
-  const yeniEk = parseInt(ekV)||0;
-  const yeniKcal = parseInt(kcalV)||0;
-  s.ad = yeniAd;
-  s.ek = yeniEk;
-  s.kcal = yeniKcal;
-  // ad değiştiyse tüm şubelerdeki kapatma kayıtlarını taşı
-  if(eskiAd!==yeniAd){
-    Object.keys(SEC_KAPALI).forEach(sb=>{
-      if(SEC_KAPALI[sb] && SEC_KAPALI[sb][eskiAd]){ SEC_KAPALI[sb][yeniAd]=SEC_KAPALI[sb][eskiAd]; delete SEC_KAPALI[sb][eskiAd]; }
-    });
+  state._sppPopup = {mod:'duzenle', i, ad:s.ad, ek:s.ek||0, kcal:s.kcal||0};
+  sppCiz();
+}
+/* ============================================================
+   SEÇENEK (TEKİL HAVUZ) POPUP — ekle / düzenle
+   ============================================================ */
+function sppKapat(){
+  state._sppPopup = null;
+  const mdl=document.getElementById("sppModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function sppCiz(){
+  const p = state._sppPopup;
+  let mdl=document.getElementById("sppModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="sppModal"; mdl.className="modal-bg"; mdl.style.zIndex="200"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  mdl.innerHTML = `<div class="spp-ic">
+    <div class="spp-baslik">${p.mod==='ekle'?'🔘 Yeni Seçenek':'✏️ Seçeneği Düzenle'}</div>
+    <div class="spp-etiket">Seçenek adı</div>
+    <input class="spp-input" id="sppAd" type="text" value="${(p.ad||'').replace(/"/g,'&quot;')}"
+      placeholder="örn. Sütlü Pankek, Çilek" onkeydown="if(event.key==='Enter') sppOnayla()">
+    <div class="spp-row">
+      <div style="flex:1">
+        <div class="spp-etiket">Ek fiyat (₺)</div>
+        <input class="spp-input" id="sppEk" type="number" inputmode="decimal" min="0" value="${p.ek||0}" placeholder="0">
+      </div>
+      <div style="flex:1">
+        <div class="spp-etiket">Kalori (kcal)</div>
+        <input class="spp-input" id="sppKcal" type="number" inputmode="numeric" min="0" value="${p.kcal||0}" placeholder="0">
+      </div>
+    </div>
+    <div class="spp-btn-row">
+      <button class="spp-iptal" onclick="sppKapat()">İptal</button>
+      <button class="spp-onayla" onclick="sppOnayla()">${p.mod==='ekle'?'Ekle':'Kaydet'}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("sppAd"); if(i){ i.focus(); if(p.mod==='duzenle') i.select(); } }, 60);
+}
+function sppOnayla(){
+  const p = state._sppPopup; if(!p) return;
+  const adEl=document.getElementById("sppAd"), ekEl=document.getElementById("sppEk"), kcalEl=document.getElementById("sppKcal");
+  const ad = adEl ? adEl.value.trim() : "";
+  if(!ad){ note("Seçenek adı boş olamaz"); return; }
+  const ek = Math.max(0, parseInt(ekEl?ekEl.value:0)||0);
+  const kcal = Math.max(0, parseInt(kcalEl?kcalEl.value:0)||0);
+  if(p.mod==='ekle'){
+    if(OPTION_POOL.find(s=>s.ad===ad)){ note("Bu seçenek zaten var"); return; }
+    OPTION_POOL.push({ad, ek, kcal});
+    OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+    note("Seçenek eklendi: "+ad);
+  } else {
+    const s = OPTION_POOL[p.i];
+    const eskiAd = s.ad;
+    if(ad!==eskiAd && OPTION_POOL.find(x=>x.ad===ad)){ note("Bu isimde seçenek zaten var"); return; }
+    s.ad=ad; s.ek=ek; s.kcal=kcal;
+    if(eskiAd!==ad){
+      Object.keys(SEC_KAPALI).forEach(sb=>{
+        if(SEC_KAPALI[sb] && SEC_KAPALI[sb][eskiAd]){ SEC_KAPALI[sb][ad]=SEC_KAPALI[sb][eskiAd]; delete SEC_KAPALI[sb][eskiAd]; }
+      });
+    }
+    secenekFiyatYansit(eskiAd, ad, ek, kcal);
+    OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
+    note("Seçenek güncellendi — kullanan tüm ürünlere yansıdı");
   }
-  // FİYAT/AD/KCAL DEĞİŞİKLİĞİNİ kullanılan her yere yansıt (gruplar + ürünler)
-  secenekFiyatYansit(eskiAd, yeniAd, yeniEk, yeniKcal);
-  OPTION_POOL.sort((a,b)=>a.ad.localeCompare(b.ad,"tr"));
-  note("Seçenek güncellendi — kullanan tüm ürünlere yansıdı");
-  menuKaydet();
-  go("fiyat", true);
+  sppKapat(); menuKaydet(); go("fiyat", true);
 }
 /* Bir havuz seçeneğinin ad/fiyat/kcal değişikliğini gruplara ve ürünlere yansıt */
 function secenekFiyatYansit(eskiAd, yeniAd, yeniEk, yeniKcal){
@@ -13449,35 +13490,65 @@ function subeFormKaydet(){
 function subeKapatAc(i){
   const b=DEMO_BRANCHES[i];
   if(!b.kapali){
-    // açık masa var mı kontrolü
     const acikMasa=subeMasalari(b.ad).some(mm=>{ const id=b.ad+"::"+mm.id; return SESSIONS[id]&&SESSIONS[id].acik; });
     if(acikMasa){ note("⛔ "+b.ad+" şubesinde açık masa var — önce hesapları kapatın"); return; }
-    if(!confirm(b.ad+" şubesi geçici kapatılsın mı? Satış durur, veriler korunur, istediğinizde tekrar açabilirsiniz.")) return;
-    b.kapali=true; note("⛔ "+b.ad+" kapatıldı (geçici)");
+    subeOnayAc('kapat', i, b.ad,
+      b.ad+" şubesi geçici kapatılacak. Satış durur, veriler korunur, istediğinizde tekrar açabilirsiniz.");
   } else {
+    // tekrar açma yıkıcı değil, direkt yap
     b.kapali=false; note("✓ "+b.ad+" yeniden açıldı");
+    subeKaydet(); go("subeler");
   }
-  subeKaydet();
-  go("subeler");
 }
 function subeSil(i){
   const b=DEMO_BRANCHES[i];
   if(DEMO_BRANCHES.length<=1){ note("Son şube silinemez"); return; }
   const acikMasa=subeMasalari(b.ad).some(mm=>{ const id=b.ad+"::"+mm.id; return SESSIONS[id]&&SESSIONS[id].acik; });
   if(acikMasa){ note("⛔ Açık masa var — önce hesapları kapatın"); return; }
-  if(!confirm("⚠️ "+b.ad+" KALICI olarak silinecek!\n\nMasa düzeni, fiyatlar ve tüm ayarları gidecek. Bu işlem geri alınamaz.\n\nEmin misiniz?")) return;
-  // tüm verileri temizle
-  delete BRANCH_TABLES[b.ad];
-  delete BRANCH_INFO[b.ad];
-  delete SUBE_FIYAT[b.ad];
-  delete POS_AYAR[b.ad];
-  delete YAZICILAR[b.ad];
-  // kapalı/geçmiş masa kayıtları da silinsin — yoksa localStorage'da sonsuza dek yetim kalır
-  const onek = b.ad+"::";
-  Object.keys(SESSIONS).filter(id=>id.startsWith(onek)).forEach(id=>delete SESSIONS[id]);
-  DEMO_BRANCHES.splice(i,1);
-  subeKaydet(); menuKaydet(); posAyarKaydet(); yaziciKaydet(); sessionsKaydet();
-  note("🗑️ "+b.ad+" kalıcı olarak silindi");
+  subeOnayAc('sil', i, b.ad,
+    b.ad+" KALICI olarak silinecek. Masa düzeni, fiyatlar ve tüm ayarları gidecek.");
+}
+/* Şube kapatma/silme onay popup'ı (tehlikeli işlemler için ortak) */
+function subeOnayAc(tip, i, ad, mesaj){
+  state._subeOnay = {tip, i, ad, mesaj};
+  let mdl=document.getElementById("subeOnayModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="subeOnayModal"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
+  mdl.innerHTML = `<div class="myp-ic">
+    <div class="myp-baslik">${tip==='sil'?'🗑️ Şubeyi Sil':'⛔ Şubeyi Kapat'}</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.6">
+      ${mesaj}<br><strong style="color:var(--err)">${tip==='sil'?'Bu işlem geri alınamaz.':''}</strong>
+    </div>
+    <div class="myp-btn-row">
+      <button class="myp-iptal" onclick="subeOnayKapat()">İptal</button>
+      <button class="myp-onayla" ${tip==='sil'?'style="background:var(--err)"':''} onclick="subeOnayUygula()">${tip==='sil'?'Evet, Sil':'Evet, Kapat'}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+}
+function subeOnayKapat(){
+  state._subeOnay=null;
+  const mdl=document.getElementById("subeOnayModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function subeOnayUygula(){
+  const p = state._subeOnay; if(!p) return;
+  const b = DEMO_BRANCHES[p.i];
+  if(p.tip==='kapat'){
+    b.kapali=true; note("⛔ "+b.ad+" kapatıldı (geçici)");
+    subeKaydet();
+  } else {
+    delete BRANCH_TABLES[b.ad];
+    delete BRANCH_INFO[b.ad];
+    delete SUBE_FIYAT[b.ad];
+    delete POS_AYAR[b.ad];
+    delete YAZICILAR[b.ad];
+    const onek = b.ad+"::";
+    Object.keys(SESSIONS).filter(id=>id.startsWith(onek)).forEach(id=>delete SESSIONS[id]);
+    DEMO_BRANCHES.splice(p.i,1);
+    subeKaydet(); menuKaydet(); posAyarKaydet(); yaziciKaydet(); sessionsKaydet();
+    note("🗑️ "+b.ad+" kalıcı olarak silindi");
+  }
+  subeOnayKapat();
   go("subeler");
 }
 
