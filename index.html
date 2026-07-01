@@ -1226,6 +1226,56 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .myp-btn-row{display:flex; gap:10px}
 .myp-iptal{flex:1; padding:14px; border-radius:11px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
 .myp-onayla{flex:2; padding:14px; border-radius:11px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+/* ── Yeni Paket Sipariş modalı (premium) ── */
+.ypm-ic{max-width:400px; width:94%; background:var(--surface); border-radius:20px; padding:0; margin:auto; overflow:hidden; box-shadow:var(--shadow-lg)}
+.ypm-head{padding:22px 24px 18px; background:linear-gradient(135deg, var(--brand-soft), var(--cocoa-soft)); border-bottom:1px solid var(--line)}
+.ypm-head-ic{font-size:30px; line-height:1; margin-bottom:8px}
+.ypm-head-baslik{font-size:19px; font-weight:800; color:var(--ink); letter-spacing:-.3px}
+.ypm-head-alt{font-size:12.5px; color:var(--ink-2); margin-top:3px}
+.ypm-body{padding:22px 24px 24px}
+.ypm-etiket{font-size:12px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.6px; margin-bottom:9px}
+.ypm-tip-row{display:flex; gap:10px; margin-bottom:20px}
+.ypm-tip{flex:1; padding:15px 10px; border-radius:13px; border:1.5px solid var(--line); background:var(--surface-2); cursor:pointer; text-align:center; transition:all .18s ease}
+.ypm-tip:hover{border-color:var(--line-2)}
+.ypm-tip.on{border-color:var(--brand); background:var(--brand-soft); box-shadow:0 0 0 3px rgba(240,167,40,.14)}
+.ypm-tip-ic{font-size:24px; line-height:1; margin-bottom:6px}
+.ypm-tip-ad{font-size:13.5px; font-weight:800; color:var(--ink)}
+.ypm-tip-alt{font-size:11px; color:var(--ink-3); margin-top:2px}
+.ypm-tip.on .ypm-tip-ad{color:var(--brand-d)}
+.ypm-input{width:100%; padding:14px 16px; border-radius:12px; border:1.5px solid var(--line); font-size:16px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box; margin-bottom:5px}
+.ypm-input:focus{outline:none; border-color:var(--brand); background:var(--surface)}
+.ypm-input.eksik{border-color:var(--danger); background:var(--danger-soft)}
+.ypm-ipucu{font-size:11.5px; color:var(--ink-3); margin-bottom:20px; min-height:15px}
+.ypm-btn-row{display:flex; gap:10px}
+.ypm-iptal{flex:1; padding:15px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
+.ypm-basla{flex:2; padding:15px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(240,167,40,.35)}
+.ypm-basla:active{transform:translateY(1px)}
+/* Kasa paket kartı — kalem satırları + iptal */
+.kpk-urun-list{margin:8px 0 4px; display:flex; flex-direction:column; gap:4px}
+.kpk-urun-satir{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:var(--surface-2); border-radius:8px}
+.kpk-urun-ad{font-size:13px; font-weight:600; color:var(--ink)}
+.kpk-urun-fiyat{font-size:12px; font-weight:800; color:var(--ink-3); margin-left:4px}
+.kpk-kalem-iptal{width:24px; height:24px; flex-shrink:0; border:none; border-radius:7px; background:var(--danger-soft); color:var(--danger); font-size:13px; font-weight:800; cursor:pointer; line-height:1; display:flex; align-items:center; justify-content:center}
+.kpk-kalem-iptal:hover{background:var(--danger); color:#fff}
+/* ── Yeni Kişi modalı (premium) ── */
+.ykm-ic{max-width:380px; width:94%; background:var(--surface); border-radius:20px; padding:0; margin:auto; overflow:hidden; box-shadow:var(--shadow-lg)}
+.ykm-head{padding:22px 24px 18px; background:linear-gradient(135deg, var(--brand-soft), var(--cocoa-soft)); border-bottom:1px solid var(--line)}
+.ykm-head-ic{font-size:28px; line-height:1; margin-bottom:8px}
+.ykm-head-baslik{font-size:18px; font-weight:800; color:var(--ink); letter-spacing:-.3px}
+.ykm-head-alt{font-size:12.5px; color:var(--ink-2); margin-top:3px}
+.ykm-body{padding:22px 24px 24px}
+.ykm-etiket{font-size:12px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.6px; margin-bottom:9px}
+.ykm-mevcut{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px}
+.ykm-kisi-chip{padding:9px 15px; border-radius:99px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink); font-size:13.5px; font-weight:700; cursor:pointer; transition:all .15s ease}
+.ykm-kisi-chip:hover{border-color:var(--brand); background:var(--brand-soft); color:var(--brand-d)}
+.ykm-input{width:100%; padding:14px 16px; border-radius:12px; border:1.5px solid var(--line); font-size:16px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box; margin-bottom:5px}
+.ykm-input:focus{outline:none; border-color:var(--brand); background:var(--surface)}
+.ykm-input.eksik{border-color:var(--danger); background:var(--danger-soft)}
+.ykm-ipucu{font-size:11.5px; color:var(--ink-3); margin-bottom:20px; min-height:15px}
+.ykm-btn-row{display:flex; gap:10px}
+.ykm-iptal{flex:1; padding:15px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
+.ykm-ekle{flex:2; padding:15px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(240,167,40,.35)}
+.ykm-ekle:active{transform:translateY(1px)}
 /* Fiyat/Ürün kategorisi popup */
 .fkp-ic{max-width:380px; width:94%; background:var(--surface); border-radius:16px; padding:22px; margin:auto}
 .fkp-baslik{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:16px; text-align:center}
@@ -1606,6 +1656,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .my-masa{display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; background:var(--surface-2); font-weight:700; font-size:14px; border:1px solid var(--line)}
 .my-masa.dolu{background:var(--ok-soft); border-color:var(--ok)}
 .my-masa-sil{width:20px; height:20px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800}
+.my-masa-duzenle{width:20px; height:20px; border-radius:50%; background:var(--brand-soft); color:var(--brand-d); font-size:10px; font-weight:800; border:none; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; line-height:1}
+.my-masa-duzenle:hover{background:var(--brand); color:#fff}
 .my-masa-qr{padding:4px 10px; border-radius:8px; background:var(--cocoa); color:#fff; font-size:11px; font-weight:800; border:none}
 .my-toplu-qr{width:100%; padding:13px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:14px; border:none; margin-bottom:16px}
 .my-dolu-rozet{font-size:10px; font-weight:800; color:var(--ok); background:#fff; padding:2px 7px; border-radius:99px}
@@ -1706,6 +1758,49 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .bayi-s-aksiyon{display:flex; gap:6px; align-items:center}
 .bayi-mini{padding:6px 12px; border-radius:8px; background:var(--surface-2); border:1px solid var(--line); font-size:12px; font-weight:700; color:var(--ink-2)}
 .bayi-mini.sil{color:var(--err); border-color:#e8a59e}
+/* ══ Stok Kartı Modalı — museum-quality, parşömen/bakır ══ */
+.skm-ic{max-width:520px; width:96%; max-height:90vh; background:var(--surface); border-radius:20px; padding:0; margin:auto; overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow-lg)}
+.skm-head{padding:22px 26px 18px; background:linear-gradient(135deg, var(--brand-soft) 0%, var(--cocoa-soft) 100%); border-bottom:1px solid var(--line); flex-shrink:0}
+.skm-head-ic{font-size:26px; line-height:1; margin-bottom:7px}
+.skm-head-baslik{font-size:20px; font-weight:800; color:var(--ink); letter-spacing:-.4px}
+.skm-head-alt{font-size:12.5px; color:var(--ink-2); margin-top:3px}
+.skm-body{padding:22px 26px; overflow-y:auto; flex:1}
+.skm-grup{margin-bottom:22px}
+.skm-grup:last-child{margin-bottom:4px}
+.skm-grup-baslik{font-size:11px; font-weight:800; color:var(--cocoa); text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; padding-bottom:7px; border-bottom:1px solid var(--line)}
+.skm-alan{margin-bottom:14px}
+.skm-alan:last-child{margin-bottom:0}
+.skm-lbl{display:block; font-size:12.5px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
+.skm-lbl small{font-weight:600; color:var(--ink-3)}
+.skm-input{width:100%; padding:12px 14px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box; font-family:inherit}
+.skm-input:focus{outline:none; border-color:var(--brand); background:var(--surface)}
+.skm-input.eksik{border-color:var(--danger); background:var(--danger-soft)}
+.skm-satir2{display:flex; gap:12px}
+.skm-satir2 > .skm-alan{flex:1; margin-bottom:14px}
+.skm-input-suf{position:relative}
+.skm-input-suf .skm-input{padding-right:48px}
+.skm-suf{position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:12.5px; font-weight:700; color:var(--ink-3); pointer-events:none}
+/* Birim chip-grid */
+.skm-birim-grid{display:flex; flex-wrap:wrap; gap:8px}
+.skm-birim-chip{padding:9px 16px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:700; cursor:pointer; transition:all .15s ease}
+.skm-birim-chip:hover{border-color:var(--line-2)}
+.skm-birim-chip.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+.skm-birim-yeni{padding:9px 14px; border-radius:10px; border:1.5px dashed var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:13px; font-weight:800; cursor:pointer}
+.skm-birim-yeni:hover{background:var(--brand); color:#fff; border-style:solid}
+/* Durum toggle */
+.skm-toggle-satir{display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-radius:12px; background:var(--surface-2); border:1.5px solid var(--line)}
+.skm-toggle-bilgi{display:flex; flex-direction:column; gap:2px}
+.skm-toggle-ad{font-size:14px; font-weight:800; color:var(--ink)}
+.skm-toggle-alt{font-size:11.5px; color:var(--ink-3)}
+.skm-toggle{position:relative; width:52px; height:30px; border-radius:99px; background:var(--line-2); border:none; cursor:pointer; flex-shrink:0; transition:background .22s ease}
+.skm-toggle.on{background:var(--ok)}
+.skm-toggle::after{content:""; position:absolute; left:3px; top:3px; width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:transform .22s cubic-bezier(.2,.8,.2,1)}
+.skm-toggle.on::after{transform:translateX(22px)}
+.skm-foot{padding:16px 26px; border-top:1px solid var(--line); display:flex; gap:12px; flex-shrink:0; background:var(--surface)}
+.skm-iptal{flex:1; padding:15px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:none; font-size:15px; font-weight:800; cursor:pointer}
+.skm-kaydet{flex:2; padding:15px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(240,167,40,.35)}
+.skm-kaydet:active{transform:translateY(1px)}
+.skm-ipucu{font-size:11.5px; color:var(--danger); min-height:15px; margin-top:8px; font-weight:600}
 .bayi-bos{padding:24px; text-align:center; color:var(--ink-3); font-size:13.5px}
 .bayi-gecmis-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:18px 0 10px}
 /* irsaliye form */
@@ -1828,6 +1923,15 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .fy-sube-filtre-lbl{font-size:12px; font-weight:700; color:var(--ink-2); margin-right:4px; flex-shrink:0}
 .fy-sf-chip{padding:6px 12px; border-radius:20px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap}
 .fy-sf-chip.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
+/* Yorum filtre çubuğu — şube + ürün, museum-quality */
+.yym-filtre-bar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:12px}
+.yym-filtre-grup{display:flex; align-items:center; gap:8px; padding:9px 14px; background:var(--surface); border:1px solid var(--line); border-radius:12px; flex:1 1 240px; min-width:220px}
+.yym-filtre-lbl{font-size:12px; font-weight:800; color:var(--ink-2); letter-spacing:.3px; flex-shrink:0}
+.yym-urun-select{flex:1; min-width:0; padding:7px 34px 7px 12px; border-radius:9px; border:1.5px solid var(--line); background:var(--surface-2) url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2.5 4l3.5 3.5L9.5 4' stroke='%236b3f23' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center; -webkit-appearance:none; appearance:none; font-family:inherit; font-size:13.5px; font-weight:700; color:var(--ink); cursor:pointer}
+.yym-urun-select:focus{outline:none; border-color:var(--brand)}
+.yym-filtre-temizle{padding:8px 13px; border-radius:9px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0}
+.yym-filtre-temizle:hover{border-color:var(--cocoa); color:var(--cocoa)}
+.yym-filtre-ozet{font-size:12px; color:var(--ink-3); font-weight:600; margin-bottom:10px}
 .fy-sf-tumunu{padding:6px 12px; border-radius:20px; border:1.5px solid var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap}
 .fy-tablo-sar{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--surface)}
 .fy-tablo{border-collapse:collapse; width:100%; font-size:13px}
@@ -5487,6 +5591,8 @@ let STOCK = {
   limon:    {ad:"Limon",         mevcut:2800,  kritik:600,  birim:"gr"},
   misir:    {ad:"Mısır/gevrek",  mevcut:3400,  kritik:700,  birim:"gr"},
 };
+/* Stok ölçü birimleri — varsayılanlar + genel müdürün eklediği özel birimler */
+let STOK_BIRIMLERI = ["gr","kg","adet","litre","ml","koli","paket"];
 
 /* ============================================================
    BAYİ KANALI (B2B) — genel müdür ↔ bayi (şube) tedarik sistemi
@@ -5542,7 +5648,10 @@ function b2bKaydet(){
     BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER,
     _irsaliyeId, _siparisId,
     // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
-    STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut]))
+    STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut])),
+    // stok kartı meta bilgileri (ad, birim, kritik, kcal, kdv, aktif) — kart oluştur/düzenle kalıcı olsun
+    STOCK_META: STOCK,
+    STOK_BIRIMLERI
   }, 1);
 }
 function b2bYukle(){
@@ -5554,7 +5663,10 @@ function b2bYukle(){
   if(v.BAYI_SIPARISLER) BAYI_SIPARISLER = v.BAYI_SIPARISLER;
   if(v._irsaliyeId) _irsaliyeId = v._irsaliyeId;
   if(v._siparisId) _siparisId = v._siparisId;
-  if(v.STOCK_MEVCUT){ Object.entries(v.STOCK_MEVCUT).forEach(([k,m])=>{ if(STOCK[k]) STOCK[k].mevcut=m; }); }
+  // Tam kart meta'sı varsa onu kullan (yeni kartlar + düzenlemeler burada); yoksa eski davranış
+  if(v.STOCK_META && Object.keys(v.STOCK_META).length){ STOCK = v.STOCK_META; }
+  else if(v.STOCK_MEVCUT){ Object.entries(v.STOCK_MEVCUT).forEach(([k,m])=>{ if(STOCK[k]) STOCK[k].mevcut=m; }); }
+  if(v.STOK_BIRIMLERI && v.STOK_BIRIMLERI.length) STOK_BIRIMLERI = v.STOK_BIRIMLERI;
 }
 
 /* === KAMPANYA + GENEL FİYAT KALICILIĞI ===
@@ -7258,9 +7370,23 @@ function masaDurum(masaNo){
   if(s.garsonCagri) return {kod:"garson", ad:"🔔 Garson çağırdı", renk:"#e74c3c", bg:"#fdeceb"};
   if(s.mesajVar)    return {kod:"mesaj", ad:"💬 Mutfağa mesaj", renk:"#8e44ad", bg:"#f5ecfa"};
   const kalemler=masaKalemleri(masaNo).filter(it=>it.durum!=="iptal");
+  // Tüm kalemler iptal edildiyse (geçerli ürün kalmadıysa) masa boş sayılır
+  if(kalemler.length===0) return {kod:"bos", ad:"Boş", renk:"var(--line-2)", bg:"transparent"};
   const yeni=kalemler.some(it=>it.durum==="bekliyor");
   if(yeni) return {kod:"yeni", ad:"🆕 Yeni sipariş", renk:"#2f7ed8", bg:"#e8f1fc"};
   return {kod:"dolu", ad:"Dolu", renk:"var(--ok)", bg:"var(--ok-soft)"};
+}
+/* Masada iptal dışı kalem kalmadıysa oturumu kapat, masayı boşa düşür.
+   Bekleyen mutfak bildirimlerini gönderir, açık kasa seçimini temizler. */
+function masaBosMuKapat(masaNo){
+  const s=SESSIONS[masaNo]; if(!s || !s.acik) return false;
+  const kalan=masaKalemleri(masaNo).filter(it=>it.durum!=="iptal");
+  if(kalan.length>0) return false;
+  try{ if(bekleyenDegisiklikVar(masaNo)) degisiklikleriMutfagaGonder(masaNo); }catch(e){}
+  SESSIONS[masaNo]={masa:masaNo, acik:false, zaman:Date.now(), kisiler:[]};
+  if(state.kasaMasa===masaNo) state.kasaMasa=null;
+  sessionsKaydet();
+  return true;
 }
 /* Masa çağrılarını temizle (kasa/garson ilgilendi) */
 function masaCagriTemizle(masaNo){
@@ -7420,7 +7546,7 @@ function viewMasaYonetim(main){
         <span class="my-masa-ad">${etiket}</span>
         <button class="my-masa-qr" onclick="masaQrIndir('${masaId.replace(/'/g,"\\'")}','${etiket.replace(/'/g,"\\'")}')" title="Bu masanın QR kodunu indir">⬇ QR</button>
         ${dolu?'<span class="my-dolu-rozet">dolu</span>'
-          :`<button class="my-masa-sil" onclick="myMasaSil(${ki},${mi})" title="Masayı sil">✕</button>`}
+          :`<button class="my-masa-duzenle" onclick="myMasaYenidenAdlandir(${ki},${mi})" title="Masa adını düzenle">✏</button><button class="my-masa-sil" onclick="myMasaSil(${ki},${mi})" title="Masayı sil">✕</button>`}
       </div>`;
     });
     html+=`<button class="my-masa-ekle" onclick="myMasaEkle(${ki})">+ Masa</button>`;
@@ -7569,13 +7695,45 @@ function myMasaEkleOnayla(ki, ad){
   note(k.kat+"-"+ad.trim()+" eklendi");
   subeKaydet(); go("masayonetim", true);
 }
+/* Masa adını düzenle — pop-up aç */
+function myMasaYenidenAdlandir(ki, mi){
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
+  if(!k) return;
+  const mevcut=k.masalar[mi];
+  const masaId=sube+"::"+k.kat+"|"+mevcut;
+  if(SESSIONS[masaId] && SESSIONS[masaId].acik){ note("Dolu masanın adı değiştirilemez — önce hesabı kapatın"); return; }
+  myPopupDuzenleAc('masaad', ki, mevcut, mi);
+}
+/* Masa adı değişimini uygula — açık oturum anahtarı da güvenle taşınır */
+function myMasaYenidenAdlandirOnayla(ki, mi, yeniAd){
+  if(!yeniAd||!yeniAd.trim()) return;
+  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
+  if(!k) return;
+  const eski=k.masalar[mi];
+  const yeni=yeniAd.trim();
+  if(yeni===eski){ myPopupKapat(); return; }
+  if(k.masalar.some((x,i)=>i!==mi && x===yeni)){ note("Bu isimde masa zaten var"); return; }
+  const eskiId=sube+"::"+k.kat+"|"+eski;
+  // Oturum varsa yeni anahtara taşı (sipariş/oturum korunur)
+  if(SESSIONS[eskiId]){
+    const yeniId=sube+"::"+k.kat+"|"+yeni;
+    SESSIONS[yeniId]=SESSIONS[eskiId];
+    SESSIONS[yeniId].masa=yeniId;
+    delete SESSIONS[eskiId];
+    if(state.kasaMasa===eskiId) state.kasaMasa=yeniId;
+    sessionsKaydet();
+  }
+  k.masalar[mi]=yeni;
+  note("Masa adı güncellendi: "+k.kat+"-"+yeni);
+  subeKaydet(); myPopupKapat(); go("masayonetim", true);
+}
 /* Kategori/masa ekleme metin giriş pop-up'ı (prompt() yerine — tutarlı görünüm + dokunmatikte daha rahat) */
 function myPopupAc(tip, ki, onerilenDeger){
   state._myPopup = {tip, ki, deger:onerilenDeger||""};
   myPopupCiz();
 }
-function myPopupDuzenleAc(tip, ki, mevcutDeger){
-  state._myPopup = {tip, ki, deger:mevcutDeger||"", duzenle:true};
+function myPopupDuzenleAc(tip, ki, mevcutDeger, mi){
+  state._myPopup = {tip, ki, mi:(mi!=null?mi:null), deger:mevcutDeger||"", duzenle:true};
   myPopupCiz();
 }
 function myPopupKapat(){
@@ -7588,10 +7746,10 @@ function myPopupOnayla(){
   const inp = document.getElementById("mypInput");
   const deger = inp ? inp.value : "";
   if(!deger || !deger.trim()) { note("Bir değer girin"); return; }
-  if(p.tip==='kategori') myKatEkleOnayla(deger);
+  if(p.tip==='kategori'){ myKatEkleOnayla(deger); myPopupKapat(); }
   else if(p.tip==='katad') myKatYenidenAdlandirOnayla(p.ki, deger);
-  else myMasaEkleOnayla(p.ki, deger);
-  myPopupKapat();
+  else if(p.tip==='masaad') myMasaYenidenAdlandirOnayla(p.ki, p.mi, deger);
+  else { myMasaEkleOnayla(p.ki, deger); myPopupKapat(); }
 }
 function myPopupCiz(){
   const p = state._myPopup;
@@ -7606,6 +7764,10 @@ function myPopupCiz(){
   } else if(p.tip==='katad'){
     baslik = "✏️ Kategori Adını Değiştir";
     placeholder = "Yeni kategori adı";
+  } else if(p.tip==='masaad'){
+    const k = BRANCH_TABLES[sube] ? BRANCH_TABLES[sube][p.ki] : null;
+    baslik = "✏️ "+(k?k.kat:"")+" · Masa Adını Değiştir";
+    placeholder = "Masa adı/numarası";
   } else {
     const k = BRANCH_TABLES[sube] ? BRANCH_TABLES[sube][p.ki] : null;
     baslik = "🪑 "+(k?k.kat:"")+" için Masa Ekle";
@@ -7681,7 +7843,7 @@ function mySilOnayPopupCiz(){
 function viewMasalar(main){
   if(Object.keys(SESSIONS).length===0) seedSessions();
   const sekme = state.kasaSekme||"masa";
-  const aktifPaket=PAKET_ORDERS.filter(p=>p.durum!=="teslim"&&p.durum!=="iptal"&&(p.sube||AKTIF_SUBE)===AKTIF_SUBE);
+  const aktifPaket=aktifPaketler(AKTIF_SUBE);
   // SOL kolon: sekmeler + masa ızgarası / paket listesi
   let sol=`<div class="sec-head"><div><h2>Masalar & Paket</h2><div class="sh-sub">${AKTIF_SUBE}</div></div></div>
     <div class="kasa-sekme-row">
@@ -7693,12 +7855,18 @@ function viewMasalar(main){
     if(aktifPaket.length===0){ sol+=`<div class="kmd-bos">Bekleyen paket sipariş yok.</div>`; }
     else aktifPaket.forEach(p=>{
       const dm=TESLIMAT_DURUM[p.durum]; const gelAl=p.tip==="paket";
+      const gecerli=paketGecerliKalemler(p);
+      const gTutar=paketGecerliTutar(p);
       sol+=`<div class="kasa-paket-kart">
         <div class="kpk-ust"><span class="kpk-no">${gelAl?"🥡 Gel-Al":"🛵 Eve"} #${p.id} · ${p.musteri}</span>
           <span class="kpk-durum" style="color:${dm.renk}">${dm.ic} ${dm.ad}</span></div>
-        <div class="kpk-urunler">${p.kalemler.map(k=>k.ad).join(", ")}</div>
-        <div class="kpk-alt"><span class="kpk-tutar">${p.tutar} ₺ · ${p.odeme==="kasada"?"💵 Kasada ödenecek":p.odeme==="online"?"✓ Online ödendi":"Kapıda"}</span>
-        ${p.odeme==="kasada"?`<button class="kpk-ode" onclick="kasaPaketOde(${p.id})">Öde · ${p.tutar} ₺</button>`:""}</div>
+        <div class="kpk-urun-list">${gecerli.map((k,ki)=>{
+          const oidx=(p.kalemler||[]).indexOf(k);
+          return `<div class="kpk-urun-satir"><span class="kpk-urun-ad">${k.ad}${k.fiyat?` <span class="kpk-urun-fiyat">${k.fiyat} ₺</span>`:""}</span>
+            <button class="kpk-kalem-iptal" onclick="kasaPaketKalemIptal(${p.id},${oidx})" title="Ürünü iptal et">✕</button></div>`;
+        }).join("")}</div>
+        <div class="kpk-alt"><span class="kpk-tutar">${gTutar} ₺ · ${p.odeme==="kasada"?"💵 Kasada ödenecek":p.odeme==="online"?"✓ Online ödendi":"Kapıda"}</span>
+        ${p.odeme==="kasada"?`<button class="kpk-ode" onclick="kasaPaketOde(${p.id})">Öde · ${gTutar} ₺</button>`:""}</div>
       </div>`;
     });
     sol+=`</div>`;
@@ -7740,20 +7908,195 @@ function viewMasalar(main){
   }
   main.innerHTML = `<div class="pos-grid kasa-masa-grid-layout"><div class="kasa-sol-kol">${sol}</div><div class="kasa-sag-panel">${sag}</div></div>`;
 }
-/* Kasa yeni paket sipariş — isim zorunlu (fiş için) */
+/* Kasa yeni paket sipariş — premium modal ile başlat */
 function kasaPaketBasla(){
-  const ad=prompt("Paket sipariş için müşteri adı (fişte görünecek):");
-  if(!ad || !ad.trim()){ note("İsim zorunlu (fiş için)"); return; }
-  state.kasaPaket={musteri:ad.trim(), sepet:[]}; state.cat="Tatlılar";
-  go("satis");
-  note("Ürün seç → 🥡 Paket: "+ad.trim());
+  paketModalAc("kasa");
+}
+/* Kasa paket kartında tek ürünü iptal et */
+function kasaPaketKalemIptal(paketId, kalemIdx){
+  paketKalemIptal(paketId, kalemIdx);
+  const p=PAKET_ORDERS.find(x=>x.id===paketId);
+  if(p && p.durum==="iptal"){ note("Paket iptal edildi · listeden kaldırıldı"); }
+  else { note("Ürün paketten çıkarıldı · tutar güncellendi"); }
+  go("masalar");
+}
+/* ── Yeni Paket Sipariş modalı (kasa + garson ortak) ──
+   kaynak: "kasa" | "garson" · tip: "paket" (gel-al) | "eve" */
+function paketModalAc(kaynak){
+  state._paketModal = { kaynak, tip:"paket", ad:"" };
+  paketModalCiz();
+}
+function paketModalTip(t){
+  if(!state._paketModal) return;
+  state._paketModal.tip=t;
+  paketModalCiz();
+}
+function paketModalKapat(){
+  const m=document.getElementById("paketModal"); if(m) m.classList.remove("on");
+  state._paketModal=null;
+}
+function paketModalBasla(){
+  const p=state._paketModal; if(!p) return;
+  const inp=document.getElementById("ypmAdInput");
+  const ad=(inp?inp.value:"").trim();
+  if(!ad){
+    if(inp){ inp.classList.add("eksik"); inp.focus(); }
+    const ip=document.getElementById("ypmIpucu");
+    if(ip){ ip.textContent="⚠ Fişte görünecek isim zorunlu."; ip.style.color="var(--danger)"; }
+    return;
+  }
+  const kaynak=p.kaynak, tip=p.tip;
+  paketModalKapat();
+  if(kaynak==="garson"){
+    GARSON.paketModu=true; GARSON.masa="paket"; GARSON.kisi=ad; GARSON.paketMusteri=ad;
+    GARSON.paketTip=tip; GARSON.paketSepet=[];
+    GARSON.view="menu"; renderGarson();
+  } else {
+    state.kasaPaket={musteri:ad, tip:tip, sepet:[]}; state.cat="Tatlılar";
+    go("satis");
+    note((tip==="eve"?"🛵 Eve":"🥡 Gel-Al")+" paket · "+ad+" · ürün seç");
+  }
+}
+function paketModalCiz(){
+  const p=state._paketModal;
+  let mdl=document.getElementById("paketModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="paketModal"; mdl.className="modal-bg"; mdl.style.zIndex="230"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  const tipler=[
+    {k:"paket", ic:"🥡", ad:"Gel-Al", alt:"Müşteri alacak"},
+    {k:"eve",   ic:"🛵", ad:"Eve Teslim", alt:"Kurye götürecek"}
+  ];
+  mdl.innerHTML = `<div class="ypm-ic">
+    <div class="ypm-head">
+      <div class="ypm-head-ic">🥡</div>
+      <div class="ypm-head-baslik">Yeni Paket Sipariş</div>
+      <div class="ypm-head-alt">Sipariş tipini seç, müşteri adını gir</div>
+    </div>
+    <div class="ypm-body">
+      <div class="ypm-etiket">Sipariş Tipi</div>
+      <div class="ypm-tip-row">
+        ${tipler.map(t=>`<button class="ypm-tip${p.tip===t.k?' on':''}" onclick="paketModalTip('${t.k}')">
+          <div class="ypm-tip-ic">${t.ic}</div>
+          <div class="ypm-tip-ad">${t.ad}</div>
+          <div class="ypm-tip-alt">${t.alt}</div>
+        </button>`).join("")}
+      </div>
+      <div class="ypm-etiket">Müşteri Adı</div>
+      <input class="ypm-input" id="ypmAdInput" type="text" value="${(p.ad||'').replace(/"/g,'&quot;')}"
+        placeholder="örn. Mehmet Bey" autocomplete="off"
+        oninput="state._paketModal.ad=this.value; this.classList.remove('eksik')"
+        onkeydown="if(event.key==='Enter') paketModalBasla()">
+      <div class="ypm-ipucu" id="ypmIpucu">Bu isim mutfak fişinde ve teslimatta görünür.</div>
+      <div class="ypm-btn-row">
+        <button class="ypm-iptal" onclick="paketModalKapat()">Vazgeç</button>
+        <button class="ypm-basla" onclick="paketModalBasla()">Ürün Seçimine Geç →</button>
+      </div>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("ypmAdInput"); if(i){ i.focus(); i.select(); } }, 80);
+}
+/* ── Yeni Kişi modalı (kasa + garson · sepet + masa detay ortak) ──
+   kaynak: "kasaSepet" | "garsonSepet" | "kasaMasa" | "garsonMasa"
+   masaNo: kasaMasa/garsonMasa için hedef masa anahtarı */
+function kisiModalAc(kaynak, masaNo){
+  state._kisiModal = { kaynak, masaNo: masaNo||null, ad:"" };
+  kisiModalCiz();
+}
+function kisiModalKapat(){
+  const m=document.getElementById("kisiModal"); if(m) m.classList.remove("on");
+  state._kisiModal=null;
+}
+/* Modaldaki mevcut kişilerden birini seç */
+function kisiModalSec(ad){
+  const p=state._kisiModal; if(!p) return;
+  const kaynak=p.kaynak;
+  kisiModalKapat();
+  if(kaynak==="kasaSepet"){ state.kasaEkle.kisi=ad; go("satis"); }
+  else if(kaynak==="garsonSepet"){ GARSON.kisi=ad; renderGarson(); }
+  else if(kaynak==="kasaMasa"){ kasaUrunEkleBasla(p.masaNo, ad); }
+  else if(kaynak==="garsonMasa"){ garsonUrunEkleBasla(p.masaNo, ad); }
+}
+/* Modaldan yeni kişi oluştur */
+function kisiModalEkle(){
+  const p=state._kisiModal; if(!p) return;
+  const inp=document.getElementById("ykmAdInput");
+  const ad=(inp?inp.value:"").trim();
+  const ip=document.getElementById("ykmIpucu");
+  if(!ad){
+    if(inp){ inp.classList.add("eksik"); inp.focus(); }
+    if(ip){ ip.textContent="⚠ Kişi adı boş olamaz."; ip.style.color="var(--danger)"; }
+    return;
+  }
+  // Aynı isim var mı? (masa bazlı kaynaklarda çakışma kontrolü)
+  const masaNo = p.masaNo || (p.kaynak==="kasaSepet"?(state.kasaEkle&&state.kasaEkle.masa):null) || (p.kaynak==="garsonSepet"?GARSON.masa:null);
+  const s = masaNo ? SESSIONS[masaNo] : null;
+  if(s && s.kisiler && s.kisiler.find(k=>k.ad===ad)){
+    if(inp){ inp.classList.add("eksik"); inp.focus(); inp.select(); }
+    if(ip){ ip.textContent="⚠ Bu isimde bir kişi zaten var. Yukarıdan seçebilirsiniz."; ip.style.color="var(--danger)"; }
+    return;
+  }
+  const kaynak=p.kaynak, hedefMasa=p.masaNo;
+  kisiModalKapat();
+  if(kaynak==="kasaSepet"){
+    state.kasaEkle.kisi=ad; go("satis");
+  } else if(kaynak==="garsonSepet"){
+    GARSON.kisi=ad; renderGarson();
+  } else if(kaynak==="kasaMasa"){
+    if(!SESSIONS[hedefMasa].kisiler.find(k=>k.ad===ad)) SESSIONS[hedefMasa].kisiler.push({ad:ad, kalemler:[]});
+    kasaUrunEkleBasla(hedefMasa, ad);
+  } else if(kaynak==="garsonMasa"){
+    if(!SESSIONS[hedefMasa].kisiler.find(k=>k.ad===ad)) SESSIONS[hedefMasa].kisiler.push({ad:ad, kalemler:[]});
+    garsonUrunEkleBasla(hedefMasa, ad);
+  }
+  note("👤 "+ad+" eklendi");
+}
+function kisiModalCiz(){
+  const p=state._kisiModal;
+  let mdl=document.getElementById("kisiModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="kisiModal"; mdl.className="modal-bg"; mdl.style.zIndex="235"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  // Bağlama göre mevcut kişileri topla (varsa hızlı seçim için)
+  let mevcut=[];
+  const masaNo = p.masaNo || (p.kaynak==="kasaSepet"?(state.kasaEkle&&state.kasaEkle.masa):null) || (p.kaynak==="garsonSepet"?GARSON.masa:null);
+  const s = masaNo ? SESSIONS[masaNo] : null;
+  if(s && s.kisiler) mevcut = s.kisiler.map(k=>k.ad);
+  const mevcutHtml = mevcut.length
+    ? `<div class="ykm-etiket">Mevcut kişiler</div>
+       <div class="ykm-mevcut">${mevcut.map(ad=>
+         `<button class="ykm-kisi-chip" onclick="kisiModalSec('${ad.replace(/'/g,"\\'")}')">${ad}</button>`).join("")}</div>`
+    : "";
+  mdl.innerHTML = `<div class="ykm-ic">
+    <div class="ykm-head">
+      <div class="ykm-head-ic">👤</div>
+      <div class="ykm-head-baslik">Yeni Kişi Ekle</div>
+      <div class="ykm-head-alt">Sipariş bu kişinin adına işlenecek</div>
+    </div>
+    <div class="ykm-body">
+      ${mevcutHtml}
+      <div class="ykm-etiket">${mevcut.length?"Ya da yeni kişi":"Kişi adı"}</div>
+      <input class="ykm-input" id="ykmAdInput" type="text" value="${(p.ad||'').replace(/"/g,'&quot;')}"
+        placeholder="örn. Ali, 3 Numara, Masa arkadaşı" autocomplete="off"
+        oninput="state._kisiModal.ad=this.value; this.classList.remove('eksik')"
+        onkeydown="if(event.key==='Enter') kisiModalEkle()">
+      <div class="ykm-ipucu" id="ykmIpucu">Hesap bölme için her kişiyi ayrı ekleyebilirsiniz.</div>
+      <div class="ykm-btn-row">
+        <button class="ykm-iptal" onclick="kisiModalKapat()">Vazgeç</button>
+        <button class="ykm-ekle" onclick="kisiModalEkle()">Ekle ve Devam →</button>
+      </div>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("ykmAdInput"); if(i){ i.focus(); i.select(); } }, 80);
 }
 function kasaPaketOde(id){
   const p=PAKET_ORDERS.find(x=>x.id===id);
   if(!p) return;
-  BOL={total:p.tutar, mod:"tek", kisiler:[p.musteri], atama:[{}], odenenler:{}, tekOdeme:true, paketId:id};
-  state.cart=p.kalemler.map(k=>({ad:k.ad, fiyat:k.fiyat, q:1, secimler:k.secimler||[], ekstraRecete:[]}));
-  bolPayAl(0, p.tutar);
+  const gecerli=paketGecerliKalemler(p);
+  const gTutar=paketGecerliTutar(p);
+  BOL={total:gTutar, mod:"tek", kisiler:[p.musteri], atama:[{}], odenenler:{}, tekOdeme:true, paketId:id};
+  state.cart=gecerli.map(k=>({ad:k.ad, fiyat:k.fiyat, q:1, secimler:k.secimler||[], ekstraRecete:[]}));
+  bolPayAl(0, gTutar);
 }
 /* Kasa paket siparişini mutfağa gönder */
 function kasaPaketGonder(){
@@ -7762,18 +8105,19 @@ function kasaPaketGonder(){
   const t=kp.sepet.reduce((s,c)=>s+c.fiyat,0);
   const takipId="S"+(_takipId++);
   const yeniId=_paketId++;
+  const eve = kp.tip==="eve";
   PAKET_ORDERS.push({
-    id:yeniId, takipId:takipId, tip:"paket", sube:AKTIF_SUBE, musteri:kp.musteri, tel:null,
+    id:yeniId, takipId:takipId, tip: eve?"eve":"paket", sube:AKTIF_SUBE, musteri:kp.musteri, tel:null,
     adres:null, masa:null, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat})),
     tutar:t, odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()
   });
   consumeRecipe(kp.sepet.map(c=>({...c, q:1, ekstraRecete:[]})));
   // OTOMATİK MUTFAK FİŞİ (masa:"paket#N" ile siparişe bağlanır — geçmişte eşleştirme için)
   mutfakFisiBas({
-    tip:"paket", baslik:"PAKET (GEL-AL)", alt:kp.musteri, masa:"paket#"+yeniId,
+    tip:"paket", baslik: eve?"PAKET (EVE TESLİM)":"PAKET (GEL-AL)", alt:kp.musteri, masa:"paket#"+yeniId,
     kisi:kp.musteri, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, paket:true}))
   });
-  note("🥡 Paket sipariş mutfağa gönderildi · "+kp.musteri);
+  note((eve?"🛵 Eve teslim":"🥡 Gel-Al")+" paket mutfağa gönderildi · "+kp.musteri);
   state.kasaPaket=null; state.kasaSekme="paket"; go("masalar");
 }
 function kasaPaketIptal(){ state.kasaPaket=null; go("masalar"); }
@@ -9252,17 +9596,13 @@ function odemeFisYazdir(){
 }
 
 function kasaYeniKisi(m){
-  const ad=prompt("Kişi adı:");
-  if(ad&&ad.trim()&&!SESSIONS[m].kisiler.find(k=>k.ad===ad.trim())){
-    SESSIONS[m].kisiler.push({ad:ad.trim(), kalemler:[]});
-    go("masalar");
-  }
+  kisiModalAc("kasaMasa", m);
 }
 function kasaUrunEkleBasla(m,kisi){ state.kasaEkle={masa:m,kisi:kisi,sepet:[]}; state.cat="Tatlılar"; go("satis"); note("Ürün seç → "+kisi+" (Masa "+m+")"); }
 function kasaSepetSil(i){ state.kasaEkle.sepet.splice(i,1); go("satis"); }
 function kasaSepetPaket(i){ state.kasaEkle.sepet[i].paket = !state.kasaEkle.sepet[i].paket; go("satis"); }
 function kasaSepetKisi(ad){ state.kasaEkle.kisi=ad; go("satis"); }
-function kasaSepetYeniKisi(){ const ad=prompt("Yeni kişi adı:"); if(ad&&ad.trim()){ state.kasaEkle.kisi=ad.trim(); go("satis"); } }
+function kasaSepetYeniKisi(){ kisiModalAc("kasaSepet"); }
 function kasaEkleIptal(){ const m=state.kasaEkle.masa; state.kasaEkle=null; state.kasaMasa=m; go("masalar"); }
 /* Kasa masa siparişini gönder — sadece YENİ sepet mutfağa + tek fiş */
 function kasaMasaGonder(){
@@ -9381,7 +9721,15 @@ function kalemIptalUygula(){
   kalemIptal(masaNo, kalemId);
   // mutfağa bildirilecek değişiklik kaydı (kasa/kds/ödeme kaynaklı)
   degisiklikKaydet(masaNo, kisiAd, "iptal", urunAd, "");
-  note("Ürün iptal edildi · tutar düştü");
+  // Masada geçerli ürün kalmadıysa oturumu kapat, masayı boşalt
+  const masaBosaldi = masaBosMuKapat(masaNo);
+  note(masaBosaldi ? "Ürün iptal edildi · masa boşaldı" : "Ürün iptal edildi · tutar düştü");
+  if(masaBosaldi){
+    // masa kapandıysa açık ödeme ekranı yerine masa listesine dön
+    if(kaynak==="kds"){ renderKDS(); }
+    else { go("masalar"); }
+    return;
+  }
   // kaynağa göre ekran yenile
   if(kaynak==="kds"){ renderKDS(); }
   else if(kaynak==="odeme"){ ekranlariYenile("odeme", masaNo); }
@@ -9666,9 +10014,11 @@ function yorumYonetimHtml(sube){
   // Genel müdür için şube filtresi (tümü veya tek şube)
   const isGenel = !sube;
   const aktifSubeFiltre = isGenel ? (state.yorumSubeFiltre||"__tum") : sube;
+  const aktifUrunFiltre = state.yorumUrunFiltre || "__tum";
 
-  const bekleyen = bekleyenYorumlar(aktifSubeFiltre==="__tum" ? null : aktifSubeFiltre);
-  const tumOnayli=[];
+  // Şube filtresine göre ham listeler
+  let bekleyen = bekleyenYorumlar(aktifSubeFiltre==="__tum" ? null : aktifSubeFiltre);
+  let tumOnayli=[];
   Object.entries(YORUMLAR).forEach(([urun,ys])=>{
     ys.forEach((y,i)=>{
       if(y.onay && (aktifSubeFiltre==="__tum" || (y.sube||"")=== aktifSubeFiltre))
@@ -9676,6 +10026,23 @@ function yorumYonetimHtml(sube){
     });
   });
   tumOnayli.sort((a,b)=>b.tarih-a.tarih);
+
+  // Ürün filtre seçenekleri — mevcut şube filtresi altında yorumu olan ürünler
+  const urunSeti = new Set();
+  [...bekleyen, ...tumOnayli].forEach(y=>urunSeti.add(y.urun));
+  const urunListesi = [...urunSeti].sort((a,b)=>a.localeCompare(b,'tr'));
+
+  // Seçili ürün artık listede yoksa filtreyi sıfırla
+  if(aktifUrunFiltre!=="__tum" && !urunSeti.has(aktifUrunFiltre)){
+    state.yorumUrunFiltre="__tum";
+  }
+  const urunFil = state.yorumUrunFiltre || "__tum";
+
+  // Ürün filtresini uygula
+  if(urunFil!=="__tum"){
+    bekleyen = bekleyen.filter(y=>y.urun===urunFil);
+    tumOnayli = tumOnayli.filter(y=>y.urun===urunFil);
+  }
 
   const subeNot = sube
     ? `<div class="fy-mudur-not">📍 <strong>${sube}</strong> şubesinin QR menüsünden gelen yorumlar. Onayladığınız yorumlar tüm müşterilere yayınlanır.</div>`
@@ -9693,6 +10060,22 @@ function yorumYonetimHtml(sube){
     </div>`;
   }
 
+  // Ürüne göre filtre (dropdown) — her rolde
+  html += `<div class="yym-filtre-bar">
+    <div class="yym-filtre-grup">
+      <span class="yym-filtre-lbl">🧇 Ürün</span>
+      <select class="yym-urun-select" onchange="yorumUrunFiltreSec(this.value)">
+        <option value="__tum"${urunFil==='__tum'?' selected':''}>Tüm ürünler (${urunListesi.length})</option>
+        ${urunListesi.map(u=>`<option value="${u.replace(/"/g,'&quot;')}"${urunFil===u?' selected':''}>${u}</option>`).join("")}
+      </select>
+    </div>
+    ${urunFil!=='__tum'?`<button class="yym-filtre-temizle" onclick="yorumUrunFiltreSec('__tum')">✕ Filtreyi temizle</button>`:""}
+  </div>`;
+
+  if(urunFil!=='__tum'){
+    html += `<div class="yym-filtre-ozet">📌 <strong>${urunFil}</strong> için ${bekleyen.length} bekleyen · ${tumOnayli.length} yayında yorum</div>`;
+  }
+
   html += `<div class="yym-sekme-row">
     <button class="yym-sekme${state.yorumSekme==='bekleyen'?' on':''}" onclick="yorumSekmeSec('bekleyen')">⏳ Onay bekleyen${bekleyen.length?' ('+bekleyen.length+')':''}</button>
     <button class="yym-sekme${state.yorumSekme==='onayli'?' on':''}" onclick="yorumSekmeSec('onayli')">✓ Yayında (${tumOnayli.length})</button>
@@ -9700,7 +10083,10 @@ function yorumYonetimHtml(sube){
 
   const liste = state.yorumSekme==="bekleyen" ? bekleyen : tumOnayli;
   if(liste.length===0){
-    html += `<div class="bayi-bos">${state.yorumSekme==="bekleyen"?'Onay bekleyen yorum yok.':'Yayında yorum yok.'}</div>`;
+    const bosMetin = urunFil!=='__tum'
+      ? (state.yorumSekme==="bekleyen"?'Bu ürün için onay bekleyen yorum yok.':'Bu ürün için yayında yorum yok.')
+      : (state.yorumSekme==="bekleyen"?'Onay bekleyen yorum yok.':'Yayında yorum yok.');
+    html += `<div class="bayi-bos">${bosMetin}</div>`;
     return html;
   }
   html += `<div class="yym-liste">`;
@@ -9731,7 +10117,8 @@ function yorumYonetimHtml(sube){
   return html;
 }
 function yorumSekmeSec(k){ state.yorumSekme=k; go("fiyat", true); }
-function yorumSubeFiltreSec(sb){ state.yorumSubeFiltre=sb; go("fiyat", true); }
+function yorumSubeFiltreSec(sb){ state.yorumSubeFiltre=sb; state.yorumUrunFiltre="__tum"; go("fiyat", true); }
+function yorumUrunFiltreSec(u){ state.yorumUrunFiltre=u; go("fiyat", true); }
 function yorumOnayla(urun, idx){
   if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=true; yorumKaydet(); note("✓ Yorum yayınlandı"); go("fiyat", true); }
 }
@@ -12105,9 +12492,16 @@ function bayiStokKartHtml(){
   Object.entries(STOCK).forEach(([kod,s])=>{
     const bf = bayiFiyat(kod);
     const satirDeger = s.mevcut * bf;
-    html += `<div class="bayi-satir">
+    const birim = s.birim||"gr";
+    const aktif = s.aktif!==false;   // eski kartlar varsayılan açık
+    const kritikDurum = s.mevcut <= (s.kritik||0);
+    const rozetler = [];
+    if(s.kcal) rozetler.push(`${s.kcal} kcal/${birim}`);
+    if(s.kdv!=null) rozetler.push(`%${s.kdv} KDV`);
+    html += `<div class="bayi-satir"${!aktif?' style="opacity:.62"':''}>
       <div class="bayi-s-ad"><strong>${s.ad}</strong> <span class="bayi-s-kod">${kod}</span>
-        <div class="bayi-s-not">${s.mevcut} ${s.birim||"gr"} × ${bf>0?bf+' ₺':'fiyat yok'} <small>· kritik ${s.kritik}</small></div></div>
+        ${!aktif?'<span style="font-size:10.5px;font-weight:800;color:var(--danger);background:var(--danger-soft);border-radius:6px;padding:1px 7px;margin-left:4px">SİPARİŞE KAPALI</span>':''}
+        <div class="bayi-s-not">${s.mevcut} ${birim} × ${bf>0?bf+' ₺':'fiyat yok'} <small>· kritik ${s.kritik||0}${kritikDurum?' ⚠️':''}${rozetler.length?' · '+rozetler.join(' · '):''}</small></div></div>
       <div class="bayi-s-deger">${bf>0?satirDeger.toFixed(0)+' ₺':'—'}</div>
       <div class="bayi-s-aksiyon">
         <button class="bayi-mini" onclick="stokKartDuzenle('${kod}')">✏️</button>
@@ -12118,33 +12512,193 @@ function bayiStokKartHtml(){
   html += `</div>`;
   return html;
 }
+/* ══ Stok Kartı — oluştur / düzenle (premium modal) ══ */
 function stokKartEkle(){
-  const ad = prompt("Stok kartı adı (örn. Antep fıstığı):");
-  if(!ad||!ad.trim()) return;
-  const birim = prompt("Birim (gr / adet):", "gr");
-  if(birim==null) return;
-  const kritikV = prompt("Kritik seviye:", "500");
-  if(kritikV==null) return;
-  // kod üret
-  let kod = ad.trim().toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,12) || ("stok"+Date.now());
-  if(STOCK[kod]) kod = kod+Date.now();
-  STOCK[kod] = {ad:ad.trim(), mevcut:0, kritik:parseInt(kritikV)||0, birim:(birim.trim()||"gr")};
-  note("Stok kartı eklendi: "+ad.trim());
-  b2bKaydet();
-  go("bayi", true);
+  state._stokModal = {
+    mod:"yeni", kod:null,
+    ad:"", mevcut:"0", birim:"gr", kritik:"0",
+    kcal:"", fiyat:"", kdv:"10", aktif:true
+  };
+  stokModalCiz();
 }
 function stokKartDuzenle(kod){
   const s = STOCK[kod]; if(!s) return;
-  const ad = prompt("Stok adı:", s.ad);
-  if(ad==null) return;
-  s.ad = ad.trim()||s.ad;
-  const birim = prompt("Birim (gr/adet):", s.birim||"gr");
-  if(birim!=null) s.birim = birim.trim()||"gr";
-  const kritik = prompt("Kritik seviye:", String(s.kritik));
-  if(kritik!=null) s.kritik = parseInt(kritik)||0;
-  note(kod+" güncellendi");
+  state._stokModal = {
+    mod:"duzenle", kod:kod,
+    ad:s.ad||"", mevcut:String(s.mevcut||0), birim:s.birim||"gr", kritik:String(s.kritik||0),
+    kcal:(s.kcal!=null?String(s.kcal):""), fiyat:(bayiFiyat(kod)?String(bayiFiyat(kod)):""),
+    kdv:(s.kdv!=null?String(s.kdv):"10"), aktif:(s.aktif!==false)
+  };
+  stokModalCiz();
+}
+function stokModalKapat(){
+  const m=document.getElementById("stokModal"); if(m) m.classList.remove("on");
+  state._stokModal=null;
+}
+function stokModalBirimSec(b){
+  if(!state._stokModal) return;
+  // güncel input değerlerini state'e al (yeniden çizince kaybolmasın)
+  stokModalOku();
+  state._stokModal.birim=b;
+  stokModalCiz();
+}
+function stokModalToggle(){
+  if(!state._stokModal) return;
+  stokModalOku();
+  state._stokModal.aktif=!state._stokModal.aktif;
+  stokModalCiz();
+}
+function stokModalYeniBirim(){
+  stokModalOku();
+  const b=prompt("Yeni ölçü birimi (örn. galon, düzine, çuval):");
+  if(b==null) return;
+  const yeni=b.trim();
+  if(!yeni){ return; }
+  if(!STOK_BIRIMLERI.includes(yeni)){ STOK_BIRIMLERI.push(yeni); b2bKaydet(); }
+  state._stokModal.birim=yeni;
+  stokModalCiz();
+}
+/* Modaldaki input değerlerini state'e oku (yeniden çizimden önce) */
+function stokModalOku(){
+  const p=state._stokModal; if(!p) return;
+  const g=id=>{ const e=document.getElementById(id); return e?e.value:undefined; };
+  const ad=g("skmAd"); if(ad!==undefined) p.ad=ad;
+  const mv=g("skmMevcut"); if(mv!==undefined) p.mevcut=mv;
+  const kr=g("skmKritik"); if(kr!==undefined) p.kritik=kr;
+  const kc=g("skmKcal"); if(kc!==undefined) p.kcal=kc;
+  const fy=g("skmFiyat"); if(fy!==undefined) p.fiyat=fy;
+  const kd=g("skmKdv"); if(kd!==undefined) p.kdv=kd;
+}
+function stokModalKaydet(){
+  const p=state._stokModal; if(!p) return;
+  stokModalOku();
+  const ad=(p.ad||"").trim();
+  const ip=document.getElementById("skmIpucu");
+  if(!ad){
+    const inp=document.getElementById("skmAd");
+    if(inp){ inp.classList.add("eksik"); inp.focus(); }
+    if(ip) ip.textContent="⚠ Stok kartı adı zorunlu.";
+    return;
+  }
+  const sayi=(v,def=0)=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?def:n; };
+  const veri={
+    ad: ad,
+    mevcut: Math.max(0, sayi(p.mevcut,0)),
+    birim: p.birim||"gr",
+    kritik: Math.max(0, sayi(p.kritik,0)),
+    kcal: (p.kcal!==""&&p.kcal!=null) ? Math.max(0, sayi(p.kcal,0)) : null,
+    kdv: (p.kdv!==""&&p.kdv!=null) ? Math.max(0, sayi(p.kdv,0)) : null,
+    aktif: p.aktif!==false
+  };
+  const fiyatV = (p.fiyat!==""&&p.fiyat!=null) ? Math.max(0, sayi(p.fiyat,0)) : null;
+
+  let kod=p.kod;
+  if(p.mod==="yeni"){
+    kod = ad.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,12) || ("stok"+Date.now());
+    if(STOCK[kod]) kod = kod+Date.now();
+  }
+  STOCK[kod] = {...(STOCK[kod]||{}), ...veri};
+  BAYI_FIYAT[kod] = fiyatV;   // fiyat ayrı tabloda; null = fiyat yok
+  note(p.mod==="yeni" ? "Stok kartı eklendi: "+ad : ad+" güncellendi");
   b2bKaydet();
+  stokModalKapat();
   go("bayi", true);
+}
+function stokModalCiz(){
+  const p=state._stokModal;
+  let mdl=document.getElementById("stokModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="stokModal"; mdl.className="modal-bg"; mdl.style.zIndex="240"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  const yeni = p.mod==="yeni";
+  const birimChips = STOK_BIRIMLERI.map(b=>
+    `<button class="skm-birim-chip${p.birim===b?' on':''}" onclick="stokModalBirimSec('${b.replace(/'/g,"\\'")}')">${b}</button>`
+  ).join("");
+  const esc=v=>String(v==null?"":v).replace(/"/g,'&quot;');
+  mdl.innerHTML = `<div class="skm-ic">
+    <div class="skm-head">
+      <div class="skm-head-ic">📦</div>
+      <div class="skm-head-baslik">${yeni?"Yeni Stok Kartı":"Stok Kartını Düzenle"}</div>
+      <div class="skm-head-alt">${yeni?"Ürünün stok, ölçü ve fiyat bilgilerini girin":p.kod}</div>
+    </div>
+    <div class="skm-body">
+
+      <div class="skm-grup">
+        <div class="skm-grup-baslik">Temel Bilgi</div>
+        <div class="skm-alan">
+          <label class="skm-lbl">Stok kartı adı *</label>
+          <input class="skm-input" id="skmAd" type="text" value="${esc(p.ad)}" placeholder="örn. Antep fıstığı"
+            oninput="this.classList.remove('eksik')">
+        </div>
+      </div>
+
+      <div class="skm-grup">
+        <div class="skm-grup-baslik">Ölçü & Stok</div>
+        <div class="skm-alan">
+          <label class="skm-lbl">Ölçü birimi</label>
+          <div class="skm-birim-grid">
+            ${birimChips}
+            <button class="skm-birim-yeni" onclick="stokModalYeniBirim()">+ Yeni birim</button>
+          </div>
+        </div>
+        <div class="skm-satir2">
+          <div class="skm-alan">
+            <label class="skm-lbl">Stok miktarı <small>(${p.birim})</small></label>
+            <input class="skm-input" id="skmMevcut" type="number" inputmode="decimal" value="${esc(p.mevcut)}" placeholder="0">
+          </div>
+          <div class="skm-alan">
+            <label class="skm-lbl">Kritik stok <small>(${p.birim})</small></label>
+            <input class="skm-input" id="skmKritik" type="number" inputmode="decimal" value="${esc(p.kritik)}" placeholder="0">
+          </div>
+        </div>
+        <div class="skm-alan">
+          <label class="skm-lbl">Kalori <small>· ${p.birim} başına düşen kcal (opsiyonel)</small></label>
+          <div class="skm-input-suf">
+            <input class="skm-input" id="skmKcal" type="number" inputmode="decimal" value="${esc(p.kcal)}" placeholder="—">
+            <span class="skm-suf">kcal/${p.birim}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="skm-grup">
+        <div class="skm-grup-baslik">Fiyatlandırma</div>
+        <div class="skm-satir2">
+          <div class="skm-alan">
+            <label class="skm-lbl">Birim fiyat <small>(bayi)</small></label>
+            <div class="skm-input-suf">
+              <input class="skm-input" id="skmFiyat" type="number" inputmode="decimal" value="${esc(p.fiyat)}" placeholder="—">
+              <span class="skm-suf">₺/${p.birim}</span>
+            </div>
+          </div>
+          <div class="skm-alan">
+            <label class="skm-lbl">KDV oranı</label>
+            <div class="skm-input-suf">
+              <input class="skm-input" id="skmKdv" type="number" inputmode="decimal" value="${esc(p.kdv)}" placeholder="10">
+              <span class="skm-suf">%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="skm-grup">
+        <div class="skm-grup-baslik">Durum</div>
+        <div class="skm-toggle-satir">
+          <div class="skm-toggle-bilgi">
+            <span class="skm-toggle-ad">${p.aktif!==false?"Siparişe açık":"Siparişe kapalı"}</span>
+            <span class="skm-toggle-alt">${p.aktif!==false?"Bu ürün bayi siparişlerinde listelenir":"Bu ürün siparişe kapalı, listede pasif görünür"}</span>
+          </div>
+          <button class="skm-toggle${p.aktif!==false?' on':''}" onclick="stokModalToggle()" aria-label="Siparişe açık/kapalı"></button>
+        </div>
+      </div>
+
+      <div class="skm-ipucu" id="skmIpucu"></div>
+    </div>
+    <div class="skm-foot">
+      <button class="skm-iptal" onclick="stokModalKapat()">Vazgeç</button>
+      <button class="skm-kaydet" onclick="stokModalKaydet()">${yeni?"Kartı Oluştur":"Değişiklikleri Kaydet"}</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ if(yeni){ const i=document.getElementById("skmAd"); if(i) i.focus(); } }, 80);
 }
 function stokKartSil(kod){
   if(!confirm(STOCK[kod].ad+" stok kartı silinsin mi? Reçetelerde kullanılıyorsa dikkat.")) return;
@@ -13906,6 +14460,32 @@ function otpDogrula(girilen){
    ============================================================ */
 let PAKET_ORDERS = [];   // {id, musteri, tel, adres, kalemler, tutar, odeme, durum, zaman}
 let _paketId = 1;
+/* Bir paketin iptal edilmemiş (geçerli) kalemleri */
+function paketGecerliKalemler(p){
+  return (p.kalemler||[]).filter(k=>k.durum!=="iptal");
+}
+/* Paketin geçerli tutarı (iptal kalemler hariç) */
+function paketGecerliTutar(p){
+  return paketGecerliKalemler(p).reduce((s,k)=>s+(k.fiyat||0),0);
+}
+/* Aktif paket listesi: teslim/iptal edilmemiş VE en az bir geçerli kalemi olan.
+   Tüm kalemleri iptal edilmiş paket otomatik olarak "iptal" sayılır. */
+function aktifPaketler(sube){
+  const S = sube||AKTIF_SUBE;
+  return PAKET_ORDERS.filter(p=>
+    p.durum!=="teslim" && p.durum!=="iptal" &&
+    (p.sube||AKTIF_SUBE)===S &&
+    paketGecerliKalemler(p).length>0
+  );
+}
+/* Paket kaleminin durumunu iptal yap; tüm kalemler iptal olduysa paketi iptal et */
+function paketKalemIptal(paketId, kalemIdx){
+  const p=PAKET_ORDERS.find(x=>x.id===paketId); if(!p) return;
+  const k=(p.kalemler||[])[kalemIdx]; if(!k) return;
+  k.durum="iptal";
+  p.tutar=paketGecerliTutar(p);
+  if(paketGecerliKalemler(p).length===0){ p.durum="iptal"; }
+}
 /* MUTFAK YAZICI — sipariş anında otomatik fiş (onaysız). Tekrar yazdırılabilir. */
 let MUTFAK_FISLER = [];   // basılan fişlerin geçmişi
 let _fisNo = 1;
@@ -15605,7 +16185,7 @@ function renderKDS(){
       '<button class="kds-sekme'+(KDS.sekme==="masalar"?' on':'')+'" onclick="kdsSekme(\'masalar\')">🍽️ Masalar</button>'+
       '<button class="kds-sekme'+(KDS.sekme==="akis"?' on':'')+'" onclick="kdsSekme(\'akis\')">📋 Akış</button>'+
       '<button class="kds-sekme'+(KDS.sekme==="paket"?' on':'')+'" onclick="kdsSekme(\'paket\')">🛵 Paket'+
-        (PAKET_ORDERS.filter(p=>p.durum==="hazirlaniyor"&&(p.sube||AKTIF_SUBE)===AKTIF_SUBE).length>0?' <span class="kds-rozet-n">'+PAKET_ORDERS.filter(p=>p.durum==="hazirlaniyor"&&(p.sube||AKTIF_SUBE)===AKTIF_SUBE).length+'</span>':'')+'</button>'+
+        (aktifPaketler(AKTIF_SUBE).filter(p=>p.durum==="hazirlaniyor").length>0?' <span class="kds-rozet-n">'+aktifPaketler(AKTIF_SUBE).filter(p=>p.durum==="hazirlaniyor").length+'</span>':'')+'</button>'+
       '<button class="kds-sekme'+(KDS.sekme==="fisler"?' on':'')+'" onclick="kdsSekme(\'fisler\')">🖨️ Fişler</button>'+
     '</div>';
   html += (KDS.sekme==="masalar") ? kdsMasalarHtml() : (KDS.sekme==="akis") ? kdsAkisHtml() : (KDS.sekme==="fisler") ? kdsFislerHtml() : kdsPaketHtml();
@@ -15637,7 +16217,7 @@ function kdsFislerHtml(){
 
 /* SEKME 3: Paket siparişler (eve teslimat) */
 function kdsPaketHtml(){
-  const aktif=PAKET_ORDERS.filter(p=>p.durum!=="teslim"&&p.durum!=="iptal"&&(p.sube||AKTIF_SUBE)===AKTIF_SUBE);
+  const aktif=aktifPaketler(AKTIF_SUBE);
   if(aktif.length===0) return '<div class="kds-bos">Bekleyen paket sipariş yok 🛵</div>';
   let html='<div class="kds-akis-list">';
   aktif.forEach(p=>{
@@ -15652,10 +16232,10 @@ function kdsPaketHtml(){
       '<div class="kp-paketrozet">'+ikon+' Bu sipariş paketlenecek</div>'+
       (gelAl
         ? '<div class="kp-tel">'+(p.tel?'📞 '+p.tel+' · ':'')+dk+' dk önce · '+(p.odeme==="kasada"?'💵 Kasada ödenecek':'✓ Ödendi')+'</div>'
-        : '<div class="kp-adres">📍 '+p.adres.ad+' · '+p.adres.adres+'</div>'+
-          '<div class="kp-tel">📞 '+p.tel+' · '+dk+' dk önce · '+(p.odeme==="online"?'✓ Online ödendi':'💵 Kapıda ödeme')+'</div>')+
-      '<div class="kp-kalemler">'+p.kalemler.map(k=>'• '+k.ad+(k.secimler.length?' <small>('+k.secimler.join(', ')+')</small>':'')).join('<br>')+'</div>'+
-      '<div class="kp-tutar">'+p.tutar+' ₺</div>'+
+        : '<div class="kp-adres">📍 '+(p.adres?(p.adres.ad+' · '+p.adres.adres):'Adres girilmedi')+'</div>'+
+          '<div class="kp-tel">📞 '+(p.tel||'—')+' · '+dk+' dk önce · '+(p.odeme==="online"?'✓ Online ödendi':'💵 Kapıda ödeme')+'</div>')+
+      '<div class="kp-kalemler">'+paketGecerliKalemler(p).map(k=>'• '+k.ad+(k.secimler&&k.secimler.length?' <small>('+k.secimler.join(', ')+')</small>':'')).join('<br>')+'</div>'+
+      '<div class="kp-tutar">'+paketGecerliTutar(p)+' ₺</div>'+
       '<div class="kak-aksiyon">'+
         (gelAl
           ? (p.durum==="hazirlaniyor"?'<button class="kak-btn gonder" onclick="kdsPaketDurum('+p.id+',\'teslim\')">🥡 Paketlendi · hazır</button>':'')
@@ -15937,7 +16517,7 @@ function renderGarson(){
 
 /* 1) Masa listesi */
 function garsonMasalarHtml(){
-  const aktifPaket=PAKET_ORDERS.filter(p=>p.durum!=="teslim"&&p.durum!=="iptal"&&(p.sube||AKTIF_SUBE)===AKTIF_SUBE);
+  const aktifPaket=aktifPaketler(AKTIF_SUBE);
   let html='<div class="grs-screen"><div class="grs-top">'+
     '<button class="qr-close" style="position:static" onclick="closeGarson()">✕</button>'+
     '<div class="grs-title">🧑‍💼 Garson · '+AKTIF_SUBE+'</div>'+
@@ -15960,8 +16540,8 @@ function garsonMasalarHtml(){
         html+='<div class="grs-paket-kart"><div class="grs-pk-ust">'+
           '<span class="grs-pk-no">'+(gelAl?'🥡 Gel-al':'🛵 Eve')+' #'+p.id+' · '+p.musteri+'</span>'+
           '<span class="grs-pk-durum" style="color:'+dm.renk+'">'+dm.ic+' '+dm.ad+'</span></div>'+
-          '<div class="grs-pk-urunler">'+p.kalemler.map(k=>k.ad).join(', ')+'</div>'+
-          '<div class="grs-pk-tutar">'+p.tutar+' ₺</div></div>';
+          '<div class="grs-pk-urunler">'+paketGecerliKalemler(p).map(k=>k.ad).join(', ')+'</div>'+
+          '<div class="grs-pk-tutar">'+paketGecerliTutar(p)+' ₺</div></div>';
       });
     }
     html+='</div></div></div>';
@@ -15996,10 +16576,7 @@ function garsonMasalarHtml(){
 function garsonSekme(s){ GARSON.sekme=s; renderGarson(); }
 /* Garson yeni paket sipariş başlat — menüden seçer, paket olarak kaydolur */
 function garsonPaketBasla(){
-  const ad=prompt("Paket sipariş için müşteri adı (fişte görünecek):");
-  if(!ad || !ad.trim()){ note("İsim zorunlu (fiş için)"); return; }
-  GARSON.paketModu=true; GARSON.masa="paket"; GARSON.kisi=ad.trim(); GARSON.paketMusteri=ad.trim(); GARSON.paketSepet=[];
-  GARSON.view="menu"; renderGarson();
+  paketModalAc("garson");
 }
 function garsonMasaAc(m){
   if(!SESSIONS[m]) SESSIONS[m]={masa:m, acik:false, zaman:Date.now(), kisiler:[]};
@@ -16042,13 +16619,7 @@ function garsonYeniSiparis(m){
   GARSON.masa=m; GARSON.kisi=null; GARSON.masaSepet=[]; GARSON.view="menu"; renderGarson();
 }
 function garsonYeniKisi(m){
-  const ad=prompt("Kişi adı:");
-  if(ad&&ad.trim()){
-    if(!SESSIONS[m].kisiler.find(k=>k.ad===ad.trim())){
-      SESSIONS[m].kisiler.push({ad:ad.trim(), kalemler:[]});
-    }
-    renderGarson();
-  }
+  kisiModalAc("garsonMasa", m);
 }
 function garsonUrunEkleBasla(m, kisi){
   GARSON.masa=m; GARSON.kisi=kisi; GARSON.view="menu"; renderGarson();
@@ -16128,8 +16699,7 @@ function garsonMenuHtml(){
 function garsonSepetSil(i){ GARSON.masaSepet.splice(i,1); renderGarson(); }
 function garsonSepetPaket(i){ GARSON.masaSepet[i].paket = !GARSON.masaSepet[i].paket; renderGarson(); }
 function garsonSepetYeniKisi(){
-  const ad=prompt("Yeni kişi adı:");
-  if(ad&&ad.trim()){ GARSON.kisi=ad.trim(); renderGarson(); }
+  kisiModalAc("garsonSepet");
 }
 function garsonKat(k){ GARSON.aktifKat=k; renderGarson(); }
 
@@ -16185,19 +16755,20 @@ function garsonPaketGonder(){
   const t=GARSON.paketSepet.reduce((s,c)=>s+c.fiyat,0);
   const takipId="S"+(_takipId++);
   const yeniId=_paketId++;
+  const eve = GARSON.paketTip==="eve";
   PAKET_ORDERS.push({
-    id:yeniId, takipId:takipId, tip:"paket", sube:AKTIF_SUBE, musteri:GARSON.paketMusteri||"Paket müşteri", tel:null,
+    id:yeniId, takipId:takipId, tip: eve?"eve":"paket", sube:AKTIF_SUBE, musteri:GARSON.paketMusteri||"Paket müşteri", tel:null,
     adres:null, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat})),
     tutar:t, odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()
   });
   consumeRecipe(GARSON.paketSepet.map(c=>({...c, q:1, ekstraRecete:[]})));
   // OTOMATİK MUTFAK FİŞİ (masa:"paket#N" ile siparişe bağlanır — geçmişte eşleştirme için)
   mutfakFisiBas({
-    tip:"paket", baslik:"PAKET (GEL-AL)", alt:GARSON.paketMusteri||"Paket müşteri", masa:"paket#"+yeniId,
+    tip:"paket", baslik: eve?"PAKET (EVE TESLİM)":"PAKET (GEL-AL)", alt:GARSON.paketMusteri||"Paket müşteri", masa:"paket#"+yeniId,
     kisi:GARSON.paketMusteri, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, paket:true}))
   });
-  note("🥡 Paket sipariş mutfağa gönderildi");
-  GARSON.paketSepet=[]; GARSON.paketModu=false; GARSON.paketMusteri=null;
+  note((eve?"🛵 Eve teslim":"🥡 Gel-Al")+" paket mutfağa gönderildi");
+  GARSON.paketSepet=[]; GARSON.paketModu=false; GARSON.paketMusteri=null; GARSON.paketTip=null;
   GARSON.sekme="paket"; GARSON.view="masalar"; renderGarson();
 }
 
