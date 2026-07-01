@@ -2267,17 +2267,27 @@ body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
 .qr-splash-veil{position:absolute; inset:0; z-index:1; background:radial-gradient(circle at 50% 30%, transparent, rgba(0,0,0,.4) 70%, rgba(0,0,0,.75))}
 .qr-splash-kmp-wrap{position:absolute; top:0; left:0; right:0; z-index:2; padding:60px 18px 0; max-height:55%; overflow:hidden}
 .qr-splash-kampanyalar{display:flex; flex-direction:column; gap:10px}
-.qr-splash-kmp{background:rgba(20,12,8,.55); backdrop-filter:blur(10px); border:1.5px solid rgba(240,167,40,.6); border-radius:14px; padding:12px 16px; display:flex; flex-direction:column; gap:3px}
+/* Yatay, tam genişlik kampanya kartı */
+.qr-splash-kmp{
+  width:100%; box-sizing:border-box;
+  background:rgba(20,12,8,.55); backdrop-filter:blur(10px);
+  border:1.5px solid rgba(240,167,40,.6); border-radius:14px;
+  padding:14px 16px;
+  display:flex; flex-direction:row; align-items:center; gap:14px;
+  flex-wrap:nowrap;
+}
+.qsk-sol{flex:1; display:flex; flex-direction:column; gap:4px; min-width:0}
+.qsk-sag{display:flex; flex-direction:column; align-items:flex-end; gap:4px; flex-shrink:0}
 .qsk-ad{font-size:14px; font-weight:800; color:#ffd98a}
-.qsk-ust{display:flex; justify-content:space-between; align-items:center; gap:8px}
+.qsk-ust{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
 .qsk-oran{font-size:12px; font-weight:800; background:#ff8a5c; color:#3a1505; padding:2px 9px; border-radius:99px}
-.qsk-simdi{font-size:10px; font-weight:800; background:rgba(47,158,68,.9); color:#fff; padding:2px 8px; border-radius:99px; margin-left:6px}
-.qsk-saat{font-size:10px; font-weight:700; color:rgba(255,255,255,.6); margin-left:6px}
-.qsk-zaman{display:block; font-size:11.5px; font-weight:700; color:rgba(255,255,255,.75); margin-top:5px}
-.qsk-urun{font-size:13px; color:#fff; opacity:.9}
-.qsk-fiyat{font-size:15px; font-weight:800; margin-top:2px}
+.qsk-simdi{font-size:10px; font-weight:800; background:rgba(47,158,68,.9); color:#fff; padding:2px 8px; border-radius:99px}
+.qsk-saat{font-size:10px; font-weight:700; color:rgba(255,255,255,.6)}
+.qsk-zaman{display:block; font-size:11.5px; font-weight:700; color:rgba(255,255,255,.75)}
+.qsk-urun{font-size:13px; color:#fff; opacity:.9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.qsk-fiyat{display:flex; align-items:baseline; gap:7px}
 .qsk-eski{text-decoration:line-through; color:rgba(255,255,255,.55); font-size:13px}
-.qsk-yeni{color:#ff8a5c}
+.qsk-yeni{font-size:20px; font-weight:900; color:#ff8a5c}
 @keyframes glowPulse{0%,100%{box-shadow:0 0 8px rgba(240,167,40,.3), 0 0 0 rgba(240,167,40,0)}50%{box-shadow:0 0 22px rgba(240,167,40,.7), 0 0 30px rgba(255,138,92,.4)}}
 .glow{animation:glowPulse 1.8s ease-in-out infinite}
 @keyframes glowText{0%,100%{opacity:.85; text-shadow:0 0 6px rgba(240,167,40,.4)}50%{opacity:1; text-shadow:0 0 16px rgba(240,167,40,.9)}}
@@ -9600,16 +9610,15 @@ let YORUMLAR = {};        // {"Pandio": [{isim,puan,metin,tarih,onay}] } — ür
 
 function viewFiyat(main){
   const isGenel = state.role==="genel";
+  const isMudur = state.role==="mudur";
   if(!state.fiyatSekme) state.fiyatSekme = "fiyatlar";
-  // müdür yorumlar sekmesini göremez; oradaysa fiyatlara dön
-  if(!isGenel && state.fiyatSekme==="yorum") state.fiyatSekme = "fiyatlar";
   const sekme = state.fiyatSekme;
 
-  let html = `<div class="sec-head"><div><h2>🏷️ ${isGenel?'Fiyat & Ürün Yönetimi':'Ürün & Fiyat Görüntüleme'}</h2>
-    <div class="sh-sub">${isGenel?'Merkez menü yönetimi':AKTIF_SUBE+' · görüntüleme'}</div></div></div>`;
+  let html = `<div class="sec-head"><div><h2>🏷️ ${isGenel?'Fiyat & Ürün Yönetimi':'Ürün Yönetimi'}</h2>
+    <div class="sh-sub">${isGenel?'Merkez menü yönetimi':AKTIF_SUBE+' · yönetim'}</div></div></div>`;
 
   {
-    const bekleyenSay = bekleyenYorumlar().length;
+    const bekleyenSay = bekleyenYorumlar(isGenel?null:AKTIF_SUBE).length;
     const sekmeler = [
       {k:"fiyatlar", ad:"💰 Fiyatlar"},
       {k:"kategori", ad:"🗂️ Kategoriler"},
@@ -9617,8 +9626,8 @@ function viewFiyat(main){
       {k:"secpool",  ad:"🔘 Seçenekler"},
       {k:"urun",     ad:"📦 Ürünler"},
     ];
-    // yorumlar sekmesi sadece genel müdürde
-    if(isGenel) sekmeler.push({k:"yorum", ad:"💬 Yorumlar"+(bekleyenSay?" ("+bekleyenSay+")":"")});
+    // yorumlar sekmesi: genel müdür TÜM yorumlar, şube müdürü KENDİ ŞUBESİNDEKİ ürün yorumları
+    if(isGenel || isMudur) sekmeler.push({k:"yorum", ad:"💬 Yorumlar"+(bekleyenSay?" ("+bekleyenSay+")":"")});
     html += `<div class="fyt-sekme-row">`;
     sekmeler.forEach(s=>{
       html += `<button class="fyt-sekme${sekme===s.k?' on':''}" onclick="fiyatSekmeSec('${s.k}')">${s.ad}</button>`;
@@ -9631,21 +9640,59 @@ function viewFiyat(main){
   else if(sekme==="secenek") html += secenekGrupHtml();
   else if(sekme==="secpool") html += secenekPoolHtml();
   else if(sekme==="urun") html += urunYonetimHtml();
-  else if(sekme==="yorum") html += yorumYonetimHtml();
+  else if(sekme==="yorum") html += yorumYonetimHtml(isGenel?null:AKTIF_SUBE);
   html += `</div>`;
   main.innerHTML = html;
 }
 function fiyatSekmeSec(k){ state.fiyatSekme=k; go("fiyat"); }
 
 /* === YORUM YÖNETİMİ (müdür/genel müdür onayı) === */
-function yorumYonetimHtml(){
+
+/* Onay bekleyen yorumlar — sube=null ise tümü, sube verilirse sadece o şubeden gelenler */
+function bekleyenYorumlar(sube){
+  const liste=[];
+  Object.entries(YORUMLAR).forEach(([urun,ys])=>{
+    ys.forEach((y,i)=>{
+      if(!y.onay && (!sube || (y.sube||"") === sube)) liste.push({urun, idx:i, ...y});
+    });
+  });
+  return liste.sort((a,b)=>b.tarih-a.tarih);
+}
+
+/* Yorum yönetim ekranı — sube=null: tüm şubeler (genel müdür), sube: sadece o şube (müdür) */
+function yorumYonetimHtml(sube){
   if(!state.yorumSekme) state.yorumSekme="bekleyen";
-  const bekleyen = bekleyenYorumlar();
+
+  // Genel müdür için şube filtresi (tümü veya tek şube)
+  const isGenel = !sube;
+  const aktifSubeFiltre = isGenel ? (state.yorumSubeFiltre||"__tum") : sube;
+
+  const bekleyen = bekleyenYorumlar(aktifSubeFiltre==="__tum" ? null : aktifSubeFiltre);
   const tumOnayli=[];
-  Object.entries(YORUMLAR).forEach(([urun,ys])=>ys.forEach((y,i)=>{ if(y.onay) tumOnayli.push({urun,idx:i,...y}); }));
+  Object.entries(YORUMLAR).forEach(([urun,ys])=>{
+    ys.forEach((y,i)=>{
+      if(y.onay && (aktifSubeFiltre==="__tum" || (y.sube||"")=== aktifSubeFiltre))
+        tumOnayli.push({urun,idx:i,...y});
+    });
+  });
   tumOnayli.sort((a,b)=>b.tarih-a.tarih);
 
-  let html = `<div class="fy-bilgi-not">💬 Müşterilerin QR menüde bıraktığı puan ve yorumlar. Onayladıklarınız menüde yayınlanır.</div>`;
+  const subeNot = sube
+    ? `<div class="fy-mudur-not">📍 <strong>${sube}</strong> şubesinin QR menüsünden gelen yorumlar. Onayladığınız yorumlar tüm müşterilere yayınlanır.</div>`
+    : `<div class="fy-bilgi-not">💬 Tüm şubelerdeki ürün yorumları. Onayladıklarınız QR menüde yayınlanır.</div>`;
+
+  let html = subeNot;
+
+  // Genel müdür için şube filtre chipleri
+  if(isGenel){
+    const tumSubeler = DEMO_BRANCHES.map(b=>b.ad);
+    html += `<div class="fy-sube-filtre" style="margin-bottom:10px">
+      <span class="fy-sube-filtre-lbl">🏢 Şube:</span>
+      <button class="fy-sf-chip${aktifSubeFiltre==='__tum'?' on':''}" onclick="yorumSubeFiltreSec('__tum')">Tümü</button>
+      ${tumSubeler.map(sb=>`<button class="fy-sf-chip${aktifSubeFiltre===sb?' on':''}" onclick="yorumSubeFiltreSec('${sb.replace(/'/g,"\\'")}')">${sb}</button>`).join("")}
+    </div>`;
+  }
+
   html += `<div class="yym-sekme-row">
     <button class="yym-sekme${state.yorumSekme==='bekleyen'?' on':''}" onclick="yorumSekmeSec('bekleyen')">⏳ Onay bekleyen${bekleyen.length?' ('+bekleyen.length+')':''}</button>
     <button class="yym-sekme${state.yorumSekme==='onayli'?' on':''}" onclick="yorumSekmeSec('onayli')">✓ Yayında (${tumOnayli.length})</button>
@@ -9659,20 +9706,24 @@ function yorumYonetimHtml(){
   html += `<div class="yym-liste">`;
   liste.forEach(y=>{
     const tarih = new Date(y.tarih).toLocaleDateString('tr');
+    const urunEsc = y.urun.replace(/'/g,"\\'");
+    const subeRozet = (isGenel && y.sube)
+      ? `<span style="font-size:11px;font-weight:700;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:1px 7px;margin-left:6px">🏢 ${y.sube}</span>`
+      : '';
     html += `<div class="yym-kart">
       <div class="yym-ust">
-        <span class="yym-urun">${y.urun}</span>
+        <span class="yym-urun">${y.urun}${subeRozet}</span>
         <span class="yym-yildiz">${yildizHtml(y.puan)}</span>
       </div>
       <div class="yym-isim">👤 ${y.isim} · <span class="yym-tarih">${tarih}</span></div>
       ${y.metin?`<div class="yym-metin">"${y.metin}"</div>`:`<div class="yym-metin yym-bos">(sadece puan, yorum yok)</div>`}
       <div class="yym-aksiyon">`;
     if(state.yorumSekme==="bekleyen"){
-      html += `<button class="yym-btn onay" onclick="yorumOnayla('${y.urun.replace(/'/g,"\\'")}',${y.idx})">✓ Onayla</button>
-        <button class="yym-btn red" onclick="yorumSil('${y.urun.replace(/'/g,"\\'")}',${y.idx})">🗑️ Reddet</button>`;
+      html += `<button class="yym-btn onay" onclick="yorumOnayla('${urunEsc}',${y.idx})">✓ Onayla</button>
+        <button class="yym-btn red" onclick="yorumSilOnay('${urunEsc}',${y.idx})">🗑️ Reddet</button>`;
     } else {
-      html += `<button class="yym-btn gizle" onclick="yorumGizle('${y.urun.replace(/'/g,"\\'")}',${y.idx})">⏸️ Yayından kaldır</button>
-        <button class="yym-btn red" onclick="yorumSil('${y.urun.replace(/'/g,"\\'")}',${y.idx})">🗑️ Sil</button>`;
+      html += `<button class="yym-btn gizle" onclick="yorumGizle('${urunEsc}',${y.idx})">⏸️ Yayından kaldır</button>
+        <button class="yym-btn red" onclick="yorumSilOnay('${urunEsc}',${y.idx})">🗑️ Sil</button>`;
     }
     html += `</div></div>`;
   });
@@ -9680,16 +9731,47 @@ function yorumYonetimHtml(){
   return html;
 }
 function yorumSekmeSec(k){ state.yorumSekme=k; go("fiyat", true); }
+function yorumSubeFiltreSec(sb){ state.yorumSubeFiltre=sb; go("fiyat", true); }
 function yorumOnayla(urun, idx){
   if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=true; yorumKaydet(); note("✓ Yorum yayınlandı"); go("fiyat", true); }
 }
 function yorumGizle(urun, idx){
   if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=false; yorumKaydet(); note("Yorum yayından kaldırıldı"); go("fiyat", true); }
 }
-function yorumSil(urun, idx){
-  if(!confirm("Bu yorum kalıcı olarak silinsin mi?")) return;
-  if(YORUMLAR[urun]){ YORUMLAR[urun].splice(idx,1); if(YORUMLAR[urun].length===0) delete YORUMLAR[urun]; yorumKaydet(); note("Yorum silindi"); go("fiyat", true); }
+/* Yorum silme — confirm() yerine popup */
+function yorumSilOnay(urun, idx){
+  state._yorumSilOnay = {urun, idx};
+  let mdl=document.getElementById("yorumSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="yorumSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
+  const y = YORUMLAR[urun] && YORUMLAR[urun][idx];
+  const ozet = y ? `"${(y.metin||'').slice(0,60)|| urun+' – '+y.puan+'★'}"` : urun;
+  mdl.innerHTML = `<div class="myp-ic">
+    <div class="myp-baslik">🗑️ Yorumu Sil</div>
+    <div style="font-size:13.5px;color:var(--ink-2);text-align:center;margin-bottom:18px;line-height:1.6">
+      ${ozet}<br><strong style="color:var(--err)">Bu işlem geri alınamaz.</strong>
+    </div>
+    <div class="myp-btn-row">
+      <button class="myp-iptal" onclick="yorumSilOnayKapat()">İptal</button>
+      <button class="myp-onayla" style="background:var(--err)" onclick="yorumSilOnayla()">Evet, Sil</button>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
 }
+function yorumSilOnayKapat(){
+  state._yorumSilOnay=null;
+  const mdl=document.getElementById("yorumSilModal");
+  if(mdl) mdl.classList.remove("on");
+}
+function yorumSilOnayla(){
+  const p=state._yorumSilOnay; if(!p) return;
+  if(YORUMLAR[p.urun]){
+    YORUMLAR[p.urun].splice(p.idx,1);
+    if(YORUMLAR[p.urun].length===0) delete YORUMLAR[p.urun];
+    yorumKaydet(); note("Yorum silindi");
+  }
+  yorumSilOnayKapat(); go("fiyat", true);
+}
+function yorumSil(urun, idx){ yorumSilOnay(urun, idx); }   // eski çağrıları kırmamak için
 
 /* === FİYATLAR: tavsiye + şube kartları (görsel düzen) === */
 function fiyatGenelHtml(isGenel){
@@ -14228,12 +14310,19 @@ function qrSplashHtml(){
       const indEtiket = k.tip==="oran" ? "%"+k.deger : "";
       const aktifSimdi = kampanyaAktifMi(k);
       kmpHtml += '<div class="qr-splash-kmp glow">'+
-        '<div class="qsk-ust"><span class="qsk-ad">🔥 '+k.ad+'</span>'+
-        (indEtiket?'<span class="qsk-oran">'+indEtiket+'</span>':'')+'</div>'+
-        '<span class="qsk-urun">'+k.urun+(k.kanal==="eve"?' · 🛵 Eve':'')+'</span>'+
-        '<span class="qsk-fiyat"><span class="qsk-eski">'+genel+' ₺</span> <span class="qsk-yeni">'+yeni+' ₺</span></span>'+
-        '<span class="qsk-zaman">📅 '+kampanyaZamanMetni(k)+
-        (aktifSimdi?' <span class="qsk-simdi">şimdi geçerli</span>':'')+'</span>'+
+        '<div class="qsk-sol">'+
+          '<div class="qsk-ust"><span class="qsk-ad">🔥 '+k.ad+'</span>'+
+          (indEtiket?'<span class="qsk-oran">'+indEtiket+' İndirim</span>':'')+'</div>'+
+          '<span class="qsk-urun">'+k.urun+(k.kanal==="eve"?' · 🛵 Eve':'')+'</span>'+
+          '<span class="qsk-zaman">📅 '+kampanyaZamanMetni(k)+
+          (aktifSimdi?' <span class="qsk-simdi">şimdi geçerli</span>':'')+'</span>'+
+        '</div>'+
+        '<div class="qsk-sag">'+
+          '<div class="qsk-fiyat">'+
+            '<span class="qsk-eski">'+genel+' ₺</span>'+
+            '<span class="qsk-yeni">'+yeni+' ₺</span>'+
+          '</div>'+
+        '</div>'+
       '</div>';
     });
     kmpHtml += '</div>';
@@ -14872,7 +14961,8 @@ function qrYorumKaydet(){
   if(!YORUMLAR[urunAd]) YORUMLAR[urunAd]=[];
   YORUMLAR[urunAd].push({
     isim:y.isim.trim(), puan:y.puan, metin:(y.metin||"").trim(),
-    tarih:Date.now(), onay:false
+    tarih:Date.now(), onay:false,
+    sube: (QR.sube||AKTIF_SUBE)   // hangi şubenin QR'ından yapıldığı
   });
   yorumKaydet();
   QR.view="yorumlar"; renderQR();
