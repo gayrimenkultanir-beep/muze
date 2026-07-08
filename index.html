@@ -13722,21 +13722,17 @@ function viewPersonel(main){
 // ============================================================
 function viewBayi(main){
   const isGenel = state.role==="genel";
-  if(!state.bayiSekme) state.bayiSekme = isGenel ? "stokkart" : "siparis";
+  if(!state.bayiSekme) state.bayiSekme = isGenel ? "irsaliye" : "siparis";
   const sekme = state.bayiSekme;
-  // genel müdür sekmeleri
+  // genel müdür sekmeleri (stok kartları/bayi stokları/sayım → STOK menüsüne taşındı)
   const genelSekmeler = [
-    {k:"stokkart", ad:"📋 Stok Kartları"},
-    {k:"sayim",    ad:"🔢 Sayım"},
     {k:"irsaliye", ad:"🧾 Alış Faturaları"},
     {k:"bfiyat",   ad:"🏷️ Bayi Fiyatları"},
-    {k:"bstok",    ad:"🏪 Bayi Stokları"},
     {k:"siparis",  ad:"📥 Siparişler"},
     {k:"gecmis",   ad:"📊 Geçmiş"},
   ];
-  // müdür sekmeleri
+  // müdür sekmeleri (sayım → STOK menüsüne taşındı)
   const mudurSekmeler = [
-    {k:"sayim",   ad:"🔢 Sayım"},
     {k:"siparis", ad:"🛒 Sipariş Ver"},
     {k:"benimsip",ad:"📋 Siparişlerim"},
     {k:"gecmis",  ad:"📊 Geçmiş"},
@@ -13753,16 +13749,12 @@ function viewBayi(main){
   html += `</div><div class="bayi-icerik">`;
 
   if(isGenel){
-    if(sekme==="stokkart") html += bayiStokKartHtml();
-    else if(sekme==="sayim") html += bayiSayimHtml(true);
-    else if(sekme==="irsaliye") html += bayiIrsaliyeHtml();
+    if(sekme==="irsaliye") html += bayiIrsaliyeHtml();
     else if(sekme==="bfiyat") html += bayiFiyatHtml();
-    else if(sekme==="bstok") html += bayiStoklarHtml();
     else if(sekme==="siparis") html += bayiSiparisGenelHtml();
     else if(sekme==="gecmis") html += bayiGecmisHtml(true);
   } else {
-    if(sekme==="sayim") html += bayiSayimHtml(false);
-    else if(sekme==="siparis") html += bayiSiparisVerHtml();
+    if(sekme==="siparis") html += bayiSiparisVerHtml();
     else if(sekme==="benimsip") html += bayiBenimSiparisHtml();
     else if(sekme==="gecmis") html += bayiGecmisHtml(false);
   }
@@ -13997,7 +13989,7 @@ function bayiStokKartHtml(){
   }
   return html;
 }
-function stokKatFiltre(k){ state.stokKatFiltre=k; go("bayi", true); }
+function stokKatFiltre(k){ state.stokKatFiltre=k; go("stok", true); }
 /* ══ Stok Kartı — oluştur / düzenle (premium modal) ══ */
 function stokKartEkle(){
   state._stokModal = {
@@ -14204,7 +14196,7 @@ function stokModalKaydet(){
     const um=document.getElementById("urunModal"); if(um) um.classList.add("on");
     return;
   }
-  go("bayi", true);
+  go("stok", true);
 }
 /* Ambalaj özeti metni — canlı önizleme */
 /* Fiyat özeti — KDV dahil/hariç durumuna göre matrah↔toplam + kâr marjı */
@@ -14432,7 +14424,7 @@ function stokKartSil(kod){
   delete STOCK[kod];
   note("Stok kartı silindi");
   b2bKaydet();
-  go("bayi", true);
+  go("stok", true);
 }
 
 /* === SAYIM GİRİŞİ (genel müdür merkez · müdür bayi) === */
@@ -14598,7 +14590,7 @@ function sayimModalOnayla(){
   note(s.ad+" sayımı işlendi: "+toplam+" "+taban);
   b2bKaydet();
   sayimModalKapat();
-  go("bayi", true);
+  go("stok", true);
 }
 function sayimModalCiz(){
   const p=state._sayimModal;
@@ -15664,7 +15656,7 @@ function bayiStokAktar(id){
   if(uyari.length) note("📦 Aktarıldı · ⚠️ kısmi: "+uyari.join(", "));
   else note("📦 Tüm stoklar bayinize aktarıldı");
   b2bKaydet();
-  go("bayi", true);
+  go("stok", true);
 }
 
 /* ============================================================
@@ -16786,15 +16778,48 @@ function viewRapor(main){
 
 // --- STOK (canlı · motor düşürür) ---
 function viewStok(main){
+  const isGenel = state.role==="genel";
+  if(!state.stokSekme) state.stokSekme = isGenel ? "stokkart" : "sayim";
+  // sekme listesi role göre
+  const genelSekmeler = [
+    {k:"stokkart", ad:"📋 Stok Kartları"},
+    {k:"bstok",    ad:"🏪 Bayi Stokları"},
+    {k:"sayim",    ad:"🔢 Sayım"},
+    {k:"durum",    ad:"📊 Durum"},
+  ];
+  const mudurSekmeler = [
+    {k:"sayim",    ad:"🔢 Sayım"},
+    {k:"durum",    ad:"📊 Durum"},
+  ];
+  const sekmeler = isGenel ? genelSekmeler : mudurSekmeler;
+  if(!sekmeler.find(s=>s.k===state.stokSekme)) state.stokSekme = sekmeler[0].k;
+  const sekme = state.stokSekme;
+
+  let html = `<div class="sec-head"><div><h2>📦 Stok</h2>
+    <div class="sh-sub">${isGenel?'Stok kartları · bayi stokları · sayım':AKTIF_SUBE+' · sayım ve durum'}</div></div></div>`;
+  html += `<div class="bayi-sekme-row">`;
+  sekmeler.forEach(s=>{
+    html += `<button class="bayi-sekme${sekme===s.k?' on':''}" onclick="stokSekmeSec('${s.k}')">${s.ad}</button>`;
+  });
+  html += `</div><div class="bayi-icerik">`;
+
+  if(sekme==="stokkart" && isGenel) html += bayiStokKartHtml();
+  else if(sekme==="bstok" && isGenel) html += bayiStoklarHtml();
+  else if(sekme==="sayim") html += bayiSayimHtml(isGenel);
+  else if(sekme==="durum") html += stokDurumHtml();
+  html += `</div>`;
+  main.innerHTML = html;
+}
+function stokSekmeSec(k){ state.stokSekme=k; go("stok", true); }
+/* Stok durum tablosu (eski viewStok içeriği) */
+function stokDurumHtml(){
   const items = Object.entries(STOCK);
   const kritikSayi = items.filter(function(e){ return e[1].mevcut<=e[1].kritik; }).length;
-
   const uyariBlok = kritikSayi
     ? '<div class="locked-note" style="background:var(--danger-soft);border-color:#f0c0bc">'+
       '<span class="ln-ic">⚠️</span><div><div class="ln-t">'+kritikSayi+' hammadde kritik seviyede</div>'+
       '<div class="ln-d">Merkeze sipariş verilmeli. Stok bittiğinde ilgili ürünler menüden otomatik kalkar.</div></div></div>'
     : '';
-
   const satirlar = items.map(function(e){
     const k=e[0], s=e[1];
     const eksi = s.mevcut < 0;
@@ -16813,16 +16838,12 @@ function viewStok(main){
            '<td>'+tuketimTxt+'</td>'+
            '<td>'+durumTxt+'</td></tr>';
   }).join("");
-
-  main.innerHTML =
-    '<div class="sec-head"><div><h2>Stok durumu</h2>'+
-    '<div class="sh-sub">Canlı · her satışta reçeteden otomatik düşer</div></div></div>'+
-    uyariBlok+
+  return uyariBlok+
     '<div class="table-wrap"><table>'+
     '<thead><tr><th>Hammadde</th><th>Mevcut</th><th>Kritik eşik</th><th>Bugün tüketilen</th><th>Durum</th></tr></thead>'+
     '<tbody>'+satirlar+'</tbody></table></div>'+
     '<div style="margin-top:14px;font-size:12.5px;color:var(--ink-3)">'+
-    '💡 Satış ekranından ürün sat, bu tabloya geri dön — tüketilen gramların düştüğünü göreceksin. Motor adet × reçete üzerinden hesaplar.</div>';
+    '💡 Merkez stok · her satışta reçeteden otomatik düşer. Bayi bazlı stok için "Bayi Stokları" sekmesine bakın.</div>';
 }
 
 // --- DENETİM (genel müdür — fire/kaçak) ---
