@@ -390,6 +390,37 @@ tr:last-child td{border-bottom:none}
 .skp-sec-alt{font-size:12px; color:var(--ink-3); font-weight:600}
 .skp-tarih-alan{display:flex; gap:10px; margin-top:12px}
 .skp-tarih-alan .fat-alan{flex:1}
+/* ═══ Bayi Stokları — seçim şeridi + tablo ═══ */
+.bstok-serit{display:flex; gap:9px; overflow-x:auto; padding:4px 2px 10px; margin-bottom:6px}
+.bstok-kart{flex:0 0 auto; min-width:130px; display:flex; flex-direction:column; gap:4px; padding:12px 15px; border-radius:12px; border:1.5px solid var(--line); background:var(--surface); cursor:pointer; text-align:left; transition:all .15s ease}
+.bstok-kart:hover{border-color:var(--brand)}
+.bstok-kart.on{background:var(--brand-soft); border-color:var(--brand)}
+.bsk-ad{font-size:13px; font-weight:800; color:var(--ink); white-space:nowrap}
+.bsk-deger{font-size:15px; font-weight:900; color:var(--brand-d)}
+.bstok-tablo tfoot .bstok-toplam td{border-top:2px solid var(--cocoa); padding-top:12px; background:var(--brand-soft)}
+.bstok-mini-aksiyon{display:flex; gap:8px; margin-bottom:12px}
+.bstok-mini-btn{padding:6px 14px; border-radius:8px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink-2); font-size:12px; font-weight:700; cursor:pointer}
+.bstok-mini-btn:hover{border-color:var(--cocoa); color:var(--cocoa)}
+.bstok-wrap{overflow-x:auto}
+.bstok-tablo{min-width:100%; border-collapse:collapse}
+.bstok-tablo th,.bstok-tablo td{padding:9px 12px; white-space:nowrap}
+.bstok-sabit-col{position:sticky; left:0; background:var(--surface); z-index:2; box-shadow:2px 0 0 var(--line)}
+.bstok-tablo tbody tr:nth-child(even) .bstok-sabit-col{background:var(--surface-2)}
+.bstok-tablo tfoot .bstok-sabit-col{background:var(--brand-soft)}
+/* Sipariş Ver — arama + kategori grupları */
+.bsip-ara-bar{margin-bottom:14px}
+.bsip-ara{width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface); font-family:inherit; font-size:14px; font-weight:600; color:var(--ink)}
+.bsip-ara:focus{outline:none; border-color:var(--brand)}
+.bsip-kat-baslik{font-size:12.5px; font-weight:800; color:var(--cocoa); text-transform:uppercase; letter-spacing:.5px; margin:16px 0 8px; display:flex; align-items:center; gap:8px}
+.bsip-kat-say{font-size:11px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border-radius:99px; padding:1px 9px}
+.bsip-excel{margin-left:auto; padding:5px 12px; border-radius:8px; border:none; background:#217a3f; color:#fff; font-size:12px; font-weight:800; cursor:pointer}
+.bsip-excel:hover{filter:brightness(.93)}
+.bayi-ozet-kdv{font-size:12px; color:var(--ink-3)}
+.bayi-ozet-kdv span:first-child{padding-left:6px}
+.bayi-ozet-ayrac{border-top:1px solid var(--line); margin-top:4px; padding-top:8px}
+.bayi-gecmis-baslik{display:flex; align-items:center; gap:8px}
+.bayi-sip-excel-btn{padding:9px 14px; border-radius:9px; border:1.5px solid #217a3f; background:#fff; color:#217a3f; font-size:13px; font-weight:800; cursor:pointer}
+.bayi-sip-excel-btn:hover{background:#217a3f; color:#fff}
 /* İsteğe bağlı adetli seçenek */
 .opt-adetli{display:flex; align-items:center; gap:10px; cursor:default}
 .opt-adetli.on{border-color:var(--brand); background:var(--brand-soft)}
@@ -5868,10 +5899,78 @@ function bayiNetFiyat(kod, sube){
 }
 /* Bir siparişin brüt ve net (iskontolu) tutarı */
 function siparisTutar(sp){
-  const brut = sp.kalemler.filter(k=>!k.silindi && k.miktar>0).reduce((a,k)=>a+k.miktar*bayiFiyat(k.kod),0);
+  const gecerli = sp.kalemler.filter(k=>!k.silindi && k.miktar>0);
+  const brut = gecerli.reduce((a,k)=>a+k.miktar*bayiFiyat(k.kod),0);  // KDV dahil
   const isk = bayiIskonto(sp.sube);
   const indirim = brut*isk/100;
-  return { brut, isk, indirim, net:brut-indirim };
+  const net = brut-indirim;
+  // KDV oran grupları — bayi fiyatı KDV dahil kabul edilir
+  const oranGrup = {};
+  gecerli.forEach(k=>{
+    const s = STOCK[k.kod]; if(!s) return;
+    const satirDahil = k.miktar*bayiFiyat(k.kod);
+    const oran = (s.kdv!=null ? s.kdv : 0);
+    if(!oranGrup[oran]) oranGrup[oran]={brutDahil:0, matrah:0, kdv:0};
+    oranGrup[oran].brutDahil += satirDahil;
+  });
+  Object.keys(oranGrup).forEach(oran=>{
+    const g=oranGrup[oran], gn=g.brutDahil*(1-isk/100), o=parseFloat(oran)||0;
+    g.matrah=gn/(1+o/100); g.kdv=gn-g.matrah;
+  });
+  const toplamMatrah = Object.values(oranGrup).reduce((a,g)=>a+g.matrah,0);
+  const toplamKdv = Object.values(oranGrup).reduce((a,g)=>a+g.kdv,0);
+  return { brut, isk, indirim, net, oranGrup, toplamMatrah, toplamKdv };
+}
+/* Bir siparişin Excel tablosu (KDV detaylı) */
+function _siparisExcelTablo(sp){
+  const E=_xlsHucreEsc;
+  const t=siparisTutar(sp);
+  let satirlar="";
+  sp.kalemler.filter(k=>!k.silindi && k.miktar>0).forEach(k=>{
+    const s=STOCK[k.kod]; if(!s) return;
+    const f=bayiFiyat(k.kod), tutar=k.miktar*f, oran=(s.kdv!=null?s.kdv:0);
+    satirlar+=`<tr><td>${E(s.ad)}</td><td>${E(s.kategori||'')}</td><td>${k.miktar} ${E(s.birim||'adet')}</td><td class="sayi">${f.toFixed(2)}</td><td class="sayi">%${oran}</td><td class="tut">${tutar.toFixed(2)}</td></tr>`;
+  });
+  const oranlar=Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+  let kdvSatir="";
+  oranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005)return;
+    kdvSatir+=`<tr><td colspan="5" style="text-align:right">KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</td><td class="tut">${g.kdv.toFixed(2)}</td></tr>`;
+  });
+  return `<table>
+    <tr><td class="baslik" colspan="6">Sipariş #${sp.id} · ${E(sp.sube)}</td></tr>
+    <tr><td class="altbaslik" colspan="6">${E(sp.tarih)} · fiyatlar KDV dahildir</td></tr>
+    <tr><th>Stok Kartı</th><th>Kategori</th><th>Miktar</th><th>Birim ₺ (KDV dahil)</th><th>KDV</th><th>Tutar ₺</th></tr>
+    ${satirlar}
+    <tr><td colspan="5" style="text-align:right"><b>Toplam (KDV dahil)</b></td><td class="tut">${t.brut.toFixed(2)}</td></tr>
+    ${t.isk>0?`<tr><td colspan="5" style="text-align:right">İskonto (%${t.isk})</td><td class="tut">− ${t.indirim.toFixed(2)}</td></tr>`:''}
+    <tr><td colspan="5" style="text-align:right">Ara toplam (matrah)</td><td class="tut">${t.toplamMatrah.toFixed(2)}</td></tr>
+    ${kdvSatir}
+    <tr><td colspan="5" style="text-align:right">Toplam KDV</td><td class="tut">${t.toplamKdv.toFixed(2)}</td></tr>
+    <tr><td colspan="5" style="text-align:right"><b>Net Ödenecek</b></td><td class="tut">${t.net.toFixed(2)}</td></tr>
+  </table>`;
+}
+function siparisExcelTek(id){
+  const sp=BAYI_SIPARISLER.find(x=>x.id===id); if(!sp) return;
+  _xlsIndir("MINIPAN_Siparis_"+sp.id+"_"+String(sp.sube).replace(/[^\wğüşıöçĞÜŞİÖÇ]/g,"_"), _siparisExcelTablo(sp));
+  note("📥 Sipariş #"+sp.id+" indirildi");
+}
+function siparisExcelToplu(){
+  const bekleyen=BAYI_SIPARISLER.filter(s=>s.durum==="onayda");
+  if(bekleyen.length===0){ note("Bekleyen sipariş yok"); return; }
+  const E=_xlsHucreEsc;
+  // özet tablo
+  let ozet=`<table><tr><td class="baslik" colspan="6">MİNİPAN · Onay Bekleyen Siparişler</td></tr>
+    <tr><th>Sipariş</th><th>Şube</th><th>Tarih</th><th>Matrah ₺</th><th>KDV ₺</th><th>Net ₺</th></tr>`;
+  let gToplamNet=0, gToplamKdv=0, gToplamMatrah=0;
+  bekleyen.forEach(sp=>{
+    const t=siparisTutar(sp);
+    gToplamNet+=t.net; gToplamKdv+=t.toplamKdv; gToplamMatrah+=t.toplamMatrah;
+    ozet+=`<tr><td>#${sp.id}</td><td>${E(sp.sube)}</td><td>${E(sp.tarih)}</td><td class="tut">${t.toplamMatrah.toFixed(2)}</td><td class="tut">${t.toplamKdv.toFixed(2)}</td><td class="tut">${t.net.toFixed(2)}</td></tr>`;
+  });
+  ozet+=`<tr><td colspan="3" style="text-align:right"><b>GENEL TOPLAM</b></td><td class="tut">${gToplamMatrah.toFixed(2)}</td><td class="tut">${gToplamKdv.toFixed(2)}</td><td class="tut">${gToplamNet.toFixed(2)}</td></tr></table><br><br>`;
+  const detaylar=bekleyen.map(sp=>_siparisExcelTablo(sp)).join("<br><br>");
+  _xlsIndir("MINIPAN_Bekleyen_Siparisler_"+new Date().toISOString().slice(0,10), ozet+detaylar);
+  note("📥 "+bekleyen.length+" sipariş indirildi");
 }
 
 /* === B2B KALICILIK — roller arası geçişte (sayfa yenilenince) veri korunur === */
@@ -15245,22 +15344,93 @@ function bayiFiyatGir(kod){
 
 /* === BAYİ STOKLARI (genel müdür görüntüler) === */
 function bayiStoklarHtml(){
-  let html = `<div class="bayi-aciklama">🏪 Tüm bayilerin (şubelerin) elindeki stok durumu.</div>`;
+  // çoklu seçili bayiler (varsayılan: ilk bayi seçili)
+  if(!state.bstokSecililer) state.bstokSecililer = DEMO_BRANCHES.length ? [DEMO_BRANCHES[0].ad] : [];
+  const secililer = state.bstokSecililer;
+
+  // bir bayinin bir kartındaki miktarı
+  function miktarAl(bayiAd, kod){
+    return bayiAd==="__merkez" ? (STOCK[kod].mevcut||0) : bayiStok(bayiAd, kod);
+  }
+  // sütun toplam değeri
+  function sutunToplam(bayiAd){
+    let t=0; Object.keys(STOCK).forEach(kod=>{ t += miktarAl(bayiAd,kod)*(bayiFiyat(kod)||0); });
+    return t;
+  }
+
+  let html = `<div class="bayi-aciklama">🏪 Bayi stok karşılaştırma. Merkez sabit; üstten bayi seçip Merkez'in yanına sütun ekleyin.</div>`;
+
+  // ── ÜST ŞERİT: çoklu seçim ──
+  html += `<div class="bstok-serit">`;
   DEMO_BRANCHES.forEach(b=>{
-    const stokVar = BAYI_STOK[b.ad] && Object.keys(BAYI_STOK[b.ad]).some(k=>BAYI_STOK[b.ad][k]>0);
-    html += `<div class="bayi-sube-blok"><div class="bayi-sube-ad">🏬 ${b.ad}</div>`;
-    if(!stokVar){ html += `<div class="bayi-bos">Bu bayide stok kaydı yok.</div></div>`; return; }
-    html += `<div class="bayi-tablo">`;
-    Object.keys(STOCK).forEach(kod=>{
-      const m = bayiStok(b.ad, kod);
-      if(m>0) html += `<div class="bayi-satir bayi-satir-sade">
-        <div class="bayi-s-ad">${STOCK[kod].ad}</div>
-        <div class="bayi-s-deger">${m} ${STOCK[kod].birim||"gr"}</div></div>`;
-    });
-    html += `</div></div>`;
+    const sec = secililer.includes(b.ad);
+    const deger = sutunToplam(b.ad);
+    html += `<button class="bstok-kart${sec?' on':''}" onclick="bstokTogglBayi('${b.ad.replace(/'/g,"\\'")}')">
+      <span class="bsk-ad">${sec?'✓ ':''}🏬 ${b.ad}</span>
+      <span class="bsk-deger">${deger.toFixed(0)} ₺</span>
+    </button>`;
   });
+  html += `</div>`;
+  html += `<div class="bstok-mini-aksiyon">
+    <button class="bstok-mini-btn" onclick="bstokTumBayi()">Tümünü seç</button>
+    <button class="bstok-mini-btn" onclick="bstokHicBayi()">Temizle</button>
+  </div>`;
+
+  // ── TEK TABLO: Merkez (sabit) + seçili bayiler ──
+  const sutunlar = ["__merkez", ...secililer];
+  // başlıklar
+  let thead = `<tr><th class="bstok-sabit-col">Stok Kartı</th>`;
+  sutunlar.forEach(s=>{
+    const ad = s==="__merkez" ? "🏢 Merkez (Ana)" : "🏬 "+s;
+    thead += `<th colspan="2" style="text-align:center;border-left:2px solid var(--line)">${ad}</th>`;
+  });
+  thead += `</tr><tr><th class="bstok-sabit-col"></th>`;
+  sutunlar.forEach(()=>{ thead += `<th style="text-align:right;border-left:2px solid var(--line);font-size:11px">Miktar</th><th style="text-align:right;font-size:11px">Tutar</th>`; });
+  thead += `</tr>`;
+
+  // satırlar — merkezdeki tüm kartlar (kaynak liste)
+  let tbody = "";
+  const kodlar = Object.keys(STOCK);
+  kodlar.forEach(kod=>{
+    const s=STOCK[kod];
+    // en az bir sütunda kaydı olan kartları göster
+    const herhangi = sutunlar.some(sc=> miktarAl(sc,kod)!==0);
+    if(!herhangi) return;
+    let satir = `<tr><td class="bstok-sabit-col"><strong>${s.ad}</strong> <span style="color:var(--ink-3);font-size:11px">${s.birim||'gr'}</span></td>`;
+    sutunlar.forEach(sc=>{
+      const m = miktarAl(sc,kod);
+      const alis = bayiFiyat(kod)||0;
+      const tutar = m*alis;
+      const eksi = m<0;
+      satir += `<td style="text-align:right;border-left:2px solid var(--line)${eksi?';color:var(--danger);font-weight:800':''}">${m!==0?(+m.toFixed(2)):'—'}</td>
+        <td style="text-align:right;font-weight:700;color:var(--brand-d)">${tutar!==0?tutar.toFixed(2):'—'}</td>`;
+    });
+    satir += `</tr>`;
+    tbody += satir;
+  });
+  if(!tbody) tbody = `<tr><td colspan="${1+sutunlar.length*2}" style="text-align:center;color:var(--ink-3);padding:20px">Gösterilecek stok kaydı yok.</td></tr>`;
+
+  // toplam satırı
+  let tfoot = `<tr class="bstok-toplam"><td class="bstok-sabit-col" style="font-weight:800">GENEL TOPLAM</td>`;
+  sutunlar.forEach(sc=>{
+    tfoot += `<td style="border-left:2px solid var(--cocoa)"></td><td style="text-align:right;font-weight:900;color:var(--brand-d)">${sutunToplam(sc).toFixed(0)} ₺</td>`;
+  });
+  tfoot += `</tr>`;
+
+  html += `<div class="table-wrap bstok-wrap"><table class="bstok-tablo">
+    <thead>${thead}</thead><tbody>${tbody}</tbody><tfoot>${tfoot}</tfoot>
+  </table></div>`;
   return html;
 }
+function bstokTogglBayi(bayi){
+  if(!state.bstokSecililer) state.bstokSecililer=[];
+  const i=state.bstokSecililer.indexOf(bayi);
+  if(i>=0) state.bstokSecililer.splice(i,1);
+  else state.bstokSecililer.push(bayi);
+  go("stok", true);
+}
+function bstokTumBayi(){ state.bstokSecililer = DEMO_BRANCHES.map(b=>b.ad); go("stok", true); }
+function bstokHicBayi(){ state.bstokSecililer = []; go("stok", true); }
 
 /* === SİPARİŞLER (genel müdür: gelen talepleri yönet) === */
 function bayiSiparisGenelHtml(){
@@ -15270,7 +15440,7 @@ function bayiSiparisGenelHtml(){
   let html = `<div class="bayi-aciklama">📥 Bayilerden gelen sipariş talepleri. İnceleyip düzenleyebilir, onaylayabilirsiniz. Stok aktarımı tamamlanan siparişler <strong>Geçmiş</strong> sekmesine taşınır.</div>`;
   if(bekleyen.length===0 && diger.length===0){ return html+`<div class="bayi-bos">Bekleyen veya işlemdeki sipariş yok.</div>`; }
   if(bekleyen.length){
-    html += `<div class="bayi-gecmis-baslik">⏳ Onay bekleyenler (${bekleyen.length})</div>`;
+    html += `<div class="bayi-gecmis-baslik">⏳ Onay bekleyenler (${bekleyen.length}) <button class="bsip-excel" style="margin-left:auto" onclick="siparisExcelToplu()">📊 Tümünü Excel indir</button></div>`;
     bekleyen.forEach(sp=> html += bayiSiparisKartGenel(sp));
   }
   if(diger.length){
@@ -15304,16 +15474,27 @@ function bayiSiparisKartGenel(sp){
   });
   html += `</div>`;
   const t = siparisTutar(sp);
+  const oranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+  let kdvSatir="";
+  oranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
+    kdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+  });
   html += `<div class="bayi-ozet-tablo">
-    <div class="bayi-ozet-satir"><span>Toplam (iskontosuz)</span><span>${t.brut.toFixed(0)} ₺</span></div>
-    ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>Şube iskontosu (%${t.isk})</span><span>− ${t.indirim.toFixed(0)} ₺</span></div>`:''}
-    <div class="bayi-ozet-satir bayi-ozet-net"><span>Net tutar</span><span>${t.net.toFixed(0)} ₺</span></div>
+    <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${t.brut.toFixed(2)} ₺</span></div>
+    ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>Şube iskontosu (%${t.isk})</span><span>− ${t.indirim.toFixed(2)} ₺</span></div>`:''}
+    <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
+    ${kdvSatir}
+    <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
+    <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${t.net.toFixed(2)} ₺</span></div>
   </div>`;
   if(sp.durum==="onayda"){
     html += `<div class="bayi-sip-aksiyon">
       <button class="btn btn-ghost" onclick="sipReddet(${sp.id})">Reddet</button>
+      <button class="bayi-sip-excel-btn" onclick="siparisExcelTek(${sp.id})">📊 Excel</button>
       <button class="btn btn-primary" onclick="sipOnayla(${sp.id})">✓ Onayla</button>
     </div>`;
+  } else {
+    html += `<div class="bayi-sip-aksiyon"><button class="bayi-sip-excel-btn" onclick="siparisExcelTek(${sp.id})">📊 Excel indir</button></div>`;
   }
   html += `</div>`;
   return html;
@@ -15353,49 +15534,155 @@ function sipReddet(id){
 /* === MÜDÜR: SİPARİŞ VER (genel müdür stoğunu gör, talep oluştur) === */
 function bayiSiparisVerHtml(){
   if(!state.bayiSepet) state.bayiSepet = [];
+  const ara = (state.bayiSipAra||"").toLocaleLowerCase("tr-TR");
   let html = `<div class="bayi-aciklama">🛒 Merkez (genel müdür) stok durumuna göre sipariş oluşturun. Bakiyesi olmayan ürünler için de talep açabilirsiniz.</div>`;
-  html += `<div class="bayi-tablo">`;
-  // Sadece siparişe açık kartlar listelenir (aktif===false → gizli)
-  const acikKartlar = Object.entries(STOCK).filter(([kod,s])=>s.aktif!==false);
+
+  // arama kutusu
+  html += `<div class="bsip-ara-bar">
+    <input class="bsip-ara" placeholder="🔍 Stok kartı ara..." value="${(state.bayiSipAra||'').replace(/"/g,'&quot;')}" oninput="bayiSipAra(this.value)">
+  </div>`;
+
+  // siparişe açık kartlar, aramayla süz
+  let acikKartlar = Object.entries(STOCK).filter(([kod,s])=>s.aktif!==false);
   const kapaliSayi = Object.keys(STOCK).length - acikKartlar.length;
-  if(acikKartlar.length===0){
-    html += `<div class="bayi-bos">Siparişe açık ürün yok. Genel müdür stok kartlarından ürünleri siparişe açabilir.</div>`;
-  }
+  if(ara) acikKartlar = acikKartlar.filter(([kod,s])=>(s.ad||"").toLocaleLowerCase("tr-TR").includes(ara));
+
+  // kategoriye göre grupla, her grubu harf sırasına diz
+  const gruplar = {};
   acikKartlar.forEach(([kod,s])=>{
-    const merkezVar = s.mevcut;
-    const f = bayiFiyat(kod);
-    const sepette = state.bayiSepet.find(x=>x.kod===kod);
-    html += `<div class="bayi-satir">
-      <div class="bayi-s-ad"><strong>${s.ad}</strong>
-        <div class="bayi-s-not">Merkez: ${merkezVar} ${s.birim||"gr"}${merkezVar<=0?' <span style="color:var(--err)">· stokta yok</span>':''}${f>0?' · <strong>'+f+' ₺</strong>/'+(s.birim||"gr"):' · fiyat yok'}</div>
-        ${sepette?`<div class="bayi-s-satir-tutar">${sepette.girisBirim&&sepette.girisBirim!==(s.birim||"adet") ? `${sepette.girisMiktar} ${sepette.girisBirim} = ${sepette.miktar} ${s.birim||"adet"}` : `${sepette.miktar} ${s.birim||"adet"}`} × ${f} ₺ = <strong>${(sepette.miktar*f).toFixed(0)} ₺</strong></div>`:''}</div>
-      <div class="bayi-s-aksiyon">
-        ${sepette
-          ? `<span class="bayi-sepet-miktar">${sepette.girisBirim&&sepette.girisBirim!==(s.birim||"adet") ? `${sepette.girisMiktar} ${sepette.girisBirim}` : `${sepette.miktar} ${s.birim||"adet"}`}</span><button class="bayi-mini sil" onclick="bayiSepetCikar('${kod}')">✕</button>`
-          : `<button class="bayi-mini" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`}
-      </div>
-    </div>`;
+    const kat = s.kategori || "Diğer";
+    if(!gruplar[kat]) gruplar[kat]=[];
+    gruplar[kat].push([kod,s]);
   });
-  html += `</div>`;
-  if(kapaliSayi>0){
+  // kategori sırası: STOK_KATEGORILERI önce, sonra alfabetik
+  const katSira = Object.keys(gruplar).sort((a,b)=>{
+    const ia=STOK_KATEGORILERI.indexOf(a), ib=STOK_KATEGORILERI.indexOf(b);
+    if(ia>=0&&ib>=0) return ia-ib;
+    if(ia>=0) return -1; if(ib>=0) return 1;
+    return a.localeCompare(b,"tr");
+  });
+
+  if(acikKartlar.length===0){
+    html += `<div class="bayi-bos">${ara?'Aramayla eşleşen ürün yok.':'Siparişe açık ürün yok. Genel müdür stok kartlarından ürünleri siparişe açabilir.'}</div>`;
+  }
+
+  katSira.forEach(kat=>{
+    const kartlar = gruplar[kat].sort((a,b)=>a[1].ad.localeCompare(b[1].ad,"tr"));  // harf sırası
+    html += `<div class="bsip-kat-baslik">${kat} <span class="bsip-kat-say">${kartlar.length}</span></div>`;
+    html += `<div class="bayi-tablo">`;
+    kartlar.forEach(([kod,s])=>{
+      const merkezVar = s.mevcut;
+      const f = bayiFiyat(kod);
+      const sepette = state.bayiSepet.find(x=>x.kod===kod);
+      html += `<div class="bayi-satir">
+        <div class="bayi-s-ad"><strong>${s.ad}</strong>
+          <div class="bayi-s-not">Merkez: ${merkezVar} ${s.birim||"gr"}${merkezVar<=0?' <span style="color:var(--err)">· stokta yok</span>':''}${f>0?' · <strong>'+f+' ₺</strong>/'+(s.birim||"gr"):' · fiyat yok'}</div>
+          ${sepette?`<div class="bayi-s-satir-tutar">${sepette.girisBirim&&sepette.girisBirim!==(s.birim||"adet") ? `${sepette.girisMiktar} ${sepette.girisBirim} = ${sepette.miktar} ${s.birim||"adet"}` : `${sepette.miktar} ${s.birim||"adet"}`} × ${f} ₺ = <strong>${(sepette.miktar*f).toFixed(0)} ₺</strong></div>`:''}</div>
+        <div class="bayi-s-aksiyon">
+          ${sepette
+            ? `<span class="bayi-sepet-miktar">${sepette.girisBirim&&sepette.girisBirim!==(s.birim||"adet") ? `${sepette.girisMiktar} ${sepette.girisBirim}` : `${sepette.miktar} ${s.birim||"adet"}`}</span><button class="bayi-mini sil" onclick="bayiSepetCikar('${kod}')">✕</button>`
+            : `<button class="bayi-mini" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`}
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+
+  if(kapaliSayi>0 && !ara){
     html += `<div class="bayi-s-not" style="text-align:center;margin-top:8px;color:var(--ink-3)">${kapaliSayi} ürün siparişe kapalı olduğu için listelenmedi.</div>`;
   }
   if(state.bayiSepet.length>0){
-    const toplam = state.bayiSepet.reduce((a,k)=>a+k.miktar*bayiFiyat(k.kod),0);
-    const isk = bayiIskonto(AKTIF_SUBE);
-    const indirim = toplam*isk/100;
-    const odenecek = toplam-indirim;
+    const oz = bayiSepetKdvOzet();
+    // KDV oran satırları (birden fazla oran varsa her biri ayrı)
+    const oranlar = Object.keys(oz.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+    let kdvSatirlar = "";
+    oranlar.forEach(oran=>{
+      const g = oz.oranGrup[oran];
+      if(g.kdv<=0.005) return;
+      kdvSatirlar += `<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+    });
     html += `<div class="bayi-sepet-ozet">
-      <div class="bayi-sepet-baslik">📝 Talep listesi · ${state.bayiSepet.length} kalem</div>
+      <div class="bayi-sepet-baslik">📝 Talep listesi · ${state.bayiSepet.length} kalem
+        <button class="bsip-excel" onclick="bayiSiparisExcel()">📊 Excel indir</button></div>
       <div class="bayi-ozet-tablo">
-        <div class="bayi-ozet-satir"><span>Toplam tutar (iskontosuz)</span><span>${toplam.toFixed(0)} ₺</span></div>
-        ${isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${isk})</span><span>− ${indirim.toFixed(0)} ₺</span></div>`:''}
-        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek tutar</span><span>${odenecek.toFixed(0)} ₺</span></div>
+        <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${oz.brutToplam.toFixed(2)} ₺</span></div>
+        ${oz.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${oz.isk})</span><span>− ${oz.indirimDahil.toFixed(2)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${oz.toplamMatrah.toFixed(2)} ₺</span></div>
+        ${kdvSatirlar}
+        <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${oz.toplamKdv.toFixed(2)} ₺</span></div>
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${oz.netDahil.toFixed(2)} ₺</span></div>
       </div>
       <button class="btn btn-primary btn-full" onclick="bayiSiparisGonder()">Onaya gönder</button>
     </div>`;
   }
   return html;
+}
+function bayiSipAra(v){ state.bayiSipAra=v; go("bayi", true); }
+/* Sepet KDV özeti — bayi fiyatı KDV DAHİL kabul edilir.
+   İskonto KDV dahil tutara uygulanır, sonra her KDV oranı için matrah/KDV ayrıştırılır. */
+function bayiSepetKdvOzet(){
+  const isk = bayiIskonto(AKTIF_SUBE);
+  const oranGrup = {};   // oran → {brutDahil, matrah, kdv}
+  let brutToplam = 0;    // iskontosuz, KDV dahil
+  state.bayiSepet.forEach(k=>{
+    const s = STOCK[k.kod]; if(!s) return;
+    const f = bayiFiyat(k.kod);            // KDV dahil birim fiyat
+    const satirDahil = k.miktar * f;       // KDV dahil satır tutarı
+    brutToplam += satirDahil;
+    const oran = (s.kdv!=null ? s.kdv : 0);
+    if(!oranGrup[oran]) oranGrup[oran] = {brutDahil:0, matrah:0, kdv:0};
+    oranGrup[oran].brutDahil += satirDahil;
+  });
+  // iskonto oranını her gruba orantılı uygula, sonra matrah/kdv ayrıştır
+  const indirimDahil = brutToplam * (isk/100);   // KDV dahil iskonto tutarı
+  const netDahil = brutToplam - indirimDahil;
+  Object.keys(oranGrup).forEach(oran=>{
+    const g = oranGrup[oran];
+    // iskonto sonrası bu grubun KDV dahil tutarı
+    const grupNetDahil = g.brutDahil * (1 - isk/100);
+    const o = parseFloat(oran)||0;
+    g.matrah = grupNetDahil / (1 + o/100);
+    g.kdv = grupNetDahil - g.matrah;
+  });
+  const toplamMatrah = Object.values(oranGrup).reduce((a,g)=>a+g.matrah,0);
+  const toplamKdv = Object.values(oranGrup).reduce((a,g)=>a+g.kdv,0);
+  return {isk, brutToplam, indirimDahil, netDahil, oranGrup, toplamMatrah, toplamKdv};
+}
+/* Sipariş talebini Excel'e indir */
+function bayiSiparisExcel(){
+  if(!state.bayiSepet || state.bayiSepet.length===0){ note("Sepet boş"); return; }
+  const E=_xlsHucreEsc;
+  const oz = bayiSepetKdvOzet();
+  let satirlar="";
+  state.bayiSepet.forEach(k=>{
+    const s=STOCK[k.kod]; if(!s) return;
+    const f=bayiFiyat(k.kod);            // KDV dahil birim fiyat
+    const tutar=k.miktar*f;              // KDV dahil satır
+    const oran=(s.kdv!=null?s.kdv:0);
+    const birimGoster = (k.girisBirim&&k.girisBirim!==(s.birim||"adet")) ? `${k.girisMiktar} ${k.girisBirim} (${k.miktar} ${s.birim||'adet'})` : `${k.miktar} ${s.birim||'adet'}`;
+    satirlar+=`<tr><td>${E(s.ad)}</td><td>${E(s.kategori||'')}</td><td>${E(birimGoster)}</td><td class="sayi">${f.toFixed(2)}</td><td class="sayi">%${oran}</td><td class="tut">${tutar.toFixed(2)}</td></tr>`;
+  });
+  const tarih=new Date().toLocaleDateString("tr-TR");
+  // KDV oran satırları
+  const oranlar = Object.keys(oz.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+  let kdvSatir="";
+  oranlar.forEach(oran=>{ const g=oz.oranGrup[oran]; if(g.kdv<=0.005)return;
+    kdvSatir+=`<tr><td colspan="5" style="text-align:right">KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</td><td class="tut">${g.kdv.toFixed(2)}</td></tr>`;
+  });
+  let tablo=`<table>
+    <tr><td class="baslik" colspan="6">MİNİPAN · Sipariş Talebi</td></tr>
+    <tr><td class="altbaslik" colspan="6">${E(AKTIF_SUBE)} · ${tarih} · fiyatlar KDV dahildir</td></tr>
+    <tr><th>Stok Kartı</th><th>Kategori</th><th>Miktar</th><th>Birim Fiyat ₺ (KDV dahil)</th><th>KDV</th><th>Tutar ₺</th></tr>
+    ${satirlar}
+    <tr><td colspan="5" style="text-align:right"><b>Toplam (KDV dahil)</b></td><td class="tut">${oz.brutToplam.toFixed(2)}</td></tr>
+    ${oz.isk>0?`<tr><td colspan="5" style="text-align:right">İskonto (%${oz.isk})</td><td class="tut">− ${oz.indirimDahil.toFixed(2)}</td></tr>`:''}
+    <tr><td colspan="5" style="text-align:right">Ara toplam (matrah)</td><td class="tut">${oz.toplamMatrah.toFixed(2)}</td></tr>
+    ${kdvSatir}
+    <tr><td colspan="5" style="text-align:right">Toplam KDV</td><td class="tut">${oz.toplamKdv.toFixed(2)}</td></tr>
+    <tr><td colspan="5" style="text-align:right"><b>Net Ödenecek</b></td><td class="tut">${oz.netDahil.toFixed(2)}</td></tr>
+  </table>`;
+  _xlsIndir("MINIPAN_Siparis_"+AKTIF_SUBE.replace(/[^\wğüşıöçĞÜŞİÖÇ]/g,"_")+"_"+new Date().toISOString().slice(0,10), tablo);
+  note("📥 Sipariş talebi indirildi");
 }
 function bayiSepetEkle(kod){
   const s=STOCK[kod]; if(!s) return;
