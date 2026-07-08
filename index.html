@@ -482,6 +482,11 @@ tr:last-child td{border-bottom:none}
 .uf-input:focus{border-color:var(--brand); outline:none}
 .uf-textarea{min-height:60px; resize:vertical; font-family:inherit}
 .uf-ikili{display:flex; gap:12px}
+.uf-fiyat-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:16px 0 10px; display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+.uf-fiyat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.uf-fiyat-suf{position:relative}
+.uf-fiyat-suf input{padding-right:32px; width:100%}
+.uf-fiyat-suf span{position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:13px; font-weight:700; color:var(--ink-3); pointer-events:none}
 .uf-ikili .uf-alan{flex:1}
 .uf-mag-alan{margin-top:12px}
 .uf-mag-not{font-weight:400; color:var(--ink-3); font-size:11px}
@@ -7356,7 +7361,8 @@ function bolTamamla(){
    Satış → reçete → gram düşüm → stok azalt → tüketim logla.
    Ödeme/indirim/sadakat bu motora DOKUNMAZ — adet üzerinden sayar.
    ============================================================ */
-function consumeRecipe(cart){
+function consumeRecipe(cart, sube){
+  sube = sube || AKTIF_SUBE;
   const dusenler = [];
   const uyari = [];
   cart.forEach(item=>{
@@ -7367,12 +7373,21 @@ function consumeRecipe(cart){
     if(item.ekstraRecete) item.ekstraRecete.forEach(r=>tumKalemler.push(r));
     tumKalemler.forEach(r=>{
       const toplam = r.g * item.q;              // gram × satılan adet
+      // ŞUBE STOĞU — her bayi kendi deposundan düşer (eksiye düşebilir, satış engellenmez)
+      if(sube){
+        if(!BAYI_STOK[sube]) BAYI_STOK[sube]={};
+        const mevcut = BAYI_STOK[sube][r.ing]||0;
+        BAYI_STOK[sube][r.ing] = mevcut - toplam;
+      }
+      // MERKEZ STOCK — referans/denetim için düşmeye devam eder
       if(STOCK[r.ing]){
-        STOCK[r.ing].mevcut -= toplam;          // stok düş
+        STOCK[r.ing].mevcut -= toplam;
         CONSUMED[r.ing] = (CONSUMED[r.ing]||0) + toplam; // denetim logu
         dusenler.push(STOCK[r.ing].ad+" −"+toplam+" "+(STOCK[r.ing].birim||"g"));
-        if(STOCK[r.ing].mevcut <= STOCK[r.ing].kritik)
-          uyari.push(STOCK[r.ing].ad);
+        // uyarı: şube stoğu kritiğe/eksiye düştüyse
+        const subeMevcut = sube ? (BAYI_STOK[sube][r.ing]||0) : STOCK[r.ing].mevcut;
+        if(subeMevcut <= (STOCK[r.ing].kritik||0))
+          uyari.push(STOCK[r.ing].ad + (subeMevcut<0?" (stok eksiye düştü!)":""));
       }
     });
   });
@@ -12972,13 +12987,13 @@ function urunFormAc(pi){
     const dogrudan = (rec.length===1) ? rec[0] : null;
     state.urunForm = {
       pi:pi, eskiAd:p.ad, ad:p.ad, aciklama:p.aciklama||"", emoji:p.emoji,
-      kat:p.kat, fiyat:p.fiyat, mag:(p.mag!=null?p.mag:""), kcal:(p.kcal!=null?p.kcal:""), aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar,
+      kat:p.kat, fiyat:p.fiyat, fiyatEve:(p.fiyatEve!=null?p.fiyatEve:""), mag:(p.mag!=null?p.mag:""), kcal:(p.kcal!=null?p.kcal:""), aktif:p.aktif, gorsel:URUN_GORSEL[p.ad]||"", gruplar:gruplar,
       stokKod: dogrudan?dogrudan.ing:"", stokMiktar: dogrudan?String(dogrudan.g):""
     };
   } else {
     state.urunForm = {
       pi:null, eskiAd:null, ad:"", aciklama:"", emoji:"🍽️",
-      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", mag:"", kcal:"", aktif:true, gorsel:"", gruplar:[],
+      kat:state.urunKat||DEMO_KATEGORILER[0]?.ad, fiyat:"", fiyatEve:"", mag:"", kcal:"", aktif:true, gorsel:"", gruplar:[],
       stokKod:"", stokMiktar:""
     };
   }
@@ -13011,15 +13026,18 @@ function renderUrunForm(){
   // açıklama
   html += `<div class="uf-alan"><label>Açıklama</label>
     <textarea class="uf-input uf-textarea" placeholder="Ürün açıklaması" oninput="state.urunForm.aciklama=this.value">${f.aciklama||''}</textarea></div>`;
-  // kategori + fiyat yan yana
-  html += `<div class="uf-ikili">
-    <div class="uf-alan"><label>Kategori</label>
+  // kategori + fiyatlar
+  html += `<div class="uf-alan"><label>Kategori</label>
       <select class="uf-input" onchange="state.urunForm.kat=this.value">
         ${DEMO_KATEGORILER.map(k=>`<option value="${k.ad}"${f.kat===k.ad?' selected':''}>${k.emoji} ${k.ad}</option>`).join("")}
-      </select></div>
-    <div class="uf-alan"><label>Temel fiyat (₺)</label>
-      <input class="uf-input" inputmode="numeric" placeholder="0" value="${f.fiyat||''}" oninput="state.urunForm.fiyat=this.value"></div>
-  </div>`;
+      </select></div>`;
+  html += `<div class="uf-fiyat-baslik">💵 Satış Fiyatları <span class="uf-mag-not">(ürün oluşunca tüm şubelere yansır · her şube sonra kendi fiyatını değiştirebilir)</span></div>
+    <div class="uf-fiyat-grid">
+      <div class="uf-alan"><label>🍽️ Masa <span class="uf-mag-not">(paket ile aynı)</span></label>
+        <div class="uf-fiyat-suf"><input class="uf-input" inputmode="decimal" placeholder="0" value="${f.fiyat||''}" oninput="state.urunForm.fiyat=this.value"><span>₺</span></div></div>
+      <div class="uf-alan"><label>🏠 Eve</label>
+        <div class="uf-fiyat-suf"><input class="uf-input" inputmode="decimal" placeholder="masa ile aynı" value="${f.fiyatEve||''}" oninput="state.urunForm.fiyatEve=this.value"><span>₺</span></div></div>
+    </div>`;
   // MAG PUAN alanı
   const magTlKars = f.mag ? magToTl(parseInt(f.mag)||0) : 0;
   html += `<div class="uf-alan uf-mag-alan">
@@ -13424,6 +13442,7 @@ function urunKaydet(){
   const yeniAd = f.ad.trim();
   const magDeger = (f.mag===""||f.mag==null) ? null : Math.max(0, parseInt(f.mag)||0);
   const kcalDeger = (f.kcal===""||f.kcal==null) ? null : Math.max(0, parseInt(f.kcal)||0);
+  const eveDeger = (f.fiyatEve===""||f.fiyatEve==null) ? null : Math.max(0, parseFloat(String(f.fiyatEve).replace(",","."))||0);
   if(f.pi!=null){
     // DÜZENLE
     const p = DEMO_PRODUCTS[f.pi];
@@ -13435,11 +13454,13 @@ function urunKaydet(){
     }
     p.ad=yeniAd; p.aciklama=f.aciklama.trim(); p.emoji=f.emoji;
     p.kat=f.kat; p.fiyat=fiyat; p.aktif=f.aktif;
+    if(eveDeger!=null && eveDeger>0) p.fiyatEve=eveDeger; else delete p.fiyatEve;
     if(magDeger!=null) p.mag=magDeger; else delete p.mag;
     if(kcalDeger!=null) p.kcal=kcalDeger; else delete p.kcal;
   } else {
     // YENİ
     const yeni={ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()};
+    if(eveDeger!=null && eveDeger>0) yeni.fiyatEve=eveDeger;
     if(magDeger!=null) yeni.mag=magDeger;
     if(kcalDeger!=null) yeni.kcal=kcalDeger;
     DEMO_PRODUCTS.push(yeni);
@@ -18169,7 +18190,7 @@ function qrKalemPaket(i){
 }
 function qrSiparisGonder(){
   const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
-  consumeRecipe(QR.sepet);
+  consumeRecipe(QR.sepet, QR.sube || AKTIF_SUBE);
   const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat*c.q, paket:!!c.paket}));
   let takipId = "S"+(_takipId++);
   let fisMasaRef = QR.masa;   // mutfak fişini doğru kayda bağlamak için (varsayılan: masa siparişi)
