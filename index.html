@@ -8143,9 +8143,11 @@ function masaKalemleri(masaNo){
    Öncelik: garson çağrı > mutfağa mesaj > yeni sipariş (bekliyor) > dolu > boş */
 function masaDurum(masaNo){
   const s=SESSIONS[masaNo];
-  if(!s || !s.acik) return {kod:"bos", ad:"Boş", renk:"var(--line-2)", bg:"transparent"};
+  if(!s) return {kod:"bos", ad:"Boş", renk:"var(--line-2)", bg:"transparent"};
+  // Garson çağrısı / mutfağa mesaj — masa boş (sipariş yok) olsa bile öncelikli gösterilir
   if(s.garsonCagri) return {kod:"garson", ad:"🔔 Garson çağırdı", renk:"#e74c3c", bg:"#fdeceb"};
   if(s.mesajVar)    return {kod:"mesaj", ad:"💬 Mutfağa mesaj", renk:"#8e44ad", bg:"#f5ecfa"};
+  if(!s.acik) return {kod:"bos", ad:"Boş", renk:"var(--line-2)", bg:"transparent"};
   const kalemler=masaKalemleri(masaNo).filter(it=>it.durum!=="iptal");
   // Tüm kalemler iptal edildiyse (geçerli ürün kalmadıysa) masa boş sayılır
   if(kalemler.length===0) return {kod:"bos", ad:"Boş", renk:"var(--line-2)", bg:"transparent"};
