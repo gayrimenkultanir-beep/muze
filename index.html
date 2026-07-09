@@ -218,6 +218,30 @@ input,select{font-family:inherit; font-size:15px}
 .ukm-tarih-uygula{width:100%; padding:12px; border-radius:10px; border:none; background:var(--brand); color:#fff; font-size:14px; font-weight:800; cursor:pointer}
 .ukm-btn-row{margin-top:16px}
 .ukm-iptal{width:100%; padding:12px; border-radius:11px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink-2); font-size:14px; font-weight:700; cursor:pointer}
+/* İskonto modalı */
+.ikm-ic{background:#fff; border-radius:var(--radius-lg); max-width:400px; width:92%; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.ikm-head{background:var(--cocoa); color:#fff; padding:18px 20px; text-align:center}
+.ikm-head-ic{font-size:26px; margin-bottom:4px}
+.ikm-head-baslik{font-size:17px; font-weight:800}
+.ikm-head-alt{font-size:12.5px; opacity:.9; margin-top:4px}
+.ikm-body{padding:20px}
+.ikm-etiket{font-size:12px; font-weight:700; color:var(--ink-2); margin-bottom:8px}
+.ikm-input-row{position:relative; margin-bottom:14px}
+.ikm-input{width:100%; padding:14px 40px 14px 16px; border-radius:12px; border:1.5px solid var(--line); font-family:inherit; font-size:24px; font-weight:800; color:var(--cocoa); text-align:center}
+.ikm-input:focus{outline:none; border-color:var(--brand)}
+.ikm-yuzde{position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:18px; font-weight:800; color:var(--ink-3)}
+.ikm-hizli{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-bottom:14px}
+.ikm-hizli-btn{padding:9px 4px; border-radius:8px; border:1.5px solid var(--line); background:var(--surface); font-size:12.5px; font-weight:800; color:var(--ink-2); cursor:pointer}
+.ikm-hizli-btn:hover{border-color:var(--brand)}
+.ikm-hizli-btn.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
+.ikm-ozet{background:var(--surface-2); border-radius:10px; padding:12px 14px; text-align:center; font-size:13px; color:var(--ink-2); margin-bottom:16px}
+.ikm-ozet.hata{background:var(--danger-soft); color:var(--danger); font-weight:700}
+.ikm-btn-row{display:flex; gap:8px; flex-wrap:wrap}
+.ikm-iptal{flex:0 0 auto; padding:12px 16px; border-radius:11px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink-2); font-size:13.5px; font-weight:700; cursor:pointer}
+.ikm-kaldir{flex:0 0 auto; padding:12px 14px; border-radius:11px; border:1.5px solid var(--danger); background:#fff; color:var(--danger); font-size:13px; font-weight:800; cursor:pointer}
+.ikm-kaldir:hover{background:var(--danger-soft)}
+.ikm-kaydet{flex:1; min-width:100px; padding:12px; border-radius:11px; border:none; background:var(--brand); color:#fff; font-size:14.5px; font-weight:800; cursor:pointer}
+.ikm-kaydet:hover{filter:brightness(.95)}
 .bayi-sip-durum-rozet{font-size:12.5px; font-weight:700; padding:7px 12px; border-radius:8px}
 .bayi-sip-durum-rozet.onay{background:#e9f6ea; color:#2f7a34; border:1px solid #7fbf87}
 .bayi-sip-durum-rozet.aktar{background:var(--brand-soft); color:var(--brand-d); border:1px solid var(--brand)}
@@ -16045,13 +16069,87 @@ function bayiFiyatExcel(){
   note("📥 Bayi fiyatları indirildi");
 }
 function bayiIskontoGir(sube){
-  const v = prompt(sube+" için iskonto oranı (% 0-100, boş=kaldır):", String(bayiIskonto(sube)||""));
-  if(v==null) return;
-  if(v.trim()===""){ BAYI_ISKONTO[sube]=null; note(sube+" iskontosu kaldırıldı"); b2bKaydet(); go("bayi", true); return; }
-  const o = parseFloat(v);
+  state._iskontoModal = { sube, deger:String(bayiIskonto(sube)||"") };
+  iskontoModalCiz();
+}
+function iskontoModalCiz(){
+  const p=state._iskontoModal;
+  let mdl=document.getElementById("iskontoModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="iskontoModal"; mdl.className="modal-bg"; mdl.style.zIndex="230"; document.body.appendChild(mdl); }
+  if(!p){ mdl.classList.remove("on"); return; }
+  const mevcut = bayiIskonto(p.sube);
+  const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
+  const o = sayi(p.deger);
+  const gecerli = o>=0 && o<=100;
+  const hizli = [0,5,10,15,20,25];
+  mdl.innerHTML=`<div class="ikm-ic">
+    <div class="ikm-head">
+      <div class="ikm-head-ic">💸</div>
+      <div class="ikm-head-baslik">${p.sube}</div>
+      <div class="ikm-head-alt">Bayi iskonto oranı${mevcut>0?` · şu an %${mevcut}`:' · iskonto yok'}</div>
+    </div>
+    <div class="ikm-body">
+      <div class="ikm-etiket">İskonto oranı (%)</div>
+      <div class="ikm-input-row">
+        <input class="ikm-input" id="ikmDeger" type="number" inputmode="decimal" min="0" max="100"
+          value="${(p.deger||'').replace(/"/g,'&quot;')}" placeholder="0" oninput="iskontoModalCanli(this.value)">
+        <span class="ikm-yuzde">%</span>
+      </div>
+      <div class="ikm-hizli">
+        ${hizli.map(h=>`<button class="ikm-hizli-btn${o===h?' on':''}" onclick="iskontoModalHizli(${h})">%${h}</button>`).join("")}
+      </div>
+      <div class="ikm-ozet ${gecerli?'':'hata'}" id="ikmOzet">
+        ${gecerli ? (o>0?`Sipariş toplamına <strong>%${o}</strong> iskonto uygulanacak.`:'İskonto uygulanmayacak.') : '⚠️ Geçersiz oran (0-100)'}
+      </div>
+      <div class="ikm-btn-row">
+        <button class="ikm-iptal" onclick="iskontoModalKapat()">Vazgeç</button>
+        ${mevcut>0?`<button class="ikm-kaldir" onclick="iskontoModalKaldir()">İskontoyu Kaldır</button>`:''}
+        <button class="ikm-kaydet" ${gecerli?'':'disabled style="opacity:.4"'} onclick="iskontoModalKaydet()">Kaydet</button>
+      </div>
+    </div>
+  </div>`;
+  mdl.classList.add("on");
+  setTimeout(()=>{ const i=document.getElementById("ikmDeger"); if(i){ i.focus(); i.select(); } },80);
+}
+function iskontoModalCanli(v){
+  const p=state._iskontoModal; if(!p) return;
+  p.deger=v;
+  const o=parseFloat(String(v).replace(",","."))||0;
+  const gecerli=o>=0&&o<=100;
+  const oz=document.getElementById("ikmOzet");
+  if(oz){
+    oz.className="ikm-ozet"+(gecerli?'':' hata');
+    oz.innerHTML = gecerli ? (o>0?`Sipariş toplamına <strong>%${o}</strong> iskonto uygulanacak.`:'İskonto uygulanmayacak.') : '⚠️ Geçersiz oran (0-100)';
+  }
+  // hızlı butonların aktifini güncelle
+  document.querySelectorAll("#iskontoModal .ikm-hizli-btn").forEach(b=>{
+    b.classList.toggle("on", parseFloat(b.textContent.replace("%",""))===o);
+  });
+  const kaydet=document.querySelector("#iskontoModal .ikm-kaydet");
+  if(kaydet){ kaydet.disabled=!gecerli; kaydet.style.opacity=gecerli?'1':'.4'; }
+}
+function iskontoModalHizli(h){
+  const p=state._iskontoModal; if(!p) return;
+  p.deger=String(h);
+  const inp=document.getElementById("ikmDeger"); if(inp) inp.value=h;
+  iskontoModalCanli(String(h));
+}
+function iskontoModalKapat(){ state._iskontoModal=null; const mdl=document.getElementById("iskontoModal"); if(mdl) mdl.classList.remove("on"); }
+function iskontoModalKaydet(){
+  const p=state._iskontoModal; if(!p) return;
+  const o=parseFloat(String(p.deger).replace(",","."));
   if(isNaN(o)||o<0||o>100){ note("Geçersiz oran (0-100)"); return; }
-  BAYI_ISKONTO[sube] = o||null;
-  note(sube+" iskontosu: %"+o);
+  BAYI_ISKONTO[p.sube] = o||null;
+  iskontoModalKapat();
+  note(o>0 ? p.sube+" iskontosu: %"+o : p.sube+" iskontosu kaldırıldı");
+  b2bKaydet();
+  go("bayi", true);
+}
+function iskontoModalKaldir(){
+  const p=state._iskontoModal; if(!p) return;
+  BAYI_ISKONTO[p.sube]=null;
+  iskontoModalKapat();
+  note(p.sube+" iskontosu kaldırıldı");
   b2bKaydet();
   go("bayi", true);
 }
