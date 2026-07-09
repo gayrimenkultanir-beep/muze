@@ -17063,10 +17063,10 @@ function magSekmeSec(k){ state.magSekme=k; viewMagPuan(document.querySelector(".
 function magAyarHtml(){
   let h = `<div class="yk-kart">
     <div class="mag-ayar-baslik">💱 ${SADAKAT.ad} Puan Karşılığı</div>
-    <div class="mag-ayar-aciklama">1 ${SADAKAT.ad} puanının kaç TL değerinde olduğunu belirleyin. Müşteriler puanlarını bu kura göre indirim olarak kullanır.</div>
+    <div class="mag-ayar-aciklama">100 ${SADAKAT.ad} puanının kaç TL değerinde olduğunu belirleyin. Müşteriler puanlarını bu kura göre indirim olarak kullanır.</div>
     <div class="mag-kur-row">
-      <span class="mag-kur-lbl">1 ${SADAKAT.ad} =</span>
-      <input class="mag-kur-input" inputmode="decimal" id="magKurInput" value="${SADAKAT.magTl}" oninput="magKurOnizle(this.value)">
+      <span class="mag-kur-lbl">100 ${SADAKAT.ad} =</span>
+      <input class="mag-kur-input" inputmode="decimal" id="magKurInput" value="${(SADAKAT.magTl*100).toFixed(2).replace(/\.?0+$/,'')}" oninput="magKurOnizle(this.value)">
       <span class="mag-kur-tl">₺</span>
     </div>
     <div class="mag-kur-ornek" id="magKurOrnek">Örnek: 100 ${SADAKAT.ad} = ${tl(magToTl(100))} ₺ indirim</div>
@@ -17120,12 +17120,12 @@ function magKademeKaydet(){
   note("✓ Üyelik kademeleri güncellendi");
   viewMagPuan(document.querySelector(".main"));
 }
-function magKurOnizle(v){ const el=document.getElementById("magKurOrnek"); if(el){ const k=parseFloat(String(v).replace(",","."))||0; el.textContent="Örnek: 100 "+SADAKAT.ad+" = "+tl(100*k)+" ₺ indirim"; } }
+function magKurOnizle(v){ const el=document.getElementById("magKurOrnek"); if(el){ const yuz=parseFloat(String(v).replace(",","."))||0; el.textContent="Örnek: 100 "+SADAKAT.ad+" = "+tl(yuz)+" ₺ indirim"; } }
 function magKurKaydet(){
-  const v=parseFloat(String(document.getElementById("magKurInput").value).replace(",","."));
-  if(isNaN(v)||v<=0){ note("Geçerli bir kur girin"); return; }
-  SADAKAT.magTl=Math.round(v*100)/100; sadakatKaydet();
-  note("✓ "+SADAKAT.ad+" kuru güncellendi: 1 "+SADAKAT.ad+" = "+tl(SADAKAT.magTl)+" ₺");
+  const yuz=parseFloat(String(document.getElementById("magKurInput").value).replace(",","."));
+  if(isNaN(yuz)||yuz<=0){ note("Geçerli bir kur girin"); return; }
+  SADAKAT.magTl=Math.round((yuz/100)*10000)/10000; sadakatKaydet();
+  note("✓ "+SADAKAT.ad+" kuru güncellendi: 100 "+SADAKAT.ad+" = "+tl(yuz)+" ₺");
   viewMagPuan(document.querySelector(".main"));
 }
 function magOranOnizle(v){ const el=document.getElementById("magOranOrnek"); if(el){ const k=parseFloat(String(v).replace(",","."))||0; el.textContent="Örnek: 100 ₺ harcama = "+Math.round(100*k)+" "+SADAKAT.ad; } }
