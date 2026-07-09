@@ -2,7 +2,11 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#f0a728">
 <title>MİNİPAN POS</title>
 <style>
 /* ============================================================
@@ -406,7 +410,7 @@ tr:last-child td{border-bottom:none}
 }
 @media(max-width:520px){
   .modal-bg{align-items:flex-end}
-  .opt-modal{width:100%; max-height:90vh; border-radius:var(--radius-lg) var(--radius-lg) 0 0; animation:sheetUp .25s ease}
+  .opt-modal{width:100%; max-height:90dvh; border-radius:var(--radius-lg) var(--radius-lg) 0 0; animation:sheetUp .25s ease}
 }
 @keyframes sheetUp{from{transform:translateY(40px); opacity:.6} to{transform:translateY(0); opacity:1}}
 .opt-head{display:flex; align-items:center; gap:14px; padding:18px 20px; border-bottom:1px solid var(--line)}
@@ -1047,7 +1051,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .opt-not{width:100%; min-height:60px; border:1.5px solid var(--line-2); border-radius:var(--radius-sm);
   padding:11px 13px; font-size:14px; resize:vertical; font-family:inherit}
 .opt-not:focus{outline:none; border-color:var(--brand)}
-.opt-foot{display:flex; align-items:center; gap:14px; padding:14px 20px; border-top:1px solid var(--line)}
+.opt-foot{display:flex; align-items:center; gap:14px; padding:14px 20px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--line)}
 .opt-toplam{flex:1}
 .opt-toplam .ot-l{font-size:12px; color:var(--ink-2); font-weight:600}
 .opt-toplam .ot-v{font-size:22px; font-weight:800; letter-spacing:-.5px}
@@ -1315,9 +1319,37 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* ============================================================
    QR MENÜ — müşteri telefonu (mobil tam ekran)
    ============================================================ */
-#qrApp{display:none; position:fixed; inset:0; z-index:95; background:var(--bg); overflow-y:auto}
-.qr-screen{max-width:480px; margin:0 auto; min-height:100%; display:flex; flex-direction:column; background:var(--surface); position:relative}
-.qr-close{position:absolute; top:14px; left:14px; z-index:5; width:36px; height:36px; border-radius:99px; background:rgba(255,255,255,.85); backdrop-filter:blur(6px); font-size:16px; font-weight:700; color:var(--ink); box-shadow:var(--shadow)}
+#qrApp{display:none; position:fixed; inset:0; z-index:95; background:var(--bg); overflow-y:auto; overflow-x:hidden; height:100dvh; -webkit-overflow-scrolling:touch; overscroll-behavior:contain}
+/* ═══ QR MENÜ %100 MOBİL UYUM ═══ */
+#qrApp *{max-width:100%; box-sizing:border-box}
+#qrApp img{max-width:100%; height:auto}
+#qrApp input, #qrApp textarea, #qrApp select{font-size:16px}  /* iOS'ta odaklanınca zoom engeli (16px altı zoom yapar) */
+/* Uzun ürün adı/açıklama taşmasın, kelime kırılsın */
+.qr-card-ad, .qr-kat-baslik, .qkk-ad, .opt-name, .qr-sepet-ad{overflow-wrap:break-word; word-break:break-word}
+/* Yatay kaydırma güvenlik ağı — hiçbir öğe viewport'u aşmasın */
+.qr-screen{overflow-x:hidden}
+/* Safe-area: çentik / home-bar / status-bar boşlukları */
+.qr-screen{padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right)}
+/* Çok küçük ekranlar (<360px) */
+@media(max-width:359px){
+  .qr-kat-grid{grid-template-columns:1fr; gap:10px}
+  .qr-kat-baslik{font-size:18px; padding:14px 14px 10px}
+  .qr-brand{font-size:26px}
+  .qr-logo{font-size:52px}
+  .qr-giris{padding:24px 16px}
+  .qr-giris-kart{padding:18px}
+}
+/* Orta-küçük telefonlar */
+@media(max-width:400px){
+  .qr-kat-grid{gap:10px; padding:0 12px 14px}
+  .qr-menu-list{padding:12px}
+}
+.qr-screen{max-width:480px; margin:0 auto; min-height:100dvh; display:flex; flex-direction:column; background:var(--surface); position:relative; overflow-x:hidden}
+#qrApp .qr-close{position:absolute; top:calc(14px + env(safe-area-inset-top)); right:calc(14px + env(safe-area-inset-right)); left:auto; z-index:10; width:42px; height:42px; border-radius:99px; background:linear-gradient(180deg,#ffffff,#f0ede6); font-size:17px; font-weight:800; color:var(--cocoa); display:grid; place-items:center;
+  box-shadow:0 4px 0 #d9d3c8, 0 6px 14px rgba(0,0,0,.18); border:1px solid rgba(0,0,0,.04);
+  transition:transform .12s ease, box-shadow .12s ease}
+#qrApp .qr-close:hover{transform:translateY(-1px); box-shadow:0 5px 0 #d9d3c8, 0 8px 18px rgba(0,0,0,.2)}
+#qrApp .qr-close:active{transform:translateY(3px); box-shadow:0 1px 0 #d9d3c8, 0 2px 6px rgba(0,0,0,.15)}
 
 /* Karşılama */
 .qr-giris{justify-content:center; align-items:center; padding:30px 24px; background:radial-gradient(130% 90% at 50% 0%, #fff2dc 0%, var(--surface) 60%)}
@@ -1343,18 +1375,27 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* + ekle ve kapat gibi buton-İÇİ-buton istisnaları korunur (kendileri buton, ayrı algılanır) */
 
 /* Menü üst bar */
-.qr-topbar{position:sticky; top:0; z-index:4; display:flex; align-items:center; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line)}
-.qr-topbar .qr-close{position:static; box-shadow:none; background:var(--surface-2)}
+.qr-topbar{position:sticky; top:0; z-index:4; display:flex; align-items:center; padding:calc(12px + env(safe-area-inset-top)) 62px 12px 14px; background:var(--surface); border-bottom:1px solid var(--line); min-height:64px}
+#qrApp .qr-topbar .qr-close{position:absolute; top:50%; right:14px; bottom:auto; left:auto; transform:translateY(-50%); margin:0; width:40px; height:40px;
+  background:linear-gradient(180deg,#ffffff,#eeebe4); color:var(--cocoa);
+  box-shadow:0 3px 0 #d9d3c8, 0 5px 12px rgba(0,0,0,.14)}
+#qrApp .qr-topbar .qr-close:active{transform:translateY(-50%) translateY(3px); box-shadow:0 1px 0 #d9d3c8, 0 2px 5px rgba(0,0,0,.12)}
+.qr-topbar .qr-tb-mid{order:1; min-width:0}
+.qr-topbar .qr-tb-sadakat{order:2; margin-left:auto; margin-right:0; align-self:center}
 .qr-tb-mid{flex:1; text-align:center}
 .qr-tb-brand{font-size:16px; font-weight:800}
 .qr-tb-masa{font-size:11.5px; color:var(--ink-2)}
 
 /* Kategori şeridi */
-.qr-kat-row{position:sticky; top:60px; z-index:3; display:flex; gap:8px; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line); overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none}
+.qr-kat-row{position:sticky; top:calc(58px + env(safe-area-inset-top)); z-index:3; display:flex; gap:8px; padding:12px 14px; background:var(--surface); border-bottom:1px solid var(--line); overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none}
 .qr-kat-row::-webkit-scrollbar{display:none}
 .qr-kat{flex:none; padding:9px 16px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:700; white-space:nowrap}
 .qr-kat.on{background:var(--cocoa); color:#fff}
 .qr-servis-row{display:flex; gap:8px; padding:12px 14px 0}
+/* Kategoriler alt sabit bar — kaydırınca hep görünür, tam genişlik */
+.qr-alt-sabit{position:fixed; bottom:0; left:50%; transform:translateX(-50%); z-index:90; width:100%; max-width:480px; box-sizing:border-box; background:#ffffff; border-top:1px solid var(--line); padding:0 14px calc(10px + env(safe-area-inset-bottom)); box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+.qr-alt-sabit .qr-servis-row{padding:10px 0 0; width:100%; box-sizing:border-box}
+.qr-alt-sabit .qr-yardim-row{padding:10px 0 0; width:100%; box-sizing:border-box}
 .qr-yardim-row{display:flex; gap:8px; padding:10px 14px 0; flex-wrap:wrap}
 .qr-yardim{flex:1; min-width:fit-content; padding:9px 12px; border-radius:99px; background:var(--surface-2); border:1.5px solid var(--line); color:var(--ink-2); font-size:12.5px; font-weight:700; white-space:nowrap}
 .qr-yardim:active{background:var(--brand-soft); border-color:var(--brand)}
@@ -1363,7 +1404,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 
 /* Kategori ızgarası (2'li büyük kartlar) */
 .qr-kat-baslik{font-size:20px; font-weight:800; padding:18px 18px 12px}
-.qr-kat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px 16px}
+.qr-kat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px calc(130px + env(safe-area-inset-bottom))}
 .qr-kat-kart{width:100%; padding:0; margin:0; box-sizing:border-box; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); text-align:left; display:flex; flex-direction:column}
 .qr-kat-kart:active{transform:scale(.97)}
 .qkk-gorsel{width:100%; aspect-ratio:4/3; flex:0 0 auto; display:grid; place-items:center}
@@ -1823,7 +1864,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-splash2-bolum{margin-bottom:20px}
 .qr-splash2-bolum-bas{font-size:15px; font-weight:800; color:#fff; margin-bottom:10px; padding-left:2px}
 .qr-splash-kampanyalar{display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch}
-.qr-splash-kmp{flex:none; width:200px; background:rgba(255,255,255,.97); border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:5px; box-shadow:0 6px 20px rgba(0,0,0,.3)}
+.qr-splash-kmp{flex:none; width:min(200px,72vw); background:rgba(255,255,255,.97); border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:5px; box-shadow:0 6px 20px rgba(0,0,0,.3)}
 .qsk-ust{display:flex; justify-content:space-between; align-items:center; gap:6px}
 .qsk-ad{font-size:13px; font-weight:800; color:var(--err)}
 .qsk-oran{font-size:12px; font-weight:900; background:var(--err); color:#fff; border-radius:7px; padding:1px 7px}
@@ -1875,7 +1916,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-cek-kabul-btn{width:100%; padding:14px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
 .qr-cek-kabul-ok{text-align:center; padding:14px; background:var(--ok-soft); color:var(--ok); border-radius:12px; font-size:14px; font-weight:800}
 /* bildirim ekranı */
-.qr-bildirim{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg,#3a2410,#1a1208); padding:24px}
+.qr-bildirim{position:relative; flex:1; z-index:6; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg,#3a2410,#1a1208); padding:calc(24px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left)); overflow-y:auto}
 .qr-bildirim-ic{text-align:center; max-width:440px; color:#fff; animation:qrBildirimGir .5s ease}
 @keyframes qrBildirimGir{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
 .qr-bildirim-logo{font-size:64px; margin-bottom:14px}
@@ -2693,8 +2734,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-siparislerim{padding:8px 14px; border-radius:99px; background:var(--cocoa-soft); color:var(--cocoa); font-size:12.5px; font-weight:800}
 
 /* Müşteri bildirim banner'ı */
-.qr-bildirim{position:fixed; top:-100px; left:50%; transform:translateX(-50%); z-index:200; display:flex; align-items:center; gap:12px; background:var(--ink); color:#fff; padding:14px 20px; border-radius:14px; box-shadow:var(--shadow-lg); max-width:90vw; transition:top .35s cubic-bezier(.2,.8,.2,1)}
-.qr-bildirim.show{top:16px}
+.qr-toast{position:fixed; top:-100px; left:50%; transform:translateX(-50%); z-index:200; display:flex; align-items:center; gap:12px; background:var(--ink); color:#fff; padding:14px 20px; border-radius:14px; box-shadow:var(--shadow-lg); max-width:90vw; transition:top .35s cubic-bezier(.2,.8,.2,1); pointer-events:none}
+.qr-toast.show{top:calc(16px + env(safe-area-inset-top))}
 .qb-ic{font-size:26px}
 .qb-metin{display:flex; flex-direction:column; font-size:13px; line-height:1.3}
 .qb-metin strong{font-size:14.5px; margin-bottom:1px}
@@ -2742,13 +2783,13 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-card-tukendi{flex:none; font-size:11.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:8px 13px; border-radius:9px}
 
 /* Sepet bar (yüzen) */
-.qr-sepet-bar{position:fixed; bottom:14px; left:0; right:0; margin:0 auto; z-index:100; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); box-shadow:var(--shadow-lg); width:calc(min(480px,100vw) - 28px); box-sizing:border-box; cursor:pointer; border:none}
-.qr-sepet-bar > *{pointer-events:none}
-.qr-menu-list.has-sepet, .qr-kat-grid.has-sepet{padding-bottom:90px}
+.qr-sepet-bar{position:fixed; bottom:calc(14px + env(safe-area-inset-bottom)); left:0; right:0; margin:0 auto; z-index:100; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:var(--radius); background:var(--brand); color:var(--brand-ink); box-shadow:var(--shadow-lg); width:calc(min(480px,100vw) - 28px); box-sizing:border-box; cursor:pointer; border:none; pointer-events:auto}
+.qr-sepet-bar *{pointer-events:none}
+.qr-menu-list.has-sepet, .qr-kat-grid.has-sepet{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
 /* Modal açıkken sabit sepet bar gizlenir (modalın altında kalmasın) */
 body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
 .qr-sb-n{width:26px; height:26px; border-radius:99px; background:var(--brand-ink); color:#fff; display:grid; place-items:center; font-size:13px; font-weight:800}
-.qr-sb-t{flex:1; font-weight:800; font-size:15px}
+.qr-sb-t{flex:1; font-weight:800; font-size:15px; text-align:center}
 .qr-sb-f{font-weight:800; font-size:16px}
 
 /* Sepet ekranı */
@@ -2764,7 +2805,7 @@ body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
 .qr-si-adet{display:flex; align-items:center; gap:10px; background:var(--surface-2); border-radius:99px; padding:4px}
 .qr-si-adet button{width:28px; height:28px; border-radius:99px; background:var(--surface); font-size:16px; font-weight:800; color:var(--ink)}
 .qr-si-adet span{font-weight:800; min-width:18px; text-align:center}
-.qr-sepet-foot{position:sticky; bottom:0; padding:16px 18px; background:var(--surface); border-top:1px solid var(--line)}
+.qr-sepet-foot{position:sticky; bottom:0; padding:16px 18px calc(16px + env(safe-area-inset-bottom)); background:var(--surface); border-top:1px solid var(--line)}
 .qr-sf-toplam{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px; font-size:15px}
 .qr-sf-toplam strong{font-size:24px; font-weight:800}
 .qr-sf-not{text-align:center; font-size:11.5px; color:var(--ink-3); margin-top:8px}
@@ -18672,11 +18713,20 @@ function qrSepetBarGuncelle(){
     bar = document.createElement("button");
     bar.id = "qrSepetBarSabit";
     bar.className = "qr-sepet-bar";
-    bar.onclick = ()=>{ QR.view="sepet"; renderQR(); };
+    bar.type = "button";
+    const git = (e)=>{ if(e){ e.preventDefault(); e.stopPropagation(); } QR.view="sepet"; renderQR(); };
+    bar.addEventListener("click", git);
+    bar.addEventListener("touchend", git);
     document.body.appendChild(bar);
   }
   bar.innerHTML = '<span class="qr-sb-n">'+sepetN+'</span><span class="qr-sb-t">Sepetim</span>'+
     '<span class="qr-sb-f">'+sepetT+' ₺</span>';
+  // kategoriler ekranında alt sabit bar var → sepet barını onun üstüne yükselt
+  if(QR.view==="kategoriler"){
+    bar.style.bottom = "calc(120px + env(safe-area-inset-bottom))";
+  } else {
+    bar.style.bottom = "";  // menü ekranında normal konum (CSS'ten)
+  }
 }
 
 /* 0) SPLASH — açılış reklamı (WebP/GIF/MP4) */
@@ -19128,17 +19178,19 @@ function qrKategorilerHtml(){
       '<div class="qkk-bilgi"><div class="qkk-ad">'+k+'</div><div class="qkk-adet">'+adet+' ürün</div></div>'+
     '</button>';
   });
-  html += '</div>'+
-    // servis + yardım butonları kategorilerin ALTINDA
-    '<div class="qr-servis-row">'+
-      '<button class="qr-servis'+(QR.servis==="masa"||!QR.servis?' on':'')+'" onclick="qrServisSec(\'masa\')">🍽️ Masada</button>'+
-      '<button class="qr-servis'+(QR.servis==="paket"?' on':'')+'" onclick="qrServisSec(\'paket\')">🥡 Paket (Gel-Al)</button>'+
-      '<button class="qr-servis'+(QR.servis==="eve"?' on':'')+'" onclick="qrServisSec(\'eve\')">🛵 Eve</button>'+
-    '</div>'+
-    '<div class="qr-yardim-row">'+
-      ((QR.servis==="masa"||!QR.servis)?'<button class="qr-yardim" onclick="qrGarsonCagir()">🔔 Garson çağır</button>'+
-      '<button class="qr-yardim" onclick="qrMutfagaMesaj()">💬 Mutfağa mesaj</button>':'')+
-      '<button class="qr-yardim" onclick="QR.view=\'takip\';renderQR()">📍 Siparişlerim</button>'+
+  html += '</div>'+   // qr-kat-grid kapanışı
+    // servis + yardım butonları — SABİT alt bar (kaydırınca hep görünür)
+    '<div class="qr-alt-sabit">'+
+      '<div class="qr-servis-row">'+
+        '<button class="qr-servis'+(QR.servis==="masa"||!QR.servis?' on':'')+'" onclick="qrServisSec(\'masa\')">🍽️ Masada</button>'+
+        '<button class="qr-servis'+(QR.servis==="paket"?' on':'')+'" onclick="qrServisSec(\'paket\')">🥡 Paket (Gel-Al)</button>'+
+        '<button class="qr-servis'+(QR.servis==="eve"?' on':'')+'" onclick="qrServisSec(\'eve\')">🛵 Eve</button>'+
+      '</div>'+
+      '<div class="qr-yardim-row">'+
+        ((QR.servis==="masa"||!QR.servis)?'<button class="qr-yardim" onclick="qrGarsonCagir()">🔔 Garson çağır</button>'+
+        '<button class="qr-yardim" onclick="qrMutfagaMesaj()">💬 Mutfağa mesaj</button>':'')+
+        '<button class="qr-yardim" onclick="QR.view=\'takip\';renderQR()">📍 Siparişlerim</button>'+
+      '</div>'+
     '</div>';
   html += '</div>';
   return html;
@@ -19170,7 +19222,7 @@ function takipDurumGuncelle(takipId, durum){
 function qrBildirimGoster(durum){
   const dm = TAKIP_DURUM[durum]; if(!dm) return;
   let b = document.getElementById("qrBildirim");
-  if(!b){ b=document.createElement("div"); b.id="qrBildirim"; b.className="qr-bildirim"; document.body.appendChild(b); }
+  if(!b){ b=document.createElement("div"); b.id="qrBildirim"; b.className="qr-toast"; document.body.appendChild(b); }
   b.innerHTML = '<span class="qb-ic">'+dm.ic+'</span><span class="qb-metin"><strong>'+dm.ad+'</strong>'+dm.mesaj+'</span>';
   b.classList.add("show");
   clearTimeout(b._t);
@@ -20637,7 +20689,7 @@ function garsonPaketGonder(){
 function note(msg){
   let t=document.getElementById("toast");
   if(!t){ t=document.createElement("div"); t.id="toast";
-    t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;z-index:200;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .2s,transform .2s";
+    t.style.cssText="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;z-index:200;box-shadow:var(--shadow-lg);opacity:0;transition:opacity .2s,transform .2s;pointer-events:none";
     document.body.appendChild(t);
   }
   t.textContent=msg;
