@@ -12697,9 +12697,13 @@ function sgpOnayla(){
   } else {
     if(ad!==p.eskiAd && OPTION_GROUPS[ad]){ note("Bu isimde grup zaten var"); return; }
     const g = OPTION_GROUPS[p.eskiAd];
-    if(g.temel){
-      // temel grup düzenleme: sadece ad değişir
+    if(p.temel){
+      // temel ürün grubuna dönüştür / temel olarak kalsın
+      g.temel = true;
+      g.tip = "zorunlu"; g.min = 1; g.max = 1; g.ucretsiz = false;
     } else {
+      // seçenek grubu — temel bayrağını kaldır, tip/ücret/min-max uygula
+      delete g.temel;
       g.tip=p.tip; g.ucretsiz=p.ucretsiz; g.min=minSon; g.max=maxSon;
     }
     if(ad!==p.eskiAd){
@@ -12762,10 +12766,10 @@ function sgpCiz(){
     </div>` : "";
   mdl.innerHTML=`<div class="sgp-ic">
     <div class="sgp-baslik">${p.mod==='ekle'?(temel?'🧱 Yeni Temel Ürün Grubu':'🧩 Yeni Seçenek Grubu'):'✏️ Grubu Düzenle'}</div>
-    ${p.mod==='ekle'?`<div class="sgp-tur-row">
+    <div class="sgp-tur-row">
       <button class="sgp-tur-btn${!temel?' on':''}" onclick="sgpTurSec(false)">🧩 Seçenek Grubu</button>
       <button class="sgp-tur-btn${temel?' on':''}" onclick="sgpTurSec(true)">🧱 Temel Ürün</button>
-    </div>`:''}
+    </div>
     <div class="sgp-etiket">Grup adı</div>
     <input class="sgp-input" id="sgpAd" type="text" value="${(p.ad||'').replace(/"/g,'&quot;')}"
       placeholder="${temel?'örn. Ana Ürün, Kek Tabanı':'örn. Sos Seçimi, Pişirme Derecesi'}" onkeydown="if(event.key==='Enter') sgpOnayla()">
