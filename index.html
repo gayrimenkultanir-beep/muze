@@ -51,6 +51,7 @@
   /* Rol renkleri */
   --r-kasa:    #2f7ed8;
   --r-mudur:   #7a4ddb;
+  --r-depo:    #d97706;
   --r-genel:   #1f9d63;
 
   --radius:    14px;
@@ -651,7 +652,7 @@ tr:last-child td{border-bottom:none}
 /* Ürün formu */
 .uf-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
 .uf-baslik{font-size:17px; font-weight:800}
-.uf-govde{padding:16px 20px; max-height:62vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px}
+.uf-govde{padding:16px 20px; max-height:62vh; overflow-y:auto; overflow-x:hidden; display:flex; flex-direction:column; gap:14px}
 .uf-gorsel-alan{display:flex; gap:14px; align-items:center}
 .uf-gorsel-onizleme{width:80px; height:80px; min-width:80px; border-radius:14px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:38px; overflow:hidden; border:1px solid var(--line)}
 .uf-gorsel-onizleme img{width:100%; height:100%; object-fit:cover}
@@ -809,12 +810,21 @@ tr:last-child td{border-bottom:none}
 .uf-minmax label{font-size:11px; font-weight:700; color:var(--ink-3)}
 .uf-mm-input{width:48px; padding:7px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; font-weight:700; text-align:center; background:var(--surface)}
 .uf-mm-not{font-size:10.5px; color:var(--ink-3)}
-.uf-secenekler{display:flex; flex-direction:column; gap:6px}
-.uf-secenek-satir{display:flex; gap:6px; align-items:center}
-.uf-sec-ad{flex:1; padding:8px 11px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; background:var(--surface)}
+.uf-secenekler{display:flex; flex-direction:column; gap:10px}
+.uf-secenek-satir{display:flex; gap:6px; align-items:center; flex-wrap:wrap; padding:8px; border:1px solid var(--line); border-radius:10px; background:var(--surface-2)}
+.uf-sec-ad{flex:1 1 auto; min-width:120px; padding:8px 11px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; background:var(--surface)}
+.uf-sec-ozel{flex:1 1 100%; padding:8px 11px; border-radius:8px; border:1.5px solid var(--line); font-size:13px; background:var(--surface)}
+/* miktar/kalori/ek fiyat satırı — ad'ın altına wrap ile iner */
+.uf-sec-alt-satir{flex:1 1 100%; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
 .uf-sec-ek{display:flex; align-items:center; gap:1px; font-size:12px; font-weight:700; color:var(--ink-3)}
 .uf-sec-ek-input{width:44px; padding:7px 4px; border-radius:7px; border:1.5px solid var(--line); font-size:13px; font-weight:700; text-align:center; background:var(--surface)}
-.uf-sec-sil{width:28px; height:28px; min-width:28px; border-radius:7px; background:var(--err-soft); color:var(--err); border:none; font-size:11px; font-weight:800}
+.uf-sec-miktar{display:flex; align-items:center; gap:2px; font-size:12px; font-weight:700; color:var(--brand-d)}
+.uf-sec-miktar-input{width:46px; padding:7px 4px; border-radius:7px; border:1.5px solid var(--brand); font-size:13px; font-weight:800; text-align:center; background:var(--brand-soft); color:var(--brand-d)}
+.uf-sec-miktar b{font-size:10.5px; color:var(--ink-3); font-weight:700}
+.uf-sec-kcal{display:flex; align-items:center; gap:2px; font-size:11.5px; font-weight:700; color:#d92c08}
+.uf-sec-kcal-input{width:46px; padding:7px 4px; border-radius:7px; border:1.5px solid var(--line); font-size:12.5px; font-weight:700; text-align:center; background:var(--surface)}
+.uf-sec-sil{width:28px; height:28px; min-width:28px; margin-left:auto; border-radius:7px; background:var(--err-soft); color:var(--err); border:none; font-size:11px; font-weight:800}
+.uf-tasi-sec{display:flex; flex-direction:column; gap:2px; flex-shrink:0}
 /* Ürün doğrudan stok bağlantısı */
 .uf-stok-baglanti{background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px}
 .uf-stok-row{display:flex; gap:8px; align-items:center}
@@ -3033,6 +3043,10 @@ body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
       <button class="role-btn" onclick="login('genel')">
         <span class="role-dot" style="background:var(--r-genel)">🗺️</span>
         <span><span class="rb-name">Genel müdür</span><br><span class="rb-desc">Tüm şubeler, reçete, merkez tanımlar</span></span>
+      </button>
+      <button class="role-btn" onclick="login('depo')">
+        <span class="role-dot" style="background:var(--r-depo)">📦</span>
+        <span><span class="rb-name">Depo / Lojistik</span><br><span class="rb-desc">Bayi kanalı, stok işlemleri, bildirimler</span></span>
       </button>
       <div style="height:1px;background:var(--line);margin:6px 0"></div>
       <button class="role-btn" onclick="openKDS()">
@@ -5552,6 +5566,8 @@ const ROLES = {
            nav:["satis","masalar","masagecmis"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
            nav:["satis","masalar","masagecmis","masayonetim","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","personel","yazarkasa","yazicilar","musteriekran","rapor"] },
+  depo:  { ad:"Depo / Lojistik", ic:"📦", renk:"var(--r-depo)", sube:"Tüm şubeler",
+           nav:["bayi","stok","bildirim"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
            nav:["canli","masagecmis","masayonetim","recete","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","subeler","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
 };
@@ -6152,8 +6168,8 @@ function bildirimEkle(opts){
 function bildirimListesi(){
   const rol = state.role, sube = AKTIF_SUBE;
   return BILDIRIMLER.filter(b=>{
-    if(b.hedefSube){ return rol!=="genel" && b.hedefSube===sube; }   // şube hedefli: sadece o şube müdürü (genel müdür değil)
-    if(b.hedefRol){ return b.hedefRol===rol; }       // rol hedefli
+    if(b.hedefSube){ return rol!=="genel" && rol!=="depo" && b.hedefSube===sube; }   // şube hedefli: sadece o şube müdürü
+    if(b.hedefRol){ return b.hedefRol===rol || (rol==="depo" && b.hedefRol==="genel"); }  // depo, genel bildirimleri de görür
     return true;                                      // herkese
   }).sort((a,b)=>b.ts-a.ts);
 }
@@ -6712,6 +6728,9 @@ function toggleKapatMod(){
 let state = { role:null, cat:"Hepsi", cart:[] };
 
 let AKTIF_SUBE = "Edirne Atatürk";   // kasa/müdürün çalıştığı şube
+
+/* Depo rolü, bayi & stok işlemlerinde genel müdür yetkileriyle çalışır */
+function depoVeyaGenel(){ return state.role==="genel" || state.role==="depo"; }
 
 function login(role){
   const r = ROLES[role];
@@ -11123,14 +11142,23 @@ function maliyetReceteFormHtml(){
     <div class="mr-cikan-not">💡 Örn. 4 adet pankek çıkıyorsa, 1 adetin maliyeti toplam ÷ 4 olarak hesaplanır.</div>
   </div>`;
 
-  // hesap özeti
-  html+=`<div class="mr-hesap">
+  // hesap özeti (canlı güncellenen bölüm — input focus'u bozulmasın diye ayrı sarıldı)
+  html+=`<div id="mrHesapAlan">${maliyetHesapAlanHtml(t,h)}</div>`;
+
+  html+=`<div class="fat-form-foot">
+    <button class="btn btn-ghost" onclick="maliyetReceteIptal()">İptal</button>
+    <button class="btn btn-primary" onclick="maliyetReceteKaydet()">${duzenle?'Değişiklikleri kaydet':'Reçeteyi kaydet'}</button>
+  </div>`;
+  return html;
+}
+/* Hesap özeti + KDV + kârlılık — sadece bu bölüm canlı güncellenir (input DOM'una dokunulmaz) */
+function maliyetHesapAlanHtml(t,h){
+  let html=`<div class="mr-hesap">
     <div class="mr-hesap-satir"><span>Toplam hammadde maliyeti</span><strong>${h.toplamMaliyet.toFixed(2)} ₺</strong></div>
     ${h.toplamKcal>0?`<div class="mr-hesap-satir"><span>Toplam kalori</span><strong>🔥 ${Math.round(h.toplamKcal)} kcal</strong></div>`:''}
     <div class="mr-hesap-satir mr-birim"><span>1 ${t.cikanBirim} maliyeti <small>(${t.cikanMiktar||1} ${t.cikanBirim} için)</small></span><strong>${h.birimMaliyet.toFixed(2)} ₺</strong></div>
     ${h.birimKcal>0?`<div class="mr-hesap-satir mr-birim-kcal"><span>1 ${t.cikanBirim} kalorisi</span><strong>🔥 ${Math.round(h.birimKcal)} kcal</strong></div>`:''}
   </div>`;
-
   // KDV
   html+=`<div class="mr-kdv-row">
     <div class="fat-alan" style="flex:1">
@@ -11139,14 +11167,12 @@ function maliyetReceteFormHtml(){
     </div>
     <div class="mr-kdv-tutar"><span>KDV tutarı</span><strong>${h.kdvTutar.toFixed(2)} ₺</strong></div>
   </div>`;
-
   // kârlılık — çift yönlü
   html+=`<div class="mr-kar-baslik">Satış Kârlılığı</div>
     <div class="mr-kar-mod">
       <button class="mr-kar-btn${t.karTipi==='oran'?' on':''}" onclick="maliyetKarTipi('oran')">Kâr oranı gir → fiyat çıksın</button>
       <button class="mr-kar-btn${t.karTipi==='fiyat'?' on':''}" onclick="maliyetKarTipi('fiyat')">Satış fiyatı gir → kâr çıksın</button>
     </div>`;
-
   if(t.karTipi==="oran"){
     html+=`<div class="mr-kar-giris">
       <div class="fat-alan"><label>Kâr oranı (%)</label>
@@ -11168,15 +11194,53 @@ function maliyetReceteFormHtml(){
       <div class="mr-sonuc-satir mr-sonuc-fiyat"><span>Kâr oranı</span><strong>%${h.karOran.toFixed(1)}</strong></div>
     </div>`;
   }
-
-  html+=`<div class="fat-form-foot">
-    <button class="btn btn-ghost" onclick="maliyetReceteIptal()">İptal</button>
-    <button class="btn btn-primary" onclick="maliyetReceteKaydet()">${duzenle?'Değişiklikleri kaydet':'Reçeteyi kaydet'}</button>
-  </div>`;
   return html;
 }
-function maliyetAlan(alan,val){ if(state.maliyetTaslak){ state.maliyetTaslak[alan]=val; maliyetFormYenile(); } }
-function maliyetKalemAlan(i,alan,val){ const k=state.maliyetTaslak.kalemler[i]; if(k){ k[alan]=val; maliyetFormYenile(); } }
+function maliyetAlan(alan,val){
+  if(!state.maliyetTaslak) return;
+  state.maliyetTaslak[alan]=val;
+  maliyetHesapGuncelle(alan);
+}
+function maliyetKalemAlan(i,alan,val){
+  const k=state.maliyetTaslak && state.maliyetTaslak.kalemler[i];
+  if(!k) return;
+  k[alan]=val;
+  maliyetKalemTutarGuncelle(i);   // sadece o kalemin tutar/kalori span'ını güncelle
+  maliyetHesapGuncelle(null);     // toplam özet
+}
+/* Sadece hesap özeti bölümünü yeniden çiz — input DOM'una ve focus'a dokunma */
+function maliyetHesapGuncelle(aktifAlan){
+  const t=state.maliyetTaslak; if(!t) return;
+  const kap=document.getElementById("mrHesapAlan"); if(!kap) return;
+  const h=maliyetReceteHesap(t);
+  // o an düzenlenen input focus'ta olabilir — değerini state'e zaten yazdık,
+  // hesap alanını yeniden çizerken focus'taki input'un imlecini koru
+  const aktif=document.activeElement;
+  const aktifId=aktif&&aktif.closest&&aktif.closest("#mrHesapAlan")?aktif:null;
+  let selStart=null, selEnd=null, aktifOninput=null;
+  if(aktifId){ try{selStart=aktif.selectionStart; selEnd=aktif.selectionEnd;}catch(e){} aktifOninput=aktif.getAttribute("oninput"); }
+  kap.innerHTML=maliyetHesapAlanHtml(t,h);
+  // aynı oninput'a sahip input'u bulup focus'u geri ver
+  if(aktifOninput){
+    const yeni=kap.querySelector(`[oninput="${aktifOninput.replace(/"/g,'\\"')}"]`);
+    if(yeni){ yeni.focus(); try{ if(selStart!=null) yeni.setSelectionRange(selStart,selEnd);}catch(e){} }
+  }
+}
+/* Kalem satırındaki tutar + kalori span'ını güncelle (input'a dokunmadan) */
+function maliyetKalemTutarGuncelle(i){
+  const t=state.maliyetTaslak; if(!t) return;
+  const k=t.kalemler[i]; if(!k) return;
+  const s=STOCK[k.kod];
+  const mik=parseFloat(k.miktar)||0;
+  const tutar=mik*(parseFloat(k.alisFiyat)||0);
+  const birimKcal=(k.kcal!=null?parseFloat(k.kcal):(s&&s.kcal!=null?s.kcal:0))||0;
+  const kalemKcal=birimKcal*mik;
+  const satir=document.querySelectorAll(".mr-kalem")[i];
+  if(satir){
+    const tut=satir.querySelector(".mrk-tut"); if(tut) tut.textContent=tutar.toFixed(2)+" ₺";
+    const kc=satir.querySelector(".mrk-kcal"); if(kc) kc.textContent=birimKcal>0?Math.round(kalemKcal)+" kcal":"—";
+  }
+}
 function maliyetKarTipi(tip){ if(state.maliyetTaslak){ state.maliyetTaslak.karTipi=tip; go("recete", true); } }
 function maliyetKalemSil(i){ state.maliyetTaslak.kalemler.splice(i,1); go("recete", true); }
 /* Form yeniden çizmeden hesap özetini güncelle — input focus'u korunur */
@@ -11758,7 +11822,7 @@ function fiyatGenelHtml(isGenel){
 
   let html = `<div class="fy-bilgi-not">💡 <strong>Tavsiye edilen fiyat</strong> tüm şubeler için başlangıç değeridir; şubeye özel fiyat girilmezse o şubede tavsiye fiyat geçerlidir. Her hücrede üstte <strong>masa/gel-al</strong>, altta <strong>eve teslim</strong> fiyatı gösterilir.</div>`;
   if(!isGenel){
-    html += `<div class="fy-mudur-not">👁️ Fiyatları görüntüleyebilir, <strong>${AKTIF_SUBE}</strong> şubesi için ürünleri açıp/kapatabilirsiniz. Fiyat değişikliği genel müdür yetkisindedir.</div>`;
+    html += `<div class="fy-mudur-not">✏️ <strong>${AKTIF_SUBE}</strong> şubesinin fiyatlarını düzenleyebilir, ürünleri açıp/kapatabilirsiniz. Tavsiye fiyat genel müdür tarafından belirlenir; tavsiyeden düşük fiyat girerseniz genel müdüre bildirim gider.</div>`;
   }
 
   // üst bar: arama + kanal filtresi + excel
@@ -11843,7 +11907,10 @@ function fiyatHucre(p, pi, sube, isGenel, kanalFil){
   kanalFil = kanalFil || "tum";
   const tavMasa = p.fiyat||0;
   const tavEve = (p.fiyatEve!=null && p.fiyatEve>0) ? p.fiyatEve : null;
-  const duzenle = isGenel; // sadece genel müdür düzenler
+  // Düzenleme yetkisi:
+  //  - Tavsiye bloğu (sube===null): sadece genel müdür
+  //  - Şube bloğu: genel müdür her şubeyi; şube müdürü SADECE kendi şubesini
+  const duzenle = (sube===null) ? isGenel : (isGenel || sube===AKTIF_SUBE);
   const tavsiyeBlok = (sube===null);
   let mFiyat, eFiyat, mTavsiyeMi, eTavsiyeMi, mKapali, eKapali;
   if(tavsiyeBlok){
@@ -12145,6 +12212,19 @@ function subeFiyatGir(sube, ad, kanal, tavsiye){
     if(isNaN(f)||f<0){ note("Geçersiz fiyat"); return; }
     fiyatKayitYaz(sube, ad, kanal).genel = f;
     note(ad+" "+sube+" fiyatı: "+f+" ₺");
+    // Tavsiye fiyatın ALTINDA fiyat girildiyse genel müdüre bildirim düş
+    if(tavsiye>0 && f<tavsiye){
+      const fark = tavsiye - f;
+      const yuzde = Math.round((fark/tavsiye)*100);
+      bildirimEkle({
+        tip:"uyari",
+        baslik:"Tavsiye fiyatın altında satış",
+        mesaj:sube+" · "+ad+(kanal==="eve"?" (eve)":"")+" — "+f+"₺ girildi, tavsiye "+tavsiye+"₺ (−"+fark+"₺ · %"+yuzde+" düşük)",
+        kanal:"fiyat",
+        hedefRol:"genel",
+        link:"fiyat"
+      });
+    }
   }
   menuKaydet();
   go("fiyat", true);
@@ -13844,6 +13924,7 @@ function renderUrunForm(){
       const havuzAdlar = OPTION_POOL.map(x=>x.ad);
       const stokBagli = s.recete && s.recete[0] && STOCK[s.recete[0].ing];
       const ozelSec = s.ad && !havuzAdlar.includes(s.ad) && !stokBagli;
+      const stokBirim = stokBagli ? (STOCK[s.recete[0].ing].birim||"adet") : "";
       html += `<div class="uf-secenek-satir">
         <div class="uf-tasi-sec">
           <button class="uf-tasi-btn sm" ${si===0?'disabled':''} onclick="ufSecTasi(${gi},${si},-1)" title="Yukarı">▲</button>
@@ -13861,12 +13942,15 @@ function renderUrunForm(){
           <option value="__ozel__"${ozelSec?' selected':''}>✏️ Serbest yaz (stoksuz)...</option>
         </select>
         ${ozelSec?`<input class="uf-sec-ozel" value="${(s.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ad=this.value" placeholder="Ad">`:''}
-        ${g.ucretsiz
-          ? `<span class="uf-sec-ek ucretsiz">🆓 ücretsiz</span>`
-          : `<span class="uf-sec-ek">+<input class="uf-sec-ek-input" inputmode="numeric" value="${s.ek||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ek=parseInt(this.value)||0">₺</span>`}
-        <button class="uf-sec-stok-btn${(s.recete&&s.recete.length)?' bagli':''}" onclick="ufSecStokAc(${gi},${si})" title="Stok bağlantısı">${(s.recete&&s.recete.length)?'📦'+(STOCK[s.recete[0].ing]?' '+s.recete[0].g:''):'📦'}</button>
-        <button class="uf-sec-sil" onclick="ufSecSil(${gi},${si})">✕</button>
-      </div>${(state.urunForm._stokAcik===gi+'-'+si)?ufSecStokPanelHtml(gi,si,s):''}`;
+        <div class="uf-sec-alt-satir">
+          ${stokBagli?`<span class="uf-sec-miktar" title="Bu seçenek seçilince stoktan düşecek miktar">📦<input class="uf-sec-miktar-input" inputmode="decimal" value="${s.recete[0].g}" oninput="ufSecMiktarGir(${gi},${si},this.value)" placeholder="0"><b>${stokBirim}</b></span>`:''}
+          ${g.ucretsiz
+            ? `<span class="uf-sec-ek ucretsiz">🆓 ücretsiz</span>`
+            : `<span class="uf-sec-ek">+<input class="uf-sec-ek-input" inputmode="numeric" value="${s.ek||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ek=parseInt(this.value)||0">₺</span>`}
+          <span class="uf-sec-kcal">🔥<input class="uf-sec-kcal-input" inputmode="numeric" value="${s.kcal||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].kcal=parseInt(this.value)||0" title="Bu seçeneğin kalorisi">kcal</span>
+          <button class="uf-sec-sil" onclick="ufSecSil(${gi},${si})">✕</button>
+        </div>
+      </div>`;
     });
     html += `<div class="uf-sec-ekle-row">
         <button class="uf-sec-ekle" onclick="ufSecEkle(${gi})">+ seçenek</button>
@@ -14093,6 +14177,19 @@ function ufGrupAdSec(gi, val){
   renderUrunForm();
 }
 /* Seçenek adı dropdown'dan seçildi (havuzdan) */
+/* Seçenek stok miktarı (adet/gram) — girince reçeteye yaz + kaloriyi otomatik hesapla */
+function ufSecMiktarGir(gi, si, val){
+  const s = state.urunForm.gruplar[gi].secenekler[si];
+  if(!s.recete || !s.recete[0]) return;
+  const miktar = parseFloat(String(val).replace(",","."))||0;
+  s.recete[0].g = miktar;
+  // stok kartında birim başına kalori tanımlıysa: seçenek kalorisi = birim kcal × miktar
+  const kod = s.recete[0].ing;
+  if(STOCK[kod] && STOCK[kod].kcal!=null){
+    s.kcal = Math.round(STOCK[kod].kcal * miktar);
+    renderUrunForm();   // kalori alanını da güncelle
+  }
+}
 function ufSecAdSec(gi, si, val){
   const s = state.urunForm.gruplar[gi].secenekler[si];
   if(val==="__ozel__"){ s.ad=""; s.recete=[]; renderUrunForm(); return; }
@@ -14110,8 +14207,8 @@ function ufSecAdSec(gi, si, val){
     // mevcut miktar varsa koru, yoksa varsayılan 1
     const eskiG = (s.recete&&s.recete[0]&&s.recete[0].ing===kod)?s.recete[0].g:1;
     s.recete = [{ing:kod, g:eskiG}];
-    // stok bağlı seçenekte panel otomatik açılsın (miktar girsin)
-    state.urunForm._stokAcik = gi+"-"+si;
+    // kaloriyi stok kartından otomatik getir (birim kcal × miktar)
+    if(st.kcal!=null) s.kcal = Math.round(st.kcal * eskiG);
     renderUrunForm();
     return;
   }
@@ -14202,6 +14299,20 @@ function urunKaydet(){
       delete PRODUCT_OPTIONS[f.eskiAd];
       delete URUN_GORSEL[f.eskiAd];
       if(RECIPES[f.eskiAd]){ RECIPES[yeniAd]=RECIPES[f.eskiAd]; delete RECIPES[f.eskiAd]; }
+      // Şubelere özel fiyatları yeni ada taşı (ad değişince şube fiyatları kaybolmasın)
+      Object.keys(SUBE_FIYAT).forEach(sube=>{
+        if(SUBE_FIYAT[sube] && SUBE_FIYAT[sube][f.eskiAd]){
+          SUBE_FIYAT[sube][yeniAd] = SUBE_FIYAT[sube][f.eskiAd];
+          delete SUBE_FIYAT[sube][f.eskiAd];
+        }
+      });
+      // Ürün kapatma ve seçenek kapatma kayıtlarını da taşı
+      Object.keys(URUN_KAPALI).forEach(sube=>{
+        if(URUN_KAPALI[sube] && URUN_KAPALI[sube][f.eskiAd]){
+          URUN_KAPALI[sube][yeniAd] = URUN_KAPALI[sube][f.eskiAd];
+          delete URUN_KAPALI[sube][f.eskiAd];
+        }
+      });
     }
     p.ad=yeniAd; p.aciklama=f.aciklama.trim(); p.emoji=f.emoji;
     p.kat=f.kat; p.fiyat=fiyat; p.aktif=f.aktif;
@@ -14472,7 +14583,7 @@ function viewPersonel(main){
 // BAYİ KANALI (B2B) — genel müdür ↔ bayi tedarik
 // ============================================================
 function viewBayi(main){
-  const isGenel = state.role==="genel";
+  const isGenel = depoVeyaGenel();
   if(!state.bayiSekme) state.bayiSekme = isGenel ? "irsaliye" : "siparis";
   const sekme = state.bayiSekme;
   // genel müdür sekmeleri (stok kartları/bayi stokları/sayım → STOK menüsüne taşındı)
@@ -18093,7 +18204,7 @@ function viewRapor(main){
 
 // --- STOK (canlı · motor düşürür) ---
 function viewStok(main){
-  const isGenel = state.role==="genel";
+  const isGenel = depoVeyaGenel();
   if(!state.stokSekme) state.stokSekme = isGenel ? "stokkart" : "sayim";
   // sekme listesi role göre
   const genelSekmeler = [
@@ -20876,7 +20987,6 @@ try {
 } catch(e){ /* migrasyon başarısızsa mevcut kartlarla devam */ }
 initFirebase();
 
-   
 // Güvenlik ağı: render hook'larının kaçırdığı ara durumlar için 4 sn'de bir otomatik kayıt
 setInterval(sessionsKaydet, 4000);
 // Sekme/uygulama kapanırken son hali kesin kaydet
