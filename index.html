@@ -2586,6 +2586,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .sube-form-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
 /* Merkez firma kartı (Şubeler ekranı üstü) */
 .merkez-firma-kart{background:linear-gradient(135deg,var(--cocoa-soft),#fbe6ec); border:1px solid #e6c4d4; border-radius:16px; padding:16px 18px; margin-bottom:18px}
+.sb-kod{font-size:10.5px; font-weight:700; color:var(--brand-d); background:var(--brand-soft); border:1px solid #ffb3a0; border-radius:5px; padding:1px 7px; margin-left:4px; letter-spacing:.3px}
 .merkez-firma-ust{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px}
 .merkez-firma-baslik{font-size:14px; font-weight:800; color:var(--cocoa); display:flex; flex-direction:column; gap:2px}
 .merkez-firma-not{font-size:11px; font-weight:500; color:var(--ink-3)}
@@ -6410,10 +6411,14 @@ function b2bYukle(){
 }
 /* Stok kartlarına görünür, sıralı, kalıcı numara — irsaliye/rapor/arama için */
 let _stokNoSayac = 1;
-function stokNoBiçim(n){ return "STK-" + String(n).padStart(6,"0"); }
+function stokNoBiçim(n){ return "MNPN-S-" + String(n).padStart(6,"0"); }
 function stokNoMigrasyon(){
   try{
     let degisti=false;
+    // eski "STK-" formatındaki numaraları yeni "MNPN-S-" formatına çevir (numara korunur)
+    Object.values(STOCK).forEach(s=>{
+      if(s.no && /^STK-/.test(s.no)){ const n=parseInt(s.no.replace(/\D/g,""))||0; s.no=stokNoBiçim(n); degisti=true; }
+    });
     // en yüksek mevcut no'yu bul, sayacı ona göre ilerlet
     Object.values(STOCK).forEach(s=>{
       if(s.no){ const n=parseInt(String(s.no).replace(/\D/g,""))||0; if(n>=_stokNoSayac) _stokNoSayac=n+1; }
@@ -11256,6 +11261,7 @@ function maliyetReceteFormHtml(){
 }
 /* Hesap özeti + KDV + kârlılık — sadece bu bölüm canlı güncellenir (input DOM'una dokunulmaz) */
 function maliyetHesapAlanHtml(t,h){
+  const esc=v=>String(v==null?"":v).replace(/"/g,'&quot;');
   let html=`<div class="mr-hesap">
     <div class="mr-hesap-satir"><span>Toplam hammadde maliyeti</span><strong>${h.toplamMaliyet.toFixed(2)} ₺</strong></div>
     ${h.toplamKcal>0?`<div class="mr-hesap-satir"><span>Toplam kalori</span><strong>🔥 ${Math.round(h.toplamKcal)} kcal</strong></div>`:''}
@@ -13825,11 +13831,15 @@ function urunIdUret(){
   const id = "urn_" + Date.now().toString(36) + "_" + (_urunIdSayac++).toString(36);
   return id;
 }
-function urunNoBiçim(n){ return "ÜRN-" + String(n).padStart(6,"0"); }
+function urunNoBiçim(n){ return "MNPN-U-" + String(n).padStart(6,"0"); }
 function urunIdMigrasyon(){
   try{
     let degisti=false;
     const mevcutIdler = new Set(DEMO_PRODUCTS.map(p=>p.id).filter(Boolean));
+    // eski "ÜRN-" formatındaki numaraları yeni "MNPN-U-" formatına çevir (numara korunur)
+    DEMO_PRODUCTS.forEach(p=>{
+      if(p.no && /^ÜRN-/.test(p.no)){ const n=parseInt(p.no.replace(/\D/g,""))||0; p.no=urunNoBiçim(n); degisti=true; }
+    });
     // en yüksek mevcut ürün no'sundan sayacı ilerlet
     DEMO_PRODUCTS.forEach(p=>{
       if(p.no){ const n=parseInt(String(p.no).replace(/\D/g,""))||0; if(n>=_urunNoSayac) _urunNoSayac=n+1; }
@@ -13915,7 +13925,7 @@ function kcalMigrasyon(){
 /* === ŞUBE VERİLERİ KALICILIĞI === */
 const SUBE_KEY = "minipan_subeler_v1";
 function subeKaydet(){
-  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES, MERKEZ_FIRMA }, 1);
+  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES, MERKEZ_FIRMA, _subeKodSayac }, 1);
 }
 function subeYukle(){
   const v = MPStore.get(SUBE_KEY, {}, {version:1});
@@ -13923,6 +13933,35 @@ function subeYukle(){
   if(v.BRANCH_INFO) BRANCH_INFO = v.BRANCH_INFO;
   if(v.BRANCH_TABLES) BRANCH_TABLES = v.BRANCH_TABLES;
   if(v.MERKEZ_FIRMA) MERKEZ_FIRMA = Object.assign({}, MERKEZ_FIRMA, v.MERKEZ_FIRMA);
+  if(v._subeKodSayac) _subeKodSayac = v._subeKodSayac;
+  subeKoduMigrasyon();   // her şubeye özgü kalıcı kod ata (MNPN-B-001)
+}
+/* Şubelere özgü kalıcı kod — sipariş no'sunda ve belgelerde kullanılır */
+let _subeKodSayac = 1;
+function subeKoduBiçim(n){ return "MNPN-B-" + String(n).padStart(3,"0"); }
+/* Şube adından kısa harf kodu (sipariş no'da okunur kısım) — örn "Edirne Atatürk" → "EDA" */
+function subeKisaKod(ad){
+  if(!ad) return "SB";
+  const harfler = ad.toLocaleUpperCase("tr").replace(/[^A-ZÇĞİÖŞÜ ]/g,"").split(/\s+/).filter(Boolean);
+  let kod = harfler.map(k=>k[0]).join("").slice(0,3);
+  if(kod.length<2 && harfler[0]) kod = harfler[0].slice(0,3);
+  return kod || "SB";
+}
+function subeKoduMigrasyon(){
+  try{
+    let degisti=false;
+    // BRANCH_INFO'da şube kodu tut
+    DEMO_BRANCHES.forEach(b=>{
+      const info = BRANCH_INFO[b.ad] || (BRANCH_INFO[b.ad]={});
+      if(info.kod){ const n=parseInt(String(info.kod).replace(/\D/g,""))||0; if(n>=_subeKodSayac) _subeKodSayac=n+1; }
+    });
+    DEMO_BRANCHES.forEach(b=>{
+      const info = BRANCH_INFO[b.ad] || (BRANCH_INFO[b.ad]={});
+      if(!info.kod){ info.kod = subeKoduBiçim(_subeKodSayac++); degisti=true; }
+      if(!info.kisaKod){ info.kisaKod = subeKisaKod(b.ad); degisti=true; }
+    });
+    if(degisti && typeof subeKaydet==="function") subeKaydet();
+  }catch(e){ console.warn("subeKoduMigrasyon:", e); }
 }
 
 /* === ÜRÜN YORUM / PUANLAMA === */
@@ -14915,7 +14954,7 @@ function bayiGecmisHtml(isGenel){
     const t = siparisTutar(sp);
     const aktifKalem = sp.kalemler.filter(k=>!k.silindi && k.miktar>0);
     html += `<div class="bayi-sip-kart">
-      <div class="bayi-sip-ust"><span class="bayi-sip-no">#${sp.id}${isGenel?' · '+sp.sube:''}</span>
+      <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)}${isGenel?' · '+sp.sube:''}</span>
         <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
       <div class="bayi-sip-tarih">${sp.tarih}${sp.odeme?' · '+sp.odeme:''}</div>
       <div class="bayi-sip-kalemler">`;
@@ -16709,7 +16748,7 @@ function bayiSiparisGenelHtml(){
 function bayiSiparisKartGenel(sp){
   const dm = SIPARIS_DURUM[sp.durum];
   let html = `<div class="bayi-sip-kart">
-    <div class="bayi-sip-ust"><span class="bayi-sip-no">#${sp.id} · ${sp.sube}</span>
+    <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)} · ${sp.sube}</span>
       <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
     <div class="bayi-sip-tarih">${sp.tarih}</div>
     <div class="bayi-sip-kalemler">`;
@@ -17131,11 +17170,16 @@ function bayiSepetCikar(kod){
   state.bayiSepet = state.bayiSepet.filter(x=>x.kod!==kod);
   go("bayi", true);
 }
+/* Siparişin görünen numarası — yeni siparişlerde MNPN-XXX-00042, eskilerde #id */
+function siparisNo(sp){ return sp && sp.no ? sp.no : ("#"+(sp?sp.id:"")); }
 function bayiSiparisGonder(){
   if(!state.bayiSepet || state.bayiSepet.length===0){ note("Liste boş"); return; }
   const bugun = new Date().toLocaleDateString("tr-TR");
+  const sipId = _siparisId++;
+  const kisaKod = (BRANCH_INFO[AKTIF_SUBE] && BRANCH_INFO[AKTIF_SUBE].kisaKod) || subeKisaKod(AKTIF_SUBE);
+  const sipNo = "MNPN-" + kisaKod + "-" + String(sipId).padStart(5,"0");
   BAYI_SIPARISLER.push({
-    id:_siparisId++, sube:AKTIF_SUBE, tarih:bugun,
+    id:sipId, no:sipNo, sube:AKTIF_SUBE, tarih:bugun,
     kalemler:state.bayiSepet.map(k=>({kod:k.kod, miktar:k.miktar, talepMiktar:k.miktar, girisBirim:k.girisBirim||null, girisMiktar:k.girisMiktar!=null?k.girisMiktar:null})),
     durum:"onayda", odeme:null, aktarildi:false, duzenlendi:false
   });
@@ -17158,7 +17202,7 @@ function bayiBenimSiparisHtml(){
     const dm = SIPARIS_DURUM[sp.durum];
     const t = siparisTutar(sp);
     html += `<div class="bayi-sip-kart">
-      <div class="bayi-sip-ust"><span class="bayi-sip-no">#${sp.id}</span>
+      <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)}</span>
         <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
       <div class="bayi-sip-tarih">${sp.tarih}${sp.duzenlendi?' <span class="bayi-duzenlendi-rozet">✏️ genel müdür düzenledi</span>':''}</div>
       <div class="bayi-sip-kalemler">`;
@@ -17271,7 +17315,7 @@ function bayiOdemeTamamla(){
   bayiOdemeKapat();
   note("✓ Ödeme alındı ("+yontem+") · stok aktarımına hazır");
   bildirimEkle({tip:"odeme", baslik:"Ödeme gerçekleşti",
-    mesaj:sp.sube+" şubesi #"+sp.id+" siparişi için "+yontem+" ile ödeme yaptı. Stok aktarımı yapabilirsiniz.",
+    mesaj:sp.sube+" şubesi "+siparisNo(sp)+" siparişi için "+yontem+" ile ödeme yaptı. Stok aktarımı yapabilirsiniz.",
     kanal:"Bayi Kanalı", hedefRol:"genel", link:{ekran:"bayi", sekme:"siparis"}});
   b2bKaydet();
   go("bayi", true);
@@ -17320,7 +17364,7 @@ function irsaliyeAc(id){
           <div class="irs-tarih-blok">
             <div>Düzenleme: <strong>${bugun}</strong></div>
             <div>Saat: <strong>${saat}</strong></div>
-            <div>Sipariş No: <strong>#${sp.id}</strong></div>
+            <div>Sipariş No: <strong>${siparisNo(sp)}</strong></div>
           </div>
         </div>
 
@@ -17424,7 +17468,7 @@ function bayiStokAktar(id){
   if(uyari.length) note("📦 Aktarıldı · ⚠️ kısmi: "+uyari.join(", "));
   else note("📦 Tüm stoklar bayinize aktarıldı");
   bildirimEkle({tip:"stok", baslik:"Stoklarınız aktarıldı",
-    mesaj:"#"+sp.id+" siparişinizin stokları deponuza aktarıldı."+(uyari.length?" (Bazı kalemler kısmi: "+uyari.join(", ")+")":""),
+    mesaj:siparisNo(sp)+" siparişinizin stokları deponuza aktarıldı."+(uyari.length?" (Bazı kalemler kısmi: "+uyari.join(", ")+")":""),
     kanal:"Bayi Kanalı", hedefSube:sp.sube, link:{ekran:"stok", sekme:null}});
   b2bKaydet();
   go("stok", true);
@@ -18357,7 +18401,7 @@ function viewSubeler(main){
     html+=`<div class="sb-kart${kapali?' sb-kapali':''}">
       <div class="sb-ust">
         <div class="sb-bilgi">
-          <div class="sb-ad">${info.express?'⚡ ':'🏬 '}${b.ad}${kapali?' <span class="sb-rozet-kapali">KAPALI</span>':''}</div>
+          <div class="sb-ad">${info.express?'⚡ ':'🏬 '}${b.ad}${info.kod?` <span class="sb-kod">${info.kod}</span>`:''}${kapali?' <span class="sb-rozet-kapali">KAPALI</span>':''}</div>
           <div class="sb-adres">📍 ${info.sehir||''}${info.adres?' · '+info.adres:''}</div>
           <div class="sb-meta">${masaSayi} masa · ${info.tel||'tel yok'}</div>
         </div>
@@ -18505,6 +18549,7 @@ function subeFormKaydet(){
     const kopyaSube = (f.kaynak && DEMO_BRANCHES.find(b=>b.ad===f.kaynak)) ? f.kaynak : (DEMO_BRANCHES[0]?DEMO_BRANCHES[0].ad:"");
     DEMO_BRANCHES.push({ad:yeniAd, ciro:0, masa:0, bekleyen:0, durum:"green", fire:"normal"});
     BRANCH_INFO[yeniAd]={
+      kod: subeKoduBiçim(_subeKodSayac++), kisaKod: subeKisaKod(yeniAd),
       vkn:(f.vkn||"").trim(), tckn:(f.tckn||"").trim(),
       vergiDairesi:(f.vergiDairesi||"").trim(), vergiTuru:(f.vergiTuru||"").trim(),
       sehir:(f.sehir||"").trim(), adres:(f.adres||"").trim(), tel:(f.tel||"").trim()
@@ -18548,8 +18593,10 @@ function subeFormKaydet(){
       MUTFAK_FISLER.forEach(f2=>{ if(f2.sube===eski) f2.sube=yeniAd; });
       sessionsKaydet();
     }
+    const eskiKod = (BRANCH_INFO[eski]&&BRANCH_INFO[eski].kod) || subeKoduBiçim(_subeKodSayac++);
     if(eski!==yeniAd && BRANCH_INFO[eski]) delete BRANCH_INFO[eski];
     BRANCH_INFO[yeniAd]={
+      kod: eskiKod, kisaKod: subeKisaKod(yeniAd),
       vkn:(f.vkn||"").trim(), tckn:(f.tckn||"").trim(),
       vergiDairesi:(f.vergiDairesi||"").trim(), vergiTuru:(f.vergiTuru||"").trim(),
       sehir:(f.sehir||"").trim(), adres:(f.adres||"").trim(), tel:(f.tel||"").trim()
