@@ -1036,6 +1036,37 @@ tr:last-child td{border-bottom:none}
 .opt-kcal{display:inline-block; font-size:11.5px; font-weight:700; color:#c0392b; margin-left:6px}
 .qr-card-kcal{display:inline-flex; align-items:center; gap:3px; font-size:11.5px; font-weight:700; color:#d92c08; background:#ffe6df; border-radius:99px; padding:2px 9px; white-space:nowrap}
 .qr-card-kcal-row{margin:2px 0 4px}
+/* ══ Sevk İrsaliyesi önizleme modalı ══ */
+.irs-modal-bg{position:fixed; inset:0; z-index:300; background:rgba(20,10,20,.55); display:flex; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto}
+.irs-modal-ic{background:#fff; border-radius:16px; max-width:760px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; margin:auto}
+.irs-arac-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; background:var(--surface-2); border-bottom:1px solid var(--line)}
+.irs-arac-baslik{font-size:15px; font-weight:800; color:var(--cocoa)}
+.irs-arac-btnlar{display:flex; gap:8px}
+.irs-kagit{padding:28px 30px; color:#1a1a1a; background:#fff}
+.irs-ust{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #4a0f2e; padding-bottom:14px; margin-bottom:16px}
+.irs-belge-tip{font-size:22px; font-weight:800; color:#4a0f2e; letter-spacing:1px}
+.irs-belge-no{font-size:12px; color:#666; margin-top:3px}
+.irs-tarih-blok{font-size:12px; text-align:right; line-height:1.7}
+.irs-taraflar{display:flex; gap:16px; margin-bottom:18px}
+.irs-taraf{flex:1; border:1px solid #ddd; border-radius:8px; padding:12px 14px}
+.irs-taraf-etiket{font-size:10px; font-weight:800; color:#ff3b14; letter-spacing:1px; margin-bottom:5px}
+.irs-taraf-unvan{font-size:14px; font-weight:800; margin-bottom:4px}
+.irs-taraf-satir{font-size:11.5px; color:#444; line-height:1.6}
+.irs-tablo{width:100%; border-collapse:collapse; margin-bottom:14px}
+.irs-tablo th{background:#4a0f2e; color:#fff; font-size:11px; padding:9px 10px; text-align:left; font-weight:700}
+.irs-tablo td{padding:9px 10px; border-bottom:1px solid #eee; font-size:12.5px}
+.irs-tablo .irs-sira{width:36px; text-align:center; color:#999}
+.irs-tablo .irs-birim,.irs-tablo .irs-miktar{text-align:center; width:90px}
+.irs-tablo .irs-miktar{font-weight:800}
+.irs-tablo tfoot td{border-top:2px solid #4a0f2e; border-bottom:none; font-weight:800; background:#faf4ec}
+.irs-toplam-lbl{text-align:right}
+.irs-bos{text-align:center; color:#999; padding:18px}
+.irs-not{font-size:10.5px; color:#888; font-style:italic; margin-bottom:24px; border-left:3px solid #ff3b14; padding-left:10px}
+.irs-imza-blok{display:flex; gap:40px; margin-top:34px}
+.irs-imza{flex:1; text-align:center}
+.irs-imza-cizgi{border-top:1px solid #333; margin-bottom:6px}
+.irs-imza-lbl{font-size:11px; font-weight:700}
+.irs-imza-lbl small{font-weight:400; color:#777}
 /* Ürün formu alerjen seçimi */
 .uf-alerjen-not{font-size:11px; font-weight:500; color:var(--ink-3)}
 .uf-alerjen-grid{display:flex; flex-wrap:wrap; gap:7px; margin-top:6px}
@@ -5797,6 +5828,16 @@ function subeMasalari(sube){
 }
 
 /* --- ŞUBE ADRESLERİ (yönetim için) --- */
+/* Merkez / Genel Müdürlük firma bilgileri — irsaliyede GÖNDEREN olarak görünür */
+let MERKEZ_FIRMA = {
+  unvan: "FOOST Gıda Franchise A.Ş.",
+  vkn: "1234567890",
+  vergiDairesi: "Merkez V.D.",
+  adres: "Merkez Mah. Üretim Cad. No:1",
+  sehir: "İstanbul",
+  tel: "0850 840 17 56",
+  mersis: ""
+};
 let BRANCH_INFO = {
   "Bolu Tabaklar":           {sehir:"Bolu", adres:"Tabaklar, Börekciler Sk. No:20B D:19, 14100 Bolu Merkez", tel:"08508401756"},
   "Çanakkale Kemalpaşa":      {sehir:"Çanakkale", adres:"Kemalpaşa, Yalı Cd. No:7, 17000 Çanakkale Merkez", tel:"08508401756", express:true},
@@ -16624,12 +16665,14 @@ function bayiSiparisKartGenel(sp){
     html += `<div class="bayi-sip-aksiyon">
       <span class="bayi-odendi-rozet">💰 Ödendi (${sp.odeme})</span>
       <button class="bayi-sip-excel-btn" onclick="siparisExcelTek(${sp.id})">📊 Excel</button>
+      <button class="btn btn-ghost" onclick="irsaliyeAc(${sp.id})">🧾 İrsaliye</button>
       <button class="btn btn-primary" onclick="bayiStokAktar(${sp.id})">📦 Stok aktar</button>
     </div>`;
   } else if(sp.durum==="aktarildi"){
     html += `<div class="bayi-sip-aksiyon">
       <span class="bayi-sip-durum-rozet aktar">✓ Stoklar aktarıldı</span>
       <button class="bayi-sip-excel-btn" onclick="siparisExcelTek(${sp.id})">📊 Excel</button>
+      <button class="btn btn-ghost" onclick="irsaliyeAc(${sp.id})">🧾 İrsaliye</button>
     </div>`;
   } else {
     html += `<div class="bayi-sip-aksiyon"><button class="bayi-sip-excel-btn" onclick="siparisExcelTek(${sp.id})">📊 Excel indir</button></div>`;
@@ -17139,6 +17182,134 @@ function bayiOdemeTamamla(){
   b2bKaydet();
   go("bayi", true);
 }
+/* ══ SEVK İRSALİYESİ — onaylı sipariş içeriği, fiyatsız (birim+adet), matbu format ══ */
+function irsaliyeAc(id){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
+  const sube = sp.sube;
+  const alici = BRANCH_INFO[sube] || {};
+  const kalemler = (sp.kalemler||[]).filter(k=>!k.silindi && k.miktar>0);
+  const bugun = new Date().toLocaleDateString("tr-TR",{day:'2-digit',month:'2-digit',year:'numeric'});
+  const saat = new Date().toLocaleTimeString("tr-TR",{hour:'2-digit',minute:'2-digit'});
+
+  let satirlar = kalemler.map((k,i)=>{
+    const s = STOCK[k.kod] || {};
+    const birim = s.birim || "adet";
+    return `<tr>
+      <td class="irs-sira">${i+1}</td>
+      <td class="irs-ad">${s.ad || k.kod}</td>
+      <td class="irs-birim">${birim}</td>
+      <td class="irs-miktar">${k.miktar}</td>
+    </tr>`;
+  }).join("");
+  if(!satirlar) satirlar = `<tr><td colspan="4" class="irs-bos">Aktarılacak kalem yok.</td></tr>`;
+  const toplamKalem = kalemler.length;
+  const toplamMiktar = kalemler.reduce((t,k)=>t+(k.miktar||0),0);
+
+  const m = MERKEZ_FIRMA;
+  const html = `
+  <div class="irs-modal-bg" id="irsModal" onclick="if(event.target===this)irsaliyeKapat()">
+    <div class="irs-modal-ic">
+      <div class="irs-arac-bar no-print">
+        <span class="irs-arac-baslik">🧾 Sevk İrsaliyesi · Önizleme</span>
+        <div class="irs-arac-btnlar">
+          <button class="btn btn-ghost" onclick="irsaliyeKapat()">Kapat</button>
+          <button class="btn btn-primary" onclick="irsaliyeYazdir()">🖨️ Yazdır</button>
+        </div>
+      </div>
+      <div class="irs-kagit" id="irsKagit">
+        <div class="irs-ust">
+          <div class="irs-baslik-blok">
+            <div class="irs-belge-tip">SEVK İRSALİYESİ</div>
+            <div class="irs-belge-no">Belge No: SVK-${String(sp.id).padStart(6,'0')}</div>
+          </div>
+          <div class="irs-tarih-blok">
+            <div>Düzenleme: <strong>${bugun}</strong></div>
+            <div>Saat: <strong>${saat}</strong></div>
+            <div>Sipariş No: <strong>#${sp.id}</strong></div>
+          </div>
+        </div>
+
+        <div class="irs-taraflar">
+          <div class="irs-taraf">
+            <div class="irs-taraf-etiket">GÖNDEREN (Satıcı)</div>
+            <div class="irs-taraf-unvan">${m.unvan||"—"}</div>
+            <div class="irs-taraf-satir">VKN: ${m.vkn||"—"}${m.vergiDairesi?" · "+m.vergiDairesi:""}</div>
+            <div class="irs-taraf-satir">${m.adres||""}${m.sehir?", "+m.sehir:""}</div>
+            <div class="irs-taraf-satir">Tel: ${m.tel||"—"}</div>
+          </div>
+          <div class="irs-taraf">
+            <div class="irs-taraf-etiket">ALICI (Şube)</div>
+            <div class="irs-taraf-unvan">${alici.unvan || sube}</div>
+            <div class="irs-taraf-satir">${(alici.vkn?"VKN: "+alici.vkn:(alici.tckn?"TCKN: "+alici.tckn:"VKN/TCKN: —"))}${alici.vergiDairesi?" · "+alici.vergiDairesi:""}</div>
+            <div class="irs-taraf-satir">${alici.adres||""}${alici.sehir?", "+alici.sehir:""}</div>
+            <div class="irs-taraf-satir">Tel: ${alici.tel||"—"}</div>
+          </div>
+        </div>
+
+        <table class="irs-tablo">
+          <thead>
+            <tr><th class="irs-sira">#</th><th class="irs-ad">Malın Cinsi</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
+          </thead>
+          <tbody>${satirlar}</tbody>
+          <tfoot>
+            <tr><td colspan="2" class="irs-toplam-lbl">TOPLAM</td><td class="irs-birim">${toplamKalem} kalem</td><td class="irs-miktar">${toplamMiktar}</td></tr>
+          </tfoot>
+        </table>
+
+        <div class="irs-not">Bu irsaliye ticari mal sevkiyatı içindir; fiyat ve bedel içermez. Malın fiili sevk tarihi düzenleme tarihidir.</div>
+
+        <div class="irs-imza-blok">
+          <div class="irs-imza"><div class="irs-imza-cizgi"></div><div class="irs-imza-lbl">Teslim Eden<br><small>${m.unvan||""}</small></div></div>
+          <div class="irs-imza"><div class="irs-imza-cizgi"></div><div class="irs-imza-lbl">Teslim Alan<br><small>${alici.unvan||sube}</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  let el = document.getElementById("irsModalWrap");
+  if(!el){ el=document.createElement("div"); el.id="irsModalWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function irsaliyeKapat(){ const w=document.getElementById("irsModalWrap"); if(w) w.innerHTML=""; }
+function irsaliyeYazdir(){
+  const kagit = document.getElementById("irsKagit");
+  if(!kagit) return;
+  const pencere = window.open("", "_blank", "width=800,height=1000");
+  if(!pencere){ note("Yazdırma penceresi açılamadı (pop-up engeli olabilir)"); return; }
+  pencere.document.write(`<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><title>Sevk İrsaliyesi</title>
+    <style>${irsaliyeYazdirCss()}</style></head><body>${kagit.outerHTML}</body></html>`);
+  pencere.document.close();
+  setTimeout(()=>{ pencere.focus(); pencere.print(); }, 300);
+}
+function irsaliyeYazdirCss(){
+  return `body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;margin:0;padding:24px;color:#1a1a1a;background:#fff}
+  .irs-kagit{max-width:720px;margin:0 auto}
+  .irs-ust{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #4a0f2e;padding-bottom:14px;margin-bottom:16px}
+  .irs-belge-tip{font-size:22px;font-weight:800;color:#4a0f2e;letter-spacing:1px}
+  .irs-belge-no{font-size:12px;color:#666;margin-top:3px}
+  .irs-tarih-blok{font-size:12px;text-align:right;line-height:1.7}
+  .irs-taraflar{display:flex;gap:16px;margin-bottom:18px}
+  .irs-taraf{flex:1;border:1px solid #ddd;border-radius:8px;padding:12px 14px}
+  .irs-taraf-etiket{font-size:10px;font-weight:800;color:#ff3b14;letter-spacing:1px;margin-bottom:5px}
+  .irs-taraf-unvan{font-size:14px;font-weight:800;margin-bottom:4px}
+  .irs-taraf-satir{font-size:11.5px;color:#444;line-height:1.6}
+  .irs-tablo{width:100%;border-collapse:collapse;margin-bottom:14px}
+  .irs-tablo th{background:#4a0f2e;color:#fff;font-size:11px;padding:9px 10px;text-align:left;font-weight:700}
+  .irs-tablo td{padding:9px 10px;border-bottom:1px solid #eee;font-size:12.5px}
+  .irs-tablo .irs-sira{width:36px;text-align:center;color:#999}
+  .irs-tablo .irs-birim,.irs-tablo .irs-miktar{text-align:center;width:90px}
+  .irs-tablo .irs-miktar{font-weight:800}
+  .irs-tablo tfoot td{border-top:2px solid #4a0f2e;border-bottom:none;font-weight:800;background:#faf4ec}
+  .irs-toplam-lbl{text-align:right}
+  .irs-not{font-size:10.5px;color:#888;font-style:italic;margin-bottom:24px;border-left:3px solid #ff3b14;padding-left:10px}
+  .irs-imza-blok{display:flex;gap:40px;margin-top:34px}
+  .irs-imza{flex:1;text-align:center}
+  .irs-imza-cizgi{border-top:1px solid #333;margin-bottom:6px}
+  .irs-imza-lbl{font-size:11px;font-weight:700}
+  .irs-imza-lbl small{font-weight:400;color:#777}
+  @page{margin:1.5cm}`;
+}
+
 function bayiStokAktar(id){
   const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
   // genel müdür stoğundan düş, bayiye ekle
