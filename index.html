@@ -642,6 +642,7 @@ tr:last-child td{border-bottom:none}
 .uy-gorsel img{width:100%; height:100%; object-fit:cover}
 .uy-bilgi{flex:1}
 .uy-ad{font-weight:700; font-size:14px}
+.uy-no{font-size:10.5px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border:1px solid var(--line); border-radius:5px; padding:1px 6px; margin-left:4px; letter-spacing:.3px}
 .uy-meta{font-size:12px; color:var(--ink-3); margin-top:2px}
 .uy-aksiyon{display:flex; gap:5px}
 .uy-sira{display:flex; flex-direction:column; gap:3px; flex-shrink:0}
@@ -1056,6 +1057,7 @@ tr:last-child td{border-bottom:none}
 .irs-tablo th{background:#4a0f2e; color:#fff; font-size:11px; padding:9px 10px; text-align:left; font-weight:700}
 .irs-tablo td{padding:9px 10px; border-bottom:1px solid #eee; font-size:12.5px}
 .irs-tablo .irs-sira{width:36px; text-align:center; color:#999}
+.irs-tablo .irs-kod{width:92px; font-size:11px; color:#777; font-weight:700}
 .irs-tablo .irs-birim,.irs-tablo .irs-miktar{text-align:center; width:90px}
 .irs-tablo .irs-miktar{font-weight:800}
 .irs-tablo tfoot td{border-top:2px solid #4a0f2e; border-bottom:none; font-weight:800; background:#faf4ec}
@@ -2582,6 +2584,13 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .sube-modal-bas{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line); font-size:16px; font-weight:800; color:var(--cocoa)}
 .sube-modal-govde{padding:18px 20px; overflow-y:auto; flex:1; max-height:70vh}
 .sube-form-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+/* Merkez firma kartı (Şubeler ekranı üstü) */
+.merkez-firma-kart{background:linear-gradient(135deg,var(--cocoa-soft),#fbe6ec); border:1px solid #e6c4d4; border-radius:16px; padding:16px 18px; margin-bottom:18px}
+.merkez-firma-ust{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px}
+.merkez-firma-baslik{font-size:14px; font-weight:800; color:var(--cocoa); display:flex; flex-direction:column; gap:2px}
+.merkez-firma-not{font-size:11px; font-weight:500; color:var(--ink-3)}
+.merkez-firma-unvan{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:4px}
+.merkez-firma-satir{font-size:12.5px; color:var(--ink-2); line-height:1.7}
 .sube-form-baslik:first-child{margin-top:0}
 .sube-modal-not{font-size:11.5px; color:var(--ink-3); margin-top:6px; line-height:1.4}
 .sube-modal-foot{display:flex; gap:10px; padding:16px 20px; border-top:1px solid var(--line)}
@@ -6369,7 +6378,7 @@ const B2B_KEY = "minipan_b2b_v1";
 function b2bKaydet(){
   MPStore.set(B2B_KEY, {
     BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER, TEDARIKCILER, BILDIRIMLER, _bildirimId, STOK_HAREKET,
-    _irsaliyeId, _siparisId,
+    _irsaliyeId, _siparisId, _stokNoSayac,
     // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
     STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut])),
     // stok kartı meta bilgileri (ad, birim, kritik, kcal, kdv, aktif) — kart oluştur/düzenle kalıcı olsun
@@ -6396,6 +6405,24 @@ function b2bYukle(){
   else if(v.STOCK_MEVCUT){ Object.entries(v.STOCK_MEVCUT).forEach(([k,m])=>{ if(STOCK[k]) STOCK[k].mevcut=m; }); }
   if(v.STOK_BIRIMLERI && v.STOK_BIRIMLERI.length) STOK_BIRIMLERI = v.STOK_BIRIMLERI;
   if(v.STOK_KATEGORILERI && v.STOK_KATEGORILERI.length) STOK_KATEGORILERI = v.STOK_KATEGORILERI;
+  if(v._stokNoSayac) _stokNoSayac = v._stokNoSayac;
+  stokNoMigrasyon();   // her stok kartına görünür sıralı no ata (STK-000001)
+}
+/* Stok kartlarına görünür, sıralı, kalıcı numara — irsaliye/rapor/arama için */
+let _stokNoSayac = 1;
+function stokNoBiçim(n){ return "STK-" + String(n).padStart(6,"0"); }
+function stokNoMigrasyon(){
+  try{
+    let degisti=false;
+    // en yüksek mevcut no'yu bul, sayacı ona göre ilerlet
+    Object.values(STOCK).forEach(s=>{
+      if(s.no){ const n=parseInt(String(s.no).replace(/\D/g,""))||0; if(n>=_stokNoSayac) _stokNoSayac=n+1; }
+    });
+    Object.keys(STOCK).forEach(kod=>{
+      if(!STOCK[kod].no){ STOCK[kod].no = stokNoBiçim(_stokNoSayac++); degisti=true; }
+    });
+    if(degisti && typeof b2bKaydet==="function") b2bKaydet();
+  }catch(e){ console.warn("stokNoMigrasyon:", e); }
 }
 
 /* === KAMPANYA + GENEL FİYAT KALICILIĞI ===
@@ -13715,7 +13742,7 @@ function urunYonetimHtml(){
       </div>`:''}
       <div class="uy-gorsel">${gorsel?`<img src="${gorsel}" alt="">`:`<span>${p.emoji}</span>`}</div>
       <div class="uy-bilgi">
-        <div class="uy-ad">${p.ad}</div>
+        <div class="uy-ad">${p.ad} ${p.no?`<span class="uy-no">${p.no}</span>`:''}</div>
         <div class="uy-meta">${p.fiyat} ₺${opsSay?` · ${opsSay} seçenek grubu`:''}${p.aktif?'':' · ⛔ pasif'}${kapaliMi?` · <span class="uy-kapali-rozet">🔴 ${kapaliMetin}</span>`:''}</div>
       </div>
       <div class="uy-aksiyon">
@@ -13768,7 +13795,7 @@ const KOD_SEC_KCAL = {"Sütlü Pankek":180,"Kakaolu":130,"Sütlü - Kakaolu":140
 const MENU_KEY = "minipan_menu_v1";
 function menuKaydet(){
   MPStore.set(MENU_KEY, {
-    DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_KAPALI, URUN_GORSEL, KAT_GORSEL, SUBE_FIYAT, MALIYET_RECETELERI, RECIPES
+    DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_KAPALI, URUN_GORSEL, KAT_GORSEL, SUBE_FIYAT, MALIYET_RECETELERI, RECIPES, _urunNoSayac
   }, 1);
 }
 function menuYukle(){
@@ -13785,7 +13812,87 @@ function menuYukle(){
   if(v.SUBE_FIYAT) SUBE_FIYAT = v.SUBE_FIYAT;
   if(v.MALIYET_RECETELERI) MALIYET_RECETELERI = v.MALIYET_RECETELERI;
   if(v.RECIPES) RECIPES = Object.assign({}, RECIPES, v.RECIPES);   // kayıtlı reçeteler + doğrudan stok bağlantıları
+  if(v._urunNoSayac) _urunNoSayac = v._urunNoSayac;
+  urunIdMigrasyon();   // her ürüne kalıcı (değişmez) id + görünür no ata
   kcalMigrasyon();   // eski kayıtta kcal eksikse koddaki varsayılanlardan doldur
+}
+/* Ürünlere kalıcı, değişmez kimlik (id) üretir — ad'dan bağımsız.
+   Ad değiştiğinde bile ürün kimliği sabit kalır; ilişkiler bu id'ye bağlanabilir. */
+let _urunIdSayac = 1;
+let _urunNoSayac = 1;
+function urunIdUret(){
+  // urn_ + zaman tabanlı + sayaç → çakışmaz, kısa
+  const id = "urn_" + Date.now().toString(36) + "_" + (_urunIdSayac++).toString(36);
+  return id;
+}
+function urunNoBiçim(n){ return "ÜRN-" + String(n).padStart(6,"0"); }
+function urunIdMigrasyon(){
+  try{
+    let degisti=false;
+    const mevcutIdler = new Set(DEMO_PRODUCTS.map(p=>p.id).filter(Boolean));
+    // en yüksek mevcut ürün no'sundan sayacı ilerlet
+    DEMO_PRODUCTS.forEach(p=>{
+      if(p.no){ const n=parseInt(String(p.no).replace(/\D/g,""))||0; if(n>=_urunNoSayac) _urunNoSayac=n+1; }
+    });
+    DEMO_PRODUCTS.forEach(p=>{
+      if(!p.id){
+        let yeni;
+        do { yeni = urunIdUret(); } while(mevcutIdler.has(yeni));
+        p.id = yeni; mevcutIdler.add(yeni); degisti=true;
+      }
+      if(!p.no){ p.no = urunNoBiçim(_urunNoSayac++); degisti=true; }
+    });
+    if(degisti && typeof menuKaydet==="function") menuKaydet();
+  }catch(e){ console.warn("urunIdMigrasyon:", e); }
+}
+/* id ile ürün bul (yardımcı) */
+function urunById(id){ return DEMO_PRODUCTS.find(p=>p.id===id) || null; }
+
+/* ═══════════════════════════════════════════════════════════════
+   MERKEZİ ÜRÜN ADI TAŞIMA — ad değiştiğinde ada-bağlı TÜM yapıları
+   yeni ada taşır. Ada-bağlı yeni bir yapı eklenirse SADECE buraya eklenir;
+   böylece "taşımayı unutma" riski ortadan kalkar.
+   ═══════════════════════════════════════════════════════════════ */
+function urunAdiTasi(eskiAd, yeniAd){
+  if(!eskiAd || !yeniAd || eskiAd===yeniAd) return;
+
+  // 1) düz ürün-adı anahtarlı objeler: {ürünAdı: değer}
+  [ (typeof PRODUCT_OPTIONS!=="undefined")?PRODUCT_OPTIONS:null,
+    (typeof URUN_GORSEL!=="undefined")?URUN_GORSEL:null,
+    (typeof RECIPES!=="undefined")?RECIPES:null,
+    (typeof YORUMLAR!=="undefined")?YORUMLAR:null
+  ].forEach(obj=>{
+    if(obj && Object.prototype.hasOwnProperty.call(obj, eskiAd)){
+      obj[yeniAd] = obj[eskiAd];
+      delete obj[eskiAd];
+    }
+  });
+
+  // 2) şube→ürünAdı iç içe objeler: {şube: {ürünAdı: değer}}
+  [ (typeof SUBE_FIYAT!=="undefined")?SUBE_FIYAT:null,
+    (typeof URUN_KAPALI!=="undefined")?URUN_KAPALI:null
+  ].forEach(obj=>{
+    if(!obj) return;
+    Object.keys(obj).forEach(sube=>{
+      if(obj[sube] && Object.prototype.hasOwnProperty.call(obj[sube], eskiAd)){
+        obj[sube][yeniAd] = obj[sube][eskiAd];
+        delete obj[sube][eskiAd];
+      }
+    });
+  });
+
+  // 3) SEC_KAPALI — yapısı {şube: {ürünAdı: {...}}} veya {ürünAdı: {...}} olabilir; ikisini de kapsa
+  if(typeof SEC_KAPALI!=="undefined" && SEC_KAPALI){
+    if(Object.prototype.hasOwnProperty.call(SEC_KAPALI, eskiAd)){
+      SEC_KAPALI[yeniAd] = SEC_KAPALI[eskiAd]; delete SEC_KAPALI[eskiAd];
+    }
+    Object.keys(SEC_KAPALI).forEach(k=>{
+      const v = SEC_KAPALI[k];
+      if(v && typeof v==="object" && Object.prototype.hasOwnProperty.call(v, eskiAd)){
+        v[yeniAd] = v[eskiAd]; delete v[eskiAd];
+      }
+    });
+  }
 }
 /* Eski localStorage menüsünde kcal alanı yoksa, koddaki orijinal değerlerden doldur.
    (Daha önce kaydedilmiş menü kcal'siz olduğu için tek seferlik migrasyon.) */
@@ -13808,13 +13915,14 @@ function kcalMigrasyon(){
 /* === ŞUBE VERİLERİ KALICILIĞI === */
 const SUBE_KEY = "minipan_subeler_v1";
 function subeKaydet(){
-  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES }, 1);
+  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES, MERKEZ_FIRMA }, 1);
 }
 function subeYukle(){
   const v = MPStore.get(SUBE_KEY, {}, {version:1});
   if(v.DEMO_BRANCHES) DEMO_BRANCHES = v.DEMO_BRANCHES;
   if(v.BRANCH_INFO) BRANCH_INFO = v.BRANCH_INFO;
   if(v.BRANCH_TABLES) BRANCH_TABLES = v.BRANCH_TABLES;
+  if(v.MERKEZ_FIRMA) MERKEZ_FIRMA = Object.assign({}, MERKEZ_FIRMA, v.MERKEZ_FIRMA);
 }
 
 /* === ÜRÜN YORUM / PUANLAMA === */
@@ -14418,25 +14526,9 @@ function urunKaydet(){
   if(f.pi!=null){
     // DÜZENLE
     const p = DEMO_PRODUCTS[f.pi];
-    // ad değiştiyse opsiyon/görsel/reçete anahtarlarını taşı
+    // ad değiştiyse ada bağlı TÜM yapıları merkezi fonksiyonla taşı
     if(f.eskiAd!==yeniAd){
-      delete PRODUCT_OPTIONS[f.eskiAd];
-      delete URUN_GORSEL[f.eskiAd];
-      if(RECIPES[f.eskiAd]){ RECIPES[yeniAd]=RECIPES[f.eskiAd]; delete RECIPES[f.eskiAd]; }
-      // Şubelere özel fiyatları yeni ada taşı (ad değişince şube fiyatları kaybolmasın)
-      Object.keys(SUBE_FIYAT).forEach(sube=>{
-        if(SUBE_FIYAT[sube] && SUBE_FIYAT[sube][f.eskiAd]){
-          SUBE_FIYAT[sube][yeniAd] = SUBE_FIYAT[sube][f.eskiAd];
-          delete SUBE_FIYAT[sube][f.eskiAd];
-        }
-      });
-      // Ürün kapatma ve seçenek kapatma kayıtlarını da taşı
-      Object.keys(URUN_KAPALI).forEach(sube=>{
-        if(URUN_KAPALI[sube] && URUN_KAPALI[sube][f.eskiAd]){
-          URUN_KAPALI[sube][yeniAd] = URUN_KAPALI[sube][f.eskiAd];
-          delete URUN_KAPALI[sube][f.eskiAd];
-        }
-      });
+      urunAdiTasi(f.eskiAd, yeniAd);
     }
     p.ad=yeniAd; p.aciklama=f.aciklama.trim(); p.emoji=f.emoji;
     p.kat=f.kat; p.fiyat=fiyat; p.aktif=f.aktif;
@@ -14446,7 +14538,7 @@ function urunKaydet(){
     if(Array.isArray(f.alerjenler) && f.alerjenler.length) p.alerjenler=f.alerjenler.slice(); else delete p.alerjenler;
   } else {
     // YENİ
-    const yeni={ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()};
+    const yeni={id:urunIdUret(), no:urunNoBiçim(_urunNoSayac++), ad:yeniAd, emoji:f.emoji, kat:f.kat, fiyat:fiyat, aktif:f.aktif, aciklama:f.aciklama.trim()};
     if(eveDeger!=null && eveDeger>0) yeni.fiyatEve=eveDeger;
     if(magDeger!=null) yeni.mag=magDeger;
     if(kcalDeger!=null) yeni.kcal=kcalDeger;
@@ -14946,7 +15038,7 @@ function bayiStokKartHtml(){
     const marj = (alisH && satisH) ? ((satisH.matrah-alisH.matrah)/alisH.matrah*100) : null;
     return `<div class="stok-kart${!aktif?' pasif':''}">
       <div class="stok-kart-ust">
-        <div class="stok-kart-ad"><strong>${s.ad}</strong> <span class="stok-kart-kod">${kod}</span></div>
+        <div class="stok-kart-ad"><strong>${s.ad}</strong> <span class="stok-kart-kod">${s.no||kod}</span></div>
         <div class="stok-kart-aksiyon">
           <button class="bayi-mini" onclick="stokKartDuzenle('${kod}')">✏️</button>
           <button class="bayi-mini sil" onclick="stokKartSil('${kod}')">🗑️</button>
@@ -15196,6 +15288,8 @@ function stokModalKaydet(){
     if(STOCK[kod]) kod = kod+Date.now();
   }
   STOCK[kod] = {...(STOCK[kod]||{}), ...veri};
+  // yeni kartsa görünür sıralı no ata (mevcut kartın no'su korunur)
+  if(!STOCK[kod].no) STOCK[kod].no = stokNoBiçim(_stokNoSayac++);
   BAYI_FIYAT[kod] = fiyatV;   // fiyat ayrı tabloda; null = fiyat yok
   note(p.mod==="yeni" ? "Stok kartı eklendi: "+ad : ad+" güncellendi");
   b2bKaydet();
@@ -17196,12 +17290,13 @@ function irsaliyeAc(id){
     const birim = s.birim || "adet";
     return `<tr>
       <td class="irs-sira">${i+1}</td>
+      <td class="irs-kod">${s.no||""}</td>
       <td class="irs-ad">${s.ad || k.kod}</td>
       <td class="irs-birim">${birim}</td>
       <td class="irs-miktar">${k.miktar}</td>
     </tr>`;
   }).join("");
-  if(!satirlar) satirlar = `<tr><td colspan="4" class="irs-bos">Aktarılacak kalem yok.</td></tr>`;
+  if(!satirlar) satirlar = `<tr><td colspan="5" class="irs-bos">Aktarılacak kalem yok.</td></tr>`;
   const toplamKalem = kalemler.length;
   const toplamMiktar = kalemler.reduce((t,k)=>t+(k.miktar||0),0);
 
@@ -17248,11 +17343,11 @@ function irsaliyeAc(id){
 
         <table class="irs-tablo">
           <thead>
-            <tr><th class="irs-sira">#</th><th class="irs-ad">Malın Cinsi</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
+            <tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
           </thead>
           <tbody>${satirlar}</tbody>
           <tfoot>
-            <tr><td colspan="2" class="irs-toplam-lbl">TOPLAM</td><td class="irs-birim">${toplamKalem} kalem</td><td class="irs-miktar">${toplamMiktar}</td></tr>
+            <tr><td colspan="3" class="irs-toplam-lbl">TOPLAM</td><td class="irs-birim">${toplamKalem} kalem</td><td class="irs-miktar">${toplamMiktar}</td></tr>
           </tfoot>
         </table>
 
@@ -17297,6 +17392,7 @@ function irsaliyeYazdirCss(){
   .irs-tablo th{background:#4a0f2e;color:#fff;font-size:11px;padding:9px 10px;text-align:left;font-weight:700}
   .irs-tablo td{padding:9px 10px;border-bottom:1px solid #eee;font-size:12.5px}
   .irs-tablo .irs-sira{width:36px;text-align:center;color:#999}
+  .irs-tablo .irs-kod{width:92px;font-size:11px;color:#777;font-weight:700}
   .irs-tablo .irs-birim,.irs-tablo .irs-miktar{text-align:center;width:90px}
   .irs-tablo .irs-miktar{font-weight:800}
   .irs-tablo tfoot td{border-top:2px solid #4a0f2e;border-bottom:none;font-weight:800;background:#faf4ec}
@@ -18236,6 +18332,23 @@ function viewSubeler(main){
   let html=`<div class="sec-head"><div><h2>🏬 Şubeler</h2>
     <div class="sh-sub">${aktifSayi} aktif · ${DEMO_BRANCHES.length} toplam</div></div>
     <button class="btn btn-primary" style="padding:11px 18px" onclick="subeYeniAc()">+ Yeni şube</button></div>`;
+
+  // Merkez / Genel Müdürlük firma bilgileri — irsaliyede GÖNDEREN olarak görünür
+  const m = MERKEZ_FIRMA;
+  html+=`<div class="merkez-firma-kart">
+    <div class="merkez-firma-ust">
+      <div class="merkez-firma-baslik">🏛️ Merkez / Genel Müdürlük Bilgileri
+        <span class="merkez-firma-not">İrsaliye ve resmi belgelerde “Gönderen” olarak görünür</span></div>
+      <button class="sb-btn" onclick="merkezFirmaDuzenle()">✏️ Düzenle</button>
+    </div>
+    <div class="merkez-firma-govde">
+      <div class="merkez-firma-unvan">${m.unvan||'—'}</div>
+      <div class="merkez-firma-satir">VKN: ${m.vkn||'—'}${m.vergiDairesi?' · '+m.vergiDairesi:''}</div>
+      <div class="merkez-firma-satir">📍 ${m.adres||''}${m.sehir?', '+m.sehir:''}</div>
+      <div class="merkez-firma-satir">📞 ${m.tel||'—'}</div>
+    </div>
+  </div>`;
+
   html+=`<div class="sb-liste">`;
   DEMO_BRANCHES.forEach((b,i)=>{
     const info=BRANCH_INFO[b.ad]||{};
@@ -18270,6 +18383,58 @@ function subeDuzenle(ad){
     vkn:info.vkn||"", tckn:info.tckn||"", vergiDairesi:info.vergiDairesi||"", vergiTuru:info.vergiTuru||"",
     sehir:info.sehir||"", adres:info.adres||"", tel:info.tel||"" };
   renderSubeModal();
+}
+/* ══ Merkez / Genel Müdürlük firma bilgileri düzenleme ══ */
+function merkezFirmaDuzenle(){
+  const m = MERKEZ_FIRMA;
+  const html = `
+  <div class="sube-modal-bg" id="merkezFirmaModal" onclick="if(event.target===this)merkezFirmaKapat()">
+    <div class="sube-modal-ic">
+      <div class="sube-modal-bas">🏛️ Merkez / Genel Müdürlük Bilgileri
+        <button class="sube-modal-x" onclick="merkezFirmaKapat()">✕</button></div>
+      <div class="sube-modal-govde">
+        <div class="yk-alan"><label>Firma Ünvanı</label>
+          <input class="yk-input" id="mfUnvan" value="${(m.unvan||'').replace(/"/g,'&quot;')}" placeholder="örn. FOOST Gıda Franchise A.Ş."></div>
+        <div class="sube-form-baslik">🧾 Mükellef Bilgileri</div>
+        <div class="yk-ikili">
+          <div class="yk-alan"><label>Vergi Kimlik No (VKN)</label>
+            <input class="yk-input" id="mfVkn" inputmode="numeric" maxlength="10" value="${(m.vkn||'').replace(/"/g,'&quot;')}" placeholder="10 haneli"></div>
+          <div class="yk-alan"><label>Vergi Dairesi</label>
+            <input class="yk-input" id="mfVd" value="${(m.vergiDairesi||'').replace(/"/g,'&quot;')}" placeholder="örn. Merkez V.D."></div>
+        </div>
+        <div class="sube-form-baslik">📍 İletişim</div>
+        <div class="yk-alan"><label>Adres</label>
+          <input class="yk-input" id="mfAdres" value="${(m.adres||'').replace(/"/g,'&quot;')}" placeholder="Açık adres"></div>
+        <div class="yk-ikili">
+          <div class="yk-alan"><label>Şehir</label>
+            <input class="yk-input" id="mfSehir" value="${(m.sehir||'').replace(/"/g,'&quot;')}" placeholder="örn. İstanbul"></div>
+          <div class="yk-alan"><label>Telefon</label>
+            <input class="yk-input" id="mfTel" inputmode="tel" value="${(m.tel||'').replace(/"/g,'&quot;')}" placeholder="0850 ..."></div>
+        </div>
+        <div class="yk-alan"><label>MERSİS No <span style="font-weight:400;color:var(--ink-3)">(opsiyonel)</span></label>
+          <input class="yk-input" id="mfMersis" value="${(m.mersis||'').replace(/"/g,'&quot;')}" placeholder="—"></div>
+      </div>
+      <div class="sube-modal-foot">
+        <button class="btn btn-ghost" onclick="merkezFirmaKapat()">İptal</button>
+        <button class="btn btn-primary" onclick="merkezFirmaKaydet()">✓ Kaydet</button>
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("merkezFirmaWrap");
+  if(!el){ el=document.createElement("div"); el.id="merkezFirmaWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function merkezFirmaKapat(){ const w=document.getElementById("merkezFirmaWrap"); if(w) w.innerHTML=""; }
+function merkezFirmaKaydet(){
+  const g = id => { const e=document.getElementById(id); return e?e.value.trim():""; };
+  MERKEZ_FIRMA = {
+    unvan: g("mfUnvan"), vkn: g("mfVkn"), vergiDairesi: g("mfVd"),
+    adres: g("mfAdres"), sehir: g("mfSehir"), tel: g("mfTel"), mersis: g("mfMersis")
+  };
+  subeKaydet();
+  merkezFirmaKapat();
+  note("Merkez firma bilgileri güncellendi");
+  go("subeler", true);
 }
 function renderSubeModal(){
   const f=state._subeForm;
