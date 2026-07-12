@@ -2132,6 +2132,56 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yym-sube-rozet{font-size:11px; font-weight:700; color:var(--cocoa); background:var(--cocoa-soft); border-radius:6px; padding:2px 8px; margin-left:6px; white-space:nowrap}
 .yym-onaylayan{font-size:11px; font-weight:700; color:var(--ok); margin-left:8px}
 .yym-yetkisiz{font-size:12.5px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border:1px dashed var(--line); border-radius:9px; padding:9px 12px; text-align:center; width:100%}
+/* ══ RAPORLAR ══ */
+.rapor-sekme-bar{display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap}
+.rapor-sekme{padding:10px 16px; border-radius:11px; background:var(--surface-2); border:1.5px solid var(--line); font-size:14px; font-weight:700; color:var(--ink-2); cursor:pointer}
+.rapor-sekme.on{background:var(--brand); color:#fff; border-color:var(--brand)}
+.rapor-arac-bar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; padding:14px 16px; background:var(--surface); border:1px solid var(--line); border-radius:13px}
+.rab-sol{display:flex; align-items:center; gap:8px}
+.rab-lbl{font-size:13px; font-weight:700; color:var(--ink-2)}
+.rab-tarih{padding:8px 11px; border-radius:9px; border:1.5px solid var(--line); font-size:14px; font-family:inherit; background:var(--surface)}
+.rab-sube-row{display:flex; gap:6px; flex-wrap:wrap; flex:1}
+.rab-sube{padding:7px 12px; border-radius:9px; border:1px solid var(--line); background:var(--surface-2); font-size:12.5px; font-weight:700; color:var(--ink-2); cursor:pointer; white-space:nowrap}
+.rab-sube.on{background:var(--cocoa); color:#fff; border-color:var(--cocoa)}
+.rab-excel{padding:10px 16px !important; font-size:13.5px !important}
+.rapor-ozet-row{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px}
+.rapor-ozet{flex:1; min-width:130px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:13px 15px}
+.rapor-ozet.ana{background:linear-gradient(135deg,var(--brand-soft),#ffd9cc); border-color:var(--brand)}
+.rapor-ozet.ikram{background:var(--cocoa-soft); border-color:var(--cocoa)}
+.rapor-ozet.ind{background:var(--err-soft); border-color:var(--err)}
+.ro-lbl{font-size:11.5px; font-weight:700; color:var(--ink-3); margin-bottom:4px}
+.ro-val{font-size:19px; font-weight:900; color:var(--ink)}
+.rapor-ozet.ana .ro-val{color:var(--brand-d)}
+.rapor-tablo{font-size:13.5px}
+.rapor-tablo th.sag, .rapor-tablo td.sag{text-align:right}
+.rapor-tablo tr.kat-bas td{border-top:2px solid var(--line)}
+.rt-kat{font-weight:800; color:var(--cocoa); font-size:12.5px}
+.rt-ad{font-weight:600}
+.rt-sube{font-size:12px; color:var(--ink-3); font-weight:700}
+.rt-net{font-weight:800; color:var(--ink)}
+.rt-ikram{color:var(--cocoa); font-weight:700}
+.rt-ind{color:var(--err); font-weight:700}
+.rt-hediye-rozet{font-size:10px; font-weight:800; background:var(--cocoa); color:#fff; padding:1px 6px; border-radius:99px; margin-left:4px}
+.rapor-tablo tr.rt-toplam td{background:var(--surface-2); font-weight:900; font-size:14px; border-top:2.5px solid var(--ink); color:var(--ink)}
+.rapor-bos{text-align:center; padding:44px 20px; color:var(--ink-3); font-size:14.5px; background:var(--surface); border:1px dashed var(--line); border-radius:14px}
+/* Rapor erişim talepleri (müdür bildirimlerinde) */
+.rapor-talep-blok{background:var(--brand-soft); border:1.5px solid var(--brand); border-radius:14px; padding:14px 16px; margin-bottom:18px}
+.rtb-bas{font-size:14.5px; font-weight:800; color:var(--brand-d); margin-bottom:10px; display:flex; align-items:center; gap:8px}
+.rtb-say{font-size:11px; font-weight:800; background:var(--brand); color:#fff; padding:2px 8px; border-radius:99px}
+.rtb-kart{display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border-radius:10px; padding:11px 13px; margin-bottom:8px; flex-wrap:wrap}
+.rtb-kasa{font-size:14px; font-weight:800; color:var(--ink)}
+.rtb-alt{font-size:11.5px; color:var(--ink-3); margin-top:2px}
+.rtb-btnler{display:flex; gap:8px}
+.rtb-btn{padding:8px 14px; border-radius:9px; border:none; font-size:13px; font-weight:800; cursor:pointer}
+.rtb-btn.onay{background:var(--ok); color:#fff}
+.rtb-btn.red{background:var(--surface-2); color:var(--ink-2); border:1px solid var(--line)}
+/* Kasa: onay bekleme modalı */
+.rbm-ic{background:#fff; border-radius:18px; max-width:380px; width:92%; margin:auto; padding:26px 22px; text-align:center}
+.rbm-ikon{font-size:48px; margin-bottom:10px}
+.rbm-baslik{font-size:18px; font-weight:900; color:var(--ink); margin-bottom:8px}
+.rbm-metin{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin-bottom:16px}
+.rbm-spinner{width:36px; height:36px; margin:0 auto; border:3px solid var(--line); border-top-color:var(--brand); border-radius:50%; animation:rbmDon .8s linear infinite}
+@keyframes rbmDon{to{transform:rotate(360deg)}}
 .yym-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
 .yym-urun{font-weight:800; font-size:14.5px}
 .yym-yildiz{font-size:14px}
@@ -6001,7 +6051,7 @@ service cloud.firestore {
 
 const ROLES = {
   kasa:  { ad:"Kasa görevlisi", ic:"💳", renk:"var(--r-kasa)", subeSec:true,
-           nav:["satis","masalar","masagecmis"] },
+           nav:["satis","masalar","masagecmis","rapor"] },
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
            nav:["canli","satis","masalar","masagecmis","masayonetim","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","personel","yazarkasa","yazicilar","musteriekran","rapor"] },
   depo:  { ad:"Depo / Lojistik", ic:"📦", renk:"var(--r-depo)", sube:"Tüm şubeler",
@@ -6820,6 +6870,31 @@ function viewBildirim(main){
   const okunmamis = liste.filter(b=>!b.okundu).length;
   let html = `<div class="sec-head"><div><h2>🔔 Bildirimler</h2>
     <div class="sh-sub">${liste.length} bildirim${okunmamis?' · '+okunmamis+' okunmamış':''}</div></div></div>`;
+
+  // 🔐 BEKLEYEN RAPOR ERİŞİM TALEPLERİ (müdür/genel müdür onaylar)
+  if(state.role==="mudur" || state.role==="genel"){
+    raporTalepYukle();
+    const talepler = bekleyenRaporTalepleri();
+    if(talepler.length>0){
+      html += `<div class="rapor-talep-blok">
+        <div class="rtb-bas">🔐 Rapor Erişim Talepleri <span class="rtb-say">${talepler.length}</span></div>`;
+      talepler.forEach(t=>{
+        const dk = Math.round((Date.now()-t.ts)/60000);
+        html += `<div class="rtb-kart">
+          <div class="rtb-bilgi">
+            <div class="rtb-kasa">👤 ${t.kasaAd}</div>
+            <div class="rtb-alt">🏢 ${t.sube} · ${dk<1?'az önce':dk+' dk önce'}</div>
+          </div>
+          <div class="rtb-btnler">
+            <button class="rtb-btn red" onclick="raporTalepKarar(${t.id},false)">Reddet</button>
+            <button class="rtb-btn onay" onclick="raporTalepKarar(${t.id},true)">✓ Onayla</button>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    }
+  }
+
   if(liste.length===0){
     main.innerHTML = html+`<div class="bayi-bos" style="text-align:center;padding:40px">📭 Henüz bildirim yok.</div>`;
     return;
@@ -7515,7 +7590,16 @@ function navGrupTikla(baslik){
 }
 
 function go(key, scrollKoru){
+  // 🔐 KASA + RAPOR → müdür onayı gerekir (her girişte yeniden)
+  if(key==="rapor" && state.role==="kasa" && !state._raporErisimAcik){
+    raporErisimIste();
+    return;   // onay gelene kadar ekran açılmaz
+  }
   sessionsKaydet();
+  // kasa rapordan çıkıyorsa erişim iptal (bir sonraki girişte yeniden onay gerekir)
+  if(state.role==="kasa" && state.ekran==="rapor" && key!=="rapor"){
+    state._raporErisimAcik = false;
+  }
   state.ekran = key;                       // aktif ekran (nav vurgusu için)
   // seçilen ekran bir grupta ise o grubu aç; grupsuz (Canlı/Bildirim) ise açık grubu kapat
   const grupBul = (k)=>{ const g=NAV_GRUPLAR.find(gr=>gr.baslik && gr.uyeler.includes(k)); return g?g.baslik:null; };
@@ -8790,6 +8874,107 @@ function sessionsYukle(){
    Artık arşivlendikten sonra oturum sıfırdan temiz açılıyor.
    ============================================================ */
 let MASA_GECMISI = [];
+/* ═══════════════════════════════════════════════════════════
+   KASA RAPOR ERİŞİM ONAYI
+   Kasa "Raporlar" butonuna basınca müdüre onay talebi gider.
+   Şube müdürü VEYA genel müdür onaylarsa kasa raporu açabilir.
+   Onay HER GİRİŞTE yeniden alınır (tek kullanımlık).
+   ═══════════════════════════════════════════════════════════ */
+let RAPOR_TALEPLERI = [];       // {id, sube, kasaAd, ts, durum:"bekliyor|onayli|red", karar, kararTs}
+let _raporTalepId = 1;
+const RAPOR_TALEP_KEY = "minipan_rapor_talep_v1";
+function raporTalepKaydet(){ MPStore.set(RAPOR_TALEP_KEY, {RAPOR_TALEPLERI, _raporTalepId}, 1); }
+function raporTalepYukle(){
+  const v = MPStore.get(RAPOR_TALEP_KEY, null, {version:1});
+  if(v){
+    if(v.RAPOR_TALEPLERI) RAPOR_TALEPLERI = v.RAPOR_TALEPLERI;
+    if(v._raporTalepId) _raporTalepId = v._raporTalepId;
+  }
+}
+/* Kasa rapor erişimi ister → müdüre bildirim gider */
+function raporErisimIste(){
+  const sube = AKTIF_SUBE;
+  const kasaAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "Kasa görevlisi";
+  // aynı kasadan bekleyen talep varsa yenisini açma
+  const mevcut = RAPOR_TALEPLERI.find(t=>t.sube===sube && t.kasaAd===kasaAd && t.durum==="bekliyor");
+  if(mevcut){
+    note("⏳ Onay talebiniz zaten müdüre iletildi, bekleniyor…");
+    return;
+  }
+  const talep = {
+    id: _raporTalepId++, sube, kasaAd, ts: Date.now(),
+    durum: "bekliyor", karar:"", kararTs:null
+  };
+  RAPOR_TALEPLERI.unshift(talep);
+  raporTalepKaydet();
+  // şube müdürü + genel müdüre bildirim
+  if(typeof bildirimEkle==="function"){
+    const mesaj = kasaAd+" · "+sube+" · rapor ekranına erişim istiyor";
+    bildirimEkle({ tip:"raporTalep", baslik:"🔐 Rapor erişim talebi",
+      mesaj:mesaj, kanal:"Kasa", hedefSube:sube, link:"rapor" });
+    bildirimEkle({ tip:"raporTalep", baslik:"🔐 Rapor erişim talebi · "+sube,
+      mesaj:mesaj, kanal:"Kasa", hedefRol:"genel", link:"rapor" });
+  }
+  note("🔐 Onay talebi müdüre iletildi. Onaylanınca raporlar açılacak.");
+  raporBekleModalAc(talep.id);
+}
+/* Kasa: onay bekleme ekranı (müdür onaylayınca otomatik açılır) */
+function raporBekleModalAc(talepId){
+  const html = `
+  <div class="modal-bg on" id="raporBekleModal" style="z-index:200">
+    <div class="rbm-ic">
+      <div class="rbm-ikon">🔐</div>
+      <div class="rbm-baslik">Müdür onayı bekleniyor</div>
+      <div class="rbm-metin">Rapor ekranına erişim talebiniz <b>${AKTIF_SUBE}</b> müdürüne ve genel müdüre iletildi.<br>Onaylandığında raporlar otomatik açılacak.</div>
+      <div class="rbm-spinner"></div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:14px" onclick="raporBekleKapat()">Vazgeç</button>
+    </div>
+  </div>`;
+  let el = document.getElementById("raporBekleWrap");
+  if(!el){ el=document.createElement("div"); el.id="raporBekleWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+  // onay geldi mi diye periyodik kontrol
+  state._raporBekleTimer = setInterval(()=>{
+    raporTalepYukle();
+    const t = RAPOR_TALEPLERI.find(x=>x.id===talepId);
+    if(!t) return;
+    if(t.durum==="onayli"){
+      raporBekleKapat();
+      state._raporErisimAcik = true;   // tek kullanımlık erişim
+      note("✓ "+(t.karar||"Müdür")+" onayladı · raporlar açılıyor");
+      go("rapor");
+    } else if(t.durum==="red"){
+      raporBekleKapat();
+      note("⛔ Rapor erişim talebiniz reddedildi");
+    }
+  }, 1500);
+}
+function raporBekleKapat(){
+  clearInterval(state._raporBekleTimer);
+  const w=document.getElementById("raporBekleWrap"); if(w) w.innerHTML="";
+}
+/* Müdür/genel müdür: bekleyen rapor taleplerini onayla/reddet */
+function raporTalepKarar(talepId, onay){
+  const t = RAPOR_TALEPLERI.find(x=>x.id===talepId);
+  if(!t) return;
+  // yetki: genel müdür hepsini, şube müdürü sadece kendi şubesini
+  if(state.role!=="genel" && t.sube!==AKTIF_SUBE){
+    note("⛔ Bu talep "+t.sube+" şubesine ait");
+    return;
+  }
+  t.durum = onay ? "onayli" : "red";
+  t.karar = (state.role==="genel") ? "Genel Müdür" : (AKTIF_SUBE+" Müdürü");
+  t.kararTs = Date.now();
+  raporTalepKaydet();
+  note(onay ? "✓ Rapor erişimi onaylandı" : "Talep reddedildi");
+  go(state.ekran, true);
+}
+function bekleyenRaporTalepleri(){
+  const hepsi = RAPOR_TALEPLERI.filter(t=>t.durum==="bekliyor");
+  if(state.role==="genel") return hepsi;
+  return hepsi.filter(t=>t.sube===AKTIF_SUBE);
+}
+
 let _gecmisId = 1;
 const MASA_GECMISI_KEY = "minipan_masa_gecmisi_v1";
 function masaGecmisKaydet(){ MPStore.set(MASA_GECMISI_KEY, {kayitlar:MASA_GECMISI, _gecmisId}, 1); }
@@ -8840,8 +9025,12 @@ function masaGecmiseArsivle(masaNo, ekOdemeler){
   const kalemler = [];
   (s.kisiler||[]).forEach(k=>{
     (k.kalemler||[]).forEach(it=>{
+      // rapor için: kategori + hediye bayrağı satış anında saklanır (menü sonradan değişse de rapor doğru kalır)
+      const urunRef = DEMO_PRODUCTS.find(p=>p.ad===it.ad);
       kalemler.push({ad:it.ad, fiyat:it.fiyat||0, kisi:k.ad, durum:it.durum||"bekliyor",
-        secimler:it.secimler||[], paket:!!it.paket, odenenTutar:it.odenenTutar||0});
+        secimler:it.secimler||[], paket:!!it.paket, odenenTutar:it.odenenTutar||0,
+        kat: (urunRef && urunRef.kat) ? urunRef.kat : "Diğer",
+        hediye: !!it.hediye});
     });
   });
   const gecerli = kalemler.filter(it=>it.durum!=="iptal");
@@ -20049,27 +20238,200 @@ function subeOnayUygula(){
 }
 
 // --- RAPOR ---
+/* ═══════════════════════════════════════════════════════════
+   RAPORLAR — sekmeli yapı. İlk rapor: Günlük Ürün Satışları
+   ═══════════════════════════════════════════════════════════ */
+const RAPOR_SEKMELER = [
+  { kod:"urunSatis", ad:"📦 Günlük Ürün Satışları" },
+  // ileride: ciro, ödeme yöntemi, personel, stok, iptal/ikram...
+];
 function viewRapor(main){
+  if(!state.raporSekme) state.raporSekme = "urunSatis";
+  if(!state.raporTarih) state.raporTarih = new Date().toISOString().slice(0,10);
   const isGenel = state.role==="genel";
-  main.innerHTML=`
-    <div class="sec-head"><div><h2>Raporlar</h2><div class="sh-sub">${isGenel?'Karşılaştırmalı · tüm şubeler':AKTIF_SUBE}</div></div></div>
-    <div class="kpi-row">
-      <div class="kpi"><div class="k-lbl">Bugün</div><div class="k-val">${isGenel?'42.2k':'8.4k'} <small>₺</small></div><div class="k-trend up">▲ %12</div></div>
-      <div class="kpi"><div class="k-lbl">Bu hafta</div><div class="k-val">${isGenel?'284k':'52k'} <small>₺</small></div></div>
-      <div class="kpi"><div class="k-lbl">Ort. adisyon</div><div class="k-val">${isGenel?'312':'285'} <small>₺</small></div></div>
-      <div class="kpi"><div class="k-lbl">En çok satan</div><div class="k-val" style="font-size:18px">🧇 Çikolatalı</div></div>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Ürün</th><th>Adet</th><th>Ciro</th><th>Pay</th></tr></thead>
-        <tbody>
-          <tr><td>🧇 Çikolatalı Waffle</td><td>142</td><td>17.040 ₺</td><td>34%</td></tr>
-          <tr><td>🍌 Muzlu Waffle</td><td>98</td><td>12.740 ₺</td><td>25%</td></tr>
-          <tr><td>🍓 Çilekli Waffle</td><td>76</td><td>10.260 ₺</td><td>20%</td></tr>
-          <tr><td>☕ Sıcak Çikolata</td><td>110</td><td>7.150 ₺</td><td>14%</td></tr>
-        </tbody>
-      </table>
+  if(isGenel && !state.raporSube) state.raporSube = "__tum";
+
+  let html = `<div class="sec-head"><div><h2>📊 Raporlar</h2>
+    <div class="sh-sub">${isGenel?'Genel müdür · tüm şubeler':AKTIF_SUBE}</div></div></div>`;
+
+  // sekme barı
+  html += `<div class="rapor-sekme-bar">`;
+  RAPOR_SEKMELER.forEach(s=>{
+    html += `<button class="rapor-sekme${state.raporSekme===s.kod?' on':''}" onclick="raporSekmeSec('${s.kod}')">${s.ad}</button>`;
+  });
+  html += `</div>`;
+
+  if(state.raporSekme==="urunSatis") html += raporUrunSatisHtml();
+
+  main.innerHTML = html;
+}
+function raporSekmeSec(k){ state.raporSekme=k; go("rapor", true); }
+function raporTarihSec(t){ state.raporTarih=t; go("rapor", true); }
+function raporSubeSec(s){ state.raporSube=s; go("rapor", true); }
+
+/* ── Günlük Ürün Satışları ── */
+function raporUrunSatisVeri(){
+  const tarih = state.raporTarih || new Date().toISOString().slice(0,10);
+  const isGenel = state.role==="genel";
+  const subeFiltre = isGenel ? (state.raporSube||"__tum") : AKTIF_SUBE;
+  const gunBas = new Date(tarih+"T00:00:00").getTime();
+  const gunBit = gunBas + 24*60*60*1000;
+
+  // o güne ait kapanmış masalar/paketler
+  const kayitlar = MASA_GECMISI.filter(g=>{
+    const t = g.kapanis || g.ts || 0;
+    if(t < gunBas || t >= gunBit) return false;
+    if(subeFiltre!=="__tum" && g.sube!==subeFiltre) return false;
+    return true;
+  });
+
+  // ürün bazlı topla (genel müdür "tüm şubeler"de şube bazlı ayrı satır)
+  const map = {};
+  kayitlar.forEach(g=>{
+    (g.kalemler||[]).forEach(it=>{
+      if(it.durum==="iptal") return;
+      const subeKey = (isGenel && subeFiltre==="__tum") ? (g.sube||"?") : "";
+      // kategori: satış anında kaydedilmişse onu kullan; yoksa (eski kayıt) menüden bul
+      let kat = it.kat;
+      if(!kat || kat==="Diğer"){
+        const ref = DEMO_PRODUCTS.find(p=>p.ad===it.ad);
+        kat = (ref && ref.kat) ? ref.kat : "Diğer";
+      }
+      const key = it.ad + "||" + kat + "||" + subeKey;
+      if(!map[key]) map[key] = {
+        ad:it.ad, kat:kat, sube:subeKey,
+        adet:0, birim:it.fiyat||0, brut:0, hediyeAdet:0, hediyeTutar:0, indirim:0
+      };
+      const r = map[key];
+      r.adet++;
+      r.brut += (it.fiyat||0);
+      if(it.hediye){ r.hediyeAdet++; r.hediyeTutar += (it.fiyat||0); }
+      // kısmi ödeme farkı = indirim (ödenen < fiyat, hediye hariç)
+      if(!it.hediye){
+        const odenen = it.odenenTutar||0;
+        const fark = (it.fiyat||0) - odenen;
+        if(fark > 0.01) r.indirim += fark;
+      }
+      if(r.birim===0 && it.fiyat) r.birim = it.fiyat;
+    });
+  });
+
+  // kategori sırası → sonra harf sırası
+  const satirlar = Object.values(map).sort((a,b)=>{
+    const kc = a.kat.localeCompare(b.kat,"tr");
+    if(kc!==0) return kc;
+    const ac = a.ad.localeCompare(b.ad,"tr");
+    if(ac!==0) return ac;
+    return (a.sube||"").localeCompare(b.sube||"","tr");
+  });
+  satirlar.forEach(r=>{
+    r.net = Math.round((r.brut - r.hediyeTutar - r.indirim)*100)/100;
+    r.brut = Math.round(r.brut*100)/100;
+    r.hediyeTutar = Math.round(r.hediyeTutar*100)/100;
+    r.indirim = Math.round(r.indirim*100)/100;
+  });
+  return {tarih, satirlar, subeFiltre, isGenel};
+}
+function raporUrunSatisHtml(){
+  const {tarih, satirlar, subeFiltre, isGenel} = raporUrunSatisVeri();
+  const tumSube = isGenel && subeFiltre==="__tum";
+
+  let html = `<div class="rapor-arac-bar">
+    <div class="rab-sol">
+      <label class="rab-lbl">📅 Tarih</label>
+      <input class="rab-tarih" type="date" value="${tarih}" onchange="raporTarihSec(this.value)">
     </div>`;
+  if(isGenel){
+    html += `<div class="rab-sube-row">
+      <button class="rab-sube${subeFiltre==="__tum"?' on':''}" onclick="raporSubeSec('__tum')">Tüm şubeler</button>`;
+    DEMO_BRANCHES.forEach(b=>{
+      html += `<button class="rab-sube${subeFiltre===b.ad?' on':''}" onclick="raporSubeSec('${b.ad.replace(/'/g,"\\'")}')">${b.ad}</button>`;
+    });
+    html += `</div>`;
+  }
+  html += `<button class="btn btn-primary rab-excel" onclick="raporUrunSatisExcel()">📥 Excel indir</button>
+  </div>`;
+
+  if(satirlar.length===0){
+    return html + `<div class="rapor-bos">📭 ${new Date(tarih).toLocaleDateString('tr')} tarihinde ${tumSube?'hiçbir şubede':'bu şubede'} satış kaydı yok.</div>`;
+  }
+
+  // toplamlar
+  const tAdet = satirlar.reduce((t,r)=>t+r.adet,0);
+  const tBrut = satirlar.reduce((t,r)=>t+r.brut,0);
+  const tHediye = satirlar.reduce((t,r)=>t+r.hediyeTutar,0);
+  const tIndirim = satirlar.reduce((t,r)=>t+r.indirim,0);
+  const tNet = satirlar.reduce((t,r)=>t+r.net,0);
+
+  html += `<div class="rapor-ozet-row">
+    <div class="rapor-ozet"><div class="ro-lbl">Satılan ürün</div><div class="ro-val">${tAdet} adet</div></div>
+    <div class="rapor-ozet"><div class="ro-lbl">Brüt tutar</div><div class="ro-val">${tl(tBrut)} ₺</div></div>
+    ${tHediye>0?`<div class="rapor-ozet ikram"><div class="ro-lbl">🎁 İkram</div><div class="ro-val">−${tl(tHediye)} ₺</div></div>`:''}
+    ${tIndirim>0?`<div class="rapor-ozet ind"><div class="ro-lbl">İndirim</div><div class="ro-val">−${tl(tIndirim)} ₺</div></div>`:''}
+    <div class="rapor-ozet ana"><div class="ro-lbl">NET CİRO</div><div class="ro-val">${tl(tNet)} ₺</div></div>
+  </div>`;
+
+  html += `<div class="table-wrap"><table class="rapor-tablo">
+    <thead><tr>
+      <th>Kategori</th><th>Ürün</th>${tumSube?'<th>Şube</th>':''}
+      <th class="sag">Adet</th><th class="sag">Birim</th><th class="sag">Brüt</th>
+      <th class="sag">İkram</th><th class="sag">İndirim</th><th class="sag">Net</th>
+    </tr></thead><tbody>`;
+
+  let sonKat = "";
+  satirlar.forEach(r=>{
+    const katGoster = (r.kat!==sonKat);
+    sonKat = r.kat;
+    html += `<tr${katGoster?' class="kat-bas"':''}>
+      <td class="rt-kat">${katGoster?r.kat:''}</td>
+      <td class="rt-ad">${r.ad}${r.hediyeAdet>0?' <span class="rt-hediye-rozet">🎁'+r.hediyeAdet+'</span>':''}</td>
+      ${tumSube?`<td class="rt-sube">${r.sube}</td>`:''}
+      <td class="sag">${r.adet}</td>
+      <td class="sag">${tl(r.birim)} ₺</td>
+      <td class="sag">${tl(r.brut)} ₺</td>
+      <td class="sag ${r.hediyeTutar>0?'rt-ikram':''}">${r.hediyeTutar>0?'−'+tl(r.hediyeTutar)+' ₺':'—'}</td>
+      <td class="sag ${r.indirim>0?'rt-ind':''}">${r.indirim>0?'−'+tl(r.indirim)+' ₺':'—'}</td>
+      <td class="sag rt-net">${tl(r.net)} ₺</td>
+    </tr>`;
+  });
+  html += `<tr class="rt-toplam">
+      <td colspan="${tumSube?3:2}">GENEL TOPLAM</td>
+      <td class="sag">${tAdet}</td><td class="sag">—</td>
+      <td class="sag">${tl(tBrut)} ₺</td>
+      <td class="sag">${tHediye>0?'−'+tl(tHediye)+' ₺':'—'}</td>
+      <td class="sag">${tIndirim>0?'−'+tl(tIndirim)+' ₺':'—'}</td>
+      <td class="sag">${tl(tNet)} ₺</td>
+    </tr>`;
+  html += `</tbody></table></div>`;
+  return html;
+}
+/* Excel (CSV) indirme */
+function raporUrunSatisExcel(){
+  const {tarih, satirlar, subeFiltre, isGenel} = raporUrunSatisVeri();
+  const tumSube = isGenel && subeFiltre==="__tum";
+  if(satirlar.length===0){ note("İndirilecek veri yok"); return; }
+  const bas = ["Kategori","Ürün"].concat(tumSube?["Şube"]:[])
+    .concat(["Adet","Birim Fiyat","Brüt Tutar","İkram","İndirim","Net Tutar"]);
+  const satirCsv = satirlar.map(r=>{
+    const s = [r.kat, r.ad].concat(tumSube?[r.sube]:[])
+      .concat([r.adet, r.birim, r.brut, r.hediyeTutar, r.indirim, r.net]);
+    return s.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(";");
+  });
+  const tAdet = satirlar.reduce((t,r)=>t+r.adet,0);
+  const tBrut = satirlar.reduce((t,r)=>t+r.brut,0);
+  const tHediye = satirlar.reduce((t,r)=>t+r.hediyeTutar,0);
+  const tIndirim = satirlar.reduce((t,r)=>t+r.indirim,0);
+  const tNet = satirlar.reduce((t,r)=>t+r.net,0);
+  const toplamSatir = ["GENEL TOPLAM",""].concat(tumSube?[""]:[])
+    .concat([tAdet,"",tBrut,tHediye,tIndirim,tNet])
+    .map(x=>'"'+String(x)+'"').join(";");
+  const csv = "\uFEFF" + [bas.map(x=>'"'+x+'"').join(";")].concat(satirCsv).concat([toplamSatir]).join("\r\n");
+  const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "MINIPAN_UrunSatis_"+tarih+(tumSube?"_TumSubeler":"_"+(subeFiltre||AKTIF_SUBE).replace(/\s+/g,"_"))+".csv";
+  a.click();
+  note("📥 Excel dosyası indirildi");
 }
 
 // --- STOK (canlı · motor düşürür) ---
@@ -23457,6 +23819,7 @@ sessionsYukle();   // masa/oturum/sipariş verilerini geri yükle (artık kalıc
 masaGecmisYukle(); // kapanmış masa hesaplarının arşivini geri yükle
 subeYukle();     // şube verilerini (yeni eklenenler dahil) geri yükle
 kullaniciYukle(); // personel/kullanıcı verilerini geri yükle
+raporTalepYukle(); // kasa rapor erişim taleplerini geri yükle
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
 kampanyaYukle(); // kampanya + genel fiyat verilerini geri yükle
 menuYukle();     // menü (kategori/ürün/seçenek/görsel) verilerini geri yükle
