@@ -84,6 +84,9 @@ input,select{font-family:inherit; font-size:15px}
   position:fixed; inset:0; z-index:100;
   display:flex; align-items:center; justify-content:center;
   background:radial-gradient(120% 120% at 50% 0%, #fff6e6 0%, var(--bg) 55%);
+  overflow-y:auto;                      /* içerik uzunsa kaydırılabilir */
+  padding:20px 0;
+  -webkit-overflow-scrolling:touch;
 }
 .login-card{
   width:min(420px,92vw);
@@ -92,6 +95,24 @@ input,select{font-family:inherit; font-size:15px}
   box-shadow:var(--shadow-lg);
   padding:36px 32px;
   text-align:center;
+  margin:auto;                          /* dikey ortalama, taşarsa üstten başlar */
+  flex:0 0 auto;
+}
+/* Mobil — sıkıştır ve kaydırılabilir tut */
+@media (max-width:480px), (max-height:760px){
+  #login{align-items:flex-start; padding:14px 0}
+  .login-card{padding:22px 20px; margin:0 auto}
+  .logo{font-size:25px !important; margin-bottom:2px !important}
+  .login-sub{font-size:12px !important; margin-bottom:14px !important}
+  .pg-form{gap:9px !important; margin-bottom:12px !important}
+  .pg-input{padding:11px 13px !important; font-size:14.5px !important}
+  .pg-btn{padding:13px !important; font-size:14.5px !important}
+  .pg-ayrac{margin:12px 0 10px !important}
+  .role-pick{gap:7px !important}
+  .role-btn{padding:10px 12px !important}
+  .rb-name{font-size:13.5px !important}
+  .rb-desc{font-size:10.5px !important}
+  .role-dot{width:32px !important; height:32px !important; font-size:15px !important}
 }
 .logo{
   font-size:30px; font-weight:800; letter-spacing:-.5px;
@@ -103,6 +124,31 @@ input,select{font-family:inherit; font-size:15px}
   display:grid; place-items:center; font-size:24px;
 }
 .login-sub{color:var(--ink-2); margin:2px 0 26px; font-size:14px}
+/* Genel onay pop-up (confirm yerine) */
+.op-ic{background:#fff; border-radius:20px; max-width:400px; width:92%; margin:auto; padding:28px 24px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .3s cubic-bezier(.2,.9,.25,1)}
+.op-ikon{font-size:44px; margin-bottom:10px}
+.op-bas{font-size:19px; font-weight:900; color:var(--ink); margin-bottom:8px}
+.op-metin{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin-bottom:20px}
+.op-btnler{display:flex; gap:10px}
+.op-btn{flex:1; padding:13px; border-radius:11px; font-size:14.5px; font-weight:800; cursor:pointer; border:none}
+.op-btn:active{transform:scale(.98)}
+.op-btn.vazgec{background:var(--surface-2); color:var(--ink-2); border:1.5px solid var(--line)}
+.op-btn.onay{background:var(--brand); color:#fff}
+.op-btn.tehlike{background:var(--err); color:#fff}
+
+/* Çıkış uyarı pop-up (kasa açıkken) */
+.cu-ic{background:#fff; border-radius:20px; max-width:400px; width:92%; margin:auto; padding:28px 24px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .3s cubic-bezier(.2,.9,.25,1)}
+.cu-ikon{font-size:46px; margin-bottom:10px}
+.cu-bas{font-size:20px; font-weight:900; color:var(--ink); margin-bottom:6px}
+.cu-kasa{font-size:12.5px; font-weight:700; color:var(--err); background:var(--err-soft); border-radius:99px; padding:5px 14px; display:inline-block; margin-bottom:16px}
+.cu-metin{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin-bottom:20px; text-align:left; background:var(--surface-2); border-radius:11px; padding:13px 15px}
+.cu-btnler{display:flex; flex-direction:column; gap:9px}
+.cu-btn{width:100%; padding:13px; border-radius:11px; font-size:14.5px; font-weight:800; cursor:pointer; border:none}
+.cu-btn:active{transform:scale(.98)}
+.cu-btn.kapat{background:var(--brand); color:#fff; box-shadow:0 4px 12px rgba(217,44,8,.28)}
+.cu-btn.cik{background:var(--err-soft); color:var(--err); border:1.5px solid var(--err)}
+.cu-btn.vazgec{background:var(--surface-2); color:var(--ink-2); border:1.5px solid var(--line)}
+
 /* Personel girişi (kullanıcı adı + şifre) */
 .pg-form{display:flex; flex-direction:column; gap:12px; margin-bottom:18px}
 .pg-alan{display:flex; flex-direction:column; gap:5px; text-align:left}
@@ -115,6 +161,8 @@ input,select{font-family:inherit; font-size:15px}
 .pg-btn:active{transform:scale(.98); background:var(--brand-d)}
 .pg-ayrac{display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:var(--ink-3); font-size:11.5px}
 .pg-ayrac::before,.pg-ayrac::after{content:""; flex:1; height:1px; background:var(--line)}
+.pg-demo-toggle{width:100%; padding:10px; margin:14px 0 10px; border-radius:10px; background:none; border:1px dashed var(--line); color:var(--ink-3); font-size:12px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px}
+.pg-demo-toggle:active{background:var(--surface-2)}
 /* Bölüm seçim ekranı (çoklu yetki) */
 .bs-ic{background:#fff; border-radius:20px; max-width:400px; width:92%; margin:auto; padding:26px 24px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.3)}
 .bs-ust{margin-bottom:20px}
@@ -3131,6 +3179,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .pers-bos{text-align:center; padding:40px 20px; color:var(--ink-3); font-size:14px; line-height:1.7}
 .km-ipucu{font-size:12.5px; margin-top:10px; min-height:18px; color:var(--ink-3)}
 .km-bolum-yetki{display:flex; flex-wrap:wrap; gap:8px}
+.km-genel-not{background:var(--cocoa-soft); border:1px solid var(--cocoa); border-radius:11px; padding:11px 13px; margin-bottom:12px; font-size:12px; color:var(--cocoa); line-height:1.55}
 .km-vardiya-liste{display:flex; flex-direction:column; gap:8px}
 .km-vardiya-gun{display:flex; align-items:center; gap:10px}
 .kvg-gun-btn{width:52px; flex-shrink:0; padding:8px 0; border-radius:9px; border:1.5px solid var(--line); background:var(--surface); font-size:12.5px; font-weight:800; color:var(--ink-3); cursor:pointer}
@@ -3718,9 +3767,11 @@ body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
       <button class="pg-btn" onclick="personelGirisYap()">🔑 Giriş Yap</button>
     </div>
 
-    <div class="pg-ayrac"><span>demo erişim</span></div>
+    <button class="pg-demo-toggle" onclick="demoToggle()">
+      <span id="demoOk">▼</span> Demo erişim (test için)
+    </button>
 
-    <div class="role-pick">
+    <div class="role-pick" id="demoPick" style="display:none">
       <button class="role-btn" onclick="login('kasa')">
         <span class="role-dot" style="background:var(--r-kasa)">💳</span>
         <span><span class="rb-name">Kasa görevlisi</span><br><span class="rb-desc">Satış, tahsilat, masa · tek şube</span></span>
@@ -6270,6 +6321,16 @@ let AKTIF_PERSONEL_ID = null;
 let AKTIF_PERSONEL_AD = "";
 let AKTIF_BOLUM = null;
 
+/* Demo erişim bölümünü aç/kapa */
+function demoToggle(){
+  const el = document.getElementById("demoPick");
+  const ok = document.getElementById("demoOk");
+  if(!el) return;
+  const acik = el.style.display !== "none";
+  el.style.display = acik ? "none" : "grid";
+  if(ok) ok.textContent = acik ? "▼" : "▲";
+}
+
 function personelGirisYap(){
   const ad = (document.getElementById("pgKullaniciAdi")||{}).value || "";
   const sifre = (document.getElementById("pgSifre")||{}).value || "";
@@ -6294,7 +6355,7 @@ function personelGirisYap(){
   }
 
   const bolumler = (u.bolumler && u.bolumler.length) ? u.bolumler : [u.bolum];
-  const mudurYetkisi = bolumler.includes("mudur");
+  const mudurYetkisi = bolumler.some(b=>MUDUR_BOLUMLERI.includes(b));   // müdür + genel müdür muaf
   if(!mudurYetkisi && !kullaniciVardiyadaMi(u)){
     const bugunVardiya = (u.vardiya||{})[new Date().getDay()];
     const saatBilgi = bugunVardiya
@@ -6354,7 +6415,9 @@ function personelGirisTamamla(u, bolum){
   const kasamAcik = av && av.kasiyerId === u.id;
   const baskasininKasasi = av && av.kasiyerId !== u.id;
 
-  if(bolum==="mudur"){
+  if(bolum==="genel"){ login("genel"); }              // genel müdür — tüm şubeler
+  else if(bolum==="mudur"){
+    // merkez müdürü de genel yetki alır (eski kayıtlarla uyum)
     login(u.sube===MERKEZ_SUBE ? "genel" : "mudur");
   }
   else if(bolum==="kasa"){ login("kasa"); }
@@ -6379,7 +6442,7 @@ function kasaAcikBilgiModal(v, benimMi){
   const sure = Math.floor((Date.now() - v.acilisTs)/60000);
   const saat = Math.floor(sure/60), dk = sure%60;
   const html = `
-  <div class="modal-bg on" id="kasaAcikModal" style="z-index:220" onclick="if(event.target===this)kasaAcikKapat()">
+  <div class="modal-bg on" id="kasaAcikModal" style="z-index:220" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) kasaAcikKapat()">
     <div class="km-sil-ic">
       <div class="ka-ikon" style="font-size:44px">${benimMi?'🔓':'⚠️'}</div>
       <div class="km-sil-bas" style="text-align:center">${benimMi?'Kasanız Hâlâ Açık':'Kasa Başkasında Açık'}</div>
@@ -6404,9 +6467,62 @@ function kasaAcikBilgiModal(v, benimMi){
 function kasaAcikKapat(){ const w=document.getElementById("kasaAcikWrap"); if(w) w.innerHTML=""; }
 function personelCikis(){
   const av = (typeof acikVardiya==="function") ? acikVardiya(AKTIF_SUBE) : null;
+  // kasası açıksa özel uyarı pop-up'ı
   if(av && AKTIF_PERSONEL && av.kasiyerId===AKTIF_PERSONEL.id){
-    if(!confirm("⚠️ Kasanız hâlâ AÇIK ("+av.no+").\n\nÇıkarsanız kasa açık kalır ve tüm işlemlerden sorumlu olmaya devam edersiniz.\n\nYine de çıkmak istiyor musunuz?")) return;
+    const sure = Math.floor((Date.now() - av.acilisTs)/60000);
+    const saat = Math.floor(sure/60), dk = sure%60;
+    const html = `
+    <div class="modal-bg on" id="cikisUyariModal" style="z-index:260" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) cikisUyariKapat()">
+      <div class="cu-ic">
+        <div class="cu-ikon">⚠️</div>
+        <div class="cu-bas">Kasanız Hâlâ Açık</div>
+        <div class="cu-kasa">${av.no} · ${saat>0?saat+' saat ':''}${dk} dakikadır açık</div>
+        <div class="cu-metin">
+          Çıkarsanız kasa <b>açık kalır</b> ve bu kasadaki tüm işlemlerden
+          <b>sorumlu olmaya devam edersiniz</b>.<br><br>
+          Vardiyanızı bitiriyorsanız önce <b>kasayı kapatın</b>.
+        </div>
+        <div class="cu-btnler">
+          <button class="cu-btn kapat" onclick="cikisUyariKapat();kasaKapatAc()">🔒 Önce Kasayı Kapat</button>
+          <button class="cu-btn cik" onclick="cikisUyariKapat();personelCikisYap()">Yine de Çık</button>
+          <button class="cu-btn vazgec" onclick="cikisUyariKapat()">Vazgeç</button>
+        </div>
+      </div>
+    </div>`;
+    let el = document.getElementById("cikisUyariWrap");
+    if(!el){ el=document.createElement("div"); el.id="cikisUyariWrap"; document.body.appendChild(el); }
+    el.innerHTML = html;
+    return;
   }
+  personelCikisYap();
+}
+function cikisUyariKapat(){ const w=document.getElementById("cikisUyariWrap"); if(w) w.innerHTML=""; }
+
+/* ══ GENEL ONAY POP-UP — tarayıcının confirm() kutusu yerine ══
+   Kullanım: onayPop({baslik, metin, onayYazi, tehlike, onOnay}) */
+function onayPop(o){
+  const tehlike = !!o.tehlike;
+  const html = `
+  <div class="modal-bg on" id="onayPopModal" style="z-index:260" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) onayPopKapat()">
+    <div class="op-ic">
+      <div class="op-ikon">${o.ikon || (tehlike?'🗑️':'❓')}</div>
+      <div class="op-bas">${o.baslik || 'Emin misiniz?'}</div>
+      <div class="op-metin">${o.metin || ''}</div>
+      <div class="op-btnler">
+        <button class="op-btn vazgec" onclick="onayPopKapat()">Vazgeç</button>
+        <button class="op-btn ${tehlike?'tehlike':'onay'}" id="opOnayBtn">${o.onayYazi || 'Evet, devam et'}</button>
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("onayPopWrap");
+  if(!el){ el=document.createElement("div"); el.id="onayPopWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+  const btn = document.getElementById("opOnayBtn");
+  if(btn) btn.onclick = ()=>{ onayPopKapat(); if(typeof o.onOnay==="function") o.onOnay(); };
+}
+function onayPopKapat(){ const w=document.getElementById("onayPopWrap"); if(w) w.innerHTML=""; }
+/* Çıkışı gerçekten yap */
+function personelCikisYap(){
   if(AKTIF_PERSONEL){
     personelLogEkle("cikis", AKTIF_PERSONEL, "");
     kullaniciKaydet();
@@ -6429,7 +6545,10 @@ const BOLUMLER = {
   garson: { ad:"Garson",       ic:"🍽️", renk:"#1f9d63" },
   depo:   { ad:"Depo",         ic:"📦", renk:"#d97706" },
   mudur:  { ad:"Şube Müdürü",  ic:"📋", renk:"#7c3aed" },
+  genel:  { ad:"Genel Müdür",  ic:"🗺️", renk:"#4a0f2e", merkezZorunlu:true },
 };
+/* Genel müdür yetkisi olan bölümler — vardiya saati kısıtından muaf */
+const MUDUR_BOLUMLERI = ["mudur","genel"];
 /* Bir kullanıcı kaydı:
    {
      id:"MNPN-P-000001", no:"MNPN-P-000001",
@@ -6472,7 +6591,23 @@ function kullaniciYukle(){
     if(u.bolum && !u.bolumler.includes(u.bolum)) u.bolumler.unshift(u.bolum);
   });
   kullaniciDemoTohum();
+  genelMudurMigrasyon();     // genel müdür yoksa ekle (eski kayıtlar için)
   dondurmaSuresiKontrol();   // süresi biten dondurmaları otomatik aç
+}
+/* Genel müdür bölümü sonradan eklendi — hiç genel müdür yoksa demo olarak ekle */
+function genelMudurMigrasyon(){
+  const varMi = Object.values(KULLANICILAR).some(u=>
+    u.durum!=="arsiv" && ((u.bolumler&&u.bolumler.includes("genel")) || u.bolum==="genel"));
+  if(varMi) return;
+  const std = { 1:{ac:"09:00",kapat:"18:00"},2:{ac:"09:00",kapat:"18:00"},3:{ac:"09:00",kapat:"18:00"},4:{ac:"09:00",kapat:"18:00"},5:{ac:"09:00",kapat:"18:00"},6:null,0:null };
+  const id = kullaniciNoBicim(_kullaniciNoSayac++);
+  KULLANICILAR[id] = {
+    id:id, no:id, kullaniciAdi:"ibrahim.y", sifreHash:sifreHashle("1234"),
+    ad:"İbrahim Yılmaz", tc:"12345678900", tel:"5320001122", mail:"ibrahim@minipan.tr",
+    sube:MERKEZ_SUBE, bolum:"genel", bolumler:["genel"], durum:"aktif", dondur:null,
+    vardiya:std, tolerans:15, olusturan:"sistem", olusturmaTs:Date.now(), sonGiris:null
+  };
+  kullaniciKaydet();
 }
 /* İlk açılışta örnek kullanıcılar (hiç kullanıcı yoksa) — gösterim için */
 function kullaniciDemoTohum(){
@@ -6495,8 +6630,9 @@ function kullaniciDemoTohum(){
       vardiya:std, tolerans:15, olusturan:"sistem", olusturmaTs:Date.now(), sonGiris:null
     };
   });
-  // Genel Merkez — depo/lojistik personeli (şubeye bağlı değil)
+  // Genel Merkez — genel müdür + depo/lojistik personeli
   const merkezDemolar = [
+    {ad:"İbrahim Yılmaz", kullaniciAdi:"ibrahim.y", bolum:"genel", bolumler:["genel"], tc:"12345678900", tel:"5320001122", mail:"ibrahim@minipan.tr"},
     {ad:"Hakan Öz",   kullaniciAdi:"hakan.o", bolum:"depo", bolumler:["depo"], tc:"12345678906", tel:"5326667788", mail:"hakan@minipan.tr"},
     {ad:"Selin Yurt", kullaniciAdi:"selin.y", bolum:"depo", bolumler:["depo"], tc:"12345678907", tel:"5327778899", mail:"selin@minipan.tr"},
   ];
@@ -7553,8 +7689,19 @@ function bildirimTemizle(){
 function bildirimAc(id){
   const b=BILDIRIMLER.find(x=>x.id===id); if(!b) return;
   bildirimOku(id);
-  if(b.link){ if(b.link.sekme) state.bayiSekme=b.link.sekme; go(b.link.ekran||"bayi", true); }
-  else { go("bildirim", true); }
+  if(!b.link){ go("bildirim", true); return; }
+  // link iki formatta olabilir:
+  //   1) string  → doğrudan ekran adı  (örn. "fiyat", "masalar")
+  //   2) obje    → {ekran, sekme}      (bayi ekranı için sekme bilgisiyle)
+  if(typeof b.link === "string"){
+    // hedef ekran bu rolde var mı? yoksa bildirim ekranında kal
+    const nav = (ROLES[state.role] && ROLES[state.role].nav) || [];
+    if(nav.includes(b.link)) go(b.link, true);
+    else note("Bu bildirimin ekranına erişim yetkiniz yok");
+    return;
+  }
+  if(b.link.sekme) state.bayiSekme = b.link.sekme;
+  go(b.link.ekran || "bayi", true);
 }
 function bildirimBadgeGuncelle(){ if(document.getElementById("nav") && state.role) buildNav(); }
 function viewBildirim(main){
@@ -8360,7 +8507,7 @@ function kasaKapatAc(){
   state._kasaKapat = { beklenen, ozet, vardiya:v };
 
   const html = `
-  <div class="modal-bg on" id="kasaKapatModal" style="z-index:200" onclick="if(event.target===this)kasaKapatKapat()">
+  <div class="modal-bg on" id="kasaKapatModal" style="z-index:200" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) kasaKapatKapat()">
     <div class="kk-ic">
       <div class="kk-bas">🔒 Kasa Kapatma
         <button class="bom-kapat" onclick="kasaKapatKapat()">✕</button></div>
@@ -10410,7 +10557,13 @@ function myKatSil(ki){
   // kategoride dolu masa var mı
   const dolu = k.masalar.some(ad=>{ const id=sube+"::"+k.kat+"|"+ad; return SESSIONS[id]&&SESSIONS[id].acik; });
   if(dolu){ note("Bu kategoride dolu masa var — önce hesapları kapatın"); return; }
-  if(!confirm(k.kat+" kategorisi ve içindeki "+k.masalar.length+" masa silinecek. Emin misiniz?")) return;
+  onayPop({ tehlike:true, baslik:"Kategori Silinecek",
+    metin:"<b>"+k.kat+"</b> kategorisi ve içindeki <b>"+k.masalar.length+" masa</b> silinecek.<br>Bu işlem geri alınamaz.",
+    onayYazi:"🗑️ Sil", onOnay:()=>masaKatSilOnay(ki) });
+  return;
+}
+function masaKatSilOnay(ki){
+  const k = BRANCH_TABLES[AKTIF_SUBE][ki]; if(!k) return;
   BRANCH_TABLES[sube].splice(ki,1);
   note("Kategori silindi");
   subeKaydet(); go("masayonetim", true);
@@ -15361,7 +15514,12 @@ function secStokDonusturUygula(){
 }
 /* Havuzdaki fiyatları ürünlerdeki gerçek fiyatlardan tazele */
 function secHavuzTazele(){
-  if(!confirm("Havuzdaki fiyatlar, ürünlerde kullanılan gerçek fiyatlarla güncellenecek. Devam edilsin mi?")) return;
+  onayPop({ baslik:"Havuz Fiyatları Güncellenecek",
+    metin:"Havuzdaki fiyatlar, ürünlerde kullanılan gerçek fiyatlarla güncellenecek.",
+    onayYazi:"✓ Güncelle", onOnay:()=>havuzFiyatGuncelleOnay() });
+  return;
+}
+function havuzFiyatGuncelleOnay(){
   const fiyatHarita = {};
   Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
     gruplar.forEach(g=>g.secenekler.forEach(s=>{
@@ -15725,7 +15883,13 @@ function urunSiraTasi(pi, yon){
 }
 function urunSil(pi){
   const p = DEMO_PRODUCTS[pi];
-  if(!confirm('"'+p.ad+'" ürünü silinsin mi?')) return;
+  onayPop({ tehlike:true, baslik:"Ürün Silinecek",
+    metin:"<b>"+p.ad+"</b> ürünü silinecek.<br>Reçetesi, görseli ve fiyat ayarları da kaldırılır.",
+    onayYazi:"🗑️ Sil", onOnay:()=>urunSilOnay(i) });
+  return;
+}
+function urunSilOnay(i){
+  const p = DEMO_PRODUCTS[i]; if(!p) return;
   delete PRODUCT_OPTIONS[p.ad];
   delete URUN_GORSEL[p.ad];
   DEMO_PRODUCTS.splice(pi,1);
@@ -16767,7 +16931,13 @@ function kampanyaAcKapa(id){
 }
 function kampanyaSil(id){
   const k=KAMPANYALAR.find(x=>x.id===id); if(!k) return;
-  if(!confirm('"'+k.ad+'" kampanyası silinsin mi?')) return;
+  onayPop({ tehlike:true, baslik:"Kampanya Silinecek",
+    metin:"<b>"+k.ad+"</b> kampanyası silinecek.",
+    onayYazi:"🗑️ Sil", onOnay:()=>kampanyaSilOnay(id) });
+  return;
+}
+function kampanyaSilOnay(id){
+  const k = KAMPANYALAR.find(x=>x.id===id); if(!k) return;
   KAMPANYALAR=KAMPANYALAR.filter(x=>x.id!==id);
   note("Kampanya silindi");
   kampanyaKaydet_persist();
@@ -16888,11 +17058,16 @@ function kullaniciModalRender(){
   const subeSecenek = `<option value="${MERKEZ_SUBE}"${f.sube===MERKEZ_SUBE?' selected':''}>🏛️ Genel Merkez</option>` +
     DEMO_BRANCHES.map(b=>
     `<option value="${esc(b.ad)}"${b.ad===f.sube?' selected':''}>${b.ad}</option>`).join("");
-  const bolumSecenek = Object.keys(BOLUMLER).map(k=>
-    `<option value="${k}"${k===f.bolum?' selected':''}>${BOLUMLER[k].ic} ${BOLUMLER[k].ad}</option>`).join("");
+  const bolumSecenek = Object.keys(BOLUMLER).map(k=>{
+    // "Genel Müdür" bölümünü sadece genel müdür atayabilir
+    if(BOLUMLER[k].merkezZorunlu && !genelMu) return '';
+    return `<option value="${k}"${k===f.bolum?' selected':''}>${BOLUMLER[k].ic} ${BOLUMLER[k].ad}</option>`;
+  }).join("");
 
   const html = `
-  <div class="modal-bg on" id="kullaniciModal" style="z-index:190" onclick="if(event.target===this)kullaniciModalKapat()">
+  <div class="modal-bg on" id="kullaniciModal" style="z-index:190"
+       onmousedown="window.__modalBasladi=(event.target===this)"
+       onclick="if(event.target===this && window.__modalBasladi) kullaniciModalKapat()">
     <div class="sube-modal-ic">
       <div class="sube-modal-bas">${f.yeni?'➕ Yeni Kullanıcı':'✏️ Kullanıcı Düzenle'}
         <button class="bom-kapat" onclick="kullaniciModalKapat()">✕</button></div>
@@ -16910,9 +17085,12 @@ function kullaniciModalRender(){
           <input class="yk-input" id="kmMail" type="email" value="${esc(f.mail)}" placeholder="ornek@minipan.tr"></div>
 
         <div class="sube-form-baslik">🏢 Görev</div>
+        ${(BOLUMLER[f.bolum] && BOLUMLER[f.bolum].merkezZorunlu)?`
+          <div class="km-genel-not">🗺️ <b>Genel Müdür</b> otomatik olarak <b>Genel Merkez</b>'e bağlanır ·
+            tüm şubeleri görür · vardiya saati kısıtından muaftır · gün sonu kilidini açabilir.</div>`:''}
         <div class="yk-ikili">
           <div class="yk-alan"><label>Şube</label>
-            <select class="yk-select" id="kmSube" ${genelMu?'':'disabled'}>${subeSecenek}</select></div>
+            <select class="yk-select" id="kmSube" ${(genelMu && !(BOLUMLER[f.bolum]&&BOLUMLER[f.bolum].merkezZorunlu))?'':'disabled'}>${subeSecenek}</select></div>
           <div class="yk-alan"><label>Ana Bölüm</label>
             <select class="yk-select" id="kmBolum" onchange="kullaniciFormAnaBolum(this.value)">${bolumSecenek}</select></div>
         </div>
@@ -17018,8 +17196,11 @@ function kullaniciVardiyadaMi(u, simdi){
 function kullaniciBolumYetkiHtml(f){
   const anaBolum = f.bolum;
   const secili = f.bolumler || [anaBolum];
+  const genelMu = (state.role==="genel");
   return Object.keys(BOLUMLER).map(k=>{
     const b = BOLUMLER[k];
+    // "Genel Müdür" yetkisini sadece genel müdür verebilir
+    if(b.merkezZorunlu && !genelMu) return '';
     const isAna = (k===anaBolum);
     const isSecili = isAna || secili.includes(k);
     return `<button type="button" class="km-yetki-cip${isSecili?' on':''}${isAna?' ana':''}" onclick="${isAna?'':'kullaniciYetkiToggle(\''+k+'\')'}">
@@ -17044,16 +17225,19 @@ function kullaniciFormAnaBolum(yeni){
   kullaniciModalOku();
   f.bolum = yeni;
   if(!f.bolumler) f.bolumler = [];
-  if(!f.bolumler.includes(yeni)) f.bolumler.unshift(yeni);   // ana bölüm yetkilerde olmalı
-  const el = document.getElementById("kmBolumYetki");
-  if(el) el.innerHTML = kullaniciBolumYetkiHtml(f);
+  if(!f.bolumler.includes(yeni)) f.bolumler.unshift(yeni);
+  // Genel Müdür → otomatik Genel Merkez'e bağlanır
+  if(BOLUMLER[yeni] && BOLUMLER[yeni].merkezZorunlu){
+    f.sube = MERKEZ_SUBE;
+  }
+  kullaniciModalRender();   // şube seçici de güncellensin
 }
 /* Sil / Arşivle seçim menüsü — müdür karar verir */
 function kullaniciSilMenu(){
   const f = state._kullaniciForm; if(!f || !f.id) return;
   const u = KULLANICILAR[f.id]; if(!u) return;
   const html = `
-  <div class="modal-bg on" id="kullaniciSilModal" style="z-index:200" onclick="if(event.target===this)kullaniciSilKapat()">
+  <div class="modal-bg on" id="kullaniciSilModal" style="z-index:200" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) kullaniciSilKapat()">
     <div class="km-sil-ic">
       <div class="km-sil-bas">${u.ad} için işlem</div>
       <div class="km-sil-ack">Bu kullanıcıyı ne yapmak istersiniz?</div>
@@ -17089,7 +17273,7 @@ function kullaniciDondurAc(){
   }
   const bugun = new Date().toISOString().slice(0,10);
   const html = `
-  <div class="modal-bg on" id="kullaniciDondurModal" style="z-index:200" onclick="if(event.target===this)kullaniciDondurKapat()">
+  <div class="modal-bg on" id="kullaniciDondurModal" style="z-index:200" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) kullaniciDondurKapat()">
     <div class="km-sil-ic">
       <div class="km-sil-bas">❄️ ${u.ad} · Dondur</div>
       <div class="km-sil-ack">Seçilen tarih aralığında bu kullanıcı giriş yapamaz. Süre bitince otomatik aktifleşir.</div>
@@ -18019,7 +18203,13 @@ function stokModalCiz(){
   setTimeout(()=>{ if(yeni){ const i=document.getElementById("skmAd"); if(i) i.focus(); } }, 80);
 }
 function stokKartSil(kod){
-  if(!confirm(STOCK[kod].ad+" stok kartı silinsin mi? Reçetelerde kullanılıyorsa dikkat.")) return;
+  onayPop({ tehlike:true, baslik:"Stok Kartı Silinecek",
+    metin:"<b>"+STOCK[kod].ad+"</b> stok kartı silinecek.<br>⚠️ Reçetelerde kullanılıyorsa maliyet hesapları etkilenir.",
+    onayYazi:"🗑️ Sil", onOnay:()=>stokSilOnay(kod) });
+  return;
+}
+function stokSilOnay(kod){
+  if(!STOCK[kod]) return;
   delete STOCK[kod];
   note("Stok kartı silindi");
   b2bKaydet();
@@ -19331,7 +19521,12 @@ function sipOnayla(id){
 }
 function sipReddet(id){
   const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
-  if(!confirm("#"+id+" siparişi reddedilsin mi?")) return;
+  onayPop({ tehlike:true, baslik:"Sipariş Reddedilecek",
+    metin:"<b>#"+id+"</b> numaralı sipariş reddedilecek.",
+    onayYazi:"✕ Reddet", onOnay:()=>siparisReddetOnay(id) });
+  return;
+}
+function siparisReddetOnay(id){
   sp.durum = "red";
   note("Sipariş reddedildi");
   b2bKaydet();
@@ -19783,7 +19978,7 @@ function irsaliyeAc(id){
 
   const m = MERKEZ_FIRMA;
   const html = `
-  <div class="irs-modal-bg" id="irsModal" onclick="if(event.target===this)irsaliyeKapat()">
+  <div class="irs-modal-bg" id="irsModal" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) irsaliyeKapat()">
     <div class="irs-modal-ic">
       <div class="irs-arac-bar no-print">
         <span class="irs-arac-baslik">🧾 Sevk İrsaliyesi · Önizleme</span>
@@ -20640,7 +20835,13 @@ function yzcSil(id){
   const liste = subeYazicilari(state.yzcSube);
   const y = liste.find(x=>x.id===id);
   if(!y) return;
-  if(!confirm('"'+(y.ad||YAZICI_ROLLER[y.rol].ad)+'" yazıcısı silinsin mi?')) return;
+  onayPop({ tehlike:true, baslik:"Yazıcı Silinecek",
+    metin:"<b>"+(y.ad||YAZICI_ROLLER[y.rol].ad)+"</b> yazıcısı silinecek.",
+    onayYazi:"🗑️ Sil", onOnay:()=>yaziciSilOnay(i) });
+  return;
+}
+function yaziciSilOnay(i){
+  const y = YAZICILAR[i]; if(!y) return;
   YAZICILAR[state.yzcSube] = liste.filter(x=>x.id!==id);
   yaziciKaydet();
   note("Yazıcı silindi");
@@ -20997,7 +21198,7 @@ function subeDuzenle(ad){
 function merkezFirmaDuzenle(){
   const m = MERKEZ_FIRMA;
   const html = `
-  <div class="modal-bg on" id="merkezFirmaModal" style="z-index:190" onclick="if(event.target===this)merkezFirmaKapat()">
+  <div class="modal-bg on" id="merkezFirmaModal" style="z-index:190" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) merkezFirmaKapat()">
     <div class="sube-modal-ic">
       <div class="sube-modal-bas">🏛️ Merkez / Genel Müdürlük Bilgileri
         <button class="bom-kapat" onclick="merkezFirmaKapat()">✕</button></div>
@@ -21422,7 +21623,7 @@ function gunSonuKapatModal(sube, gun){
   const vardiyalar = gunSonuVardiyalari(sube, gun);
   const kasaFark = Math.round(vardiyalar.reduce((t,v)=>t+(v.fark||0),0)*100)/100;
   const html = `
-  <div class="modal-bg on" id="gsKapatModal" style="z-index:200" onclick="if(event.target===this)gsModalKapat()">
+  <div class="modal-bg on" id="gsKapatModal" style="z-index:200" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) gsModalKapat()">
     <div class="gs-modal-ic">
       <div class="kk-bas">🌙 Gün Sonu Kapatma
         <button class="bom-kapat" onclick="gsModalKapat()">✕</button></div>
@@ -21507,7 +21708,7 @@ function gunSonuKapatOnayla(sube, gun){
 /* Kilit açma modalı (sadece genel müdür) */
 function gunSonuAcModal(sube, gun){
   const html = `
-  <div class="modal-bg on" id="gsAcModal" style="z-index:200" onclick="if(event.target===this)gsModalKapat()">
+  <div class="modal-bg on" id="gsAcModal" style="z-index:200" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) gsModalKapat()">
     <div class="km-sil-ic">
       <div class="km-sil-bas">🔓 Gün Kilidini Aç</div>
       <div class="km-sil-ack">${sube} · ${isletmeGunuGoster(gun)}<br><br>
@@ -23321,10 +23522,26 @@ function qrAdresDuzenle(i){
 }
 function qrAdresSil(i){
   const m=QR.musteri;
-  if(confirm(m.adresler[i].ad+" adresini sil?")){
+  if(!m || !m.adresler || !m.adresler[i]) return;
+  const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
+    '<div class="qr-pop" onclick="event.stopPropagation()">'+
+      '<div class="qr-pop-ikon">🗑️</div>'+
+      '<div class="qr-pop-baslik">Adres Silinecek</div>'+
+      '<div class="qr-pop-metin"><b>'+m.adresler[i].ad+'</b> adresi silinecek.</div>'+
+      '<div style="display:flex;gap:9px">'+
+        '<button class="qr-pop-btn" style="background:var(--surface-2);color:var(--ink-2)" onclick="qrPopKapat()">Vazgeç</button>'+
+        '<button class="qr-pop-btn" onclick="qrAdresSilOnay('+i+')">🗑️ Sil</button>'+
+      '</div>'+
+    '</div></div>';
+  qrPopGoster(html);
+}
+function qrAdresSilOnay(i){
+  const m=QR.musteri;
+  if(m && m.adresler && m.adresler[i]){
     m.adresler.splice(i,1);
-    renderQR();
   }
+  qrPopKapat();
+  renderQR();
 }
 function qrUyelikCikis(){
   DEVICE_MEMORY=null; QR.musteri=null; QR.kisi=""; QR.tel="";
