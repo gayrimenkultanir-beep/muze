@@ -1116,6 +1116,7 @@ tr:last-child td{border-bottom:none}
 .qr-alerjen-bas{font-size:11.5px; font-weight:800; color:#d92c08}
 .qr-alerjen-rozet{display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:700; color:#8a1d52; background:#f7e2ec; border:1px solid #e6c4d4; border-radius:99px; padding:3px 9px}
 .qr-si-ad .kalem-kcal{font-size:10.5px}
+.qr-card .kalem-kcal{font-size:9px; padding:1px 4px; margin-left:2px}
 .sp-fiyat .sp-ucretsiz2{color:var(--ink-3); font-weight:500}
 .sp-durum-kapali{font-size:11.5px; font-weight:700; color:var(--err)}
 .sp-kapat-btn{padding:6px 13px; border-radius:8px; background:var(--err-soft); border:1px solid #e8a59e; color:var(--err); font-size:12px; font-weight:800}
@@ -1447,7 +1448,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-screen{padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right)}
 /* Çok küçük ekranlar (<360px) */
 @media(max-width:359px){
-  .qr-kat-grid{grid-template-columns:1fr; gap:10px}
+  .qr-kat-grid{grid-template-columns:1fr 1fr; gap:8px}
   .qr-kat-baslik{font-size:18px; padding:14px 14px 10px}
   .qr-brand{font-size:26px}
   .qr-logo{font-size:52px}
@@ -1456,7 +1457,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 }
 /* Orta-küçük telefonlar */
 @media(max-width:400px){
-  .qr-kat-grid{gap:10px; padding:0 12px 14px}
+  .qr-kat-grid{gap:8px; padding:0 10px 14px}
   .qr-menu-list{padding:12px}
 }
 .qr-screen{max-width:480px; margin:0 auto; min-height:100dvh; display:flex; flex-direction:column; background:transparent; position:relative; overflow-x:hidden}
@@ -1468,8 +1469,42 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 
 /* Karşılama */
 .qr-giris{justify-content:center; align-items:center; padding:30px 24px; background:transparent}
+/* içerik ekrandan uzunsa merkezleme yerine üstten başlat (kesilmesin) */
+@media (max-height:780px), (max-width:420px){
+  .qr-giris{justify-content:flex-start; padding:18px 18px 24px}
+}
 /* Karşılama ekranı — dönen logo + yazı PNG + daktilo slogan */
-.qr-karsilama{position:relative; justify-content:flex-start; padding-top:26px}
+.qr-karsilama{position:relative; justify-content:flex-start; padding-top:26px; padding-bottom:20px; overflow-y:auto}
+/* ══ Karşılama — MOBİL uyum: küçük ekranda ölçüler küçülür, içerik sığar ══ */
+@media (max-height:780px), (max-width:420px){
+  .qr-karsilama{padding-top:14px; padding-bottom:14px}
+  .qr-krs-ust{margin-bottom:10px}
+  .qr-krs-logo{height:104px !important; margin-bottom:4px !important}
+  .qr-krs-logo-img{width:94px !important; height:94px !important}
+  .qr-krs-logo-ph{font-size:56px !important}
+  .qr-krs-logo::after{width:96px !important; height:96px !important; margin:-48px 0 0 -48px !important}
+  .qr-krs-yazi{margin-bottom:6px !important}
+  .qr-krs-yazi-img{width:min(190px,54vw) !important}
+  .qr-krs-yazi-ph{font-size:26px !important}
+  .qr-krs-slogan{font-size:12px !important; line-height:1.45 !important; min-height:auto !important; max-width:300px !important; margin-bottom:8px !important}
+  .qr-karsilama .qr-masa-rozet{font-size:11.5px !important; padding:5px 12px !important}
+  .qr-karsilama .qr-giris-kart{padding:16px 16px !important}
+  .qr-karsilama .qr-sadakat-ikon{font-size:32px !important; margin-bottom:4px !important}
+  .qr-karsilama .qr-g-baslik{font-size:17px !important; margin-bottom:4px !important}
+  .qr-karsilama .qr-g-alt{font-size:12px !important; line-height:1.45 !important; margin-bottom:12px !important}
+  .qr-karsilama .qr-btn-primary{padding:13px !important; font-size:14.5px !important}
+  .qr-karsilama .qr-btn-ghost{padding:11px !important; font-size:13px !important}
+  .qr-krs-cekmece-tetik{margin-top:10px !important}
+}
+/* Çok kısa ekranlar (küçük telefonlar) — daha da sıkıştır */
+@media (max-height:680px){
+  .qr-krs-logo{height:84px !important}
+  .qr-krs-logo-img{width:76px !important; height:76px !important}
+  .qr-krs-logo::after{width:78px !important; height:78px !important; margin:-39px 0 0 -39px !important}
+  .qr-krs-yazi-img{width:min(160px,48vw) !important}
+  .qr-krs-slogan{font-size:11.5px !important; margin-bottom:6px !important}
+  .qr-karsilama .qr-g-alt{font-size:11.5px !important}
+}
 .qr-krs-ust{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; text-align:center; width:100%; margin-bottom:18px}
 /* Logo — her iki ekranda aynı yükseklik, sabit alan */
 .qr-krs-logo{margin-bottom:10px; height:150px; display:flex; align-items:center; justify-content:center; position:relative}
@@ -1574,7 +1609,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 
 /* Kategori ızgarası (2'li büyük kartlar) */
 .qr-kat-baslik{font-size:20px; font-weight:800; padding:18px 18px 12px}
-.qr-kat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px calc(130px + env(safe-area-inset-bottom))}
+.qr-kat-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; padding:0 14px calc(190px + env(safe-area-inset-bottom)); align-items:stretch}
 /* Kategori kartı — kabartma 3D: üstte ışık, altta derinlik gölgesi */
 .qr-kat-kart{width:100%; padding:0; margin:0; box-sizing:border-box;
   background:linear-gradient(180deg,#ffffff 0%, #faf6ec 100%);
@@ -1596,7 +1631,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-kat-kampanya{border-color:var(--brand)}
 .qr-kat-coksatan{border-color:#e0a800}
 .qkk-ozel-bg{display:flex; align-items:center; justify-content:center}
-.qkk-ozel-bg span{font-size:40px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
+.qkk-ozel-bg span{font-size:30px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
 .qkk-kampanya-bg{background:linear-gradient(135deg,#ff5a2c,#d92c08)}
 .qkk-coksatan-bg{background:linear-gradient(135deg,#ffcf4a,#e0a800)}
 @keyframes qrKatGlow{
@@ -2086,10 +2121,10 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yym-btn.red{background:var(--err-soft); color:var(--err)}
 .qkk-gorsel.qkk-foto{padding:0; overflow:hidden; display:block; position:relative}
 .qkk-gorsel.qkk-foto img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
-.qkk-gorsel span{font-size:54px; opacity:.9}
-.qkk-bilgi{flex:1 1 auto; padding:12px 14px}
-.qkk-ad{font-size:15.5px; font-weight:800; line-height:1.2}
-.qkk-adet{font-size:12px; color:var(--ink-2); margin-top:3px}
+.qkk-gorsel span{font-size:38px; opacity:.9}
+.qkk-bilgi{flex:1 1 auto; padding:9px 8px 11px; text-align:center}
+.qkk-ad{font-size:12.5px; font-weight:800; line-height:1.25}
+.qkk-adet{font-size:10.5px; color:var(--ink-2); margin-top:2px}
 .qr-anamenu-row{position:sticky; top:57px; z-index:4; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--surface); border-bottom:1px solid var(--line)}
 .qr-anamenu-btn{padding:10px 16px; border-radius:99px; background:var(--cocoa); color:#fff; font-size:13.5px; font-weight:800; flex:none}
 .qr-anamenu-btn:active{transform:scale(.96)}
@@ -3159,7 +3194,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qk-yakinda{position:absolute; top:5px; right:5px; font-size:9px; font-weight:800; background:var(--ink-3); color:#fff; padding:2px 6px; border-radius:99px}
 
 /* Ürün kartları (dikey · tam genişlik görsel üstte) */
-.qr-menu-list{flex:1; padding:14px; display:flex; flex-direction:column; gap:18px}
+/* Menü — 2 sütunlu ızgara */
+.qr-menu-list{flex:1; padding:14px; display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start}
 /* Ürün kartı — kabartma 3D */
 .qr-card{
   background:linear-gradient(180deg,#ffffff 0%, #faf6ec 100%);
@@ -3177,31 +3213,38 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
     0 2px 0 -1px #e6ddc4,
     0 4px 8px rgba(74,15,46,.12)}
 .qr-card.qr-out{opacity:.55}
-.qr-img{width:100%; aspect-ratio:16/10; flex:0 0 auto; background-size:cover; background-position:center; display:block}
+.qr-img{width:100%; aspect-ratio:4/3; flex:0 0 auto; background-size:cover; background-position:center; display:block}
 .qr-img-ph{display:grid; place-items:center}
-.qr-card-body{flex:1 1 auto; display:block; padding:14px 16px}
-.qr-card-info{min-width:0; padding-right:56px}
-.qr-card-ad{font-weight:800; font-size:17px; line-height:1.25}
+.qr-card-body{flex:1 1 auto; display:block; padding:11px 12px 52px}
+.qr-card-info{min-width:0; padding-right:0}
+.qr-card-ad{font-weight:800; font-size:14.5px; line-height:1.25}
 .qr-card-ad-row .qr-card-ad{margin-bottom:0; word-break:break-word}
 /* Görsel kapsayıcı — değerlendir rozeti görselin üstüne yüzer */
 .qr-card-gorsel-wrap{position:relative; display:block; width:100%}
-#qrApp .qr-puan-gorsel{position:absolute; right:10px; bottom:10px; z-index:2; margin:0;
-  background:rgba(255,255,255,.92); backdrop-filter:blur(6px); color:var(--cocoa);
-  box-shadow:0 2px 8px rgba(58,11,34,.18); border:1px solid rgba(255,255,255,.6)}
+#qrApp .qr-puan-gorsel{position:absolute; right:7px; bottom:7px; z-index:2; margin:0; font-size:10.5px; padding:3px 7px;
+  background:rgba(255,255,255,.92); color:var(--cocoa);
+  box-shadow:0 2px 6px rgba(58,11,34,.18); border:1px solid rgba(255,255,255,.6)}
 /* Fiyat + Mag puan aynı satırda: fiyat solda, mag sağında */
-.qr-card-fiyat-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:2px}
-.qr-card-fiyat-row .qr-mag-rozet{margin:0}
-.qr-card-desc{font-size:12.5px; color:var(--ink-2); line-height:1.4; margin-bottom:7px}
-.qr-card-fiyat{font-weight:800; font-size:18px; color:var(--brand-d)}
-#qrApp .qr-card-add{position:absolute; right:16px; bottom:16px; z-index:3; width:46px; height:46px; border-radius:99px; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:28px; font-weight:700; box-shadow:0 3px 10px rgba(217,44,8,.35); border:none}
+.qr-card-fiyat-row{display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:3px}
+.qr-card-fiyat-row .qr-mag-rozet{margin:0; font-size:10px; padding:2px 6px}
+.qr-card-desc{font-size:11.5px; color:var(--ink-2); line-height:1.35; margin-bottom:6px;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.qr-card-fiyat{font-weight:800; font-size:16px; color:var(--brand-d)}
+#qrApp .qr-card-add{position:absolute; right:10px; bottom:10px; z-index:3; width:40px; height:40px; border-radius:99px; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:25px; font-weight:700; box-shadow:0 3px 9px rgba(217,44,8,.35); border:none}
 .qr-card-add:active{transform:scale(.92); background:var(--brand-d); color:#fff}
-.qr-card-tukendi{position:absolute; right:16px; bottom:16px; z-index:3; flex:none; font-size:11.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:8px 13px; border-radius:9px}
-.qr-card-ad-row{display:block; margin:0 0 4px}
+.qr-card-tukendi{position:absolute; right:9px; bottom:9px; z-index:3; flex:none; font-size:10.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:6px 9px; border-radius:8px}
+.qr-card-ad-row{display:block; margin:0 0 3px}
+/* Çok küçük telefonlarda tek sütun */
+@media(max-width:359px){
+  .qr-menu-list{grid-template-columns:1fr; gap:10px}
+}
 
 /* Sepet bar (yüzen) */
 .qr-sepet-bar{position:fixed; bottom:calc(14px + env(safe-area-inset-bottom)); left:0; right:0; margin:0 auto; z-index:100; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:var(--radius); background:#ff3b14; color:#ffffff; box-shadow:var(--shadow-lg); width:calc(min(480px,100vw) - 28px); box-sizing:border-box; cursor:pointer; border:none; pointer-events:auto}
 .qr-sepet-bar *{pointer-events:none}
-.qr-menu-list.has-sepet, .qr-kat-grid.has-sepet{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+/* Sepet bar varken: kategoride sabit alt bar + sepet bar üst üste → daha çok boşluk */
+.qr-menu-list.has-sepet{padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+.qr-kat-grid.has-sepet{padding-bottom:calc(265px + env(safe-area-inset-bottom))}
 /* Modal açıkken sabit sepet bar gizlenir (modalın altında kalmasın) */
 body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
 .qr-sb-n{width:26px; height:26px; border-radius:99px; background:#ffffff; color:#ff3b14; display:grid; place-items:center; font-size:13px; font-weight:800}
