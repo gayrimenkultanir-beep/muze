@@ -1703,8 +1703,10 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* ══ Ürün görsel pop-up ══ */
 .qug-kart{background:#fff; border-radius:20px; max-width:360px; width:100%; overflow:hidden; position:relative; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .3s cubic-bezier(.2,.9,.25,1)}
 .qug-kapat{position:absolute; top:10px; right:10px; z-index:3; width:34px; height:34px; border-radius:99px; background:rgba(255,255,255,.92); border:1px solid var(--line); color:var(--ink); font-size:16px; font-weight:800; cursor:pointer; display:grid; place-items:center; box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.qug-img{width:100%; height:auto; aspect-ratio:1/1; object-fit:contain; background:#faf6ec; display:block; max-height:none}
-.qug-ph{display:flex; align-items:center; justify-content:center; font-size:90px; width:100%; aspect-ratio:1/1; background:#faf6ec}
+/* Pop-up görseli — kare alan, görsel alanı TAM doldurur */
+.qug-gorsel-wrap{position:relative; width:100%; height:0; padding-bottom:100%; overflow:hidden; background:#faf6ec}
+.qug-img{position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block}
+.qug-ph{position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:90px; background:#faf6ec}
 .qug-mag{font-size:11px !important; padding:3px 8px !important; animation:none !important}
 .qug-govde{padding:16px 18px 20px}
 .qug-ad{font-size:19px; font-weight:900; color:var(--ink); line-height:1.25; margin-bottom:8px}
@@ -2139,7 +2141,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yym-btn.gizle{background:var(--surface-2); color:var(--ink-2)}
 .yym-btn.red{background:var(--err-soft); color:var(--err)}
 .qkk-gorsel.qkk-foto{overflow:hidden; display:block; position:relative; background:#faf6ec}
-.qkk-gorsel.qkk-foto img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block}
+.qkk-gorsel.qkk-foto img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
 .qkk-gorsel span{font-size:38px; opacity:.9}
 .qkk-bilgi{flex:1 1 auto; padding:9px 8px 11px; text-align:center}
 .qkk-ad{font-size:12.5px; font-weight:800; line-height:1.25}
@@ -3237,9 +3239,9 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-card-info{min-width:0; padding-right:0}
 .qr-card-ad{font-weight:800; font-size:14.5px; line-height:1.25}
 .qr-card-ad-row .qr-card-ad{margin-bottom:0; word-break:break-word}
-/* Görsel kapsayıcı — GARANTİLİ KARE (padding-bottom hilesi; aspect-ratio flex'te güvenilmez) */
+/* Görsel kapsayıcı — kart genişliğine göre KARE alan, görsel alanı TAM doldurur */
 .qr-card-gorsel-wrap{position:relative; display:block; width:100%; height:0; padding-bottom:100%; flex:0 0 auto; overflow:hidden; background:#faf6ec}
-.qr-img{position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#faf6ec; display:block}
+.qr-img{position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background-size:cover; background-repeat:no-repeat; background-position:center; background-color:#faf6ec; display:block}
 #qrApp .qr-puan-gorsel{position:absolute; right:6px; bottom:6px; z-index:2; margin:0; font-size:9px; padding:2px 6px; gap:2px;
   background:rgba(255,255,255,.92); color:var(--cocoa);
   box-shadow:0 2px 6px rgba(58,11,34,.18); border:1px solid rgba(255,255,255,.6)}
@@ -21561,9 +21563,11 @@ function qrUrunGorselAc(urunAd){
   const magP = (typeof urunMagPuan==="function") ? urunMagPuan(p) : 0;
   const fb = (typeof urunFiyatBilgi==="function") ? urunFiyatBilgi(p, sube, "qr") : {gecerli:p.fiyat, indirimli:false};
   const satilir = (typeof urunSatilabilir==="function") ? urunSatilabilir(p, "qr", sube) : true;
-  const gorselHtml = gorsel
-    ? '<img class="qug-img" src="'+gorsel+'" alt="">'
-    : '<div class="qug-img qug-ph">'+(p.emoji||"🍰")+'</div>';
+  const gorselHtml = '<div class="qug-gorsel-wrap">'+
+    (gorsel
+      ? '<img class="qug-img" src="'+gorsel+'" alt="">'
+      : '<div class="qug-ph">'+(p.emoji||"🍰")+'</div>')+
+    '</div>';
   const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
     '<div class="qug-kart" onclick="event.stopPropagation()">'+
       '<button class="qug-kapat" onclick="qrPopKapat()">✕</button>'+
