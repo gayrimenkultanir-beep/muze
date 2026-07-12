@@ -1067,8 +1067,8 @@ tr:last-child td{border-bottom:none}
 .sp-kcal{font-size:14.5px; font-weight:800; color:#c0392b; white-space:nowrap}
 .kalem-kcal{display:inline-block; font-size:11px; font-weight:700; color:#c0392b; background:#fdecea; border-radius:6px; padding:1px 6px; margin-left:4px; white-space:nowrap; vertical-align:middle}
 .opt-kcal{display:inline-block; font-size:11.5px; font-weight:700; color:#c0392b; margin-left:6px}
-.qr-card-kcal{display:inline-flex; align-items:center; gap:3px; font-size:11.5px; font-weight:700; color:#d92c08; background:#ffe6df; border-radius:99px; padding:2px 9px; white-space:nowrap}
-.qr-card-kcal-row{margin:2px 0 4px}
+.qr-card-kcal{display:inline-flex; align-items:center; gap:2px; font-size:9px; font-weight:700; color:#d92c08; background:#ffe6df; border-radius:99px; padding:2px 6px; white-space:nowrap}
+.qr-card-kcal-row{margin:1px 0 3px}
 /* ══ Sevk İrsaliyesi önizleme modalı ══ */
 .irs-modal-bg{position:fixed; inset:0; z-index:300; background:rgba(20,10,20,.55); display:flex; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto}
 .irs-modal-ic{background:#fff; border-radius:16px; max-width:760px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; margin:auto}
@@ -1632,7 +1632,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-kat-ozel{position:relative}
 .qr-kat-kampanya{border-color:var(--brand)}
 .qr-kat-coksatan{border-color:#e0a800}
-.qkk-ozel-bg{display:flex; align-items:center; justify-content:center}
+.qkk-ozel-bg{position:relative}
+.qkk-ozel-bg > span{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)}
 .qkk-ozel-bg span{font-size:30px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
 .qkk-kampanya-bg{background:linear-gradient(135deg,#ff5a2c,#d92c08)}
 .qkk-coksatan-bg{background:linear-gradient(135deg,#ffcf4a,#e0a800)}
@@ -1646,7 +1647,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
   50%{box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 0 -1px #e6ddc4, 0 10px 18px rgba(74,15,46,.16), 0 0 20px 3px rgba(224,168,0,.5)}
 }
 .qr-kat-coksatan.glow{animation:qrKatGlowGold 1.8s ease-in-out infinite}
-.qkk-gorsel{width:100%; aspect-ratio:1/1; flex:0 0 auto; display:grid; place-items:center}
+.qkk-gorsel{width:100%; height:0; padding-bottom:100%; flex:0 0 auto; position:relative; overflow:hidden; background:#faf6ec}
+.qkk-gorsel > span{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)}
 /* === ÜRÜN PUAN/YORUM === */
 .yld{color:#d8d2c4} .yld.dolu{color:#f5a623}
 .qr-puan-rozet{display:inline-flex; align-items:center; gap:3px; background:#ffe6df; color:#d92c08; border:none; border-radius:99px; padding:3px 10px; font-size:11.5px; font-weight:800; margin:3px 0 5px; cursor:pointer}
@@ -1698,6 +1700,21 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-pop-hediye{border:2px solid var(--brand); position:relative; overflow:hidden}
 .qr-pop-konfeti{position:absolute; top:8px; left:0; right:0; font-size:22px; letter-spacing:8px; opacity:.5}
 .qr-pop-hediye-not{font-size:12px; color:var(--ink-3); background:var(--surface-2); border-radius:10px; padding:9px 12px; margin-bottom:14px}
+/* ══ Ürün görsel pop-up ══ */
+.qug-kart{background:#fff; border-radius:20px; max-width:360px; width:100%; overflow:hidden; position:relative; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .3s cubic-bezier(.2,.9,.25,1)}
+.qug-kapat{position:absolute; top:10px; right:10px; z-index:3; width:34px; height:34px; border-radius:99px; background:rgba(255,255,255,.92); border:1px solid var(--line); color:var(--ink); font-size:16px; font-weight:800; cursor:pointer; display:grid; place-items:center; box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.qug-img{width:100%; height:auto; aspect-ratio:1/1; object-fit:contain; background:#faf6ec; display:block; max-height:none}
+.qug-ph{display:flex; align-items:center; justify-content:center; font-size:90px; width:100%; aspect-ratio:1/1; background:#faf6ec}
+.qug-mag{font-size:11px !important; padding:3px 8px !important; animation:none !important}
+.qug-govde{padding:16px 18px 20px}
+.qug-ad{font-size:19px; font-weight:900; color:var(--ink); line-height:1.25; margin-bottom:8px}
+.qug-rozetler{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px}
+.qug-kcal{font-size:12px; font-weight:700; color:#d92c08; background:#ffe6df; border-radius:99px; padding:4px 11px}
+.qug-fiyat{font-size:20px; font-weight:900; color:var(--brand-d)}
+.qug-desc{font-size:13.5px; color:var(--ink-2); line-height:1.55; text-align:justify}
+.qug-ekle{width:100%; margin-top:14px; padding:14px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15.5px; font-weight:800; cursor:pointer; box-shadow:0 4px 12px rgba(217,44,8,.3)}
+.qug-ekle:active{transform:scale(.98); background:var(--brand-d)}
+.qug-tukendi{width:100%; margin-top:14px; padding:14px; border-radius:12px; background:var(--err-soft); color:var(--err); text-align:center; font-size:14px; font-weight:800}
 /* Kasada hediye kalemi */
 .kmd-kalem-hediye{background:linear-gradient(180deg,#fff6ea,#ffeede); border-left:3px solid var(--brand)}
 .kmd-hediye-rozet{font-size:9.5px; font-weight:800; background:var(--brand); color:#fff; padding:2px 7px; border-radius:99px; margin-left:5px}
@@ -2121,8 +2138,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yym-btn.onay{background:var(--ok-soft); color:var(--ok)}
 .yym-btn.gizle{background:var(--surface-2); color:var(--ink-2)}
 .yym-btn.red{background:var(--err-soft); color:var(--err)}
-.qkk-gorsel.qkk-foto{padding:0; overflow:hidden; display:block; position:relative}
-.qkk-gorsel.qkk-foto img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+.qkk-gorsel.qkk-foto{overflow:hidden; display:block; position:relative; background:#faf6ec}
+.qkk-gorsel.qkk-foto img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; display:block}
 .qkk-gorsel span{font-size:38px; opacity:.9}
 .qkk-bilgi{flex:1 1 auto; padding:9px 8px 11px; text-align:center}
 .qkk-ad{font-size:12.5px; font-weight:800; line-height:1.25}
@@ -3215,21 +3232,21 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
     0 2px 0 -1px #e6ddc4,
     0 4px 8px rgba(74,15,46,.12)}
 .qr-card.qr-out{opacity:.55}
-.qr-img{width:100%; aspect-ratio:1/1; flex:0 0 auto; background-size:cover; background-position:center; display:block}
-.qr-img-ph{display:grid; place-items:center}
-.qr-card-body{flex:1 1 auto; display:block; padding:11px 12px 52px}
+.qr-img-ph{display:flex !important; align-items:center; justify-content:center}
+.qr-card-body{flex:1 1 auto; display:block; padding:11px 12px 56px}
 .qr-card-info{min-width:0; padding-right:0}
 .qr-card-ad{font-weight:800; font-size:14.5px; line-height:1.25}
 .qr-card-ad-row .qr-card-ad{margin-bottom:0; word-break:break-word}
-/* Görsel kapsayıcı — değerlendir rozeti görselin üstüne yüzer */
-.qr-card-gorsel-wrap{position:relative; display:block; width:100%}
+/* Görsel kapsayıcı — GARANTİLİ KARE (padding-bottom hilesi; aspect-ratio flex'te güvenilmez) */
+.qr-card-gorsel-wrap{position:relative; display:block; width:100%; height:0; padding-bottom:100%; flex:0 0 auto; overflow:hidden; background:#faf6ec}
+.qr-img{position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background-size:contain; background-repeat:no-repeat; background-position:center; background-color:#faf6ec; display:block}
 #qrApp .qr-puan-gorsel{position:absolute; right:6px; bottom:6px; z-index:2; margin:0; font-size:9px; padding:2px 6px; gap:2px;
   background:rgba(255,255,255,.92); color:var(--cocoa);
   box-shadow:0 2px 6px rgba(58,11,34,.18); border:1px solid rgba(255,255,255,.6)}
 /* Fiyat + Mag puan aynı satırda: fiyat solda, mag sağında */
 .qr-card-fiyat-row{display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-top:3px}
-.qr-card-fiyat-row .qr-mag-rozet{margin:0; font-size:7px; padding:1px 4px; border-radius:5px; gap:2px}
-.qr-card-desc{font-size:8.5px; color:var(--ink-2); line-height:1.35; margin-bottom:5px}
+.qr-card-fiyat-row .qr-mag-rozet{margin:0; font-size:9px; padding:2px 6px; border-radius:99px; gap:2px; border-width:1px; box-shadow:none; animation:none}
+.qr-card-desc{font-size:8.5px; color:var(--ink-2); line-height:1.4; margin-bottom:5px; text-align:justify; hyphens:auto}
 .qr-card-fiyat{font-weight:800; font-size:15px; color:var(--brand-d)}
 #qrApp .qr-card-add{position:absolute; right:10px; bottom:10px; z-index:3; width:40px; height:40px; border-radius:99px; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:25px; font-weight:700; box-shadow:0 3px 9px rgba(217,44,8,.35); border:none}
 .qr-card-add:active{transform:scale(.92); background:var(--brand-d); color:#fff}
@@ -20606,9 +20623,10 @@ function kademeRozetHtml(uye){
 /* Bir ürünün kazandıracağı Mag puanı (ürüne özel; yoksa orandan) */
 function urunMagPuan(p){
   if(!p) return 0;
-  if(p.mag!=null && p.mag!=="") return Math.max(0, Math.round(p.mag));
+  // ürüne özel mag girilmişse onu kullan (0 = "girilmemiş" sayılır, fallback'e düşer)
+  if(p.mag!=null && p.mag!=="" && Number(p.mag)>0) return Math.max(0, Math.round(Number(p.mag)));
   // ürüne mag girilmemişse: fiyattan orana göre türet
-  return Math.round((p.fiyat||0) * SADAKAT.kazancOrani);
+  return Math.max(1, Math.round((p.fiyat||0) * SADAKAT.kazancOrani));
 }
 /* Mag puanının TL karşılığı */
 function magToTl(mag){ return Math.round((mag||0) * SADAKAT.magTl * 100)/100; }
@@ -21531,6 +21549,40 @@ function qrKategorilerHtml(){
   return html;
 }
 function qrKategoriAc(k){ QR.aktifKat=k; QR.view="menu"; renderQR(); }
+/* Ürün görseline tıklama → büyük görsel + açıklama pop-up */
+function qrUrunGorselAc(urunAd){
+  if(!urunAd) return;
+  const pi = DEMO_PRODUCTS.findIndex(x=>x.ad===urunAd);
+  const p = DEMO_PRODUCTS[pi];
+  if(!p) return;
+  const sube = QR.sube||AKTIF_SUBE;
+  const gorsel = URUN_GORSEL[p.ad];
+  const tKcal = (typeof urunTemelKcal==="function") ? urunTemelKcal(p.ad) : 0;
+  const magP = (typeof urunMagPuan==="function") ? urunMagPuan(p) : 0;
+  const fb = (typeof urunFiyatBilgi==="function") ? urunFiyatBilgi(p, sube, "qr") : {gecerli:p.fiyat, indirimli:false};
+  const satilir = (typeof urunSatilabilir==="function") ? urunSatilabilir(p, "qr", sube) : true;
+  const gorselHtml = gorsel
+    ? '<img class="qug-img" src="'+gorsel+'" alt="">'
+    : '<div class="qug-img qug-ph">'+(p.emoji||"🍰")+'</div>';
+  const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
+    '<div class="qug-kart" onclick="event.stopPropagation()">'+
+      '<button class="qug-kapat" onclick="qrPopKapat()">✕</button>'+
+      gorselHtml+
+      '<div class="qug-govde">'+
+        '<div class="qug-ad">'+p.ad+'</div>'+
+        '<div class="qug-rozetler">'+
+          (tKcal>0?'<span class="qug-kcal">🔥 '+tKcal+' kcal</span>':'')+
+          '<span class="qug-fiyat">'+(fb.gecerli||p.fiyat)+' ₺</span>'+
+          (magP>0?'<span class="qr-mag-rozet qug-mag">🎁 +'+magP+' '+SADAKAT.ad+'</span>':'')+
+        '</div>'+
+        (p.aciklama?'<div class="qug-desc">'+p.aciklama+'</div>':'')+
+        (satilir
+          ? '<button class="qug-ekle" onclick="qrPopKapat();qrUrunSec('+pi+')">+ Sepete Ekle</button>'
+          : '<div class="qug-tukendi">Tükendi</div>')+
+      '</div>'+
+    '</div></div>';
+  qrPopGoster(html);
+}
 /* Kampanya kartına tıkla → o ürünün menüdeki kartına git (kategorisini açıp kaydır) */
 function qrKampanyaUrunAc(urunAd){
   if(!urunAd){ return; }
@@ -21662,7 +21714,7 @@ function qrMenuHtml(){
       : '<div class="qr-card-fiyat">'+fb.gecerli+' ₺</div>';
     const aciklamaHtml = (fb.indirimli && fb.aciklama) ? '<div class="qr-card-kampanya blink">🔥 '+fb.aciklama+'</div>' : '';
     html += '<div class="qr-card'+(satilir?'':' qr-out')+(fb.indirimli?' qr-card-indirimli blink-soft':'')+'" data-urun="'+String(p.ad).replace(/"/g,'&quot;')+'">'+
-      '<div class="qr-card-gorsel-wrap">'+
+      '<div class="qr-card-gorsel-wrap" onclick="event.stopPropagation();qrUrunGorselAc(this.closest(\'.qr-card\').getAttribute(\'data-urun\'))">'+
         urunGorsel(p,true)+
         qrPuanRozetHtml(p.ad, true)+
       '</div>'+
