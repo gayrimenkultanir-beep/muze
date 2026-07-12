@@ -1067,8 +1067,8 @@ tr:last-child td{border-bottom:none}
 .sp-kcal{font-size:14.5px; font-weight:800; color:#c0392b; white-space:nowrap}
 .kalem-kcal{display:inline-block; font-size:11px; font-weight:700; color:#c0392b; background:#fdecea; border-radius:6px; padding:1px 6px; margin-left:4px; white-space:nowrap; vertical-align:middle}
 .opt-kcal{display:inline-block; font-size:11.5px; font-weight:700; color:#c0392b; margin-left:6px}
-.qr-card-kcal{display:inline-flex; align-items:center; gap:2px; font-size:9px; font-weight:700; color:#d92c08; background:#ffe6df; border-radius:99px; padding:2px 6px; white-space:nowrap}
-.qr-card-kcal-row{margin:1px 0 3px}
+.qr-card-kcal{display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:700; color:#d92c08; background:#ffe6df; border-radius:99px; padding:3px 9px; white-space:nowrap}
+.qr-card-kcal-row{margin:3px 0 5px}
 /* ══ Sevk İrsaliyesi önizleme modalı ══ */
 .irs-modal-bg{position:fixed; inset:0; z-index:300; background:rgba(20,10,20,.55); display:flex; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto}
 .irs-modal-ic{background:#fff; border-radius:16px; max-width:760px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; margin:auto}
@@ -1647,7 +1647,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
   50%{box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 0 -1px #e6ddc4, 0 10px 18px rgba(74,15,46,.16), 0 0 20px 3px rgba(224,168,0,.5)}
 }
 .qr-kat-coksatan.glow{animation:qrKatGlowGold 1.8s ease-in-out infinite}
-.qkk-gorsel{width:100%; height:0; padding-bottom:100%; flex:0 0 auto; position:relative; overflow:hidden; background:#faf6ec}
+.qkk-gorsel{width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; flex:none !important; position:relative; overflow:hidden; background:#faf6ec; min-height:0}
 .qkk-gorsel > span{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)}
 /* === ÜRÜN PUAN/YORUM === */
 .yld{color:#d8d2c4} .yld.dolu{color:#f5a623}
@@ -1704,7 +1704,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qug-kart{background:#fff; border-radius:20px; max-width:360px; width:100%; overflow:hidden; position:relative; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .3s cubic-bezier(.2,.9,.25,1)}
 .qug-kapat{position:absolute; top:10px; right:10px; z-index:3; width:34px; height:34px; border-radius:99px; background:rgba(255,255,255,.92); border:1px solid var(--line); color:var(--ink); font-size:16px; font-weight:800; cursor:pointer; display:grid; place-items:center; box-shadow:0 2px 8px rgba(0,0,0,.15)}
 /* Pop-up görseli — kare alan, görsel alanı TAM doldurur */
-.qug-gorsel-wrap{position:relative; width:100%; height:0; padding-bottom:100%; overflow:hidden; background:#faf6ec}
+.qug-gorsel-wrap{position:relative; width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; overflow:hidden; background:#faf6ec}
 .qug-img{position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block}
 .qug-ph{position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:90px; background:#faf6ec}
 .qug-mag{font-size:11px !important; padding:3px 8px !important; animation:none !important}
@@ -3215,8 +3215,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qk-yakinda{position:absolute; top:5px; right:5px; font-size:9px; font-weight:800; background:var(--ink-3); color:#fff; padding:2px 6px; border-radius:99px}
 
 /* Ürün kartları (dikey · tam genişlik görsel üstte) */
-/* Menü — 2 sütunlu ızgara */
-.qr-menu-list{flex:1; padding:14px; display:grid; grid-template-columns:1fr 1fr; gap:12px; align-content:start}
+/* Menü — tek sütun (geniş kartlar) */
+.qr-menu-list{flex:1; padding:14px; display:flex; flex-direction:column; gap:14px}
 /* Ürün kartı — kabartma 3D */
 .qr-card{
   background:linear-gradient(180deg,#ffffff 0%, #faf6ec 100%);
@@ -3235,29 +3235,25 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
     0 4px 8px rgba(74,15,46,.12)}
 .qr-card.qr-out{opacity:.55}
 .qr-img-ph{display:flex !important; align-items:center; justify-content:center}
-.qr-card-body{flex:1 1 auto; display:block; padding:11px 12px 56px}
+.qr-card-body{flex:1 1 auto; display:block; padding:14px 16px 66px}
 .qr-card-info{min-width:0; padding-right:0}
-.qr-card-ad{font-weight:800; font-size:14.5px; line-height:1.25}
+.qr-card-ad{font-weight:800; font-size:17px; line-height:1.25}
 .qr-card-ad-row .qr-card-ad{margin-bottom:0; word-break:break-word}
 /* Görsel kapsayıcı — kart genişliğine göre KARE alan, görsel alanı TAM doldurur */
-.qr-card-gorsel-wrap{position:relative; display:block; width:100%; height:0; padding-bottom:100%; flex:0 0 auto; overflow:hidden; background:#faf6ec}
+.qr-card-gorsel-wrap{position:relative; display:block; width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; flex:none !important; overflow:hidden; background:#faf6ec; min-height:0}
 .qr-img{position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background-size:cover; background-repeat:no-repeat; background-position:center; background-color:#faf6ec; display:block}
-#qrApp .qr-puan-gorsel{position:absolute; right:6px; bottom:6px; z-index:2; margin:0; font-size:9px; padding:2px 6px; gap:2px;
+#qrApp .qr-puan-gorsel{position:absolute; right:10px; bottom:10px; z-index:2; margin:0; font-size:11px; padding:4px 10px; gap:3px;
   background:rgba(255,255,255,.92); color:var(--cocoa);
   box-shadow:0 2px 6px rgba(58,11,34,.18); border:1px solid rgba(255,255,255,.6)}
 /* Fiyat + Mag puan aynı satırda: fiyat solda, mag sağında */
-.qr-card-fiyat-row{display:flex; align-items:center; gap:5px; flex-wrap:wrap; margin-top:3px}
-.qr-card-fiyat-row .qr-mag-rozet{margin:0; font-size:9px; padding:2px 6px; border-radius:99px; gap:2px; border-width:1px; box-shadow:none; animation:none}
-.qr-card-desc{font-size:8.5px; color:var(--ink-2); line-height:1.4; margin-bottom:5px; text-align:justify; hyphens:auto}
-.qr-card-fiyat{font-weight:800; font-size:15px; color:var(--brand-d)}
-#qrApp .qr-card-add{position:absolute; right:10px; bottom:10px; z-index:3; width:40px; height:40px; border-radius:99px; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:25px; font-weight:700; box-shadow:0 3px 9px rgba(217,44,8,.35); border:none}
+.qr-card-fiyat-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:5px}
+.qr-card-fiyat-row .qr-mag-rozet{margin:0; font-size:11px; padding:3px 9px; border-radius:99px; gap:3px; box-shadow:none; animation:none}
+.qr-card-desc{font-size:12.5px; color:var(--ink-2); line-height:1.45; margin-bottom:7px; text-align:justify; hyphens:auto}
+.qr-card-fiyat{font-weight:800; font-size:19px; color:var(--brand-d)}
+#qrApp .qr-card-add{position:absolute; right:16px; bottom:16px; z-index:3; width:46px; height:46px; border-radius:99px; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:28px; font-weight:700; box-shadow:0 3px 10px rgba(217,44,8,.35); border:none}
 .qr-card-add:active{transform:scale(.92); background:var(--brand-d); color:#fff}
-.qr-card-tukendi{position:absolute; right:9px; bottom:9px; z-index:3; flex:none; font-size:10.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:6px 9px; border-radius:8px}
-.qr-card-ad-row{display:block; margin:0 0 3px}
-/* Çok küçük telefonlarda tek sütun */
-@media(max-width:359px){
-  .qr-menu-list{grid-template-columns:1fr; gap:10px}
-}
+.qr-card-tukendi{position:absolute; right:16px; bottom:16px; z-index:3; flex:none; font-size:11.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:8px 13px; border-radius:9px}
+.qr-card-ad-row{display:block; margin:0 0 5px}
 
 /* Sepet bar (yüzen) */
 .qr-sepet-bar{position:fixed; bottom:calc(14px + env(safe-area-inset-bottom)); left:0; right:0; margin:0 auto; z-index:100; display:flex; align-items:center; gap:12px; padding:15px 18px; border-radius:var(--radius); background:#ff3b14; color:#ffffff; box-shadow:var(--shadow-lg); width:calc(min(480px,100vw) - 28px); box-sizing:border-box; cursor:pointer; border:none; pointer-events:auto}
