@@ -103,6 +103,31 @@ input,select{font-family:inherit; font-size:15px}
   display:grid; place-items:center; font-size:24px;
 }
 .login-sub{color:var(--ink-2); margin:2px 0 26px; font-size:14px}
+/* Personel girişi (kullanıcı adı + şifre) */
+.pg-form{display:flex; flex-direction:column; gap:12px; margin-bottom:18px}
+.pg-alan{display:flex; flex-direction:column; gap:5px; text-align:left}
+.pg-alan label{font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.pg-input{width:100%; padding:13px 15px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; color:var(--ink); background:var(--surface-2); font-family:inherit}
+.pg-input:focus{border-color:var(--brand); outline:none; background:#fff}
+.pg-hata{font-size:12.5px; color:var(--err); font-weight:600; min-height:0; opacity:0; transition:opacity .15s}
+.pg-hata.goster{min-height:18px; opacity:1}
+.pg-btn{width:100%; padding:15px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15.5px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(217,44,8,.28)}
+.pg-btn:active{transform:scale(.98); background:var(--brand-d)}
+.pg-ayrac{display:flex; align-items:center; gap:10px; margin:16px 0 14px; color:var(--ink-3); font-size:11.5px}
+.pg-ayrac::before,.pg-ayrac::after{content:""; flex:1; height:1px; background:var(--line)}
+/* Bölüm seçim ekranı (çoklu yetki) */
+.bs-ic{background:#fff; border-radius:20px; max-width:400px; width:92%; margin:auto; padding:26px 24px; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.3)}
+.bs-ust{margin-bottom:20px}
+.bs-ikon{font-size:42px; margin-bottom:8px}
+.bs-bas{font-size:20px; font-weight:900; color:var(--ink); margin-bottom:4px}
+.bs-alt{font-size:13.5px; color:var(--ink-3)}
+.bs-liste{display:flex; flex-direction:column; gap:10px}
+.bs-btn{display:flex; align-items:center; gap:12px; width:100%; padding:14px 16px; border-radius:13px; border:2px solid var(--line); background:var(--surface); cursor:pointer; text-align:left}
+.bs-btn:active{transform:scale(.98)}
+.bs-btn-ic{width:40px; height:40px; border-radius:11px; display:grid; place-items:center; font-size:20px; flex:none}
+.bs-btn-ad{font-size:15.5px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.bs-ana{font-size:9.5px; font-weight:800; background:var(--cocoa); color:#fff; padding:2px 7px; border-radius:99px}
+
 .role-pick{display:grid; gap:10px}
 .role-btn{
   display:flex; align-items:center; gap:14px;
@@ -2917,6 +2942,163 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .sube-form-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--line)}
 /* Merkez firma kartı (Şubeler ekranı üstü) */
 .merkez-firma-kart{background:linear-gradient(135deg,var(--cocoa-soft),#fbe6ec); border:1px solid #e6c4d4; border-radius:16px; padding:16px 18px; margin-bottom:18px}
+/* ══ KASA VARDİYA ══ */
+/* ══ GÜN SONU ══ */
+.gs-banner{display:flex; justify-content:space-between; align-items:center; gap:16px; border-radius:14px; padding:16px 18px; margin:16px 0; flex-wrap:wrap}
+.gs-banner.hazir{background:var(--ok-soft); border:1.5px solid var(--ok)}
+.gs-banner.engel{background:var(--err-soft); border:1.5px solid var(--err)}
+.gs-banner.kapali{background:var(--surface-2); border:1.5px solid var(--ink-3)}
+.gs-banner.acildi{background:#fff6ea; border:1.5px solid var(--brand)}
+.gs-banner-sol{display:flex; align-items:flex-start; gap:13px; flex:1}
+.gs-banner-ikon{font-size:26px; line-height:1}
+.gs-banner-bas{font-size:16px; font-weight:900; color:var(--ink)}
+.gs-banner-alt{font-size:12.5px; color:var(--ink-2); margin-top:3px}
+.gs-engel-liste{margin-top:8px; display:flex; flex-direction:column; gap:5px}
+.gs-engel{font-size:12.5px; color:var(--err); font-weight:600}
+.gs-engel-cozum{color:var(--ink-3); font-weight:500; font-size:11.5px}
+.gs-kapat-btn{padding:12px 20px; border-radius:11px; background:var(--ink); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer; white-space:nowrap}
+.gs-kapat-btn:active{transform:scale(.98)}
+.gs-ac-btn{padding:11px 18px; border-radius:10px; background:var(--brand); color:#fff; border:none; font-size:13.5px; font-weight:800; cursor:pointer; white-space:nowrap}
+.gs-kilit-not{font-size:12px; color:var(--ink-3); font-style:italic}
+.gs-bolum{margin-top:22px}
+.gs-bolum-bas{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:12px; padding-bottom:8px; border-bottom:2px solid var(--line)}
+.gs-tablo{width:100%; border-collapse:collapse; font-size:13px}
+.gs-tablo th{text-align:left; padding:10px 12px; background:var(--surface-2); font-size:11.5px; font-weight:800; color:var(--ink-2); border-bottom:2px solid var(--line)}
+.gs-tablo th.sag, .gs-tablo td.sag{text-align:right}
+.gs-tablo td{padding:11px 12px; border-bottom:1px solid var(--line); color:var(--ink-2)}
+.gs-kucuk{font-size:11.5px; color:var(--ink-3)}
+.gs-eksik{color:var(--err); font-weight:800}
+.gs-fazla{color:var(--ok); font-weight:800}
+.gs-fark-not{font-size:10.5px; color:var(--ink-3); font-weight:400; margin-top:2px}
+.gs-acik-rozet{font-size:9.5px; font-weight:800; background:var(--ok); color:#fff; padding:2px 6px; border-radius:99px}
+.gs-toplam-satir td{background:var(--surface-2); border-top:2px solid var(--line); border-bottom:none; font-size:14px}
+.gs-alt-butonlar{margin-top:20px; display:flex; justify-content:flex-end}
+.gs-modal-ic{background:#fff; border-radius:18px; max-width:500px; width:94%; margin:auto; max-height:92vh; display:flex; flex-direction:column}
+.gs-modal-gun{font-size:14px; color:var(--ink-2); background:var(--surface-2); border-radius:9px; padding:9px 13px; margin-bottom:14px}
+.gs-uyari{font-size:12.5px; color:var(--ink-2); background:var(--err-soft); border:1px solid var(--err); border-radius:10px; padding:11px 14px; margin-top:14px; line-height:1.55}
+.gs-onay-kutu{background:var(--surface-2); border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; margin-top:16px}
+.gs-onay-bas{font-size:14px; font-weight:800; color:var(--brand-d); margin-bottom:4px}
+.gs-onay-ack{font-size:12px; color:var(--ink-2); margin-bottom:12px; line-height:1.45}
+
+/* Kasa vardiya raporu */
+.kv-liste{display:flex; flex-direction:column; gap:10px; margin-top:16px}
+.kv-kart{background:var(--surface); border:1px solid var(--line); border-radius:13px; overflow:hidden; transition:box-shadow .15s}
+.kv-kart.acik{border-color:var(--brand); box-shadow:0 4px 16px rgba(74,15,46,.1)}
+.kv-ust{display:flex; justify-content:space-between; align-items:center; gap:12px; padding:14px 16px; cursor:pointer}
+.kv-ust:hover{background:var(--surface-2)}
+.kv-ust-sol{display:flex; align-items:center; gap:11px}
+.kv-durum{font-size:19px}
+.kv-ad{font-size:14.5px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:7px; flex-wrap:wrap}
+.kv-no{font-size:11px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border-radius:5px; padding:1px 7px}
+.kv-sube{font-size:11px; font-weight:700; color:var(--cocoa); background:var(--cocoa-soft); border-radius:5px; padding:1px 7px}
+.kv-saat{font-size:11.5px; color:var(--ink-3); margin-top:2px}
+.kv-ust-sag{display:flex; align-items:center; gap:12px}
+.kv-tutar{font-size:17px; font-weight:900; color:var(--ink)}
+.kv-fark{font-size:12px; font-weight:800; padding:3px 8px; border-radius:6px}
+.kv-fark.eksik{color:var(--err); background:var(--err-soft)}
+.kv-fark.fazla{color:var(--ok); background:var(--ok-soft)}
+.kv-ok{font-size:11px; color:var(--ink-3)}
+.kv-detay{display:flex; gap:14px; padding:0 16px 16px; flex-wrap:wrap; border-top:1px dashed var(--line); padding-top:14px}
+.kv-blok{flex:1; min-width:260px; background:var(--surface-2); border-radius:11px; padding:12px 14px}
+.kv-blok-bas{font-size:12.5px; font-weight:800; color:var(--ink); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--line)}
+.kv-satir{display:flex; justify-content:space-between; gap:10px; font-size:13px; color:var(--ink-2); padding:3px 0}
+.kv-satir.alt{font-size:11.5px; color:var(--ink-3); padding-left:12px}
+.kv-satir.ind{color:var(--err)}
+.kv-satir.fazla{color:var(--ok)}
+.kv-satir.ok{color:var(--ok); font-weight:700}
+.kv-satir.ikram{color:var(--brand-d); font-weight:700}
+.kv-satir.toplam{border-top:1.5px dashed var(--line); margin-top:5px; padding-top:7px; font-weight:900; color:var(--ink); font-size:14px}
+.kv-satir.ayrac{border-top:1px solid var(--line); margin-top:7px; padding-top:8px}
+.kv-satir.kucuk{font-size:11px; color:var(--ink-3)}
+.kv-not{font-size:11.5px; color:var(--ink-2); background:#fff; border:1px dashed var(--line); border-radius:8px; padding:7px 10px; margin-top:7px; line-height:1.4}
+.kv-devam{font-size:11.5px; color:var(--ok); background:var(--ok-soft); border-radius:8px; padding:8px 11px; margin-top:8px; text-align:center; font-weight:700}
+.roz-alt{font-size:10.5px; color:var(--ink-3); margin-top:2px}
+.roz-kart.eksik .roz-deg{color:var(--err)}
+.roz-kart.fazla .roz-deg{color:var(--ok)}
+.roz-kart.ikram .roz-deg{color:var(--brand-d)}
+.kasa-acilis-wrap{display:flex; align-items:center; justify-content:center; min-height:70vh; padding:20px}
+.kasa-acilis-kart{background:var(--surface); border:1px solid var(--line); border-radius:20px; padding:30px 28px; max-width:440px; width:100%; text-align:center; box-shadow:0 10px 40px rgba(74,15,46,.12)}
+.ka-ikon{font-size:52px; margin-bottom:10px}
+.ka-baslik{font-size:24px; font-weight:900; color:var(--ink); margin-bottom:4px}
+.ka-alt{font-size:13.5px; color:var(--ink-3); margin-bottom:22px}
+.ka-ilk{background:var(--brand-soft); border:1px solid var(--brand); border-radius:13px; padding:14px 16px; margin-bottom:20px; text-align:left}
+.ka-ilk-bas{font-size:14px; font-weight:800; color:var(--brand-d); margin-bottom:4px}
+.ka-ilk-ack{font-size:12.5px; color:var(--ink-2); line-height:1.5}
+.ka-devir{background:var(--surface-2); border:1px solid var(--line); border-radius:13px; padding:14px 16px; margin-bottom:20px}
+.ka-devir-satir{display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--ink-2)}
+.ka-devir-satir strong{font-size:22px; font-weight:900; color:var(--ink)}
+.ka-devir-not{font-size:11.5px; color:var(--ink-3); margin-top:6px; text-align:left}
+.ka-alan{text-align:left; margin-bottom:14px}
+.ka-alan label{display:block; font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
+.ka-input{width:100%; padding:14px 16px; border-radius:12px; border:1.5px solid var(--line); font-size:20px; font-weight:800; color:var(--ink); background:var(--surface-2); font-family:inherit; text-align:right}
+.ka-input:focus{border-color:var(--brand); outline:none}
+.ka-input-not{font-size:11.5px; color:var(--ink-3); margin-top:5px; line-height:1.4}
+.ka-fark{font-size:13px; font-weight:700; min-height:20px; margin-bottom:14px}
+.ka-fark.fazla{color:var(--ok)}
+.ka-fark.eksik{color:var(--err)}
+.ka-btn{width:100%; padding:16px; border-radius:13px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(217,44,8,.3)}
+.ka-btn:active{transform:scale(.98); background:var(--brand-d)}
+.ka-uyari{font-size:11.5px; color:var(--ink-3); margin-top:14px; line-height:1.5; background:var(--surface-2); border-radius:9px; padding:9px 12px}
+.ka-rol{font-size:10.5px; font-weight:800; background:var(--cocoa-soft); color:var(--cocoa); padding:2px 8px; border-radius:99px; margin-left:5px}
+.ka-mudur-not{background:var(--cocoa-soft); border:1px solid var(--cocoa); border-radius:12px; padding:12px 14px; margin-bottom:18px; font-size:12.5px; color:var(--cocoa); line-height:1.55; text-align:left}
+.ka-ayrac{display:flex; align-items:center; gap:10px; margin:14px 0; color:var(--ink-3); font-size:12px}
+.ka-ayrac::before,.ka-ayrac::after{content:""; flex:1; height:1px; background:var(--line)}
+.ka-goruntule-btn{width:100%; padding:13px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:1.5px solid var(--line); font-size:14px; font-weight:800; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px}
+.ka-goruntule-btn:active{transform:scale(.98)}
+.ka-goruntule-not{font-size:11px; font-weight:500; color:var(--ink-3)}
+/* Salt görüntüleme barı */
+.kasa-vardiya-bar.salt{background:var(--cocoa-soft); border-color:var(--cocoa)}
+.kasa-vardiya-bar.mudur{background:var(--cocoa-soft); border-color:var(--cocoa)}
+.kvb-goz{font-size:17px}
+.kvb-ac-btn{padding:8px 14px; border-radius:9px; background:var(--brand); color:#fff; border:none; font-size:12.5px; font-weight:800; cursor:pointer; white-space:nowrap}
+.kvb-mudur-rozet{font-size:9px; font-weight:800; background:var(--cocoa); color:#fff; padding:2px 6px; border-radius:99px; margin-left:4px}
+.kv-mudur-rozet{font-size:9.5px; font-weight:800; background:var(--cocoa); color:#fff; padding:2px 7px; border-radius:99px}
+.gs-mudur-rozet{font-size:9.5px; font-weight:800; background:var(--cocoa); color:#fff; padding:2px 7px; border-radius:99px}
+/* Vardiya barı */
+.kasa-vardiya-bar{display:flex; align-items:center; gap:14px; background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:8px 12px}
+.kvb-bilgi{display:flex; align-items:center; gap:9px}
+.kvb-nokta{width:9px; height:9px; border-radius:99px; background:var(--ok); box-shadow:0 0 0 3px rgba(31,157,99,.2); animation:kvbNabiz 2s ease-in-out infinite}
+@keyframes kvbNabiz{50%{box-shadow:0 0 0 6px rgba(31,157,99,.08)}}
+.kvb-ad{font-size:13px; font-weight:800; color:var(--ink)}
+.kvb-alt{font-size:11px; color:var(--ink-3)}
+.kvb-kapat-btn{padding:8px 14px; border-radius:9px; background:var(--err-soft); color:var(--err); border:1px solid var(--err); font-size:12.5px; font-weight:800; cursor:pointer; white-space:nowrap}
+.kvb-kapat-btn:active{transform:scale(.97)}
+/* Kapatma modalı */
+.kk-ic{background:#fff; border-radius:18px; max-width:520px; width:94%; margin:auto; max-height:92vh; display:flex; flex-direction:column}
+.kk-bas{padding:18px 22px; border-bottom:1px solid var(--line); font-size:18px; font-weight:900; color:var(--ink); display:flex; justify-content:space-between; align-items:center}
+.kk-govde{padding:18px 22px; overflow-y:auto; flex:1}
+.kk-vardiya-bilgi{display:flex; justify-content:space-between; font-size:12px; color:var(--ink-3); background:var(--surface-2); border-radius:9px; padding:8px 12px; margin-bottom:16px; flex-wrap:wrap; gap:6px}
+.kk-bolum-bas{font-size:14px; font-weight:800; color:var(--ink); margin:16px 0 10px; padding-bottom:6px; border-bottom:1.5px solid var(--line)}
+.kk-ozet-tablo{background:var(--surface-2); border-radius:12px; padding:12px 14px}
+.kk-satir{display:flex; justify-content:space-between; font-size:13.5px; color:var(--ink-2); padding:4px 0}
+.kk-satir.alt{font-size:12px; color:var(--ink-3); padding-left:12px}
+.kk-satir.ind{color:var(--err)}
+.kk-satir.ikram{color:var(--brand-d); font-weight:700}
+.kk-satir.toplam{border-top:1.5px dashed var(--line); margin-top:6px; padding-top:8px; font-size:16px; font-weight:900; color:var(--ink)}
+.kk-satir.kucuk{font-size:11.5px; color:var(--ink-3); padding-top:6px}
+.kk-beklenen{display:flex; justify-content:space-between; align-items:center; background:var(--brand-soft); border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; font-size:14px; color:var(--ink-2)}
+.kk-beklenen strong{font-size:24px; font-weight:900; color:var(--brand-d)}
+.kk-beklenen-not{font-size:11.5px; color:var(--ink-3); margin:6px 0 14px}
+.kk-fark{font-size:15px; font-weight:800; min-height:24px; margin-bottom:12px; text-align:center; padding:8px; border-radius:9px}
+.kk-fark.tam{color:var(--ok); background:var(--ok-soft)}
+.kk-fark.fazla{color:var(--ok); background:var(--ok-soft)}
+.kk-fark.eksik{color:var(--err); background:var(--err-soft)}
+.kk-devir-ozet{font-size:13px; color:var(--ink-2); background:var(--surface-2); border-radius:9px; padding:10px 13px; margin-top:4px}
+.kk-devir-ozet.hata{color:var(--err); background:var(--err-soft); font-weight:700}
+.kk-foot{padding:14px 22px; border-top:1px solid var(--line); display:flex; gap:10px}
+.kk-foot .btn{flex:1}
+.isletme-gun-kart{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px 18px; margin-bottom:18px}
+.isletme-gun-govde{display:flex; gap:20px; flex-wrap:wrap; align-items:flex-start; margin-top:12px}
+.isletme-gun-secim{display:flex; flex-direction:column; gap:6px}
+.isletme-gun-secim label{font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.isletme-gun-input{padding:10px 12px; border-radius:10px; border:1.5px solid var(--line); font-size:16px; font-weight:800; color:var(--ink); background:var(--surface-2); font-family:inherit}
+.isletme-gun-ornek{flex:1; min-width:260px; background:var(--surface-2); border-radius:12px; padding:12px 14px}
+.igo-bas{font-size:12px; font-weight:800; color:var(--ink-2); margin-bottom:7px}
+.igo-satir{display:flex; justify-content:space-between; gap:12px; font-size:12.5px; color:var(--ink-3); padding:3px 0}
+.igo-satir b{color:var(--ink)}
+.igo-satir.vurgu{border-top:1px dashed var(--line); margin-top:4px; padding-top:6px; color:var(--brand-d)}
+.igo-satir.vurgu b{color:var(--brand-d)}
+.isletme-gun-simdi{width:100%; font-size:13px; color:var(--ink-2); background:var(--brand-soft); border-radius:10px; padding:9px 13px; margin-top:4px}
 /* Personel / kullanıcı yönetimi */
 .pers-sube-row{display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; margin-bottom:14px; -webkit-overflow-scrolling:touch}
 .pers-sube-chip{flex:none; padding:9px 14px; border-radius:10px; border:1px solid var(--line); background:var(--surface); font-size:13px; font-weight:700; color:var(--ink-2); cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:6px}
@@ -3519,6 +3701,25 @@ body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
   <div class="login-card">
     <div class="logo"><span class="mark">🧇</span> MİNİPAN</div>
     <div class="login-sub">POS · şube yönetim sistemi</div>
+
+    <!-- PERSONEL GİRİŞİ -->
+    <div class="pg-form" id="pgForm">
+      <div class="pg-alan">
+        <label>Kullanıcı adı</label>
+        <input class="pg-input" id="pgKullaniciAdi" autocomplete="username" placeholder="örn. ayse.k"
+               onkeydown="if(event.key==='Enter')document.getElementById('pgSifre').focus()">
+      </div>
+      <div class="pg-alan">
+        <label>Şifre</label>
+        <input class="pg-input" id="pgSifre" type="password" autocomplete="current-password" placeholder="••••"
+               onkeydown="if(event.key==='Enter')personelGirisYap()">
+      </div>
+      <div id="pgHata" class="pg-hata"></div>
+      <button class="pg-btn" onclick="personelGirisYap()">🔑 Giriş Yap</button>
+    </div>
+
+    <div class="pg-ayrac"><span>demo erişim</span></div>
+
     <div class="role-pick">
       <button class="role-btn" onclick="login('kasa')">
         <span class="role-dot" style="background:var(--r-kasa)">💳</span>
@@ -3573,7 +3774,7 @@ body:has(.modal-bg.on) #qrSepetBarSabit{display:none}
       <span class="rc-dot" id="roleDot">·</span>
       <span id="roleLabel">—</span>
     </div>
-    <button class="tb-out" onclick="logout()">Çıkış</button>
+    <button class="tb-out" onclick="AKTIF_PERSONEL?personelCikis():logout()">Çıkış</button>
   </div>
   <div class="body">
     <div class="nav" id="nav"></div>
@@ -6061,6 +6262,161 @@ const ROLES = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
+   PERSONEL GİRİŞİ — kullanıcı adı + şifre
+   Kontroller: şifre → dondurma → vardiya saati (müdürler muaf) → bölüm
+   ═══════════════════════════════════════════════════════════════ */
+let AKTIF_PERSONEL = null;
+let AKTIF_PERSONEL_ID = null;
+let AKTIF_PERSONEL_AD = "";
+let AKTIF_BOLUM = null;
+
+function personelGirisYap(){
+  const ad = (document.getElementById("pgKullaniciAdi")||{}).value || "";
+  const sifre = (document.getElementById("pgSifre")||{}).value || "";
+  const ip = document.getElementById("pgHata");
+  const hata = m => { if(ip){ ip.textContent="⚠ "+m; ip.className="pg-hata goster"; } };
+  if(ip){ ip.textContent=""; ip.className="pg-hata"; }
+
+  if(!ad.trim()){ hata("Kullanıcı adı girin"); return; }
+  if(!sifre){ hata("Şifre girin"); return; }
+
+  const u = Object.values(KULLANICILAR).find(x=>
+    x.kullaniciAdi === ad.trim().toLowerCase() && x.durum !== "arsiv");
+  if(!u){ hata("Kullanıcı bulunamadı"); return; }
+  if(!sifreDogrula(sifre, u.sifreHash)){ hata("Şifre hatalı"); return; }
+
+  if(kullaniciDonmusMu(u)){
+    const d = u.dondur||{};
+    hata("Hesabınız dondurulmuş"+(d.bitis?" ("+d.bitis+" tarihine kadar)":"")+(d.not?" · "+d.not:""));
+    personelLogEkle("giris_red_dondurulmus", u, "");
+    kullaniciKaydet();
+    return;
+  }
+
+  const bolumler = (u.bolumler && u.bolumler.length) ? u.bolumler : [u.bolum];
+  const mudurYetkisi = bolumler.includes("mudur");
+  if(!mudurYetkisi && !kullaniciVardiyadaMi(u)){
+    const bugunVardiya = (u.vardiya||{})[new Date().getDay()];
+    const saatBilgi = bugunVardiya
+      ? " (bugünkü vardiyanız: "+bugunVardiya.ac+"–"+bugunVardiya.kapat+")"
+      : " (bugün izinlisiniz)";
+    hata("Mesai saatiniz dışındasınız"+saatBilgi);
+    personelLogEkle("giris_red_saat", u, "");
+    kullaniciKaydet();
+    return;
+  }
+
+  if(bolumler.length > 1){
+    personelBolumSecEkrani(u, bolumler);
+    return;
+  }
+  personelGirisTamamla(u, bolumler[0]);
+}
+function personelBolumSecEkrani(u, bolumler){
+  const html = `
+  <div class="modal-bg on" id="bolumSecModal" style="z-index:250">
+    <div class="bs-ic">
+      <div class="bs-ust">
+        <div class="bs-ikon">👋</div>
+        <div class="bs-bas">Hoş geldin, ${u.ad.split(" ")[0]}!</div>
+        <div class="bs-alt">Bugün hangi bölümde çalışacaksın?</div>
+      </div>
+      <div class="bs-liste">
+        ${bolumler.map(b=>{
+          const bl = BOLUMLER[b];
+          if(!bl) return '';
+          const ana = (b===u.bolum);
+          return `<button class="bs-btn" style="border-color:${bl.renk}" onclick="personelGirisTamamla(KULLANICILAR['${u.id}'],'${b}')">
+            <span class="bs-btn-ic" style="background:${bl.renk}">${bl.ic}</span>
+            <span class="bs-btn-ad">${bl.ad}${ana?'<span class="bs-ana">ana bölüm</span>':''}</span>
+          </button>`;
+        }).join("")}
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("bolumSecWrap");
+  if(!el){ el=document.createElement("div"); el.id="bolumSecWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function personelGirisTamamla(u, bolum){
+  const w = document.getElementById("bolumSecWrap"); if(w) w.innerHTML="";
+  AKTIF_PERSONEL = u;
+  AKTIF_PERSONEL_ID = u.id;
+  AKTIF_PERSONEL_AD = u.ad;
+  AKTIF_BOLUM = bolum;
+  u.sonGiris = Date.now();
+  personelLogEkle("giris", u, "Bölüm: "+(BOLUMLER[bolum]?BOLUMLER[bolum].ad:bolum));
+  kullaniciKaydet();
+  if(u.sube && u.sube!==MERKEZ_SUBE) AKTIF_SUBE = u.sube;
+
+  // ── KESİNTİ SONRASI: kasası hâlâ açık mı? ──
+  const av = (typeof acikVardiya==="function") ? acikVardiya(AKTIF_SUBE) : null;
+  const kasamAcik = av && av.kasiyerId === u.id;
+  const baskasininKasasi = av && av.kasiyerId !== u.id;
+
+  if(bolum==="mudur"){
+    login(u.sube===MERKEZ_SUBE ? "genel" : "mudur");
+  }
+  else if(bolum==="kasa"){ login("kasa"); }
+  else if(bolum==="depo"){ login("depo"); }
+  else if(bolum==="mutfak"){ document.getElementById("login").style.display="none"; openKDS(); }
+  else if(bolum==="garson"){ document.getElementById("login").style.display="none"; openGarson(); }
+  else { login("kasa"); }
+
+  note("👋 Hoş geldin "+u.ad+" · "+(BOLUMLER[bolum]?BOLUMLER[bolum].ad:bolum));
+
+  // kasa bilgisi (giriş sonrası)
+  setTimeout(()=>{
+    if(kasamAcik){
+      kasaAcikBilgiModal(av, true);
+    } else if(baskasininKasasi && (bolum==="kasa"||bolum==="mudur")){
+      kasaAcikBilgiModal(av, false);
+    }
+  }, 400);
+}
+/* Kasa açık bilgi modalı — kesinti sonrası veya başkasının kasası */
+function kasaAcikBilgiModal(v, benimMi){
+  const sure = Math.floor((Date.now() - v.acilisTs)/60000);
+  const saat = Math.floor(sure/60), dk = sure%60;
+  const html = `
+  <div class="modal-bg on" id="kasaAcikModal" style="z-index:220" onclick="if(event.target===this)kasaAcikKapat()">
+    <div class="km-sil-ic">
+      <div class="ka-ikon" style="font-size:44px">${benimMi?'🔓':'⚠️'}</div>
+      <div class="km-sil-bas" style="text-align:center">${benimMi?'Kasanız Hâlâ Açık':'Kasa Başkasında Açık'}</div>
+      <div class="km-sil-ack" style="text-align:center">
+        ${benimMi
+          ? `<b>${v.no}</b> numaralı kasanız açık durumda.<br>
+             ${saat>0?saat+' saat ':''}${dk} dakikadır açık · devir ${tl(v.devirAlinan||0)} ₺<br><br>
+             İşlemlerinize <b>kaldığınız yerden devam edebilirsiniz</b>.<br>
+             Kasa kapatılana kadar tüm işlemlerden sorumlusunuz.`
+          : `Kasa <b>${v.kasiyerAd}</b> adına açık (<b>${v.no}</b>).<br>
+             ${saat>0?saat+' saat ':''}${dk} dakikadır açık<br><br>
+             Yeni kasa açabilmek için <b>önce bu kasa kapatılmalı</b>.<br>
+             Kasa sahibinin kapatması veya müdür müdahalesi gerekir.`}
+      </div>
+      <button class="ka-btn" onclick="kasaAcikKapat()">${benimMi?'Devam Et':'Anladım'}</button>
+    </div>
+  </div>`;
+  let el = document.getElementById("kasaAcikWrap");
+  if(!el){ el=document.createElement("div"); el.id="kasaAcikWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function kasaAcikKapat(){ const w=document.getElementById("kasaAcikWrap"); if(w) w.innerHTML=""; }
+function personelCikis(){
+  const av = (typeof acikVardiya==="function") ? acikVardiya(AKTIF_SUBE) : null;
+  if(av && AKTIF_PERSONEL && av.kasiyerId===AKTIF_PERSONEL.id){
+    if(!confirm("⚠️ Kasanız hâlâ AÇIK ("+av.no+").\n\nÇıkarsanız kasa açık kalır ve tüm işlemlerden sorumlu olmaya devam edersiniz.\n\nYine de çıkmak istiyor musunuz?")) return;
+  }
+  if(AKTIF_PERSONEL){
+    personelLogEkle("cikis", AKTIF_PERSONEL, "");
+    kullaniciKaydet();
+  }
+  AKTIF_PERSONEL = null; AKTIF_PERSONEL_ID = null; AKTIF_PERSONEL_AD = ""; AKTIF_BOLUM = null;
+  state.kasaSadeceGoruntule = false;
+  location.reload();
+}
+
+/* ═══════════════════════════════════════════════════════════════
    PERSONEL / KULLANICI YÖNETİMİ — Adım 1: veri modeli
    Hiyerarşi: Merkez → Şube → Bölüm → Kullanıcı
    Kural: bir bölümde çok kişi olabilir; bir kişi TEK bölümde çalışır.
@@ -6435,6 +6791,342 @@ function subeMasalari(sube){
 /* Marka logoları — yönetimden yüklenir (PNG/WEBP, base64). Kullanım yerleri sonra tanımlanacak. */
 let MARKA_LOGOLAR = { logo:"", yazi:"", gorsel:"", arkaplan:"" };
 /* Merkez / Genel Müdürlük firma bilgileri — irsaliyede GÖNDEREN olarak görünür */
+/* ═══════════════════════════════════════════════════════════════
+   İŞLETME GÜNÜ (Business Day) — gece çalışan işletmeler için
+   Her işleme hem gerçek zaman hem "işletme günü" yazılır.
+   Değişim saatinden ÖNCEKİ işlemler bir önceki işletme gününe sayılır.
+   Örn. değişim 06:00 iken: 13 Tem 03:20 → işletme günü 12 Tem
+   ═══════════════════════════════════════════════════════════════ */
+let ISLETME_AYAR = {
+  gunDegisimSaati: "06:00",   // varsayılan 06:00 · "00:00", "04:00", "05:00" olabilir
+};
+const ISLETME_KEY = "minipan_isletme_ayar_v1";
+function isletmeAyarKaydet(){ MPStore.set(ISLETME_KEY, ISLETME_AYAR, 1); }
+function isletmeAyarYukle(){
+  const v = MPStore.get(ISLETME_KEY, null, {version:1});
+  if(v && v.gunDegisimSaati) ISLETME_AYAR.gunDegisimSaati = v.gunDegisimSaati;
+}
+/* Verilen zamanın (varsayılan: şimdi) İŞLETME GÜNÜ tarihini döndürür — "YYYY-MM-DD" */
+function isletmeGunu(ts){
+  const d = ts ? new Date(ts) : new Date();
+  const [sa, sd] = String(ISLETME_AYAR.gunDegisimSaati||"06:00").split(":").map(x=>parseInt(x)||0);
+  const esikDk = sa*60 + sd;
+  const anDk = d.getHours()*60 + d.getMinutes();
+  const g = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  if(anDk < esikDk) g.setDate(g.getDate()-1);   // değişim saatinden önce → önceki işletme günü
+  const yil = g.getFullYear();
+  const ay = String(g.getMonth()+1).padStart(2,"0");
+  const gun = String(g.getDate()).padStart(2,"0");
+  return yil+"-"+ay+"-"+gun;
+}
+/* İşletme gününü okunur biçimde göster */
+function isletmeGunuGoster(gunStr){
+  if(!gunStr) return "";
+  const [y,a,g] = gunStr.split("-");
+  return g+"."+a+"."+y;
+}
+/* Bir işletme gününün gerçek zaman aralığı [başlangıç, bitiş) — raporlarda filtrelemek için */
+function isletmeGunAraligi(gunStr){
+  const [y,a,g] = String(gunStr).split("-").map(x=>parseInt(x));
+  const [sa, sd] = String(ISLETME_AYAR.gunDegisimSaati||"06:00").split(":").map(x=>parseInt(x)||0);
+  const bas = new Date(y, a-1, g, sa, sd, 0, 0);           // örn. 12 Tem 06:00
+  const bit = new Date(y, a-1, g+1, sa, sd, 0, 0);         // 13 Tem 06:00 (dahil değil)
+  return { bas: bas.getTime(), bit: bit.getTime() };
+}
+
+/* İşletme günü değişim saatini kaydet */
+function isletmeGunSaatiKaydet(saat){
+  if(!saat) return;
+  ISLETME_AYAR.gunDegisimSaati = saat;
+  isletmeAyarKaydet();
+  note("🕕 İşletme günü değişim saati: "+saat+" · Şu anki işletme günü: "+isletmeGunuGoster(isletmeGunu()));
+  go("subeler", true);
+}
+/* ═══════════════════════════════════════════════════════════════
+   KASA VARDİYA (Z-Raporu) — şube başına TEK kasa
+   Akış: Açılış (devir teslim) → İşlemler → Kapanış (sayım + fark)
+   Kurallar:
+   - Önceki kasiyer kapatmadan yeni kasiyer devralamaz
+   - Kasa açıkken tüm işlemler o kasiyere kaydedilir
+   - Kesinti sonrası aynı kasiyer girince "kasan hâlâ açık" denir
+   - Kapanışta: beklenen nakit gösterilir, sayılan girilir, fark hesaplanır
+   - Kasiyer devredecek tutarı seçer, gerisi "kasadan alınan" olur
+   ═══════════════════════════════════════════════════════════════ */
+let KASA_VARDIYALAR = {};      // { "Şube Adı": [vardiya, ...] } — kapanmış + açık
+let _kasaVardiyaId = 1;
+const KASA_VARDIYA_KEY = "minipan_kasa_vardiya_v1";
+function kasaVardiyaKaydet(){ MPStore.set(KASA_VARDIYA_KEY, {KASA_VARDIYALAR, _kasaVardiyaId}, 1); }
+function kasaVardiyaYukle(){
+  const v = MPStore.get(KASA_VARDIYA_KEY, null, {version:1});
+  if(v){
+    if(v.KASA_VARDIYALAR) KASA_VARDIYALAR = v.KASA_VARDIYALAR;
+    if(v._kasaVardiyaId) _kasaVardiyaId = v._kasaVardiyaId;
+  }
+}
+/* Bir vardiya kaydı:
+   {
+     id, no:"KV-000001", sube,
+     kasiyerId, kasiyerAd,
+     durum: "acik" | "kapali",
+     acilisTs, isletmeGunu,
+     devirBeklenen,        // önceki vardiyadan devreden (sistem hesabı)
+     devirAlinan,          // kasiyerin teslim aldığını beyan ettiği tutar
+     devirFark,            // alınan - beklenen
+     kapanisTs,
+     beklenenNakit,        // açılış + nakit satış - iade
+     sayilanNakit,         // kasiyerin saydığı
+     nakitFark,            // sayılan - beklenen
+     farkNot,              // eksik/fazla açıklaması
+     devredilen,           // sonraki vardiyaya bırakılan
+     kasadanAlinan,        // sayılan - devredilen (bankaya/kasaya giden)
+     ozet: {nakit, kredi, diger, digerNakit, digerKredi, indirim, ikram, brut, net, islemSayisi}
+   } */
+function subeVardiyalari(sube){ return KASA_VARDIYALAR[sube] || []; }
+/* Şubede ŞU AN açık vardiya var mı? */
+function acikVardiya(sube){
+  return (KASA_VARDIYALAR[sube]||[]).find(v=>v.durum==="acik") || null;
+}
+/* Son kapanmış vardiya (devir hesabı için) */
+function sonKapananVardiya(sube){
+  const list = (KASA_VARDIYALAR[sube]||[]).filter(v=>v.durum==="kapali");
+  return list.length ? list[list.length-1] : null;
+}
+/* Sonraki vardiyaya devreden tutar (yoksa 0 = ilk açılış) */
+function devredenTutar(sube){
+  const son = sonKapananVardiya(sube);
+  return son ? (son.devredilen||0) : 0;
+}
+function kasaVardiyaNo(n){ return "KV-"+String(n).padStart(6,"0"); }
+
+/* ── VARDİYA AÇ ── */
+function kasaVardiyaAc(sube, kasiyerId, kasiyerAd, devirAlinan, rol){
+  if(acikVardiya(sube)) return {hata:"Bu şubede zaten açık bir kasa var. Önce kapatılmalı."};
+  if(gunKapaliMi(sube, isletmeGunu())) return {hata:"Bu işletme günü KAPATILMIŞ. Satış yapılamaz. (Genel müdür kilidi açabilir)"};
+  const beklenen = devredenTutar(sube);
+  const alinan = Math.round((devirAlinan||0)*100)/100;
+  const mudurVardiyasi = (rol==="mudur" || rol==="genel");
+  const v = {
+    id: _kasaVardiyaId++,
+    no: kasaVardiyaNo(_kasaVardiyaId-1),
+    sube: sube,
+    kasiyerId: kasiyerId, kasiyerAd: kasiyerAd,
+    rol: rol||"kasa",                    // kasa | mudur | genel
+    mudurVardiyasi: mudurVardiyasi,      // 👔 raporda ayrı işaretlenir
+    durum: "acik",
+    acilisTs: Date.now(),
+    isletmeGunu: isletmeGunu(),
+    devirBeklenen: beklenen,
+    devirAlinan: alinan,
+    devirFark: Math.round((alinan - beklenen)*100)/100,
+    ilkAcilis: (sonKapananVardiya(sube)===null)
+  };
+  if(!KASA_VARDIYALAR[sube]) KASA_VARDIYALAR[sube] = [];
+  KASA_VARDIYALAR[sube].push(v);
+  kasaVardiyaKaydet();
+  return {ok:true, vardiya:v};
+}
+/* ── VARDİYA ÖZETİ — açılıştan şimdiye kadarki tüm işlemler ── */
+function vardiyaOzetHesapla(v){
+  const bas = v.acilisTs, bit = v.kapanisTs || Date.now();
+  const kayitlar = MASA_GECMISI.filter(g=>{
+    if(g.sube!==v.sube) return false;
+    const t = g.kapanis || 0;
+    return t>=bas && t<=bit;
+  });
+  const o = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
+              indirim:0, ikram:0, brut:0, net:0, islemSayisi:0, urunAdet:0 };
+  kayitlar.forEach(g=>{
+    o.islemSayisi++;
+    o.urunAdet += (g.urunSayisi||0);
+    (g.odemeIslemleri||[]).forEach(is=>{
+      const t = is.tahsil!=null ? is.tahsil : (is.tutar||0);
+      const y = (is.yontem||"").toLowerCase();
+      if(y==="nakit") o.nakit += t;
+      else if(y==="kredi"||y==="kredi kartı") o.kredi += t;
+      else { // diğer / QR — alt kırılım
+        o.diger += t;
+        if(is.digerTip==="nakit") o.digerNakit += t;
+        else if(is.digerTip==="kredi") o.digerKredi += t;
+      }
+      o.indirim += (is.indirim||0);
+    });
+    // ikram (hediye) — ödeme kayıtlarındaki ikram alanı
+    (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
+    (g.kalemler||[]).forEach(k=>{ if(k.hediye) o.ikram += (k.fiyat||0); });
+    o.brut += (g.toplam||0);
+  });
+  o.nakit = Math.round(o.nakit*100)/100;
+  o.kredi = Math.round(o.kredi*100)/100;
+  o.diger = Math.round(o.diger*100)/100;
+  o.indirim = Math.round(o.indirim*100)/100;
+  o.ikram = Math.round(o.ikram*100)/100;
+  o.brut = Math.round(o.brut*100)/100;
+  o.net = Math.round((o.nakit + o.kredi + o.diger)*100)/100;
+  return o;
+}
+/* Beklenen nakit = devir alınan + nakit satışlar (+ diğer/QR'ın nakit kısmı) */
+function vardiyaBeklenenNakit(v){
+  const o = vardiyaOzetHesapla(v);
+  return Math.round(((v.devirAlinan||0) + o.nakit + o.digerNakit)*100)/100;
+}
+/* ── VARDİYA KAPAT ── */
+function kasaVardiyaKapat(sube, sayilanNakit, devredilen, farkNot){
+  const v = acikVardiya(sube);
+  if(!v) return {hata:"Açık kasa bulunamadı."};
+  const ozet = vardiyaOzetHesapla(v);
+  const beklenen = vardiyaBeklenenNakit(v);
+  const sayilan = Math.round((sayilanNakit||0)*100)/100;
+  const devir = Math.round((devredilen||0)*100)/100;
+  if(devir > sayilan) return {hata:"Devredilen tutar sayılan nakitten fazla olamaz."};
+  v.durum = "kapali";
+  v.kapanisTs = Date.now();
+  v.ozet = ozet;
+  v.beklenenNakit = beklenen;
+  v.sayilanNakit = sayilan;
+  v.nakitFark = Math.round((sayilan - beklenen)*100)/100;   // + fazla, − eksik
+  v.farkNot = (farkNot||"").trim();
+  v.devredilen = devir;
+  v.kasadanAlinan = Math.round((sayilan - devir)*100)/100;
+  kasaVardiyaKaydet();
+  return {ok:true, vardiya:v};
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GÜN SONU (Z Raporu / Gün Kapanışı)
+   - Kapatma: müdür + genel müdür doğrudan · kasiyer müdür onayıyla
+   - Kapanınca gün KİLİTLENİR (satış girilemez) · sadece genel müdür açar
+   - Açık masa veya açık kasa varsa kapatma ENGELLENİR
+   ═══════════════════════════════════════════════════════════════ */
+let GUN_SONU = {};             // { "Şube Adı": { "2026-07-12": {kayit}, ... } }
+const GUN_SONU_KEY = "minipan_gun_sonu_v1";
+function gunSonuKaydet(){ MPStore.set(GUN_SONU_KEY, GUN_SONU, 1); }
+function gunSonuYukle(){ GUN_SONU = MPStore.get(GUN_SONU_KEY, {}, {version:1}) || {}; }
+/* Bir gün sonu kaydı:
+   { sube, isletmeGunu, kapatanId, kapatanAd, kapatanRol, kapanisTs,
+     kilit:true, acanAd, acmaTs, acmaNot,
+     ozet:{ nakit, kredi, diger, digerNakit, digerKredi, indirim, ikram,
+            brut, net, iptalTutar, iptalAdet, islemSayisi, urunAdet },
+     vardiyalar:[{no, kasiyerAd, net, fark, devredilen, kasadanAlinan}],
+     kasaFarkToplam, kasadanAlinanToplam, devredilenSon }
+*/
+/* Gün kapalı mı? */
+function gunKapaliMi(sube, gun){
+  const g = GUN_SONU[sube] && GUN_SONU[sube][gun];
+  return !!(g && g.kilit);
+}
+/* Bugünün işletme günü kapalı mı? (satış engeli için) */
+function bugunKapaliMi(sube){ return gunKapaliMi(sube||AKTIF_SUBE, isletmeGunu()); }
+/* Gün sonu kapatılabilir mi? — engelleri döndürür */
+function gunSonuEngelleri(sube, gun){
+  const engeller = [];
+  // 1) açık kasa var mı
+  const av = acikVardiya(sube);
+  if(av) engeller.push({tip:"kasa", mesaj:"Kasa hâlâ açık: "+av.kasiyerAd+" ("+av.no+")", cozum:"Kasayı kapatın"});
+  // 2) açık masa var mı (o şubede, dolu oturum)
+  const acikMasalar = [];
+  Object.keys(SESSIONS||{}).forEach(m=>{
+    const s = SESSIONS[m];
+    if(!s || !s.acik) return;
+    const kalemVar = (s.kisiler||[]).some(k=>(k.kalemler||[]).some(it=>it.durum!=="iptal"));
+    if(kalemVar) acikMasalar.push(masaEtiket(m));
+  });
+  if(acikMasalar.length>0){
+    engeller.push({tip:"masa", mesaj:acikMasalar.length+" açık masa var: "+acikMasalar.slice(0,4).join(", ")+(acikMasalar.length>4?"…":""), cozum:"Masaları kapatın/ödeme alın"});
+  }
+  // 3) zaten kapalı mı
+  if(gunKapaliMi(sube, gun)) engeller.push({tip:"kapali", mesaj:"Bu işletme günü zaten kapatılmış", cozum:"Genel müdür açabilir"});
+  return engeller;
+}
+/* Gün özeti hesapla (o işletme gününün tüm satışları) */
+function gunSonuOzetHesapla(sube, gun){
+  const kayitlar = MASA_GECMISI.filter(g=>{
+    if(g.sube!==sube) return false;
+    const vg = g.isletmeGunu || isletmeGunu(g.kapanis||g.ts||0);
+    return vg === gun;
+  });
+  const o = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
+              indirim:0, ikram:0, brut:0, net:0,
+              iptalTutar:0, iptalAdet:0, islemSayisi:0, urunAdet:0 };
+  kayitlar.forEach(g=>{
+    o.islemSayisi++;
+    o.urunAdet += (g.urunSayisi||0);
+    o.brut += (g.toplam||0);
+    (g.odemeIslemleri||[]).forEach(is=>{
+      const t = is.tahsil!=null ? is.tahsil : (is.tutar||0);
+      const y = (is.yontem||"").toLowerCase();
+      if(y==="nakit") o.nakit += t;
+      else if(y==="kredi"||y==="kredi kartı") o.kredi += t;
+      else {
+        o.diger += t;
+        if(is.digerTip==="nakit") o.digerNakit += t;
+        else if(is.digerTip==="kredi") o.digerKredi += t;
+      }
+      o.indirim += (is.indirim||0);
+    });
+    (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
+    (g.kalemler||[]).forEach(k=>{
+      if(k.hediye) o.ikram += (k.fiyat||0);
+      if(k.durum==="iptal"){ o.iptalAdet++; o.iptalTutar += (k.fiyat||0); }
+    });
+  });
+  ["nakit","kredi","diger","digerNakit","digerKredi","indirim","ikram","brut","iptalTutar"].forEach(k=>{
+    o[k] = Math.round(o[k]*100)/100;
+  });
+  o.net = Math.round((o.nakit + o.kredi + o.diger)*100)/100;
+  return o;
+}
+/* O günün vardiya özetleri */
+function gunSonuVardiyalari(sube, gun){
+  return (KASA_VARDIYALAR[sube]||[]).filter(v=>{
+    const vg = v.isletmeGunu || isletmeGunu(v.acilisTs);
+    return vg === gun;
+  }).map(v=>{
+    const o = v.ozet || vardiyaOzetHesapla(v);
+    return {
+      no:v.no, kasiyerAd:v.kasiyerAd, durum:v.durum,
+      rol:v.rol||"kasa", mudurVardiyasi:!!v.mudurVardiyasi,
+      acilisTs:v.acilisTs, kapanisTs:v.kapanisTs,
+      net:o.net||0, fark:v.nakitFark||0, farkNot:v.farkNot||"",
+      devirAlinan:v.devirAlinan||0, devredilen:v.devredilen||0, kasadanAlinan:v.kasadanAlinan||0
+    };
+  });
+}
+/* ── GÜN SONU KAPAT ── */
+function gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId){
+  const engeller = gunSonuEngelleri(sube, gun);
+  if(engeller.length>0) return {hata:"Engeller var", engeller};
+  const ozet = gunSonuOzetHesapla(sube, gun);
+  const vardiyalar = gunSonuVardiyalari(sube, gun);
+  const kasaFarkToplam = Math.round(vardiyalar.reduce((t,v)=>t+(v.fark||0),0)*100)/100;
+  const kasadanAlinanToplam = Math.round(vardiyalar.reduce((t,v)=>t+(v.kasadanAlinan||0),0)*100)/100;
+  const sonVardiya = vardiyalar.length ? vardiyalar[vardiyalar.length-1] : null;
+  const kayit = {
+    sube, isletmeGunu:gun,
+    kapatanId:kapatanId||null, kapatanAd:kapatanAd||"", kapatanRol:kapatanRol||"",
+    kapanisTs: Date.now(),
+    kilit: true,
+    ozet, vardiyalar,
+    kasaFarkToplam, kasadanAlinanToplam,
+    devredilenSon: sonVardiya ? (sonVardiya.devredilen||0) : 0
+  };
+  if(!GUN_SONU[sube]) GUN_SONU[sube] = {};
+  GUN_SONU[sube][gun] = kayit;
+  gunSonuKaydet();
+  return {ok:true, kayit};
+}
+/* ── GÜN KİLİDİNİ AÇ (sadece genel müdür) ── */
+function gunSonuAc(sube, gun, acanAd, not){
+  if(state.role!=="genel") return {hata:"Sadece genel müdür kilidi açabilir"};
+  const g = GUN_SONU[sube] && GUN_SONU[sube][gun];
+  if(!g) return {hata:"Bu gün için kapanış kaydı yok"};
+  g.kilit = false;
+  g.acanAd = acanAd||"Genel Müdür";
+  g.acmaTs = Date.now();
+  g.acmaNot = (not||"").trim();
+  gunSonuKaydet();
+  return {ok:true};
+}
+
 let MERKEZ_FIRMA = {
   unvan: "FOOST Gıda Franchise A.Ş.",
   vkn: "1234567890",
@@ -7483,6 +8175,8 @@ function depoVeyaGenel(){ return state.role==="genel" || state.role==="depo"; }
 
 function login(role){
   const r = ROLES[role];
+  // Personel girişi yapıldıysa şube zaten belli — seçim ekranını atla
+  if(AKTIF_PERSONEL) state._subeSecildi = true;
   // Kasa/müdür → önce şube seç (genel müdür tüm şubeleri görür)
   if(r.subeSec && !state._subeSecildi){
     subeSecimGoster(role);
@@ -7624,7 +8318,282 @@ function go(key, scrollKoru){
    ============================================================ */
 
 // --- SATIŞ (kasa + müdür + genel) ---
+/* Kasa ekranı üst barı — açık vardiya bilgisi + kapat butonu */
+function kasaVardiyaBarHtml(){
+  // salt görüntüleme modu (müdür, vardiya açmadan bakıyor)
+  if(kasaSaltGoruntuleme()){
+    return `<div class="kasa-vardiya-bar salt">
+      <div class="kvb-bilgi">
+        <span class="kvb-goz">👁️</span>
+        <div>
+          <div class="kvb-ad">Salt Görüntüleme</div>
+          <div class="kvb-alt">Tahsilat yapılamaz · işlem için kasa açın</div>
+        </div>
+      </div>
+      <button class="kvb-ac-btn" onclick="kasaGoruntulemedenCik()">🔓 Kasa Aç</button>
+    </div>`;
+  }
+  const v = acikVardiya(AKTIF_SUBE);
+  if(!v) return '';
+  const sure = Math.floor((Date.now() - v.acilisTs)/60000);
+  const saat = Math.floor(sure/60), dk = sure%60;
+  const mudurMu = !!v.mudurVardiyasi;
+  return `<div class="kasa-vardiya-bar${mudurMu?' mudur':''}">
+    <div class="kvb-bilgi">
+      <span class="kvb-nokta"></span>
+      <div>
+        <div class="kvb-ad">${mudurMu?'👔':'🔓'} ${v.kasiyerAd}${mudurMu?' <span class="kvb-mudur-rozet">MÜDÜR</span>':''}</div>
+        <div class="kvb-alt">${v.no} · ${saat>0?saat+'s ':''}${dk}dk · devir ${tl(v.devirAlinan||0)} ₺</div>
+      </div>
+    </div>
+    <button class="kvb-kapat-btn" onclick="kasaKapatAc()">🔒 Kasa Kapat</button>
+  </div>`;
+}
+
+/* ── KASA KAPATMA EKRANI ── */
+function kasaKapatAc(){
+  const sube = AKTIF_SUBE;
+  const v = acikVardiya(sube);
+  if(!v){ note("Açık kasa yok"); return; }
+  const ozet = vardiyaOzetHesapla(v);
+  const beklenen = vardiyaBeklenenNakit(v);
+  state._kasaKapat = { beklenen, ozet, vardiya:v };
+
+  const html = `
+  <div class="modal-bg on" id="kasaKapatModal" style="z-index:200" onclick="if(event.target===this)kasaKapatKapat()">
+    <div class="kk-ic">
+      <div class="kk-bas">🔒 Kasa Kapatma
+        <button class="bom-kapat" onclick="kasaKapatKapat()">✕</button></div>
+
+      <div class="kk-govde">
+        <div class="kk-vardiya-bilgi">
+          <span>${v.no} · ${v.kasiyerAd}</span>
+          <span>${new Date(v.acilisTs).toLocaleString('tr')} →  şimdi</span>
+        </div>
+
+        <div class="kk-bolum-bas">📊 Vardiya Özeti</div>
+        <div class="kk-ozet-tablo">
+          <div class="kk-satir"><span>Açılış devri</span><span>${tl(v.devirAlinan||0)} ₺</span></div>
+          <div class="kk-satir"><span>💵 Nakit satış</span><span>${tl(ozet.nakit)} ₺</span></div>
+          ${ozet.digerNakit>0?`<div class="kk-satir alt"><span>↳ Diğer/QR nakit kısmı</span><span>${tl(ozet.digerNakit)} ₺</span></div>`:''}
+          <div class="kk-satir"><span>💳 Kredi kartı</span><span>${tl(ozet.kredi)} ₺</span></div>
+          <div class="kk-satir"><span>📱 Diğer / QR</span><span>${tl(ozet.diger)} ₺</span></div>
+          ${ozet.indirim>0?`<div class="kk-satir ind"><span>🏷️ İndirim</span><span>−${tl(ozet.indirim)} ₺</span></div>`:''}
+          ${ozet.ikram>0?`<div class="kk-satir ikram"><span>🎁 İkram (hediye)</span><span>−${tl(ozet.ikram)} ₺</span></div>`:''}
+          <div class="kk-satir toplam"><span>Toplam tahsilat</span><span>${tl(ozet.net)} ₺</span></div>
+          <div class="kk-satir kucuk"><span>${ozet.islemSayisi} işlem · ${ozet.urunAdet} ürün</span><span></span></div>
+        </div>
+
+        <div class="kk-bolum-bas">💰 Nakit Sayımı</div>
+        <div class="kk-beklenen">
+          <span>Kasada olması gereken nakit</span>
+          <strong>${tl(beklenen)} ₺</strong>
+        </div>
+        <div class="kk-beklenen-not">Açılış devri (${tl(v.devirAlinan||0)} ₺) + nakit tahsilat (${tl(ozet.nakit + ozet.digerNakit)} ₺)</div>
+
+        <div class="ka-alan">
+          <label>Saydığınız fiili nakit</label>
+          <input class="ka-input" id="kkSayilan" inputmode="decimal" value="" placeholder="0,00" oninput="kasaKapatFarkGuncelle()">
+        </div>
+        <div id="kkFark" class="kk-fark"></div>
+
+        <div class="ka-alan" id="kkNotAlan" style="display:none">
+          <label>Fark açıklaması</label>
+          <input class="ka-input" id="kkNot" placeholder="örn. bozuk para hatası, müşteri iadesi...">
+        </div>
+
+        <div class="kk-bolum-bas">🔁 Devir</div>
+        <div class="ka-alan">
+          <label>Sonraki vardiyaya bırakılacak tutar</label>
+          <input class="ka-input" id="kkDevir" inputmode="decimal" value="0" placeholder="0,00" oninput="kasaKapatFarkGuncelle()">
+          <div class="ka-input-not">Kalan tutar "kasadan alınan" olarak kaydedilir (bankaya/merkeze giden).</div>
+        </div>
+        <div id="kkDevirOzet" class="kk-devir-ozet"></div>
+      </div>
+
+      <div class="kk-foot">
+        <button class="btn btn-ghost" onclick="kasaKapatKapat()">Vazgeç</button>
+        <button class="btn btn-primary" onclick="kasaKapatOnayla()">🔒 Kasayı Kapat</button>
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("kasaKapatWrap");
+  if(!el){ el=document.createElement("div"); el.id="kasaKapatWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+  kasaKapatFarkGuncelle();
+}
+function kasaKapatKapat(){ const w=document.getElementById("kasaKapatWrap"); if(w) w.innerHTML=""; }
+function kasaKapatFarkGuncelle(){
+  const st = state._kasaKapat; if(!st) return;
+  const g = id => { const e=document.getElementById(id); return parseFloat(String(e?e.value:"0").replace(",","."))||0; };
+  const sayilan = g("kkSayilan");
+  const devir = g("kkDevir");
+  const fark = Math.round((sayilan - st.beklenen)*100)/100;
+
+  const fEl = document.getElementById("kkFark");
+  const notAlan = document.getElementById("kkNotAlan");
+  if(fEl){
+    if(!sayilan){ fEl.innerHTML=''; fEl.className="kk-fark"; if(notAlan) notAlan.style.display="none"; }
+    else if(Math.abs(fark)<0.01){
+      fEl.innerHTML='✓ Kasa <b>tam</b> — fark yok';
+      fEl.className="kk-fark tam";
+      if(notAlan) notAlan.style.display="none";
+    } else if(fark>0){
+      fEl.innerHTML='📈 <b>'+tl(fark)+' ₺ FAZLA</b> çıktı';
+      fEl.className="kk-fark fazla";
+      if(notAlan) notAlan.style.display="block";
+    } else {
+      fEl.innerHTML='📉 <b>'+tl(Math.abs(fark))+' ₺ EKSİK</b> çıktı';
+      fEl.className="kk-fark eksik";
+      if(notAlan) notAlan.style.display="block";
+    }
+  }
+  const dEl = document.getElementById("kkDevirOzet");
+  if(dEl){
+    const alinan = Math.round((sayilan - devir)*100)/100;
+    if(devir > sayilan){
+      dEl.innerHTML = '⚠️ Devredilen tutar sayılan nakitten fazla olamaz';
+      dEl.className = "kk-devir-ozet hata";
+    } else {
+      dEl.innerHTML = 'Devredilecek: <b>'+tl(devir)+' ₺</b> · Kasadan alınan: <b>'+tl(alinan)+' ₺</b>';
+      dEl.className = "kk-devir-ozet";
+    }
+  }
+}
+function kasaKapatOnayla(){
+  const g = id => { const e=document.getElementById(id); return parseFloat(String(e?e.value:"0").replace(",","."))||0; };
+  const sayilan = g("kkSayilan");
+  const devir = g("kkDevir");
+  const notEl = document.getElementById("kkNot");
+  const not = notEl ? notEl.value.trim() : "";
+  const st = state._kasaKapat;
+  const fark = Math.round((sayilan - (st?st.beklenen:0))*100)/100;
+
+  if(!sayilan && sayilan!==0){ note("Saydığınız nakit tutarı girin"); return; }
+  if(Math.abs(fark)>=0.01 && !not){ note("⚠️ Fark var — lütfen açıklama yazın"); return; }
+
+  const r = kasaVardiyaKapat(AKTIF_SUBE, sayilan, devir, not);
+  if(r.hata){ note("⛔ "+r.hata); return; }
+  kasaKapatKapat();
+  const v = r.vardiya;
+  note("🔒 Kasa kapatıldı · "+v.no+" · fark: "+(v.nakitFark===0?"yok":(v.nakitFark>0?"+":"")+tl(v.nakitFark)+" ₺"));
+  go("satis", true);   // açılış ekranına döner (kasa kapalı)
+}
+
+/* ── KASA VARDİYA EKRANLARI ── */
+/* Kasa ekranına girilebilir mi?
+   HERKES (müdür/genel müdür dahil) işlem yapmak için vardiya açmalı — mali sorumluluk zinciri.
+   Müdür "sadece görüntüleme" modunu seçerse vardiya gerekmez ama TAHSİLAT YAPAMAZ. */
+function kasaVardiyaGerekli(){
+  if(acikVardiya(AKTIF_SUBE)) return false;              // kasa zaten açık
+  if(state.kasaSadeceGoruntule) return false;            // müdür salt görüntüleme seçti
+  return true;                                           // vardiya açılmalı
+}
+/* Salt görüntüleme modunda mı? (tahsilat butonları pasif) */
+function kasaSaltGoruntuleme(){
+  return !!state.kasaSadeceGoruntule && !acikVardiya(AKTIF_SUBE);
+}
+/* Kasa açılış ekranı — devir teslim */
+function kasaAcilisEkrani(main){
+  const sube = AKTIF_SUBE;
+  const devir = devredenTutar(sube);
+  const son = sonKapananVardiya(sube);
+  const ilkAcilis = (son===null);
+  const kasiyerAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "Kasa görevlisi";
+  const isMudur = (state.role==="mudur" || state.role==="genel");
+  const rolEtiket = state.role==="genel" ? "Genel Müdür" : (state.role==="mudur" ? "Şube Müdürü" : "Kasa Görevlisi");
+
+  main.innerHTML = `
+  <div class="kasa-acilis-wrap">
+    <div class="kasa-acilis-kart">
+      <div class="ka-ikon">${isMudur?'👔':'💰'}</div>
+      <div class="ka-baslik">Kasa Açılışı</div>
+      <div class="ka-alt">${sube} · ${kasiyerAd} <span class="ka-rol">${rolEtiket}</span></div>
+
+      ${isMudur?`<div class="ka-mudur-not">
+        👔 <b>Müdür olarak kasa açıyorsunuz.</b> Tahsilat yapabilmek için vardiya açmanız gerekir —
+        yapılan tüm işlemler <b>size</b> kaydedilir ve kasa mutabakatında sorumlusu siz olursunuz.
+      </div>`:''}
+
+      ${ilkAcilis
+        ? `<div class="ka-ilk">
+             <div class="ka-ilk-bas">🆕 İlk kasa açılışı</div>
+             <div class="ka-ilk-ack">Bu şubede daha önce kasa açılmamış. Devir yok, <b>sıfır</b> ile başlıyorsunuz.</div>
+           </div>`
+        : `<div class="ka-devir">
+             <div class="ka-devir-satir">
+               <span>Önceki vardiyadan devreden</span>
+               <strong>${tl(devir)} ₺</strong>
+             </div>
+             <div class="ka-devir-not">Son kapanış: ${son.kasiyerAd} · ${new Date(son.kapanisTs).toLocaleString('tr')}</div>
+           </div>`}
+
+      <div class="ka-alan">
+        <label>Teslim aldığınız nakit tutar</label>
+        <input class="ka-input" id="kaDevirInput" inputmode="decimal"
+               value="${ilkAcilis?'0':tl(devir)}" placeholder="0,00">
+        <div class="ka-input-not">${ilkAcilis
+          ? 'Kasada bozuk para varsa tutarını yazın, yoksa 0 bırakın.'
+          : 'Fiilen saydığınız tutarı yazın. Devreden tutardan farklıysa kayda geçer.'}</div>
+      </div>
+
+      <div id="kaFark" class="ka-fark"></div>
+
+      <button class="ka-btn" onclick="kasaAcilisYap()">🔓 Kasayı Aç ve Başla</button>
+
+      ${isMudur?`
+        <div class="ka-ayrac"><span>veya</span></div>
+        <button class="ka-goruntule-btn" onclick="kasaSaltGoruntuleAc()">
+          👁️ Sadece Görüntüle
+          <span class="ka-goruntule-not">Masaları ve durumu görün · tahsilat yapılamaz</span>
+        </button>`:''}
+
+      <div class="ka-uyari">⚠️ Kasayı kapatana kadar bu kasadaki <b>tüm işlemlerden siz sorumlusunuz</b>.</div>
+    </div>
+  </div>`;
+
+  // canlı fark gösterimi
+  const inp = document.getElementById("kaDevirInput");
+  if(inp && !ilkAcilis){
+    const guncelle = ()=>{
+      const alinan = parseFloat(String(inp.value).replace(",","."))||0;
+      const fark = Math.round((alinan - devir)*100)/100;
+      const el = document.getElementById("kaFark");
+      if(!el) return;
+      if(Math.abs(fark)<0.01){ el.innerHTML=''; el.className="ka-fark"; }
+      else if(fark>0){ el.innerHTML='📈 Devredenden <b>'+tl(fark)+' ₺ FAZLA</b> teslim alıyorsunuz'; el.className="ka-fark fazla"; }
+      else { el.innerHTML='📉 Devredenden <b>'+tl(Math.abs(fark))+' ₺ EKSİK</b> teslim alıyorsunuz'; el.className="ka-fark eksik"; }
+    };
+    inp.addEventListener("input", guncelle);
+    guncelle();
+  }
+}
+function kasaAcilisYap(){
+  const inp = document.getElementById("kaDevirInput");
+  const alinan = parseFloat(String(inp?inp.value:"0").replace(",","."))||0;
+  const kasiyerId = (typeof AKTIF_PERSONEL_ID!=="undefined") ? AKTIF_PERSONEL_ID : null;
+  const kasiyerAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "Kasa görevlisi";
+  const r = kasaVardiyaAc(AKTIF_SUBE, kasiyerId, kasiyerAd, alinan, state.role);
+  if(r.hata){ note("⛔ "+r.hata); return; }
+  state.kasaSadeceGoruntule = false;   // vardiya açıldı, görüntüleme modu kapansın
+  const mudurMu = (state.role==="mudur"||state.role==="genel");
+  note((mudurMu?"👔 Müdür vardiyası açıldı · ":"🔓 Kasa açıldı · ")+r.vardiya.no+" · devir: "+tl(alinan)+" ₺");
+  go("satis", true);
+}
+/* Müdür: salt görüntüleme modu — tahsilat yapılamaz */
+function kasaSaltGoruntuleAc(){
+  state.kasaSadeceGoruntule = true;
+  note("👁️ Salt görüntüleme modu · tahsilat yapmak için kasa açmalısınız");
+  go("masalar", true);
+}
+function kasaGoruntulemedenCik(){
+  state.kasaSadeceGoruntule = false;
+  go("satis", true);
+}
+
 function viewSatis(main){
+  // ── KASA VARDİYA KONTROLÜ — kasa açık değilse açılış ekranı ──
+  if(kasaVardiyaGerekli()){ kasaAcilisEkrani(main); return; }
   const cats = ["Hepsi", ...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
   const prods = DEMO_PRODUCTS.filter(p=> (state.cat==="Hepsi" || p.kat===state.cat) && !urunKapaliMi(p.ad, AKTIF_SUBE));
   main.innerHTML = `
@@ -7632,6 +8601,7 @@ function viewSatis(main){
       <div class="pos-sol">
         <div class="sec-head">
           <div><h2>Satış</h2><div class="sh-sub">Ürüne dokun → adisyona ekle</div></div>
+          ${kasaVardiyaBarHtml()}
         </div>
         <div class="cat-row">
           ${cats.map(c=>`<button class="cat-pill ${c===state.cat?'on':''}" onclick="setCat('${c}')">${c}</button>`).join("")}
@@ -9038,9 +10008,11 @@ function masaGecmiseArsivle(masaNo, ekOdemeler){
   const odemeOzet = odemeOzetiCikar(s, ekOdemeler);
   const odemeIslemleri = odemeIslemleriCikar(s, ekOdemeler);
   const fisNolari = MUTFAK_FISLER.filter(f=>f.masa===masaNo).map(f=>f.no);
+  const kapanisTs = Date.now();
   MASA_GECMISI.push({
     id:_gecmisId++, tip:"masa", sube, masaId:masaNo, masaEtiket:masaEtiket(masaNo),
-    acilis:s.zaman||Date.now(), kapanis:Date.now(),
+    acilis:s.zaman||Date.now(), kapanis:kapanisTs,
+    isletmeGunu: isletmeGunu(kapanisTs),   // gece çalışan işletmeler için işletme günü
     kisiler:(s.kisiler||[]).map(k=>k.ad),
     kalemler, urunSayisi:gecerli.length, toplam,
     odemeler:odemeOzet, odemeIslemleri, fisNo:fisNolari
@@ -9604,11 +10576,13 @@ function mySilOnayPopupCiz(){
 
 // --- MASALAR ---
 function viewMasalar(main){
+  // ── KASA VARDİYA KONTROLÜ ──
+  if(kasaVardiyaGerekli()){ kasaAcilisEkrani(main); return; }
   if(Object.keys(SESSIONS).length===0) seedSessions();
   const sekme = state.kasaSekme||"masa";
   const aktifPaket=aktifPaketler(AKTIF_SUBE);
   // SOL kolon: sekmeler + masa ızgarası / paket listesi
-  let sol=`<div class="sec-head"><div><h2>Masalar & Paket</h2><div class="sh-sub">${AKTIF_SUBE}</div></div></div>
+  let sol=`<div class="sec-head"><div><h2>Masalar & Paket</h2><div class="sh-sub">${AKTIF_SUBE}</div></div>${kasaVardiyaBarHtml()}</div>
     <div class="kasa-sekme-row">
       <button class="kasa-sekme${sekme==="masa"?" on":""}" onclick="state.kasaSekme='masa';go('masalar')">🍽️ Masalar</button>
       <button class="kasa-sekme${sekme==="paket"?" on":""}" onclick="state.kasaSekme='paket';go('masalar')">🥡 Paket${aktifPaket.length?" ("+aktifPaket.length+")":""}</button>
@@ -10142,11 +11116,15 @@ function kasaMasaDetayHtml(m){
   html+='</div>';
   // alt aksiyon bar: Yeni sipariş + Ödeme Al
   const hepOdendi = kalan<=0.01 && s.kisiler.length>0;
+  const saltGoruntu = kasaSaltGoruntuleme();
   html+=`<div class="kmd-foot">
-    <button class="btn btn-ghost" onclick="kasaYeniSiparis(${mq})">+ Yeni sipariş</button>
-    ${!hepOdendi
-      ? `<button class="btn btn-primary" onclick="odemeEkraniAc(${mq})">💳 Ödeme Al · ${kalan} ₺</button>`
-      : `<button class="btn btn-primary" disabled style="opacity:.5">✓ Tümü ödendi</button>`}
+    ${saltGoruntu
+      ? `<button class="btn btn-ghost" disabled style="opacity:.5">+ Yeni sipariş</button>
+         <button class="btn btn-primary" onclick="kasaGoruntulemedenCik()">🔓 İşlem için Kasa Aç</button>`
+      : `<button class="btn btn-ghost" onclick="kasaYeniSiparis(${mq})">+ Yeni sipariş</button>
+         ${!hepOdendi
+           ? `<button class="btn btn-primary" onclick="odemeEkraniAc(${mq})">💳 Ödeme Al · ${kalan} ₺</button>`
+           : `<button class="btn btn-primary" disabled style="opacity:.5">✓ Tümü ödendi</button>`}`}
   </div>`;
   return html;
 }
@@ -19956,6 +20934,30 @@ function viewSubeler(main){
     </div>
   </div>`;
 
+  // İŞLETME GÜNÜ AYARI — gece çalışan şubeler için gün değişim saati
+  const dg = ISLETME_AYAR.gunDegisimSaati||"06:00";
+  const dgSaat = dg.split(":")[0];
+  html+=`<div class="isletme-gun-kart">
+    <div class="merkez-firma-ust">
+      <div class="merkez-firma-baslik">🕕 İşletme Günü Değişim Saati
+        <span class="merkez-firma-not">Gece çalışan şubelerde raporlar karışmasın diye: bu saatten önceki satışlar bir önceki işletme gününe sayılır</span></div>
+    </div>
+    <div class="isletme-gun-govde">
+      <div class="isletme-gun-secim">
+        <label>Gün değişim saati</label>
+        <input class="isletme-gun-input" type="time" value="${dg}" onchange="isletmeGunSaatiKaydet(this.value)">
+      </div>
+      <div class="isletme-gun-ornek">
+        <div class="igo-bas">Örnek (${dg} ayarıyla)</div>
+        <div class="igo-satir"><span>12 Tem · 22:15</span><span>→ işletme günü <b>12 Tem</b></span></div>
+        <div class="igo-satir"><span>13 Tem · 00:45</span><span>→ işletme günü <b>12 Tem</b></span></div>
+        <div class="igo-satir"><span>13 Tem · 03:20</span><span>→ işletme günü <b>12 Tem</b></span></div>
+        <div class="igo-satir vurgu"><span>13 Tem · ${dgSaat}:05</span><span>→ işletme günü <b>13 Tem</b></span></div>
+      </div>
+      <div class="isletme-gun-simdi">Şu anki işletme günü: <b>${isletmeGunuGoster(isletmeGunu())}</b></div>
+    </div>
+  </div>`;
+
   html+=`<div class="sb-liste">`;
   DEMO_BRANCHES.forEach((b,i)=>{
     const info=BRANCH_INFO[b.ad]||{};
@@ -20243,11 +21245,13 @@ function subeOnayUygula(){
    ═══════════════════════════════════════════════════════════ */
 const RAPOR_SEKMELER = [
   { kod:"urunSatis", ad:"📦 Günlük Ürün Satışları" },
+  { kod:"kasaVardiya", ad:"💰 Kasa Vardiyaları" },
+  { kod:"gunSonu", ad:"🌙 Gün Sonu" },
   // ileride: ciro, ödeme yöntemi, personel, stok, iptal/ikram...
 ];
 function viewRapor(main){
   if(!state.raporSekme) state.raporSekme = "urunSatis";
-  if(!state.raporTarih) state.raporTarih = new Date().toISOString().slice(0,10);
+  if(!state.raporTarih) state.raporTarih = isletmeGunu();   // bugünün İŞLETME günü
   const isGenel = state.role==="genel";
   if(isGenel && !state.raporSube) state.raporSube = "__tum";
 
@@ -20262,25 +21266,511 @@ function viewRapor(main){
   html += `</div>`;
 
   if(state.raporSekme==="urunSatis") html += raporUrunSatisHtml();
+  else if(state.raporSekme==="kasaVardiya") html += raporKasaVardiyaHtml();
+  else if(state.raporSekme==="gunSonu") html += raporGunSonuHtml();
 
   main.innerHTML = html;
 }
 function raporSekmeSec(k){ state.raporSekme=k; go("rapor", true); }
+
+/* ══ GÜN SONU ══ */
+function raporGunSonuHtml(){
+  const isGenel = state.role==="genel";
+  const isMudur = state.role==="mudur";
+  const isKasa  = state.role==="kasa";
+  const sube = isGenel ? (state.gsSube || (DEMO_BRANCHES[0]?DEMO_BRANCHES[0].ad:"")) : AKTIF_SUBE;
+  const gun = state.gsTarih || isletmeGunu();
+  const kayit = GUN_SONU[sube] && GUN_SONU[sube][gun];
+  const kapali = !!(kayit && kayit.kilit);
+  const engeller = kapali ? [] : gunSonuEngelleri(sube, gun);
+  const ozet = kayit ? kayit.ozet : gunSonuOzetHesapla(sube, gun);
+  const vardiyalar = kayit ? kayit.vardiyalar : gunSonuVardiyalari(sube, gun);
+  const kasaFark = kayit ? kayit.kasaFarkToplam : Math.round(vardiyalar.reduce((t,v)=>t+(v.fark||0),0)*100)/100;
+  const kasadanAlinan = kayit ? kayit.kasadanAlinanToplam : Math.round(vardiyalar.reduce((t,v)=>t+(v.kasadanAlinan||0),0)*100)/100;
+
+  let html = `<div class="rapor-arac-bar">
+    <div class="rab-sol">
+      <span class="rab-tarih-lbl">🗓️ İşletme günü</span>
+      <input class="rab-tarih" type="date" value="${gun}" onchange="gsTarihSec(this.value)">
+    </div>`;
+  if(isGenel){
+    html += `<div class="rab-sube-row">`;
+    DEMO_BRANCHES.forEach(b=>{
+      html += `<button class="rab-sube${sube===b.ad?' on':''}" onclick="gsSubeSec('${b.ad.replace(/'/g,"\\'")}')">${b.ad}</button>`;
+    });
+    html += `</div>`;
+  }
+  html += `</div>`;
+
+  // DURUM BANNER
+  if(kapali){
+    html += `<div class="gs-banner kapali">
+      <div class="gs-banner-sol">
+        <div class="gs-banner-ikon">🔒</div>
+        <div>
+          <div class="gs-banner-bas">Gün Kapatıldı</div>
+          <div class="gs-banner-alt">${kayit.kapatanAd} · ${new Date(kayit.kapanisTs).toLocaleString('tr')}</div>
+        </div>
+      </div>
+      ${isGenel?`<button class="gs-ac-btn" onclick="gunSonuAcModal('${sube.replace(/'/g,"\\'")}','${gun}')">🔓 Kilidi Aç</button>`
+               :`<div class="gs-kilit-not">Sadece genel müdür açabilir</div>`}
+    </div>`;
+  } else if(kayit && !kayit.kilit){
+    html += `<div class="gs-banner acildi">
+      <div class="gs-banner-sol">
+        <div class="gs-banner-ikon">🔓</div>
+        <div>
+          <div class="gs-banner-bas">Kilit Açıldı — düzeltme yapılabilir</div>
+          <div class="gs-banner-alt">${kayit.acanAd} · ${new Date(kayit.acmaTs).toLocaleString('tr')}${kayit.acmaNot?' · '+kayit.acmaNot:''}</div>
+        </div>
+      </div>
+      <button class="gs-kapat-btn" onclick="gunSonuKapatModal('${sube.replace(/'/g,"\\'")}','${gun}')">🔒 Tekrar Kapat</button>
+    </div>`;
+  } else {
+    // AÇIK GÜN — engeller / kapatma butonu
+    if(engeller.length>0){
+      html += `<div class="gs-banner engel">
+        <div class="gs-banner-sol">
+          <div class="gs-banner-ikon">⚠️</div>
+          <div>
+            <div class="gs-banner-bas">Gün kapatılamaz — ${engeller.length} engel var</div>
+            <div class="gs-engel-liste">
+              ${engeller.map(e=>`<div class="gs-engel">⛔ ${e.mesaj} <span class="gs-engel-cozum">→ ${e.cozum}</span></div>`).join("")}
+            </div>
+          </div>
+        </div>
+      </div>`;
+    } else {
+      html += `<div class="gs-banner hazir">
+        <div class="gs-banner-sol">
+          <div class="gs-banner-ikon">✓</div>
+          <div>
+            <div class="gs-banner-bas">Gün kapatmaya hazır</div>
+            <div class="gs-banner-alt">Açık masa yok · Kasa kapalı</div>
+          </div>
+        </div>
+        <button class="gs-kapat-btn" onclick="gunSonuKapatModal('${sube.replace(/'/g,"\\'")}','${gun}')">
+          ${isKasa?'🔒 Gün Sonu Kapat (müdür onayı gerekir)':'🔒 Gün Sonunu Kapat'}
+        </button>
+      </div>`;
+    }
+  }
+
+  // ÖZET KARTLAR
+  html += `<div class="rapor-ozet-row">
+    <div class="roz-kart"><div class="roz-lbl">İşlem</div><div class="roz-deg">${ozet.islemSayisi}</div>
+      <div class="roz-alt">${ozet.urunAdet} ürün</div></div>
+    <div class="roz-kart"><div class="roz-lbl">💵 Nakit</div><div class="roz-deg">${tl(ozet.nakit)} ₺</div></div>
+    <div class="roz-kart"><div class="roz-lbl">💳 Kredi kartı</div><div class="roz-deg">${tl(ozet.kredi)} ₺</div></div>
+    <div class="roz-kart"><div class="roz-lbl">📱 Diğer / QR</div><div class="roz-deg">${tl(ozet.diger)} ₺</div>
+      ${(ozet.digerNakit>0||ozet.digerKredi>0)?`<div class="roz-alt">nakit ${tl(ozet.digerNakit)} · kredi ${tl(ozet.digerKredi)}</div>`:''}</div>
+    ${ozet.indirim>0?`<div class="roz-kart ind"><div class="roz-lbl">🏷️ İndirim</div><div class="roz-deg">−${tl(ozet.indirim)} ₺</div></div>`:''}
+    ${ozet.ikram>0?`<div class="roz-kart ikram"><div class="roz-lbl">🎁 İkram</div><div class="roz-deg">−${tl(ozet.ikram)} ₺</div></div>`:''}
+    ${ozet.iptalAdet>0?`<div class="roz-kart ind"><div class="roz-lbl">✕ İptal</div><div class="roz-deg">${ozet.iptalAdet} adet</div>
+      <div class="roz-alt">${tl(ozet.iptalTutar)} ₺</div></div>`:''}
+    <div class="roz-kart vurgu"><div class="roz-lbl">NET CİRO</div><div class="roz-deg">${tl(ozet.net)} ₺</div></div>
+  </div>`;
+
+  // VARDİYA MUTABAKATI
+  html += `<div class="gs-bolum">
+    <div class="gs-bolum-bas">💰 Kasa Mutabakatı</div>`;
+  if(vardiyalar.length===0){
+    html += `<div class="rapor-bos" style="padding:24px">Bu günde kasa vardiyası yok.</div>`;
+  } else {
+    html += `<div class="table-wrap"><table class="gs-tablo">
+      <thead><tr>
+        <th>Vardiya</th><th>Kasiyer</th><th>Saat</th>
+        <th class="sag">Net tahsilat</th><th class="sag">Devir aldı</th>
+        <th class="sag">Fark</th><th class="sag">Devretti</th><th class="sag">Kasadan alınan</th>
+      </tr></thead><tbody>`;
+    vardiyalar.forEach(v=>{
+      const farkVar = Math.abs(v.fark||0)>=0.01;
+      html += `<tr>
+        <td><b>${v.no}</b>${v.mudurVardiyasi?' <span class="gs-mudur-rozet">👔 MÜDÜR</span>':''}${v.durum==="acik"?' <span class="gs-acik-rozet">AÇIK</span>':''}</td>
+        <td>${v.kasiyerAd}</td>
+        <td class="gs-kucuk">${new Date(v.acilisTs).toLocaleTimeString('tr',{hour:'2-digit',minute:'2-digit'})}–${v.kapanisTs?new Date(v.kapanisTs).toLocaleTimeString('tr',{hour:'2-digit',minute:'2-digit'}):'…'}</td>
+        <td class="sag"><b>${tl(v.net)} ₺</b></td>
+        <td class="sag">${tl(v.devirAlinan)} ₺</td>
+        <td class="sag ${farkVar?(v.fark<0?'gs-eksik':'gs-fazla'):''}">${farkVar?((v.fark>0?'+':'')+tl(v.fark)+' ₺'):'—'}
+          ${v.farkNot?`<div class="gs-fark-not">${v.farkNot}</div>`:''}</td>
+        <td class="sag">${tl(v.devredilen)} ₺</td>
+        <td class="sag">${tl(v.kasadanAlinan)} ₺</td>
+      </tr>`;
+    });
+    html += `<tr class="gs-toplam-satir">
+      <td colspan="3"><b>TOPLAM</b></td>
+      <td class="sag"><b>${tl(vardiyalar.reduce((t,v)=>t+(v.net||0),0))} ₺</b></td>
+      <td class="sag">—</td>
+      <td class="sag ${Math.abs(kasaFark)>=0.01?(kasaFark<0?'gs-eksik':'gs-fazla'):''}"><b>${Math.abs(kasaFark)>=0.01?((kasaFark>0?'+':'')+tl(kasaFark)+' ₺'):'—'}</b></td>
+      <td class="sag">—</td>
+      <td class="sag"><b>${tl(kasadanAlinan)} ₺</b></td>
+    </tr></tbody></table></div>`;
+  }
+  html += `</div>`;
+
+  html += `<div class="gs-alt-butonlar">
+    <button class="rab-excel" onclick="gsExcelIndir()">📗 Excel indir</button>
+  </div>`;
+  return html;
+}
+function gsTarihSec(t){ state.gsTarih=t; go("rapor", true); }
+function gsSubeSec(s){ state.gsSube=s; go("rapor", true); }
+/* Gün sonu kapatma onay modalı */
+function gunSonuKapatModal(sube, gun){
+  const isKasa = state.role==="kasa";
+  const ozet = gunSonuOzetHesapla(sube, gun);
+  const vardiyalar = gunSonuVardiyalari(sube, gun);
+  const kasaFark = Math.round(vardiyalar.reduce((t,v)=>t+(v.fark||0),0)*100)/100;
+  const html = `
+  <div class="modal-bg on" id="gsKapatModal" style="z-index:200" onclick="if(event.target===this)gsModalKapat()">
+    <div class="gs-modal-ic">
+      <div class="kk-bas">🌙 Gün Sonu Kapatma
+        <button class="bom-kapat" onclick="gsModalKapat()">✕</button></div>
+      <div class="kk-govde">
+        <div class="gs-modal-gun">${sube} · <b>${isletmeGunuGoster(gun)}</b></div>
+
+        <div class="kk-ozet-tablo">
+          <div class="kk-satir"><span>💵 Nakit</span><span>${tl(ozet.nakit)} ₺</span></div>
+          <div class="kk-satir"><span>💳 Kredi kartı</span><span>${tl(ozet.kredi)} ₺</span></div>
+          <div class="kk-satir"><span>📱 Diğer / QR</span><span>${tl(ozet.diger)} ₺</span></div>
+          ${ozet.indirim>0?`<div class="kk-satir ind"><span>🏷️ İndirim</span><span>−${tl(ozet.indirim)} ₺</span></div>`:''}
+          ${ozet.ikram>0?`<div class="kk-satir ikram"><span>🎁 İkram</span><span>−${tl(ozet.ikram)} ₺</span></div>`:''}
+          ${ozet.iptalAdet>0?`<div class="kk-satir ind"><span>✕ İptal (${ozet.iptalAdet})</span><span>${tl(ozet.iptalTutar)} ₺</span></div>`:''}
+          <div class="kk-satir toplam"><span>NET CİRO</span><span>${tl(ozet.net)} ₺</span></div>
+          <div class="kk-satir kucuk"><span>${ozet.islemSayisi} işlem · ${ozet.urunAdet} ürün · ${vardiyalar.length} vardiya</span><span></span></div>
+          ${Math.abs(kasaFark)>=0.01?`<div class="kk-satir ${kasaFark<0?'ind':'fazla'}"><span>Kasa farkı toplamı</span><span>${kasaFark>0?'+':''}${tl(kasaFark)} ₺</span></div>`:''}
+        </div>
+
+        <div class="gs-uyari">
+          🔒 Gün kapatıldıktan sonra <b>bu güne satış girilemez</b> ve kayıtlar değiştirilemez.<br>
+          Sadece <b>genel müdür</b> kilidi açabilir.
+        </div>
+
+        ${isKasa?`
+          <div class="gs-onay-kutu">
+            <div class="gs-onay-bas">🔑 Müdür Onayı Gerekli</div>
+            <div class="gs-onay-ack">Kasa görevlisi olarak gün sonu kapatmak için müdür kullanıcı adı ve şifresi gerekir.</div>
+            <div class="ka-alan"><label>Müdür kullanıcı adı</label>
+              <input class="ka-input" id="gsMudurAd" style="text-align:left;font-size:15px" autocomplete="off"></div>
+            <div class="ka-alan"><label>Şifre</label>
+              <input class="ka-input" id="gsMudurSifre" type="password" style="text-align:left;font-size:15px" autocomplete="new-password"></div>
+            <div id="gsOnayHata" class="km-ipucu"></div>
+          </div>`:''}
+      </div>
+      <div class="kk-foot">
+        <button class="btn btn-ghost" onclick="gsModalKapat()">Vazgeç</button>
+        <button class="btn btn-primary" onclick="gunSonuKapatOnayla('${sube.replace(/'/g,"\\'")}','${gun}')">🔒 Günü Kapat</button>
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("gsModalWrap");
+  if(!el){ el=document.createElement("div"); el.id="gsModalWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function gsModalKapat(){ const w=document.getElementById("gsModalWrap"); if(w) w.innerHTML=""; }
+function gunSonuKapatOnayla(sube, gun){
+  const isKasa = state.role==="kasa";
+  let kapatanAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "";
+  let kapatanRol = state.role;
+  let kapatanId = (typeof AKTIF_PERSONEL_ID!=="undefined") ? AKTIF_PERSONEL_ID : null;
+
+  // kasa görevlisi → müdür onayı doğrula
+  if(isKasa){
+    const ad = (document.getElementById("gsMudurAd")||{}).value || "";
+    const sifre = (document.getElementById("gsMudurSifre")||{}).value || "";
+    const ip = document.getElementById("gsOnayHata");
+    const hata = m => { if(ip){ ip.textContent="⚠ "+m; ip.className="km-ipucu hata"; } };
+    if(!ad || !sifre){ hata("Müdür kullanıcı adı ve şifre gerekli"); return; }
+    const u = Object.values(KULLANICILAR).find(x=>
+      x.kullaniciAdi===ad.trim().toLowerCase() && x.durum==="aktif");
+    if(!u){ hata("Kullanıcı bulunamadı"); return; }
+    if(!sifreDogrula(sifre, u.sifreHash)){ hata("Şifre hatalı"); return; }
+    const yetkili = (u.bolumler||[u.bolum]).includes("mudur");
+    if(!yetkili){ hata("Bu kullanıcı müdür değil — gün sonu kapatma yetkisi yok"); return; }
+    if(u.sube!==sube && u.sube!==MERKEZ_SUBE){ hata("Bu müdür "+sube+" şubesine ait değil"); return; }
+    kapatanAd = u.ad + " (müdür onayı · kasiyer: " + ((typeof AKTIF_PERSONEL_AD!=="undefined"&&AKTIF_PERSONEL_AD)||"kasa") + ")";
+    kapatanRol = "mudur-onay";
+    kapatanId = u.id;
+  }
+
+  const r = gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId);
+  if(r.hata){
+    if(r.engeller && r.engeller.length){
+      note("⛔ "+r.engeller.map(e=>e.mesaj).join(" · "));
+    } else note("⛔ "+r.hata);
+    return;
+  }
+  gsModalKapat();
+  note("🌙 Gün sonu kapatıldı · "+isletmeGunuGoster(gun)+" · net ciro "+tl(r.kayit.ozet.net)+" ₺");
+  go("rapor", true);
+}
+/* Kilit açma modalı (sadece genel müdür) */
+function gunSonuAcModal(sube, gun){
+  const html = `
+  <div class="modal-bg on" id="gsAcModal" style="z-index:200" onclick="if(event.target===this)gsModalKapat()">
+    <div class="km-sil-ic">
+      <div class="km-sil-bas">🔓 Gün Kilidini Aç</div>
+      <div class="km-sil-ack">${sube} · ${isletmeGunuGoster(gun)}<br><br>
+        Kilit açılınca bu güne <b>satış girilebilir</b> ve kayıtlar değiştirilebilir.
+        İşlem loglanır.</div>
+      <div class="ka-alan"><label>Açma gerekçesi</label>
+        <input class="ka-input" id="gsAcmaNot" style="text-align:left;font-size:14px" placeholder="örn. eksik satış girişi düzeltmesi"></div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn btn-ghost" style="flex:1" onclick="gsModalKapat()">Vazgeç</button>
+        <button class="btn btn-primary" style="flex:1" onclick="gunSonuAcOnayla('${sube.replace(/'/g,"\\'")}','${gun}')">🔓 Kilidi Aç</button>
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("gsModalWrap");
+  if(!el){ el=document.createElement("div"); el.id="gsModalWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function gunSonuAcOnayla(sube, gun){
+  const notEl = document.getElementById("gsAcmaNot");
+  const not = notEl ? notEl.value.trim() : "";
+  if(!not){ note("⚠️ Açma gerekçesi yazın"); return; }
+  const acanAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "Genel Müdür";
+  const r = gunSonuAc(sube, gun, acanAd, not);
+  if(r.hata){ note("⛔ "+r.hata); return; }
+  gsModalKapat();
+  note("🔓 Gün kilidi açıldı · "+isletmeGunuGoster(gun));
+  go("rapor", true);
+}
+/* Gün sonu Excel */
+function gsExcelIndir(){
+  const isGenel = state.role==="genel";
+  const sube = isGenel ? (state.gsSube || (DEMO_BRANCHES[0]?DEMO_BRANCHES[0].ad:"")) : AKTIF_SUBE;
+  const gun = state.gsTarih || isletmeGunu();
+  const kayit = GUN_SONU[sube] && GUN_SONU[sube][gun];
+  const ozet = kayit ? kayit.ozet : gunSonuOzetHesapla(sube, gun);
+  const vardiyalar = kayit ? kayit.vardiyalar : gunSonuVardiyalari(sube, gun);
+  let s = [];
+  s.push(["MİNİPAN — Gün Sonu Raporu"]);
+  s.push(["Şube:", sube, "İşletme günü:", isletmeGunuGoster(gun)]);
+  s.push(["Durum:", kayit ? (kayit.kilit?"KAPALI":"Kilit açık") : "AÇIK",
+          "Kapatan:", kayit?kayit.kapatanAd:"—",
+          "Kapanış:", kayit?new Date(kayit.kapanisTs).toLocaleString('tr'):"—"]);
+  s.push([]);
+  s.push(["ÖDEME DAĞILIMI"]);
+  s.push(["Nakit", ozet.nakit]);
+  s.push(["Kredi kartı", ozet.kredi]);
+  s.push(["Diğer / QR", ozet.diger]);
+  s.push(["  ↳ nakit kısmı", ozet.digerNakit]);
+  s.push(["  ↳ kredi kısmı", ozet.digerKredi]);
+  s.push(["İndirim", -ozet.indirim]);
+  s.push(["İkram (hediye)", -ozet.ikram]);
+  s.push(["İptal ("+ozet.iptalAdet+" adet)", ozet.iptalTutar]);
+  s.push(["NET CİRO", ozet.net]);
+  s.push(["İşlem sayısı", ozet.islemSayisi]);
+  s.push(["Ürün adedi", ozet.urunAdet]);
+  s.push([]);
+  s.push(["KASA MUTABAKATI"]);
+  s.push(["Vardiya No","Kasiyer","Açılış","Kapanış","Net tahsilat","Devir aldı","Fark","Fark notu","Devretti","Kasadan alınan"]);
+  vardiyalar.forEach(v=>{
+    s.push([v.no, v.kasiyerAd,
+      new Date(v.acilisTs).toLocaleString('tr'),
+      v.kapanisTs?new Date(v.kapanisTs).toLocaleString('tr'):"AÇIK",
+      v.net, v.devirAlinan, v.fark||0, v.farkNot||"", v.devredilen, v.kasadanAlinan]);
+  });
+  const csv = s.map(r=>r.map(c=>{
+    const x = String(c==null?"":c);
+    return (x.includes(";")||x.includes('"')||x.includes("\n")) ? '"'+x.replace(/"/g,'""')+'"' : x;
+  }).join(";")).join("\n");
+  const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "gun_sonu_"+sube.replace(/\s+/g,"_")+"_"+gun+".csv";
+  a.click();
+  note("📗 Excel indirildi");
+}
+
+/* ══ KASA VARDİYALARI RAPORU ══ */
+function raporKasaVardiyaHtml(){
+  const isGenel = state.role==="genel";
+  const subeFiltre = isGenel ? (state.kvSube||"__tum") : AKTIF_SUBE;
+  const tarih = state.kvTarih || isletmeGunu();
+
+  let liste = [];
+  Object.keys(KASA_VARDIYALAR).forEach(sube=>{
+    if(subeFiltre!=="__tum" && sube!==subeFiltre) return;
+    (KASA_VARDIYALAR[sube]||[]).forEach(v=>{
+      const vg = v.isletmeGunu || isletmeGunu(v.acilisTs);
+      if(vg !== tarih) return;
+      liste.push(v);
+    });
+  });
+  liste.sort((a,b)=>b.acilisTs - a.acilisTs);
+
+  const T = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
+              indirim:0, ikram:0, net:0, fark:0, islem:0 };
+  liste.forEach(v=>{
+    const o = v.ozet || vardiyaOzetHesapla(v);
+    T.nakit += o.nakit||0; T.kredi += o.kredi||0; T.diger += o.diger||0;
+    T.digerNakit += o.digerNakit||0; T.digerKredi += o.digerKredi||0;
+    T.indirim += o.indirim||0; T.ikram += o.ikram||0; T.net += o.net||0;
+    T.islem += o.islemSayisi||0;
+    T.fark += (v.nakitFark||0);
+  });
+
+  let html = `<div class="rapor-arac-bar">
+    <div class="rab-sol">
+      <span class="rab-tarih-lbl">🗓️ İşletme günü</span>
+      <input class="rab-tarih" type="date" value="${tarih}" onchange="kvTarihSec(this.value)">
+    </div>`;
+  if(isGenel){
+    html += `<div class="rab-sube-row">
+      <button class="rab-sube${subeFiltre==="__tum"?' on':''}" onclick="kvSubeSec('__tum')">Tüm şubeler</button>`;
+    DEMO_BRANCHES.forEach(b=>{
+      html += `<button class="rab-sube${subeFiltre===b.ad?' on':''}" onclick="kvSubeSec('${b.ad.replace(/'/g,"\\'")}')">${b.ad}</button>`;
+    });
+    html += `</div>`;
+  }
+  html += `<button class="rab-excel" onclick="kvExcelIndir()">📗 Excel indir</button>
+  </div>`;
+
+  if(liste.length===0){
+    html += `<div class="rapor-bos">Bu işletme gününde kasa vardiyası yok.</div>`;
+    return html;
+  }
+
+  html += `<div class="rapor-ozet-row">
+    <div class="roz-kart"><div class="roz-lbl">Vardiya</div><div class="roz-deg">${liste.length}</div></div>
+    <div class="roz-kart"><div class="roz-lbl">💵 Nakit</div><div class="roz-deg">${tl(T.nakit)} ₺</div></div>
+    <div class="roz-kart"><div class="roz-lbl">💳 Kredi kartı</div><div class="roz-deg">${tl(T.kredi)} ₺</div></div>
+    <div class="roz-kart"><div class="roz-lbl">📱 Diğer / QR</div><div class="roz-deg">${tl(T.diger)} ₺</div>
+      ${(T.digerNakit>0||T.digerKredi>0)?`<div class="roz-alt">nakit ${tl(T.digerNakit)} · kredi ${tl(T.digerKredi)}</div>`:''}</div>
+    ${T.indirim>0?`<div class="roz-kart ind"><div class="roz-lbl">🏷️ İndirim</div><div class="roz-deg">−${tl(T.indirim)} ₺</div></div>`:''}
+    ${T.ikram>0?`<div class="roz-kart ikram"><div class="roz-lbl">🎁 İkram</div><div class="roz-deg">−${tl(T.ikram)} ₺</div></div>`:''}
+    <div class="roz-kart vurgu"><div class="roz-lbl">NET TAHSİLAT</div><div class="roz-deg">${tl(T.net)} ₺</div></div>
+    ${Math.abs(T.fark)>=0.01?`<div class="roz-kart ${T.fark<0?'eksik':'fazla'}"><div class="roz-lbl">Kasa farkı</div><div class="roz-deg">${T.fark>0?'+':''}${tl(T.fark)} ₺</div></div>`:''}
+  </div>`;
+
+  html += `<div class="kv-liste">`;
+  liste.forEach(v=>{
+    const acik = state.kvAcik === v.id;
+    const o = v.ozet || vardiyaOzetHesapla(v);
+    const kapaliMi = v.durum==="kapali";
+    const farkVar = Math.abs(v.nakitFark||0)>=0.01;
+    html += `<div class="kv-kart${acik?' acik':''}">
+      <div class="kv-ust" onclick="kvKartToggle(${v.id})">
+        <div class="kv-ust-sol">
+          <span class="kv-durum ${kapaliMi?'kapali':'acik'}">${kapaliMi?'🔒':'🔓'}</span>
+          <div>
+            <div class="kv-ad">${v.mudurVardiyasi?'👔 ':''}${v.kasiyerAd} <span class="kv-no">${v.no}</span>${v.mudurVardiyasi?'<span class="kv-mudur-rozet">MÜDÜR</span>':''}${isGenel&&subeFiltre==="__tum"?`<span class="kv-sube">🏢 ${v.sube}</span>`:''}</div>
+            <div class="kv-saat">${new Date(v.acilisTs).toLocaleTimeString('tr',{hour:'2-digit',minute:'2-digit'})} → ${kapaliMi?new Date(v.kapanisTs).toLocaleTimeString('tr',{hour:'2-digit',minute:'2-digit'}):'devam ediyor'}</div>
+          </div>
+        </div>
+        <div class="kv-ust-sag">
+          <div class="kv-tutar">${tl(o.net)} ₺</div>
+          ${kapaliMi&&farkVar?`<div class="kv-fark ${v.nakitFark<0?'eksik':'fazla'}">${v.nakitFark>0?'+':''}${tl(v.nakitFark)} ₺</div>`:''}
+          <span class="kv-ok">${acik?'▲':'▼'}</span>
+        </div>
+      </div>`;
+
+    if(acik){
+      html += `<div class="kv-detay">
+        <div class="kv-blok">
+          <div class="kv-blok-bas">💳 Ödeme Dağılımı</div>
+          <div class="kv-satir"><span>💵 Nakit</span><span>${tl(o.nakit)} ₺</span></div>
+          <div class="kv-satir"><span>💳 Kredi kartı</span><span>${tl(o.kredi)} ₺</span></div>
+          <div class="kv-satir"><span>📱 Diğer / QR</span><span>${tl(o.diger)} ₺</span></div>
+          ${o.digerNakit>0?`<div class="kv-satir alt"><span>↳ nakit kısmı</span><span>${tl(o.digerNakit)} ₺</span></div>`:''}
+          ${o.digerKredi>0?`<div class="kv-satir alt"><span>↳ kredi kısmı</span><span>${tl(o.digerKredi)} ₺</span></div>`:''}
+          ${o.indirim>0?`<div class="kv-satir ind"><span>🏷️ İndirim</span><span>−${tl(o.indirim)} ₺</span></div>`:''}
+          ${o.ikram>0?`<div class="kv-satir ikram"><span>🎁 İkram (hediye)</span><span>−${tl(o.ikram)} ₺</span></div>`:''}
+          <div class="kv-satir toplam"><span>Net tahsilat</span><span>${tl(o.net)} ₺</span></div>
+          <div class="kv-satir kucuk"><span>${o.islemSayisi} işlem · ${o.urunAdet} ürün</span><span></span></div>
+        </div>
+
+        <div class="kv-blok">
+          <div class="kv-blok-bas">💰 Nakit Hesabı</div>
+          <div class="kv-satir"><span>Açılış devri (teslim alınan)</span><span>${tl(v.devirAlinan||0)} ₺</span></div>
+          ${v.ilkAcilis?`<div class="kv-satir kucuk"><span>İlk açılış — devir yok</span><span></span></div>`:
+            (Math.abs(v.devirFark||0)>=0.01?`<div class="kv-satir ${v.devirFark<0?'ind':'fazla'}"><span>↳ devir farkı</span><span>${v.devirFark>0?'+':''}${tl(v.devirFark)} ₺</span></div>`:'')}
+          <div class="kv-satir"><span>+ Nakit tahsilat</span><span>${tl((o.nakit||0)+(o.digerNakit||0))} ₺</span></div>
+          ${kapaliMi?`
+            <div class="kv-satir toplam"><span>Beklenen nakit</span><span>${tl(v.beklenenNakit||0)} ₺</span></div>
+            <div class="kv-satir"><span>Sayılan nakit</span><span>${tl(v.sayilanNakit||0)} ₺</span></div>
+            <div class="kv-satir ${farkVar?(v.nakitFark<0?'ind':'fazla'):'ok'}">
+              <span>${farkVar?(v.nakitFark<0?'📉 EKSİK':'📈 FAZLA'):'✓ Kasa tam'}</span>
+              <span>${farkVar?((v.nakitFark>0?'+':'')+tl(v.nakitFark)+' ₺'):'—'}</span></div>
+            ${v.farkNot?`<div class="kv-not">📝 ${v.farkNot}</div>`:''}
+            <div class="kv-satir ayrac"><span>🔁 Sonraki vardiyaya devredilen</span><span>${tl(v.devredilen||0)} ₺</span></div>
+            <div class="kv-satir"><span>🏦 Kasadan alınan</span><span>${tl(v.kasadanAlinan||0)} ₺</span></div>
+          ` : `<div class="kv-satir toplam"><span>Şu anki beklenen nakit</span><span>${tl(vardiyaBeklenenNakit(v))} ₺</span></div>
+               <div class="kv-devam">🔓 Kasa hâlâ açık — kapanış bilgileri henüz yok</div>`}
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+function kvTarihSec(t){ state.kvTarih=t; state.kvAcik=null; go("rapor", true); }
+function kvSubeSec(s){ state.kvSube=s; state.kvAcik=null; go("rapor", true); }
+function kvKartToggle(id){ state.kvAcik = (state.kvAcik===id ? null : id); go("rapor", true); }
+function kvExcelIndir(){
+  const isGenel = state.role==="genel";
+  const subeFiltre = isGenel ? (state.kvSube||"__tum") : AKTIF_SUBE;
+  const tarih = state.kvTarih || isletmeGunu();
+  let satirlar = [];
+  satirlar.push(["MİNİPAN — Kasa Vardiya Raporu"]);
+  satirlar.push(["İşletme günü:", isletmeGunuGoster(tarih), "Şube:", subeFiltre==="__tum"?"Tüm şubeler":subeFiltre]);
+  satirlar.push([]);
+  satirlar.push(["Vardiya No","Şube","Kasiyer","Açılış","Kapanış","Durum",
+    "Açılış devri","Nakit","Kredi kartı","Diğer/QR","Diğer-nakit","Diğer-kredi",
+    "İndirim","İkram","Net tahsilat","Beklenen nakit","Sayılan nakit","Fark","Fark notu","Devredilen","Kasadan alınan"]);
+  Object.keys(KASA_VARDIYALAR).forEach(sube=>{
+    if(subeFiltre!=="__tum" && sube!==subeFiltre) return;
+    (KASA_VARDIYALAR[sube]||[]).forEach(v=>{
+      const vg = v.isletmeGunu || isletmeGunu(v.acilisTs);
+      if(vg !== tarih) return;
+      const o = v.ozet || vardiyaOzetHesapla(v);
+      satirlar.push([
+        v.no, v.sube, v.kasiyerAd,
+        new Date(v.acilisTs).toLocaleString('tr'),
+        v.kapanisTs?new Date(v.kapanisTs).toLocaleString('tr'):"—",
+        v.durum==="kapali"?"Kapalı":"AÇIK",
+        v.devirAlinan||0, o.nakit||0, o.kredi||0, o.diger||0, o.digerNakit||0, o.digerKredi||0,
+        o.indirim||0, o.ikram||0, o.net||0,
+        v.beklenenNakit||"", v.sayilanNakit||"", v.nakitFark||"", v.farkNot||"",
+        v.devredilen||"", v.kasadanAlinan||""
+      ]);
+    });
+  });
+  const csv = satirlar.map(r=>r.map(c=>{
+    const s = String(c==null?"":c);
+    return (s.includes(";")||s.includes('"')||s.includes("\n")) ? '"'+s.replace(/"/g,'""')+'"' : s;
+  }).join(";")).join("\n");
+  const blob = new Blob(["\uFEFF"+csv], {type:"text/csv;charset=utf-8;"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "kasa_vardiya_"+tarih+".csv";
+  a.click();
+  note("📗 Excel indirildi");
+}
 function raporTarihSec(t){ state.raporTarih=t; go("rapor", true); }
 function raporSubeSec(s){ state.raporSube=s; go("rapor", true); }
 
 /* ── Günlük Ürün Satışları ── */
 function raporUrunSatisVeri(){
-  const tarih = state.raporTarih || new Date().toISOString().slice(0,10);
+  const tarih = state.raporTarih || isletmeGunu();   // varsayılan: bugünün İŞLETME günü
   const isGenel = state.role==="genel";
   const subeFiltre = isGenel ? (state.raporSube||"__tum") : AKTIF_SUBE;
-  const gunBas = new Date(tarih+"T00:00:00").getTime();
-  const gunBit = gunBas + 24*60*60*1000;
+  // işletme günü aralığı (örn. değişim 06:00 → 12 Tem 06:00 ile 13 Tem 06:00 arası)
+  const ara = isletmeGunAraligi(tarih);
+  const gunBas = ara.bas, gunBit = ara.bit;
 
-  // o güne ait kapanmış masalar/paketler
+  // o İŞLETME GÜNÜNE ait kapanmış masalar/paketler
   const kayitlar = MASA_GECMISI.filter(g=>{
-    const t = g.kapanis || g.ts || 0;
-    if(t < gunBas || t >= gunBit) return false;
+    // kayıtta işletme günü varsa doğrudan onu kullan (en güvenilir)
+    if(g.isletmeGunu) { if(g.isletmeGunu !== tarih) return false; }
+    else {
+      // eski kayıt: zaman damgasından hesapla
+      const t = g.kapanis || g.ts || 0;
+      if(t < gunBas || t >= gunBit) return false;
+    }
     if(subeFiltre!=="__tum" && g.sube!==subeFiltre) return false;
     return true;
   });
@@ -22805,11 +24295,12 @@ function garsonCagriSesBaslat(){
 }
 function garsonCagriSesDurdur(){ if(GARSON_SES_TIMER){ clearInterval(GARSON_SES_TIMER); GARSON_SES_TIMER=null; } }
 
-/* === GARSON ÇAĞRI ONAY (kasa/garson/müdür) === */
-let AKTIF_PERSONEL_AD = "";  // bu cihazdaki personelin adı (bir kez girilir)
+/* === GARSON ÇAĞRI ONAY (kasa/garson/müdür) ===
+   NOT: AKTIF_PERSONEL_AD artık personel giriş sisteminden gelir (yukarıda tanımlı).
+   Eski cihaz-bazlı isim saklama kaldırıldı. */
 const PERSONEL_AD_KEY = "minipan_personel_ad_v1";
-function personelAdYukle(){ AKTIF_PERSONEL_AD = MPStore.getRaw(PERSONEL_AD_KEY, ""); }
-function personelAdKaydet(ad){ AKTIF_PERSONEL_AD = ad; MPStore.setRaw(PERSONEL_AD_KEY, ad); }
+function personelAdYukle(){ /* giriş sistemi AKTIF_PERSONEL_AD'ı doldurur */ }
+function personelAdKaydet(ad){ if(!AKTIF_PERSONEL_AD) AKTIF_PERSONEL_AD = ad; }
 /* Masaya tıklanınca çağrı varsa onay pop-up'ı göster (kasa/garson/müdür) */
 function garsonCagriPopAc(masaId){
   const s=SESSIONS[masaId];
@@ -23818,6 +25309,9 @@ window.addEventListener("offline", ()=> setConnState(false, "Bağlantı kesildi 
 sessionsYukle();   // masa/oturum/sipariş verilerini geri yükle (artık kalıcı)
 masaGecmisYukle(); // kapanmış masa hesaplarının arşivini geri yükle
 subeYukle();     // şube verilerini (yeni eklenenler dahil) geri yükle
+isletmeAyarYukle(); // işletme günü değişim saati
+kasaVardiyaYukle(); // kasa vardiya kayıtları
+gunSonuYukle();     // gün sonu kapanış kayıtları
 kullaniciYukle(); // personel/kullanıcı verilerini geri yükle
 raporTalepYukle(); // kasa rapor erişim taleplerini geri yükle
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
