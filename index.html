@@ -1074,7 +1074,12 @@ tr:last-child td{border-bottom:none}
 .irs-arac-baslik{font-size:15px; font-weight:800; color:var(--cocoa)}
 .irs-arac-btnlar{display:flex; gap:8px}
 .irs-kagit{padding:28px 30px; color:#1a1a1a; background:#fff}
+.irs-logo-orta{display:flex; flex-direction:column; align-items:center; gap:0; margin-bottom:16px}
+.irs-logo{width:80px; height:80px; object-fit:contain; flex:none; margin-bottom:-4px}
+.irs-logo-yazi{width:170px; object-fit:contain; flex:none}
 .irs-ust{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #4a0f2e; padding-bottom:14px; margin-bottom:16px}
+.irs-baslik-blok{display:flex; align-items:center; gap:12px}
+.irs-baslik-metin{display:flex; flex-direction:column}
 .irs-belge-tip{font-size:22px; font-weight:800; color:#4a0f2e; letter-spacing:1px}
 .irs-belge-no{font-size:12px; color:#666; margin-top:3px}
 .irs-tarih-blok{font-size:12px; text-align:right; line-height:1.7}
@@ -1463,6 +1468,54 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 
 /* Karşılama */
 .qr-giris{justify-content:center; align-items:center; padding:30px 24px; background:transparent}
+/* Karşılama ekranı — dönen logo + yazı PNG + daktilo slogan */
+.qr-karsilama{position:relative; justify-content:flex-start; padding-top:26px}
+.qr-krs-ust{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; text-align:center; width:100%; margin-bottom:18px}
+/* Logo — her iki ekranda aynı yükseklik, sabit alan */
+.qr-krs-logo{margin-bottom:10px; height:150px; display:flex; align-items:center; justify-content:center; position:relative}
+.qr-krs-logo-img{width:138px; height:138px; object-fit:contain; position:relative; z-index:2;
+  animation:qrKrsLogoGel 1.5s cubic-bezier(.2,.9,.25,1) both, qrKrsLogoParla 2.4s ease-in-out 1.5s infinite}
+.qr-krs-logo-ph{font-size:80px; position:relative; z-index:2;
+  animation:qrKrsLogoGel 1.5s cubic-bezier(.2,.9,.25,1) both, qrKrsLogoParla 2.4s ease-in-out 1.5s infinite}
+/* Sonraki ekranlarda (isim/kayıt): yakınlaşma yok, parlama DEVAM eder */
+.qr-krs-logo-img.sabit, .qr-krs-logo-ph.sabit{
+  animation:qrKrsLogoParla 2.4s ease-in-out infinite}
+/* Dışarı doğru yayılan hareketli parlama halkası */
+.qr-krs-logo::after{
+  content:""; position:absolute; top:50%; left:50%; width:130px; height:130px;
+  margin:-65px 0 0 -65px; border-radius:50%; z-index:1; pointer-events:none;
+  background:radial-gradient(circle, rgba(255,59,20,.35) 0%, rgba(255,59,20,.12) 45%, transparent 70%);
+  animation:qrKrsHalka 2.4s ease-out 1.5s infinite;
+}
+.qr-krs-logo.sabit-halka::after{animation-delay:0s}
+@keyframes qrKrsLogoGel{
+  0%{opacity:0; transform:scale(.25) rotate(-540deg)}
+  60%{opacity:1}
+  100%{opacity:1; transform:scale(1) rotate(0deg)}
+}
+/* Logonun kendisi hafifçe nabız gibi parlar */
+@keyframes qrKrsLogoParla{
+  0%,100%{filter:drop-shadow(0 0 0 rgba(255,59,20,0))}
+  50%{filter:drop-shadow(0 0 16px rgba(255,59,20,.55))}
+}
+/* Halka dışa doğru büyüyerek yayılır ve söner */
+@keyframes qrKrsHalka{
+  0%{transform:scale(.7); opacity:.7}
+  70%{opacity:.25}
+  100%{transform:scale(1.7); opacity:0}
+}
+.qr-krs-yazi{opacity:0; transform:scale(.7); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.9,.25,1); margin-bottom:12px}
+.qr-krs-yazi.gir{opacity:1; transform:scale(1)}
+.qr-krs-yazi-img{width:min(268px,70vw); object-fit:contain}
+.qr-krs-yazi-ph{font-size:34px; font-weight:900; color:var(--cocoa); letter-spacing:1px}
+/* Karşılama alt çekmece tetiği (WiFi + Çerezler) */
+.qr-krs-cekmece-tetik{position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; gap:5px; margin-top:16px}
+.qr-cekmece-tetik-btn{background:none; border:none; padding:6px 20px; cursor:pointer}
+.qr-cekmece-cizgi.koyu{display:block; width:44px; height:5px; border-radius:99px; background:var(--line)}
+.qr-cekmece-ipucu.koyu{font-size:11.5px; color:var(--ink-3); font-weight:600}
+.qr-krs-slogan{min-height:44px; font-size:13.5px; line-height:1.55; font-weight:600; color:var(--cocoa); max-width:330px; margin:0 auto 12px; padding:0 6px}
+.qr-krs-slogan::after{content:"|"; animation:qrKrsImlec .7s steps(1) infinite; margin-left:1px; color:var(--brand)}
+@keyframes qrKrsImlec{50%{opacity:0}}
 .qr-giris-ayrac{display:flex; align-items:center; gap:10px; margin:14px 0 10px; color:var(--ink-3); font-size:12px}
 .qr-giris-ayrac::before,.qr-giris-ayrac::after{content:""; flex:1; height:1px; background:var(--line)}
 .qr-btn-uye{width:100%; padding:13px; border-radius:12px; border:1.5px solid var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:14px; font-weight:800; cursor:pointer}
@@ -1522,8 +1575,22 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* Kategori ızgarası (2'li büyük kartlar) */
 .qr-kat-baslik{font-size:20px; font-weight:800; padding:18px 18px 12px}
 .qr-kat-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 16px calc(130px + env(safe-area-inset-bottom))}
-.qr-kat-kart{width:100%; padding:0; margin:0; box-sizing:border-box; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); text-align:left; display:flex; flex-direction:column}
-.qr-kat-kart:active{transform:scale(.97)}
+/* Kategori kartı — kabartma 3D: üstte ışık, altta derinlik gölgesi */
+.qr-kat-kart{width:100%; padding:0; margin:0; box-sizing:border-box;
+  background:linear-gradient(180deg,#ffffff 0%, #faf6ec 100%);
+  border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,          /* üst ışık çizgisi */
+    0 6px 0 -1px #e6ddc4,                        /* kabartma kalınlığı */
+    0 10px 18px rgba(74,15,46,.16);              /* düşen gölge */
+  text-align:left; display:flex; flex-direction:column;
+  transform:translateY(0); transition:transform .12s ease, box-shadow .12s ease}
+.qr-kat-kart:active{
+  transform:translateY(4px);                     /* basınca içe çöker */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 2px 0 -1px #e6ddc4,
+    0 4px 8px rgba(74,15,46,.14)}
 /* Otomatik özel kategoriler — parlama efektli */
 .qr-kat-ozel{position:relative}
 .qr-kat-kampanya{border-color:var(--brand)}
@@ -1532,9 +1599,15 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qkk-ozel-bg span{font-size:40px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.25))}
 .qkk-kampanya-bg{background:linear-gradient(135deg,#ff5a2c,#d92c08)}
 .qkk-coksatan-bg{background:linear-gradient(135deg,#ffcf4a,#e0a800)}
-@keyframes qrKatGlow{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.08)}50%{box-shadow:0 0 18px 2px rgba(255,59,20,.45)}}
+@keyframes qrKatGlow{
+  0%,100%{box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 0 -1px #e6ddc4, 0 10px 18px rgba(74,15,46,.16)}
+  50%{box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 0 -1px #e6ddc4, 0 10px 18px rgba(74,15,46,.16), 0 0 20px 3px rgba(255,59,20,.45)}
+}
 .qr-kat-kampanya.glow{animation:qrKatGlow 1.8s ease-in-out infinite}
-@keyframes qrKatGlowGold{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.08)}50%{box-shadow:0 0 18px 2px rgba(224,168,0,.5)}}
+@keyframes qrKatGlowGold{
+  0%,100%{box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 0 -1px #e6ddc4, 0 10px 18px rgba(74,15,46,.16)}
+  50%{box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 6px 0 -1px #e6ddc4, 0 10px 18px rgba(74,15,46,.16), 0 0 20px 3px rgba(224,168,0,.5)}
+}
 .qr-kat-coksatan.glow{animation:qrKatGlowGold 1.8s ease-in-out infinite}
 .qkk-gorsel{width:100%; aspect-ratio:4/3; flex:0 0 auto; display:grid; place-items:center}
 /* === ÜRÜN PUAN/YORUM === */
@@ -1572,8 +1645,35 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qye-alan{display:flex; flex-direction:column; gap:8px}
 .qye-alan label{font-size:13px; font-weight:800; color:var(--ink-2)}
 .qye-yildiz-sec{display:flex; gap:6px; justify-content:center}
-.qye-yld{font-size:38px; background:none; border:none; color:#d8d2c4; cursor:pointer; padding:0}
+.qye-yld{font-size:38px; background:none; border:none; color:#d8d2c4; cursor:pointer; padding:0; transition:color .12s, transform .12s}
+/* ══ Yorum onay + sürpriz hediye pop-up ══ */
+.qr-pop-bg{position:fixed; inset:0; z-index:300; background:rgba(0,0,0,.55); display:flex; align-items:center; justify-content:center; padding:24px; animation:qrPopBgGel .2s ease}
+@keyframes qrPopBgGel{from{opacity:0}to{opacity:1}}
+.qr-pop{background:#fff; border-radius:20px; padding:26px 22px; max-width:340px; width:100%; text-align:center; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .32s cubic-bezier(.2,.9,.25,1)}
+@keyframes qrPopGel{from{opacity:0; transform:scale(.8) translateY(20px)}to{opacity:1; transform:scale(1) translateY(0)}}
+.qr-pop-ikon{font-size:44px; margin-bottom:10px}
+.qr-pop-ikon.buyuk{font-size:64px; animation:qrPopHediye 1.2s ease-in-out infinite}
+@keyframes qrPopHediye{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.1) rotate(-6deg)}75%{transform:scale(1.1) rotate(6deg)}}
+.qr-pop-baslik{font-size:19px; font-weight:900; color:var(--ink); margin-bottom:8px}
+.qr-pop-metin{font-size:14px; color:var(--ink-2); line-height:1.6; margin-bottom:16px}
+.qr-pop-btn{width:100%; padding:14px; border-radius:12px; background:var(--brand); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+.qr-pop-btn.hediye{background:linear-gradient(135deg,#ff8a2b,#ff3b14)}
+.qr-pop-hediye{border:2px solid var(--brand); position:relative; overflow:hidden}
+.qr-pop-konfeti{position:absolute; top:8px; left:0; right:0; font-size:22px; letter-spacing:8px; opacity:.5}
+.qr-pop-hediye-not{font-size:12px; color:var(--ink-3); background:var(--surface-2); border-radius:10px; padding:9px 12px; margin-bottom:14px}
+/* Kasada hediye kalemi */
+.kmd-kalem-hediye{background:linear-gradient(180deg,#fff6ea,#ffeede); border-left:3px solid var(--brand)}
+.kmd-hediye-rozet{font-size:9.5px; font-weight:800; background:var(--brand); color:#fff; padding:2px 7px; border-radius:99px; margin-left:5px}
+.kmd-k-fiyat.hediye{color:var(--ok); font-weight:900}
+/* Ödeme ekranında hediye kalem */
+.ode-urun-hediye{background:linear-gradient(180deg,#fff6ea,#ffeede); border-color:var(--brand)}
+.ode-hediye-rozet{font-size:9px; font-weight:800; background:var(--brand); color:#fff; padding:2px 6px; border-radius:99px; margin-left:4px; vertical-align:middle}
+.ode-urun-fiyat.hediye{color:var(--ok); font-weight:900}
 .qye-yld.on{color:#f5a623}
+.qye-yld:active{transform:scale(1.15)}
+/* üzerine gelince o yıldıza kadar önizleme (masaüstü) */
+.qye-yildiz-sec:hover .qye-yld{color:#f5a623}
+.qye-yildiz-sec .qye-yld:hover ~ .qye-yld{color:#d8d2c4}
 .qye-input,.qye-textarea{padding:13px 14px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; background:var(--surface); font-family:inherit}
 .qye-textarea{min-height:90px; resize:vertical}
 .qye-bilgi{font-size:12.5px; color:var(--ink-3); background:var(--surface-2); padding:11px 13px; border-radius:10px; line-height:1.5}
@@ -1699,6 +1799,21 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ode-mag-kullan-ind{margin-top:9px; text-align:center; font-size:13px; font-weight:800; color:#2e9e5b; background:#eafaf0; border-radius:8px; padding:7px}
 .ode-mag-kullan-ipuc{margin-top:8px; text-align:center; font-size:11px; color:#a98a4e}
 .ode-ozet-satir.mag{color:#b8860b; font-weight:700}
+.ode-ozet-satir.hediye{color:var(--brand-d); font-weight:800}
+.ode-onay-ikram{background:var(--brand-soft); border:1.5px solid var(--brand); border-radius:12px; padding:12px 14px; margin-top:10px}
+.ode-onay-ikram-bas{font-size:13px; font-weight:800; color:var(--brand-d); margin-bottom:7px}
+.ode-onay-ikram-not{font-size:11.5px; color:var(--ink-2); margin-top:8px; line-height:1.45}
+/* QR sepetinde hediye kalem */
+.qr-si-hediye{background:linear-gradient(180deg,#fff6ea,#ffeede); border-left:3px solid var(--brand)}
+.qr-si-hediye-rozet{font-size:9px; font-weight:800; background:var(--brand); color:#fff; padding:2px 6px; border-radius:99px; margin-left:4px; vertical-align:middle}
+.qr-si-hediye-not{font-size:11.5px; color:var(--brand-d); font-weight:600; margin-top:4px; line-height:1.4}
+.qr-si-fiyat.hediye{display:flex; flex-direction:column; align-items:flex-end; gap:1px}
+.qr-si-eski{text-decoration:line-through; color:var(--ink-3); font-size:12px; font-weight:600}
+.qr-si-bedava{color:var(--ok); font-weight:900; font-size:13px}
+.qr-si-adet-sabit{font-size:12.5px; color:var(--ink-3); font-weight:700; text-align:right; margin-top:4px}
+.qr-sf-ara{display:flex; justify-content:space-between; font-size:13px; color:var(--ink-3); padding:2px 0}
+.qr-sf-hediye{display:flex; justify-content:space-between; font-size:13.5px; color:var(--brand-d); font-weight:800; padding:2px 0}
+.qr-sf-hediye-not{font-size:12px; color:var(--brand-d); background:var(--brand-soft); border-radius:9px; padding:8px 11px; margin-top:8px; line-height:1.45; text-align:center}
 /* kazanılacak mag notu (Ödemeyi Al üstü) */
 .ode-kazanc-not{text-align:center; font-size:12.5px; font-weight:700; color:#8a6212; background:linear-gradient(180deg,#fff8e8,#fdf0d2); border:1px solid #e8d9b8; border-radius:9px; padding:8px 10px; margin-bottom:10px}
 .ode-kazanc-carpan{display:inline-block; background:#d4a93a; color:#fff; font-size:10.5px; font-weight:800; padding:1px 6px; border-radius:6px; margin-left:3px}
@@ -2057,13 +2172,14 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* yukarı açılır çekmece */
 .qr-cekmece-bg{position:absolute; inset:0; z-index:8; background:rgba(0,0,0,0); visibility:hidden; transition:.3s}
 .qr-cekmece-bg.acik{background:rgba(0,0,0,.5); visibility:visible}
-.qr-cekmece{position:absolute; left:0; right:0; bottom:0; z-index:9; background:#fff; border-radius:22px 22px 0 0; transform:translateY(100%); transition:transform .32s cubic-bezier(.3,.8,.3,1); max-height:70%; display:flex; flex-direction:column; box-shadow:0 -8px 30px rgba(0,0,0,.3)}
+.qr-cekmece{position:absolute; left:0; right:0; bottom:0; z-index:9; background:#fff; border-radius:22px 22px 0 0; transform:translateY(100%); transition:transform .32s cubic-bezier(.3,.8,.3,1); display:flex; flex-direction:column; box-shadow:0 -8px 30px rgba(0,0,0,.3)}
 .qr-cekmece.acik{transform:translateY(0)}
 .qr-cekmece-tut{width:44px; height:5px; border-radius:99px; background:var(--line); margin:12px auto 8px; cursor:pointer; flex:none}
 .qr-cekmece-sekme-bar{display:flex; gap:8px; padding:4px 18px 14px; border-bottom:1px solid var(--line)}
 .qr-cekmece-sekme{flex:1; padding:11px; border-radius:11px; background:var(--surface-2); border:1.5px solid var(--line); font-size:14px; font-weight:800; color:var(--ink-2); cursor:pointer}
 .qr-cekmece-sekme.on{background:var(--brand); border-color:var(--brand); color:#fff}
-.qr-cekmece-ic{padding:18px; overflow-y:auto}
+/* Her iki sekme (WiFi / Çerezler) aynı yükseklikte — geçişte zıplamasın */
+.qr-cekmece-ic{padding:18px; overflow-y:auto; height:280px; box-sizing:border-box}
 .qr-cek-baslik{font-size:16px; font-weight:800; color:var(--cocoa); margin-bottom:12px}
 .qr-cek-metin{font-size:13.5px; color:var(--ink-2); line-height:1.6; margin-bottom:16px}
 .qr-wifi-kart{background:var(--surface-2); border-radius:12px; padding:14px; margin-bottom:14px}
@@ -2073,8 +2189,13 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-wifi-deger{font-size:15px; font-weight:800; color:var(--ink); font-family:monospace}
 .qr-wifi-sifre{color:var(--brand-d); letter-spacing:1px}
 .qr-wifi-kopya{width:100%; padding:13px; border-radius:11px; background:var(--cocoa); color:#fff; border:none; font-size:14px; font-weight:700; cursor:pointer}
-.qr-cek-kabul-btn{width:100%; padding:14px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
-.qr-cek-kabul-ok{text-align:center; padding:14px; background:var(--ok-soft); color:var(--ok); border-radius:12px; font-size:14px; font-weight:800}
+.qr-cek-kabul-btn{flex:1; padding:14px; border-radius:12px; background:var(--ok); color:#fff; border:none; font-size:15px; font-weight:800; cursor:pointer}
+.qr-cek-btn-row{display:flex; gap:10px; margin-top:12px}
+.qr-cek-red-btn{flex:none; padding:14px 18px; border-radius:12px; background:var(--surface-2); color:var(--ink-2); border:1.5px solid var(--line); font-size:14px; font-weight:700; cursor:pointer}
+.qr-cek-fayda{font-size:12.5px; color:var(--ink-3); line-height:1.5; margin-top:10px}
+.qr-cek-red-ok{text-align:center; padding:14px; background:var(--surface-2); color:var(--ink-2); border-radius:12px; font-size:14px; font-weight:800; margin-top:12px}
+.qr-cek-sifirla-btn{width:100%; margin-top:10px; padding:11px; border-radius:10px; background:none; border:1px solid var(--line); color:var(--ink-3); font-size:12.5px; font-weight:700; cursor:pointer}
+.qr-cek-kabul-ok{text-align:center; padding:14px; background:var(--ok-soft); color:var(--ok); border-radius:12px; font-size:14px; font-weight:800; margin-top:12px}
 /* bildirim ekranı */
 .qr-bildirim{position:relative; flex:1; z-index:6; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg,#4a0f2e,#2a0819); padding:calc(24px + env(safe-area-inset-top)) calc(24px + env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) calc(24px + env(safe-area-inset-left)); overflow-y:auto}
 .qr-bildirim-ic{text-align:center; max-width:440px; color:#fff; animation:qrBildirimGir .5s ease}
@@ -3039,7 +3160,22 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 
 /* Ürün kartları (dikey · tam genişlik görsel üstte) */
 .qr-menu-list{flex:1; padding:14px; display:flex; flex-direction:column; gap:18px}
-.qr-card{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column; position:relative}
+/* Ürün kartı — kabartma 3D */
+.qr-card{
+  background:linear-gradient(180deg,#ffffff 0%, #faf6ec 100%);
+  border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,
+    0 5px 0 -1px #e6ddc4,
+    0 9px 16px rgba(74,15,46,.14);
+  display:flex; flex-direction:column; position:relative;
+  transform:translateY(0); transition:transform .12s ease, box-shadow .12s ease}
+.qr-card:active{
+  transform:translateY(3px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.7) inset,
+    0 2px 0 -1px #e6ddc4,
+    0 4px 8px rgba(74,15,46,.12)}
 .qr-card.qr-out{opacity:.55}
 .qr-img{width:100%; aspect-ratio:16/10; flex:0 0 auto; background-size:cover; background-position:center; display:block}
 .qr-img-ph{display:grid; place-items:center}
@@ -8786,19 +8922,29 @@ function masaOdemeKaydet(masaNo, odemeler, dagitim, indirim){
   // kalemlere ödenen tutarı işle
   (dagitim||[]).forEach(d=>{
     s.kisiler.forEach(k=>k.kalemler.forEach(it=>{
-      if(it.id===d.kalemId){ it.odenenTutar = Math.round(((it.odenenTutar||0)+d.tutar)*100)/100; }
+      if(it.id===d.kalemId){
+        it.odenenTutar = Math.round(((it.odenenTutar||0)+d.tutar)*100)/100;
+        if(it.hediye) it.odendi = true;   // hediye kalem: kasada onaylandı (0 ₺)
+      }
     }));
   });
   // ödeme kaydı (yöntem dağılımı) — kalem adı/kişi bilgisi de eklenir, geçmiş ekranında
   // "kim neyi nasıl ödedi" tahsilat bazlı gösterilebilsin
+  // 🎁 ikram (hediye) tutarı ayrı alanda → raporlarda promosyon gideri olarak izlenir
+  const ikramTutar = (dagitim||[]).reduce((t,d)=>{
+    let h=false;
+    s.kisiler.forEach(k=>k.kalemler.forEach(it=>{ if(it.id===d.kalemId && it.hediye) h=true; }));
+    return t + (h ? d.tutar : 0);
+  },0);
   s.odemeler.push({
     zaman: Date.now(),
     yontemler: odemeler,       // [{yontem:"nakit",tutar:50},...]
     indirim: indirim||0,
+    ikram: Math.round(ikramTutar*100)/100,   // hediye/promosyon gideri
     kalemler: (dagitim||[]).map(d=>{
-      let ad="Ürün", kisi="";
-      s.kisiler.forEach(k=>k.kalemler.forEach(it=>{ if(it.id===d.kalemId){ ad=it.ad; kisi=k.ad; } }));
-      return {kalemId:d.kalemId, ad, kisi, tutar:d.tutar};
+      let ad="Ürün", kisi="", hed=false;
+      s.kisiler.forEach(k=>k.kalemler.forEach(it=>{ if(it.id===d.kalemId){ ad=it.ad; kisi=k.ad; hed=!!it.hediye; } }));
+      return {kalemId:d.kalemId, ad, kisi, tutar:d.tutar, hediye:hed};
     })
   });
   // hepsi ödendiyse masayı kapat
@@ -9715,8 +9861,8 @@ function kasaMasaDetayHtml(m){
       const kk=kalemKalan(it);
       const kismiOdendi=(it.odenenTutar||0)>0;
       const tamOdendi=kismiOdendi && kk<=0.01;
-      html+=`<div class="kmd-kalem${iptalli?' iptal':''}${tamOdendi?' kmd-kalem-odendi':''}${it.paket?' kmd-kalem-paket':''}">
-        <div class="kmd-k-ust"><span class="kmd-k-ad">${it.paket?'📦 ':''}${tamOdendi?'✓ ':''}${it.ad}${it.kcal?` <span class="kalem-kcal">🔥 ${it.kcal} kcal</span>`:''}${it.paket?' <span class="kmd-paket-rozet">PAKET</span>':''}</span>
+      html+=`<div class="kmd-kalem${iptalli?' iptal':''}${tamOdendi?' kmd-kalem-odendi':''}${it.paket?' kmd-kalem-paket':''}${it.hediye?' kmd-kalem-hediye':''}">
+        <div class="kmd-k-ust"><span class="kmd-k-ad">${it.hediye?'🎁 ':''}${it.paket?'📦 ':''}${tamOdendi?'✓ ':''}${it.ad}${it.kcal?` <span class="kalem-kcal">🔥 ${it.kcal} kcal</span>`:''}${it.paket?' <span class="kmd-paket-rozet">PAKET</span>':''}${it.hediye?' <span class="kmd-hediye-rozet">HEDİYE</span>':''}</span>
           <span class="kmd-k-fiyat">${it.fiyat} ₺</span></div>
         <div class="kmd-k-durum" style="color:${dm.renk}">${dm.ad}</div>`;
       if(kismiOdendi && !tamOdendi){
@@ -9973,12 +10119,17 @@ function viewOdemeEkran(main){
   const mq="'"+String(m).replace(/'/g,"\\'")+"'";
   // bu ödemenin ham toplamı (seçili kısımlar)
   const hamToplam = Math.round(o.secili.reduce((t,x)=>t+x.tutar,0)*100)/100;
+  // 🎁 HEDİYE İNDİRİMİ — seçili hediye kalemlerin tutarı otomatik düşülür
+  const hediyeIndirim = Math.round(o.secili.reduce((t,x)=>{
+    const it = masaKalemBul(m, x.kalemId);
+    return t + ((it && it.hediye) ? x.tutar : 0);
+  },0)*100)/100;
   // Mag puan indirimi (kullanılan Mag × kur) — ödenecek tutarı geçemez
   const magIndirimHam = (o.musteri && o.kullanilanMag>0) ? o.kullanilanMag * SADAKAT.magTl : 0;
-  const elleInd = Math.min(o.indirim, hamToplam);
-  const magIndirim = Math.min(magIndirimHam, Math.max(0, hamToplam - elleInd));
-  const indirim = Math.round((elleInd + magIndirim)*100)/100;
-  const odenecek = Math.round((hamToplam - indirim)*100)/100;
+  const elleInd = Math.min(o.indirim, Math.max(0, hamToplam - hediyeIndirim));
+  const magIndirim = Math.min(magIndirimHam, Math.max(0, hamToplam - hediyeIndirim - elleInd));
+  const indirim = Math.round((hediyeIndirim + elleInd + magIndirim)*100)/100;
+  const odenecek = Math.round(Math.max(0, hamToplam - indirim)*100)/100;
   const girilen = Math.round((o.yontem.nakit + o.yontem.kredi + o.yontem.diger)*100)/100;
 
   let html=`<div class="ode-ekran">
@@ -9999,6 +10150,7 @@ function viewOdemeEkran(main){
     <div class="ode-kol-bas">Ödeme Yöntemi</div>
     <div class="ode-ozet-kutu">
       <div class="ode-ozet-satir"><span>Seçilen tutar</span><span>${tl(hamToplam)} ₺</span></div>
+      ${hediyeIndirim>0?`<div class="ode-ozet-satir hediye"><span>🎁 Hediye indirimi</span><span>−${tl(hediyeIndirim)} ₺</span></div>`:''}
       <div class="ode-ozet-satir ind"><span>İndirim</span><span>${elleInd>0?'−'+tl(elleInd):'0,00'} ₺</span></div>
       ${magIndirim>0?`<div class="ode-ozet-satir mag"><span>🎁 ${SADAKAT.ad} indirimi</span><span>−${tl(magIndirim)} ₺</span></div>`:''}
       <div class="ode-ozet-satir ana"><span>Ödenecek</span><span>${tl(odenecek)} ₺</span></div>
@@ -10036,7 +10188,7 @@ function viewOdemeEkran(main){
       <div class="ode-go-not">${girilen>odenecek+0.01?`💰 Para üstü ${tl(girilen-odenecek)} ₺`:(girilen<odenecek-0.01&&girilen>0?`⚠️ Eksik ${tl(odenecek-girilen)} ₺ masada kalır`:'&nbsp;')}</div>
     </div>
     ${odeKazanilacakMagHtml(o, hamToplam)}
-    <button class="ode-onayla" ${(odenecek<=0||girilen<=0)?'disabled':''} onclick="odemeOnayla(${mq})">
+    <button class="ode-onayla" ${((odenecek>0.01 && girilen<=0) || (odenecek<=0.01 && indirim<=0.01))?'disabled':''} onclick="odemeOnayla(${mq})">
       ✓ Ödemeyi Al
     </button>
   </div>`;
@@ -10111,13 +10263,14 @@ function viewOdemeEkran(main){
     const acikKalemler=k.kalemler.filter(it=>it.durum!=="iptal" && kalemKalan(it)>0.01);
     const odenmisKalemler=k.kalemler.filter(it=>it.durum!=="iptal" && kalemKalan(it)<=0.01 && (it.odenenTutar||0)>0);
     if(acikKalemler.length===0 && odenmisKalemler.length===0) return;
-    // kişinin ödenmemiş toplamı
+    // kişinin ödenmemiş toplamı (hediye kalemler 0 ₺ ama yine de onay bekliyor)
     const kisiKalan=acikKalemler.reduce((t,it)=>t+kalemKalan(it),0);
+    const bekleyenVar=acikKalemler.length>0;
     // kişi başlığı (tıklanınca hepsi fişe)
     html+=`<div class="ode-kisi-grup">
-      <div class="ode-kisi-bas${kisiKalan>0?'':' tum-odendi'}" ${kisiKalan>0?`onclick="odeKisiSec(${ki})"`:''}>
+      <div class="ode-kisi-bas${bekleyenVar?'':' tum-odendi'}" ${bekleyenVar?`onclick="odeKisiSec(${ki})"`:''}>
         <span class="ode-kisi-ad">👤 ${k.ad}</span>
-        ${kisiKalan>0?`<span class="ode-kisi-tut">${tl(kisiKalan)} ₺ →</span>`:`<span class="ode-kisi-tut odendi">✓ ödendi</span>`}
+        ${bekleyenVar?`<span class="ode-kisi-tut">${tl(kisiKalan)} ₺ →</span>`:`<span class="ode-kisi-tut odendi">✓ ödendi</span>`}
       </div>`;
     acikKalemler.forEach(it=>{
       urunVar=true;
@@ -10125,9 +10278,9 @@ function viewOdemeEkran(main){
       const seciliMi=o.secili.some(x=>x.kalemId===it.id);
       const opsVar=(PRODUCT_OPTIONS[it.ad]||[]).length>0;
       const kismiOdenmis=(it.odenenTutar||0)>0;
-      html+=`<div class="ode-urun-kart${seciliMi?' secili':''}" onclick="odeUrunSec(${it.id})">
+      html+=`<div class="ode-urun-kart${seciliMi?' secili':''}${it.hediye?' ode-urun-hediye':''}" onclick="odeUrunSec(${it.id})">
         <div class="ode-urun-bas">
-          <div class="ode-urun-ad">${seciliMi?'✓ ':''}${it.ad}${it.kcal?` <span class="kalem-kcal">🔥 ${it.kcal}</span>`:''}</div>
+          <div class="ode-urun-ad">${seciliMi?'✓ ':''}${it.hediye?'🎁 ':''}${it.ad}${it.hediye?' <span class="ode-hediye-rozet">HEDİYE</span>':''}${it.kcal?` <span class="kalem-kcal">🔥 ${it.kcal}</span>`:''}</div>
           <div class="ode-urun-fiyat">${tl(kk)} ₺${(it.odenenTutar||0)>0?` <small>(${tl(it.fiyat)}₺)</small>`:''}</div>
         </div>`;
       // seçenekler (varsa) — her biri silinebilir
@@ -10437,8 +10590,14 @@ function odemeEkranYenile(){
 function odeYontemDengeleSessiz(){
   const o=state.odeme;
   if(!o.dengeYontem) return;
+  const m=o.masa;
   const hamToplam=o.secili.reduce((t,x)=>t+x.tutar,0);
-  const odenecek=Math.round((hamToplam-Math.min(o.indirim,hamToplam))*100)/100;
+  // 🎁 hediye indirimi + elle indirim + Mag indirimi düşülmüş gerçek ödenecek
+  const hediyeInd=Math.round(o.secili.reduce((t,x)=>{ const it=masaKalemBul(m,x.kalemId); return t+((it&&it.hediye)?x.tutar:0); },0)*100)/100;
+  const elleInd=Math.min(o.indirim, Math.max(0, hamToplam-hediyeInd));
+  const magIndHam=(o.musteri && o.kullanilanMag>0) ? o.kullanilanMag*SADAKAT.magTl : 0;
+  const magInd=Math.min(magIndHam, Math.max(0, hamToplam-hediyeInd-elleInd));
+  const odenecek=Math.round(Math.max(0, hamToplam-hediyeInd-elleInd-magInd)*100)/100;
   let digerToplam=0;
   ["nakit","kredi","diger"].forEach(k=>{ if(k!==o.dengeYontem) digerToplam+=o.yontem[k]; });
   o.yontem[o.dengeYontem]=Math.max(0, Math.round((odenecek-digerToplam)*100)/100);
@@ -10479,8 +10638,9 @@ function musteriSnapshot(){
     return { ad: it?it.ad:"", adet: it?(it.adet||1):1, tutar: x.tutar };
   });
   const hamToplam=o.secili.reduce((t,x)=>t+x.tutar,0);
-  const indirim=Math.min(o.indirim||0,hamToplam);
-  const odenecek=Math.round((hamToplam-indirim)*100)/100;
+  const hediyeInd=Math.round(o.secili.reduce((t,x)=>{ const it=masaKalemBul(m,x.kalemId); return t+((it&&it.hediye)?x.tutar:0); },0)*100)/100;
+  const indirim=Math.round((hediyeInd+Math.min(o.indirim||0, Math.max(0,hamToplam-hediyeInd)))*100)/100;
+  const odenecek=Math.round(Math.max(0,hamToplam-indirim)*100)/100;
   const girilen=(o.yontem.nakit||0)+(o.yontem.kredi||0)+(o.yontem.diger||0);
   return {
     tip:"odeme",
@@ -10785,15 +10945,21 @@ function paraUstuModal(tutar){
 function odemeOnayla(m){
   const o=state.odeme;
   const hamToplam=o.secili.reduce((t,x)=>t+x.tutar,0);
+  // ── HEDİYE İNDİRİMİ — seçili hediye kalemlerin tutarı otomatik indirilir ──
+  const hediyeIndirim = Math.round(o.secili.reduce((t,x)=>{
+    const it = masaKalemBul(m, x.kalemId);
+    return t + ((it && it.hediye) ? x.tutar : 0);
+  },0)*100)/100;
   if(hamToplam<=0){ note("Önce ürün/tutar seçin"); return; }
-  const elleInd=Math.min(o.indirim,hamToplam);
+  const elleInd=Math.min(o.indirim, Math.max(0, hamToplam-hediyeIndirim));
   // Mag indirimi (kullanılan Mag × kur), elle indirimden sonra kalan tutarı geçemez
   const magIndirimHam=(o.musteri && o.kullanilanMag>0) ? o.kullanilanMag*SADAKAT.magTl : 0;
-  const magIndirim=Math.round(Math.min(magIndirimHam, Math.max(0, hamToplam-elleInd))*100)/100;
-  const indirim=Math.round((elleInd+magIndirim)*100)/100;
-  const odenecek=Math.round((hamToplam-indirim)*100)/100;
+  const magIndirim=Math.round(Math.min(magIndirimHam, Math.max(0, hamToplam-hediyeIndirim-elleInd))*100)/100;
+  const indirim=Math.round((hediyeIndirim+elleInd+magIndirim)*100)/100;   // hediye + elle + Mag
+  const odenecek=Math.round(Math.max(0, hamToplam-indirim)*100)/100;
   const girilen=Math.round((o.yontem.nakit+o.yontem.kredi+o.yontem.diger)*100)/100;
-  if(girilen<=0){ note("Ödeme yöntemine tutar girin"); return; }
+  // ödenecek 0 ise (tamamı hediye/indirim) ödeme yöntemine tutar girmeye gerek yok
+  if(girilen<=0 && odenecek>0.01){ note("Ödeme yöntemine tutar girin"); return; }
 
   // DİĞER/QR bölümleme akışı: sadece Diğer/QR'a tutar girilmişse → nakit/kredi bölme pop-upı
   if(o.yontem.diger>0 && o.yontem.nakit===0 && o.yontem.kredi===0){
@@ -10808,12 +10974,19 @@ function odemeOnayla(m){
   if(o.yontem.kredi>0) aktifYontemler.push({yontem:"kredi", ad:"Kredi Kartı", tutar:o.yontem.kredi});
   if(o.yontem.diger>0) aktifYontemler.push({yontem:"diger", ad:"Diğer / QR", tutar:o.yontem.diger});
 
+  // 🎁 hediye kalemler — POS'a GİTMEZ, ayrı ikram fişi çıkar
+  const hediyeKalemler = o.secili.map(x=>{
+    const it = masaKalemBul(m, x.kalemId);
+    return (it && it.hediye) ? {kalemId:it.id, ad:it.ad, tutar:x.tutar, kisi:it.kisi||""} : null;
+  }).filter(Boolean);
+
   // ONAY POP-UP — her tahsilat ayrı işlem, POS'a yöntem yöntem gönderilir
   odemeOnayModal({
     masa:m, odenecek, girilen, paraUstu,
     eksik: girilen < odenecek-0.01 ? Math.round((odenecek-girilen)*100)/100 : 0,
     yontemler: aktifYontemler,
-    hamToplam, indirim, magIndirim, kullanilanMag:(o.musteri?o.kullanilanMag:0)
+    hamToplam, indirim, magIndirim, kullanilanMag:(o.musteri?o.kullanilanMag:0),
+    hediyeIndirim, hediyeKalemler
   });
 }
 /* ═══ DİĞER/QR BÖLÜMLEME POP-UP ═══
@@ -10921,7 +11094,7 @@ function digerBolOnayla(){
       if(it.secimGruplu && it.secimGruplu.length) secMetin = it.secimGruplu.map(g=>g.grup+": "+g.secenekler.join(", ")).join(" · ");
       else if(it.secimler && it.secimler.length) secMetin = it.secimler.join(", ");
     }
-    return { ad:it?it.ad:"?", tutar:x.tutar, kisi:(it&&it.kisi)?it.kisi:(x.kisi||""), secim:secMetin };
+    return { ad:(it&&it.hediye?"* HEDIYE * ":"")+(it?it.ad:"?"), tutar:x.tutar, kisi:(it&&it.kisi)?it.kisi:(x.kisi||""), secim:secMetin, hediye:!!(it&&it.hediye) };
   });
   const s=SESSIONS[m];
   const masaAd = masaEtiket(m);
@@ -11010,7 +11183,10 @@ function odemeTahsilEt(veri){
           tutar: y.tutar,
           kdv: Math.round((y.tutar - y.tutar/1.10)*100)/100,  // %10 KDV varsayım (tatlı/gıda)
           yontem: y.yontem,
-          kalemler: dagitim.map(dd=>{ const it=masaKalemBul(m,dd.kalemId); return {ad:it?it.ad:"", tutar:dd.tutar}; })
+          // 🎁 HEDİYE kalemler mali fişe GİRMEZ — sadece gerçekten tahsil edilen ürünler
+          kalemler: dagitim
+            .filter(dd=>{ const it=masaKalemBul(m,dd.kalemId); return !(it && it.hediye); })
+            .map(dd=>{ const it=masaKalemBul(m,dd.kalemId); return {ad:it?it.ad:"", tutar:dd.tutar}; })
         }).then(r=>{
           if(r.ok && !r.simulasyon) note("🧾 "+ykYontemAd(y.yontem)+" "+tl(y.tutar)+"₺ → mali fiş üretildi");
           else if(!r.ok) note("⚠️ Yazarkasa: "+r.mesaj);
@@ -11018,7 +11194,25 @@ function odemeTahsilEt(veri){
       });
     }
   }
+  // ══ 🎁 İKRAM FİŞİ — hediye kalemler için AYRI fiş (POS'a gitmez, kasa yazıcısı) ══
+  if(veri.hediyeKalemler && veri.hediyeKalemler.length>0){
+    ikramFisiYazdir({
+      masaAd: veri.masaAd || masaEtiket(m),
+      kalemler: veri.hediyeKalemler,
+      toplam: veri.hediyeIndirim || veri.hediyeKalemler.reduce((t,k)=>t+k.tutar,0),
+      sube: sube
+    });
+  }
   const kalan=masaKalan(m);
+  // hediye kalemler (0 ₺) — bu tahsilatta onaylanmış say, ödendi olarak işaretle
+  const oturum = SESSIONS[m];
+  if(oturum && oturum.kisiler){
+    oturum.kisiler.forEach(k=>(k.kalemler||[]).forEach(it=>{
+      if(it.hediye && !it.odendi && it.durum!=="iptal"){
+        it.odendi = true; it.odenenTutar = 0;
+      }
+    }));
+  }
   if(kalan<=0.01){
     // HIZLI SATIŞ → reçete tüket, geçici oturumu temizle, satış ekranına dön
     if(m===HIZLI_SATIS_ID){
@@ -11058,13 +11252,26 @@ function odemeOnayModal(veri){
       <div class="ode-onay-baslik">Tahsilat Onayı</div>`;
   }
   // POS'a gönderilecek yöntemler (sadeceFis modunda POS'a GİTMEZ, fiş yazıcısına)
-  ic+=`<div class="ode-onay-yontemler"><div class="ode-onay-yt-bas">${veri.sadeceFis?'🖨️ Fiş yazıcısına gönderilecek (POS\'a gitmez):':'Yazarkasa-POS\'a gönderilecek:'}</div>`;
-  const puPozitif=Math.max(0, veri.paraUstu);
-  veri.yontemler.forEach(y=>{
-    const tahsilEdilen = y.yontem==="nakit" ? Math.max(0, y.tutar-puPozitif) : y.tutar;
-    ic+=`<div class="ode-onay-yt-satir"><span>${y.ad}</span><span>${tl(tahsilEdilen)} ₺</span></div>`;
-  });
-  ic+=`</div>`;
+  const posaGidecek = veri.yontemler && veri.yontemler.length>0;
+  if(posaGidecek){
+    ic+=`<div class="ode-onay-yontemler"><div class="ode-onay-yt-bas">${veri.sadeceFis?'🖨️ Fiş yazıcısına gönderilecek (POS\'a gitmez):':'Yazarkasa-POS\'a gönderilecek:'}</div>`;
+    const puPozitif=Math.max(0, veri.paraUstu);
+    veri.yontemler.forEach(y=>{
+      const tahsilEdilen = y.yontem==="nakit" ? Math.max(0, y.tutar-puPozitif) : y.tutar;
+      ic+=`<div class="ode-onay-yt-satir"><span>${y.ad}</span><span>${tl(tahsilEdilen)} ₺</span></div>`;
+    });
+    ic+=`</div>`;
+  }
+  // 🎁 hediye kalemler — POS'a gitmez, ayrı ikram fişi
+  if(veri.hediyeKalemler && veri.hediyeKalemler.length>0){
+    ic+=`<div class="ode-onay-ikram">
+      <div class="ode-onay-ikram-bas">🎁 İkram (POS'a gitmez · ayrı fiş)</div>`;
+    veri.hediyeKalemler.forEach(k=>{
+      ic+=`<div class="ode-onay-yt-satir"><span>${k.ad}</span><span>${tl(k.tutar)} ₺ → 0 ₺</span></div>`;
+    });
+    ic+=`<div class="ode-onay-ikram-not">Kasa yazıcısından <b>ikram fişi</b> çıkacak. Mali fişe girmez.</div>
+    </div>`;
+  }
   if(veri.magIndirim>0){
     ic+=`<div class="ode-onay-mag">🎁 ${veri.kullanilanMag} ${SADAKAT.ad} indirimi: −${tl(veri.magIndirim)} ₺</div>`;
   }
@@ -12151,6 +12358,28 @@ function optionGroupsNormalize(){
 let URUN_GORSEL = {};     // {"Pandio": "data:image/..."} — base64 ürün görselleri
 let KAT_GORSEL = {};      // {"Tatlılar": "data:image/webp..."} — base64 kategori görselleri
 let YORUMLAR = {};        // {"Pandio": [{isim,puan,metin,tarih,onay}] } — ürün yorumları/puanları
+/* ═══════════════════════════════════════════════════════════
+   GİZLİ SÜRPRİZ HEDİYE — şube bazlı yorum sayacı
+   Her şubenin 100. (200., 300. ...) yorumu hediye kazandırır.
+   Hediye = o yorumun yapıldığı ürün · 0 TL olarak sepete düşer.
+   Kural gizlidir, müşteriye ilan edilmez.
+   ═══════════════════════════════════════════════════════════ */
+const HEDIYE_ARALIK = 3;            // ⚠️ TEST MODU — canlıda 100 yapılacak
+let SUBE_YORUM_SAYAC = {};          // { "Edirne Atatürk": 47, ... }
+let HEDIYE_KAZANANLAR = [];         // { id, isim, urun, sube, ts, kullanildi, masa }
+let _hediyeId = 1;
+/* Aynı kişi (isim+şube) aynı ürüne 1 saat içinde tekrar yorum yapamaz */
+const YORUM_BEKLEME_MS = 60*60*1000;
+function yorumTekrarEngeli(urunAd, isim, sube){
+  const liste = YORUMLAR[urunAd] || [];
+  const ad = String(isim||"").trim().toLocaleLowerCase("tr");
+  const simdi = Date.now();
+  return liste.some(y=>
+    String(y.isim||"").trim().toLocaleLowerCase("tr")===ad &&
+    (y.sube||"")===sube &&
+    (simdi - (y.tarih||0)) < YORUM_BEKLEME_MS
+  );
+}
 
 function viewFiyat(main){
   const isGenel = state.role==="genel";
@@ -14414,8 +14643,20 @@ function subeKoduMigrasyon(){
 
 /* === ÜRÜN YORUM / PUANLAMA === */
 const YORUM_KEY = "minipan_yorum_v1";
-function yorumKaydet(){ MPStore.set(YORUM_KEY, YORUMLAR, 1); }
-function yorumYukle(){ YORUMLAR = MPStore.get(YORUM_KEY, {}, {version:1}); }
+function yorumKaydet(){ MPStore.set(YORUM_KEY, {YORUMLAR, SUBE_YORUM_SAYAC, HEDIYE_KAZANANLAR, _hediyeId}, 1); }
+function yorumYukle(){
+  const v = MPStore.get(YORUM_KEY, null, {version:1});
+  if(!v) return;
+  // eski format (sadece YORUMLAR objesi) ile geriye uyumluluk
+  if(v.YORUMLAR || v.SUBE_YORUM_SAYAC){
+    YORUMLAR = v.YORUMLAR || {};
+    SUBE_YORUM_SAYAC = v.SUBE_YORUM_SAYAC || {};
+    HEDIYE_KAZANANLAR = v.HEDIYE_KAZANANLAR || [];
+    if(v._hediyeId) _hediyeId = v._hediyeId;
+  } else {
+    YORUMLAR = v;   // eski kayıt
+  }
+}
 /* Bir ürünün onaylı yorumları */
 function urunOnayliYorumlar(urunAd){ return (YORUMLAR[urunAd]||[]).filter(y=>y.onay); }
 /* Ortalama puan ve yorum sayısı (onaylılar) */
@@ -18285,10 +18526,16 @@ function irsaliyeAc(id){
         </div>
       </div>
       <div class="irs-kagit" id="irsKagit">
+        ${(MARKA_LOGOLAR.logo || MARKA_LOGOLAR.yazi) ? `<div class="irs-logo-orta">
+          ${MARKA_LOGOLAR.logo ? `<img class="irs-logo" src="${MARKA_LOGOLAR.logo}" alt="">` : ''}
+          ${MARKA_LOGOLAR.yazi ? `<img class="irs-logo-yazi" src="${MARKA_LOGOLAR.yazi}" alt="MİNİPAN">` : ''}
+        </div>` : ''}
         <div class="irs-ust">
           <div class="irs-baslik-blok">
-            <div class="irs-belge-tip">SEVK İRSALİYESİ</div>
-            <div class="irs-belge-no">Belge No: SVK-${String(sp.id).padStart(6,'0')}</div>
+            <div class="irs-baslik-metin">
+              <div class="irs-belge-tip">SEVK İRSALİYESİ</div>
+              <div class="irs-belge-no">Belge No: SVK-${String(sp.id).padStart(6,'0')}</div>
+            </div>
           </div>
           <div class="irs-tarih-blok">
             <div>Düzenleme: <strong>${bugun}</strong></div>
@@ -18352,7 +18599,12 @@ function irsaliyeYazdir(){
 function irsaliyeYazdirCss(){
   return `body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;margin:0;padding:24px;color:#1a1a1a;background:#fff}
   .irs-kagit{max-width:720px;margin:0 auto}
+  .irs-logo-orta{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:16px}
+  .irs-logo{width:80px;height:80px;object-fit:contain;flex:none;margin-bottom:-4px}
+  .irs-logo-yazi{width:170px;object-fit:contain;flex:none}
   .irs-ust{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #4a0f2e;padding-bottom:14px;margin-bottom:16px}
+  .irs-baslik-blok{display:flex;align-items:center;gap:12px}
+  .irs-baslik-metin{display:flex;flex-direction:column}
   .irs-belge-tip{font-size:22px;font-weight:800;color:#4a0f2e;letter-spacing:1px}
   .irs-belge-no{font-size:12px;color:#666;margin-top:3px}
   .irs-tarih-blok{font-size:12px;text-align:right;line-height:1.7}
@@ -18502,6 +18754,17 @@ function viewIntro(main){
     </label>
   </div>`;
 
+  // KARŞILAMA EKRANI (ilk açılış) — daktilo slogan
+  html += `<div class="yk-kart">
+    <div class="intro-kart-bas">👋 Karşılama Ekranı (İlk Açılış)</div>
+    <div style="font-size:12.5px;color:var(--ink-3);margin-bottom:12px;line-height:1.5">
+      Müşteri QR'ı okuttuğunda ilk gördüğü ekran. Logo dönerek gelir, altında marka yazısı,
+      altında bu slogan daktilo efektiyle yazılır. Logo ve yazı görselleri <b>Yönetim → Logo</b> ekranından yüklenir.
+    </div>
+    <div class="intro-alan"><label>Daktilo Sloganı</label>
+      <textarea class="intro-input" rows="3" style="resize:vertical;font-family:inherit" oninput="SPLASH.slogan=this.value" placeholder="Markanızı anlatan kısa bir cümle...">${(SPLASH.slogan||QR_SLOGAN).replace(/</g,'&lt;')}</textarea></div>
+  </div>`;
+
   // HERO METİNLERİ
   html += `<div class="yk-kart">
     <div class="intro-kart-bas">✨ Açılış Başlığı</div>
@@ -18609,7 +18872,7 @@ function introKaydet(){ splashKaydet(); note("✓ İntro ayarları kaydedildi");
 function introOnizle(){
   splashKaydet();
   // QR önizleme: yeni sekmede değil, mevcut QR motorunu splash'tan başlat
-  QR = { masa:"1", masaKat:"İç Salon", sube:AKTIF_SUBE, kisi:"", tel:"", musteri:null, sepet:[], view:"opening", aktifKat:DEMO_KATEGORILER[0]?.ad||"Tatlılar" };
+  QR = { masa:"1", masaKat:"İç Salon", sube:AKTIF_SUBE, kisi:"", tel:"", musteri:null, sepet:[], view:"karsilama", aktifKat:DEMO_KATEGORILER[0]?.ad||"Tatlılar" };
   document.getElementById("qrApp").style.display="block";
   renderQR();
 }
@@ -20185,7 +20448,18 @@ const TESLIMAT_DURUM = {
   teslim:      {ad:"Teslim edildi",ic:"✓",  renk:"#27ae60"},
   iptal:       {ad:"İptal",        ic:"✕",  renk:"#95a5a6"},
 };
-let DEVICE_MEMORY = null;               // bu cihazda hatırlanan telefon (localStorage simülasyonu)
+let DEVICE_MEMORY = null;               // bu cihazda hatırlanan kimlik (çerez onayına bağlı kalıcı)
+/* Cihaz hafızasına yaz — SADECE çerez kabul edilmişse kalıcı olur */
+function cihazHafizasiYaz(kimlik){
+  DEVICE_MEMORY = kimlik || null;
+  if(!kimlik) return;
+  const ham = (typeof cerezOnayDurumu==="function") ? cerezOnayDurumu() : "";
+  let kabul = false;
+  try{ if(ham) kabul = (JSON.parse(ham).onay==="kabul"); }catch(e){}
+  if(kabul){
+    try{ localStorage.setItem("minipan_device_memory", kimlik); }catch(e){}
+  }
+}
 
 /* ============================================================
    SADAKAT AYARLARI — genel müdür belirler (merkez kilitli)
@@ -20308,6 +20582,7 @@ const SPLASH = {
   baslik: "Lotus Bisküvili Mag",
   altyazi: "Yeni! Sınırlı süre · kavanozda servis",
   rozet: "YENİ ÜRÜN",
+  slogan: "",       // karşılama ekranı daktilo sloganı (boşsa QR_SLOGAN kullanılır)
   video: "",        // arka plan WebP/video URL (data: veya http)
   gorsel: "",       // video yoksa sabit görsel
   // alt çekmece: WiFi + çerez
@@ -20380,10 +20655,18 @@ function urunGorsel(p, buyuk){
 
 function openQR(){
   document.getElementById("login").style.display="none";
-  QR = { masa:"1", masaKat:"İç Salon", sube:"Edirne Atatürk", kisi:"", tel:"", musteri:null, sepet:[], view:"opening", aktifKat:"Tatlılar" };
+  QR = { masa:"1", masaKat:"İç Salon", sube:"Edirne Atatürk", kisi:"", tel:"", musteri:null, sepet:[], view:"karsilama", aktifKat:"Tatlılar" };
+  cerezOnayYukle();   // çerez tercihi + cihaz hafızası (tanınan müşteri) geri yüklenir
+  // çerez kabul edilmiş + cihaz tanınıyorsa → karşılamayı atla, üyeyi yükle
+  if(DEVICE_MEMORY && typeof musteriBulMail==="function"){
+    const m = musteriBulMail(DEVICE_MEMORY) || (typeof musteriBulTel==="function" ? musteriBulTel(DEVICE_MEMORY) : null);
+    if(m){
+      QR.musteri = m; QR.kisi = m.ad; QR.tel = m.tel||"";
+      QR.view = "splash";   // doğrudan kampanyalara
+    }
+  }
   renderQR();
   document.getElementById("qrApp").style.display="block";
-  // splash sadece "Devam et" butonuyla geçer (otomatik geçiş yok)
 }
 function closeQR(){
   clearTimeout(QR._splashTimer);
@@ -20431,6 +20714,7 @@ function renderQR(){
   el.scrollTop = 0;
   qrSepetBarGuncelle();   // body-seviyesi sabit sepet bar (viewport altında)
   if(QR.view==="opening") qrOpeningBaslat();   // logo/yazı/daktilo animasyon zinciri
+  if(QR.view==="karsilama") qrKarsilamaBaslat();   // karşılama: dönen logo + yazı + daktilo slogan
   // innerHTML ile eklenen <video autoplay> bazı tarayıcılarda tetiklenmez → elle oynat
   document.querySelectorAll("#qrApp .qr-intro-video-el").forEach(vd=>{
     if(vd.tagName==="VIDEO" && vd.play){ const p=vd.play(); if(p&&p.catch) p.catch(()=>{}); }
@@ -20640,13 +20924,29 @@ function qrSplashCekmeceHtml(){
 }
 function splashCekmeceIcHtml(sekme){
   if(sekme==="cerez"){
-    const kabul = QR._cerezKabul;
+    const ham = cerezOnayDurumu();
+    let durum = "";   // "", "kabul", "red"
+    try{ if(ham) durum = (JSON.parse(ham).onay||""); }catch(e){}
+    let altHtml = "";
+    if(durum==="kabul"){
+      altHtml = '<div class="qr-cek-kabul-ok">✓ Çerezleri kabul ettin</div>'+
+        '<div class="qr-cek-fayda">Bir dahaki gelişinde seni tanıyacağız · adın ve üyeliğin hatırlanacak</div>'+
+        '<button class="qr-cek-sifirla-btn" onclick="splashCerezSifirla()">Tercihimi değiştir</button>';
+    } else if(durum==="red"){
+      altHtml = '<div class="qr-cek-red-ok">✕ Çerezleri reddettin</div>'+
+        '<div class="qr-cek-fayda">Hiçbir bilgin cihazında saklanmıyor · her gelişinde misafir olarak başlarsın</div>'+
+        '<button class="qr-cek-sifirla-btn" onclick="splashCerezSifirla()">Tercihimi değiştir</button>';
+    } else {
+      altHtml = '<div class="qr-cek-fayda">Kabul edersen: bir dahaki gelişinde seni tanırız, adını ve üyeliğini tekrar girmen gerekmez.</div>'+
+        '<div class="qr-cek-btn-row">'+
+          '<button class="qr-cek-red-btn" onclick="splashCerezReddet()">Reddet</button>'+
+          '<button class="qr-cek-kabul-btn" onclick="splashCerezKabul()">Çerezleri Kabul Et</button>'+
+        '</div>';
+    }
     return '<div class="qr-cek-bolum">'+
       '<div class="qr-cek-baslik">🍪 Çerez Politikası</div>'+
       '<div class="qr-cek-metin">'+SPLASH.cerezMetni+'</div>'+
-      (kabul
-        ? '<div class="qr-cek-kabul-ok">✓ Çerezleri kabul ettiniz</div>'
-        : '<button class="qr-cek-kabul-btn" onclick="splashCerezKabul()">Çerezleri Kabul Et</button>')+
+      altHtml+
     '</div>';
   }
   // wifi
@@ -20666,21 +20966,69 @@ function splashCekmeceSekme(s){
   document.getElementById("qrCekWifiBtn").classList.toggle("on", s==="wifi");
   document.getElementById("qrCekCerezBtn").classList.toggle("on", s==="cerez");
 }
-function splashCerezKabul(){ QR._cerezKabul=true; splashCekmeceSekme("cerez"); note("✓ Çerezler kabul edildi"); }
+/* ══ ÇEREZ KABULÜ ══
+   Kabul edilince:
+   1) Kalıcı olarak kaydedilir (bir daha sorulmaz)
+   2) Cihaz hafızası açılır → tekrar gelen müşteri tanınır, adı/üyeliği hatırlanır
+   3) Sepet ve tercihleri cihazda saklanabilir
+   Reddedilirse: hiçbir şey saklanmaz, her gelişte misafir gibi başlar. */
+const CEREZ_KEY = "minipan_cerez_onay";
+function cerezOnayDurumu(){
+  try{ return localStorage.getItem(CEREZ_KEY) || ""; }catch(e){ return ""; }
+}
+function splashCerezKabul(){
+  try{ localStorage.setItem(CEREZ_KEY, JSON.stringify({onay:"kabul", ts:Date.now()})); }catch(e){}
+  QR._cerezKabul = true;
+  cihazHafizasiAc();                    // cihaz tanıma devreye girer
+  splashCekmeceSekme("cerez");
+  note("✓ Çerezler kabul edildi · Bir dahaki gelişinde seni tanıyacağız");
+}
+function splashCerezReddet(){
+  try{ localStorage.setItem(CEREZ_KEY, JSON.stringify({onay:"red", ts:Date.now()})); }catch(e){}
+  QR._cerezKabul = false;
+  cihazHafizasiKapat();                 // hiçbir şey saklanmaz
+  splashCekmeceSekme("cerez");
+  note("Çerezler reddedildi · Bilgilerin saklanmayacak");
+}
+function splashCerezSifirla(){
+  try{ localStorage.removeItem(CEREZ_KEY); }catch(e){}
+  QR._cerezKabul = false;
+  cihazHafizasiKapat();
+  splashCekmeceSekme("cerez");
+  note("Çerez tercihin sıfırlandı");
+}
+/* Cihaz hafızası — çerez onayına bağlı */
+function cihazHafizasiAc(){
+  // üye girişi yapılmışsa cihazda hatırla
+  if(QR.musteri && (QR.musteri.mail || QR.musteri.tel)){
+    DEVICE_MEMORY = QR.musteri.mail || QR.musteri.tel;
+    try{ localStorage.setItem("minipan_device_memory", DEVICE_MEMORY); }catch(e){}
+  }
+}
+function cihazHafizasiKapat(){
+  DEVICE_MEMORY = null;
+  try{ localStorage.removeItem("minipan_device_memory"); }catch(e){}
+}
+/* Açılışta çerez onayını geri yükle */
+function cerezOnayYukle(){
+  const ham = cerezOnayDurumu();
+  if(!ham) return;
+  try{
+    const v = JSON.parse(ham);
+    if(v.onay==="kabul"){
+      QR._cerezKabul = true;
+      // cihaz hafızasını geri yükle
+      try{ const dm = localStorage.getItem("minipan_device_memory"); if(dm) DEVICE_MEMORY = dm; }catch(e){}
+    }
+  }catch(e){}
+}
 function splashWifiKopya(){
   try{ navigator.clipboard.writeText(SPLASH.wifiSifre||""); note("📋 Parola kopyalandı"); }catch(e){ note("Parola: "+SPLASH.wifiSifre); }
 }
 function splashGec(){
   clearTimeout(QR._splashTimer);
-  // Kampanya sonrası: tanınan üye → doğrudan kategoriler; yeni ziyaretçi → karşılama
-  // (Sadakate kaydol / Hesabım var giriş / Şimdilik atla) ekranı
-  if(DEVICE_MEMORY && typeof musteriBul==="function" && musteriBul(DEVICE_MEMORY)){
-    QR.musteri = musteriBul(DEVICE_MEMORY);
-    QR.kisi = QR.musteri.ad; QR.tel = QR.musteri.tel;
-    QR.view = "kategoriler";
-  } else {
-    QR.view = "karsilama";   // 3 seçenekli karşılama ekranı
-  }
+  // Yeni akış: Karşılama → Kampanya → Kategoriler
+  QR.view = "kategoriler";
   renderQR();
 }
 /* Bildirim ekranı — tescilli marka + alerjen ikazı (otomatik + atlanabilir) */
@@ -20723,11 +21071,23 @@ function bildirimGec(){
 
 /* 1a) KARŞILAMA — sadakate kaydol / atla seçimi */
 function qrKarsilamaHtml(){
-  return '<div class="qr-screen qr-giris">'+
+  const logo = MARKA_LOGOLAR.logo;
+  const yazi = MARKA_LOGOLAR.yazi;
+  const logoHtml = logo
+    ? '<img class="qr-krs-logo-img" src="'+logo+'" alt="MİNİPAN">'
+    : '<div class="qr-krs-logo-ph">🧇</div>';
+  const yaziHtml = yazi
+    ? '<img class="qr-krs-yazi-img" src="'+yazi+'" alt="MİNİPAN">'
+    : '<div class="qr-krs-yazi-ph">MİNİPAN</div>';
+  return '<div class="qr-screen qr-giris qr-karsilama">'+
+    qrIntroVideoKatman()+
     '<button class="qr-close" onclick="closeQR()">✕</button>'+
-    '<div class="qr-hero"><div class="qr-logo">🧇</div>'+
-      '<div class="qr-brand">MİNİPAN</div>'+
-      '<div class="qr-masa-rozet">📍 '+QR.sube+' · Masa '+QR.masa+'</div></div>'+
+    '<div class="qr-krs-ust">'+
+      '<div class="qr-krs-logo" id="qrKrsLogo">'+logoHtml+'</div>'+
+      '<div class="qr-krs-yazi" id="qrKrsYazi">'+yaziHtml+'</div>'+
+      '<div class="qr-krs-slogan" id="qrKrsSlogan"></div>'+
+      '<div class="qr-masa-rozet">📍 '+QR.sube+' · Masa '+QR.masa+'</div>'+
+    '</div>'+
     '<div class="qr-giris-kart">'+
       '<div class="qr-sadakat-ikon">🎁</div>'+
       '<div class="qr-g-baslik">MİNİPAN Sadakat</div>'+
@@ -20735,7 +21095,36 @@ function qrKarsilamaHtml(){
       '<button class="qr-btn-primary" onclick="QR.view=\'kayit\';renderQR()">🎁 Sadakate kaydol</button>'+
       '<button class="qr-btn-ghost" onclick="QR.view=\'kurtarma\';renderQR()">Hesabım var · giriş yap</button>'+
       '<button class="qr-btn-ghost" onclick="QR.view=\'giris\';renderQR()">Şimdilik atla, isimle sipariş ver</button>'+
-    '</div></div>';
+    '</div>'+
+    // WiFi + Çerezler açılır çekmecesi
+    '<div class="qr-krs-cekmece-tetik">'+
+      '<button class="qr-cekmece-tetik-btn" onclick="splashCekmeceAc()"><span class="qr-cekmece-cizgi koyu"></span></button>'+
+      '<div class="qr-cekmece-ipucu koyu">⌃ WiFi şifresi & çerezler</div>'+
+    '</div>'+
+    qrSplashCekmeceHtml()+
+    '</div>';
+}
+/* Karşılama animasyonu — logo dönerek gelir, yazı yakınlaşır, slogan daktilo ile yazılır */
+function qrKarsilamaBaslat(){
+  clearTimeout(QR._krsTimer1); clearTimeout(QR._krsTimer2); clearInterval(QR._krsDaktilo);
+  const yaziEl = document.getElementById("qrKrsYazi");
+  const sloEl  = document.getElementById("qrKrsSlogan");
+  if(sloEl) sloEl.textContent = "";
+  const slogan = (SPLASH && SPLASH.slogan) ? SPLASH.slogan : QR_SLOGAN;
+  // 1) logo dönerek yakınlaşır (CSS) → 1.6sn sonra yazı
+  QR._krsTimer1 = setTimeout(()=>{
+    if(yaziEl) yaziEl.classList.add("gir");
+    // 2) yazı gelince → daktilo başlasın
+    QR._krsTimer2 = setTimeout(()=>{
+      if(!sloEl) return;
+      let i=0;
+      QR._krsDaktilo = setInterval(()=>{
+        sloEl.textContent = slogan.slice(0,i+1);
+        i++;
+        if(i>=slogan.length) clearInterval(QR._krsDaktilo);
+      }, 38);
+    }, 900);
+  }, 1500);
 }
 
 /* 1b) KAYIT — mail (asıl kimlik) + ad + telefon (opsiyonel) */
@@ -20780,9 +21169,9 @@ function qrKaydol(){
     CUSTOMERS[mail] = m;   // gerçekte customers/{mail} — mail asıl kimlik
   }
   QR.musteri = m; QR.kisi = m.ad; QR.tel = m.tel||"";
-  DEVICE_MEMORY = mail;    // cihaz hafızası artık mail ile
+  cihazHafizasiYaz(mail);    // çerez kabul edildiyse kalıcı
   note("Hoş geldin "+m.ad+"! "+(m.mag>0?m.mag+" "+SADAKAT.ad+" puanın var":"İlk siparişinle kazanmaya başla"));
-  QR.view = "kategoriler"; renderQR();
+  QR.view = "splash"; renderQR();
 }
 
 /* 1c) HESAP KURTARMA — yeni cihaz/telefon: mail + kod ile giriş */
@@ -20818,18 +21207,29 @@ function qrKurtarmaDogrula(){
   if(!otpDogrula(kod)){ note("Kod hatalı veya süresi doldu"); return; }
   const m=musteriBulMail(QR._kurtarmaMail);
   QR.musteri=m; QR.kisi=m.ad; QR.tel=m.tel||"";
-  DEVICE_MEMORY=m.mail; OTP_AKTIF=null; QR._kurtarmaAsama=null;
+  cihazHafizasiYaz(m.mail); OTP_AKTIF=null; QR._kurtarmaAsama=null;
   // yeni telefon güncelleme öner
   note("Hoş geldin "+m.ad+"! Hesabına yeni cihazdan giriş yaptın · "+m.mag+" "+SADAKAT.ad);
-  QR.view="kategoriler"; renderQR();
+  QR.view="splash"; renderQR();
 }
 
 function qrGirisHtml(){
+  const logo = MARKA_LOGOLAR.logo;
+  const yazi = MARKA_LOGOLAR.yazi;
+  const logoHtml = logo
+    ? '<img class="qr-krs-logo-img sabit" src="'+logo+'" alt="MİNİPAN">'
+    : '<div class="qr-krs-logo-ph sabit">🧇</div>';
+  const yaziHtml = yazi
+    ? '<img class="qr-krs-yazi-img" src="'+yazi+'" alt="MİNİPAN">'
+    : '<div class="qr-krs-yazi-ph">MİNİPAN</div>';
   return '<div class="qr-screen qr-giris">'+
+    qrIntroVideoKatman()+
     '<button class="qr-close" onclick="closeQR()">✕</button>'+
-    '<div class="qr-hero"><div class="qr-logo">🧇</div>'+
-      '<div class="qr-brand">MİNİPAN</div>'+
-      '<div class="qr-masa-rozet">📍 '+QR.sube+' · Masa '+QR.masa+'</div></div>'+
+    '<div class="qr-krs-ust">'+
+      '<div class="qr-krs-logo sabit-halka">'+logoHtml+'</div>'+
+      '<div class="qr-krs-yazi gir">'+yaziHtml+'</div>'+
+      '<div class="qr-masa-rozet">📍 '+QR.sube+' · Masa '+QR.masa+'</div>'+
+    '</div>'+
     '<div class="qr-giris-kart">'+
       '<div class="qr-g-baslik">Hoş geldin!</div>'+
       '<div class="qr-g-alt">Sipariş vermek için adını yaz. Aynı masada herkes kendi adına sipariş verebilir.</div>'+
@@ -20843,7 +21243,7 @@ function qrGirisHtml(){
 function qrGirisYap(){
   const ad = (document.getElementById("qrAdInput").value||"").trim();
   if(!ad){ note("Lütfen adını yaz"); return; }
-  QR.kisi = ad; QR.view="kategoriler"; renderQR();
+  QR.kisi = ad; QR.view="splash"; renderQR();
 }
 
 /* ÜYE GİRİŞİ — mevcut üye e-posta veya telefonuyla hesabına girer */
@@ -20872,9 +21272,9 @@ function qrUyeGiris(){
     return;
   }
   QR.musteri = m; QR.kisi = m.ad; QR.tel = m.tel||"";
-  DEVICE_MEMORY = m.mail || (m.tel||"");   // cihaz hafızasına yaz
+  cihazHafizasiYaz(m.mail || (m.tel||""));   // çerez kabul edildiyse kalıcı
   note("Hoş geldin "+m.ad+"! "+(m.mag>0?m.mag+" "+SADAKAT.ad+" puanın var":"Sipariş verip puan kazan"));
-  QR.view = "kategoriler"; renderQR();
+  QR.view = "splash"; renderQR();
 }
 
 /* Kademe şeridi (Bronz→Gümüş→Altın ilerleme + Mag bakiyesi) */
@@ -21334,7 +21734,7 @@ function qrYorumlarHtml(){
 }
 /* Yorum ekleme formu */
 function qrYorumEkleAc(){
-  QR.yeniYorum = {puan:5, isim:QR.kisi||"", metin:""};
+  QR.yeniYorum = {puan:0, isim:QR.kisi||"", metin:""};
   QR.view="yorumEkle"; renderQR();
 }
 function qrYorumEkleHtml(){
@@ -21365,16 +21765,95 @@ function qrYorumPuan(p){ QR.yeniYorum.puan=p; renderQR(); }
 function qrYorumKaydet(){
   const urunAd = QR.yorumUrun;
   const y = QR.yeniYorum;
+  const sube = QR.sube || AKTIF_SUBE;
+  if(!y.puan || y.puan<1){ note("Lütfen yıldız vererek puanlayın"); return; }
   if(!y.isim || !y.isim.trim()){ note("Lütfen adınızı girin"); return; }
+  // 1 saat tekrar engeli — aynı kişi aynı ürüne
+  if(yorumTekrarEngeli(urunAd, y.isim, sube)){
+    note("⏱️ Bu ürüne yakın zamanda yorum yaptınız. Lütfen bir süre sonra tekrar deneyin.");
+    return;
+  }
   if(!YORUMLAR[urunAd]) YORUMLAR[urunAd]=[];
   YORUMLAR[urunAd].push({
     isim:y.isim.trim(), puan:y.puan, metin:(y.metin||"").trim(),
     tarih:Date.now(), onay:false,
-    sube: (QR.sube||AKTIF_SUBE)   // hangi şubenin QR'ından yapıldığı
+    sube: sube
+  });
+  // ── şube yorum sayacı → gizli sürpriz hediye kontrolü ──
+  SUBE_YORUM_SAYAC[sube] = (SUBE_YORUM_SAYAC[sube]||0) + 1;
+  const sayac = SUBE_YORUM_SAYAC[sube];
+  const hediyeKazandi = (sayac % HEDIYE_ARALIK === 0);
+  yorumKaydet();
+  if(hediyeKazandi){
+    hediyeVer(urunAd, y.isim.trim(), sube, sayac);
+    return;   // pop-up hediyeVer içinde gösterilir
+  }
+  QR.view="yorumlar"; renderQR();
+  qrOnayPopupAc("✓ Yorumunuz alındı", "Yorumunuz onaylandıktan sonra yayınlanacaktır. Teşekkür ederiz!");
+}
+/* Onay bilgisi pop-up'ı */
+function qrOnayPopupAc(baslik, metin){
+  const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
+    '<div class="qr-pop" onclick="event.stopPropagation()">'+
+      '<div class="qr-pop-ikon">💬</div>'+
+      '<div class="qr-pop-baslik">'+baslik+'</div>'+
+      '<div class="qr-pop-metin">'+metin+'</div>'+
+      '<button class="qr-pop-btn" onclick="qrPopKapat()">Tamam</button>'+
+    '</div></div>';
+  qrPopGoster(html);
+}
+function qrPopGoster(html){
+  let el = document.getElementById("qrPopWrap");
+  if(!el){ el=document.createElement("div"); el.id="qrPopWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function qrPopKapat(){ const el=document.getElementById("qrPopWrap"); if(el) el.innerHTML=""; }
+
+/* ══ HEDİYE VER — 100. yorum sürprizi ══ */
+function hediyeVer(urunAd, isim, sube, sayac){
+  const id = "HD-"+String(_hediyeId++).padStart(4,"0");
+  const kayit = {
+    id:id, isim:isim, urun:urunAd, sube:sube, ts:Date.now(),
+    masa: QR.masa||"", kullanildi:false, sayac:sayac
+  };
+  HEDIYE_KAZANANLAR.unshift(kayit);
+  // hediyeyi müşterinin MEVCUT sepetine NORMAL FİYATIYLA ekle — hediye bayrağı taşır.
+  // Kasada bu kalem tutarı kadar otomatik "hediye indirimi" uygulanır.
+  const gercekFiyat = (typeof urunGecerliFiyat==="function")
+    ? urunGecerliFiyat(urunAd, sube, (typeof aktifKanal==="function"?aktifKanal():"qr"))
+    : 0;
+  QR.sepet.push({
+    ad:urunAd, fiyat:gercekFiyat, q:1, secimler:[], ekstraRecete:[],
+    kcal:(typeof urunTemelKcal==="function"?urunTemelKcal(urunAd):0),
+    not:"", hediye:true, hediyeId:id
   });
   yorumKaydet();
+  // kasa + müdürlere bildirim
+  hediyeBildirimGonder(kayit);
+  // müşteriye sürpriz pop-up
   QR.view="yorumlar"; renderQR();
-  note("✓ Yorumunuz alındı — onaylandıktan sonra yayınlanacak");
+  const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
+    '<div class="qr-pop qr-pop-hediye" onclick="event.stopPropagation()">'+
+      '<div class="qr-pop-konfeti">🎉</div>'+
+      '<div class="qr-pop-ikon buyuk">🎁</div>'+
+      '<div class="qr-pop-baslik">Tebrikler '+isim+'!</div>'+
+      '<div class="qr-pop-metin">Sürpriz hediye kazandınız!<br><b>'+urunAd+'</b> siparişinize <b>ücretsiz</b> olarak eklendi.</div>'+
+      '<div class="qr-pop-hediye-not">🧾 Kasada onaylandıktan sonra ikram edilecektir.</div>'+
+      '<button class="qr-pop-btn hediye" onclick="qrPopKapat()">Harika! 🎊</button>'+
+    '</div></div>';
+  qrPopGoster(html);
+}
+/* Hediye bildirimi — kasa, şube müdürü, genel müdür */
+function hediyeBildirimGonder(kayit){
+  const mesaj = kayit.isim+" · "+kayit.urun+" · Masa "+(kayit.masa||"-")+" · ücretsiz ikram (kasada 0 ₺)";
+  if(typeof bildirimEkle!=="function") return;
+  // kasa (o şubenin kasası) + şube müdürü + genel müdür
+  bildirimEkle({ tip:"hediye", baslik:"🎁 Sürpriz Hediye Kazanıldı", mesaj:mesaj,
+    kanal:"QR Menü", hedefRol:"kasa", hedefSube:null, link:"masalar" });
+  bildirimEkle({ tip:"hediye", baslik:"🎁 Sürpriz Hediye · "+kayit.sube, mesaj:mesaj,
+    kanal:"QR Menü", hedefSube:kayit.sube, link:"masalar" });
+  bildirimEkle({ tip:"hediye", baslik:"🎁 Sürpriz Hediye · "+kayit.sube, mesaj:mesaj,
+    kanal:"QR Menü", hedefRol:"genel", link:"masalar" });
 }
 
 function qrUrunSec(pi){
@@ -21442,10 +21921,17 @@ function qrSepetHtml(){
       const paketToggle = (QR.siparisTipi==="masa"||!QR.siparisTipi)
         ? '<button class="qr-si-paketle'+(c.paket?' on':'')+'" onclick="qrKalemPaket('+i+')">'+(c.paket?'📦 Paket':'📦 Paketle')+'</button>'
         : '';
-      html += '<div class="qr-si'+(c.paket?' qr-si-paketli':'')+'"><div class="qr-si-info"><div class="qr-si-ad">'+(c.paket?'📦 ':'')+c.ad+(c.kcal?' <span class="kalem-kcal">🔥 '+c.kcal+' kcal</span>':'')+'</div>'+secim+notT+paketToggle+'</div>'+
-        '<div class="qr-si-sag"><div class="qr-si-fiyat">'+(c.fiyat*c.q)+' ₺</div>'+
-          '<div class="qr-si-adet"><button onclick="qrAdet('+i+',-1)">−</button><span>'+c.q+'</span>'+
-          '<button onclick="qrAdet('+i+',1)">+</button></div></div></div>';
+      html += '<div class="qr-si'+(c.paket?' qr-si-paketli':'')+(c.hediye?' qr-si-hediye':'')+'"><div class="qr-si-info"><div class="qr-si-ad">'+(c.hediye?'🎁 ':'')+(c.paket?'📦 ':'')+c.ad+(c.hediye?' <span class="qr-si-hediye-rozet">HEDİYE</span>':'')+(c.kcal?' <span class="kalem-kcal">🔥 '+c.kcal+' kcal</span>':'')+'</div>'+secim+notT+paketToggle+
+        (c.hediye?'<div class="qr-si-hediye-not">✨ Kazandığın hediye · kasada <b>ücret alınmayacak</b></div>':'')+'</div>'+
+        '<div class="qr-si-sag">'+
+          (c.hediye
+            ? '<div class="qr-si-fiyat hediye"><span class="qr-si-eski">'+(c.fiyat*c.q)+' ₺</span><span class="qr-si-bedava">Ücretsiz</span></div>'
+            : '<div class="qr-si-fiyat">'+(c.fiyat*c.q)+' ₺</div>')+
+          (c.hediye
+            ? '<div class="qr-si-adet-sabit">×'+c.q+'</div>'
+            : '<div class="qr-si-adet"><button onclick="qrAdet('+i+',-1)">−</button><span>'+c.q+'</span>'+
+              '<button onclick="qrAdet('+i+',1)">+</button></div>')+
+        '</div></div>';
     });
   }
   html += '</div>';
@@ -21523,10 +22009,19 @@ function qrSepetHtml(){
       butonYazi = QR.odemeTipi==="online" ? "Online öde · "+t+" ₺" : "Siparişi ver · kapıda öde";
       pasifYazi = "Adres/üyelik gerekli";
     }
-    html += '<div class="qr-sepet-foot"><div class="qr-sf-toplam"><span>Toplam</span><strong>'+t+' ₺</strong></div>'+
+    // 🎁 hediye indirimi — sepette görünsün, müşteri ne ödeyeceğini bilsin
+    const hediyeInd = QR.sepet.reduce((s,c)=>s+(c.hediye?c.fiyat*c.q:0),0);
+    const odenecekT = Math.max(0, t - hediyeInd);
+    html += '<div class="qr-sepet-foot">'+
+      (hediyeInd>0
+        ? '<div class="qr-sf-ara"><span>Ara toplam</span><span>'+t+' ₺</span></div>'+
+          '<div class="qr-sf-hediye"><span>🎁 Hediye indirimi</span><span>−'+hediyeInd+' ₺</span></div>'
+        : '')+
+      '<div class="qr-sf-toplam"><span>'+(hediyeInd>0?'Ödenecek':'Toplam')+'</span><strong>'+odenecekT+' ₺</strong></div>'+
       (butonAktif
         ? '<button class="qr-btn-primary" onclick="qrSiparisGonder()">'+butonYazi+'</button>'
         : '<button class="qr-btn-primary" disabled style="opacity:.4">'+pasifYazi+'</button>')+
+      (hediyeInd>0 ? '<div class="qr-sf-hediye-not">🎁 Hediye ürünün için kasada <b>ücret alınmayacak</b>.</div>' : '')+
       '<div class="qr-sf-not">'+(QR.siparisTipi==="masa"?'Siparişin onaysız doğrudan mutfağa iletilir.':'Sipariş mutfağa iletilir, durumu takip edebilirsin.')+'</div></div>';
   }
   html += '</div>';
@@ -21546,9 +22041,34 @@ function qrKalemPaket(i){
   renderQR();
 }
 function qrSiparisGonder(){
+  // 🎁 hediye varsa müşteriye net bilgilendirme yap (kasada ücret alınmayacak)
+  const hediyeler = QR.sepet.filter(c=>c.hediye);
+  if(hediyeler.length>0 && !QR._hediyeOnaylandi){
+    const adlar = hediyeler.map(c=>c.ad).join(", ");
+    const tutar = hediyeler.reduce((s,c)=>s+c.fiyat*c.q,0);
+    const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
+      '<div class="qr-pop" onclick="event.stopPropagation()">'+
+        '<div class="qr-pop-ikon">🎁</div>'+
+        '<div class="qr-pop-baslik">Hediyen siparişinde</div>'+
+        '<div class="qr-pop-metin"><b>'+adlar+'</b> kazandığın hediye.<br>'+
+          'Menüde <b>'+tutar+' ₺</b> yazsa da <b>kasada bu ürün için ücret alınmayacak</b>.<br>'+
+          'Fişinde indirim olarak görünecek.</div>'+
+        '<button class="qr-pop-btn" onclick="qrHediyeOnayGonder()">Anladım, siparişi gönder</button>'+
+      '</div></div>';
+    qrPopGoster(html);
+    return;   // onay bekle
+  }
+  qrSiparisGonderDevam();
+}
+function qrHediyeOnayGonder(){
+  QR._hediyeOnaylandi = true;
+  qrPopKapat();
+  qrSiparisGonderDevam();
+}
+function qrSiparisGonderDevam(){
   const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
   consumeRecipe(QR.sepet, QR.sube || AKTIF_SUBE);
-  const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat*c.q, paket:!!c.paket}));
+  const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat*c.q, paket:!!c.paket, hediye:!!c.hediye, hediyeId:c.hediyeId||null}));
   let takipId = "S"+(_takipId++);
   let fisMasaRef = QR.masa;   // mutfak fişini doğru kayda bağlamak için (varsayılan: masa siparişi)
   // EVE TESLİMAT → adresli paket kaydı
@@ -21581,7 +22101,7 @@ function qrSiparisGonder(){
       if(!k){ k={ad:(QR.kisi||"Müşteri"), kalemler:[]}; s.kisiler.push(k); }
       if(QR.musteri && QR.musteri.mail) k.uyeMail = QR.musteri.mail;  // sadakat üyesi → kişiye bağla
       kalemlerKopya.forEach(it=>{
-        k.kalemler.push({id:_kalemId++, ad:it.ad, fiyat:it.fiyat, secimler:it.secimler, ekstraRecete:[], durum:"hazirlaniyor", paket:true});
+        k.kalemler.push({id:_kalemId++, ad:it.ad, fiyat:it.fiyat, secimler:it.secimler, ekstraRecete:[], durum:"hazirlaniyor", paket:true, hediye:!!it.hediye, hediyeId:it.hediyeId||null});
       });
     }
     QR.sonPaket = true;
@@ -21596,7 +22116,7 @@ function qrSiparisGonder(){
     if(QR.musteri && QR.musteri.mail) k.uyeMail = QR.musteri.mail;  // sadakat üyesi → kişiye bağla
     QR.sepet.forEach(c=>{
       for(let n=0;n<c.q;n++){
-        k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], secimEk:c.secimEk||[], secimKcal:c.secimKcal||[], kcal:c.kcal||0, ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
+        k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], secimEk:c.secimEk||[], secimKcal:c.secimKcal||[], kcal:c.kcal||0, ekstraRecete:[], durum:"bekliyor", paket:!!c.paket, hediye:!!c.hediye, hediyeId:c.hediyeId||null});
       }
     });
     // masadan paketli ürün masaya bağlı kalır (kalemde paket:true) — ayrı PAKET_ORDERS oluşturulmaz
@@ -22289,6 +22809,40 @@ function kdsFisYazdir(m){
 /* Kısmi ödeme fişi (POS gönderim için) */
 /* Diğer/QR ödeme fişi — kasa yazıcısından OTOMATİK çıkar (önizleme modalı yok).
    Kişi, seçenek grupları, masa adı dahil. Altta "Diğer Ödeme" ibaresi. */
+/* ══ 🎁 İKRAM FİŞİ — hediye ürünler için. Mali değeri YOK, POS'a gitmez.
+   Kasa yazıcısından çıkar, müşteriye ikram belgesi olarak verilir. ══ */
+function ikramFisiYazdir(veri){
+  const yaz = document.createElement("div");
+  yaz.className = "fis-print-alan";
+  let ic = `<div class="fis-kagit">
+    <div class="fis-logo">MİNİPAN</div>
+    <div class="fis-fis-baslik">🎁 İKRAM FİŞİ</div>
+    <div class="fis-meta">${veri.masaAd} · ${new Date().toLocaleString('tr')}</div>
+    <div class="fis-alt-not" style="text-align:center">MALİ DEĞERİ YOKTUR</div>
+    <div class="fis-cizgi"></div>`;
+  veri.kalemler.forEach(k=>{
+    ic += `<div class="fis-satir"><span>${k.ad}</span><span>${tl(k.tutar)} ₺</span></div>`;
+    if(k.kisi) ic += `<div class="fis-alt-not">👤 ${k.kisi}</div>`;
+  });
+  ic += `<div class="fis-cizgi"></div>
+    <div class="fis-satir"><span>Ara toplam</span><span>${tl(veri.toplam)} ₺</span></div>
+    <div class="fis-satir" style="color:#d92c08;font-weight:800"><span>🎁 Hediye indirimi</span><span>−${tl(veri.toplam)} ₺</span></div>
+    <div class="fis-cizgi"></div>
+    <div class="fis-toplam"><span>ÖDENEN</span><span>0,00 ₺</span></div>
+    <div class="fis-cizgi"></div>
+    <div class="fis-alt-not" style="text-align:center;margin-top:8px">
+      Bu ürün işletmemizin ikramıdır.<br>Afiyet olsun! 🎉
+    </div>
+    <div class="fis-alt-not" style="text-align:center;font-size:9px;margin-top:6px">
+      Mali fiş değildir · yazarkasadan geçmemiştir
+    </div>
+  </div>`;
+  yaz.innerHTML = ic;
+  document.body.appendChild(yaz);
+  window.print();
+  setTimeout(()=>{ if(yaz.parentNode) yaz.parentNode.removeChild(yaz); }, 500);
+  note("🎁 İkram fişi kasa yazıcısından çıktı (POS'a gitmedi)");
+}
 function digerFisiOtomatikYazdir(veri){
   const yaz = document.createElement("div");
   yaz.className = "fis-print-alan";
