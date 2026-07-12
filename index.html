@@ -1678,7 +1678,9 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qyk-isim{font-weight:800; font-size:14px}
 .qyk-yildiz{font-size:13px}
 .qyk-metin{font-size:13.5px; color:var(--ink-2); line-height:1.5; margin-bottom:6px}
-.qyk-tarih{font-size:11.5px; color:var(--ink-3); text-align:right}
+.qyk-alt{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:6px; flex-wrap:wrap}
+.qyk-tarih{font-size:11.5px; color:var(--ink-3)}
+.qyk-sube{font-size:11px; font-weight:700; color:var(--cocoa); background:var(--cocoa-soft); border-radius:6px; padding:2px 8px; white-space:nowrap}
 .qr-yorum-ekle-btn{position:sticky; bottom:0; margin:14px; width:calc(100% - 28px); padding:16px; border-radius:14px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; box-shadow:var(--shadow-lg)}
 .qye-govde{padding:6px 16px; display:flex; flex-direction:column; gap:18px}
 .qye-alan{display:flex; flex-direction:column; gap:8px}
@@ -1704,9 +1706,8 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qug-kart{background:#fff; border-radius:20px; max-width:360px; width:100%; overflow:hidden; position:relative; box-shadow:0 20px 50px rgba(0,0,0,.35); animation:qrPopGel .3s cubic-bezier(.2,.9,.25,1)}
 .qug-kapat{position:absolute; top:10px; right:10px; z-index:3; width:34px; height:34px; border-radius:99px; background:rgba(255,255,255,.92); border:1px solid var(--line); color:var(--ink); font-size:16px; font-weight:800; cursor:pointer; display:grid; place-items:center; box-shadow:0 2px 8px rgba(0,0,0,.15)}
 /* Pop-up görseli — kare alan, görsel alanı TAM doldurur */
-.qug-gorsel-wrap{position:relative; width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; overflow:hidden; background:#faf6ec}
-.qug-img{position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; display:block}
-.qug-ph{position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:90px; background:#faf6ec}
+.qug-gorsel-wrap{position:relative; width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; overflow:hidden; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#faf6ec}
+.qug-ph{position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-size:90px}
 .qug-mag{font-size:11px !important; padding:3px 8px !important; animation:none !important}
 .qug-govde{padding:16px 18px 20px}
 .qug-ad{font-size:19px; font-weight:900; color:var(--ink); line-height:1.25; margin-bottom:8px}
@@ -2128,6 +2129,9 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yym-sekme.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
 .yym-liste{display:flex; flex-direction:column; gap:10px}
 .yym-kart{background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:14px 16px}
+.yym-sube-rozet{font-size:11px; font-weight:700; color:var(--cocoa); background:var(--cocoa-soft); border-radius:6px; padding:2px 8px; margin-left:6px; white-space:nowrap}
+.yym-onaylayan{font-size:11px; font-weight:700; color:var(--ok); margin-left:8px}
+.yym-yetkisiz{font-size:12.5px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border:1px dashed var(--line); border-radius:9px; padding:9px 12px; text-align:center; width:100%}
 .yym-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:6px}
 .yym-urun{font-weight:800; font-size:14.5px}
 .yym-yildiz{font-size:14px}
@@ -2140,8 +2144,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .yym-btn.onay{background:var(--ok-soft); color:var(--ok)}
 .yym-btn.gizle{background:var(--surface-2); color:var(--ink-2)}
 .yym-btn.red{background:var(--err-soft); color:var(--err)}
-.qkk-gorsel.qkk-foto{overflow:hidden; display:block; position:relative; background:#faf6ec}
-.qkk-gorsel.qkk-foto img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block}
+.qkk-gorsel.qkk-foto{overflow:hidden; display:block; position:relative; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#faf6ec}
 .qkk-gorsel span{font-size:38px; opacity:.9}
 .qkk-bilgi{flex:1 1 auto; padding:9px 8px 11px; text-align:center}
 .qkk-ad{font-size:12.5px; font-weight:800; line-height:1.25}
@@ -3241,7 +3244,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-card-ad-row .qr-card-ad{margin-bottom:0; word-break:break-word}
 /* Görsel kapsayıcı — kart genişliğine göre KARE alan, görsel alanı TAM doldurur */
 .qr-card-gorsel-wrap{position:relative; display:block; width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; flex:none !important; overflow:hidden; background:#faf6ec; min-height:0}
-.qr-img{position:absolute; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background-size:cover; background-repeat:no-repeat; background-position:center; background-color:#faf6ec; display:block}
+.qr-img{position:absolute; top:0; left:0; right:0; bottom:0; background-size:cover; background-repeat:no-repeat; background-position:center; background-color:#faf6ec; display:block}
 #qrApp .qr-puan-gorsel{position:absolute; right:10px; bottom:10px; z-index:2; margin:0; font-size:11px; padding:4px 10px; gap:3px;
   background:rgba(255,255,255,.92); color:var(--cocoa);
   box-shadow:0 2px 6px rgba(58,11,34,.18); border:1px solid rgba(255,255,255,.6)}
@@ -12577,18 +12580,24 @@ function yorumYonetimHtml(sube){
   liste.forEach(y=>{
     const tarih = new Date(y.tarih).toLocaleDateString('tr');
     const urunEsc = y.urun.replace(/'/g,"\\'");
-    const subeRozet = (isGenel && y.sube)
-      ? `<span style="font-size:11px;font-weight:700;color:var(--ink-3);background:var(--surface-2);border-radius:6px;padding:1px 7px;margin-left:6px">🏢 ${y.sube}</span>`
+    const subeRozet = y.sube
+      ? `<span class="yym-sube-rozet">🏢 ${y.sube}</span>`
+      : '';
+    const onayBilgi = (y.onay && y.onaylayan)
+      ? `<span class="yym-onaylayan">✓ ${y.onaylayan}${y.onayTs?' · '+new Date(y.onayTs).toLocaleDateString('tr'):''}</span>`
       : '';
     html += `<div class="yym-kart">
       <div class="yym-ust">
         <span class="yym-urun">${y.urun}${subeRozet}</span>
         <span class="yym-yildiz">${yildizHtml(y.puan)}</span>
       </div>
-      <div class="yym-isim">👤 ${y.isim} · <span class="yym-tarih">${tarih}</span></div>
+      <div class="yym-isim">👤 ${y.isim} · <span class="yym-tarih">${tarih}</span>${onayBilgi}</div>
       ${y.metin?`<div class="yym-metin">"${y.metin}"</div>`:`<div class="yym-metin yym-bos">(sadece puan, yorum yok)</div>`}
       <div class="yym-aksiyon">`;
-    if(state.yorumSekme==="bekleyen"){
+    const yetkili = yorumYetkisiVar(y);
+    if(!yetkili){
+      html += `<div class="yym-yetkisiz">🔒 ${y.sube||"Başka şube"} şubesinin onayında</div>`;
+    } else if(state.yorumSekme==="bekleyen"){
       html += `<button class="yym-btn onay" onclick="yorumOnayla('${urunEsc}',${y.idx})">✓ Onayla</button>
         <button class="yym-btn red" onclick="yorumSilOnay('${urunEsc}',${y.idx})">🗑️ Reddet</button>`;
     } else {
@@ -12603,14 +12612,46 @@ function yorumYonetimHtml(sube){
 function yorumSekmeSec(k){ state.yorumSekme=k; go("fiyat", true); }
 function yorumSubeFiltreSec(sb){ state.yorumSubeFiltre=sb; state.yorumUrunFiltre="__tum"; go("fiyat", true); }
 function yorumUrunFiltreSec(u){ state.yorumUrunFiltre=u; go("fiyat", true); }
+/* Bu yorum üzerinde işlem yetkisi var mı?
+   Genel müdür: tüm şubeler · Şube müdürü: SADECE kendi şubesinden gelen yorumlar */
+function yorumYetkisiVar(y){
+  if(!y) return false;
+  if(state.role==="genel") return true;                   // genel müdür her şubeyi onaylar
+  return (y.sube||"") === AKTIF_SUBE;                     // şube müdürü sadece kendi şubesi
+}
 function yorumOnayla(urun, idx){
-  if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=true; yorumKaydet(); note("✓ Yorum yayınlandı"); go("fiyat", true); }
+  const y = YORUMLAR[urun] && YORUMLAR[urun][idx];
+  if(!y) return;
+  if(!yorumYetkisiVar(y)){
+    note("⛔ Bu yorum "+(y.sube||"başka şube")+" şubesine ait — sadece o şubenin müdürü veya genel müdür onaylayabilir");
+    return;
+  }
+  y.onay = true;
+  y.onaylayan = (state.role==="genel") ? "Genel Müdür" : (AKTIF_SUBE+" Müdürü");
+  y.onayTs = Date.now();
+  yorumKaydet();
+  note("✓ Yorum yayınlandı (tüm şubelerde görünür)");
+  go("fiyat", true);
 }
 function yorumGizle(urun, idx){
-  if(YORUMLAR[urun] && YORUMLAR[urun][idx]){ YORUMLAR[urun][idx].onay=false; yorumKaydet(); note("Yorum yayından kaldırıldı"); go("fiyat", true); }
+  const y = YORUMLAR[urun] && YORUMLAR[urun][idx];
+  if(!y) return;
+  if(!yorumYetkisiVar(y)){
+    note("⛔ Bu yorum "+(y.sube||"başka şube")+" şubesine ait — işlem yetkiniz yok");
+    return;
+  }
+  y.onay = false;
+  yorumKaydet();
+  note("Yorum yayından kaldırıldı");
+  go("fiyat", true);
 }
 /* Yorum silme — confirm() yerine popup */
 function yorumSilOnay(urun, idx){
+  const yk = YORUMLAR[urun] && YORUMLAR[urun][idx];
+  if(yk && !yorumYetkisiVar(yk)){
+    note("⛔ Bu yorum "+(yk.sube||"başka şube")+" şubesine ait — işlem yetkiniz yok");
+    return;
+  }
   state._yorumSilOnay = {urun, idx};
   let mdl=document.getElementById("yorumSilModal");
   if(!mdl){ mdl=document.createElement("div"); mdl.id="yorumSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="210"; document.body.appendChild(mdl); }
@@ -21524,7 +21565,7 @@ function qrKategorilerHtml(){
     const gorsel=KAT_GORSEL[k];
     html += '<button class="qr-kat-kart" onclick="qrKategoriAc(\''+k.replace(/'/g,"\\'")+'\')">'+
       (gorsel
-        ? '<div class="qkk-gorsel qkk-foto"><img src="'+gorsel+'" alt=""></div>'
+        ? '<div class="qkk-gorsel qkk-foto" style="background-image:url('+gorsel+')"></div>'
         : '<div class="qkk-gorsel" style="background:linear-gradient(135deg,'+kapak.ton+')"><span>'+kapak.emoji+'</span></div>')+
       '<div class="qkk-bilgi"><div class="qkk-ad">'+k+'</div><div class="qkk-adet">'+adet+' ürün</div></div>'+
     '</button>';
@@ -21559,11 +21600,9 @@ function qrUrunGorselAc(urunAd){
   const magP = (typeof urunMagPuan==="function") ? urunMagPuan(p) : 0;
   const fb = (typeof urunFiyatBilgi==="function") ? urunFiyatBilgi(p, sube, "qr") : {gecerli:p.fiyat, indirimli:false};
   const satilir = (typeof urunSatilabilir==="function") ? urunSatilabilir(p, "qr", sube) : true;
-  const gorselHtml = '<div class="qug-gorsel-wrap">'+
-    (gorsel
-      ? '<img class="qug-img" src="'+gorsel+'" alt="">'
-      : '<div class="qug-ph">'+(p.emoji||"🍰")+'</div>')+
-    '</div>';
+  const gorselHtml = gorsel
+    ? '<div class="qug-gorsel-wrap" style="background-image:url('+gorsel+')"></div>'
+    : '<div class="qug-gorsel-wrap"><div class="qug-ph">'+(p.emoji||"🍰")+'</div></div>';
   const html = '<div class="qr-pop-bg" onclick="qrPopKapat()">'+
     '<div class="qug-kart" onclick="event.stopPropagation()">'+
       '<button class="qug-kapat" onclick="qrPopKapat()">✕</button>'+
@@ -21820,7 +21859,10 @@ function qrYorumlarHtml(){
         '<div class="qyk-ust"><span class="qyk-isim">'+y.isim+'</span>'+
           '<span class="qyk-yildiz">'+yildizHtml(y.puan)+'</span></div>'+
         (y.metin?'<div class="qyk-metin">'+y.metin+'</div>':'')+
-        '<div class="qyk-tarih">'+tarih+'</div></div>';
+        '<div class="qyk-alt">'+
+          '<span class="qyk-tarih">'+tarih+'</span>'+
+          (y.sube?'<span class="qyk-sube">📍 '+y.sube+'</span>':'')+
+        '</div></div>';
     });
     html += '</div>';
   }
@@ -21880,12 +21922,28 @@ function qrYorumKaydet(){
   const sayac = SUBE_YORUM_SAYAC[sube];
   const hediyeKazandi = (sayac % HEDIYE_ARALIK === 0);
   yorumKaydet();
+  // ── onay bildirimi: SADECE o şubenin müdürü + genel müdür ──
+  yorumOnayBildirimi(urunAd, y, sube);
   if(hediyeKazandi){
     hediyeVer(urunAd, y.isim.trim(), sube, sayac);
     return;   // pop-up hediyeVer içinde gösterilir
   }
   QR.view="yorumlar"; renderQR();
   qrOnayPopupAc("✓ Yorumunuz alındı", "Yorumunuz onaylandıktan sonra yayınlanacaktır. Teşekkür ederiz!");
+}
+/* Yeni yorum → onay bildirimi. SADECE yorumun yapıldığı şubenin müdürüne + genel müdüre. */
+function yorumOnayBildirimi(urunAd, y, sube){
+  if(typeof bildirimEkle!=="function") return;
+  const yildiz = "★".repeat(y.puan||0) + "☆".repeat(5-(y.puan||0));
+  const ozet = (y.metin||"").trim();
+  const mesaj = urunAd+" · "+yildiz+" · "+(y.isim||"Misafir")+
+                (ozet ? " · \""+ozet.slice(0,60)+(ozet.length>60?"…":"")+"\"" : "");
+  // o şubenin müdürü
+  bildirimEkle({ tip:"yorum", baslik:"💬 Yeni yorum · onay bekliyor",
+    mesaj:mesaj, kanal:"QR Menü", hedefSube:sube, link:"fiyat" });
+  // genel müdür (tüm şubeleri görür)
+  bildirimEkle({ tip:"yorum", baslik:"💬 Yeni yorum · "+sube,
+    mesaj:mesaj, kanal:"QR Menü", hedefRol:"genel", link:"fiyat" });
 }
 /* Onay bilgisi pop-up'ı */
 function qrOnayPopupAc(baslik, metin){
