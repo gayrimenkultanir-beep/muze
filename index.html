@@ -10552,22 +10552,7 @@ function myKatYenidenAdlandirOnayla(ki, yeniAd){
   k.kat=yeniAd.trim();
   subeKaydet(); myPopupKapat(); go("masayonetim", true);
 }
-function myKatSil(ki){
-  const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
-  // kategoride dolu masa var mı
-  const dolu = k.masalar.some(ad=>{ const id=sube+"::"+k.kat+"|"+ad; return SESSIONS[id]&&SESSIONS[id].acik; });
-  if(dolu){ note("Bu kategoride dolu masa var — önce hesapları kapatın"); return; }
-  onayPop({ tehlike:true, baslik:"Kategori Silinecek",
-    metin:"<b>"+k.kat+"</b> kategorisi ve içindeki <b>"+k.masalar.length+" masa</b> silinecek.<br>Bu işlem geri alınamaz.",
-    onayYazi:"🗑️ Sil", onOnay:()=>masaKatSilOnay(ki) });
-  return;
-}
-function masaKatSilOnay(ki){
-  const k = BRANCH_TABLES[AKTIF_SUBE][ki]; if(!k) return;
-  BRANCH_TABLES[sube].splice(ki,1);
-  note("Kategori silindi");
-  subeKaydet(); go("masayonetim", true);
-}
+/* NOT: myKatSil tanımı aşağıda (mySilOnayAc sistemiyle) — çift tanım kaldırıldı */
 function myMasaEkle(ki){
   const sube=state.myHedefSube; const k=BRANCH_TABLES[sube][ki];
   // sonraki numarayı öner
@@ -15473,7 +15458,7 @@ function secenekPoolHtml(){
   html += `</div>`;
   return html;
 }
-function secKapatSubeSec(v){ state.secKapatSube=v; go("fiyat", true); }
+/* secKapatSubeSec — yukarıda tanımlı (çift tanım kaldırıldı) */
 /* Seçenekleri stok kartına dönüştürme — önce önizleme/onay */
 function secStokDonusturOnay(){
   secenekleriTopla();
@@ -15883,9 +15868,10 @@ function urunSiraTasi(pi, yon){
 }
 function urunSil(pi){
   const p = DEMO_PRODUCTS[pi];
+  if(!p) return;
   onayPop({ tehlike:true, baslik:"Ürün Silinecek",
     metin:"<b>"+p.ad+"</b> ürünü silinecek.<br>Reçetesi, görseli ve fiyat ayarları da kaldırılır.",
-    onayYazi:"🗑️ Sil", onOnay:()=>urunSilOnay(i) });
+    onayYazi:"🗑️ Sil", onOnay:()=>urunSilOnay(pi) });
   return;
 }
 function urunSilOnay(i){
@@ -16103,14 +16089,8 @@ function urunPuanDagilim(urunAd){
   urunOnayliYorumlar(urunAd).forEach(y=>{ if(d[y.puan]!=null) d[y.puan]++; });
   return d;
 }
-/* Onay bekleyen tüm yorumlar (müdür paneli için) */
-function bekleyenYorumlar(){
-  const liste=[];
-  Object.entries(YORUMLAR).forEach(([urun,ys])=>{
-    ys.forEach((y,i)=>{ if(!y.onay) liste.push({urun, idx:i, ...y}); });
-  });
-  return liste.sort((a,b)=>b.tarih-a.tarih);
-}
+/* NOT: bekleyenYorumlar(sube) yukarıda tanımlı — şube filtreli sürüm kullanılır.
+   Buradaki eski (filtresiz) çift tanım kaldırıldı; şube bazlı onay yetkisini eziyordu. */
 /* Yıldız HTML (dolu/boş) */
 function yildizHtml(puan, boyut){
   let h='';
@@ -19527,6 +19507,7 @@ function sipReddet(id){
   return;
 }
 function siparisReddetOnay(id){
+  const sp = BAYI_SIPARISLER.find(s=>s.id===id); if(!sp) return;
   sp.durum = "red";
   note("Sipariş reddedildi");
   b2bKaydet();
@@ -20837,11 +20818,11 @@ function yzcSil(id){
   if(!y) return;
   onayPop({ tehlike:true, baslik:"Yazıcı Silinecek",
     metin:"<b>"+(y.ad||YAZICI_ROLLER[y.rol].ad)+"</b> yazıcısı silinecek.",
-    onayYazi:"🗑️ Sil", onOnay:()=>yaziciSilOnay(i) });
+    onayYazi:"🗑️ Sil", onOnay:()=>yaziciSilOnay(id) });
   return;
 }
-function yaziciSilOnay(i){
-  const y = YAZICILAR[i]; if(!y) return;
+function yaziciSilOnay(id){
+  const liste = subeYazicilari(state.yzcSube);
   YAZICILAR[state.yzcSube] = liste.filter(x=>x.id!==id);
   yaziciKaydet();
   note("Yazıcı silindi");
