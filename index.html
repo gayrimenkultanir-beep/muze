@@ -7071,32 +7071,36 @@ function vardiyaOzetHesapla(v){
   });
   const o = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
               indirim:0, ikram:0, brut:0, net:0, islemSayisi:0, urunAdet:0 };
+  const yontemEkle = (yontemAd, tutar, digerTip)=>{
+    const y = String(yontemAd||"").toLowerCase();
+    if(y.includes("nakit") && !y.includes("diğer")) o.nakit += tutar;
+    else if(y.includes("kredi") || y.includes("kart")) o.kredi += tutar;
+    else {
+      o.diger += tutar;
+      if(digerTip==="nakit") o.digerNakit += tutar;
+      else if(digerTip==="kredi") o.digerKredi += tutar;
+    }
+  };
   kayitlar.forEach(g=>{
     o.islemSayisi++;
     o.urunAdet += (g.urunSayisi||0);
+    o.brut += (g.toplam||0);
     (g.odemeIslemleri||[]).forEach(is=>{
-      const t = is.tahsil!=null ? is.tahsil : (is.tutar||0);
-      const y = (is.yontem||"").toLowerCase();
-      if(y==="nakit") o.nakit += t;
-      else if(y==="kredi"||y==="kredi kartı") o.kredi += t;
-      else { // diğer / QR — alt kırılım
-        o.diger += t;
-        if(is.digerTip==="nakit") o.digerNakit += t;
-        else if(is.digerTip==="kredi") o.digerKredi += t;
-      }
       o.indirim += (is.indirim||0);
+      if(is.tip === "kalem"){
+        // kasa tahsilatı — yontemler DİZİSİ
+        (is.yontemler||[]).forEach(y=> yontemEkle(y.ad || y.yontem, y.tutar||0));
+      } else {
+        // kişi bazlı (diğer/QR bölme) — tekil yöntem
+        yontemEkle(is.yontem, (is.tahsil!=null?is.tahsil:(is.tutar||0)), is.digerTip);
+      }
     });
-    // ikram (hediye) — ödeme kayıtlarındaki ikram alanı
     (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
     (g.kalemler||[]).forEach(k=>{ if(k.hediye) o.ikram += (k.fiyat||0); });
-    o.brut += (g.toplam||0);
   });
-  o.nakit = Math.round(o.nakit*100)/100;
-  o.kredi = Math.round(o.kredi*100)/100;
-  o.diger = Math.round(o.diger*100)/100;
-  o.indirim = Math.round(o.indirim*100)/100;
-  o.ikram = Math.round(o.ikram*100)/100;
-  o.brut = Math.round(o.brut*100)/100;
+  ["nakit","kredi","diger","digerNakit","digerKredi","indirim","ikram","brut"].forEach(k=>{
+    o[k] = Math.round(o[k]*100)/100;
+  });
   o.net = Math.round((o.nakit + o.kredi + o.diger)*100)/100;
   return o;
 }
@@ -7183,21 +7187,27 @@ function gunSonuOzetHesapla(sube, gun){
   const o = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
               indirim:0, ikram:0, brut:0, net:0,
               iptalTutar:0, iptalAdet:0, islemSayisi:0, urunAdet:0 };
+  const yontemEkle = (yontemAd, tutar, digerTip)=>{
+    const y = String(yontemAd||"").toLowerCase();
+    if(y.includes("nakit") && !y.includes("diğer")) o.nakit += tutar;
+    else if(y.includes("kredi") || y.includes("kart")) o.kredi += tutar;
+    else {
+      o.diger += tutar;
+      if(digerTip==="nakit") o.digerNakit += tutar;
+      else if(digerTip==="kredi") o.digerKredi += tutar;
+    }
+  };
   kayitlar.forEach(g=>{
     o.islemSayisi++;
     o.urunAdet += (g.urunSayisi||0);
     o.brut += (g.toplam||0);
     (g.odemeIslemleri||[]).forEach(is=>{
-      const t = is.tahsil!=null ? is.tahsil : (is.tutar||0);
-      const y = (is.yontem||"").toLowerCase();
-      if(y==="nakit") o.nakit += t;
-      else if(y==="kredi"||y==="kredi kartı") o.kredi += t;
-      else {
-        o.diger += t;
-        if(is.digerTip==="nakit") o.digerNakit += t;
-        else if(is.digerTip==="kredi") o.digerKredi += t;
-      }
       o.indirim += (is.indirim||0);
+      if(is.tip === "kalem"){
+        (is.yontemler||[]).forEach(y=> yontemEkle(y.ad || y.yontem, y.tutar||0));
+      } else {
+        yontemEkle(is.yontem, (is.tahsil!=null?is.tahsil:(is.tutar||0)), is.digerTip);
+      }
     });
     (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
     (g.kalemler||[]).forEach(k=>{
@@ -23438,6 +23448,19 @@ function qrSadakatGoster(){
    ============================================================ */
 function qrProfilHtml(){
   const m = QR.musteri;
+  // üye girişi yapılmamışsa profil gösterilemez — karşılamaya yönlendir
+  if(!m){
+    return '<div class="qr-screen qr-giris">'+
+      '<button class="qr-close" onclick="QR.view=\'menu\';renderQR()">←</button>'+
+      '<div class="qr-giris-kart">'+
+        '<div class="qr-sadakat-ikon">🎁</div>'+
+        '<div class="qr-g-baslik">Üye Girişi Gerekli</div>'+
+        '<div class="qr-g-alt">Profilini görmek, Mag puanlarını takip etmek ve adreslerini kaydetmek için üye ol veya giriş yap.</div>'+
+        '<button class="qr-btn-primary" onclick="QR.view=\'kayit\';renderQR()">🎁 Üye Ol</button>'+
+        '<button class="qr-btn-ghost" onclick="QR.view=\'kurtarma\';renderQR()">Hesabım var · giriş yap</button>'+
+        '<button class="qr-btn-ghost" onclick="QR.view=\'menu\';renderQR()">← Menüye dön</button>'+
+      '</div></div>';
+  }
   if(!m.adresler) m.adresler=[];
   const kademe = uyeKademe(m);
   let html='<div class="qr-screen"><div class="qr-topbar">'+
