@@ -7071,9 +7071,16 @@ function vardiyaOzetHesapla(v){
   });
   const o = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
               indirim:0, ikram:0, brut:0, net:0, islemSayisi:0, urunAdet:0 };
-  const yontemEkle = (yontemAd, tutar, digerTip)=>{
+  const yontemEkle = (yontemAd, tutar, digerTip, kaynak)=>{
     const y = String(yontemAd||"").toLowerCase();
-    if(y.includes("nakit") && !y.includes("diğer")) o.nakit += tutar;
+    // Diğer/QR'dan bölünmüş ödeme → Diğer/QR toplamına + alt kırılıma
+    if(kaynak === "diger"){
+      o.diger += tutar;
+      if(digerTip==="nakit") o.digerNakit += tutar;
+      else if(digerTip==="kredi") o.digerKredi += tutar;
+      return;
+    }
+    if(y.includes("nakit")) o.nakit += tutar;
     else if(y.includes("kredi") || y.includes("kart")) o.kredi += tutar;
     else {
       o.diger += tutar;
@@ -7088,11 +7095,9 @@ function vardiyaOzetHesapla(v){
     (g.odemeIslemleri||[]).forEach(is=>{
       o.indirim += (is.indirim||0);
       if(is.tip === "kalem"){
-        // kasa tahsilatı — yontemler DİZİSİ
-        (is.yontemler||[]).forEach(y=> yontemEkle(y.ad || y.yontem, y.tutar||0));
+        (is.yontemler||[]).forEach(y=> yontemEkle(y.ad || y.yontem, y.tutar||0, y.digerTip, y.kaynak));
       } else {
-        // kişi bazlı (diğer/QR bölme) — tekil yöntem
-        yontemEkle(is.yontem, (is.tahsil!=null?is.tahsil:(is.tutar||0)), is.digerTip);
+        yontemEkle(is.yontem, (is.tahsil!=null?is.tahsil:(is.tutar||0)), is.digerTip, is.kaynak);
       }
     });
     (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
@@ -7187,9 +7192,16 @@ function gunSonuOzetHesapla(sube, gun){
   const o = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
               indirim:0, ikram:0, brut:0, net:0,
               iptalTutar:0, iptalAdet:0, islemSayisi:0, urunAdet:0 };
-  const yontemEkle = (yontemAd, tutar, digerTip)=>{
+  const yontemEkle = (yontemAd, tutar, digerTip, kaynak)=>{
     const y = String(yontemAd||"").toLowerCase();
-    if(y.includes("nakit") && !y.includes("diğer")) o.nakit += tutar;
+    // Diğer/QR'dan bölünmüş ödeme → "Diğer/QR" toplamına + alt kırılıma yazılır
+    if(kaynak === "diger"){
+      o.diger += tutar;
+      if(digerTip==="nakit") o.digerNakit += tutar;
+      else if(digerTip==="kredi") o.digerKredi += tutar;
+      return;
+    }
+    if(y.includes("nakit")) o.nakit += tutar;
     else if(y.includes("kredi") || y.includes("kart")) o.kredi += tutar;
     else {
       o.diger += tutar;
@@ -7204,9 +7216,9 @@ function gunSonuOzetHesapla(sube, gun){
     (g.odemeIslemleri||[]).forEach(is=>{
       o.indirim += (is.indirim||0);
       if(is.tip === "kalem"){
-        (is.yontemler||[]).forEach(y=> yontemEkle(y.ad || y.yontem, y.tutar||0));
+        (is.yontemler||[]).forEach(y=> yontemEkle(y.ad || y.yontem, y.tutar||0, y.digerTip, y.kaynak));
       } else {
-        yontemEkle(is.yontem, (is.tahsil!=null?is.tahsil:(is.tutar||0)), is.digerTip);
+        yontemEkle(is.yontem, (is.tahsil!=null?is.tahsil:(is.tutar||0)), is.digerTip, is.kaynak);
       }
     });
     (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
@@ -10128,7 +10140,10 @@ function odemeIslemleriCikar(s, ekOdemeler){
     out.push({
       zaman:o.zaman, tip:'kalem',
       kalemler:(o.kalemler||[]).map(k=>({ad:k.ad||"Ürün", kisi:k.kisi||"", tutar:k.tutar||0})),
-      yontemler:(o.yontemler||[]).map(y=>({ad:YONTEM_AD_MAP[y.yontem]||y.yontem, tutar:y.tutar||0})),
+      yontemler:(o.yontemler||[]).map(y=>({
+        ad:YONTEM_AD_MAP[y.yontem]||y.yontem, tutar:y.tutar||0,
+        kaynak:y.kaynak||null, digerTip:y.digerTip||null   // Diğer/QR alt kırılımı
+      })),
       indirim:o.indirim||0
     });
   });
@@ -12461,8 +12476,10 @@ function digerBolOnayla(){
   o.yontem.nakit = h.nakit;
   o.yontem.kredi = h.kredi;
   const yontemler=[];
-  if(h.nakit>0) yontemler.push({yontem:"nakit", ad:"Nakit", tutar:h.nakit});
-  if(h.kredi>0) yontemler.push({yontem:"kredi", ad:"Kredi Kartı", tutar:h.kredi});
+  // Diğer/QR'dan bölünen tutarlar — kaynak "diger" olarak işaretlenir ki
+  // raporlarda "Diğer/QR → nakit kısmı / kredi kısmı" alt kırılımı görünsün
+  if(h.nakit>0) yontemler.push({yontem:"nakit", ad:"Nakit", tutar:h.nakit, kaynak:"diger", digerTip:"nakit"});
+  if(h.kredi>0) yontemler.push({yontem:"kredi", ad:"Kredi Kartı", tutar:h.kredi, kaynak:"diger", digerTip:"kredi"});
   // fiş için kalem detayları (kişi + seçenekler) — tahsilattan ÖNCE topla (kalemler kalkabilir)
   const fisKalemler = o.secili.map(x=>{
     const it=masaKalemBul(m,x.kalemId);
@@ -12496,12 +12513,22 @@ function odemeTahsilEt(veri){
   let kalanTahsil=tahsil;
   const yontemler=[];
   const puPozitif=Math.max(0, veri.paraUstu);
+  // Diğer/QR bölmesinden geldiyse kaynak bilgisi taşınır (raporda alt kırılım için)
+  const kaynakHar = {};
+  (veri.yontemler||[]).forEach(y=>{
+    if(y.kaynak) kaynakHar[y.yontem] = {kaynak:y.kaynak, digerTip:y.digerTip||y.yontem};
+  });
   ["kredi","diger","nakit"].forEach(y=>{
     if(o.yontem[y]>0){
       let t=o.yontem[y];
       if(y==="nakit") t=Math.max(0, Math.round((t-puPozitif)*100)/100);
       t=Math.min(t, Math.round(kalanTahsil*100)/100);
-      if(t>0){ yontemler.push({yontem:y, tutar:Math.round(t*100)/100}); kalanTahsil=Math.round((kalanTahsil-t)*100)/100; }
+      if(t>0){
+        const kayit = {yontem:y, tutar:Math.round(t*100)/100};
+        if(kaynakHar[y]){ kayit.kaynak = kaynakHar[y].kaynak; kayit.digerTip = kaynakHar[y].digerTip; }
+        yontemler.push(kayit);
+        kalanTahsil=Math.round((kalanTahsil-t)*100)/100;
+      }
     }
   });
   masaOdemeKaydet(m, yontemler, dagitim, veri.indirim);
