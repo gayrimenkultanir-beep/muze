@@ -3028,6 +3028,33 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .gs-onay-bas{font-size:14px; font-weight:800; color:var(--brand-d); margin-bottom:4px}
 .gs-onay-ack{font-size:12px; color:var(--ink-2); margin-bottom:12px; line-height:1.45}
 
+/* ══ İADE ══ */
+.kak-btn.iade{background:var(--err-soft); color:var(--err); border:1px solid var(--err)}
+.mgd-iade-not{font-size:12px; color:var(--err); background:var(--err-soft); border-radius:8px; padding:8px 12px; text-align:center}
+.iad-ic{background:#fff; border-radius:18px; max-width:520px; width:94%; margin:auto; max-height:92vh; display:flex; flex-direction:column}
+.iad-satis{background:var(--surface-2); border-radius:11px; padding:12px 14px; margin-bottom:16px}
+.iad-satis-ust{font-size:13.5px; font-weight:800; color:var(--ink); margin-bottom:4px}
+.iad-satis-alt{font-size:12px; color:var(--ink-3); display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.iad-oy{background:#fff; border:1px solid var(--line); border-radius:6px; padding:2px 8px; font-weight:700}
+.iad-engel{background:var(--err-soft); border:1.5px solid var(--err); border-radius:12px; padding:14px 16px; font-size:13px; color:var(--err); line-height:1.7; font-weight:600}
+.iad-liste{display:flex; flex-direction:column; gap:9px}
+.iad-kalem{display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--surface-2); border-radius:11px; padding:12px 14px}
+.iad-k-ad{font-size:14px; font-weight:800; color:var(--ink)}
+.iad-k-alt{font-size:11.5px; color:var(--ink-3); margin-top:2px}
+.iad-onceki{color:var(--err); font-weight:700}
+.iad-k-adet{display:flex; align-items:center; gap:10px; flex:none}
+.iad-k-adet span{min-width:22px; text-align:center; font-size:16px; font-weight:900; color:var(--ink)}
+.iad-adet-btn{width:32px; height:32px; border-radius:9px; border:1.5px solid var(--line); background:#fff; font-size:18px; font-weight:800; color:var(--ink-2); cursor:pointer; display:grid; place-items:center}
+.iad-adet-btn:active{transform:scale(.92); background:var(--surface-2)}
+.iad-toplam{display:flex; justify-content:space-between; align-items:center; background:var(--err-soft); border:1.5px solid var(--err); border-radius:12px; padding:13px 16px; margin-top:14px; font-size:14px; color:var(--ink-2)}
+.iad-toplam strong{font-size:22px; font-weight:900; color:var(--err)}
+.iad-dagitim{margin-top:10px}
+.iad-d-bas{font-size:12px; font-weight:800; color:var(--ink-2); margin-bottom:6px}
+.iad-d-satir{display:flex; justify-content:space-between; font-size:13px; color:var(--ink-2); padding:3px 0}
+.iad-bilgi{font-size:12px; color:var(--ink-2); background:var(--surface-2); border-radius:10px; padding:11px 14px; margin-top:14px; line-height:1.65}
+.kk-satir.iade{color:var(--err); font-weight:700}
+.roz-kart.iade .roz-deg{color:var(--err)}
+
 /* Kasa vardiya raporu */
 .kv-liste{display:flex; flex-direction:column; gap:10px; margin-top:16px}
 .kv-kart{background:var(--surface); border:1px solid var(--line); border-radius:13px; overflow:hidden; transition:box-shadow .15s}
@@ -7103,16 +7130,32 @@ function vardiyaOzetHesapla(v){
     (g.odemeler||[]).forEach(od=>{ if(od.ikram) o.ikram += od.ikram; });
     (g.kalemler||[]).forEach(k=>{ if(k.hediye) o.ikram += (k.fiyat||0); });
   });
+  // ══ İADELER — bu vardiyada yapılan iadeler tahsilattan düşülür ══
+  o.iade = 0; o.iadeNakit = 0; o.iadeKredi = 0; o.iadeDiger = 0; o.iadeAdet = 0;
+  IADELER.filter(i=> i.sube===v.sube && i.ts>=bas && i.ts<=bit).forEach(i=>{
+    o.iade += (i.tutar||0);
+    o.iadeAdet++;
+    (i.yontemler||[]).forEach(y=>{
+      if(y.yontem==="nakit") o.iadeNakit += (y.tutar||0);
+      else if(y.yontem==="kredi") o.iadeKredi += (y.tutar||0);
+      else o.iadeDiger += (y.tutar||0);
+    });
+  });
+  ["iade","iadeNakit","iadeKredi","iadeDiger"].forEach(k=> o[k]=Math.round(o[k]*100)/100);
   ["nakit","kredi","diger","digerNakit","digerKredi","indirim","ikram","brut"].forEach(k=>{
     o[k] = Math.round(o[k]*100)/100;
   });
-  o.net = Math.round((o.nakit + o.kredi + o.diger)*100)/100;
+  o.net = Math.round((o.nakit + o.kredi + o.diger - (o.iade||0))*100)/100;   // iade düşülmüş
   return o;
 }
+/* Beklenen nakit = devir + nakit tahsilat + Diğer/QR nakit kısmı − NAKİT İADELER */
 /* Beklenen nakit = devir alınan + nakit satışlar (+ diğer/QR'ın nakit kısmı) */
 function vardiyaBeklenenNakit(v){
   const o = vardiyaOzetHesapla(v);
-  return Math.round(((v.devirAlinan||0) + o.nakit + o.digerNakit)*100)/100;
+  // devir + nakit tahsilat + Diğer/QR'ın nakit kısmı − nakit iadeler (kasadan çıkan para)
+  return Math.round((
+    (v.devirAlinan||0) + o.nakit + o.digerNakit - (o.iadeNakit||0)
+  )*100)/100;
 }
 /* ── VARDİYA KAPAT ── */
 function kasaVardiyaKapat(sube, sayilanNakit, devredilen, farkNot){
@@ -7227,10 +7270,22 @@ function gunSonuOzetHesapla(sube, gun){
       if(k.durum==="iptal"){ o.iptalAdet++; o.iptalTutar += (k.fiyat||0); }
     });
   });
+  // ══ İADELER — o işletme gününde yapılan iadeler ══
+  o.iade = 0; o.iadeNakit = 0; o.iadeKredi = 0; o.iadeDiger = 0; o.iadeAdet = 0;
+  IADELER.filter(i=> i.sube===sube && (i.isletmeGunu||isletmeGunu(i.ts))===gun).forEach(i=>{
+    o.iade += (i.tutar||0);
+    o.iadeAdet++;
+    (i.yontemler||[]).forEach(y=>{
+      if(y.yontem==="nakit") o.iadeNakit += (y.tutar||0);
+      else if(y.yontem==="kredi") o.iadeKredi += (y.tutar||0);
+      else o.iadeDiger += (y.tutar||0);
+    });
+  });
+  ["iade","iadeNakit","iadeKredi","iadeDiger"].forEach(k=> o[k]=Math.round(o[k]*100)/100);
   ["nakit","kredi","diger","digerNakit","digerKredi","indirim","ikram","brut","iptalTutar"].forEach(k=>{
     o[k] = Math.round(o[k]*100)/100;
   });
-  o.net = Math.round((o.nakit + o.kredi + o.diger)*100)/100;
+  o.net = Math.round((o.nakit + o.kredi + o.diger - o.iade)*100)/100;   // iade düşülmüş net ciro
   return o;
 }
 /* O günün vardiya özetleri */
@@ -7283,6 +7338,175 @@ function gunSonuAc(sube, gun, acanAd, not){
   g.acmaNot = (not||"").trim();
   gunSonuKaydet();
   return {ok:true};
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SATIŞ İADESİ (Refund)
+   - Kısmi iade: satılan ürünlerden seçilenler iade edilir
+   - Yetki: kasiyer yapabilir (açık kasa vardiyası gerekir)
+   - Stok: iade edilen ürünün hammaddesi stoğa GERİ DÖNER
+   - Ödeme: orijinal yöntemle iade (nakit→nakit, kart→kart)
+   - Kasa: nakit iade kasadan çıkar → beklenen nakit azalır
+   - Kilit: gün sonu kapanmış günden iade YAPILAMAZ
+   ═══════════════════════════════════════════════════════════════ */
+let IADELER = [];              // { id, no, sube, gecmisId, isletmeGunu, ts, kasiyerId, kasiyerAd, vardiyaNo,
+                               //   kalemler:[{ad, fiyat, adet}], tutar, yontemler:[{yontem,tutar}], sebep, stokGeri }
+let _iadeId = 1;
+const IADE_KEY = "minipan_iadeler_v1";
+function iadeKaydet(){ MPStore.set(IADE_KEY, {IADELER, _iadeId}, 1); }
+function iadeYukle(){
+  const v = MPStore.get(IADE_KEY, null, {version:1});
+  if(v){ if(v.IADELER) IADELER = v.IADELER; if(v._iadeId) _iadeId = v._iadeId; }
+}
+function iadeNoBicim(n){ return "IAD-"+String(n).padStart(6,"0"); }
+
+/* Bir satışın (geçmiş kaydının) iade edilebilir kalemleri
+   — daha önce iade edilenler düşülür */
+function iadeEdilebilirKalemler(gecmisId){
+  const g = MASA_GECMISI.find(x=>x.id===gecmisId);
+  if(!g) return [];
+  // önceki iadelerde bu satıştan kaç adet iade edilmiş?
+  const iadeEdilen = {};
+  IADELER.filter(i=>i.gecmisId===gecmisId).forEach(i=>{
+    (i.kalemler||[]).forEach(k=>{
+      iadeEdilen[k.ad] = (iadeEdilen[k.ad]||0) + (k.adet||1);
+    });
+  });
+  // satılan kalemleri say (iptal + hediye hariç — hediyeden para iadesi olmaz)
+  const satilan = {};
+  (g.kalemler||[]).forEach(k=>{
+    if(k.durum==="iptal") return;
+    if(k.hediye) return;                       // hediye → para iadesi yok
+    if(!satilan[k.ad]) satilan[k.ad] = {ad:k.ad, fiyat:k.fiyat||0, adet:0};
+    satilan[k.ad].adet++;
+  });
+  // kalan = satılan - iade edilen
+  return Object.values(satilan).map(s=>({
+    ad: s.ad, fiyat: s.fiyat,
+    satilan: s.adet,
+    iadeEdilen: iadeEdilen[s.ad]||0,
+    kalan: Math.max(0, s.adet - (iadeEdilen[s.ad]||0))
+  })).filter(s=>s.kalan>0);
+}
+/* Bir satıştan iade yapılabilir mi? — engelleri döndürür */
+function iadeEngelleri(gecmisId){
+  const engeller = [];
+  const g = MASA_GECMISI.find(x=>x.id===gecmisId);
+  if(!g){ engeller.push("Satış kaydı bulunamadı"); return engeller; }
+  const gun = g.isletmeGunu || isletmeGunu(g.kapanis||g.ts||0);
+  // 1) gün sonu kapalı mı
+  if(gunKapaliMi(g.sube, gun)){
+    engeller.push("Bu işletme günü ("+isletmeGunuGoster(gun)+") kapatılmış — iade yapılamaz. Genel müdür kilidi açmalı.");
+  }
+  // 2) kasa açık mı (iade için vardiya gerekir)
+  if(!acikVardiya(g.sube)){
+    engeller.push("İade için kasa açık olmalı — önce kasa açın.");
+  }
+  // 3) iade edilebilir kalem var mı
+  if(iadeEdilebilirKalemler(gecmisId).length===0){
+    engeller.push("Bu satışta iade edilebilir ürün kalmamış (tamamı iade edilmiş).");
+  }
+  return engeller;
+}
+/* Satışta kullanılan ödeme yöntemleri (iade dağıtımı için) */
+function satisOdemeYontemleri(g){
+  const y = {};
+  (g.odemeIslemleri||[]).forEach(is=>{
+    if(is.tip==="kalem"){
+      (is.yontemler||[]).forEach(yy=>{
+        const ad = String(yy.ad||yy.yontem||"").toLowerCase();
+        const kod = ad.includes("nakit") ? "nakit" : (ad.includes("kredi")||ad.includes("kart") ? "kredi" : "diger");
+        y[kod] = (y[kod]||0) + (yy.tutar||0);
+      });
+    } else {
+      const ad = String(is.yontem||"").toLowerCase();
+      const kod = ad.includes("nakit") ? "nakit" : (ad.includes("kredi")||ad.includes("kart") ? "kredi" : "diger");
+      y[kod] = (y[kod]||0) + (is.tahsil!=null?is.tahsil:(is.tutar||0));
+    }
+  });
+  return y;   // {nakit: 200, kredi: 150}
+}
+/* ── İADE YAP ── */
+function iadeYap(gecmisId, secilenler, sebep){
+  const g = MASA_GECMISI.find(x=>x.id===gecmisId);
+  if(!g) return {hata:"Satış bulunamadı"};
+  const engeller = iadeEngelleri(gecmisId);
+  if(engeller.length) return {hata:engeller[0], engeller};
+  if(!secilenler || !secilenler.length) return {hata:"İade edilecek ürün seçin"};
+
+  const v = acikVardiya(g.sube);
+  const tutar = Math.round(secilenler.reduce((t,s)=>t+(s.fiyat*s.adet),0)*100)/100;
+  if(tutar<=0) return {hata:"İade tutarı sıfır"};
+
+  // ödeme yöntemlerine orantılı dağıt (nakit ödendiyse nakit iade)
+  const odemeY = satisOdemeYontemleri(g);
+  const odemeToplam = Object.values(odemeY).reduce((a,b)=>a+b,0) || 1;
+  const yontemler = [];
+  Object.keys(odemeY).forEach(kod=>{
+    const pay = Math.round((tutar * (odemeY[kod]/odemeToplam))*100)/100;
+    if(pay>0.001) yontemler.push({yontem:kod, tutar:pay});
+  });
+  // yuvarlama farkını ilk yönteme ekle
+  const dagitilan = yontemler.reduce((t,y)=>t+y.tutar,0);
+  if(yontemler.length && Math.abs(dagitilan-tutar)>=0.01){
+    yontemler[0].tutar = Math.round((yontemler[0].tutar + (tutar-dagitilan))*100)/100;
+  }
+
+  // ══ STOK GERİ DÖNÜŞÜ ══
+  try{
+    const geri = [];
+    secilenler.forEach(s=>{ for(let i=0;i<s.adet;i++) geri.push({ad:s.ad, q:1, secimler:[], ekstraRecete:[]}); });
+    stokGeriAl(geri, g.sube);
+  }catch(e){ console.warn("İade stok geri alma:", e); }
+
+  const kayit = {
+    id: _iadeId++,
+    no: iadeNoBicim(_iadeId-1),
+    sube: g.sube,
+    gecmisId: gecmisId,
+    isletmeGunu: isletmeGunu(),
+    ts: Date.now(),
+    kasiyerId: v ? v.kasiyerId : null,
+    kasiyerAd: v ? v.kasiyerAd : (AKTIF_PERSONEL_AD||"Kasa"),
+    vardiyaNo: v ? v.no : null,
+    kalemler: secilenler.map(s=>({ad:s.ad, fiyat:s.fiyat, adet:s.adet})),
+    tutar: tutar,
+    yontemler: yontemler,
+    sebep: (sebep||"").trim(),
+    stokGeri: true
+  };
+  IADELER.unshift(kayit);
+  iadeKaydet();
+  return {ok:true, iade:kayit};
+}
+/* Reçete motorunun TERSİ — iade edilen ürünlerin hammaddesi stoğa geri döner */
+function stokGeriAl(cart, sube){
+  sube = sube || AKTIF_SUBE;
+  const geriDonenler = [];
+  cart.forEach(item=>{
+    const recipe = RECIPES[item.ad];
+    const tumKalemler = recipe ? recipe.slice() : [];
+    if(item.ekstraRecete) item.ekstraRecete.forEach(r=>tumKalemler.push(r));
+    tumKalemler.forEach(r=>{
+      const kod = r.ing || r.kod;
+      const miktar = (r.g!=null ? r.g : (r.miktar||0)) * (item.q||1);
+      if(!kod || !miktar) return;
+      const mevcut = bayiStok(sube, kod);
+      bayiStokYaz(sube, kod, Math.round((mevcut + miktar)*100)/100);
+      geriDonenler.push({kod, miktar});
+      // stok hareketi kaydet
+      if(typeof STOK_HAREKET!=="undefined"){
+        STOK_HAREKET.unshift({
+          ts: Date.now(), sube, kod, tip: "iade",
+          miktar: miktar, aciklama: "İade — "+item.ad,
+          kullanici: AKTIF_PERSONEL_AD||""
+        });
+        if(STOK_HAREKET.length>3000) STOK_HAREKET.length=3000;
+      }
+    });
+  });
+  if(typeof b2bKaydet==="function") b2bKaydet();
+  return geriDonenler;
 }
 
 let MERKEZ_FIRMA = {
@@ -8549,6 +8773,7 @@ function kasaKapatAc(){
           <div class="kk-satir"><span>📱 Diğer / QR</span><span>${tl(ozet.diger)} ₺</span></div>
           ${ozet.indirim>0?`<div class="kk-satir ind"><span>🏷️ İndirim</span><span>−${tl(ozet.indirim)} ₺</span></div>`:''}
           ${ozet.ikram>0?`<div class="kk-satir ikram"><span>🎁 İkram (hediye)</span><span>−${tl(ozet.ikram)} ₺</span></div>`:''}
+          ${ozet.iade>0?`<div class="kk-satir iade"><span>↩️ İade (${ozet.iadeAdet})</span><span>−${tl(ozet.iade)} ₺</span></div>`:''}
           <div class="kk-satir toplam"><span>Toplam tahsilat</span><span>${tl(ozet.net)} ₺</span></div>
           <div class="kk-satir kucuk"><span>${ozet.islemSayisi} işlem · ${ozet.urunAdet} ürün</span><span></span></div>
         </div>
@@ -8558,7 +8783,7 @@ function kasaKapatAc(){
           <span>Kasada olması gereken nakit</span>
           <strong>${tl(beklenen)} ₺</strong>
         </div>
-        <div class="kk-beklenen-not">Açılış devri (${tl(v.devirAlinan||0)} ₺) + nakit tahsilat (${tl(ozet.nakit + ozet.digerNakit)} ₺)</div>
+        <div class="kk-beklenen-not">Açılış devri (${tl(v.devirAlinan||0)} ₺) + nakit tahsilat (${tl(ozet.nakit + ozet.digerNakit)} ₺)${ozet.iadeNakit>0?` − nakit iade (${tl(ozet.iadeNakit)} ₺)`:''}</div>
 
         <div class="ka-alan">
           <label>Saydığınız fiili nakit</label>
@@ -10181,6 +10406,22 @@ function masaGecmiseArsivle(masaNo, ekOdemeler){
   const odemeIslemleri = odemeIslemleriCikar(s, ekOdemeler);
   const fisNolari = MUTFAK_FISLER.filter(f=>f.masa===masaNo).map(f=>f.no);
   const kapanisTs = Date.now();
+  // ══ STOK DÜŞÜMÜ — ÖDEME TAMAMLANDIĞINDA ══
+  // İptal edilen kalemler DÜŞMEZ. Böylece "sipariş verildi ama iptal edildi" durumunda
+  // envanter bozulmaz. Fiilen harcanan ama satılmayan ürün varsa FİRE olarak girilir.
+  try{
+    const tuketim = [];
+    (s.kisiler||[]).forEach(k=>(k.kalemler||[]).forEach(it=>{
+      if(it.durum === "iptal") return;                 // iptal → stoktan düşme
+      tuketim.push({
+        ad: it.ad, q: 1,
+        secimler: it.secimler || [],
+        ekstraRecete: it.ekstraRecete || []
+      });
+    }));
+    if(tuketim.length) consumeRecipe(tuketim, sube);
+  }catch(e){ console.warn("Stok düşümü:", e); }
+
   MASA_GECMISI.push({
     id:_gecmisId++, tip:"masa", sube, masaId:masaNo, masaEtiket:masaEtiket(masaNo),
     acilis:s.zaman||Date.now(), kapanis:kapanisTs,
@@ -10202,6 +10443,13 @@ const ODEME_TIPI_AD = {kasada:"Kasada (nakit/kart)", online:"Online ödeme", kap
 function paketGecmiseArsivle(p){
   const musteri = p.musteri||"Müşteri";
   const kalemler = (p.kalemler||[]).map(it=>({ad:it.ad, fiyat:it.fiyat||0, kisi:musteri, durum:"teslim", secimler:it.secimler||[]}));
+  // ══ STOK DÜŞÜMÜ — teslim/ödeme anında (sipariş alınırken değil) ══
+  try{
+    const tuketim = (p.kalemler||[])
+      .filter(it=>it.durum !== "iptal")
+      .map(it=>({ad:it.ad, q:1, secimler:it.secimler||[], ekstraRecete:it.ekstraRecete||[]}));
+    if(tuketim.length) consumeRecipe(tuketim, p.sube||AKTIF_SUBE);
+  }catch(e){ console.warn("Paket stok düşümü:", e); }
   const toplam = Math.round(kalemler.reduce((t,it)=>t+(it.fiyat||0),0)*100)/100;
   const odemeAdi = ODEME_TIPI_AD[p.odeme]||p.odeme||"Belirtilmemiş";
   const fisAnahtari = (p.tip==="eve"?"eve#":"paket#")+p.id;
@@ -11011,7 +11259,7 @@ function kasaPaketGonder(){
     adres:null, masa:null, kalemler:kp.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat})),
     tutar:t, odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()
   });
-  consumeRecipe(kp.sepet.map(c=>({...c, q:1, ekstraRecete:[]})));
+  // NOT: Stok düşümü TESLİM/ÖDEME anında (paketGecmiseArsivle) — sipariş alınırken değil.
   // OTOMATİK MUTFAK FİŞİ (masa:"paket#N" ile siparişe bağlanır — geçmişte eşleştirme için)
   mutfakFisiBas({
     tip:"paket", baslik: eve?"PAKET (EVE TESLİM)":"PAKET (GEL-AL)", alt:kp.musteri, masa:"paket#"+yeniId,
@@ -11178,6 +11426,11 @@ function masaGecmisDetay(id){
     ${fisHtml}
   </div><div class="fis-aksiyon">
     <button class="kak-btn iptal" onclick="document.getElementById('mgDetayModal').classList.remove('on')">Kapat</button>
+    ${iadeEdilebilirKalemler(k.id).length>0
+      ? `<button class="kak-btn iade" onclick="iadeModalAc(${k.id})">↩️ İade Al</button>`
+      : (IADELER.some(i=>i.gecmisId===k.id)
+          ? `<div class="mgd-iade-not">↩️ Bu satıştan iade yapılmış${iadeEdilebilirKalemler(k.id).length===0?' (tamamı)':''}</div>`
+          : '')}
   </div></div>`;
   mdl.classList.add("on");
 }
@@ -11205,6 +11458,143 @@ function kasaMasaAc(m){
   state.kasaMasa=m; go("masalar");
 }
 function kasaMasaKapat(){ state.kasaMasa=null; go("masalar"); }
+
+/* ══ İADE MODALI ══ */
+function iadeModalAc(gecmisId){
+  const g = MASA_GECMISI.find(x=>x.id===gecmisId); if(!g) return;
+  const engeller = iadeEngelleri(gecmisId);
+  const kalemler = iadeEdilebilirKalemler(gecmisId);
+  const odemeY = satisOdemeYontemleri(g);
+  state._iade = { gecmisId, secim:{} };   // {urunAd: adet}
+
+  const yontemAd = {nakit:"💵 Nakit", kredi:"💳 Kredi kartı", diger:"📱 Diğer/QR"};
+  const odemeHtml = Object.keys(odemeY).map(k=>
+    `<span class="iad-oy">${yontemAd[k]||k}: ${tl(odemeY[k])} ₺</span>`).join("");
+
+  const html = `
+  <div class="modal-bg on" id="iadeModal" style="z-index:200"
+       onmousedown="window.__modalBasladi=(event.target===this)"
+       onclick="if(event.target===this && window.__modalBasladi) iadeModalKapat()">
+    <div class="iad-ic">
+      <div class="kk-bas">↩️ Satış İadesi
+        <button class="bom-kapat" onclick="iadeModalKapat()">✕</button></div>
+
+      <div class="kk-govde">
+        <div class="iad-satis">
+          <div class="iad-satis-ust">${g.masaEtiket} · ${new Date(g.kapanis).toLocaleString('tr')}</div>
+          <div class="iad-satis-alt">Satış tutarı: <b>${tl(g.toplam)} ₺</b> · Ödeme: ${odemeHtml}</div>
+        </div>
+
+        ${engeller.length>0
+          ? `<div class="iad-engel">
+               ${engeller.map(e=>`<div>⛔ ${e}</div>`).join("")}
+             </div>`
+          : `
+        <div class="kk-bolum-bas">📦 İade Edilecek Ürünler</div>
+        <div class="iad-liste">
+          ${kalemler.map(k=>`
+            <div class="iad-kalem">
+              <div class="iad-k-sol">
+                <div class="iad-k-ad">${k.ad}</div>
+                <div class="iad-k-alt">${tl(k.fiyat)} ₺ × ${k.kalan} adet iade edilebilir
+                  ${k.iadeEdilen>0?`<span class="iad-onceki">(${k.iadeEdilen} adet daha önce iade edildi)</span>`:''}</div>
+              </div>
+              <div class="iad-k-adet">
+                <button class="iad-adet-btn" onclick="iadeAdet('${k.ad.replace(/'/g,"\\'")}',-1,${k.kalan})">−</button>
+                <span id="iadAdet-${k.ad.replace(/[^a-zA-Z0-9]/g,'_')}">0</span>
+                <button class="iad-adet-btn" onclick="iadeAdet('${k.ad.replace(/'/g,"\\'")}',1,${k.kalan})">+</button>
+              </div>
+            </div>`).join("")}
+        </div>
+
+        <div class="iad-toplam" id="iadToplam">
+          <span>İade tutarı</span><strong>0,00 ₺</strong>
+        </div>
+        <div class="iad-dagitim" id="iadDagitim"></div>
+
+        <div class="ka-alan" style="margin-top:14px">
+          <label>İade sebebi</label>
+          <input class="ka-input" id="iadSebep" style="text-align:left;font-size:14px"
+                 placeholder="örn. müşteri beğenmedi, yanlış ürün, bozuk...">
+        </div>
+
+        <div class="iad-bilgi">
+          ↩️ İade edilen ürünlerin <b>hammaddesi stoğa geri döner</b>.<br>
+          💰 Para, satışta kullanılan <b>ödeme yöntemiyle</b> iade edilir.<br>
+          🧾 Nakit iade <b>kasadan çıkar</b> — kasa mutabakatına yansır.
+        </div>`}
+      </div>
+
+      <div class="kk-foot">
+        <button class="btn btn-ghost" onclick="iadeModalKapat()">Vazgeç</button>
+        ${engeller.length===0
+          ? `<button class="btn btn-tehlike" onclick="iadeOnayla()">↩️ İadeyi Onayla</button>`
+          : ''}
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("iadeModalWrap");
+  if(!el){ el=document.createElement("div"); el.id="iadeModalWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function iadeModalKapat(){ const w=document.getElementById("iadeModalWrap"); if(w) w.innerHTML=""; state._iade=null; }
+function iadeAdet(urunAd, delta, maks){
+  const st = state._iade; if(!st) return;
+  const mevcut = st.secim[urunAd]||0;
+  const yeni = Math.max(0, Math.min(maks, mevcut+delta));
+  st.secim[urunAd] = yeni;
+  const el = document.getElementById("iadAdet-"+urunAd.replace(/[^a-zA-Z0-9]/g,'_'));
+  if(el) el.textContent = yeni;
+  iadeToplamGuncelle();
+}
+function iadeToplamGuncelle(){
+  const st = state._iade; if(!st) return;
+  const kalemler = iadeEdilebilirKalemler(st.gecmisId);
+  let toplam = 0;
+  kalemler.forEach(k=>{ toplam += (st.secim[k.ad]||0) * k.fiyat; });
+  toplam = Math.round(toplam*100)/100;
+
+  const tEl = document.getElementById("iadToplam");
+  if(tEl) tEl.innerHTML = '<span>İade tutarı</span><strong>'+tl(toplam)+' ₺</strong>';
+
+  // ödeme dağıtımı önizleme
+  const g = MASA_GECMISI.find(x=>x.id===st.gecmisId);
+  const dEl = document.getElementById("iadDagitim");
+  if(dEl && g && toplam>0){
+    const odemeY = satisOdemeYontemleri(g);
+    const odemeToplam = Object.values(odemeY).reduce((a,b)=>a+b,0)||1;
+    const yontemAd = {nakit:"💵 Nakit", kredi:"💳 Kredi kartı", diger:"📱 Diğer/QR"};
+    const satirlar = Object.keys(odemeY).map(k=>{
+      const pay = Math.round((toplam*(odemeY[k]/odemeToplam))*100)/100;
+      return pay>0.001 ? `<div class="iad-d-satir"><span>${yontemAd[k]||k} ile iade</span><span>${tl(pay)} ₺</span></div>` : '';
+    }).join("");
+    dEl.innerHTML = '<div class="iad-d-bas">💰 İade dağıtımı</div>'+satirlar;
+  } else if(dEl){ dEl.innerHTML = ''; }
+}
+function iadeOnayla(){
+  const st = state._iade; if(!st) return;
+  const kalemler = iadeEdilebilirKalemler(st.gecmisId);
+  const secilenler = kalemler
+    .filter(k=>(st.secim[k.ad]||0) > 0)
+    .map(k=>({ad:k.ad, fiyat:k.fiyat, adet:st.secim[k.ad]}));
+  if(!secilenler.length){ note("İade edilecek ürün seçin"); return; }
+  const sebepEl = document.getElementById("iadSebep");
+  const sebep = sebepEl ? sebepEl.value.trim() : "";
+  if(!sebep){ note("⚠️ İade sebebi yazın"); return; }
+
+  const r = iadeYap(st.gecmisId, secilenler, sebep);
+  if(r.hata){ note("⛔ "+r.hata); return; }
+
+  iadeModalKapat();
+  const mdl = document.getElementById("mgDetayModal");
+  if(mdl) mdl.classList.remove("on");
+  const y = (r.iade.yontemler||[]).map(x=>{
+    const ad = {nakit:"nakit", kredi:"karta", diger:"Diğer/QR"}[x.yontem]||x.yontem;
+    return tl(x.tutar)+" ₺ "+ad;
+  }).join(" + ");
+  note("↩️ İade tamamlandı · "+r.iade.no+" · "+tl(r.iade.tutar)+" ₺ ("+y+") · stok geri döndü");
+  go("masagecmis", true);
+}
 
 /* Kasa masa detayı — kim ne istemiş, iptal, opsiyon kaldır, isme ürün ekle, hesap */
 function kasaMasaDetayHtml(m){
@@ -12742,10 +13132,8 @@ function kasaMasaGonder(){
       k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
     }
   });
-  // reçete tüketimi — her ürün miktarı kadar
-  const tuketim=[];
-  ke.sepet.forEach(c=>{ const adet=c.q||1; for(let n=0;n<adet;n++) tuketim.push({...c, q:1, ekstraRecete:[]}); });
-  consumeRecipe(tuketim);
+  // NOT: Stok düşümü ARTIK BURADA DEĞİL — ödeme tamamlanınca (masaGecmiseArsivle) düşer.
+  // Böylece iptal edilen ürünler stoktan hiç düşmez, envanter tutarlı kalır.
   // TEK FİŞ — sadece bu sepet (miktar kadar satır)
   const fisKalemler=[];
   ke.sepet.forEach(c=>{ const adet=c.q||1; for(let n=0;n<adet;n++) fisKalemler.push({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, kisi:kisi, paket:!!c.paket}); });
@@ -21587,6 +21975,8 @@ function raporGunSonuHtml(){
     ${ozet.ikram>0?`<div class="roz-kart ikram"><div class="roz-lbl">🎁 İkram</div><div class="roz-deg">−${tl(ozet.ikram)} ₺</div></div>`:''}
     ${ozet.iptalAdet>0?`<div class="roz-kart ind"><div class="roz-lbl">✕ İptal</div><div class="roz-deg">${ozet.iptalAdet} adet</div>
       <div class="roz-alt">${tl(ozet.iptalTutar)} ₺</div></div>`:''}
+    ${ozet.iade>0?`<div class="roz-kart iade"><div class="roz-lbl">↩️ İade (${ozet.iadeAdet})</div><div class="roz-deg">−${tl(ozet.iade)} ₺</div>
+      <div class="roz-alt">nakit ${tl(ozet.iadeNakit)} · kart ${tl(ozet.iadeKredi)}</div></div>`:''}
     <div class="roz-kart vurgu"><div class="roz-lbl">NET CİRO</div><div class="roz-deg">${tl(ozet.net)} ₺</div></div>
   </div>`;
 
@@ -21821,12 +22211,13 @@ function raporKasaVardiyaHtml(){
   liste.sort((a,b)=>b.acilisTs - a.acilisTs);
 
   const T = { nakit:0, kredi:0, diger:0, digerNakit:0, digerKredi:0,
-              indirim:0, ikram:0, net:0, fark:0, islem:0 };
+              indirim:0, ikram:0, iade:0, iadeAdet:0, net:0, fark:0, islem:0 };
   liste.forEach(v=>{
     const o = v.ozet || vardiyaOzetHesapla(v);
     T.nakit += o.nakit||0; T.kredi += o.kredi||0; T.diger += o.diger||0;
     T.digerNakit += o.digerNakit||0; T.digerKredi += o.digerKredi||0;
     T.indirim += o.indirim||0; T.ikram += o.ikram||0; T.net += o.net||0;
+    T.iade += o.iade||0; T.iadeAdet += o.iadeAdet||0;
     T.islem += o.islemSayisi||0;
     T.fark += (v.nakitFark||0);
   });
@@ -21860,6 +22251,7 @@ function raporKasaVardiyaHtml(){
       ${(T.digerNakit>0||T.digerKredi>0)?`<div class="roz-alt">nakit ${tl(T.digerNakit)} · kredi ${tl(T.digerKredi)}</div>`:''}</div>
     ${T.indirim>0?`<div class="roz-kart ind"><div class="roz-lbl">🏷️ İndirim</div><div class="roz-deg">−${tl(T.indirim)} ₺</div></div>`:''}
     ${T.ikram>0?`<div class="roz-kart ikram"><div class="roz-lbl">🎁 İkram</div><div class="roz-deg">−${tl(T.ikram)} ₺</div></div>`:''}
+    ${T.iade>0?`<div class="roz-kart iade"><div class="roz-lbl">↩️ İade (${T.iadeAdet})</div><div class="roz-deg">−${tl(T.iade)} ₺</div></div>`:''}
     <div class="roz-kart vurgu"><div class="roz-lbl">NET TAHSİLAT</div><div class="roz-deg">${tl(T.net)} ₺</div></div>
     ${Math.abs(T.fark)>=0.01?`<div class="roz-kart ${T.fark<0?'eksik':'fazla'}"><div class="roz-lbl">Kasa farkı</div><div class="roz-deg">${T.fark>0?'+':''}${tl(T.fark)} ₺</div></div>`:''}
   </div>`;
@@ -24321,7 +24713,7 @@ function qrHediyeOnayGonder(){
 }
 function qrSiparisGonderDevam(){
   const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
-  consumeRecipe(QR.sepet, QR.sube || AKTIF_SUBE);
+  // NOT: Stok düşümü ödeme anında yapılır (masaGecmiseArsivle) — burada değil.
   const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat*c.q, paket:!!c.paket, hediye:!!c.hediye, hediyeId:c.hediyeId||null}));
   let takipId = "S"+(_takipId++);
   let fisMasaRef = QR.masa;   // mutfak fişini doğru kayda bağlamak için (varsayılan: masa siparişi)
@@ -25440,8 +25832,7 @@ function garsonMasaGonder(){
       k.kalemler.push({id:_kalemId++, ad:c.ad, fiyat:c.fiyat, secimler:c.secimler||[], secimGruplu:c.secimGruplu||[], ekstraRecete:[], durum:"bekliyor", paket:!!c.paket});
     }
   });
-  const gTuketim=[]; GARSON.masaSepet.forEach(c=>{ const adet=c.q||1; for(let n=0;n<adet;n++) gTuketim.push({...c, q:1, ekstraRecete:[]}); });
-  consumeRecipe(gTuketim);
+  // NOT: Stok düşümü ödeme anında yapılır (masaGecmiseArsivle) — burada değil.
   // TEK FİŞ — sadece bu sepet (miktar kadar satır)
   const gFis=[]; GARSON.masaSepet.forEach(c=>{ const adet=c.q||1; for(let n=0;n<adet;n++) gFis.push({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, kisi:kisi, paket:!!c.paket}); });
   mutfakFisiBas({
@@ -25465,7 +25856,7 @@ function garsonPaketGonder(){
     adres:null, kalemler:GARSON.paketSepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat})),
     tutar:t, odeme:"kasada", durum:"hazirlaniyor", zaman:Date.now()
   });
-  consumeRecipe(GARSON.paketSepet.map(c=>({...c, q:1, ekstraRecete:[]})));
+  // NOT: Stok düşümü TESLİM/ÖDEME anında (paketGecmiseArsivle) — sipariş alınırken değil.
   // OTOMATİK MUTFAK FİŞİ (masa:"paket#N" ile siparişe bağlanır — geçmişte eşleştirme için)
   mutfakFisiBas({
     tip:"paket", baslik: eve?"PAKET (EVE TESLİM)":"PAKET (GEL-AL)", alt:GARSON.paketMusteri||"Paket müşteri", masa:"paket#"+yeniId,
@@ -25560,6 +25951,7 @@ subeYukle();     // şube verilerini (yeni eklenenler dahil) geri yükle
 isletmeAyarYukle(); // işletme günü değişim saati
 kasaVardiyaYukle(); // kasa vardiya kayıtları
 gunSonuYukle();     // gün sonu kapanış kayıtları
+iadeYukle();        // satış iadeleri
 kullaniciYukle(); // personel/kullanıcı verilerini geri yükle
 raporTalepYukle(); // kasa rapor erişim taleplerini geri yükle
 b2bYukle();      // bayi kanalı verilerini (varsa) geri yükle
