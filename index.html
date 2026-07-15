@@ -638,6 +638,25 @@ tr:last-child td{border-bottom:none}
 .bfiyat-head{padding:0 12px 4px; font-size:10.5px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.3px}
 .bfiyat-satir{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
 .bfiyat-satir .bf-ad{font-size:13.5px; color:var(--ink)}
+/* Bayi/stok satırında ürün görseli */
+.bf-ad-ic{display:flex; align-items:center; gap:9px; min-width:0}
+.bf-gorsel{flex:0 0 34px; width:34px; height:34px; border-radius:8px; overflow:hidden; background:var(--surface-2); border:1px solid var(--line); display:grid; place-items:center}
+.bf-gorsel img{width:100%; height:100%; object-fit:cover; display:block}
+.bfg-bos{font-size:17px; opacity:.4}
+/* Tıklanabilir stok görseli (büyütmek için) */
+.bf-gorsel.tiklanir, .bayi-s-gorsel.tiklanir, .stok-kart-gorsel.tiklanir{cursor:zoom-in; transition:transform .12s ease, box-shadow .12s ease}
+.bf-gorsel.tiklanir:hover, .bayi-s-gorsel.tiklanir:hover, .stok-kart-gorsel.tiklanir:hover{transform:scale(1.06); box-shadow:0 2px 10px rgba(58,11,34,.18)}
+.bf-gorsel.tiklanir:active, .bayi-s-gorsel.tiklanir:active, .stok-kart-gorsel.tiklanir:active{transform:scale(.98)}
+/* Görsel büyütme (lightbox) */
+.glb-ic{position:relative; max-width:min(560px,92vw); max-height:88vh; margin:auto; display:flex; flex-direction:column; align-items:center; animation:qrPopGel .25s cubic-bezier(.2,.9,.25,1)}
+.glb-img{max-width:100%; max-height:80vh; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5); background:#fff; object-fit:contain; display:block}
+.glb-ad{margin-top:14px; color:#fff; font-size:15px; font-weight:800; text-align:center; text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.glb-kapat{position:absolute; top:-14px; right:-14px; width:38px; height:38px; border-radius:99px; background:#fff; color:var(--ink); font-size:17px; font-weight:900; display:grid; place-items:center; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.35); border:none; z-index:2}
+.glb-kapat:active{transform:scale(.94)}
+@media(max-width:520px){ .glb-kapat{top:-6px; right:-6px} }
+.bayi-s-gorsel{flex:0 0 38px; width:38px; height:38px; border-radius:9px; overflow:hidden; background:var(--surface-2); border:1px solid var(--line); display:grid; place-items:center}
+.bayi-s-gorsel img{width:100%; height:100%; object-fit:cover; display:block}
+.bayi-s-admetin{min-width:0}
 .bf-mik-kutu{display:inline-block; background:var(--surface-2); border:1px solid var(--line); border-radius:7px; padding:3px 9px; font-size:12px; font-weight:700; color:var(--ink-2); white-space:nowrap}
 .bf-mik-kutu.eksi{background:var(--danger-soft); border-color:#e8b4ad; color:var(--danger)}
 .bf-kdv{font-size:12.5px; font-weight:700; color:var(--ink-2)}
@@ -1000,7 +1019,11 @@ tr:last-child td{border-bottom:none}
 .stok-kart{background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:12px 14px; margin-bottom:9px}
 .stok-kart.pasif{opacity:.6}
 .stok-kart-ust{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px}
-.stok-kart-ad{font-size:14.5px; color:var(--ink)}
+.stok-kart-ad{font-size:14.5px; color:var(--ink); display:flex; align-items:center; gap:10px; min-width:0}
+.stok-kart-admetin{min-width:0}
+.stok-kart-gorsel{flex:0 0 40px; width:40px; height:40px; border-radius:10px; overflow:hidden; background:var(--surface-2); border:1px solid var(--line); display:grid; place-items:center}
+.stok-kart-gorsel img{width:100%; height:100%; object-fit:cover; display:block}
+.stok-kart-gorsel .skg-bos{font-size:20px; opacity:.4}
 .stok-kart-kod{font-size:11px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border-radius:6px; padding:1px 7px; margin-left:5px}
 .stok-kart-aksiyon{display:flex; gap:6px; flex-shrink:0}
 .stok-kutular{display:flex; gap:8px; flex-wrap:wrap}
@@ -2652,7 +2675,7 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .bayi-tablo{display:flex; flex-direction:column; gap:8px}
 .bayi-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px}
 .bayi-satir-sade{padding:9px 14px; background:var(--surface-2)}
-.bayi-s-ad{flex:1; font-size:14px}
+.bayi-s-ad{flex:1; font-size:14px; display:flex; align-items:center; gap:10px; min-width:0}
 .bayi-s-kod{font-size:11px; color:var(--ink-3); background:var(--surface-2); padding:1px 7px; border-radius:6px; margin-left:5px}
 .bayi-s-not{font-size:11.5px; color:var(--ink-3); margin-top:3px}
 .bayi-s-deger{font-size:13.5px; font-weight:700; color:var(--ink-2); white-space:nowrap}
@@ -2682,6 +2705,19 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .skm-input-suf{position:relative}
 .skm-input-suf .skm-input{padding-right:48px}
 .skm-suf{position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:12.5px; font-weight:700; color:var(--ink-3); pointer-events:none}
+/* Stok kartı görsel yükleme */
+.skm-gorsel-row{display:flex; gap:14px; align-items:center}
+.skm-gorsel-onizle{width:84px; height:84px; flex:0 0 84px; border-radius:14px; border:1.5px solid var(--line); background:var(--surface-2); display:grid; place-items:center; overflow:hidden}
+.skm-gorsel-onizle.dolu{border-style:solid; border-color:var(--line-2)}
+.skm-gorsel-onizle.tiklanir{cursor:zoom-in}
+.skm-gorsel-onizle img{width:100%; height:100%; object-fit:cover; display:block}
+.skm-gorsel-bos{font-size:34px; opacity:.4}
+.skm-gorsel-aksiyon{flex:1; min-width:0; display:flex; flex-direction:column; gap:8px; align-items:flex-start}
+.skm-gorsel-btn{display:inline-flex; align-items:center; gap:6px; padding:10px 16px; border-radius:11px; background:var(--brand); color:#fff; font-size:13.5px; font-weight:800; cursor:pointer; box-shadow:0 3px 10px rgba(217,44,8,.22)}
+.skm-gorsel-btn:active{transform:scale(.98)}
+.skm-gorsel-sil{padding:8px 14px; border-radius:10px; background:var(--surface-2); border:1.5px solid var(--line); color:var(--ink-2); font-size:12.5px; font-weight:700; cursor:pointer}
+.skm-gorsel-sil:active{transform:scale(.98)}
+.skm-gorsel-not{font-size:11px; color:var(--ink-3)}
 /* Birim chip-grid */
 .skm-birim-grid{display:flex; flex-wrap:wrap; gap:8px}
 .skm-birim-chip{padding:9px 16px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:700; cursor:pointer; transition:all .15s ease}
@@ -3190,6 +3226,22 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ka-devir-satir{display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--ink-2)}
 .ka-devir-satir strong{font-size:22px; font-weight:900; color:var(--ink)}
 .ka-devir-not{font-size:11.5px; color:var(--ink-3); margin-top:6px; text-align:left}
+/* Devir nakit/bozukluk kırılımı (açılış devreden kutusu) */
+.ka-devir-kirilim{display:flex; gap:10px; margin-top:10px}
+.ka-devir-kirilim>span{flex:1; text-align:center; font-size:12.5px; color:var(--ink-2); background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:7px 8px}
+.ka-devir-kirilim>span b{display:block; font-size:15px; font-weight:900; color:var(--ink); margin-top:2px}
+/* İkili giriş — nakit + bozukluk yan yana */
+.ka-devir-ikili{display:flex; gap:12px}
+.ka-devir-ikili .ka-alan{flex:1; margin-bottom:8px}
+.ka-teslim-bas{text-align:left; font-size:13px; font-weight:800; color:var(--ink); margin:2px 0 8px}
+.kk-devir-ack{font-size:12px; color:var(--ink-2); line-height:1.5; margin:2px 0 12px; text-align:left}
+.kk-devir-ikili{display:flex; gap:12px}
+.kk-devir-ikili .ka-alan{flex:1; margin-bottom:6px}
+.kk-do-kir{font-size:12px; color:var(--ink-3); font-weight:600}
+@media (max-width:420px){
+  .ka-devir-ikili, .kk-devir-ikili{gap:8px}
+  .ka-devir-kirilim{gap:8px}
+}
 .ka-alan{text-align:left; margin-bottom:14px}
 .ka-alan label{display:block; font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
 .ka-input{width:100%; padding:14px 16px; border-radius:12px; border:1.5px solid var(--line); font-size:20px; font-weight:800; color:var(--ink); background:var(--surface-2); font-family:inherit; text-align:right}
@@ -6866,8 +6918,8 @@ const MPStore = {
     }catch(e){ return fallback; }
   },
   set(key, data, version){
-    try{ localStorage.setItem(key, JSON.stringify({__v: version||0, data})); }
-    catch(e){ /* kota dolu / localStorage yok — satış durmasın, sessiz geç */ }
+    try{ localStorage.setItem(key, JSON.stringify({__v: version||0, data})); return true; }
+    catch(e){ /* kota dolu / localStorage yok — satış durmasın, sessiz geç */ return false; }
   },
   /* Düz metin (JSON olmayan) tekil değerler için — örn. personel adı */
   getRaw(key, fallback){
@@ -7146,14 +7198,29 @@ function devredenTutar(sube){
   const son = sonKapananVardiya(sube);
   return son ? (son.devredilen||0) : 0;
 }
+/* Devreden tutarın nakit / bozukluk kırılımı (eski kayıtlar için geriye dönük) */
+function devredenKirilim(sube){
+  const son = sonKapananVardiya(sube);
+  if(!son) return {nakit:0, bozuk:0, toplam:0};
+  // Yeni kayıtta ayrı alanlar var; eski kayıtta tümü "nakit" sayılır
+  const nakit = (son.devredilenNakit!=null) ? son.devredilenNakit : (son.devredilen||0);
+  const bozuk = (son.devredilenBozuk!=null) ? son.devredilenBozuk : 0;
+  return {
+    nakit: Math.round(nakit*100)/100,
+    bozuk: Math.round(bozuk*100)/100,
+    toplam: Math.round((nakit+bozuk)*100)/100
+  };
+}
 function kasaVardiyaNo(n){ return "KV-"+String(n).padStart(6,"0"); }
 
 /* ── VARDİYA AÇ ── */
-function kasaVardiyaAc(sube, kasiyerId, kasiyerAd, devirAlinan, rol){
+function kasaVardiyaAc(sube, kasiyerId, kasiyerAd, devirNakit, rol, devirBozuk){
   if(acikVardiya(sube)) return {hata:"Bu şubede zaten açık bir kasa var. Önce kapatılmalı."};
   if(gunKapaliMi(sube, isletmeGunu())) return {hata:"Bu işletme günü KAPATILMIŞ. Satış yapılamaz. (Genel müdür kilidi açabilir)"};
   const beklenen = devredenTutar(sube);
-  const alinan = Math.round((devirAlinan||0)*100)/100;
+  const alinanNakit = Math.round((devirNakit||0)*100)/100;
+  const alinanBozuk = Math.round((devirBozuk||0)*100)/100;
+  const alinan = Math.round((alinanNakit + alinanBozuk)*100)/100;   // toplam = geriye dönük uyum
   const mudurVardiyasi = (rol==="mudur" || rol==="genel");
   const v = {
     id: _kasaVardiyaId++,
@@ -7166,7 +7233,9 @@ function kasaVardiyaAc(sube, kasiyerId, kasiyerAd, devirAlinan, rol){
     acilisTs: Date.now(),
     isletmeGunu: isletmeGunu(),
     devirBeklenen: beklenen,
-    devirAlinan: alinan,
+    devirAlinan: alinan,                 // toplam (nakit + bozukluk)
+    devirNakit: alinanNakit,             // teslim alınan nakit
+    devirBozuk: alinanBozuk,             // teslim alınan bozukluk (para üstü)
     devirFark: Math.round((alinan - beklenen)*100)/100,
     ilkAcilis: (sonKapananVardiya(sube)===null)
   };
@@ -7251,14 +7320,16 @@ function vardiyaBeklenenNakit(v){
   )*100)/100;
 }
 /* ── VARDİYA KAPAT ── */
-function kasaVardiyaKapat(sube, sayilanNakit, devredilen, farkNot){
+function kasaVardiyaKapat(sube, sayilanNakit, devredilenNakit, farkNot, devredilenBozuk){
   const v = acikVardiya(sube);
   if(!v) return {hata:"Açık kasa bulunamadı."};
   const ozet = vardiyaOzetHesapla(v);
   const beklenen = vardiyaBeklenenNakit(v);
   const sayilan = Math.round((sayilanNakit||0)*100)/100;
-  const devir = Math.round((devredilen||0)*100)/100;
-  if(devir > sayilan) return {hata:"Devredilen tutar sayılan nakitten fazla olamaz."};
+  const devirNakit = Math.round((devredilenNakit||0)*100)/100;
+  const devirBozuk = Math.round((devredilenBozuk||0)*100)/100;
+  const devir = Math.round((devirNakit + devirBozuk)*100)/100;   // toplam devir
+  if(devir > sayilan) return {hata:"Devredilen tutar (nakit + bozukluk) sayılan nakitten fazla olamaz."};
   v.durum = "kapali";
   v.kapanisTs = Date.now();
   v.ozet = ozet;
@@ -7266,7 +7337,9 @@ function kasaVardiyaKapat(sube, sayilanNakit, devredilen, farkNot){
   v.sayilanNakit = sayilan;
   v.nakitFark = Math.round((sayilan - beklenen)*100)/100;   // + fazla, − eksik
   v.farkNot = (farkNot||"").trim();
-  v.devredilen = devir;
+  v.devredilen = devir;                 // toplam (nakit + bozukluk) — geriye dönük uyum
+  v.devredilenNakit = devirNakit;       // sonraki vardiyaya bırakılan nakit
+  v.devredilenBozuk = devirBozuk;       // sonraki vardiyaya bırakılan bozukluk
   v.kasadanAlinan = Math.round((sayilan - devir)*100)/100;
   kasaVardiyaKaydet();
   return {ok:true, vardiya:v};
@@ -7398,7 +7471,9 @@ function gunSonuVardiyalari(sube, gun){
       rol:v.rol||"kasa", mudurVardiyasi:!!v.mudurVardiyasi,
       acilisTs:v.acilisTs, kapanisTs:v.kapanisTs,
       net:o.net||0, fark:v.nakitFark||0, farkNot:v.farkNot||"",
-      devirAlinan:v.devirAlinan||0, devredilen:v.devredilen||0, kasadanAlinan:v.kasadanAlinan||0
+      devirAlinan:v.devirAlinan||0, devredilen:v.devredilen||0, kasadanAlinan:v.kasadanAlinan||0,
+      devirNakit:v.devirNakit!=null?v.devirNakit:(v.devirAlinan||0), devirBozuk:v.devirBozuk||0,
+      devredilenNakit:v.devredilenNakit!=null?v.devredilenNakit:(v.devredilen||0), devredilenBozuk:v.devredilenBozuk||0
     };
   });
 }
@@ -8359,7 +8434,7 @@ function siparisExcelToplu(){
 /* === B2B KALICILIK — roller arası geçişte (sayfa yenilenince) veri korunur === */
 const B2B_KEY = "minipan_b2b_v1";
 function b2bKaydet(){
-  MPStore.set(B2B_KEY, {
+  return MPStore.set(B2B_KEY, {
     BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER, TEDARIKCILER, BILDIRIMLER, _bildirimId, STOK_HAREKET,
     _irsaliyeId, _siparisId, _stokNoSayac,
     // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
@@ -9288,9 +9363,10 @@ function numaratorOnayla(){
   if(el){
     el.value = kurusFormat(numKurus());
     if(typeof kasaKapatFarkGuncelle === "function" &&
-       (NUM.hedef === "kkSayilan" || NUM.hedef === "kkDevir")) kasaKapatFarkGuncelle();
+       (NUM.hedef === "kkSayilan" || NUM.hedef === "kkDevirNakit" || NUM.hedef === "kkDevirBozuk")) kasaKapatFarkGuncelle();
     if(typeof kasaGiderOnizle === "function" && NUM.hedef === "kgTutar") kasaGiderOnizle();
-    if(typeof kasaAcilisFarkGuncelle === "function" && NUM.hedef === "kaDevirInput") kasaAcilisFarkGuncelle();
+    if(typeof kasaAcilisFarkGuncelle === "function" &&
+       (NUM.hedef === "kaDevirNakit" || NUM.hedef === "kaDevirBozuk")) kasaAcilisFarkGuncelle();
   }
   numaratorKapat();
 }
@@ -9368,15 +9444,25 @@ function kasaKapatAc(){
           <input class="ka-input" id="kkNot" style="text-align:left;font-size:14px" placeholder="örn. bozuk para hatası, müşteri iadesi...">
         </div>
 
-        <div class="kk-bolum-bas">🔁 Devir</div>
-        <div class="ka-alan">
-          <label>Sonraki vardiyaya bırakılacak tutar</label>
-          <div class="para-input-wrap" onclick="numaratorAc('kkDevir','Devredilecek tutar (bozuk para)')">
-            <input class="ka-input para-input" id="kkDevir" readonly value="0,00" placeholder="0,00">
-            <span class="para-tl">₺</span>
+        <div class="kk-bolum-bas">🔁 Sabaha Bırakılacak Devir</div>
+        <div class="kk-devir-ack">Sabah kasayı açan kişi bu tutarları teslim alıp onaylayacak. İkisini ayrı sayıp girin.</div>
+        <div class="kk-devir-ikili">
+          <div class="ka-alan">
+            <label>💵 Nakit</label>
+            <div class="para-input-wrap" onclick="numaratorAc('kkDevirNakit','Devredilecek nakit')">
+              <input class="ka-input para-input" id="kkDevirNakit" readonly value="0,00" placeholder="0,00">
+              <span class="para-tl">₺</span>
+            </div>
           </div>
-          <div class="ka-input-not">Kalan tutar "kasadan alınan" olarak kaydedilir (bankaya/merkeze giden).</div>
+          <div class="ka-alan">
+            <label>🪙 Bozukluk (para üstü)</label>
+            <div class="para-input-wrap" onclick="numaratorAc('kkDevirBozuk','Devredilecek bozukluk')">
+              <input class="ka-input para-input" id="kkDevirBozuk" readonly value="0,00" placeholder="0,00">
+              <span class="para-tl">₺</span>
+            </div>
+          </div>
         </div>
+        <div class="ka-input-not">Kalan tutar "kasadan alınan" olarak kaydedilir (bankaya/merkeze giden).</div>
         <div id="kkDevirOzet" class="kk-devir-ozet"></div>
       </div>
 
@@ -9396,7 +9482,9 @@ function kasaKapatFarkGuncelle(){
   const st = state._kasaKapat; if(!st) return;
   const g = id => { const e=document.getElementById(id); return e ? formatKurus(e.value)/100 : 0; };
   const sayilan = g("kkSayilan");
-  const devir = g("kkDevir");
+  const devirNakit = g("kkDevirNakit");
+  const devirBozuk = g("kkDevirBozuk");
+  const devir = Math.round((devirNakit + devirBozuk)*100)/100;
   const fark = Math.round((sayilan - st.beklenen)*100)/100;
 
   const fEl = document.getElementById("kkFark");
@@ -9421,10 +9509,12 @@ function kasaKapatFarkGuncelle(){
   if(dEl){
     const alinan = Math.round((sayilan - devir)*100)/100;
     if(devir > sayilan){
-      dEl.innerHTML = '⚠️ Devredilen tutar sayılan nakitten fazla olamaz';
+      dEl.innerHTML = '⚠️ Devredilen tutar (nakit + bozukluk) sayılan nakitten fazla olamaz';
       dEl.className = "kk-devir-ozet hata";
     } else {
-      dEl.innerHTML = 'Devredilecek: <b>'+tl(devir)+' ₺</b> · Kasadan alınan: <b>'+tl(alinan)+' ₺</b>';
+      dEl.innerHTML = 'Devir: <b>'+tl(devir)+' ₺</b> '
+        + '<span class="kk-do-kir">(💵 '+tl(devirNakit)+' + 🪙 '+tl(devirBozuk)+')</span>'
+        + ' · Kasadan alınan: <b>'+tl(alinan)+' ₺</b>';
       dEl.className = "kk-devir-ozet";
     }
   }
@@ -9432,7 +9522,8 @@ function kasaKapatFarkGuncelle(){
 function kasaKapatOnayla(){
   const g = id => { const e=document.getElementById(id); return e ? formatKurus(e.value)/100 : 0; };
   const sayilan = g("kkSayilan");
-  const devir = g("kkDevir");
+  const devirNakit = g("kkDevirNakit");
+  const devirBozuk = g("kkDevirBozuk");
   const notEl = document.getElementById("kkNot");
   const not = notEl ? notEl.value.trim() : "";
   const st = state._kasaKapat;
@@ -9441,7 +9532,7 @@ function kasaKapatOnayla(){
   if(!sayilan && sayilan!==0){ note("Saydığınız nakit tutarı girin"); return; }
   if(Math.abs(fark)>=0.01 && !not){ note("⚠️ Fark var — lütfen açıklama yazın"); return; }
 
-  const r = kasaVardiyaKapat(AKTIF_SUBE, sayilan, devir, not);
+  const r = kasaVardiyaKapat(AKTIF_SUBE, sayilan, devirNakit, not, devirBozuk);
   if(r.hata){ note("⛔ "+r.hata); return; }
   kasaKapatKapat();
   const v = r.vardiya;
@@ -9466,6 +9557,7 @@ function kasaSaltGoruntuleme(){
 function kasaAcilisEkrani(main){
   const sube = AKTIF_SUBE;
   const devir = devredenTutar(sube);
+  const devK = devredenKirilim(sube);        // {nakit, bozuk, toplam}
   const son = sonKapananVardiya(sube);
   const ilkAcilis = (son===null);
   const kasiyerAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "Kasa görevlisi";
@@ -9494,20 +9586,35 @@ function kasaAcilisEkrani(main){
                <span>Önceki vardiyadan devreden</span>
                <strong>${tl(devir)} ₺</strong>
              </div>
+             <div class="ka-devir-kirilim">
+               <span>💵 Nakit <b>${tl(devK.nakit)} ₺</b></span>
+               <span>🪙 Bozukluk <b>${tl(devK.bozuk)} ₺</b></span>
+             </div>
              <div class="ka-devir-not">Son kapanış: ${son.kasiyerAd} · ${new Date(son.kapanisTs).toLocaleString('tr')}</div>
            </div>`}
 
-      <div class="ka-alan">
-        <label>Teslim aldığınız nakit tutar</label>
-        <div class="para-input-wrap" onclick="numaratorAc('kaDevirInput','Teslim alınan nakit')">
-          <input class="ka-input para-input" id="kaDevirInput" readonly
-                 value="${ilkAcilis?'0,00':kurusFormat(Math.round(devir*100))}" placeholder="0,00">
-          <span class="para-tl">₺</span>
+      <div class="ka-teslim-bas">${ilkAcilis?'Kasa başlangıcı':'Teslim aldığınız tutar'}</div>
+      <div class="ka-devir-ikili">
+        <div class="ka-alan">
+          <label>💵 Nakit</label>
+          <div class="para-input-wrap" onclick="numaratorAc('kaDevirNakit','Teslim alınan nakit')">
+            <input class="ka-input para-input" id="kaDevirNakit" readonly
+                   value="${ilkAcilis?'0,00':kurusFormat(Math.round(devK.nakit*100))}" placeholder="0,00">
+            <span class="para-tl">₺</span>
+          </div>
         </div>
-        <div class="ka-input-not">${ilkAcilis
-          ? 'Kasada bozuk para varsa tutarını yazın, yoksa 0 bırakın.'
-          : 'Fiilen saydığınız tutarı yazın. Devreden tutardan farklıysa kayda geçer.'}</div>
+        <div class="ka-alan">
+          <label>🪙 Bozukluk (para üstü)</label>
+          <div class="para-input-wrap" onclick="numaratorAc('kaDevirBozuk','Teslim alınan bozukluk')">
+            <input class="ka-input para-input" id="kaDevirBozuk" readonly
+                   value="${ilkAcilis?'0,00':kurusFormat(Math.round(devK.bozuk*100))}" placeholder="0,00">
+            <span class="para-tl">₺</span>
+          </div>
+        </div>
       </div>
+      <div class="ka-input-not">${ilkAcilis
+        ? 'Kasada başlangıç için nakit / bozuk para varsa yazın, yoksa 0 bırakın.'
+        : 'Devri sayıp onaylayın. Devreden tutarla farklıysa kayda geçer.'}</div>
 
       <div id="kaFark" class="ka-fark"></div>
 
@@ -9532,10 +9639,11 @@ function kasaAcilisEkrani(main){
 /* Açılışta devir farkı gösterimi */
 function kasaAcilisFarkGuncelle(){
   if(state._kaIlk) return;
-  const inp = document.getElementById("kaDevirInput");
+  const nEl = document.getElementById("kaDevirNakit");
+  const bEl = document.getElementById("kaDevirBozuk");
   const el = document.getElementById("kaFark");
-  if(!inp || !el) return;
-  const alinan = formatKurus(inp.value)/100;
+  if(!nEl || !bEl || !el) return;
+  const alinan = Math.round(((formatKurus(nEl.value)/100) + (formatKurus(bEl.value)/100))*100)/100;
   const devir = state._kaDevir||0;
   const fark = Math.round((alinan - devir)*100)/100;
   if(Math.abs(fark)<0.01){ el.innerHTML=''; el.className="ka-fark"; }
@@ -9543,15 +9651,18 @@ function kasaAcilisFarkGuncelle(){
   else { el.innerHTML='📉 Devredenden <b>'+tl(Math.abs(fark))+' ₺ EKSİK</b> teslim alıyorsunuz'; el.className="ka-fark eksik"; }
 }
 function kasaAcilisYap(){
-  const inp = document.getElementById("kaDevirInput");
-  const alinan = inp ? formatKurus(inp.value)/100 : 0;
+  const nEl = document.getElementById("kaDevirNakit");
+  const bEl = document.getElementById("kaDevirBozuk");
+  const alinanNakit = nEl ? formatKurus(nEl.value)/100 : 0;
+  const alinanBozuk = bEl ? formatKurus(bEl.value)/100 : 0;
   const kasiyerId = (typeof AKTIF_PERSONEL_ID!=="undefined") ? AKTIF_PERSONEL_ID : null;
   const kasiyerAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "Kasa görevlisi";
-  const r = kasaVardiyaAc(AKTIF_SUBE, kasiyerId, kasiyerAd, alinan, state.role);
+  const r = kasaVardiyaAc(AKTIF_SUBE, kasiyerId, kasiyerAd, alinanNakit, state.role, alinanBozuk);
   if(r.hata){ note("⛔ "+r.hata); return; }
   state.kasaSadeceGoruntule = false;   // vardiya açıldı, görüntüleme modu kapansın
   const mudurMu = (state.role==="mudur"||state.role==="genel");
-  note((mudurMu?"👔 Müdür vardiyası açıldı · ":"🔓 Kasa açıldı · ")+r.vardiya.no+" · devir: "+tl(alinan)+" ₺");
+  const toplam = Math.round((alinanNakit+alinanBozuk)*100)/100;
+  note((mudurMu?"👔 Müdür vardiyası açıldı · ":"🔓 Kasa açıldı · ")+r.vardiya.no+" · devir: "+tl(toplam)+" ₺ (💵"+tl(alinanNakit)+" + 🪙"+tl(alinanBozuk)+")");
   go("satis", true);
 }
 /* Müdür: salt görüntüleme modu — tahsilat yapılamaz */
@@ -14592,6 +14703,244 @@ function stokKodUret(ad, mevcutKodlar){
   mevcutKodlar.add(k);
   return k;
 }
+/* ============================================================
+   EXCEL STOK MİGRASYONU (tek seferlik) — İbrahim'in STOK_KARTLARI.xlsx
+   - Eski STOCK + BAYI_FIYAT tamamen silinir, 186 gerçek kart yüklenir
+   - Ürünlerin altındaki TÜM seçenek grupları silinir (sıfırdan kurulacak)
+   - Hazır seçenek grupları (OPTION_GROUPS/POOL) ve reçeteler temizlenir
+   - Kategori + birim listeleri Excel'e göre kurulur
+   ============================================================ */
+const EXCEL_STOK_KARTLARI = {
+  "sutlupankekmix24":{ad:"Sütlü Pankek Mix 2420 Gr", mevcut:0, kritik:0, birim:"paket", kategori:"Toz Karışım", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"paket", ici:1, altMiktar:2420, altBirim:"gr"}},
+  "kakaolupankekmix":{ad:"Kakaolu Pankek Mix 2520 Gr", mevcut:0, kritik:0, birim:"paket", kategori:"Toz Karışım", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"paket", ici:1, altMiktar:2520, altBirim:"gr"}},
+  "magnolyamix1025g":{ad:"Magnolya mix 1025 Gr", mevcut:0, kritik:0, birim:"paket", kategori:"Toz Karışım", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"paket", ici:1, altMiktar:1025, altBirim:"gr"}},
+  "un25kg":{ad:"Un 25 Kg", mevcut:0, kritik:0, birim:"çuval", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"çuval", ici:1, altMiktar:25, altBirim:"kg"}},
+  "sut1lt":{ad:"Süt 1 Lt", mevcut:0, kritik:0, birim:"adet", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:1, altBirim:"lt"}},
+  "siviyag5lt":{ad:"Sıvı Yağ 5 Lt", mevcut:0, kritik:0, birim:"adet", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:5, altBirim:"lt"}},
+  "tereyag1kg":{ad:"Tereyağ 1 Kg", mevcut:0, kritik:0, birim:"adet", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:1, altBirim:"kg"}},
+  "tozseker":{ad:"Toz Şeker", mevcut:0, kritik:0, birim:"kg", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "pakmayabugdaynis":{ad:"Pakmaya Buğday Nişastası 12 Adet", mevcut:0, kritik:0, birim:"kutu", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:12, altMiktar:200, altBirim:"gr"}},
+  "karbonat":{ad:"Karbonat", mevcut:0, kritik:0, birim:"kg", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "droutkerkabartma":{ad:"Dr Outker Kabartma Tozu 6x1 Kg", mevcut:0, kritik:0, birim:"kutu", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:6, altMiktar:1, altBirim:"kg"}},
+  "droutkervanilya6":{ad:"Dr Outker Vanilya 6x1 Kg", mevcut:0, kritik:0, birim:"kutu", kategori:"Hamur Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:6, altMiktar:1, altBirim:"kg"}},
+  "minipansutluciko":{ad:"Minipan Sütlü Çikolata Sos 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "minipanbittercik":{ad:"Minipan Bitter Çikolata Sos 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "minipanbeyazciko":{ad:"Minipan Beyaz Çikolata Sos 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "minipanframbuazc":{ad:"Minipan Frambuaz Çikolta Sos 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "minipankaramelci":{ad:"Minipan Karamel Çikolata Sos 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "minipanantepfist":{ad:"Minipan Antep Fıstığı Çikolata Sos 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "minipanbitterc1":{ad:"Minipan Bitter Çikolata Sos 300 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:300, altBirim:"gr"}},
+  "minipanbeyazci1":{ad:"Minipan Beyaz Çikolata Sos 300 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:300, altBirim:"gr"}},
+  "minipansutluci1":{ad:"Minipan Sütlü Çikolata Sos 300 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:300, altBirim:"gr"}},
+  "minipansutlupiri":{ad:"Minipan Sütlü Pirinç Patlağı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minipanbitterpir":{ad:"Minipan Bitter Pirinç Patlağı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minipanbeyazpiri":{ad:"Minipan Beyaz Pirinç Patlağı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minipanframbuazp":{ad:"Minipan Frambuaz Pirinç Patlağı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "altinpirincpatla":{ad:"Altın Pirinç Patlağı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minipanbitterdam":{ad:"Minipan Bitter Damla Çikolata", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minipanbeyazdaml":{ad:"Minipan Beyaz Damla Çikolata", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minipanframbuazd":{ad:"Minipan Frambuaz Damla Çikolata", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "minibonsekerkapl":{ad:"Minibon Şeker Kaplı Draje", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "renkliminicakilt":{ad:"Renkli Mini Çakıltaşı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "hindistancevizit":{ad:"Hindistan Cevizi Toz (Rendelenmiş)", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "oreobiskuvi154x1":{ad:"Oreo Bisküvi 154 x16 Gr", mevcut:0, kritik:0, birim:"koli", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:154, altMiktar:16, altBirim:"gr"}},
+  "lotusbiscoffcrum":{ad:"Lotus Biscoff Crumble ( Kırıntı) 7,5 Kg X 1 Ad", mevcut:0, kritik:0, birim:"koli", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:1, altMiktar:7.5, altBirim:"kg"}},
+  "cicibebebebebisk":{ad:"Cicibebe Bebe Bisküvisi 800 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:800, altBirim:"gr"}},
+  "rulokatbiskuvi24":{ad:"Rulokat Bisküvi 240 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:240, altBirim:"gr"}},
+  "krepkirigi":{ad:"Krep Kırığı", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "fistikantepicpir":{ad:"Fıstık Antep İç (Pirinç)", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "kavrulmuskiyilmi":{ad:"Kavrulmuş Kıyılmış Fındık", mevcut:0, kritik:0, birim:"kg", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "misirgevregi":{ad:"Mısır Gevreği", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true},
+  "dankekpotimuffin":{ad:"Dankek Pöti Muffin Kek Kakaolu 24x35 Gr", mevcut:0, kritik:0, birim:"kutu", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:24, altMiktar:35, altBirim:"gr"}},
+  "mcviteskremalibi":{ad:"Mc Vites Kremalı Bisküvi 18x90 Gr", mevcut:0, kritik:0, birim:"kutu", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:18, altMiktar:90, altBirim:"gr"}},
+  "brownikek40grx20":{ad:"Browni Kek 40 Grx20", mevcut:0, kritik:0, birim:"kutu", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:20, altMiktar:40, altBirim:"gr"}},
+  "kitkatkirinti400":{ad:"Kit Kat  Kırıntı 400 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:400, altBirim:"gr"}},
+  "kavrulmuskadayif":{ad:"Kavrulmuş Kadayıf 200 Gr", mevcut:0, kritik:0, birim:"adet", kategori:"Çikolata Sos ve Şekerleme", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:200, altBirim:"gr"}},
+  "limonlucheesecak":{ad:"Limonlu Cheesecake (10 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:10}},
+  "frambuazlicheese":{ad:"Frambuazlı Cheesecake 10 Dilim", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:10}},
+  "redvelvetpasta10":{ad:"Red Velvet  Pasta (10 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:10}},
+  "monolattepasta9d":{ad:"Mono Latte Pasta (9 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:9}},
+  "fistikdunyasipas":{ad:"Fıstık Dünyası Pasta 8 Dilim", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:8}},
+  "siyahprofiterolm":{ad:"Siyah Profiterol Mono Pasta 9 Adet", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:9}},
+  "karemonotramisu9":{ad:"Kare Mono Tramısu (9 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:9}},
+  "beyazprofiterolm":{ad:"Beyaz Profiterol Mono Pasta 9 Dilim", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:9}},
+  "lotuskaramellipa":{ad:"Lotus Karamelli Pasta (10 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:10}},
+  "bellavistasiyahc":{ad:"Bella Vista Siyah Çikolatalı Pasta (9 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:9}},
+  "espressocuptrami":{ad:"Espresso Cup Tramisu - 15 Adet", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:15}},
+  "antepfistiklicit":{ad:"Antep Fıstıklı Çıtır Cup - 15 Adet", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:15}},
+  "ormanmeyvelicup9":{ad:"Orman Meyveli Cup 9 Adet", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:9}},
+  "yerfistiklikaram":{ad:"Yer Fıstıklı Karamel Cup 15 Adet", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:15}},
+  "cikolatalimuscup":{ad:"Çikolatalı Mus Cup (15 Adet)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:15}},
+  "cookieklasik12ad":{ad:"Cookie Klasik (12 Adet)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:12}},
+  "cookiekakaolu12a":{ad:"Cookie Kakaolu (12 Adet)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:12}},
+  "frambuazlimonoch":{ad:"Frambuazlı Mono Cheesecake (6 Adet)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:6}},
+  "limonlumonochees":{ad:"Limonlu Mono Cheesecake (6 Adet)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:6}},
+  "sufle15adet":{ad:"Sufle (15 Adet)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:15}},
+  "fistikdunyasip1":{ad:"Fıstık Dünyası Pasta (12 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:12}},
+  "ormanmeyvelipast":{ad:"Orman Meyveli Pasta (10 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:10}},
+  "sansebastianchee":{ad:"Sansebastian Cheesecake (12 Dilim)", mevcut:0, kritik:0, birim:"kutu", kategori:"Pastalar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:12}},
+  "sticksekeradet":{ad:"Stick Şeker (Adet)", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "turkkahvesi":{ad:"Türk Kahvesi", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "filtrekahve":{ad:"Filtre Kahve", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "espressospecialc":{ad:"Espresso Special (Çekirdek Kahve)", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "goldkahve":{ad:"Gold Kahve", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "sicakcikolatatoz":{ad:"Sıcak Çikolata Tozu", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "beyazsicakcikolt":{ad:"Beyaz Sıcak Çikolta Tozu", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "salep":{ad:"Salep", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "dibekkahvesi":{ad:"Dibek Kahvesi", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "menengicliturkka":{ad:"Menengiçli Türk Kahvesi", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "damlasakizliturk":{ad:"Damla Sakızlı Türk Kahvesi", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "kurupaketcay":{ad:"Kuru Paket Çay", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "limonata2kgdonuk":{ad:"Limonata 2 Kg (Donuk Konsantre)", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:2, altBirim:"kg"}},
+  "meyvepuresibogur":{ad:"Meyve Püresi Böğürtlen 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "meyvepuresicilek":{ad:"Meyve Püresi Çilek 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "meyvepuresiyaban":{ad:"Meyve Püresi Yaban Mersini 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "meyvepuresimango":{ad:"Meyve Püresi Mango 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "meyvepuresiframb":{ad:"Meyve Püresi Frambuaz 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "meyvepuresikirmi":{ad:"Meyve Püresi Kırmızı Orman Meyve 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "meyvepuresiyesil":{ad:"Meyve Püresi Yeşil Elma 900 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:900, altBirim:"ml"}},
+  "frambuazsurup700":{ad:"Frambuaz Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "hibuskussurubu70":{ad:"Hibüsküs Şurubu 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "cileksurubu700ml":{ad:"Çilek Şurubu 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "cookiesurup700ml":{ad:"Cookie Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "coolberrysurup70":{ad:"Cool Berry Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "irishcreamsurup7":{ad:"İrish Cream Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "nanesurup700ml":{ad:"Nane Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "coollimesurup700":{ad:"Cool Lime Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "cikolatasurup700":{ad:"Çikolata Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "karamelsurup700m":{ad:"Karamel Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "toffenutsurup700":{ad:"Toffe Nut Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "hindistancevizis":{ad:"Hindistan Cevizi Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "beyazcikolatasur":{ad:"Beyaz Çikolata Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "vanilyasurup700m":{ad:"Vanilya Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "ormanmeyvelisuru":{ad:"Orman Meyveli Şurup 700 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:700, altBirim:"ml"}},
+  "milkshaketozukar":{ad:"Milkshake Tozu Karamel", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "milkshaketozuvan":{ad:"Milkshake Tozu Vanilya", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "milkshaketozucil":{ad:"Milkshake Tozu Çilek", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "milkshaketozublu":{ad:"Milkshake Tozu Blue Dream", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "milkshaketozucik":{ad:"Milkshake Tozu Çikolata", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "oreomilkshaketoz":{ad:"Oreo Milkshake Tozu", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "spreykremsanti":{ad:"Sprey Kremşanti", mevcut:0, kritik:0, birim:"kg", kategori:"Çay Kahve Malzemeleri", kdv:1, alisKdvDahil:false, aktif:true},
+  "kayisikolaseftal":{ad:"Kayısı Kola Şeftali & Yasemin 24x250 ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:250, altBirim:"ml"}},
+  "sirincegazozseft":{ad:"Şirince Gazoz Şeftali & Mürver 24x250 ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:250, altBirim:"ml"}},
+  "sirincemurdumeri":{ad:"Şirince Mürdüm Eriği & Y. Mersini 24x250 ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:250, altBirim:"ml"}},
+  "bodrummandalinal":{ad:"Bodrum Mandalinalı Gazoz 24x250 ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:250, altBirim:"ml"}},
+  "saldavisnenanear":{ad:"Salda Vişne & Nane Aromalı 24x250 ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:250, altBirim:"ml"}},
+  "uzaykola250ml4x6":{ad:"Uzay Kola 250 ml 4x6", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:250, altBirim:"ml"}},
+  "kabarcikeksielma":{ad:"Kabarcık Ekşi Elma Ekşilim (Şeker İlavesiz) 200 ml 4x6", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:200, altBirim:"ml"}},
+  "borekstrayabanme":{ad:"Bor Ekstra Yaban Mersin 200 ml 4x6", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:200, altBirim:"ml"}},
+  "gocamoglaseftali":{ad:"Goca Moğla Şeftali Lavanta 200 ml 4x6", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:24, altMiktar:200, altBirim:"ml"}},
+  "uzayportakal250m":{ad:"Uzay Portakal 250 ml 4x6", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:1, altMiktar:250, altBirim:"ml"}},
+  "beyoglulimonnane":{ad:"Beyoğlu Limon Nane Gazoz 250 ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:1, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:1, altMiktar:250, altBirim:"ml"}},
+  "borgazozuhindist":{ad:"Bor Gazozu Hindistan Cevizli 200 Ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:1, altMiktar:200, altBirim:"ml"}},
+  "baglargazozegzot":{ad:"Bağlar Gazoz Egzotik 250 Ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:1, altMiktar:250, altBirim:"ml"}},
+  "datcagazozubadem":{ad:"Datça Gazozu Bademli 200 Ml", mevcut:0, kritik:0, birim:"koli", kategori:"Gazozlar", kdv:10, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:1, altMiktar:200, altBirim:"ml"}},
+  "pankekmakinasi10":{ad:"Pankek Makinası 100 gözlü", mevcut:0, kritik:0, birim:"adet", kategori:"Makina ve Cihazlar", kdv:20, alisKdvDahil:false, aktif:true},
+  "pankekmakinasi50":{ad:"Pankek Makinası 50 gözlü", mevcut:0, kritik:0, birim:"adet", kategori:"Makina ve Cihazlar", kdv:20, alisKdvDahil:false, aktif:true},
+  "pankekocagiizgar":{ad:"Pankek Ocağı Izgarası 50 gözlü (Teflon)", mevcut:0, kritik:0, birim:"adet", kategori:"Makina ve Cihazlar", kdv:20, alisKdvDahil:false, aktif:true},
+  "pankekocagiizg1":{ad:"Pankek Ocağı Izgarası 100 gözlü (Teflon)", mevcut:0, kritik:0, birim:"adet", kategori:"Makina ve Cihazlar", kdv:20, alisKdvDahil:false, aktif:true},
+  "plastiktepsikucu":{ad:"Plastik Tepsi Küçük", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "ketcapmayonezsis":{ad:"Ketçap & Mayonez Şişesi Geniş Kapaklı şeffaf 950 ml", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:1, altMiktar:950, altBirim:"ml"}},
+  "pckapakkare12012":{ad:"Pc Kapak Kare 120*120 (Şekerleme Kavanoz Kapağı)", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pckarekavanoz120":{ad:"Pc Kare Kavanoz 120*120*160 (Şekerleme için)", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "caybardagiheybel":{ad:"Çay Bardağı Heybeli 6'lı", mevcut:0, kritik:0, birim:"kutu", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:6}},
+  "caytabagi":{ad:"Çay Tabağı", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "gryckistanbulcay":{ad:"GRY-ÇK / İSTANBUL Çay Kaşık", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "grynkistanbulnes":{ad:"GRY-NK / İSTANBUL Neskafe Kaşık", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "grytkistanbultat":{ad:"GRY-TK / İSTANBUL Tatlı Kaşık", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "grytcistanbultat":{ad:"GRY-TÇ / İSTANBUL Tatlı Çatal", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kaf300mugkaffame":{ad:"KAF300MUG / Kaff Americano Fincanı 300 cc *12", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kaf01cpfkaffcapp":{ad:"KAF01CPF / Kaff Cappuccino Fincanı 250 cc *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kaf01cptkaffcapp":{ad:"KAF01CPT / Kaff Cappuccino Tabağı 17cm *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "rit02kfritaturkk":{ad:"RIT02KF / Rita Türk Kahve Fincanı 80 cc *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "rit02ktritaturkk":{ad:"RIT02KT / Rita Türk Kahve Fincan Tabağı 12 cm *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kaf01espfkaffesp":{ad:"KAF01ESP-F / Kaff Espresso Fincanı 75cc *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kaf01esptkaffesp":{ad:"KAF01ESP-T / Kaff Espresso Fincan Tabağı *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "rit01cfritacayfi":{ad:"RIT01CF / Rita Çay Fincanı 230 cc *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "rit01ctritacayfi":{ad:"RIT01CT / Rita Çay Fincan Tabağı 16 cm *6", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kaf01stkaffsutlu":{ad:"KAF01ST / Kaff Sütlük 85cc *12", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "27cmyuvarlaktatl":{ad:"27 Cm Yuvarlak Tatlı Tabağı Bonna", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "3016cmkayiktabak":{ad:"30*16 Cm Kayık Tabak Bonna", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "magnolyakavanozk":{ad:"Magnolya Kavanoz Kapaklı", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "logolukartonbard":{ad:"Logolu Karton Bardak Kapaklı", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kavanozkapagi":{ad:"Kavanoz Kapağı", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "makinetemizleyic":{ad:"Makine Temizleyici Set", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pastafanusukapak":{ad:"Pasta Fanusu Kapaklı", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "petkasekapak":{ad:"Pet Kase Kapak", mevcut:0, kritik:0, birim:"adet", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "petbardaklux360m":{ad:"Pet Bardak Lüx 360 ml 50 li", mevcut:0, kritik:0, birim:"paket", kategori:"Züccaciye Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true, ambalaj:{ad:"paket", ici:50, altMiktar:360, altBirim:"kg"}},
+  "pankekkutusuno6":{ad:"Pankek Kutusu No: 6", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pankekkutusuno12":{ad:"Pankek Kutusu No:12", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pankekkutusuno14":{ad:"Pankek Kutusu No:14", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pankekkutusuno16":{ad:"Pankek Kutusu No:16", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kapaklipaketkutu":{ad:"Kapaklı Paket Kutusu No:12", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kapaklipaketku1":{ad:"Kapaklı Paket Kutusu No:16", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "magnolyakutusute":{ad:"Magnolya Kutusu Tekli", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "magnolyakutusuik":{ad:"Magnolya Kutusu İkili", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kusakstickerbowl":{ad:"Kuşak Sticker (Bowl için)", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "magnolyasticker":{ad:"Magnolya Sticker", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "paketstickeryuva":{ad:"Paket Sticker Yuvarlak", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "minipantepsikagi":{ad:"Minipan Tepsi Kağıdı", mevcut:0, kritik:0, birim:"adet", kategori:"Matbaa Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pleksibaskiliqrm":{ad:"Pleksi Baskılı QR Menü", mevcut:0, kritik:0, birim:"adet", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "pecete2525logolu":{ad:"Peçete 25*25 Logolu 1 Koli 2400 Adet", mevcut:0, kritik:0, birim:"koli", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true, ambalaj:{ad:"koli", ici:2400}},
+  "islakmendil":{ad:"Islak Mendil", mevcut:0, kritik:0, birim:"adet", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "ikramseticatal":{ad:"İkram Seti Çatal", mevcut:0, kritik:0, birim:"adet", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "ikramsetikasik":{ad:"İkram Seti Kaşık", mevcut:0, kritik:0, birim:"adet", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "logoluposet":{ad:"Logolu Poşet", mevcut:0, kritik:0, birim:"kg", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kasekraftsalatak":{ad:"Kase Kraft Salata Kap-Kapaklı 500 cc 50'li", mevcut:0, kritik:0, birim:"kutu", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true, ambalaj:{ad:"kutu", ici:50}},
+  "baskilisleevebar":{ad:"Baskılı Sleeve (Bardak Tutucu)", mevcut:0, kritik:0, birim:"adet", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "kahvefali":{ad:"Kahve Falı", mevcut:0, kritik:0, birim:"adet", kategori:"Ambalaj Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true},
+  "tsort":{ad:"Tşört", mevcut:0, kritik:0, birim:"adet", kategori:"Kıyafetler", kdv:20, alisKdvDahil:false, aktif:true},
+  "polar":{ad:"Polar", mevcut:0, kritik:0, birim:"adet", kategori:"Kıyafetler", kdv:20, alisKdvDahil:false, aktif:true},
+  "onluk":{ad:"Önlük", mevcut:0, kritik:0, birim:"adet", kategori:"Kıyafetler", kdv:20, alisKdvDahil:false, aktif:true},
+  "sapka":{ad:"Şapka", mevcut:0, kritik:0, birim:"adet", kategori:"Kıyafetler", kdv:20, alisKdvDahil:false, aktif:true},
+  "krema":{ad:"Krema", mevcut:0, kritik:0, birim:"adet", kategori:"Hamur Malzemeleri", kdv:20, alisKdvDahil:false, aktif:true, ambalaj:{ad:"adet", ici:200}},
+  "cilek":{ad:"Çilek", mevcut:0, kritik:0, birim:"kg", kategori:"Meyve", kdv:20, alisKdvDahil:false, aktif:true},
+  "muz":{ad:"Muz", mevcut:0, kritik:0, birim:"kg", kategori:"Meyve", kdv:20, alisKdvDahil:false, aktif:true},
+  "kivi":{ad:"Kivi", mevcut:0, kritik:0, birim:"kg", kategori:"Meyve", kdv:20, alisKdvDahil:false, aktif:true}
+};
+const EXCEL_STOK_KATEGORILERI = ["Toz Karışım", "Hamur Malzemeleri", "Çikolata Sos ve Şekerleme", "Pastalar", "Çay Kahve Malzemeleri", "Gazozlar", "Makina ve Cihazlar", "Züccaciye Malzemeleri", "Matbaa Malzemeleri", "Ambalaj Malzemeleri", "Kıyafetler", "Meyve"];
+
+function excelStokMigrasyonu(){
+  // 1) STOCK'u tamamen Excel kartlarıyla değiştir (derin kopya)
+  STOCK = JSON.parse(JSON.stringify(EXCEL_STOK_KARTLARI));
+  BAYI_FIYAT = {};
+  Object.keys(STOCK).forEach(kod=>{ BAYI_FIYAT[kod] = null; });   // alış fiyatı faturayla gelir
+
+  // 2) Kategori listesini kur (Excel kategorileri + varsa mevcut özel olanlar korunur)
+  EXCEL_STOK_KATEGORILERI.forEach(k=>{ if(!STOK_KATEGORILERI.includes(k)) STOK_KATEGORILERI.push(k); });
+
+  // 3) Kullanılan birimleri ekle (çuval vb. yeni birimler)
+  Object.values(STOCK).forEach(k=>{
+    if(k.birim && !STOK_BIRIMLERI.includes(k.birim)) STOK_BIRIMLERI.push(k.birim);
+    if(k.ambalaj){
+      if(k.ambalaj.ad && !STOK_BIRIMLERI.includes(k.ambalaj.ad)) STOK_BIRIMLERI.push(k.ambalaj.ad);
+      if(k.ambalaj.altBirim && !STOK_BIRIMLERI.includes(k.ambalaj.altBirim)) STOK_BIRIMLERI.push(k.ambalaj.altBirim);
+    }
+  });
+
+  // 4) Her karta görünür sıra no ata
+  Object.keys(STOCK).forEach(kod=>{ if(!STOCK[kod].no) STOCK[kod].no = stokNoBiçim(_stokNoSayac++); });
+
+  // 5) ÜRÜNLERİN ALTINDAKİ TÜM SEÇENEK GRUPLARINI SİL (sıfırdan kurulacak)
+  Object.keys(PRODUCT_OPTIONS).forEach(urun=>{ PRODUCT_OPTIONS[urun] = []; });
+
+  // 6) Hazır seçenek gruplarını ve tekil havuzu temizle
+  OPTION_GROUPS = {};
+  OPTION_POOL = [];
+
+  // 7) Eski hammadde-kodlu reçeteleri temizle (o kartlar artık yok)
+  if(typeof RECIPES!=="undefined"){
+    Object.keys(RECIPES).forEach(urun=>{
+      const gecerli = (RECIPES[urun]||[]).filter(r=>STOCK[r.ing]);
+      if(gecerli.length) RECIPES[urun]=gecerli; else delete RECIPES[urun];
+    });
+  }
+
+  b2bKaydet();
+  menuKaydet();
+  return Object.keys(STOCK).length;
+}
+
 function seceneklerdenStokKarti(){
   // 1) tüm gerçek seçenekleri topla (İstemiyorum hariç), en zengin kcal/birim/miktar ile
   secenekleriTopla();
@@ -18683,7 +19032,10 @@ function bayiStokKartHtml(){
     const marj = (alisH && satisH) ? ((satisH.matrah-alisH.matrah)/alisH.matrah*100) : null;
     return `<div class="stok-kart${!aktif?' pasif':''}">
       <div class="stok-kart-ust">
-        <div class="stok-kart-ad"><strong>${s.ad}</strong> <span class="stok-kart-kod">${s.no||kod}</span></div>
+        <div class="stok-kart-ad">
+          <span class="stok-kart-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="skg-bos">📦</span>`}</span>
+          <span class="stok-kart-admetin"><strong>${s.ad}</strong> <span class="stok-kart-kod">${s.no||kod}</span></span>
+        </div>
         <div class="stok-kart-aksiyon">
           <button class="bayi-mini" onclick="stokKartDuzenle('${kod}')">✏️</button>
           <button class="bayi-mini sil" onclick="stokKartSil('${kod}')">🗑️</button>
@@ -18744,12 +19096,81 @@ function stokModalAlerjenTikle(ad){
     event.target.classList.toggle("on", p.alerjenler.includes(ad));
   }
 }
+/* Stok görseli büyütme (lightbox) — thumbnail'a tıklayınca tam boy açılır */
+function stokGorselBuyut(src, ad){
+  if(!src) return;
+  const baslik = (ad||"").replace(/"/g,'&quot;');
+  const html = `
+  <div class="modal-bg on" id="gorselLightbox" style="z-index:400;background:rgba(20,6,14,.82)"
+       onmousedown="window.__lbBasladi=(event.target===this)"
+       onclick="if(event.target===this && window.__lbBasladi) stokGorselKapat()">
+    <div class="glb-ic">
+      <button class="glb-kapat" onclick="stokGorselKapat()" aria-label="Kapat">✕</button>
+      <img class="glb-img" src="${src}" alt="${baslik}">
+      ${ad?`<div class="glb-ad">${ad}</div>`:''}
+    </div>
+  </div>`;
+  let el = document.getElementById("gorselLightboxWrap");
+  if(!el){ el=document.createElement("div"); el.id="gorselLightboxWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function stokGorselKapat(){ const w=document.getElementById("gorselLightboxWrap"); if(w) w.innerHTML=""; }
+/* Stok koduyla görseli büyüt — base64'ü onclick'e gömmeden STOCK'tan okur */
+function stokGorselBuyutKod(kod){ const s=STOCK[kod]; if(s && s.gorsel) stokGorselBuyut(s.gorsel, s.ad); }
+
+/* Stok kartı görseli — yükle (otomatik küçült) & sil */
+function stokModalGorselYukle(input){
+  const dosya = input.files && input.files[0]; if(!dosya) return;
+  if(!/^image\//.test(dosya.type)){ note("Lütfen bir görsel dosyası seçin"); return; }
+  if(dosya.size > 8*1024*1024){ note("Görsel 8MB'den küçük olmalı"); return; }
+  stokModalOku();   // diğer input değerlerini kaybetme
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = new Image();
+    img.onload = ()=>{
+      // en uzun kenarı 400px'e sığdır — kare kırpma yok, oran korunur
+      const MAKS = 400;
+      let w = img.width, h = img.height;
+      if(w>MAKS || h>MAKS){
+        if(w>=h){ h = Math.round(h*MAKS/w); w = MAKS; }
+        else { w = Math.round(w*MAKS/h); h = MAKS; }
+      }
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,w,h);   // PNG şeffaflığına beyaz zemin
+      ctx.drawImage(img, 0, 0, w, h);
+      let veri;
+      try{
+        // WebP dene — aynı kalitede JPEG'den ~%25-30 daha küçük
+        veri = c.toDataURL("image/webp", 0.8);
+        // Tarayıcı WebP'yi desteklemiyorsa toDataURL sessizce PNG döndürür → JPEG'e düş
+        if(veri.indexOf("data:image/webp")!==0){ veri = c.toDataURL("image/jpeg", 0.8); }
+      }
+      catch(err){
+        try{ veri = c.toDataURL("image/jpeg", 0.8); }
+        catch(err2){ veri = e.target.result; }   // son güvenlik ağı: ham veri
+      }
+      if(state._stokModal){ state._stokModal.gorsel = veri; stokModalCiz(); }
+    };
+    img.onerror = ()=> note("Görsel okunamadı");
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(dosya);
+}
+function stokModalGorselSil(){
+  if(!state._stokModal) return;
+  stokModalOku();
+  state._stokModal.gorsel = null;
+  stokModalCiz();
+}
 function stokKartEkle(){
   state._stokModal = {
     mod:"yeni", kod:null,
     ad:"", mevcut:"0", birim:"adet", kritik:"0",
     kategori:"Hammadde",
     kcal:"", aktif:true,
+    gorsel:null,
     alerjenler:[],
     alisFiyat:"", alisKdv:"10", alisKdvDahil:false,
     satisFiyat:"", satisKdv:"10", satisKdvDahil:false,
@@ -18767,6 +19188,7 @@ function stokKartDuzenle(kod){
     ad:s.ad||"", mevcut:String(s.mevcut||0), birim:s.birim||"adet", kritik:String(s.kritik||0),
     kategori:s.kategori||"Hammadde",
     kcal:(s.kcal!=null?String(s.kcal):""), aktif:(s.aktif!==false),
+    gorsel:(s.gorsel||null),
     alerjenler: Array.isArray(s.alerjenler)?s.alerjenler.slice():[],
     alisFiyat:(bayiFiyat(kod)?String(bayiFiyat(kod)):""),
     alisKdv:(s.kdv!=null?String(s.kdv):"10"),
@@ -18912,6 +19334,8 @@ function stokModalKaydet(){
     satisKdvDahil: !!p.satisKdvDahil,
     aktif: p.aktif!==false
   };
+  // Görsel — yüklüyse base64 sakla, kaldırıldıysa alanı temizle
+  veri.gorsel = p.gorsel || null;
   // Alerjen içeriği — bu stoğu kullanan ürünlerde otomatik uyarı için
   if(Array.isArray(p.alerjenler) && p.alerjenler.length) veri.alerjenler = p.alerjenler.slice();
   // Ambalaj (koli/paket ile sipariş) — sadece açıksa ve içi>0 ise kaydet
@@ -18936,8 +19360,13 @@ function stokModalKaydet(){
   // yeni kartsa görünür sıralı no ata (mevcut kartın no'su korunur)
   if(!STOCK[kod].no) STOCK[kod].no = stokNoBiçim(_stokNoSayac++);
   BAYI_FIYAT[kod] = fiyatV;   // fiyat ayrı tabloda; null = fiyat yok
-  note(p.mod==="yeni" ? "Stok kartı eklendi: "+ad : ad+" güncellendi");
-  b2bKaydet();
+  const kayitOk = b2bKaydet();
+  if(kayitOk===false){
+    // Büyük olasılıkla görseller localStorage kotasını doldurdu
+    note("⚠️ Kayıt alanı doldu — bazı görseller kaydedilemeyebilir. Kullanılmayan görselleri kaldırın.");
+  } else {
+    note(p.mod==="yeni" ? "Stok kartı eklendi: "+ad : ad+" güncellendi");
+  }
   // Seçenek formundan "yeni stok kartı" olarak çağrıldıysa dönüş bilgisini kapatmadan önce al
   const donus = state._stokDonus;
   state._stokDonus = null;   // stokModalKapat içindeki iptal-dönüşünü tetiklememek için önce temizle
@@ -19025,6 +19454,24 @@ function stokModalCiz(){
 
       <div class="skm-grup">
         <div class="skm-grup-baslik">Temel Bilgi</div>
+        <div class="skm-alan">
+          <label class="skm-lbl">Kart görseli <small style="font-weight:500;color:var(--ink-3)">— stok listesinde ve bayi kanalında görünür</small></label>
+          <div class="skm-gorsel-row">
+            <div class="skm-gorsel-onizle${p.gorsel?' dolu tiklanir':''}"${p.gorsel?` onclick="stokGorselBuyut(state._stokModal&&state._stokModal.gorsel, state._stokModal&&state._stokModal.ad)"`:''}>
+              ${p.gorsel
+                ? `<img src="${p.gorsel}" alt="stok görseli">`
+                : `<span class="skm-gorsel-bos">📦</span>`}
+            </div>
+            <div class="skm-gorsel-aksiyon">
+              <label class="skm-gorsel-btn">
+                ${p.gorsel?'🔄 Değiştir':'📷 Görsel yükle'}
+                <input type="file" accept="image/*" style="display:none" onchange="stokModalGorselYukle(this)">
+              </label>
+              ${p.gorsel?`<button class="skm-gorsel-sil" onclick="stokModalGorselSil()">🗑 Kaldır</button>`:''}
+              <div class="skm-gorsel-not">JPG / PNG · otomatik küçültülür</div>
+            </div>
+          </div>
+        </div>
         <div class="skm-alan">
           <label class="skm-lbl">Stok kartı adı *</label>
           <input class="skm-input" id="skmAd" type="text" value="${esc(p.ad)}" placeholder="örn. Antep fıstığı"
@@ -19240,7 +19687,7 @@ function bayiSayimHtml(merkez){
         if(koli>0) mevcutMetin += ` <small>(${koli} ${amb.ad}${kalan?` + ${kalan} ${birim}`:""})</small>`;
       }
       html += `<div class="bayi-satir">
-        <div class="bayi-s-ad"><strong>${s.ad}</strong>${amb?`<div class="bayi-s-not">1 ${amb.ad} = ${amb.ici} ${birim}</div>`:""}</div>
+        <div class="bayi-s-ad"><span class="bayi-s-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bayi-s-admetin"><strong>${s.ad}</strong>${amb?`<div class="bayi-s-not">1 ${amb.ad} = ${amb.ici} ${birim}</div>`:""}</span></div>
         <div class="bayi-s-deger">${mevcutMetin}</div>
         <div class="bayi-s-aksiyon">
           <button class="bayi-mini" onclick="sayimGir('${merkez?'_MERKEZ_':sube.replace(/'/g,"\\'")}','${kod}')">🔢 Sayım gir</button>
@@ -20103,7 +20550,7 @@ function bayiFiyatHtml(){
       genelAlis += mevcut*d.alisDahil;
       genelSatis += mevcut*d.satisDahil;
       html += `<div class="bfiyat-satir">
-        <span class="bf-ad"><strong>${s.ad}</strong></span>
+        <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span></span>
         <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${(+mevcut.toFixed(2))} ${s.birim||'gr'}</span></span>
         <span class="bf-kdv">%${d.alisKdv}</span>
         <span class="bf-alis">${d.alisDahil>0?d.alisDahil.toFixed(2)+' ₺':'—'}</span>
@@ -20574,7 +21021,7 @@ function bayiSiparisVerHtml(){
       const sepette = state.bayiSepet.find(x=>x.kod===kod);
       const birimGoster = sepette ? (sepette.girisBirim&&sepette.girisBirim!==(s.birim||"adet") ? `${sepette.girisMiktar} ${sepette.girisBirim}` : `${sepette.miktar} ${s.birim||"adet"}`) : "";
       html += `<div class="bfiyat-satir bsip-satir">
-        <span class="bf-ad"><strong>${s.ad}</strong></span>
+        <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span></span>
         <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${(+merkezVar.toFixed(2))} ${s.birim||'gr'}</span></span>
         <span class="bf-kdv">%${d.satisKdv}</span>
         <span class="bf-satis">${f>0?f.toFixed(2)+' ₺':'<span style="color:var(--ink-3)">—</span>'}</span>
@@ -22909,6 +23356,7 @@ function raporKasaVardiyaHtml(){
         <div class="kv-blok">
           <div class="kv-blok-bas">💰 Nakit Hesabı</div>
           <div class="kv-satir"><span>Açılış devri (teslim alınan)</span><span>${tl(v.devirAlinan||0)} ₺</span></div>
+          ${(v.devirNakit!=null||v.devirBozuk!=null)?`<div class="kv-satir alt"><span>↳ 💵 nakit ${tl(v.devirNakit||0)} · 🪙 bozukluk ${tl(v.devirBozuk||0)}</span><span></span></div>`:''}
           ${v.ilkAcilis?`<div class="kv-satir kucuk"><span>İlk açılış — devir yok</span><span></span></div>`:
             (Math.abs(v.devirFark||0)>=0.01?`<div class="kv-satir ${v.devirFark<0?'ind':'fazla'}"><span>↳ devir farkı</span><span>${v.devirFark>0?'+':''}${tl(v.devirFark)} ₺</span></div>`:'')}
           <div class="kv-satir"><span>+ Nakit tahsilat</span><span>${tl((o.nakit||0)+(o.digerNakit||0))} ₺</span></div>
@@ -22923,6 +23371,7 @@ function raporKasaVardiyaHtml(){
               <span>${farkVar?((v.nakitFark>0?'+':'')+tl(v.nakitFark)+' ₺'):'—'}</span></div>
             ${v.farkNot?`<div class="kv-not">📝 ${v.farkNot}</div>`:''}
             <div class="kv-satir ayrac"><span>🔁 Sonraki vardiyaya devredilen</span><span>${tl(v.devredilen||0)} ₺</span></div>
+            ${(v.devredilenNakit!=null||v.devredilenBozuk!=null)?`<div class="kv-satir alt"><span>↳ 💵 nakit ${tl(v.devredilenNakit||0)} · 🪙 bozukluk ${tl(v.devredilenBozuk||0)}</span><span></span></div>`:''}
             <div class="kv-satir"><span>🏦 Kasadan alınan</span><span>${tl(v.kasadanAlinan||0)} ₺</span></div>
           ` : `<div class="kv-satir toplam"><span>Şu anki beklenen nakit</span><span>${tl(vardiyaBeklenenNakit(v))} ₺</span></div>
                <div class="kv-devam">🔓 Kasa hâlâ açık — kapanış bilgileri henüz yok</div>`}
@@ -22946,8 +23395,8 @@ function kvExcelIndir(){
   satirlar.push(["İşletme günü:", isletmeGunuGoster(tarih), "Şube:", subeFiltre==="__tum"?"Tüm şubeler":subeFiltre]);
   satirlar.push([]);
   satirlar.push(["Vardiya No","Şube","Kasiyer","Açılış","Kapanış","Durum",
-    "Açılış devri","Nakit","Kredi kartı","Diğer/QR","Diğer-nakit","Diğer-kredi",
-    "İndirim","İkram","Net tahsilat","Beklenen nakit","Sayılan nakit","Fark","Fark notu","Devredilen","Kasadan alınan"]);
+    "Açılış devri","Devir-nakit","Devir-bozukluk","Nakit","Kredi kartı","Diğer/QR","Diğer-nakit","Diğer-kredi",
+    "İndirim","İkram","Net tahsilat","Beklenen nakit","Sayılan nakit","Fark","Fark notu","Devredilen","Devredilen-nakit","Devredilen-bozukluk","Kasadan alınan"]);
   Object.keys(KASA_VARDIYALAR).forEach(sube=>{
     if(subeFiltre!=="__tum" && sube!==subeFiltre) return;
     (KASA_VARDIYALAR[sube]||[]).forEach(v=>{
@@ -22959,10 +23408,11 @@ function kvExcelIndir(){
         new Date(v.acilisTs).toLocaleString('tr'),
         v.kapanisTs?new Date(v.kapanisTs).toLocaleString('tr'):"—",
         v.durum==="kapali"?"Kapalı":"AÇIK",
-        v.devirAlinan||0, o.nakit||0, o.kredi||0, o.diger||0, o.digerNakit||0, o.digerKredi||0,
+        v.devirAlinan||0, v.devirNakit!=null?v.devirNakit:(v.devirAlinan||0), v.devirBozuk||0,
+        o.nakit||0, o.kredi||0, o.diger||0, o.digerNakit||0, o.digerKredi||0,
         o.indirim||0, o.ikram||0, o.net||0,
         v.beklenenNakit||"", v.sayilanNakit||"", v.nakitFark||"", v.farkNot||"",
-        v.devredilen||"", v.kasadanAlinan||""
+        v.devredilen||"", v.devredilenNakit!=null?v.devredilenNakit:(v.devredilen||""), v.devredilenBozuk||0, v.kasadanAlinan||""
       ]);
     });
   });
@@ -23341,7 +23791,7 @@ function stokDurumHtml(){
       const alinan = stokHareketToplam(secili, kod, "alinan", basTs, bitTs);
       const eksi = mevcut<0;
       html += `<div class="bfiyat-satir sdurum-satir">
-        <span class="bf-ad"><strong>${s.ad}</strong></span>
+        <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span></span>
         <span class="sd-mik"><span class="bf-mik-kutu${eksi?' eksi':''}">${(+mevcut.toFixed(2))} ${birim}</span></span>
         <span class="sd-kdv">%${d.satisKdv||d.alisKdv||0}</span>
         <span class="sd-bfiyat">${bfiyat>0?bfiyat.toFixed(2):'—'}${isk>0?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)}</small>`:''}</span>
@@ -26649,12 +27099,15 @@ splashYukle();        // QR intro ayarlarını geri yükle
 if(Object.keys(OPTION_GROUPS).length===0) secenekGruplariniTopla();  // ürünlerden hazır gruplar çıkar
 optionGroupsNormalize();  // eski format grupları yeni yapıya yükselt
 if(OPTION_POOL.length===0) secenekleriTopla();  // tekil seçenek havuzunu doldur
-// Otomatik: seçenekleri stok kartlarına dönüştür (bir kez). Eski 12 hammadde kartı
-// yerine gerçek seçenek-kartları gelsin. Bayrak localStorage'da tutulur, tekrar çalışmaz.
+// Otomatik: Excel'den gelen 186 gerçek stok kartını yükle (bir kez).
+// Eski hammadde/seçenek kartlarını ve ürün seçeneklerini temizler.
+// Bayrak localStorage'da tutulur, tekrar çalışmaz.
 try {
-  const migDurum = MPStore.getRaw("minipan_secenek_stok_mig", "");
-  if(migDurum!=="1" && typeof seceneklerdenStokKarti==="function"){
-    seceneklerdenStokKarti();   // STOCK'u seçeneklerden yeniden kurar, kalıcı kaydeder
+  const excelMig = MPStore.getRaw("minipan_excel_stok_mig_v1", "");
+  if(excelMig!=="1" && typeof excelStokMigrasyonu==="function"){
+    excelStokMigrasyonu();       // STOCK'u Excel'den kurar, seçenekleri siler, kalıcı kaydeder
+    if(MPStore.setRaw) MPStore.setRaw("minipan_excel_stok_mig_v1","1");
+    // eski seçenek→stok migrasyonunu da işaretle ki bir daha çalışıp üstüne yazmasın
     if(MPStore.setRaw) MPStore.setRaw("minipan_secenek_stok_mig","1");
   }
 } catch(e){ /* migrasyon başarısızsa mevcut kartlarla devam */ }
