@@ -1014,6 +1014,15 @@ tr:last-child td{border-bottom:none}
 .sdon-uyari{font-size:12px; line-height:1.6; color:var(--ink-2); background:#fff2ee; border:1px solid var(--brand); border-radius:10px; padding:11px 13px; font-weight:500}
 /* Stok kategori filtre + grup başlığı */
 .stok-kat-filtre{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px}
+/* Stok arama kutusu */
+.stok-arama-wrap{position:relative; margin-bottom:14px}
+.stok-arama-ikon{position:absolute; left:14px; top:50%; transform:translateY(-50%); font-size:15px; opacity:.6; pointer-events:none}
+.stok-arama-input{width:100%; box-sizing:border-box; padding:13px 42px 13px 42px; border-radius:12px; border:1.5px solid var(--line); background:var(--surface); font-size:15px; font-weight:600; color:var(--ink); font-family:inherit}
+.stok-arama-input:focus{outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
+.stok-arama-input::placeholder{color:var(--ink-3); font-weight:500}
+.stok-arama-temizle{position:absolute; right:10px; top:50%; transform:translateY(-50%); width:28px; height:28px; border-radius:50%; border:none; background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:900; cursor:pointer; display:grid; place-items:center}
+.stok-arama-temizle:active{transform:translateY(-50%) scale(.9)}
+.stok-arama-sonuc{font-size:12.5px; font-weight:700; color:var(--ink-3); margin-bottom:10px; padding-left:2px}
 .skf-chip{padding:7px 13px; border-radius:99px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink-2); font-size:12.5px; font-weight:700; cursor:pointer; transition:all .15s ease}
 .skf-chip:hover{border-color:var(--line-2)}
 .skf-chip.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
@@ -8412,7 +8421,7 @@ function _siparisExcelTablo(sp){
   let satirlar="";
   sp.kalemler.filter(k=>!k.silindi && k.miktar>0).forEach(k=>{
     const s=STOCK[k.kod]; if(!s) return;
-    const f=bayiSatisFiyat(k.kod), tutar=k.miktar*f, oran=(s.kdv!=null?s.kdv:0);
+    const f=bayiSatisFiyat(k.kod), tutar=k.miktar*f, oran=(s.satisKdv!=null?s.satisKdv:(s.kdv!=null?s.kdv:0));
     satirlar+=`<tr><td>${E(s.ad)}</td><td>${E(s.kategori||'')}</td><td>${k.miktar} ${E(s.birim||'adet')}</td><td class="sayi">${f.toFixed(2)}</td><td class="sayi">%${oran}</td><td class="tut">${tutar.toFixed(2)}</td></tr>`;
   });
   const oranlar=Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
@@ -14960,6 +14969,9 @@ function excelStokMigrasyonu(){
   // 4) Her karta görünür sıra no ata
   Object.keys(STOCK).forEach(kod=>{ if(!STOCK[kod].no) STOCK[kod].no = stokNoBiçim(_stokNoSayac++); });
 
+  // 4b) kg/lt ambalajsız kartları gr/ml tabana indir (reçete gram uyumu)
+  if(typeof uomKgLtMigrasyonu==="function") uomKgLtMigrasyonu();
+
   // 5) ÜRÜNLERİN ALTINDAKİ TÜM SEÇENEK GRUPLARINI SİL (sıfırdan kurulacak)
   Object.keys(PRODUCT_OPTIONS).forEach(urun=>{ PRODUCT_OPTIONS[urun] = []; });
 
@@ -14978,6 +14990,43 @@ function excelStokMigrasyonu(){
   b2bKaydet();
   menuKaydet();
   return Object.keys(STOCK).length;
+}
+
+/* ─── UoM MİGRASYONU: kg/lt taban → gr/ml taban ───
+   Toz Şeker gibi ambalajsız kg/lt kartlarda reçete gram bazlı yazılınca
+   birim uyuşmazlığı oluyordu. Taban birimi gr/ml'ye indirir, "1 kg = 1000 gr"
+   dönüşüm seviyesi ekler ve mevcut stok miktarını da tabana çevirir.
+   Örn: 1 kg şeker → taban gr, uom [{kg,1000}], mevcut 1 → 1000 gr. */
+function uomKgLtMigrasyonu(){
+  const CEVRIM = { kg:{taban:"gr", carpan:1000}, lt:{taban:"ml", carpan:1000},
+                   litre:{taban:"ml", carpan:1000}, cl:{taban:"ml", carpan:10} };
+  let sayac = 0;
+  const cevrilen = {};   // kod → carpan (şube stoğu için)
+  Object.keys(STOCK).forEach(kod=>{
+    const s = STOCK[kod];
+    if(!s) return;
+    if(s.tabanBirim && Array.isArray(s.uom)) return;   // zaten UoM tanımlı
+    if(s.ambalaj && s.ambalaj.ad) return;              // ambalajlı → uomAl çözer
+    const birim = (s.birim||"").toLowerCase();
+    const c = CEVRIM[birim];
+    if(!c) return;
+    s.tabanBirim = c.taban;
+    s.uom = [{ ad: birim, carpan: c.carpan }];
+    if(s.mevcut) s.mevcut = Math.round(s.mevcut * c.carpan * 100)/100;
+    if(s.kritik) s.kritik = Math.round(s.kritik * c.carpan * 100)/100;
+    cevrilen[kod] = c.carpan;
+    sayac++;
+  });
+  // şube stoklarını (BAYI_STOK) da aynı çarpanla çevir
+  Object.keys(BAYI_STOK||{}).forEach(sube=>{
+    Object.keys(BAYI_STOK[sube]||{}).forEach(kod=>{
+      if(cevrilen[kod] && BAYI_STOK[sube][kod]){
+        BAYI_STOK[sube][kod] = Math.round(BAYI_STOK[sube][kod] * cevrilen[kod] * 100)/100;
+      }
+    });
+  });
+  if(sayac) b2bKaydet();
+  return sayac;
 }
 
 function seceneklerdenStokKarti(){
@@ -19063,23 +19112,44 @@ function bayiStokKartHtml(){
   // toplam stok değeri (miktar × birim fiyat)
   let toplamDeger = 0;
   Object.entries(STOCK).forEach(([kod,s])=>{ toplamDeger += s.mevcut * bayiFiyat(kod); });
-  const aktifFiltre = state.stokKatFiltre || "__tum";
+  const arama = (state.stokArama||"").trim();
 
   let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${Object.keys(STOCK).length} stok kartı · toplam değer: <strong>${toplamDeger.toFixed(0)} ₺</strong></div>
     <button class="bayi-ekle-btn" onclick="stokKartEkle()">+ Yeni stok kartı</button></div>`;
 
+  // arama kutusu (SABİT — yeniden çizilmez, odak korunur)
+  html += `<div class="stok-arama-wrap">
+    <span class="stok-arama-ikon">🔍</span>
+    <input class="stok-arama-input" id="stokAramaInput" type="text" value="${arama.replace(/"/g,'&quot;')}"
+      placeholder="Stok adı, kodu veya kategori ara…" oninput="stokAramaGuncelle(this.value)" autocomplete="off">
+    <button class="stok-arama-temizle" id="stokAramaTemizleBtn" onclick="stokAramaTemizle()" aria-label="Temizle" style="display:${arama?'grid':'none'}">✕</button>
+  </div>`;
+
+  // sonuç listesi — sadece bu kısım güncellenir
+  html += `<div id="stokSonucContainer">${stokSonucHtml()}</div>`;
+  return html;
+}
+
+/* Stok listesi sonuç kısmı (kategori chip + kartlar) — arama değişince sadece bu güncellenir */
+function stokSonucHtml(){
+  const aktifFiltre = state.stokKatFiltre || "__tum";
+  const arama = (state.stokArama||"").trim().toLocaleLowerCase("tr");
+
   // hangi kategoriler kullanımda (kart sayısıyla)
   const katSay = {};
   Object.values(STOCK).forEach(s=>{ const k=s.kategori||"Hammadde"; katSay[k]=(katSay[k]||0)+1; });
-  // sıralı kategori listesi: tanımlı sıra + kullanımdaki ekstralar
   const sirali = STOK_KATEGORILERI.filter(k=>katSay[k]);
   Object.keys(katSay).forEach(k=>{ if(!sirali.includes(k)) sirali.push(k); });
 
-  // kategori filtre chip'leri
-  html += `<div class="stok-kat-filtre">
-    <button class="skf-chip${aktifFiltre==='__tum'?' on':''}" onclick="stokKatFiltre('__tum')">Tümü (${Object.keys(STOCK).length})</button>
-    ${sirali.map(k=>`<button class="skf-chip${aktifFiltre===k?' on':''}" onclick="stokKatFiltre('${k.replace(/'/g,"\\'")}')">${k} (${katSay[k]})</button>`).join("")}
-  </div>`;
+  let html = "";
+  // kategori filtre chip'leri (arama yokken göster)
+  if(!arama){
+    html += `<div class="stok-kat-filtre">
+      <button class="skf-chip${aktifFiltre==='__tum'?' on':''}" onclick="stokKatFiltre('__tum')">Tümü (${Object.keys(STOCK).length})</button>
+      ${sirali.map(k=>`<button class="skf-chip${aktifFiltre===k?' on':''}" onclick="stokKatFiltre('${k.replace(/'/g,"\\'")}')">${k} (${katSay[k]})</button>`).join("")}
+    </div>`;
+  }
+
 
   const kartSatir = (kod,s)=>{
     const alisF = bayiFiyat(kod);
@@ -19091,7 +19161,8 @@ function bayiStokKartHtml(){
     const kritikDurum = (s.mevcut||0) <= (s.kritik||0);
     // KDV dahil/hariç durumuna göre matrah & toplam
     const hesap=(f,k,dahil)=> dahil ? {matrah:f/(1+(k||0)/100), toplam:f} : {matrah:f, toplam:f*(1+(k||0)/100)};
-    const alisH = (alisF>0) ? hesap(alisF,alisK,s.alisKdvDahil) : null;
+    // alış: BAYI_FIYAT her zaman KDV HARİÇ matrah → dahil=false ile hesapla (çifte indirim yok)
+    const alisH = (alisF>0) ? hesap(alisF,alisK,false) : null;
     const satisH = (satisF>0) ? hesap(satisF,satisK,s.satisKdvDahil) : null;
     const marj = (alisH && satisH) ? ((satisH.matrah-alisH.matrah)/alisH.matrah*100) : null;
     return `<div class="stok-kart${!aktif?' pasif':''}">
@@ -19109,7 +19180,7 @@ function bayiStokKartHtml(){
         <div class="stok-kutu stok-kutu-alis">
           <span class="sk-etiket">🛒 Alış</span>
           <span class="sk-deger">${alisH?alisH.toplam.toFixed(2)+' ₺':'—'}</span>
-          <span class="sk-alt">${alisK!=null?'%'+alisK+' '+(s.alisKdvDahil?'dahil':'hariç'):''}</span>
+          <span class="sk-alt">${alisK!=null?'%'+alisK+' hariç':''}</span>
         </div>
         <div class="stok-kutu stok-kutu-satis">
           <span class="sk-etiket">💰 Bayi satış</span>
@@ -19130,7 +19201,24 @@ function bayiStokKartHtml(){
     </div>`;
   };
 
-  if(aktifFiltre==="__tum"){
+  // stok kartını aramayla eşle: ad + kod/no + kategori
+  const eslesir = (kod,s)=>{
+    if(!arama) return true;
+    const hav = [s.ad, s.no, kod, s.kategori].filter(Boolean).join(" ").toLocaleLowerCase("tr");
+    return hav.includes(arama);
+  };
+
+  if(arama){
+    // arama modu: tüm eşleşenler tek düz liste (kategori grubu yok)
+    const kartlar = Object.entries(STOCK).filter(([kod,s])=>eslesir(kod,s));
+    html += `<div class="stok-arama-sonuc">${kartlar.length} sonuç bulundu</div><div class="bayi-tablo">`;
+    if(!kartlar.length){
+      html += `<div class="bayi-bos">"${state.stokArama}" için stok kartı bulunamadı.</div>`;
+    } else {
+      kartlar.sort((a,b)=>a[1].ad.localeCompare(b[1].ad,"tr")).forEach(([kod,s])=>{ html += kartSatir(kod,s); });
+    }
+    html += `</div>`;
+  } else if(aktifFiltre==="__tum"){
     // kategoriye göre gruplu
     sirali.forEach(kat=>{
       const kartlar = Object.entries(STOCK).filter(([kod,s])=>(s.kategori||"Hammadde")===kat);
@@ -19148,7 +19236,28 @@ function bayiStokKartHtml(){
   }
   return html;
 }
-function stokKatFiltre(k){ state.stokKatFiltre=k; go("stok", true); }
+function stokKatFiltre(k){ state.stokKatFiltre=k;
+  const cont=document.getElementById("stokSonucContainer");
+  if(cont) cont.innerHTML=stokSonucHtml(); else go("stok", true);
+}
+/* Stok arama — SADECE sonuç listesi güncellenir, arama kutusuna dokunulmaz → odak korunur */
+function stokAramaGuncelle(v){
+  state.stokArama = v;
+  const cont = document.getElementById("stokSonucContainer");
+  if(cont) cont.innerHTML = stokSonucHtml();
+  // temizle butonunu göster/gizle (input'u yeniden çizmeden)
+  const btn = document.getElementById("stokAramaTemizleBtn");
+  if(btn) btn.style.display = v.trim() ? "grid" : "none";
+}
+function stokAramaTemizle(){
+  state.stokArama = "";
+  const inp = document.getElementById("stokAramaInput");
+  if(inp){ inp.value=""; inp.focus(); }
+  const cont = document.getElementById("stokSonucContainer");
+  if(cont) cont.innerHTML = stokSonucHtml();
+  const btn = document.getElementById("stokAramaTemizleBtn");
+  if(btn) btn.style.display = "none";
+}
 /* ══ Stok Kartı — oluştur / düzenle (premium modal) ══ */
 /* Stok kartı alerjen işaretle/kaldır (form re-render etmeden, focus korunur) */
 function stokModalAlerjenTikle(ad){
@@ -19496,8 +19605,8 @@ function stokModalKaydet(){
     kategori: p.kategori||"Hammadde",
     kritik: Math.max(0, sayi(p.kritik,0)),
     kcal: (p.kcal!==""&&p.kcal!=null) ? Math.max(0, sayi(p.kcal,0)) : null,
-    kdv: (p.alisKdv!==""&&p.alisKdv!=null) ? Math.max(0, sayi(p.alisKdv,0)) : null,   // alış KDV (BAYI_FIYAT ile eşleşir)
-    alisKdvDahil: !!p.alisKdvDahil,
+    kdv: (p.alisKdv!==""&&p.alisKdv!=null) ? Math.max(0, sayi(p.alisKdv,0)) : null,   // alış KDV (BAYI_FIYAT matrahına uygulanır)
+    alisKdvDahil: false,   // BAYI_FIYAT her zaman KDV hariç matrah olarak saklanır
     satisFiyat: (p.satisFiyat!==""&&p.satisFiyat!=null) ? Math.max(0, sayi(p.satisFiyat,0)) : null,
     satisKdv: (p.satisKdv!==""&&p.satisKdv!=null) ? Math.max(0, sayi(p.satisKdv,0)) : null,
     satisKdvDahil: !!p.satisKdvDahil,
@@ -19516,7 +19625,14 @@ function stokModalKaydet(){
   veri.ambalaj = null;   // eski tek-seviye alan artık kullanılmıyor (UoM'a taşındı)
   // Sayım/sipariş birimi: UoM varsa en üst seviye, yoksa taban birim
   veri.birim = sevGecerli.length ? sevGecerli[0].ad : veri.tabanBirim;
-  const fiyatV = (p.alisFiyat!==""&&p.alisFiyat!=null) ? Math.max(0, sayi(p.alisFiyat,0)) : null;   // alış fiyatı → BAYI_FIYAT
+  // Alış fiyatı → BAYI_FIYAT her zaman KDV HARİÇ matrah olarak saklanır.
+  // Kullanıcı "KDV dahil" seçtiyse matraha ayrıştır (fatura yoluyla tutarlı olsun).
+  let fiyatV = null;
+  if(p.alisFiyat!==""&&p.alisFiyat!=null){
+    const ham = Math.max(0, sayi(p.alisFiyat,0));
+    const aKdv = sayi(p.alisKdv,0);
+    fiyatV = (p.alisKdvDahil && aKdv>0) ? +(ham/(1+aKdv/100)).toFixed(4) : ham;
+  }
 
   let kod=p.kod;
   if(p.mod==="yeni"){
@@ -19827,9 +19943,16 @@ function stokModalCiz(){
     </div>
   </div>`;
   mdl.classList.add("on");
-  // saklanan scroll pozisyonunu geri yükle (yeniden çizim başa atmasın)
-  if(_scrollKaydi>0){ const yeniBody=mdl.querySelector(".skm-body"); if(yeniBody) yeniBody.scrollTop=_scrollKaydi; }
-  setTimeout(()=>{ if(yeni){ const i=document.getElementById("skmAd"); if(i) i.focus(); } }, 80);
+  // saklanan scroll pozisyonunu geri yükle (yeniden çizim başa atmasın).
+  // innerHTML sonrası tarayıcı layout'u bitirmeden scrollTop atanırsa etkisiz kalır;
+  // bu yüzden layout sonrasına (rAF) erteliyoruz ve anlık da bir kez deniyoruz.
+  if(_scrollKaydi>0){
+    const uygula=()=>{ const yb=mdl.querySelector(".skm-body"); if(yb) yb.scrollTop=_scrollKaydi; };
+    uygula();
+    requestAnimationFrame(()=>{ uygula(); requestAnimationFrame(uygula); });
+  }
+  // yeni kartta ada odaklan — ama scroll korunuyorsa (yeniden çizim) odaklanma, scroll'u bozar
+  if(yeni && !_scrollKaydi){ setTimeout(()=>{ const i=document.getElementById("skmAd"); if(i) i.focus(); }, 80); }
 }
 function stokKartSil(kod){
   onayPop({ tehlike:true, baslik:"Stok Kartı Silinecek",
@@ -19847,13 +19970,22 @@ function stokSilOnay(kod){
 
 /* === SAYIM GİRİŞİ (genel müdür merkez · müdür bayi) === */
 function bayiSayimHtml(merkez){
-  const sube = merkez ? null : AKTIF_SUBE;
-  const ara = (state.sayimAra||"").toLocaleLowerCase("tr-TR");
+  state._sayimMerkez = merkez;   // arama güncellemesi bu modu kullanır
   let html = `<div class="bayi-aciklama">${merkez?'🏢 Merkez (genel müdür) stok sayımı — girilen değer mevcut stoğun yerine yazılır.':'🏪 '+AKTIF_SUBE+' bayi deposu sayımı.'}</div>`;
   // başlık + Excel
   html += `<div class="bayi-gecmis-baslik">Stok sayımı <button class="bsip-excel" style="margin-left:auto" onclick="sayimExcel(${merkez})">📊 Excel indir</button></div>`;
-  // arama
-  html += `<div class="bsip-ara-bar"><input class="bsip-ara" placeholder="🔍 Stok kartı ara..." value="${(state.sayimAra||'').replace(/"/g,'&quot;')}" oninput="sayimAraGir(this.value)"></div>`;
+  // arama (SABİT — yeniden çizilmez, odak korunur)
+  html += `<div class="bsip-ara-bar"><input class="bsip-ara" id="sayimAraInput" placeholder="🔍 Stok kartı ara..." value="${(state.sayimAra||'').replace(/"/g,'&quot;')}" oninput="sayimAraGir(this.value)" autocomplete="off"></div>`;
+  // sonuç listesi — sadece bu kısım güncellenir
+  html += `<div id="sayimSonuc">${bayiSayimListeHtml(merkez)}</div>`;
+  return html;
+}
+
+/* Sayım listesi (kategori grupları + kartlar) — arama değişince sadece bu güncellenir */
+function bayiSayimListeHtml(merkez){
+  const sube = merkez ? null : AKTIF_SUBE;
+  const ara = (state.sayimAra||"").toLocaleLowerCase("tr-TR");
+  let html = "";
 
   // kategoriye göre grupla + harf sırası
   let kartlar = Object.entries(STOCK);
@@ -19866,24 +19998,19 @@ function bayiSayimHtml(merkez){
     return a.localeCompare(b,"tr");
   });
 
-  if(kartlar.length===0){ return html+`<div class="bayi-bos">${ara?'Aramayla eşleşen ürün yok.':'Stok kartı yok.'}</div>`; }
+  if(kartlar.length===0){ return `<div class="bayi-bos">${ara?'Aramayla eşleşen ürün yok.':'Stok kartı yok.'}</div>`; }
 
   katSira.forEach(kat=>{
     const liste = gruplar[kat].sort((a,b)=>a[1].ad.localeCompare(b[1].ad,"tr"));
     html += `<div class="bsip-kat-baslik">${kat} <span class="bsip-kat-say">${liste.length}</span></div>`;
     html += `<div class="bayi-tablo">`;
     liste.forEach(([kod,s])=>{
-      const mevcut = merkez ? s.mevcut : bayiStok(sube,kod);
-      const birim = s.birim||"adet";
-      const amb = s.ambalaj;
-      let mevcutMetin = `mevcut: ${mevcut} ${birim}`;
-      if(amb && amb.ici>0){
-        const koli = Math.floor(mevcut/amb.ici);
-        const kalan = mevcut % amb.ici;
-        if(koli>0) mevcutMetin += ` <small>(${koli} ${amb.ad}${kalan?` + ${kalan} ${birim}`:""})</small>`;
-      }
+      const mevcut = merkez ? (s.mevcut||0) : bayiStok(sube,kod);
+      const u = uomAl(s);
+      // UoM ile okunaklı mevcut gösterimi (örn. "1 kg + 500 gr")
+      const mevcutMetin = `mevcut: ${uomGoster(u, mevcut)}`;
       html += `<div class="bayi-satir">
-        <div class="bayi-s-ad"><span class="bayi-s-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bayi-s-admetin"><strong>${s.ad}</strong>${amb?`<div class="bayi-s-not">1 ${amb.ad} = ${amb.ici} ${birim}</div>`:""}</span></div>
+        <div class="bayi-s-ad"><span class="bayi-s-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bayi-s-admetin"><strong>${s.ad}</strong>${u.seviyeler.length?`<div class="bayi-s-not">1 ${u.seviyeler[0].ad} = ${uomTabanCarpani(u,0).toLocaleString('tr')} ${u.tabanBirim}</div>`:""}</span></div>
         <div class="bayi-s-deger">${mevcutMetin}</div>
         <div class="bayi-s-aksiyon">
           <button class="bayi-mini" onclick="sayimGir('${merkez?'_MERKEZ_':sube.replace(/'/g,"\\'")}','${kod}')">🔢 Sayım gir</button>
@@ -19894,7 +20021,11 @@ function bayiSayimHtml(merkez){
   });
   return html;
 }
-function sayimAraGir(v){ state.sayimAra=v; go("stok", true); }
+function sayimAraGir(v){
+  state.sayimAra=v;
+  const cont=document.getElementById("sayimSonuc");
+  if(cont) cont.innerHTML=bayiSayimListeHtml(state._sayimMerkez); else go("stok", true);
+}
 /* Sayım listesini Excel'e indir — kategori gruplu, mevcut stok */
 function sayimExcel(merkez){
   const sube = merkez ? null : AKTIF_SUBE;
@@ -20306,12 +20437,12 @@ function faturaKaydet(){
     // alış fiyatını stok kartına yansıt (taban birim başına)
     const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
     if(sayi(k.birimFiyat)>0 && k.tabanMiktar>0){
-      // kalem matrahı / taban miktar = taban birim başına alış fiyatı (KDV hariç)
+      // kalem matrahı / taban miktar = taban birim başına alış fiyatı (KDV HARİÇ)
       const h=faturaKalemHesap(k);
       const birimAlis = h.matrah / k.tabanMiktar;
-      BAYI_FIYAT[k.kod] = +birimAlis.toFixed(4);
+      BAYI_FIYAT[k.kod] = +birimAlis.toFixed(4);   // her zaman matrah (KDV hariç)
       STOCK[k.kod].kdv = sayi(k.kdv);
-      STOCK[k.kod].alisKdvDahil = !!k.kdvDahil;
+      STOCK[k.kod].alisKdvDahil = false;           // BAYI_FIYAT matrah olduğu için bayrak daima false
     }
   });
 
@@ -20624,10 +20755,10 @@ function faturaSil(id){
 /* Stok kartından KDV'li alış ve KDV dahil satış fiyatını hesapla */
 function stokFiyatDetay(kod){
   const s = STOCK[kod]; if(!s) return {alisMatrah:0, alisDahil:0, alisKdv:0, satisMatrah:0, satisDahil:0, satisKdv:0};
-  const alisMatrahHam = bayiFiyat(kod)||0;          // BAYI_FIYAT = alış (matrah temelli)
   const aKdv = s.kdv!=null?s.kdv:0;
-  // alış: BAYI_FIYAT matrah kabul (fatura matrah/taban olarak yazıyor)
-  const alisMatrah = s.alisKdvDahil ? alisMatrahHam/(1+aKdv/100) : alisMatrahHam;
+  // BAYI_FIYAT her zaman KDV HARİÇ matrah olarak saklanır (fatura kaydı matrah/taban yazar).
+  // alisKdvDahil bayrağı BAYI_FIYAT'ı yeniden yorumlamak için KULLANILMAZ — çifte indirimi önler.
+  const alisMatrah = bayiFiyat(kod)||0;
   const alisDahil = alisMatrah*(1+aKdv/100);
   // satış
   const sKdv = s.satisKdv!=null?s.satisKdv:aKdv;
@@ -20640,7 +20771,6 @@ function stokFiyatDetay(kod){
 }
 
 function bayiFiyatHtml(){
-  const ara = (state.bfiyatAra||"").toLocaleLowerCase("tr-TR");
   let html = `<div class="bayi-aciklama">🏷️ Bayilere satış fiyatları · stok kartlarıyla senkron. Bayiler bu fiyatlardan sipariş verir.</div>`;
 
   // ŞUBE İSKONTO bölümü
@@ -20657,9 +20787,19 @@ function bayiFiyatHtml(){
   });
   html += `</div></div>`;
 
-  // arama
+  // arama (SABİT — yeniden çizilmez, odak korunur)
   html += `<div class="bayi-gecmis-baslik">Ürün satış fiyatları <button class="bsip-excel" style="margin-left:auto" onclick="bayiFiyatExcel()">📊 Excel indir</button></div>`;
-  html += `<div class="bsip-ara-bar"><input class="bsip-ara" placeholder="🔍 Stok kartı ara..." value="${(state.bfiyatAra||'').replace(/"/g,'&quot;')}" oninput="bayiFiyatAra(this.value)"></div>`;
+  html += `<div class="bsip-ara-bar"><input class="bsip-ara" id="bayiFiyatAraInput" placeholder="🔍 Stok kartı ara..." value="${(state.bfiyatAra||'').replace(/"/g,'&quot;')}" oninput="bayiFiyatAra(this.value)" autocomplete="off"></div>`;
+
+  // sonuç listesi — sadece bu kısım güncellenir
+  html += `<div id="bayiFiyatSonuc">${bayiFiyatListeHtml()}</div>`;
+  return html;
+}
+
+/* Bayi fiyat listesi (kategori grupları + kartlar) — arama değişince sadece bu güncellenir */
+function bayiFiyatListeHtml(){
+  const ara = (state.bfiyatAra||"").toLocaleLowerCase("tr-TR");
+  let html = "";
 
   // kartları kategoriye göre grupla + harf sırası
   let kartlar = Object.entries(STOCK);
@@ -20703,7 +20843,7 @@ function bayiFiyatHtml(){
       genelSatis += mevcut*d.satisDahil;
       html += `<div class="bfiyat-satir">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${(+mevcut.toFixed(2))} ${s.birim||'gr'}</span></span>
+        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${uomGoster(uomAl(s), mevcut)}</span></span>
         <span class="bf-kdv">%${d.alisKdv}</span>
         <span class="bf-alis">${d.alisDahil>0?d.alisDahil.toFixed(2)+' ₺':'—'}</span>
         <span class="bf-satis">${satisVar?d.satisDahil.toFixed(2)+' ₺':'<span style="color:var(--ink-3)">—</span>'}</span>
@@ -20721,7 +20861,11 @@ function bayiFiyatHtml(){
   </div>`;
   return html;
 }
-function bayiFiyatAra(v){ state.bfiyatAra=v; go("bayi", true); }
+function bayiFiyatAra(v){
+  state.bfiyatAra=v;
+  const cont=document.getElementById("bayiFiyatSonuc");
+  if(cont) cont.innerHTML=bayiFiyatListeHtml(); else go("bayi", true);
+}
 function bayiSatisDurum(kod){
   if(STOCK[kod]){ STOCK[kod].aktif = STOCK[kod].aktif===false ? true : false; b2bKaydet(); go("bayi", true); }
 }
@@ -21122,13 +21266,22 @@ function siparisReddetOnay(id){
 /* === MÜDÜR: SİPARİŞ VER (genel müdür stoğunu gör, talep oluştur) === */
 function bayiSiparisVerHtml(){
   if(!state.bayiSepet) state.bayiSepet = [];
-  const ara = (state.bayiSipAra||"").toLocaleLowerCase("tr-TR");
   let html = `<div class="bayi-aciklama">🛒 Merkez (genel müdür) stok durumuna göre sipariş oluşturun. Bakiyesi olmayan ürünler için de talep açabilirsiniz.</div>`;
 
-  // arama kutusu
+  // arama kutusu (SABİT — yeniden çizilmez, odak korunur)
   html += `<div class="bsip-ara-bar">
-    <input class="bsip-ara" placeholder="🔍 Stok kartı ara..." value="${(state.bayiSipAra||'').replace(/"/g,'&quot;')}" oninput="bayiSipAra(this.value)">
+    <input class="bsip-ara" id="bayiSipAraInput" placeholder="🔍 Stok kartı ara..." value="${(state.bayiSipAra||'').replace(/"/g,'&quot;')}" oninput="bayiSipAra(this.value)" autocomplete="off">
   </div>`;
+
+  // gövde (ürün listesi + sepet) — arama değişince sadece bu güncellenir
+  html += `<div id="bayiSipGovde">${bayiSipGovdeHtml()}</div>`;
+  return html;
+}
+
+/* Sipariş verme gövdesi (ürün listesi + sepet özeti) — arama değişince güncellenir */
+function bayiSipGovdeHtml(){
+  const ara = (state.bayiSipAra||"").toLocaleLowerCase("tr-TR");
+  let html = "";
 
   // siparişe açık kartlar, aramayla süz
   let acikKartlar = Object.entries(STOCK).filter(([kod,s])=>s.aktif!==false);
@@ -21174,7 +21327,7 @@ function bayiSiparisVerHtml(){
       const birimGoster = sepette ? (sepette.girisBirim&&sepette.girisBirim!==(s.birim||"adet") ? `${sepette.girisMiktar} ${sepette.girisBirim}` : `${sepette.miktar} ${s.birim||"adet"}`) : "";
       html += `<div class="bfiyat-satir bsip-satir">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${(+merkezVar.toFixed(2))} ${s.birim||'gr'}</span></span>
+        <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${uomGoster(uomAl(s), merkezVar)}</span></span>
         <span class="bf-kdv">%${d.satisKdv}</span>
         <span class="bf-satis">${f>0?f.toFixed(2)+' ₺':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-islem">
@@ -21216,7 +21369,11 @@ function bayiSiparisVerHtml(){
   }
   return html;
 }
-function bayiSipAra(v){ state.bayiSipAra=v; go("bayi", true); }
+function bayiSipAra(v){
+  state.bayiSipAra=v;
+  const cont=document.getElementById("bayiSipGovde");
+  if(cont) cont.innerHTML=bayiSipGovdeHtml(); else go("bayi", true);
+}
 /* Sepet KDV özeti — bayi fiyatı KDV DAHİL kabul edilir.
    İskonto KDV dahil tutara uygulanır, sonra her KDV oranı için matrah/KDV ayrıştırılır. */
 function bayiSepetKdvOzet(){
@@ -21257,7 +21414,7 @@ function bayiSiparisExcel(){
     const s=STOCK[k.kod]; if(!s) return;
     const f=bayiSatisFiyat(k.kod);            // KDV dahil birim fiyat
     const tutar=k.miktar*f;              // KDV dahil satır
-    const oran=(s.kdv!=null?s.kdv:0);
+    const oran=(s.satisKdv!=null?s.satisKdv:(s.kdv!=null?s.kdv:0));   // satış KDV (özetle tutarlı)
     const birimGoster = (k.girisBirim&&k.girisBirim!==(s.birim||"adet")) ? `${k.girisMiktar} ${k.girisBirim} (${k.miktar} ${s.birim||'adet'})` : `${k.miktar} ${s.birim||'adet'}`;
     satirlar+=`<tr><td>${E(s.ad)}</td><td>${E(s.kategori||'')}</td><td>${E(birimGoster)}</td><td class="sayi">${f.toFixed(2)}</td><td class="sayi">%${oran}</td><td class="tut">${tutar.toFixed(2)}</td></tr>`;
   });
@@ -23841,7 +23998,7 @@ function viewStok(main){
   });
   html += `</div><div class="bayi-icerik">`;
 
-  if(sekme==="stokkart" && isGenel) html += bayiStokKartHtml();
+  if(sekme==="stokkart" && isGenel) html += `<div id="stokListeContainer">`+bayiStokKartHtml()+`</div>`;
   else if(sekme==="bstok" && isGenel) html += bayiStoklarHtml();
   else if(sekme==="sayim") html += bayiSayimHtml(isGenel);
   else if(sekme==="durum") html += stokDurumHtml();
@@ -27258,6 +27415,15 @@ try {
     if(MPStore.setRaw) MPStore.setRaw("minipan_excel_stok_mig_v1","1");
     // eski seçenek→stok migrasyonunu da işaretle ki bir daha çalışıp üstüne yazmasın
     if(MPStore.setRaw) MPStore.setRaw("minipan_secenek_stok_mig","1");
+  }
+} catch(e){ /* migrasyon başarısızsa mevcut kartlarla devam */ }
+
+// Otomatik: kg/lt taban birimli kartları gr/ml tabana indir (reçete gram uyumu). Bir kez.
+try {
+  const uomMig = MPStore.getRaw("minipan_uom_kglt_mig_v1", "");
+  if(uomMig!=="1" && typeof uomKgLtMigrasyonu==="function"){
+    const n = uomKgLtMigrasyonu();
+    if(MPStore.setRaw) MPStore.setRaw("minipan_uom_kglt_mig_v1","1");
   }
 } catch(e){ /* migrasyon başarısızsa mevcut kartlarla devam */ }
 initFirebase();
