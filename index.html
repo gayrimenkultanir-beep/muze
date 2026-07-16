@@ -687,6 +687,7 @@ tr:last-child td{border-bottom:none}
 .sd-mik,.sd-kdv,.sd-bfiyat,.sd-tfiyat,.sd-tuk,.sd-alin{font-size:12.5px}
 .sd-kdv{font-weight:700; color:var(--ink-2)}
 .sd-bfiyat{font-weight:700; color:var(--cocoa)}
+.sd-fiyatyok{font-size:10.5px; font-weight:600; color:var(--ink-3); font-style:italic}
 .sd-tfiyat{font-weight:800; color:var(--brand-d)}
 .sd-tuk{color:var(--danger); font-weight:700}
 .sd-alin{color:#2f7a34; font-weight:700}
@@ -3079,6 +3080,15 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .gs-engel-liste{margin-top:8px; display:flex; flex-direction:column; gap:5px}
 .gs-engel{font-size:12.5px; color:var(--err); font-weight:600}
 .gs-engel-cozum{color:var(--ink-3); font-weight:500; font-size:11.5px}
+.gs-engel-temizle{margin-left:8px; padding:4px 10px; border-radius:7px; border:1px solid var(--brand); background:var(--brand-soft); color:var(--cocoa); font-size:11px; font-weight:800; cursor:pointer}
+.ahk-liste{display:flex; flex-direction:column; gap:9px; margin-top:12px}
+.ahk-satir{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:11px 13px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line)}
+.ahk-bilgi{display:flex; flex-direction:column; gap:2px; min-width:0}
+.ahk-bilgi strong{font-size:14px; color:var(--ink)}
+.ahk-bilgi span{font-size:12px; color:var(--ink-3); font-weight:600}
+.ahk-aksiyon{display:flex; gap:6px; flex:none}
+.ahk-ode{padding:8px 12px; border-radius:9px; border:none; background:var(--brand); color:#fff; font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap}
+.ahk-iptal{padding:8px 12px; border-radius:9px; border:1px solid var(--err); background:var(--surface); color:var(--err); font-size:12px; font-weight:800; cursor:pointer; white-space:nowrap}
 .gs-kapat-btn{padding:12px 20px; border-radius:11px; background:var(--ink); color:#fff; border:none; font-size:14px; font-weight:800; cursor:pointer; white-space:nowrap}
 .gs-kapat-btn:active{transform:scale(.98)}
 .gs-ac-btn{padding:11px 18px; border-radius:10px; background:var(--brand); color:#fff; border:none; font-size:13.5px; font-weight:800; cursor:pointer; white-space:nowrap}
@@ -3099,6 +3109,12 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .gs-modal-ic{background:#fff; border-radius:18px; max-width:500px; width:94%; margin:auto; max-height:92vh; display:flex; flex-direction:column}
 .gs-modal-gun{font-size:14px; color:var(--ink-2); background:var(--surface-2); border-radius:9px; padding:9px 13px; margin-bottom:14px}
 .gs-uyari{font-size:12.5px; color:var(--ink-2); background:var(--err-soft); border:1px solid var(--err); border-radius:10px; padding:11px 14px; margin-top:14px; line-height:1.55}
+/* Gün sonu sabah hazırlık parası */
+.gs-hazirlik{margin-top:16px; padding:14px; border-radius:12px; background:var(--brand-soft); border:1px solid var(--brand)}
+.gs-hazirlik-bas{font-size:14px; font-weight:900; color:var(--cocoa); margin-bottom:6px}
+.gs-hazirlik-ack{font-size:11.5px; color:var(--ink-2); line-height:1.5; margin-bottom:12px}
+.gs-hazirlik-ozet{margin-top:10px; padding:9px 12px; border-radius:9px; background:var(--surface); border:1px solid var(--line); font-size:12.5px; font-weight:700; color:var(--cocoa)}
+.gs-hz-kir{color:var(--ink-3); font-weight:600; font-size:11.5px}
 .gs-onay-kutu{background:var(--surface-2); border:1.5px solid var(--brand); border-radius:12px; padding:14px 16px; margin-top:16px}
 .gs-onay-bas{font-size:14px; font-weight:800; color:var(--brand-d); margin-bottom:4px}
 .gs-onay-ack{font-size:12px; color:var(--ink-2); margin-bottom:12px; line-height:1.45}
@@ -7232,16 +7248,35 @@ function sonKapananVardiya(sube){
   const list = (KASA_VARDIYALAR[sube]||[]).filter(v=>v.durum==="kapali");
   return list.length ? list[list.length-1] : null;
 }
-/* Sonraki vardiyaya devreden tutar (yoksa 0 = ilk açılış) */
+/* En son kapanan gün sonundaki sabah hazırlık parası (varsa) */
+function sonGunSonuHazirlik(sube){
+  const g = GUN_SONU[sube];
+  if(!g) return null;
+  // en son işletme gününü bul
+  const gunler = Object.keys(g).filter(k=>g[k] && g[k].kilit).sort();
+  if(!gunler.length) return null;
+  const son = g[gunler[gunler.length-1]];
+  if(son.hazirlik==null && son.hazirlikNakit==null) return null;
+  return {
+    nakit: Math.round((son.hazirlikNakit||0)*100)/100,
+    bozuk: Math.round((son.hazirlikBozuk||0)*100)/100,
+    toplam: Math.round((son.hazirlik||0)*100)/100
+  };
+}
+/* Sonraki vardiyaya devreden tutar (öncelik: gün sonu hazırlık parası, yoksa vardiya devri) */
 function devredenTutar(sube){
+  const hz = sonGunSonuHazirlik(sube);
+  if(hz) return hz.toplam;
   const son = sonKapananVardiya(sube);
   return son ? (son.devredilen||0) : 0;
 }
-/* Devreden tutarın nakit / bozukluk kırılımı (eski kayıtlar için geriye dönük) */
+/* Devreden tutarın nakit / bozukluk kırılımı */
 function devredenKirilim(sube){
+  // öncelik: gün sonunda bırakılan sabah hazırlık parası
+  const hz = sonGunSonuHazirlik(sube);
+  if(hz) return hz;
   const son = sonKapananVardiya(sube);
   if(!son) return {nakit:0, bozuk:0, toplam:0};
-  // Yeni kayıtta ayrı alanlar var; eski kayıtta tümü "nakit" sayılır
   const nakit = (son.devredilenNakit!=null) ? son.devredilenNakit : (son.devredilen||0);
   const bozuk = (son.devredilenBozuk!=null) ? son.devredilenBozuk : 0;
   return {
@@ -7423,16 +7458,25 @@ function gunSonuEngelleri(sube, gun){
   // 1) açık kasa var mı
   const av = acikVardiya(sube);
   if(av) engeller.push({tip:"kasa", mesaj:"Kasa hâlâ açık: "+av.kasiyerAd+" ("+av.no+")", cozum:"Kasayı kapatın"});
-  // 2) açık masa var mı (o şubede, dolu oturum)
+  // 2) açık masa/hızlı satış var mı (SADECE bu şubede, dolu oturum)
   const acikMasalar = [];
   Object.keys(SESSIONS||{}).forEach(m=>{
     const s = SESSIONS[m];
     if(!s || !s.acik) return;
+    // şube filtresi: oturumun şubesi bu şube değilse atla (şube yoksa aktif şubeye say — geriye dönük)
+    const oturumSube = s.sube || sube;
+    if(oturumSube !== sube) return;
+    // gerçekten dolu mu (iptal olmayan kalem var mı)
     const kalemVar = (s.kisiler||[]).some(k=>(k.kalemler||[]).some(it=>it.durum!=="iptal"));
-    if(kalemVar) acikMasalar.push(masaEtiket(m));
+    if(kalemVar){
+      acikMasalar.push(s.hizliSatis ? "Hızlı Satış" : masaEtiket(m));
+    } else {
+      // dolu değil ama açık kalmış "hayalet" oturum → sessizce temizle (engel oluşturmasın)
+      delete SESSIONS[m];
+    }
   });
   if(acikMasalar.length>0){
-    engeller.push({tip:"masa", mesaj:acikMasalar.length+" açık masa var: "+acikMasalar.slice(0,4).join(", ")+(acikMasalar.length>4?"…":""), cozum:"Masaları kapatın/ödeme alın"});
+    engeller.push({tip:"masa", mesaj:acikMasalar.length+" açık hesap var: "+acikMasalar.slice(0,4).join(", ")+(acikMasalar.length>4?"…":""), cozum:"Ödeme alın veya iptal edin"});
   }
   // 3) zaten kapalı mı
   if(gunKapaliMi(sube, gun)) engeller.push({tip:"kapali", mesaj:"Bu işletme günü zaten kapatılmış", cozum:"Genel müdür açabilir"});
@@ -7525,7 +7569,66 @@ function gunSonuVardiyalari(sube, gun){
   });
 }
 /* ── GÜN SONU KAPAT ── */
-function gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId){
+/* Şubedeki açık hesapları (masa + hızlı satış) listele, iptal seçeneği sun */
+function acikHesapKontrol(sube){
+  const aciklar = [];
+  Object.keys(SESSIONS||{}).forEach(m=>{
+    const s = SESSIONS[m]; if(!s || !s.acik) return;
+    const oturumSube = s.sube || sube;
+    if(oturumSube !== sube) return;
+    const kalemler = (s.kisiler||[]).flatMap(k=>(k.kalemler||[]).filter(it=>it.durum!=="iptal"));
+    if(kalemler.length) aciklar.push({id:m, ad:s.hizliSatis?"⚡ Hızlı Satış":masaEtiket(m), adet:kalemler.length,
+      tutar: kalemler.reduce((t,it)=>t+(it.fiyat||0),0), hizli:!!s.hizliSatis});
+  });
+  if(!aciklar.length){ note("✓ Açık hesap kalmadı — gün sonu alabilirsiniz"); go("rapor", true); return; }
+  const html = `
+  <div class="modal-bg on" id="ahkModal" style="z-index:210" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) ahkKapat()">
+    <div class="km-sil-ic" style="max-width:440px">
+      <div class="kk-bas">🔍 Açık Hesaplar · ${sube}
+        <button class="bom-kapat" onclick="ahkKapat()">✕</button></div>
+      <div class="kk-govde">
+        <div class="gs-uyari" style="background:var(--brand-soft);border-color:var(--brand);color:var(--cocoa)">
+          Bu şubede <b>${aciklar.length} açık hesap</b> var. Ödeme alınmamış. Her birini <b>ödeme ekranına götürebilir</b> veya kalemleri kaydetmeden <b>iptal</b> edebilirsiniz.
+        </div>
+        <div class="ahk-liste">
+          ${aciklar.map(a=>`
+            <div class="ahk-satir">
+              <div class="ahk-bilgi"><strong>${a.ad}</strong><span>${a.adet} kalem · ${tl(a.tutar)} ₺</span></div>
+              <div class="ahk-aksiyon">
+                <button class="ahk-ode" onclick="ahkOdemeGit('${a.id.replace(/'/g,"\\'")}')">💳 Ödeme al</button>
+                <button class="ahk-iptal" onclick="ahkHesapIptal('${a.id.replace(/'/g,"\\'")}','${sube.replace(/'/g,"\\'")}')">🗑️ İptal</button>
+              </div>
+            </div>`).join("")}
+        </div>
+      </div>
+      <div class="kk-foot">
+        <button class="btn btn-ghost" onclick="ahkKapat()">Kapat</button>
+      </div>
+    </div>
+  </div>`;
+  let el = document.getElementById("ahkModalWrap");
+  if(!el){ el=document.createElement("div"); el.id="ahkModalWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+function ahkKapat(){ const w=document.getElementById("ahkModalWrap"); if(w) w.innerHTML=""; }
+function ahkOdemeGit(id){
+  ahkKapat();
+  if(id===HIZLI_SATIS_ID && SESSIONS[id]){
+    // hızlı satış sepetini geri yükle
+    const kalemler=(SESSIONS[id].kisiler||[]).flatMap(k=>k.kalemler||[]);
+    state.cart = kalemler.map(it=>({ad:it.ad, fiyat:it.fiyat, q:1, secimler:it.secimler||[], secimEk:it.secimEk||[], ekstraRecete:it.ekstraRecete||[]}));
+  }
+  odemeEkraniAc(id);
+}
+function ahkHesapIptal(id, sube){
+  if(!confirm("Bu açık hesap iptal edilecek — kalemler kaydedilmeden silinecek. Emin misiniz?")) return;
+  if(id===HIZLI_SATIS_ID){ state._hizliSatisCart=null; if(state.cart) state.cart=[]; }
+  delete SESSIONS[id];
+  note("🗑️ Açık hesap iptal edildi");
+  ahkKapat();
+  go("rapor", true);
+}
+function gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId, hazirlik){
   const engeller = gunSonuEngelleri(sube, gun);
   if(engeller.length>0) return {hata:"Engeller var", engeller};
   const ozet = gunSonuOzetHesapla(sube, gun);
@@ -7533,6 +7636,10 @@ function gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId){
   const kasaFarkToplam = Math.round(vardiyalar.reduce((t,v)=>t+(v.fark||0),0)*100)/100;
   const kasadanAlinanToplam = Math.round(vardiyalar.reduce((t,v)=>t+(v.kasadanAlinan||0),0)*100)/100;
   const sonVardiya = vardiyalar.length ? vardiyalar[vardiyalar.length-1] : null;
+  // sabah hazırlık parası (nakit + bozukluk) — sabah kasayı açan teslim alacak
+  const hazNakit = Math.round(((hazirlik&&hazirlik.nakit)||0)*100)/100;
+  const hazBozuk = Math.round(((hazirlik&&hazirlik.bozuk)||0)*100)/100;
+  const hazToplam = Math.round((hazNakit+hazBozuk)*100)/100;
   const kayit = {
     sube, isletmeGunu:gun,
     kapatanId:kapatanId||null, kapatanAd:kapatanAd||"", kapatanRol:kapatanRol||"",
@@ -7540,7 +7647,9 @@ function gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId){
     kilit: true,
     ozet, vardiyalar,
     kasaFarkToplam, kasadanAlinanToplam,
-    devredilenSon: sonVardiya ? (sonVardiya.devredilen||0) : 0
+    devredilenSon: sonVardiya ? (sonVardiya.devredilen||0) : 0,
+    // sabah hazırlık parası — sabah açılışta teslim edilecek
+    hazirlikNakit: hazNakit, hazirlikBozuk: hazBozuk, hazirlik: hazToplam
   };
   if(!GUN_SONU[sube]) GUN_SONU[sube] = {};
   GUN_SONU[sube][gun] = kayit;
@@ -9404,6 +9513,8 @@ function numaratorOnayla(){
     if(typeof kasaGiderOnizle === "function" && NUM.hedef === "kgTutar") kasaGiderOnizle();
     if(typeof kasaAcilisFarkGuncelle === "function" &&
        (NUM.hedef === "kaDevirNakit" || NUM.hedef === "kaDevirBozuk")) kasaAcilisFarkGuncelle();
+    if(typeof gunSonuHazirlikOzet === "function" &&
+       (NUM.hedef === "gsHazirlikNakit" || NUM.hedef === "gsHazirlikBozuk")) gunSonuHazirlikOzet();
   }
   numaratorKapat();
 }
@@ -9431,7 +9542,8 @@ function kasaKapatAc(){
 
         <div class="kk-bolum-bas">📊 Vardiya Özeti</div>
         <div class="kk-ozet-tablo">
-          <div class="kk-satir"><span>Açılış devri</span><span>${tl(v.devirAlinan||0)} ₺</span></div>
+          <div class="kk-satir"><span>🌅 Açılış parası (hazırlık)</span><span>${tl(v.devirAlinan||0)} ₺</span></div>
+          <div class="kk-satir kucuk"><span>↳ satış değildir · ciroya dahil değil</span><span></span></div>
           <div class="kk-satir"><span>💵 Nakit satış</span><span>${tl(ozet.nakit)} ₺</span></div>
           ${ozet.digerNakit>0?`<div class="kk-satir alt"><span>↳ Diğer/QR nakit kısmı</span><span>${tl(ozet.digerNakit)} ₺</span></div>`:''}
           <div class="kk-satir"><span>💳 Kredi kartı</span><span>${tl(ozet.kredi)} ₺</span></div>
@@ -9450,8 +9562,8 @@ function kasaKapatAc(){
           <strong id="kkBeklenenDeg">${tl(beklenen)} ₺</strong>
         </div>
         <div class="kk-beklenen-not" id="kkBeklenenNot">
-          Açılış devri (${tl(v.devirAlinan||0)} ₺)
-          + nakit tahsilat (${tl(ozet.nakit + ozet.digerNakit)} ₺)
+          🌅 Açılış parası (${tl(v.devirAlinan||0)} ₺, satış değil)
+          + 💵 nakit satış (${tl(ozet.nakit + ozet.digerNakit)} ₺)
           ${ozet.iadeNakit>0?` − nakit iade (${tl(ozet.iadeNakit)} ₺)`:''}
           ${ozet.gider>0?` − kasa gideri (${tl(ozet.gider)} ₺)`:''}
         </div>
@@ -9481,31 +9593,10 @@ function kasaKapatAc(){
           <input class="ka-input" id="kkNot" style="text-align:left;font-size:14px" placeholder="örn. bozuk para hatası, müşteri iadesi...">
         </div>
 
-        ${(state.role==="mudur"||state.role==="genel") ? `
-        <div class="kk-bolum-bas">🌅 Sabah Hazırlık Parası</div>
-        <div class="kk-devir-ack">Sabah kasa açılışı için kasaya bırakılan nakit ve bozukluk (para üstü). Satış geliri <b>değildir</b> — ayrı takip edilir. Sabah kasayı açan bu tutarı teslim alıp başlar.</div>
-        <div class="kk-devir-ikili">
-          <div class="ka-alan">
-            <label>💵 Nakit</label>
-            <div class="para-input-wrap" onclick="numaratorAc('kkDevirNakit','Sabah için bırakılan nakit')">
-              <input class="ka-input para-input" id="kkDevirNakit" readonly value="0,00" placeholder="0,00">
-              <span class="para-tl">₺</span>
-            </div>
-          </div>
-          <div class="ka-alan">
-            <label>🪙 Bozukluk (para üstü)</label>
-            <div class="para-input-wrap" onclick="numaratorAc('kkDevirBozuk','Sabah için bırakılan bozukluk')">
-              <input class="ka-input para-input" id="kkDevirBozuk" readonly value="0,00" placeholder="0,00">
-              <span class="para-tl">₺</span>
-            </div>
-          </div>
-        </div>
-        <div class="ka-input-not">Bu tutar kasada olması gereken nakite <b>eklenir</b> (denklik: günlük satış + hazırlık parası). Kalan satış nakiti "kasadan alınan" olarak kaydedilir.</div>
-        <div id="kkDevirOzet" class="kk-devir-ozet"></div>
-        ` : `
+        <!-- Sabah hazırlık parası artık GÜN SONU ekranında giriliyor (müdür/genel müdür).
+             Kasa kapatmada hazırlık yok; gizli 0 ile denklik satış nakiti üzerinden çalışır. -->
         <input type="hidden" id="kkDevirNakit" value="0,00">
         <input type="hidden" id="kkDevirBozuk" value="0,00">
-        `}
       </div>
 
       <div class="kk-foot">
@@ -10889,7 +10980,7 @@ function checkout(total){
     return out;
   }).flat();
   SESSIONS[HIZLI_SATIS_ID] = {
-    masa: HIZLI_SATIS_ID, acik:true, zaman:Date.now(), hizliSatis:true,
+    masa: HIZLI_SATIS_ID, acik:true, zaman:Date.now(), hizliSatis:true, sube: AKTIF_SUBE,
     kisiler: [{ad:"Hızlı Satış", kalemler:kalemler}]
   };
   // bu oturumdan dönülecek ekran + reçete tüketimi için sepet referansı sakla
@@ -23287,7 +23378,7 @@ function raporGunSonuHtml(){
           <div>
             <div class="gs-banner-bas">Gün kapatılamaz — ${engeller.length} engel var</div>
             <div class="gs-engel-liste">
-              ${engeller.map(e=>`<div class="gs-engel">⛔ ${e.mesaj} <span class="gs-engel-cozum">→ ${e.cozum}</span></div>`).join("")}
+              ${engeller.map(e=>`<div class="gs-engel">⛔ ${e.mesaj} <span class="gs-engel-cozum">→ ${e.cozum}</span>${e.tip==="masa"?` <button class="gs-engel-temizle" onclick="acikHesapKontrol('${sube.replace(/'/g,"\\'")}')">🔍 Açık hesapları göster</button>`:''}</div>`).join("")}
             </div>
           </div>
         </div>
@@ -23424,6 +23515,29 @@ function gunSonuKapatModal(sube, gun){
           ${Math.abs(kasaFark)>=0.01?`<div class="kk-satir ${kasaFark<0?'ind':'fazla'}"><span>Kasa farkı toplamı</span><span>${kasaFark>0?'+':''}${tl(kasaFark)} ₺</span></div>`:''}
         </div>
 
+        ${(state.role==="mudur"||state.role==="genel"||isKasa) ? `
+          <div class="gs-hazirlik">
+            <div class="gs-hazirlik-bas">🌅 Yarın Sabah İçin Kasada Bırakılan Para</div>
+            <div class="gs-hazirlik-ack">Sabah kasayı ilk açan bu tutarı teslim alıp başlar. Satış geliri <b>değildir</b> — sonraki açılış/kapanışlarda "hariçten eklenen açılış parası" olarak ayrı görünür.</div>
+            <div class="kk-devir-ikili">
+              <div class="ka-alan">
+                <label>💵 Nakit</label>
+                <div class="para-input-wrap" onclick="numaratorAc('gsHazirlikNakit','Sabah için bırakılan nakit')">
+                  <input class="ka-input para-input" id="gsHazirlikNakit" readonly value="0,00" placeholder="0,00">
+                  <span class="para-tl">₺</span>
+                </div>
+              </div>
+              <div class="ka-alan">
+                <label>🪙 Bozukluk</label>
+                <div class="para-input-wrap" onclick="numaratorAc('gsHazirlikBozuk','Sabah için bırakılan bozukluk')">
+                  <input class="ka-input para-input" id="gsHazirlikBozuk" readonly value="0,00" placeholder="0,00">
+                  <span class="para-tl">₺</span>
+                </div>
+              </div>
+            </div>
+            <div id="gsHazirlikOzet" class="gs-hazirlik-ozet">Bırakılan hazırlık parası: <b>0,00 ₺</b></div>
+          </div>` : ''}
+
         <div class="gs-uyari">
           🔒 Gün kapatıldıktan sonra <b>bu güne satış girilemez</b> ve kayıtlar değiştirilemez.<br>
           Sadece <b>genel müdür</b> kilidi açabilir.
@@ -23451,6 +23565,16 @@ function gunSonuKapatModal(sube, gun){
   el.innerHTML = html;
 }
 function gsModalKapat(){ const w=document.getElementById("gsModalWrap"); if(w) w.innerHTML=""; }
+/* Gün sonu hazırlık parası canlı özeti */
+function gunSonuHazirlikOzet(){
+  const g=id=>{ const e=document.getElementById(id); return e?formatKurus(e.value)/100:0; };
+  const nakit=g("gsHazirlikNakit"), bozuk=g("gsHazirlikBozuk");
+  const toplam=Math.round((nakit+bozuk)*100)/100;
+  const el=document.getElementById("gsHazirlikOzet");
+  if(el) el.innerHTML = toplam>0
+    ? `Bırakılan hazırlık parası: <b>${tl(toplam)} ₺</b> <span class="gs-hz-kir">(💵 ${tl(nakit)} + 🪙 ${tl(bozuk)})</span> · sabah açan teslim alacak`
+    : `Bırakılan hazırlık parası: <b>0,00 ₺</b>`;
+}
 function gunSonuKapatOnayla(sube, gun){
   const isKasa = state.role==="kasa";
   let kapatanAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "";
@@ -23476,7 +23600,11 @@ function gunSonuKapatOnayla(sube, gun){
     kapatanId = u.id;
   }
 
-  const r = gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId);
+  // sabah hazırlık parası (müdür/genel müdür/kasa onayı ile)
+  const gh=id=>{ const e=document.getElementById(id); return e?formatKurus(e.value)/100:0; };
+  const hazNakit=gh("gsHazirlikNakit"), hazBozuk=gh("gsHazirlikBozuk");
+
+  const r = gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId, {nakit:hazNakit, bozuk:hazBozuk});
   if(r.hata){
     if(r.engeller && r.engeller.length){
       note("⛔ "+r.engeller.map(e=>e.mesaj).join(" · "));
@@ -23484,7 +23612,8 @@ function gunSonuKapatOnayla(sube, gun){
     return;
   }
   gsModalKapat();
-  note("🌙 Gün sonu kapatıldı · "+isletmeGunuGoster(gun)+" · net ciro "+tl(r.kayit.ozet.net)+" ₺");
+  const hazT = Math.round((hazNakit+hazBozuk)*100)/100;
+  note("🌙 Gün sonu kapatıldı · "+isletmeGunuGoster(gun)+" · net ciro "+tl(r.kayit.ozet.net)+" ₺"+(hazT>0?" · sabah hazırlık "+tl(hazT)+" ₺":""));
   go("rapor", true);
 }
 /* Kilit açma modalı (sadece genel müdür) */
@@ -24106,7 +24235,7 @@ function stokDurumListeHtml(secili, merkezMi, kapsamAd, basTs, bitTs){
         <span class="bf-ad">Stok Kartı</span>
         <span class="sd-mik">Miktar</span>
         <span class="sd-kdv">KDV</span>
-        <span class="sd-bfiyat">Birim ₺</span>
+        <span class="sd-bfiyat">Birim ₺ <small>(KDV'li)</small></span>
         <span class="sd-tfiyat">Toplam ₺</span>
         <span class="sd-tuk">Tüketilen</span>
         <span class="sd-alin">Alınan</span>
@@ -24127,8 +24256,8 @@ function stokDurumListeHtml(secili, merkezMi, kapsamAd, basTs, bitTs){
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
         <span class="sd-mik"><span class="bf-mik-kutu${eksi?' eksi':''}">${uomGoster(u, mevcut)}</span></span>
         <span class="sd-kdv">%${d.satisKdv||d.alisKdv||0}</span>
-        <span class="sd-bfiyat">${bfiyat>0?bfiyat.toFixed(2):'—'}${isk>0?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)}</small>`:''}</span>
-        <span class="sd-tfiyat">${tfiyat!==0?tfiyat.toFixed(2):'—'}</span>
+        <span class="sd-bfiyat">${bfiyat>0?bfiyat.toFixed(2)+' ₺':'<span class="sd-fiyatyok">fiyat girilmemiş</span>'}${(isk>0&&bfiyat>0)?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)} · %${isk} isk</small>`:''}</span>
+        <span class="sd-tfiyat">${tfiyat!==0?tfiyat.toFixed(2)+' ₺':'—'}</span>
         <span class="sd-tuk">${tuketilen>0?'−'+(+tuketilen.toFixed(2))+' '+birim:'—'}</span>
         <span class="sd-alin">${alinan>0?'+'+(+alinan.toFixed(2))+' '+birim:'—'}</span>
       </div>`;
