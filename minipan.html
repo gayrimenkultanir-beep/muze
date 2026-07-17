@@ -2780,6 +2780,9 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .bayi-bar{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:10px}
 .bayi-bar-bilgi{font-size:13px; color:var(--ink-2); font-weight:700}
 .bayi-ekle-btn{padding:10px 16px; border-radius:10px; background:var(--brand); color:var(--brand-ink); font-weight:800; font-size:13px; border:none}
+.stok-bar-aksiyon{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.stok-csv-btn{padding:10px 14px; border-radius:10px; background:var(--surface); color:var(--cocoa); font-weight:700; font-size:13px; border:1.5px solid var(--line); cursor:pointer; white-space:nowrap}
+.stok-csv-btn:hover{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
 .bayi-tablo{display:flex; flex-direction:column; gap:8px}
 .bayi-satir{display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 15px}
 .bayi-satir-sade{padding:9px 14px; background:var(--surface-2)}
@@ -19458,7 +19461,12 @@ function bayiStokKartHtml(){
   const arama = (state.stokArama||"").trim();
 
   let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${Object.keys(STOCK).length} stok kartı · toplam değer: <strong>${toplamDeger.toFixed(0)} ₺</strong></div>
-    <button class="bayi-ekle-btn" onclick="stokKartEkle()">+ Yeni stok kartı</button></div>`;
+    <div class="stok-bar-aksiyon">
+      <button class="stok-csv-btn" onclick="stokKartCsvIndir()" title="Tüm stok kartlarını CSV olarak indir">📥 CSV indir</button>
+      <button class="stok-csv-btn" onclick="document.getElementById('stokCsvInput').click()" title="Düzenlenmiş CSV'yi yükle">📤 CSV yükle</button>
+      <button class="bayi-ekle-btn" onclick="stokKartEkle()">+ Yeni stok kartı</button>
+    </div>
+    <input type="file" id="stokCsvInput" accept=".csv,text/csv" style="display:none" onchange="stokKartCsvYukle(event)"></div>`;
 
   // arama kutusu (SABİT — yeniden çizilmez, odak korunur)
   html += `<div class="stok-arama-wrap">
@@ -19763,6 +19771,160 @@ function uomGirisSeviyeleri(u){
   const liste=u.seviyeler.map((s,i)=>({ad:s.ad, carpan:uomTabanCarpani(u,i)}));
   liste.push({ad:u.tabanBirim, carpan:1});
   return liste;
+}
+
+/* ═══ TOPLU STOK KARTI CSV İNDİR / YÜKLE ═══ */
+function _csvHucre(v){
+  const s = (v==null?"":String(v));
+  return /[";\n]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+// CSV satırını alanlara böl (tırnak içi ; ve "" destekli)
+function _csvSatirBol(satir){
+  const alanlar=[]; let cur=""; let icTirnak=false;
+  for(let i=0;i<satir.length;i++){
+    const c=satir[i];
+    if(icTirnak){
+      if(c==='"'){ if(satir[i+1]==='"'){ cur+='"'; i++; } else icTirnak=false; }
+      else cur+=c;
+    } else {
+      if(c==='"') icTirnak=true;
+      else if(c===';'){ alanlar.push(cur); cur=""; }
+      else cur+=c;
+    }
+  }
+  alanlar.push(cur);
+  return alanlar;
+}
+
+const STOK_CSV_BASLIK = ["Ürün No","Ad","Kategori","Taban Birim","Üst Birim","Üst Çarpan","Kritik Stok","Alış Fiyatı (KDV hariç)","Alış KDV %","Satış Fiyatı","Satış KDV %","Satış KDV Dahil (E/H)","Kcal (taban birim başına)","Durum (Açık/Kapalı)","Açıklama","Sistem Kodu (değiştirmeyin)"];
+
+function stokKartCsvIndir(){
+  const satirlar=[STOK_CSV_BASLIK.map(_csvHucre).join(";")];
+  Object.keys(STOCK).forEach(kod=>{
+    const s=STOCK[kod];
+    const u=uomAl(s);
+    const ustSeviye=u.seviyeler.length?u.seviyeler[0]:null;
+    const satir=[
+      s.no||"",
+      s.ad||"",
+      s.kategori||"",
+      u.tabanBirim,
+      ustSeviye?ustSeviye.ad:"",
+      ustSeviye?uomTabanCarpani(u,0):"",
+      s.kritik!=null?s.kritik:0,
+      BAYI_FIYAT[kod]!=null?BAYI_FIYAT[kod]:"",
+      s.kdv!=null?s.kdv:"",
+      s.satisFiyat!=null?s.satisFiyat:"",
+      s.satisKdv!=null?s.satisKdv:"",
+      s.satisKdvDahil?"E":"H",
+      s.kcal!=null?s.kcal:"",
+      (s.aktif!==false)?"Açık":"Kapalı",
+      s.aciklama||"",
+      kod
+    ];
+    satirlar.push(satir.map(_csvHucre).join(";"));
+  });
+  const csv="\uFEFF"+satirlar.join("\r\n");
+  const blob=new Blob([csv],{type:"text/csv;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url; a.download="MINIPAN_Stok_Kartlari_"+new Date().toISOString().slice(0,10)+".csv";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  note("📥 "+Object.keys(STOCK).length+" stok kartı CSV olarak indirildi");
+}
+
+function stokKartCsvYukle(ev){
+  const dosya=ev.target.files&&ev.target.files[0];
+  if(!dosya) return;
+  const okuyucu=new FileReader();
+  okuyucu.onload=e=>{
+    try{
+      let metin=String(e.target.result||"");
+      metin=metin.replace(/^\uFEFF/,"");   // BOM temizle
+      const satirlar=metin.split(/\r\n|\n|\r/).filter(x=>x.trim()!=="");
+      if(satirlar.length<2){ note("⚠️ CSV boş veya sadece başlık var"); ev.target.value=""; return; }
+      // başlık indekslerini bul (sıra değişse de çalışsın)
+      const bas=_csvSatirBol(satirlar[0]).map(x=>x.trim().toLocaleLowerCase("tr"));
+      const idx=(anahtar)=>bas.findIndex(b=>b.includes(anahtar));
+      const iNo=idx("ürün no"), iAd=bas.findIndex(b=>b==="ad"||b.startsWith("ad ")||b==="ürün adı"), iKat=idx("kategori"),
+            iTaban=idx("taban birim"), iUst=idx("üst birim"), iCarpan=idx("üst çarpan"),
+            iKritik=idx("kritik"), iAlis=idx("alış fiyat"), iAlisKdv=idx("alış kdv"),
+            iSatis=idx("satış fiyat"), iSatisKdv=idx("satış kdv"), iSatisDahil=idx("satış kdv dahil"),
+            iKcal=idx("kcal"), iDurum=idx("durum"), iAcik=idx("açıklama"), iKod=idx("sistem kod");
+      if(iAd<0){ note("⚠️ 'Ad' sütunu bulunamadı — başlık satırını koruyun"); ev.target.value=""; return; }
+      const sayi=v=>{ const n=parseFloat(String(v==null?"":v).replace(",",".")); return isNaN(n)?null:n; };
+      const al=(arr,i)=> (i>=0&&i<arr.length)?arr[i].trim():"";
+      // ürün no → teknik kod haritası (no ile eşleştirme için)
+      const noHarita={};
+      Object.keys(STOCK).forEach(k=>{ if(STOCK[k].no) noHarita[String(STOCK[k].no).trim().toLocaleUpperCase("tr")]=k; });
+      let guncel=0, yeni=0, atlanan=0;
+      for(let r=1;r<satirlar.length;r++){
+        const a=_csvSatirBol(satirlar[r]);
+        const ad=al(a,iAd);
+        if(!ad){ atlanan++; continue; }
+        // Önce ÜRÜN NO (MNPN-S-xxx) ile eşleştir, sonra teknik kod ile
+        const noDeger = (iNo>=0) ? al(a,iNo).trim().toLocaleUpperCase("tr") : "";
+        const kodDeger = (iKod>=0) ? al(a,iKod).trim() : "";
+        let kod = "";
+        if(noDeger && noHarita[noDeger]) kod = noHarita[noDeger];        // no eşleşti → mevcut kart
+        else if(kodDeger && STOCK[kodDeger]) kod = kodDeger;             // teknik kod eşleşti
+        const yeniKart = !kod;
+        if(yeniKart){
+          // yeni kart: teknik kod üret (kullanıcı görmez)
+          kod = kodDeger || ad.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,12) || ("stok"+Date.now());
+          if(STOCK[kod]) kod=kod+Date.now();
+        }
+        const mevcutKart = STOCK[kod] || {};
+        // UoM kur: üst birim + çarpan varsa tek seviye
+        const ustAd=al(a,iUst), ustCarpan=sayi(al(a,iCarpan));
+        const tabanBirim=al(a,iTaban)||mevcutKart.tabanBirim||"adet";
+        let uom=mevcutKart.uom||null;
+        if(iUst>=0 || iCarpan>=0){   // CSV'de birim sütunları varsa yeniden kur
+          uom = (ustAd && ustCarpan>1) ? [{ad:ustAd, carpan:ustCarpan}] : null;
+        }
+        const kart={...mevcutKart};
+        kart.ad=ad;
+        // Ürün No: yeni kartsa otomatik MNPN-S ata; mevcut kartın no'su korunur (eşleştirme anahtarı)
+        if(yeniKart){ kart.no = stokNoBiçim(_stokNoSayac++); }
+        else if(!kart.no){ kart.no = stokNoBiçim(_stokNoSayac++); }
+        if(iKat>=0 && al(a,iKat)) kart.kategori=al(a,iKat); else if(!kart.kategori) kart.kategori="Hammadde";
+        kart.tabanBirim=tabanBirim;
+        kart.uom=uom;
+        kart.birim = uom&&uom.length ? uom[0].ad : tabanBirim;
+        if(iKritik>=0){ const k=sayi(al(a,iKritik)); if(k!=null) kart.kritik=k; }
+        if(kart.kritik==null) kart.kritik=0;
+        if(kart.mevcut==null) kart.mevcut=0;
+        // satış
+        if(iSatis>=0){ const sf=sayi(al(a,iSatis)); kart.satisFiyat = sf!=null?sf:null; }
+        if(iSatisKdv>=0){ const sk=sayi(al(a,iSatisKdv)); if(sk!=null) kart.satisKdv=sk; }
+        if(kart.satisKdv==null) kart.satisKdv=10;
+        if(iSatisDahil>=0){ const d=al(a,iSatisDahil).toLocaleUpperCase("tr"); kart.satisKdvDahil = (d==="E"||d==="EVET"||d==="1"||d==="TRUE"); }
+        // alış KDV
+        if(iAlisKdv>=0){ const ak=sayi(al(a,iAlisKdv)); if(ak!=null) kart.kdv=ak; }
+        if(kart.kdv==null) kart.kdv=10;
+        // kalori (taban birim başına)
+        if(iKcal>=0){ const kc=sayi(al(a,iKcal)); kart.kcal = kc!=null?kc:null; }
+        // durum
+        if(iDurum>=0){ const d=al(a,iDurum).toLocaleLowerCase("tr"); kart.aktif = !(d.includes("kapal")||d==="h"||d==="hayır"||d==="0"); }
+        if(kart.aktif==null) kart.aktif=true;
+        if(iAcik>=0) kart.aciklama=al(a,iAcik);
+        STOCK[kod]=kart;
+        // alış fiyatı (matrah) → BAYI_FIYAT
+        if(iAlis>=0){ const af=sayi(al(a,iAlis)); BAYI_FIYAT[kod] = af!=null?af:null; }
+        else if(BAYI_FIYAT[kod]===undefined) BAYI_FIYAT[kod]=null;
+        if(yeniKart) yeni++; else guncel++;
+      }
+      b2bKaydet();
+      go("stok", true);
+      note(`✅ CSV yüklendi · ${guncel} güncellendi, ${yeni} yeni kart${atlanan?', '+atlanan+' atlandı':''}`);
+    }catch(err){
+      note("⚠️ CSV okunamadı: "+(err.message||err));
+    }
+    ev.target.value="";
+  };
+  okuyucu.onerror=()=>{ note("⚠️ Dosya okunamadı"); ev.target.value=""; };
+  okuyucu.readAsText(dosya,"UTF-8");
 }
 
 function stokKartEkle(){
@@ -20118,7 +20280,7 @@ function stokModalCiz(){
     <div class="skm-head">
       <div class="skm-head-ic">📦</div>
       <div class="skm-head-baslik">${yeni?"Yeni Stok Kartı":"Stok Kartını Düzenle"}</div>
-      <div class="skm-head-alt">${yeni?"Ürünün stok, ölçü ve fiyat bilgilerini girin":p.kod}</div>
+      <div class="skm-head-alt">${yeni?"Ürünün stok, ölçü ve fiyat bilgilerini girin":((STOCK[p.kod]&&STOCK[p.kod].no)?STOCK[p.kod].no:p.kod)}</div>
     </div>
     <div class="skm-body">
 
@@ -20178,7 +20340,7 @@ function stokModalCiz(){
             <input class="skm-input" id="skmKritik" type="number" inputmode="decimal" value="${esc(p.kritik)}" placeholder="0">
           </div>
           <div class="skm-alan">
-            <label class="skm-lbl">Kalori <small>(kcal/${p.birim})</small></label>
+            <label class="skm-lbl">Kalori <small>(kcal / ${p.tabanBirim||p.birim||'birim'} · en alt birim başına)</small></label>
             <div class="skm-input-suf">
               <input class="skm-input" id="skmKcal" type="number" inputmode="decimal" value="${esc(p.kcal)}" placeholder="—">
               <span class="skm-suf">kcal</span>
