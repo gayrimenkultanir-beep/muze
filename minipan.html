@@ -1081,9 +1081,10 @@ tr:last-child td{border-bottom:none}
 .stok-kart-gorsel img{width:100%; height:100%; object-fit:cover; display:block}
 .stok-kart-gorsel .skg-bos{font-size:20px; opacity:.4}
 .stok-kart-kod{font-size:11px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border-radius:6px; padding:1px 7px; margin-left:5px}
+.stok-kart-icerik{display:inline-block; font-size:10.5px; font-weight:700; color:var(--cocoa); background:var(--brand-soft); border-radius:6px; padding:2px 8px; margin-top:4px}
 .stok-kart-aksiyon{display:flex; gap:6px; flex-shrink:0}
 .stok-kutular{display:flex; gap:8px; flex-wrap:wrap}
-.stok-kutu{flex:1; min-width:92px; display:flex; flex-direction:column; gap:2px; background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:8px 10px}
+.stok-kutu{flex:1; min-width:120px; display:flex; flex-direction:column; gap:2px; background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:8px 10px}
 .sk-etiket{font-size:10.5px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.4px}
 .sk-deger{font-size:15px; font-weight:800; color:var(--ink)}
 .sk-alt{font-size:10.5px; font-weight:600; color:var(--ink-3)}
@@ -1125,30 +1126,77 @@ tr:last-child td{border-bottom:none}
 .fat-satir-tutar{font-size:16px; font-weight:800; color:var(--brand-d); flex-shrink:0}
 .fat-satir-aksiyon{display:flex; gap:6px; flex-shrink:0}
 /* form */
-.fat-form-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px}
-.fat-form-baslik{font-size:19px; font-weight:800; color:var(--ink); letter-spacing:-.3px}
-.fat-ust-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px}
+/* ══ ALIŞ FATURASI — profesyonel belge tasarımı ══ */
+.fat-belge{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-lg)}
+.fat-form-head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px; background:linear-gradient(135deg, var(--cocoa) 0%, var(--brand-d) 100%); color:#fff}
+.fat-form-baslik{font-size:19px; font-weight:800; letter-spacing:-.3px; color:#fff}
+.fat-kapat{width:34px; height:34px; border-radius:9px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.28); color:#fff; font-size:15px; font-weight:800; cursor:pointer}
+.fat-kapat:hover{background:rgba(255,255,255,.28)}
+/* Fatura bilgi kartı — sıcak parşömen tonu */
+.fat-bilgi-kart{margin:20px 22px 0; background:var(--brand-soft); border:1px solid var(--line); border-radius:14px; overflow:hidden}
+.fat-bilgi-baslik{font-size:12.5px; font-weight:800; color:var(--brand-d); text-transform:uppercase; letter-spacing:.6px; padding:11px 16px; background:rgba(0,0,0,.03); border-bottom:1px solid var(--line)}
+.fat-ust-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:16px}
 .fat-alan{display:flex; flex-direction:column; gap:5px}
-.fat-alan label{font-size:12px; font-weight:700; color:var(--ink-2)}
-.fat-input{padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface-2); font-family:inherit; font-size:14px; font-weight:600; color:var(--ink)}
-.fat-input:focus{outline:none; border-color:var(--brand); background:var(--surface)}
-.fat-kalem-baslik{font-size:13px; font-weight:800; color:var(--cocoa); text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px; padding-bottom:7px; border-bottom:1px solid var(--line)}
-.fat-kalem-list{display:flex; flex-direction:column; gap:8px; margin-bottom:12px}
-.fat-kalem{background:var(--surface-2); border:1px solid var(--line); border-radius:11px; padding:11px 13px}
-.fat-kalem-ust{display:flex; align-items:center; justify-content:space-between; margin-bottom:6px}
-.fat-kalem-ad{font-size:14px; font-weight:800; color:var(--ink)}
-.fat-kalem-aksiyon{display:flex; gap:6px}
-.fat-kalem-detay{display:flex; flex-wrap:wrap; gap:5px 12px; font-size:12px; color:var(--ink-2); align-items:center}
-.fat-kalem-tutar{margin-left:auto; font-size:14px; font-weight:800; color:var(--brand-d)}
-.fat-urun-ekle{width:100%; padding:13px; border-radius:11px; border:1.5px dashed var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:14px; font-weight:800; cursor:pointer; margin-bottom:18px}
+.fat-alan label{font-size:11.5px; font-weight:800; color:var(--ink-2); text-transform:uppercase; letter-spacing:.3px}
+.fat-input{padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface); font-family:inherit; font-size:14px; font-weight:600; color:var(--ink)}
+.fat-input:focus{outline:none; border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft)}
+/* Kalem bölümü */
+.fat-kalem-bolum{margin:20px 22px 0}
+.fat-kalem-baslik-bar{display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:800; color:var(--cocoa); text-transform:uppercase; letter-spacing:.5px; padding:0 2px 10px; border-bottom:2px solid var(--cocoa); margin-bottom:12px}
+.fat-kalem-adet{font-size:11px; font-weight:700; color:var(--ink-3); background:var(--surface-2); border-radius:20px; padding:3px 11px; text-transform:none; letter-spacing:0}
+.fat-bos{text-align:center; color:var(--ink-3); padding:28px; font-size:13.5px; background:var(--surface-2); border:1.5px dashed var(--line); border-radius:12px; margin-bottom:12px}
+/* Sütunlu kalem tablosu */
+.fat-tablo{border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:12px}
+.fat-thead,.fat-trow{display:grid; grid-template-columns:2fr 1.1fr 1fr 0.6fr 0.9fr 0.9fr 0.9fr 0.7fr; gap:8px; align-items:center; padding:10px 13px}
+.fat-thead{background:var(--cocoa); color:#fff; font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.3px}
+.fat-trow{border-top:1px solid var(--line); font-size:13px; background:var(--surface)}
+.fat-trow:nth-child(even){background:var(--surface-2)}
+.ftc-ad{display:flex; align-items:center; gap:9px; min-width:0}
+.fat-gorsel{flex:0 0 34px; width:34px; height:34px; border-radius:8px; overflow:hidden; background:var(--surface); border:1px solid var(--line); display:grid; place-items:center}
+.fat-gorsel img{width:100%; height:100%; object-fit:cover}
+.fat-ad-metin{display:flex; flex-direction:column; min-width:0}
+.fat-ad-metin strong{font-size:13px; font-weight:700; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.fat-ad-metin small{font-size:10px; color:var(--ink-3); font-weight:600}
+.ftc-mik{font-size:12px; font-weight:600; color:var(--ink-2)}
+.ftc-fiyat{font-size:12.5px; font-weight:700; color:var(--ink); text-align:right}
+.ftc-fiyat small,.ftc-isk small{font-size:9.5px; font-weight:600; color:var(--ink-3)}
+.ftc-kdv{font-size:12.5px; font-weight:700; color:var(--ink-2); text-align:center}
+.ftc-isk{font-size:12px; font-weight:700; color:var(--ink-2); text-align:center}
+.ftc-bos{color:var(--ink-3)}
+.ftc-matrah{font-size:12.5px; font-weight:700; color:var(--ink); text-align:right}
+.ftc-tutar{font-size:13.5px; font-weight:900; color:var(--brand-d); text-align:right}
+.ftc-islem{display:flex; gap:5px; justify-content:flex-end}
+.fat-kalem-btn{width:28px; height:28px; border-radius:7px; border:1px solid var(--line); background:var(--surface); font-size:12px; font-weight:800; cursor:pointer; display:grid; place-items:center}
+.fat-kalem-btn.duzenle{color:var(--cocoa)}
+.fat-kalem-btn.duzenle:hover{background:var(--brand-soft); border-color:var(--brand)}
+.fat-kalem-btn.sil{color:var(--err)}
+.fat-kalem-btn.sil:hover{background:var(--err); color:#fff; border-color:var(--err)}
+.fat-urun-ekle{width:100%; padding:13px; border-radius:11px; border:1.5px dashed var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:14px; font-weight:800; cursor:pointer}
 .fat-urun-ekle:hover{background:var(--brand); color:#fff; border-style:solid}
-.fat-ozet{background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:18px}
-.fat-ozet-satir{display:flex; align-items:center; justify-content:space-between; padding:6px 0; font-size:13.5px; color:var(--ink-2)}
+/* Özet — koyu vurgulu alt bölüm */
+.fat-ozet{margin:20px 22px; background:var(--surface-2); border:1px solid var(--line); border-radius:14px; padding:16px 18px}
+.fat-ozet-satir{display:flex; align-items:center; justify-content:space-between; padding:7px 0; font-size:13.5px; color:var(--ink-2)}
 .fat-ozet-satir strong{font-weight:800; color:var(--ink)}
 .fat-ozet-isk strong{color:var(--danger)}
-.fat-ozet-toplam{border-top:1.5px solid var(--line); margin-top:4px; padding-top:12px; font-size:16px}
-.fat-ozet-toplam strong{color:var(--brand-d); font-size:19px}
-.fat-form-foot{display:flex; gap:12px; justify-content:flex-end}
+.fat-ozet-toplam{border-top:2px solid var(--cocoa); margin-top:6px; padding-top:13px; font-size:16px}
+.fat-ozet-toplam strong{color:var(--brand-d); font-size:21px}
+.fat-form-foot{display:flex; gap:12px; justify-content:flex-end; padding:0 22px 22px}
+@media(max-width:760px){
+  .fat-ust-grid{grid-template-columns:1fr}
+  .fat-thead{display:none}
+  .fat-trow{grid-template-columns:1fr auto; gap:5px 10px; padding:12px}
+  .ftc-ad{grid-column:1/3; margin-bottom:4px}
+  .ftc-mik,.ftc-fiyat,.ftc-kdv,.ftc-isk,.ftc-matrah{grid-column:1; justify-self:start; text-align:left; font-size:12px}
+  .ftc-mik::before{content:"Miktar: "; color:var(--ink-3); font-weight:600}
+  .ftc-fiyat::before{content:"Birim: "; color:var(--ink-3); font-weight:600}
+  .ftc-kdv::before{content:"KDV: "; color:var(--ink-3); font-weight:600}
+  .ftc-matrah::before{content:"Matrah: "; color:var(--ink-3); font-weight:600}
+  .ftc-tutar{grid-column:2; grid-row:2/6; align-self:center; font-size:16px}
+  .ftc-islem{grid-column:1/3; justify-content:flex-start; margin-top:6px}
+  .fat-belge{margin:0}
+  .fat-bilgi-kart,.fat-kalem-bolum,.fat-ozet{margin-left:14px; margin-right:14px}
+  .fat-form-foot{padding-left:14px; padding-right:14px}
+}
 /* kalem modalı — ürün seçim */
 .fk-harf-row{display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px}
 .fk-harf{width:34px; height:34px; border-radius:8px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:800; cursor:pointer}
@@ -19451,7 +19499,6 @@ function stokSonucHtml(){
     const alisK = s.kdv!=null ? s.kdv : null;
     const satisF = s.satisFiyat!=null ? s.satisFiyat : null;
     const satisK = s.satisKdv!=null ? s.satisKdv : null;
-    const birim = s.birim||"adet";
     const aktif = s.aktif!==false;
     const kritikDurum = (s.mevcut||0) <= (s.kritik||0);
     // KDV dahil/hariç durumuna göre matrah & toplam
@@ -19460,11 +19507,18 @@ function stokSonucHtml(){
     const alisH = (alisF>0) ? hesap(alisF,alisK,false) : null;
     const satisH = (satisF>0) ? hesap(satisF,satisK,s.satisKdvDahil) : null;
     const marj = (alisH && satisH) ? ((satisH.matrah-alisH.matrah)/alisH.matrah*100) : null;
+    // UoM: üst birim (koli/kutu) fiyatları = taban × çarpan
+    const u = uomAl(s);
+    const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
+    const ustCarpan = ustSeviye ? uomTabanCarpani(u,0) : 1;
+    const alisUst = (alisH && ustSeviye) ? alisH.toplam*ustCarpan : null;   // KDV dahil üst birim alış
+    const satisUst = (satisH && ustSeviye) ? satisH.toplam*ustCarpan : null;
+    const icerikMetin = uomDonusumAcik(u);   // "1 kutu = 15 adet"
     return `<div class="stok-kart${!aktif?' pasif':''}">
       <div class="stok-kart-ust">
         <div class="stok-kart-ad">
           <span class="stok-kart-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="skg-bos">📦</span>`}</span>
-          <span class="stok-kart-admetin"><strong>${s.ad}</strong> <span class="stok-kart-kod">${s.no||kod}</span></span>
+          <span class="stok-kart-admetin"><strong>${s.ad}</strong> <span class="stok-kart-kod">${s.no||kod}</span>${icerikMetin?`<span class="stok-kart-icerik">📦 ${icerikMetin}</span>`:''}</span>
         </div>
         <div class="stok-kart-aksiyon">
           <button class="bayi-mini" onclick="stokKartDuzenle('${kod}')">✏️</button>
@@ -19473,19 +19527,29 @@ function stokSonucHtml(){
       </div>
       <div class="stok-kutular">
         <div class="stok-kutu stok-kutu-alis">
-          <span class="sk-etiket">🛒 Alış</span>
+          <span class="sk-etiket">🛒 Alış birim</span>
           <span class="sk-deger">${alisH?alisH.toplam.toFixed(2)+' ₺':'—'}</span>
-          <span class="sk-alt">${alisK!=null?'%'+alisK+' hariç':''}</span>
+          <span class="sk-alt">${alisK!=null?'%'+alisK+' dahil / '+u.tabanBirim:''}</span>
         </div>
-        <div class="stok-kutu stok-kutu-satis">
-          <span class="sk-etiket">💰 Bayi satış</span>
-          <span class="sk-deger">${satisH?satisH.toplam.toFixed(2)+' ₺':'—'}</span>
-          <span class="sk-alt">${satisK!=null?'%'+satisK+' '+(s.satisKdvDahil?'dahil':'hariç'):''}</span>
-        </div>
+        ${ustSeviye?`<div class="stok-kutu stok-kutu-alis">
+          <span class="sk-etiket">🛒 Alış ${ustSeviye.ad}</span>
+          <span class="sk-deger">${alisUst!=null?alisUst.toFixed(2)+' ₺':'—'}</span>
+          <span class="sk-alt">${ustCarpan} ${u.tabanBirim}</span>
+        </div>`:''}
         ${marj!=null?`<div class="stok-kutu stok-kutu-marj">
           <span class="sk-etiket">📈 Marj</span>
           <span class="sk-deger">%${marj.toFixed(0)}</span>
           <span class="sk-alt">KDV hariç</span>
+        </div>`:''}
+        <div class="stok-kutu stok-kutu-satis">
+          <span class="sk-etiket">💰 Satış birim</span>
+          <span class="sk-deger">${satisH?satisH.toplam.toFixed(2)+' ₺':'—'}</span>
+          <span class="sk-alt">${satisK!=null?'%'+satisK+' '+(s.satisKdvDahil?'dahil':'hariç')+' / '+u.tabanBirim:''}</span>
+        </div>
+        ${ustSeviye?`<div class="stok-kutu stok-kutu-satis">
+          <span class="sk-etiket">💰 Satış ${ustSeviye.ad}</span>
+          <span class="sk-deger">${satisUst!=null?satisUst.toFixed(2)+' ₺':'—'}</span>
+          <span class="sk-alt">${ustCarpan} ${u.tabanBirim}</span>
         </div>`:''}
         <div class="stok-kutu ${aktif?'stok-kutu-acik':'stok-kutu-kapali'}">
           <span class="sk-etiket">Durum</span>
@@ -20797,67 +20861,86 @@ function faturaFormHtml(){
   const t=state.faturaTaslak;
   const top=faturaToplamlar(t.kalemler);
   const duzenle = t.id!=null;
-  const tumTed=["", ...TEDARIKCILER];
 
-  let html=`<div class="fat-form-head">
-    <div class="fat-form-baslik">${duzenle?'✏️ Alış Faturası Düzenle':'🧾 Yeni Alış Faturası'}</div>
-    <button class="bom-kapat" onclick="faturaIptal()">✕</button>
+  let html=`<div class="fat-belge">
+    <div class="fat-form-head">
+      <div class="fat-form-baslik">${duzenle?'✏️ Alış Faturası Düzenle':'🧾 Yeni Alış Faturası'}</div>
+      <button class="fat-kapat" onclick="faturaIptal()">✕</button>
+    </div>`;
+
+  // ── FATURA BAŞLIK BİLGİLERİ (renkli üst bölüm) ──
+  html+=`<div class="fat-bilgi-kart">
+    <div class="fat-bilgi-baslik">📋 Fatura Bilgileri</div>
+    <div class="fat-ust-grid">
+      <div class="fat-alan">
+        <label>Fatura tarihi</label>
+        <input type="date" class="fat-input" value="${t.tarihISO}" onchange="faturaAlan('tarihISO',this.value)">
+      </div>
+      <div class="fat-alan">
+        <label>Fatura numarası</label>
+        <input type="text" class="fat-input" value="${(t.faturaNo||'').replace(/"/g,'&quot;')}" placeholder="örn. A-2024-1058" oninput="faturaAlan('faturaNo',this.value)">
+      </div>
+      <div class="fat-alan">
+        <label>Tedarikçi</label>
+        <select class="fat-input" onchange="faturaTedarikciSec(this.value)">
+          <option value=""${!t.tedarikci?' selected':''}>— firma seç —</option>
+          ${TEDARIKCILER.map(td=>`<option value="${td.replace(/"/g,'&quot;')}"${t.tedarikci===td?' selected':''}>${td}</option>`).join("")}
+          <option value="__yeni__">➕ Yeni firma ekle…</option>
+        </select>
+      </div>
+      <div class="fat-alan">
+        <label>Açıklama</label>
+        <input type="text" class="fat-input" value="${(t.aciklama||'').replace(/"/g,'&quot;')}" placeholder="opsiyonel not" oninput="faturaAlan('aciklama',this.value)">
+      </div>
+    </div>
   </div>`;
 
-  // üst bilgi alanları
-  html+=`<div class="fat-ust-grid">
-    <div class="fat-alan">
-      <label>Fatura tarihi</label>
-      <input type="date" class="fat-input" value="${t.tarihISO}" onchange="faturaAlan('tarihISO',this.value)">
-    </div>
-    <div class="fat-alan">
-      <label>Fatura numarası</label>
-      <input type="text" class="fat-input" value="${(t.faturaNo||'').replace(/"/g,'&quot;')}" placeholder="örn. A-2024-1058" oninput="faturaAlan('faturaNo',this.value)">
-    </div>
-    <div class="fat-alan">
-      <label>Tedarikçi</label>
-      <select class="fat-input" onchange="faturaTedarikciSec(this.value)">
-        <option value=""${!t.tedarikci?' selected':''}>— firma seç —</option>
-        ${TEDARIKCILER.map(td=>`<option value="${td.replace(/"/g,'&quot;')}"${t.tedarikci===td?' selected':''}>${td}</option>`).join("")}
-        <option value="__yeni__">➕ Yeni firma ekle…</option>
-      </select>
-    </div>
-    <div class="fat-alan">
-      <label>Açıklama</label>
-      <input type="text" class="fat-input" value="${(t.aciklama||'').replace(/"/g,'&quot;')}" placeholder="opsiyonel not" oninput="faturaAlan('aciklama',this.value)">
-    </div>
-  </div>`;
+  // ── FATURA KALEMLERİ (sütunlu tablo) ──
+  html+=`<div class="fat-kalem-bolum">
+    <div class="fat-kalem-baslik-bar">
+      <span>🧾 Fatura Kalemleri</span>
+      <span class="fat-kalem-adet">${t.kalemler.length} kalem</span>
+    </div>`;
 
-  // kalem tablosu
-  html+=`<div class="fat-kalem-baslik">Fatura kalemleri</div>`;
   if(t.kalemler.length===0){
-    html+=`<div class="bayi-bos">Henüz ürün eklenmedi. "+ Ürün ekle" ile başlayın.</div>`;
+    html+=`<div class="fat-bos">Henüz ürün eklenmedi. Aşağıdan "+ Ürün ekle" ile başlayın.</div>`;
   } else {
-    html+=`<div class="fat-kalem-list">`;
+    html+=`<div class="fat-tablo">
+      <div class="fat-thead">
+        <span class="ftc-ad">Ürün / Stok Kartı</span>
+        <span class="ftc-mik">Miktar</span>
+        <span class="ftc-fiyat">Birim Fiyat</span>
+        <span class="ftc-kdv">KDV</span>
+        <span class="ftc-isk">İskonto</span>
+        <span class="ftc-matrah">Matrah</span>
+        <span class="ftc-tutar">Tutar</span>
+        <span class="ftc-islem"></span>
+      </div>`;
     t.kalemler.forEach((k,i)=>{
       const h=faturaKalemHesap(k);
-      const ad=STOCK[k.kod]?STOCK[k.kod].ad:k.kod;
-      html+=`<div class="fat-kalem">
-        <div class="fat-kalem-ust">
-          <span class="fat-kalem-ad">${ad}</span>
-          <div class="fat-kalem-aksiyon">
-            <button class="bayi-mini" onclick="faturaKalemDuzenle(${i})">✏️</button>
-            <button class="bayi-mini sil" onclick="faturaKalemSil(${i})">✕</button>
-          </div>
-        </div>
-        <div class="fat-kalem-detay">
-          <span>${k.miktar} ${k.girisBirim}${k.ambalajIci?` × ${k.ambalajIci} ${STOCK[k.kod]?(STOCK[k.kod].birim||'adet'):''}`:''} × ${(+k.birimFiyat).toFixed(2)} ₺</span>
-          <span>KDV %${k.kdv} ${k.kdvDahil?'dahil':'hariç'}</span>
-          ${(+k.iskonto>0)?`<span>İsk %${k.iskonto} ${k.iskontoDahil?'dahil':'hariç'}</span>`:''}
-          <span class="fat-kalem-tutar">${h.satirTutar.toFixed(2)} ₺</span>
-        </div>
+      const s=STOCK[k.kod];
+      const ad=s?s.ad:k.kod;
+      const birimBilgi = `${k.miktar} ${k.girisBirim}${k.ambalajIci?` × ${k.ambalajIci} ${s?(s.birim||'adet'):''}`:''}`;
+      html+=`<div class="fat-trow">
+        <span class="ftc-ad"><span class="fat-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="fat-ad-metin"><strong>${ad}</strong>${s&&s.no?`<small>${s.no}</small>`:''}</span></span>
+        <span class="ftc-mik">${birimBilgi}</span>
+        <span class="ftc-fiyat">${(+k.birimFiyat).toFixed(2)} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
+        <span class="ftc-kdv">%${k.kdv}</span>
+        <span class="ftc-isk">${(+k.iskonto>0)?`%${k.iskonto}<br><small>${k.iskontoDahil?'dahil':'hariç'}</small>`:'<span class="ftc-bos">—</span>'}</span>
+        <span class="ftc-matrah">${h.matrah.toFixed(2)} ₺</span>
+        <span class="ftc-tutar">${h.satirTutar.toFixed(2)} ₺</span>
+        <span class="ftc-islem">
+          <button class="fat-kalem-btn duzenle" onclick="faturaKalemDuzenle(${i})" title="Düzenle">✏️</button>
+          <button class="fat-kalem-btn sil" onclick="faturaKalemSil(${i})" title="Çıkar">✕</button>
+        </span>
       </div>`;
     });
     html+=`</div>`;
   }
-  html+=`<button class="fat-urun-ekle" onclick="faturaUrunEkleAc()">+ Ürün ekle</button>`;
+  html+=`<button class="fat-urun-ekle" onclick="faturaUrunEkleAc()">+ Ürün ekle</button>
+  </div>`;
 
-  // toplam özeti
+  // ── ÖZET (renkli alt bölüm) ──
   html+=`<div class="fat-ozet">
     <div class="fat-ozet-satir"><span>Ara toplam (matrah)</span><strong>${top.matrah.toFixed(2)} ₺</strong></div>
     ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${top.iskontoToplam.toFixed(2)} ₺</strong></div>`:''}
@@ -20868,6 +20951,7 @@ function faturaFormHtml(){
   html+=`<div class="fat-form-foot">
     <button class="btn btn-ghost" onclick="faturaIptal()">İptal</button>
     <button class="btn btn-primary" onclick="faturaKaydet()">${duzenle?'Değişiklikleri kaydet':'Faturayı kaydet · stoğa işle'}</button>
+  </div>
   </div>`;
   return html;
 }
