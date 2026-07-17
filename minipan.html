@@ -635,12 +635,12 @@ tr:last-child td{border-bottom:none}
 /* Bayi fiyatları tablosu */
 .bfiyat-tablo{display:flex; flex-direction:column; gap:5px; margin-bottom:6px}
 .bfiyat-head,.bfiyat-satir{display:grid; grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.1fr 0.9fr 0.5fr; gap:8px; align-items:center}
-/* Bayi fiyatları — alış (siyah) + satış (kırmızı), her biri taban + üst birim (9 sütun) */
-.bfiyat-a2{grid-template-columns:1.3fr 0.8fr 0.4fr 0.85fr 0.9fr 0.85fr 0.9fr 0.7fr 0.4fr !important}
-.bfiyat-a2 .bf-alis, .bfiyat-a2 .bf-alis-ust{color:var(--ink) !important}
-.bfiyat-a2 .bf-satis, .bfiyat-a2 .bf-satis-ust{color:var(--brand-d) !important}
-.bf-alis-ust{font-size:13px; font-weight:800}
-.bf-satis-ust{font-size:13px; font-weight:800}
+/* Bayi fiyatları — stok üst birim + alış (siyah) + satış (kırmızı) üst birim fiyat (7 sütun) */
+.bfiyat-a2{grid-template-columns:1.6fr 0.95fr 0.5fr 1.15fr 1.15fr 0.85fr 0.45fr !important}
+.bfiyat-a2 .bf-alis{color:var(--ink) !important}
+.bfiyat-a2 .bf-satis{color:var(--brand-d) !important}
+.bfiyat-a2 .bf-alis,.bfiyat-a2 .bf-satis{font-size:14px; font-weight:800; text-align:left}
+.bfiyat-a2 .bf-mik{display:flex; flex-direction:column; align-items:flex-start; gap:1px}
 .bf-birim-et{font-size:9.5px; font-weight:600; color:var(--ink-3)}
 .bfiyat-head{padding:0 12px 4px; font-size:10.5px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.3px}
 .bfiyat-satir{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
@@ -685,13 +685,8 @@ tr:last-child td{border-bottom:none}
   .bfiyat-satir.bfiyat-a2{grid-template-columns:1fr 1fr !important}
   .bfiyat-satir .bf-ad{grid-column:1/3; font-size:14px; font-weight:800; margin-bottom:2px}
 }
-@media(min-width:721px) and (max-width:1100px){
-  /* dar tablette üst birim sütunlarını gizle — taban fiyatlar kalır */
-  .bfiyat-a2 .bf-alis-ust, .bfiyat-a2 .bf-satis-ust{display:none}
-  .bfiyat-a2{grid-template-columns:1.4fr 0.9fr 0.5fr 1fr 1fr 0.7fr 0.4fr !important}
-}
-/* Sipariş ver ekranı — 7 sütun (dönüşüm + satış üst birim) */
-.bsip-head,.bsip-satir{grid-template-columns:1.4fr 0.85fr 1.15fr 0.45fr 0.95fr 0.95fr 0.85fr !important}
+/* Sipariş ver ekranı — 6 sütun (tek satış üst birim sütunu) */
+.bsip-head,.bsip-satir{grid-template-columns:1.5fr 0.95fr 1.25fr 0.5fr 1.05fr 0.9fr !important}
 .bsip-satir .bf-islem{display:flex; align-items:center; gap:6px; justify-content:flex-end}
 .bsip-ekle{background:var(--brand)!important; color:#fff!important; border-color:var(--brand)!important; font-weight:800}
 .bsip-ekle:hover{filter:brightness(.94)}
@@ -699,13 +694,14 @@ tr:last-child td{border-bottom:none}
 .bf-donus{display:flex; align-items:center; min-width:0}
 .bf-donus-metin{font-size:11px; font-weight:600; color:var(--cocoa); line-height:1.35; background:var(--brand-soft); border-radius:7px; padding:4px 8px; white-space:normal}
 .bf-donus-yok{font-size:11px; font-weight:500; color:var(--ink-3); font-style:italic}
+.bsip-satir .bf-mik{display:flex; flex-direction:column; align-items:flex-start; gap:1px}
 @media(max-width:820px){
   .bsip-head .bf-donus,.bsip-satir .bf-donus{display:none}
-  .bsip-head,.bsip-satir{grid-template-columns:1.5fr 0.9fr 0.5fr 0.9fr 0.9fr 0.85fr !important}
+  .bsip-head,.bsip-satir{grid-template-columns:1.6fr 1fr 0.5fr 1.05fr 0.9fr !important}
 }
-@media(max-width:600px){
-  .bsip-head .bf-satis-ust,.bsip-satir .bf-satis-ust{display:none}
-  .bsip-head,.bsip-satir{grid-template-columns:1.6fr 1.1fr 0.6fr 1.1fr 1fr !important}
+@media(max-width:560px){
+  .bsip-head,.bsip-satir{grid-template-columns:1.5fr 1fr 1.05fr 0.85fr !important}
+  .bsip-head .bf-kdv,.bsip-satir .bf-kdv{display:none}
 }
 /* Stok durum ekranı — 7 sütun */
 .sdurum-head,.sdurum-satir{grid-template-columns:1.4fr 1fr 0.5fr 0.8fr 0.9fr 1fr 1fr !important}
@@ -2833,6 +2829,11 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 /* Birim chip-grid */
 .skm-birim-grid{display:flex; flex-wrap:wrap; gap:8px}
 .skm-birim-chip{padding:9px 16px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13.5px; font-weight:700; cursor:pointer; transition:all .15s ease}
+.bsm-birim-sabit{display:inline-flex; align-items:center; gap:6px; padding:11px 18px; border-radius:11px; background:var(--brand-soft); border:1.5px solid var(--brand); color:var(--brand-d); font-size:15px; font-weight:800}
+.bsm-birim-sabit small{font-size:11.5px; font-weight:600; color:var(--cocoa); opacity:.8}
+.skm-taban-fiyat{margin-top:9px; padding:8px 12px; border-radius:9px; background:var(--surface-2); border:1px dashed var(--line); font-size:12.5px; font-weight:600; color:var(--ink-2)}
+.skm-taban-fiyat strong{color:var(--cocoa); font-weight:800}
+.skm-taban-fiyat small{font-size:10.5px; color:var(--ink-3); font-weight:600}
 .skm-birim-chip:hover{border-color:var(--line-2)}
 .skm-birim-chip.on{background:var(--cocoa); border-color:var(--cocoa); color:#fff}
 .skm-birim-yeni{padding:9px 14px; border-radius:10px; border:1.5px dashed var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:13px; font-weight:800; cursor:pointer}
@@ -19881,7 +19882,8 @@ function stokKartCsvYukle(ev){
         const tabanBirim=al(a,iTaban)||mevcutKart.tabanBirim||"adet";
         let uom=mevcutKart.uom||null;
         if(iUst>=0 || iCarpan>=0){   // CSV'de birim sütunları varsa yeniden kur
-          uom = (ustAd && ustCarpan>1) ? [{ad:ustAd, carpan:ustCarpan}] : null;
+          // üst birim taban ile aynıysa veya çarpan 1 ise UoM kurma (anlamsız "1 kutu=9 kutu" önle)
+          uom = (ustAd && ustAd.toLocaleLowerCase("tr")!==tabanBirim.toLocaleLowerCase("tr") && ustCarpan>1) ? [{ad:ustAd, carpan:ustCarpan}] : null;
         }
         const kart={...mevcutKart};
         kart.ad=ad;
@@ -19940,13 +19942,22 @@ function stokKartEkle(){
     satisFiyat:"", satisKdv:"10", satisKdvDahil:false,
     // ÇOK SEVİYELİ UoM: taban birim + dönüşüm zinciri
     tabanBirim:"adet",
-    uomSeviyeler:[]   // [{ad:"koli", carpan:12}, ...] — boş = sadece taban birimle sayılır
+    uomSeviyeler:[],   // [{ad:"koli", carpan:12}, ...] — boş = sadece taban birimle sayılır
+    _ustBirimAd:null, _ustCarpan:1   // yeni kartta ambalaj yok — fiyat taban birimle girilir
   };
   stokModalCiz();
 }
 function stokKartDuzenle(kod){
   const s = STOCK[kod]; if(!s) return;
-  const amb = s.ambalaj||{};
+  const u = uomAl(s);
+  const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
+  const ustCarpan = ustSeviye ? uomTabanCarpani(u,0) : 1;
+  const ustAd = ustSeviye ? ustSeviye.ad : null;
+  // taban fiyatları ÜST BİRİM başına çevir (giriş üst birimle yapılacak)
+  const alisTaban = bayiFiyat(kod);
+  const alisUst = (alisTaban>0) ? +(alisTaban*ustCarpan).toFixed(4) : "";
+  const satisTaban = s.satisFiyat;
+  const satisUst = (satisTaban!=null&&satisTaban>0) ? +(satisTaban*ustCarpan).toFixed(4) : "";
   state._stokModal = {
     mod:"duzenle", kod:kod,
     ad:s.ad||"", mevcut:String(s.mevcut||0), birim:s.birim||"adet", kritik:String(s.kritik||0),
@@ -19955,14 +19966,16 @@ function stokKartDuzenle(kod){
     gorsel:(s.gorsel||null),
     aciklama:(s.aciklama||""),
     alerjenler: Array.isArray(s.alerjenler)?s.alerjenler.slice():[],
-    alisFiyat:(bayiFiyat(kod)?String(bayiFiyat(kod)):""),
+    alisFiyat:(alisUst!==""?String(alisUst):""),
     alisKdv:(s.kdv!=null?String(s.kdv):"10"),
     alisKdvDahil:!!s.alisKdvDahil,
-    satisFiyat:(s.satisFiyat!=null?String(s.satisFiyat):""),
+    satisFiyat:(satisUst!==""?String(satisUst):""),
     satisKdv:(s.satisKdv!=null?String(s.satisKdv):"10"),
     satisKdvDahil:!!s.satisKdvDahil,
-    tabanBirim: uomAl(s).tabanBirim||"adet",
-    uomSeviyeler: uomAl(s).seviyeler.map(x=>({ad:x.ad, carpan:String(x.carpan)}))
+    tabanBirim: u.tabanBirim||"adet",
+    uomSeviyeler: u.seviyeler.map(x=>({ad:x.ad, carpan:String(x.carpan)})),
+    _ustBirimAd: ustAd,        // üst birim adı (kutu/paket) — null ise ambalajsız
+    _ustCarpan: ustCarpan      // üst birim çarpanı
   };
   stokModalCiz();
 }
@@ -20142,7 +20155,7 @@ function stokModalKaydet(){
     kcal: (p.kcal!==""&&p.kcal!=null) ? Math.max(0, sayi(p.kcal,0)) : null,
     kdv: (p.alisKdv!==""&&p.alisKdv!=null) ? Math.max(0, sayi(p.alisKdv,0)) : null,   // alış KDV (BAYI_FIYAT matrahına uygulanır)
     alisKdvDahil: false,   // BAYI_FIYAT her zaman KDV hariç matrah olarak saklanır
-    satisFiyat: (p.satisFiyat!==""&&p.satisFiyat!=null) ? Math.max(0, sayi(p.satisFiyat,0)) : null,
+    satisFiyat: (p.satisFiyat!==""&&p.satisFiyat!=null) ? Math.max(0, sayi(p.satisFiyat,0)) : null,   // geçici: üst birim ham, aşağıda tabana bölünür
     satisKdv: (p.satisKdv!==""&&p.satisKdv!=null) ? Math.max(0, sayi(p.satisKdv,0)) : null,
     satisKdvDahil: !!p.satisKdvDahil,
     aktif: p.aktif!==false
@@ -20160,13 +20173,24 @@ function stokModalKaydet(){
   veri.ambalaj = null;   // eski tek-seviye alan artık kullanılmıyor (UoM'a taşındı)
   // Sayım/sipariş birimi: UoM varsa en üst seviye, yoksa taban birim
   veri.birim = sevGecerli.length ? sevGecerli[0].ad : veri.tabanBirim;
-  // Alış fiyatı → BAYI_FIYAT her zaman KDV HARİÇ matrah olarak saklanır.
-  // Kullanıcı "KDV dahil" seçtiyse matraha ayrıştır (fatura yoluyla tutarlı olsun).
+  // Fiyat girişi ÜST BİRİM başına yapılır → tabana bölerek sakla.
+  // Kaydedilen UoM'un en üst çarpanı (kullanıcı ambalajı değiştirmiş olabilir).
+  let kayitCarpan = 1;
+  if(sevGecerli.length){
+    // en üst seviyeden tabana toplam çarpan
+    kayitCarpan = sevGecerli.reduce((a,s)=>a*s.carpan, 1);
+  }
+  // Alış fiyatı → BAYI_FIYAT her zaman KDV HARİÇ TABAN matrah olarak saklanır.
   let fiyatV = null;
   if(p.alisFiyat!==""&&p.alisFiyat!=null){
-    const ham = Math.max(0, sayi(p.alisFiyat,0));
+    const hamUst = Math.max(0, sayi(p.alisFiyat,0));       // üst birim fiyatı (girilen)
     const aKdv = sayi(p.alisKdv,0);
-    fiyatV = (p.alisKdvDahil && aKdv>0) ? +(ham/(1+aKdv/100)).toFixed(4) : ham;
+    const matrahUst = (p.alisKdvDahil && aKdv>0) ? hamUst/(1+aKdv/100) : hamUst;
+    fiyatV = +(matrahUst/kayitCarpan).toFixed(4);           // tabana böl
+  }
+  // Satış fiyatı da ÜST BİRİM başına girildi → tabana böl (satisKdvDahil bayrağı korunur)
+  if(veri.satisFiyat!=null && veri.satisFiyat>0){
+    veri.satisFiyat = +(veri.satisFiyat/kayitCarpan).toFixed(4);
   }
 
   let kod=p.kod;
@@ -20230,6 +20254,15 @@ function stokModalFiyatOzet(){
   stokModalOku();
   const el=document.getElementById("skmFiyatOzet");
   if(el) el.innerHTML=stokFiyatOzet(p);
+  // readonly alt birim (taban) fiyatı: üst birim fiyatı / çarpan
+  if(p._ustCarpan && p._ustCarpan>1){
+    const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
+    const af=sayi(p.alisFiyat), sf=sayi(p.satisFiyat);
+    const at=document.getElementById("skmAlisTaban");
+    if(at) at.textContent = af>0 ? (af/p._ustCarpan).toFixed(4)+" ₺" : "—";
+    const st=document.getElementById("skmSatisTaban");
+    if(st) st.textContent = sf>0 ? (sf/p._ustCarpan).toFixed(4)+" ₺" : "—";
+  }
 }
 /* KDV dahil/hariç seçimi (alis|satis) */
 function stokModalKdvMod(hangi, dahil){
@@ -20418,7 +20451,7 @@ function stokModalCiz(){
           <div class="skm-fiyat-etiket">🛒 Alış (bayiden aldığım)</div>
           <div class="skm-satir2">
             <div class="skm-alan">
-              <label class="skm-lbl">Alış fiyatı</label>
+              <label class="skm-lbl">Alış fiyatı <small>(${p._ustBirimAd||p.tabanBirim} başına)</small></label>
               <div class="skm-input-suf">
                 <input class="skm-input" id="skmAlisFiyat" type="number" inputmode="decimal" value="${esc(p.alisFiyat)}" placeholder="—" oninput="stokModalFiyatOzet()">
                 <span class="skm-suf">₺</span>
@@ -20436,12 +20469,13 @@ function stokModalCiz(){
             <button class="skm-kdv-btn${!p.alisKdvDahil?' on':''}" onclick="stokModalKdvMod('alis',false)">KDV Hariç</button>
             <button class="skm-kdv-btn${p.alisKdvDahil?' on':''}" onclick="stokModalKdvMod('alis',true)">KDV Dahil</button>
           </div>
+          ${p._ustBirimAd?`<div class="skm-taban-fiyat" id="skmAlisTabanSatir">🔒 Alt birim: <strong id="skmAlisTaban">—</strong> / ${p.tabanBirim} <small>(otomatik)</small></div>`:''}
         </div>
         <div class="skm-fiyat-blok">
           <div class="skm-fiyat-etiket">💰 Bayilere satış (benden alınan)</div>
           <div class="skm-satir2">
             <div class="skm-alan">
-              <label class="skm-lbl">Bayi satış fiyatı</label>
+              <label class="skm-lbl">Bayi satış fiyatı <small>(${p._ustBirimAd||p.tabanBirim} başına)</small></label>
               <div class="skm-input-suf">
                 <input class="skm-input" id="skmSatisFiyat" type="number" inputmode="decimal" value="${esc(p.satisFiyat)}" placeholder="—" oninput="stokModalFiyatOzet()">
                 <span class="skm-suf">₺</span>
@@ -20459,6 +20493,7 @@ function stokModalCiz(){
             <button class="skm-kdv-btn${!p.satisKdvDahil?' on':''}" onclick="stokModalKdvMod('satis',false)">KDV Hariç</button>
             <button class="skm-kdv-btn${p.satisKdvDahil?' on':''}" onclick="stokModalKdvMod('satis',true)">KDV Dahil</button>
           </div>
+          ${p._ustBirimAd?`<div class="skm-taban-fiyat" id="skmSatisTabanSatir">🔒 Alt birim: <strong id="skmSatisTaban">—</strong> / ${p.tabanBirim} <small>(otomatik)</small></div>`:''}
         </div>
         <div class="skm-ambalaj-ozet" id="skmFiyatOzet">${stokFiyatOzet(p)}</div>
       </div>
@@ -20482,6 +20517,13 @@ function stokModalCiz(){
     </div>
   </div>`;
   mdl.classList.add("on");
+  // üst birim modunda alt birim (taban) fiyatını ilk açılışta göster
+  if(p._ustCarpan && p._ustCarpan>1){
+    const _sy=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
+    const _af=_sy(p.alisFiyat), _sf=_sy(p.satisFiyat);
+    const _at=document.getElementById("skmAlisTaban"); if(_at) _at.textContent = _af>0?(_af/p._ustCarpan).toFixed(4)+" ₺":"—";
+    const _st=document.getElementById("skmSatisTaban"); if(_st) _st.textContent = _sf>0?(_sf/p._ustCarpan).toFixed(4)+" ₺":"—";
+  }
   // saklanan scroll pozisyonunu geri yükle (yeniden çizim başa atmasın).
   // innerHTML sonrası tarayıcı layout'u bitirmeden scrollTop atanırsa etkisiz kalır;
   // bu yüzden layout sonrasına (rAF) erteliyoruz ve anlık da bir kez deniyoruz.
@@ -21248,7 +21290,7 @@ function faturaKalemModalCiz(){
         <span>📦 <strong>${s.ad}</strong> <small>(taban: ${u.tabanBirim})</small></span>
         <button class="fk-degistir" onclick="fatKalemUrunSec('')">değiştir</button>
       </div>
-      <div class="ykm-etiket">Alım birimi${cokSeviye?" · kasa / koli / "+u.tabanBirim:""}</div>
+      <div class="ykm-etiket">Alım birimi${cokSeviye?" · "+secenekler.map(o=>o.birim).join(" / "):""}</div>
       <div class="skm-birim-grid" style="margin-bottom:${secCarpan>1?'10px':'14px'}">
         ${secenekler.map(o=>`<button class="skm-birim-chip${p.girisBirim===o.birim?' on':''}" onclick="fatKalemBirim('${o.birim.replace(/'/g,"\\'")}')">${o.tip==="taban"?o.birim:"📦 "+o.birim}</button>`).join("")}
       </div>
@@ -21388,10 +21430,8 @@ function bayiFiyatListeHtml(){
       <span class="bf-ad">Stok Kartı</span>
       <span class="bf-mik">Stok</span>
       <span class="bf-kdv">KDV</span>
-      <span class="bf-alis">Alış birim (KDV'li)</span>
-      <span class="bf-alis-ust">Alış üst birim</span>
-      <span class="bf-satis">Satış birim (KDV dahil)</span>
-      <span class="bf-satis-ust">Satış üst birim</span>
+      <span class="bf-alis">Alış Fiyatı (KDV dahil)</span>
+      <span class="bf-satis">Satış Fiyatı (KDV dahil)</span>
       <span class="bf-durum">Satışa</span>
       <span class="bf-islem"></span>
     </div>`;
@@ -21403,22 +21443,20 @@ function bayiFiyatListeHtml(){
       const u = uomAl(s);
       genelAlis += mevcut*d.alisDahil;
       genelSatis += mevcut*d.satisDahil;
-      // taban + üst birim (KDV dahil) — alış siyah, satış kırmızı
-      const alisTaban = d.alisDahil;
-      const satisTaban = d.satisDahil;
+      // ÜST BİRİM (kutu/paket) fiyatları — KDV dahil. Ambalaj yoksa taban birim.
       const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
       const ustCarpan = ustSeviye ? uomTabanCarpani(u, 0) : 1;
-      const alisUst = alisTaban * ustCarpan;
-      const satisUst = satisTaban * ustCarpan;
-      const ustEt = ustSeviye ? `/ ${ustSeviye.ad} (${ustCarpan} ${u.tabanBirim})` : "";
+      const ustBirimAd = ustSeviye ? ustSeviye.ad : u.tabanBirim;
+      const alisUst = d.alisDahil * ustCarpan;    // KDV dahil üst birim alış
+      const satisUst = d.satisDahil * ustCarpan;  // KDV dahil üst birim satış
+      // Stok üst birim cinsinden gösterilir
+      const stokGoster = uomGoster(u, mevcut);
       html += `<div class="bfiyat-satir bfiyat-a2">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${uomGoster(u, mevcut)}</span></span>
+        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
         <span class="bf-kdv">%${d.alisKdv}</span>
-        <span class="bf-alis">${alisTaban>0?alisTaban.toFixed(2)+' ₺':'—'}<br><small class="bf-birim-et">/ ${u.tabanBirim}</small></span>
-        <span class="bf-alis-ust">${(ustSeviye&&alisUst>0)?`${alisUst.toFixed(2)} ₺<br><small class="bf-birim-et">${ustEt}</small>`:`<span style="color:var(--ink-3)">—</span>`}</span>
-        <span class="bf-satis">${satisVar?satisTaban.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+u.tabanBirim+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
-        <span class="bf-satis-ust">${(ustSeviye&&satisVar&&satisUst>0)?`${satisUst.toFixed(2)} ₺<br><small class="bf-birim-et">${ustEt}</small>`:`<span style="color:var(--ink-3)">—</span>`}</span>
+        <span class="bf-alis">${alisUst>0?alisUst.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis">${(satisVar&&satisUst>0)?satisUst.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-durum"><button class="bf-durum-btn ${acik?'acik':'kapali'}" onclick="bayiSatisDurum('${kod.replace(/'/g,"\\'")}')">${acik?'✓ Açık':'✕ Kapalı'}</button></span>
         <span class="bf-islem"><button class="bayi-mini" onclick="stokKartDuzenle('${kod.replace(/'/g,"\\'")}')">✏️</button></span>
       </div>`;
@@ -21451,27 +21489,25 @@ function bayiFiyatExcel(){
   let genelAlis=0, genelSatis=0, satirlar="";
   katSira.forEach(kat=>{
     const liste=gruplar[kat].sort((a,b)=>a[1].ad.localeCompare(b[1].ad,"tr"));
-    satirlar+=`<tr><td class="altbaslik" colspan="9">${E(kat)}</td></tr>`;
+    satirlar+=`<tr><td class="altbaslik" colspan="7">${E(kat)}</td></tr>`;
     liste.forEach(([kod,s])=>{
       const d=stokFiyatDetay(kod), mevcut=s.mevcut||0, acik=s.aktif!==false;
       const u=uomAl(s);
       const ustSeviye=u.seviyeler.length?u.seviyeler[0]:null;
       const ustCarpan=ustSeviye?uomTabanCarpani(u,0):1;
       const alisUst=d.alisDahil*ustCarpan, satisUst=d.satisDahil*ustCarpan;
-      const ustBilgi=ustSeviye?`${ustSeviye.ad}=${ustCarpan} ${u.tabanBirim}`:'';
-      const alisUstEt=ustSeviye?`${alisUst.toFixed(2)} (${ustBilgi})`:'—';
-      const satisUstEt=(ustSeviye&&d.satisDahil>0)?`${satisUst.toFixed(2)} (${ustBilgi})`:'—';
+      const ustBirimAd=ustSeviye?ustSeviye.ad:u.tabanBirim;
       const tAlis=mevcut*d.alisDahil, tSatis=mevcut*d.satisDahil;
       genelAlis+=tAlis; genelSatis+=tSatis;
-      satirlar+=`<tr><td>${E(s.ad)}</td><td class="sayi">${uomGoster(u,mevcut)}</td><td class="sayi">%${d.alisKdv}</td><td class="tut">${d.alisDahil>0?d.alisDahil.toFixed(2)+' / '+u.tabanBirim:'—'}</td><td class="tut">${E(alisUstEt)}</td><td class="tut">${d.satisDahil>0?d.satisDahil.toFixed(2)+' / '+u.tabanBirim:'—'}</td><td class="tut">${E(satisUstEt)}</td><td>${acik?'Açık':'Kapalı'}</td><td class="tut">${tSatis>0?tSatis.toFixed(2):'—'}</td></tr>`;
+      satirlar+=`<tr><td>${E(s.ad)}</td><td class="sayi">${uomGoster(u,mevcut)+' '+ustBirimAd}</td><td class="sayi">%${d.alisKdv}</td><td class="tut">${alisUst>0?alisUst.toFixed(2)+' / '+ustBirimAd:'—'}</td><td class="tut">${(d.satisDahil>0&&satisUst>0)?satisUst.toFixed(2)+' / '+ustBirimAd:'—'}</td><td>${acik?'Açık':'Kapalı'}</td><td class="tut">${tSatis>0?tSatis.toFixed(2):'—'}</td></tr>`;
     });
   });
   const tablo=`<table>
-    <tr><td class="baslik" colspan="9">MİNİPAN · Bayi Satış Fiyatları</td></tr>
-    <tr><th>Stok Kartı</th><th>Stok</th><th>KDV</th><th>Alış birim (KDV'li)</th><th>Alış üst birim</th><th>Satış birim (KDV dahil)</th><th>Satış üst birim</th><th>Satışa</th><th>Satış Değeri</th></tr>
+    <tr><td class="baslik" colspan="7">MİNİPAN · Bayi Satış Fiyatları</td></tr>
+    <tr><th>Stok Kartı</th><th>Stok</th><th>KDV</th><th>Alış Fiyatı (KDV dahil, üst birim)</th><th>Satış Fiyatı (KDV dahil, üst birim)</th><th>Satışa</th><th>Satış Değeri</th></tr>
     ${satirlar}
-    <tr><td colspan="8" style="text-align:right"><b>Toplam alış değeri (KDV'li)</b></td><td class="tut">${genelAlis.toFixed(2)}</td></tr>
-    <tr><td colspan="8" style="text-align:right"><b>Toplam satış değeri (KDV dahil)</b></td><td class="tut">${genelSatis.toFixed(2)}</td></tr>
+    <tr><td colspan="6" style="text-align:right"><b>Toplam alış değeri (KDV'li)</b></td><td class="tut">${genelAlis.toFixed(2)}</td></tr>
+    <tr><td colspan="6" style="text-align:right"><b>Toplam satış değeri (KDV dahil)</b></td><td class="tut">${genelSatis.toFixed(2)}</td></tr>
   </table>`;
   _xlsIndir("MINIPAN_Bayi_Fiyatlari_"+new Date().toISOString().slice(0,10), tablo);
   note("📥 Bayi fiyatları indirildi");
@@ -21927,19 +21963,22 @@ function bayiSipGovdeHtml(){
       <span class="bf-mik">Ana Bayi Stok</span>
       <span class="bf-donus">Birim Dönüşümü</span>
       <span class="bf-kdv">KDV</span>
-      <span class="bf-satis">Satış birim (KDV dahil)</span>
-      <span class="bf-satis-ust">Satış üst birim</span>
+      <span class="bf-satis">Satış Fiyatı (KDV dahil)</span>
       <span class="bf-islem"></span>
     </div>`;
     kartlar.forEach(([kod,s])=>{
       const d = stokFiyatDetay(kod);
-      const f = d.satisDahil||0;         // taban birim satış fiyatı (KDV dahil), alış gizli
+      const f = d.satisDahil||0;         // taban birim satış fiyatı (KDV dahil)
       const merkezVar = s.mevcut||0;
       const u = uomAl(s);
       const donusAcik = uomDonusumAcik(u);
-      // üst birim satış fiyatı = taban × üst çarpan
+      // üst birim (kutu/paket) — stok kartında işli olan en üst birim
       const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
       const ustCarpan = ustSeviye ? uomTabanCarpani(u, 0) : 1;
+      const ustBirimAd = ustSeviye ? ustSeviye.ad : u.tabanBirim;   // ambalaj yoksa taban birim
+      // Ana bayi stok: üst birim cinsinden (örn "1 kutu", kısmi ise "1 kutu + 3 adet")
+      const stokGoster = uomGoster(u, merkezVar);
+      // Satış fiyatı: sadece KDV dahil ÜST BİRİM fiyatı
       const satisUst = f * ustCarpan;
       const sepette = state.bayiSepet.find(x=>x.kod===kod);
       let birimGoster = "";
@@ -21952,11 +21991,10 @@ function bayiSipGovdeHtml(){
       }
       html += `<div class="bfiyat-satir bsip-satir">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${uomGoster(u, merkezVar)}</span></span>
-        <span class="bf-donus">${donusAcik?`<span class="bf-donus-metin">${donusAcik}</span>`:`<span class="bf-donus-yok">tek birim (${u.tabanBirim})</span>`}</span>
+        <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
+        <span class="bf-donus">${donusAcik?`<span class="bf-donus-metin">${donusAcik}</span>`:`<span class="bf-donus-yok">tek birim (${ustBirimAd})</span>`}</span>
         <span class="bf-kdv">%${d.satisKdv}</span>
-        <span class="bf-satis">${f>0?f.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+u.tabanBirim+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
-        <span class="bf-satis-ust">${(ustSeviye&&satisUst>0)?`${satisUst.toFixed(2)} ₺<br><small class="bf-birim-et">/ ${ustSeviye.ad} (${ustCarpan} ${u.tabanBirim})</small>`:`<span style="color:var(--ink-3)">—</span>`}</span>
+        <span class="bf-satis">${satisUst>0?satisUst.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-islem">
           ${sepette
             ? `<span class="bayi-sepette-rozet">✓ ${birimGoster}</span><button class="bayi-mini bsip-ekle" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`
@@ -22158,28 +22196,29 @@ function bayiSiparisModalCiz(){
   const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
   const m=sayi(p.miktar);
   const secenekler=uomGirisSeviyeleri(u);   // tüm seviyeler + taban
-  if(!p.birim) p.birim=secenekler[0].ad;
-  const secObj=secenekler.find(o=>o.ad===p.birim)||secenekler[secenekler.length-1];
-  const carpan=secObj.carpan;
+  // ŞUBE SADECE EN ÜST BİRİMLE sipariş verir (alt birim yok)
+  const enUst = secenekler[0];              // en üst seviye (koli/kutu) — yoksa taban
+  p.birim = enUst.ad;                        // birim daima en üst
+  const carpan = enUst.carpan;
+  const ustFiyat = f*carpan;                 // en üst birim satış fiyatı (KDV dahil)
   const tb=m*carpan;
-  // canlı özet
+  // canlı özet: en üst birim → taban karşılığı + tutar
   let ozet = carpan>1
-    ? `${m>0?m:"—"} ${p.birim} = <strong>${tb.toLocaleString("tr")} ${taban}</strong>${f>0?` · ≈ ${(tb*f).toFixed(2)} ₺`:""}`
+    ? `${m>0?m:"—"} ${p.birim} = <strong>${tb.toLocaleString("tr")} ${taban}</strong>${ustFiyat>0?` · ≈ ${(m*ustFiyat).toFixed(2)} ₺`:""}`
     : `${m>0?m:"—"} ${taban}${f>0?` · ≈ ${(m*f).toFixed(2)} ₺`:""}`;
   const esc=v=>String(v==null?"":v).replace(/"/g,'&quot;');
   mdl.innerHTML=`<div class="ypm-ic">
     <div class="ypm-head">
       <div class="ypm-head-ic">🛒</div>
       <div class="ypm-head-baslik">${s.ad}</div>
-      <div class="ypm-head-alt">Merkez stok: ${uomGoster(u, s.mevcut||0)}${f>0?` · ${f.toFixed(2)} ₺/${taban}`:""}</div>
+      <div class="ypm-head-alt">Merkez stok: ${uomGoster(u, s.mevcut||0)}${ustFiyat>0?` · ${ustFiyat.toFixed(2)} ₺/${p.birim}`:""}</div>
     </div>
     <div class="ypm-body">
-      ${secenekler.length>1?`
+      ${carpan>1?`<div class="ykm-etiket">Sipariş birimi</div>
+      <div class="bsm-birim-sabit">📦 ${p.birim} <small>(1 ${p.birim} = ${carpan.toLocaleString("tr")} ${taban})</small></div>`:`
       <div class="ykm-etiket">Sipariş birimi</div>
-      <div class="skm-birim-grid" style="margin-bottom:18px">
-        ${secenekler.map(o=>`<button class="skm-birim-chip${p.birim===o.ad?' on':''}" onclick="bayiSiparisModalBirim('${o.ad.replace(/'/g,"\\'")}')">${o.carpan>1?"📦 "+o.ad+" (1="+o.carpan.toLocaleString("tr")+" "+taban+")":o.ad}</button>`).join("")}
-      </div>`:""}
-      <div class="ykm-etiket">Miktar (${p.birim})</div>
+      <div class="bsm-birim-sabit">${p.birim}</div>`}
+      <div class="ykm-etiket" style="margin-top:16px">Miktar (${p.birim})</div>
       <input class="ypm-input" id="bsmMiktar" type="number" inputmode="decimal" value="${esc(p.miktar)}"
         placeholder="0" oninput="bayiSiparisModalCanli()">
       <div class="skm-ambalaj-ozet" id="bsmOzet" style="margin-top:12px">🛒 ${ozet}</div>
