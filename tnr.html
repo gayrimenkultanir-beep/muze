@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanır Emlak Gayrimenkul</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --deep:#0A3D62; --deep2:#0F4C75; --sand:#DCEAF2; --stone:#F2F8FB;
+    --olive:#2D6E8E; --clay:#F2A65A; --ink:#122436; --ink-soft:#4C6072;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Work Sans',sans-serif;background:transparent;color:var(--ink);line-height:1.5;position:relative;}
+
+  /* ---- Hareketli sahil arka planı (Kuşadası Long Beach) ---- */
+  .bg-scene{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--deep);}
+  .bg-scene img{position:absolute;top:-6%;left:-6%;width:112%;height:112%;object-fit:cover;animation:kenburns 42s ease-in-out infinite alternate;}
+  .bg-scene::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(10,61,98,.55) 0%, rgba(10,61,98,.72) 55%, rgba(10,61,98,.85) 100%);}
+  @keyframes kenburns{0%{transform:scale(1) translate(0,0);}100%{transform:scale(1.14) translate(-2.5%,-2%);}}
+
+  /* ---- Açılış splash: tanıtım videosu + sloganlar ---- */
+  .splash-intro{position:fixed;inset:0;z-index:1000;background:#04141f;overflow:hidden;display:flex;align-items:center;justify-content:center;opacity:1;visibility:visible;transition:opacity .8s ease, visibility 0s linear 0s;}
+  .splash-intro.closing{opacity:0;visibility:hidden;transition:opacity .8s ease, visibility 0s linear .8s;pointer-events:none;}
+  .splash-slides{position:absolute;inset:0;overflow:hidden;background:var(--deep);}
+  .splash-slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1);transition:opacity 1.4s ease;animation:splashKenburns 9s ease-in-out infinite alternate;}
+  .splash-slide.active{opacity:1;z-index:1;}
+  @keyframes splashKenburns{0%{transform:scale(1);}100%{transform:scale(1.1);}}
+  .splash-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg, rgba(9,26,41,.62) 0%, rgba(9,26,41,.35) 42%, rgba(9,26,41,.82) 100%);}
+  .splash-content{position:relative;z-index:2;text-align:center;color:var(--stone);padding:0 6%;max-width:820px;}
+  .splash-eyebrow{font-family:'IBM Plex Mono',monospace;letter-spacing:.16em;text-transform:uppercase;font-size:.8rem;color:var(--sand);opacity:0;animation:splashFade .8s ease .3s forwards;}
+  .splash-title{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2rem,5vw,3.6rem);line-height:1.16;margin:16px 0 20px;}
+  .splash-title .line{display:block;opacity:0;transform:translateY(26px);animation:splashLine .9s cubic-bezier(.16,1,.3,1) forwards;}
+  .splash-title .line:nth-child(1){animation-delay:.55s;}
+  .splash-title .line:nth-child(2){animation-delay:.85s;color:var(--clay);font-style:italic;}
+  .splash-sub{font-size:1.02rem;color:var(--sand);opacity:0;max-width:560px;margin:0 auto 32px;line-height:1.65;animation:splashFade .8s ease 1.25s forwards;}
+  .splash-enter{opacity:0;background:var(--clay);color:var(--stone);border:none;padding:14px 36px;font-weight:600;font-size:.95rem;letter-spacing:.03em;cursor:pointer;border-radius:2px;animation:splashFade .8s ease 1.55s forwards;transition:background .2s, transform .2s;font-family:'Work Sans',sans-serif;}
+  .splash-enter:hover{background:#fff;color:var(--deep);transform:translateY(-2px);}
+  .splash-skip{position:absolute;top:24px;right:5%;z-index:3;background:rgba(246,243,234,.12);border:1px solid rgba(246,243,234,.35);color:var(--stone);padding:8px 16px;border-radius:20px;font-size:.78rem;cursor:pointer;opacity:0;animation:splashFade .6s ease 1.8s forwards;font-family:'Work Sans',sans-serif;}
+  .splash-skip:hover{background:rgba(246,243,234,.25);}
+  @keyframes splashFade{from{opacity:0;}to{opacity:1;}}
+  @keyframes splashLine{to{opacity:1;transform:translateY(0);}}
+  @media (max-width:640px){
+    .splash-title{font-size:1.65rem;}
+    .splash-sub{font-size:.88rem;}
+    .splash-skip{top:16px;}
+  }
+
+  h1,h2,h3,.display{font-family:'Fraunces',serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;letter-spacing:0.02em;}
+
+  header{display:flex;justify-content:space-between;align-items:center;padding:22px 5%;background:rgba(242,248,251,.85);backdrop-filter:blur(10px);border-bottom:1px solid rgba(16,35,54,0.1);position:sticky;top:0;z-index:50;}
+  .logo{font-family:'Fraunces',serif;font-weight:600;font-size:1.3rem;color:var(--deep);}
+  .logo span{color:var(--clay);font-style:italic;}
+  nav a{margin-left:28px;text-decoration:none;color:var(--ink);font-size:0.92rem;font-weight:500;}
+  nav a:hover{color:var(--clay);}
+  nav a.nav-map-btn{background:var(--deep);color:var(--stone);padding:9px 16px;border-radius:20px;font-size:.84rem;font-weight:600;transition:background .2s;}
+  nav a.nav-map-btn:hover{background:var(--clay);color:var(--stone);}
+
+  .banner{position:relative;height:60vh;min-height:400px;overflow:hidden;background:var(--deep);}
+  .banner-track{display:flex;height:100%;transition:transform .8s cubic-bezier(.65,0,.35,1);}
+  .banner-slide{min-width:100%;height:100%;position:relative;display:flex;align-items:flex-end;}
+  .banner-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .banner-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,61,98,.88) 0%,rgba(10,61,98,.15) 55%,rgba(10,61,98,.05) 100%);}
+  .banner-info{position:relative;z-index:2;padding:44px 5%;color:var(--stone);max-width:620px;}
+  .banner-info .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.76rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sand);opacity:.85;}
+  .banner-info h2{font-size:2.2rem;font-weight:600;margin:8px 0 6px;}
+  .banner-price{display:inline-flex;align-items:center;gap:8px;background:var(--clay);color:var(--stone);padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:.88rem;clip-path:polygon(0 0,100% 0,94% 50%,100% 100%,0 100%);padding-right:26px;}
+  .banner-dots{position:absolute;bottom:20px;right:5%;z-index:3;display:flex;gap:8px;}
+  .banner-dots button{width:24px;height:3px;border:none;background:rgba(246,243,234,.35);cursor:pointer;padding:0;}
+  .banner-dots button.active{background:var(--sand);}
+  .banner-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;background:rgba(246,243,234,.15);border:1px solid rgba(246,243,234,.4);color:var(--stone);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.05rem;display:flex;align-items:center;justify-content:center;}
+  .banner-arrow:hover{background:rgba(246,243,234,.28);}
+  .banner-arrow.prev{left:5%;} .banner-arrow.next{right:5%;}
+
+  .filterbar{display:flex;flex-wrap:wrap;gap:14px;background:rgba(10,61,98,.72);backdrop-filter:blur(8px);padding:18px 5%;}
+  .filterbar .field{display:flex;flex-direction:column;gap:4px;}
+  .filterbar label{font-size:.72rem;color:var(--sand);font-family:'IBM Plex Mono',monospace;letter-spacing:.05em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
+  .filterbar input,.filterbar select{background:var(--stone);border:none;padding:9px 10px;font-family:'Work Sans';font-size:.9rem;color:var(--ink);min-width:140px;}
+  .filterbar button.search-btn{align-self:flex-end;background:var(--clay);color:var(--stone);border:none;padding:10px 22px;font-weight:600;cursor:pointer;font-size:.9rem;}
+
+  /* ---- Fiyat aralığı: çift uçlu kaydırma çubuğu ---- */
+  .price-field{min-width:230px;}
+  .price-range-vals{font-family:'IBM Plex Mono',monospace;color:var(--clay);font-size:.72rem;text-transform:none;letter-spacing:0;font-weight:600;}
+  .price-range{position:relative;height:30px;display:flex;align-items:center;margin-top:2px;}
+  .price-range-track{position:absolute;left:0;right:0;height:4px;border-radius:2px;background:rgba(242,248,251,.3);}
+  .price-range-fill{position:absolute;height:4px;border-radius:2px;background:var(--clay);}
+  .price-range input[type="range"]{-webkit-appearance:none;appearance:none;position:absolute;left:0;right:0;width:100%;height:30px;margin:0;background:transparent;pointer-events:none;min-width:0;}
+  .price-range input[type="range"]::-webkit-slider-runnable-track{-webkit-appearance:none;background:transparent;height:30px;}
+  .price-range input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;pointer-events:auto;width:16px;height:16px;border-radius:50%;background:var(--stone);border:3px solid var(--clay);cursor:pointer;margin-top:0;box-shadow:0 1px 3px rgba(0,0,0,.35);}
+  .price-range input[type="range"]::-moz-range-track{background:transparent;height:30px;}
+  .price-range input[type="range"]::-moz-range-thumb{pointer-events:auto;width:14px;height:14px;border-radius:50%;background:var(--stone);border:3px solid var(--clay);cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.35);}
+
+  .section-head{padding:52px 5% 20px;display:flex;justify-content:space-between;align-items:baseline;}
+  .section-head h3{font-size:1.6rem;font-weight:600;color:var(--stone);text-shadow:0 2px 10px rgba(10,30,48,.5);}
+  .section-head .count{font-family:'IBM Plex Mono',monospace;font-size:.85rem;color:var(--sand);}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:28px;padding:0 5% 70px;align-items:stretch;}
+
+  /* ---- Kart (kabartmalı / neumorphic) ---- */
+  .card{background:var(--stone);border:none;border-radius:18px;overflow:hidden;display:flex;flex-direction:column;
+    box-shadow:9px 9px 18px rgba(6,26,42,.28), -7px -7px 16px rgba(255,255,255,.55);
+    transition:box-shadow .25s ease, transform .25s ease;}
+  .card:hover{transform:translateY(-3px);box-shadow:5px 5px 12px rgba(6,26,42,.32), -5px -5px 12px rgba(255,255,255,.5);}
+  .card-slider{height:200px;position:relative;overflow:hidden;background:var(--sand);cursor:pointer;flex-shrink:0;}
+  .card-slider img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease;}
+  .card-slider img.active{opacity:1;}
+  .card-loc{position:absolute;top:12px;left:12px;background:rgba(10,61,98,.85);color:var(--stone);font-family:'IBM Plex Mono',monospace;font-size:.72rem;padding:4px 9px;z-index:2;}
+  .card-badges{position:absolute;top:12px;right:12px;z-index:2;display:flex;flex-direction:column;gap:6px;align-items:flex-end;}
+  .card-badge{font-size:.66rem;font-weight:700;color:#fff;padding:4px 10px;border-radius:3px;letter-spacing:.02em;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.28);}
+  .card-badge.badge-promo{background:#F2A65A;}
+  .card-badge.badge-kids{background:#3E8E5C;}
+  .card-badge.badge-pet{background:#0A3D62;}
+  .card-badge.badge-safe{background:#2D6E8E;}
+  .card-badge.badge-sea{background:#1E6FA8;}
+  .card-slide-btn{position:absolute;top:50%;transform:translateY(-50%);z-index:3;background:rgba(10,61,98,.55);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+  .card-slider:hover .card-slide-btn{opacity:1;}
+  .card-slide-btn.prev{left:8px;} .card-slide-btn.next{right:8px;}
+  .card-slide-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:4px;z-index:2;}
+  .card-slide-dots span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.5);}
+  .card-slide-dots span.active{background:#fff;}
+  .card-body{padding:16px 18px 6px;cursor:pointer;flex:1;display:flex;flex-direction:column;}
+  .card-body h4{font-family:'Fraunces',serif;font-size:1.13rem;font-weight:600;color:var(--deep);margin-bottom:5px;}
+  .card-feats{font-size:.81rem;color:var(--ink-soft);margin-bottom:8px;}
+  .card-desc{
+    font-size:.82rem;color:var(--ink-soft);margin-bottom:12px;line-height:1.45;
+    text-align:justify;
+    height:calc(1.45em * 3); /* metin uzunluğundan bağımsız sabit alan (3 satır) */
+    overflow:hidden;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;
+  }
+  .card-foot{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;margin-top:auto;}
+  .card-price{font-family:'IBM Plex Mono',monospace;font-size:.94rem;color:var(--clay);font-weight:500;}
+  .card-price small{color:var(--ink-soft);font-weight:400;font-size:.71rem;display:block;}
+  .card-wa{width:33px;height:33px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;text-decoration:none;}
+  .card-map{position:relative;border-top:1px solid rgba(16,35,54,.08);flex-shrink:0;}
+  .card-map iframe{width:100%;height:110px;border:0;display:block;filter:saturate(.85);pointer-events:none;}
+  .card-map-overlay{position:absolute;inset:0;cursor:pointer;background:transparent;z-index:1;}
+  .card-map-tag{position:absolute;bottom:8px;left:10px;background:rgba(10,61,98,.88);color:var(--sand);font-family:'IBM Plex Mono',monospace;font-size:.7rem;padding:3px 8px;z-index:2;pointer-events:none;}
+
+  /* ---- Harita pini (isim + yol tarifi) ---- */
+  .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-100%);z-index:3;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
+  .map-pin .pin-label{background:var(--deep);color:var(--stone);font-family:'IBM Plex Mono',monospace;font-size:.68rem;padding:3px 9px;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.25);}
+  .map-pin .pin-label:hover{background:var(--clay);}
+  .map-pin .pin-dot{width:10px;height:10px;background:var(--clay);transform:rotate(45deg);margin-top:-1px;box-shadow:0 2px 4px rgba(0,0,0,.25);}
+  .fd-map-block .map-pin .pin-label{font-size:.78rem;padding:5px 12px;}
+  .fd-map-block .map-pin .pin-dot{width:13px;height:13px;}
+  .maplightbox .map-pin .pin-label{font-size:.85rem;padding:6px 14px;}
+
+  /* ---- TAM SAYFA DETAY ---- */
+  .fulldetail{position:fixed;inset:0;background:var(--stone);z-index:200;display:none;overflow-y:auto;}
+  .fulldetail.open{display:block;}
+  .fulldetail::before{content:"";position:fixed;inset:0;z-index:0;
+    background:url('https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=1800') center/cover no-repeat;}
+  .fulldetail::after{content:"";position:fixed;inset:0;z-index:0;
+    background:linear-gradient(180deg, rgba(220,234,242,.15) 0%, rgba(220,234,242,.3) 45%, rgba(220,234,242,.4) 100%);}
+  .fd-topbar,.fd-gallery,.fd-video,.fd-body{position:relative;z-index:1;}
+  .fd-topbar{position:sticky;top:0;z-index:5;display:flex;justify-content:space-between;align-items:center;padding:18px 5%;background:var(--deep);color:var(--stone);}
+  .fd-topbar h2{font-size:1.5rem;font-weight:600;}
+  .fd-topbar .loc{font-family:'IBM Plex Mono',monospace;font-size:.78rem;color:var(--sand);opacity:.85;margin-top:2px;}
+  .fd-close{background:rgba(246,243,234,.15);border:1px solid rgba(246,243,234,.4);color:var(--stone);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:1.1rem;}
+
+  .fd-gallery{position:relative;height:56vh;min-height:360px;background:#000;}
+  .fd-gallery-track{display:flex;height:100%;transition:transform .5s ease;}
+  .fd-gallery-track img{min-width:100%;height:100%;object-fit:cover;cursor:zoom-in;}
+  .fd-gallery .banner-arrow{width:44px;height:44px;}
+  .fd-gallery-dots{position:absolute;bottom:16px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:3;}
+  .fd-gallery-dots span{width:22px;height:3px;background:rgba(255,255,255,.4);cursor:pointer;}
+  .fd-gallery-dots span.active{background:#fff;}
+  .fd-zoom-hint{position:absolute;bottom:16px;right:5%;color:rgba(255,255,255,.75);font-family:'IBM Plex Mono',monospace;font-size:.72rem;z-index:3;}
+
+  .fd-video{padding:30px 5% 34px;max-width:1100px;margin:32px auto 0;background:rgba(242,248,251,.95);border-radius:18px;box-shadow:0 14px 34px rgba(6,26,42,.22);}
+  .fd-video h3, .fd-section h3{font-family:'Fraunces',serif;font-size:1.25rem;color:var(--deep);margin-bottom:14px;}
+  .fd-video-wrap{position:relative;aspect-ratio:16/9;background:#000;cursor:zoom-in;overflow:hidden;}
+  .fd-video-wrap img{width:100%;height:100%;object-fit:cover;opacity:.7;}
+  .fd-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .fd-play span{width:64px;height:64px;border-radius:50%;background:rgba(10,61,98,.85);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+
+  .fd-body{max-width:1100px;margin:24px auto 80px;padding:36px 5%;display:grid;grid-template-columns:1.55fr 1fr;gap:40px;align-items:start;background:rgba(242,248,251,.95);border-radius:18px;box-shadow:0 14px 34px rgba(6,26,42,.22);}
+  .fd-desc{font-size:.95rem;color:var(--ink-soft);margin-bottom:26px;line-height:1.65;text-align:justify;}
+  .fd-map-block{margin-bottom:30px;position:relative;}
+  .fd-map-block .map-wrap{position:relative;}
+  .fd-map-block iframe{width:100%;height:240px;border:0;pointer-events:none;}
+  .fd-map-block .card-map-overlay{cursor:pointer;}
+  .fd-map-meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:10px;font-size:.82rem;color:var(--ink-soft);}
+  .fd-map-meta b{color:var(--deep);}
+
+  .fd-spec-cat{margin-bottom:26px;}
+  .fd-spec-cat h4{font-family:'IBM Plex Mono',monospace;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--clay);margin-bottom:10px;border-bottom:1px solid rgba(16,35,54,.12);padding-bottom:6px;}
+  .fd-spec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 16px;}
+  .fd-spec-item{font-size:.86rem;color:var(--ink);display:flex;justify-content:space-between;gap:8px;padding:4px 0;}
+  .fd-spec-item .v{color:var(--olive);font-weight:600;font-family:'IBM Plex Mono',monospace;font-size:.8rem;}
+
+  .fd-side{position:sticky;top:96px;}
+  .price-table{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:.87rem;}
+  .price-table th{font-family:'IBM Plex Mono',monospace;text-align:left;font-size:.7rem;text-transform:uppercase;color:var(--ink-soft);padding-bottom:8px;border-bottom:1px solid rgba(16,35,54,.15);}
+  .price-table td{padding:8px 0;border-bottom:1px solid rgba(16,35,54,.08);}
+  .price-table td.mono{color:var(--clay);font-family:'IBM Plex Mono',monospace;}
+
+  .booking-box{background:var(--stone);border:none;border-radius:16px;padding:22px;box-shadow:7px 7px 14px rgba(6,26,42,.14), -6px -6px 14px rgba(255,255,255,.6);}
+  .booking-box h4{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--deep);margin-bottom:12px;}
+  .booking-box label{display:block;font-size:.73rem;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin:10px 0 5px;}
+  .booking-box input,.booking-box textarea{width:100%;padding:9px 10px;border:1px solid rgba(16,35,54,.2);font-family:'Work Sans';font-size:.9rem;background:var(--stone);}
+  .booking-box textarea{resize:vertical;min-height:56px;}
+  .booking-box .btn-row{display:flex;gap:10px;margin-top:16px;}
+  .btn-form-open{width:100%;margin-top:10px;background:var(--clay);color:#fff;border:none;padding:12px;font-weight:600;cursor:pointer;font-size:.85rem;}
+  .btn-form-open:hover{background:#e0954f;}
+
+  /* ---- Rezervasyon Talep Formu (ultra tasarım overlay) ---- */
+  .resform{position:fixed;inset:0;background:var(--stone);z-index:250;display:none;overflow-y:auto;}
+  .resform.open{display:block;}
+  .resform-body{max-width:920px;margin:0 auto;padding:30px 5% 90px;}
+  .rf-section{background:#fff;border-radius:14px;padding:22px 24px;margin-bottom:22px;box-shadow:6px 6px 14px rgba(6,26,42,.12),-6px -6px 14px rgba(255,255,255,.6);}
+  .rf-section h3{font-family:'Fraunces',serif;color:var(--deep);font-size:1.15rem;margin-bottom:14px;border-bottom:1px solid rgba(16,35,54,.1);padding-bottom:8px;}
+  .rf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+  .rf-field label{display:block;font-size:.72rem;font-family:'IBM Plex Mono',monospace;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px;}
+  .rf-field input,.rf-field select{width:100%;padding:8px 10px;border:1px solid rgba(16,35,54,.2);background:var(--stone);font-family:'Work Sans';font-size:.88rem;}
+  .rf-table{width:100%;border-collapse:collapse;font-size:.8rem;}
+  .rf-table th{background:var(--deep);color:var(--stone);padding:7px 6px;font-family:'IBM Plex Mono',monospace;font-size:.66rem;text-transform:uppercase;text-align:left;}
+  .rf-table td{padding:5px;border-bottom:1px solid rgba(16,35,54,.08);}
+  .rf-table input,.rf-table select{width:100%;padding:5px 6px;border:1px solid rgba(16,35,54,.15);font-size:.78rem;background:var(--stone);}
+  .rf-price-box{background:var(--deep);color:var(--stone);}
+  .rf-price-box .row{display:flex;justify-content:space-between;padding:5px 0;font-size:.88rem;border-bottom:1px solid rgba(255,255,255,.12);}
+  .rf-price-box .row.total{font-weight:700;font-size:1.05rem;color:var(--clay);border-bottom:none;padding-top:10px;}
+  .rf-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;}
+  .rf-actions button{flex:1;min-width:180px;padding:14px;border:none;font-weight:600;cursor:pointer;font-size:.85rem;border-radius:8px;}
+  .rf-btn-pdf{background:var(--clay);color:#fff;}
+  .rf-btn-mail{background:var(--deep);color:#fff;}
+  .rf-btn-wa{background:#25D366;color:#fff;}
+  .rf-note{font-size:.76rem;color:var(--ink-soft);margin-top:12px;line-height:1.55;}
+  .rf-terms-box{max-height:260px;overflow-y:auto;background:var(--stone);border:1px solid rgba(16,35,54,.15);border-radius:8px;padding:16px 18px;font-size:.8rem;line-height:1.6;text-align:justify;color:var(--ink-soft);}
+  .rf-terms-box p{margin-bottom:9px;}
+  .rf-terms-box b{color:var(--deep);}
+  .rf-accept-row{display:flex;align-items:flex-start;gap:10px;margin-top:14px;font-size:.85rem;color:var(--ink);cursor:pointer;}
+  .rf-accept-row input{margin-top:3px;width:16px;height:16px;flex-shrink:0;cursor:pointer;}
+
+  /* ---- PDF sayfaları (ultra tasarım, A4, çok sayfalı) ---- */
+  #pdfRoot{position:absolute;top:0;left:0;width:210mm;z-index:9998;background:#fff;}
+  #pdfLoading{position:fixed;inset:0;z-index:9999;background:rgba(10,61,98,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;gap:10px;}
+  #pdfLoading .spin{width:34px;height:34px;border:3px solid rgba(255,255,255,.3);border-top-color:#F2A65A;border-radius:50%;animation:spin 0.8s linear infinite;}
+  #pdfLoading span{font-family:'IBM Plex Mono',monospace;font-size:.85rem;letter-spacing:.03em;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .pdf-page{width:210mm;min-height:297mm;background:#fff;position:relative;padding:18mm 16mm 22mm 26mm;font-family:'Work Sans',sans-serif;color:#122436;page-break-after:always;box-sizing:border-box;}
+  .pdf-page:last-child{page-break-after:auto;}
+  .pdf-band{position:absolute;top:0;left:0;width:14mm;height:100%;background:linear-gradient(180deg,#0A3D62,#0F4C75);}
+  .pdf-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8mm;}
+  .pdf-header .brand{font-family:'Fraunces',serif;font-size:19pt;color:#0A3D62;font-weight:600;}
+  .pdf-header .brand span{color:#F2A65A;font-style:italic;}
+  .pdf-header .doc-meta{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:8pt;color:#4C6072;line-height:1.6;}
+  .pdf-title{font-family:'Fraunces',serif;font-size:21pt;color:#0A3D62;margin:4mm 0 2mm;}
+  .pdf-sub{font-family:'IBM Plex Mono',monospace;font-size:9pt;color:#F2A65A;margin-bottom:6mm;text-transform:uppercase;letter-spacing:.05em;}
+  .pdf-photo{width:100%;height:58mm;object-fit:cover;border-radius:2mm;margin-bottom:6mm;display:block;}
+  .pdf-kv{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm 8mm;font-size:9.5pt;margin-bottom:6mm;}
+  .pdf-kv div{display:flex;justify-content:space-between;border-bottom:0.2mm dotted rgba(16,35,54,.3);padding:1.2mm 0;}
+  .pdf-kv b{color:#0A3D62;}
+  .pdf-price{background:#F2F8FB;border:0.3mm solid #0A3D62;padding:5mm 6mm;border-radius:2mm;}
+  .pdf-price .row{display:flex;justify-content:space-between;font-size:10pt;padding:1.4mm 0;}
+  .pdf-price .row.total{font-weight:700;font-size:12pt;color:#0A3D62;border-top:0.3mm solid #0A3D62;margin-top:2mm;padding-top:2.5mm;}
+  .pdf-section-title{font-family:'Fraunces',serif;font-size:14pt;color:#0A3D62;margin:0 0 5mm;border-bottom:0.3mm solid #F2A65A;padding-bottom:2mm;}
+  .pdf-clauses{font-size:8.3pt;line-height:1.55;text-align:justify;}
+  .pdf-clauses ol{padding-left:5mm;}
+  .pdf-clauses li{margin-bottom:2.6mm;}
+  .pdf-bank{font-size:9pt;font-family:'IBM Plex Mono',monospace;line-height:1.75;background:#F2F8FB;padding:5mm 6mm;border-radius:2mm;margin-bottom:7mm;}
+  .pdf-guest-table{width:100%;border-collapse:collapse;font-size:8pt;margin-bottom:7mm;}
+  .pdf-guest-table th{background:#0A3D62;color:#fff;padding:2mm;text-align:left;font-family:'IBM Plex Mono',monospace;font-size:7pt;text-transform:uppercase;}
+  .pdf-guest-table td{padding:2mm;border-bottom:0.2mm solid rgba(16,35,54,.15);}
+  .pdf-sign{display:flex;justify-content:space-between;margin-top:12mm;font-size:9pt;}
+  .pdf-sign div{width:45%;border-top:0.3mm solid #122436;padding-top:2mm;text-align:center;color:#4C6072;}
+  .pdf-footer{position:absolute;bottom:8mm;left:26mm;right:16mm;display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:7pt;color:#4C6072;border-top:0.2mm solid rgba(16,35,54,.15);padding-top:2mm;}
+  .btn-primary{flex:1;background:var(--deep);color:var(--stone);border:none;padding:12px;font-weight:600;cursor:pointer;font-size:.85rem;}
+  .btn-primary:hover{background:var(--deep2);}
+  .btn-wa{flex:1;background:#25D366;color:#fff;border:none;padding:12px;font-weight:600;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;gap:6px;text-decoration:none;}
+
+  /* ---- Takvim ---- */
+  .cal-box{background:var(--stone);border:none;border-radius:14px;padding:14px;box-shadow:inset 3px 3px 8px rgba(6,26,42,.1), inset -3px -3px 8px rgba(255,255,255,.6);}
+  .cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .cal-head button{background:#fff;border:1px solid rgba(16,35,54,.2);width:26px;height:26px;cursor:pointer;font-size:.9rem;}
+  .cal-title{font-family:'IBM Plex Mono',monospace;font-size:.82rem;color:var(--deep);font-weight:600;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+  .cal-dow{font-size:.63rem;text-align:center;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;padding-bottom:4px;}
+  .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:.76rem;cursor:pointer;background:#fff;border:1px solid rgba(16,35,54,.06);}
+  .cal-day.empty{visibility:hidden;}
+  .cal-day.past{color:#ccc;cursor:not-allowed;background:transparent;border-color:transparent;}
+  .cal-day.occ{background:#f1d9cf;color:var(--clay);text-decoration:line-through;cursor:not-allowed;}
+  .cal-day.sel{background:var(--deep);color:#fff;font-weight:600;}
+  .cal-day.range{background:var(--sand);}
+  .cal-legend{display:flex;gap:12px;margin-top:10px;font-size:.68rem;color:var(--ink-soft);flex-wrap:wrap;}
+  .cal-legend span{display:inline-flex;align-items:center;gap:4px;}
+  .cal-legend i{width:9px;height:9px;display:inline-block;}
+  .cal-summary{margin:12px 0 4px;padding:10px 12px;background:var(--stone);border:1px dashed rgba(16,35,54,.2);font-size:.83rem;line-height:1.5;}
+
+  /* ---- Lightbox ---- */
+  .lightbox{position:fixed;inset:0;background:rgba(6,14,12,.95);z-index:300;display:none;align-items:center;justify-content:center;}
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:90vw;max-height:82vh;object-fit:contain;}
+  .lightbox iframe{width:min(90vw,1100px);height:min(62vw,620px);border:0;}
+  .lightbox-close{position:absolute;top:24px;right:5%;background:rgba(246,243,234,.15);border:1px solid rgba(246,243,234,.4);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:1.15rem;}
+  .lightbox .banner-arrow{width:44px;height:44px;}
+
+  .maplightbox{position:fixed;inset:0;background:rgba(6,14,12,.85);z-index:300;display:none;align-items:center;justify-content:center;padding:6vh 5%;}
+  .maplightbox.open{display:flex;}
+  .maplightbox .map-wrap{position:relative;width:100%;height:100%;}
+  .maplightbox iframe{width:100%;height:100%;border:0;background:#fff;pointer-events:none;}
+  .maplightbox .lightbox-close{top:24px;right:5%;}
+
+  /* ---- Tüm villalar / interaktif harita ---- */
+  .allmap-overlay{position:fixed;inset:0;background:var(--stone);z-index:400;display:none;flex-direction:column;}
+  .allmap-overlay.open{display:flex;}
+  .allmap-topbar{display:flex;justify-content:space-between;align-items:center;padding:16px 5%;background:var(--deep);color:var(--stone);flex-shrink:0;}
+  .allmap-topbar h2{font-family:'Fraunces',serif;font-size:1.25rem;font-weight:600;}
+  .allmap-topbar .loc{font-family:'IBM Plex Mono',monospace;font-size:.76rem;color:var(--sand);opacity:.85;margin-top:2px;}
+  .allmap-canvas{flex:1;position:relative;}
+  .allmap-canvas .leaflet-container{width:100%;height:100%;background:var(--sand);font-family:'Work Sans',sans-serif;}
+  .vmi-pin{width:26px;height:34px;position:relative;}
+  .vmi-pin::before{content:"";position:absolute;top:0;left:3px;width:20px;height:20px;background:var(--deep);border:2px solid var(--stone);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 2px 6px rgba(0,0,0,.4);}
+  .vmi-pin::after{content:"";position:absolute;top:7px;left:10px;width:6px;height:6px;background:var(--clay);border-radius:50%;}
+  .villa-popup{width:220px;}
+  .villa-popup img{width:100%;height:120px;object-fit:cover;display:block;}
+  .villa-popup .vp-body{padding:10px 12px 12px;}
+  .villa-popup h4{font-family:'Fraunces',serif;font-size:.95rem;font-weight:600;color:var(--deep);margin-bottom:3px;}
+  .villa-popup .vp-loc{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--ink-soft);margin-bottom:7px;}
+  .villa-popup .vp-price{font-family:'IBM Plex Mono',monospace;font-size:.86rem;color:var(--clay);font-weight:600;margin-bottom:9px;}
+  .villa-popup .vp-price small{color:var(--ink-soft);font-weight:400;font-size:.72rem;}
+  .villa-popup button{width:100%;background:var(--deep);color:var(--stone);border:none;padding:8px;font-size:.8rem;font-weight:600;cursor:pointer;border-radius:4px;font-family:'Work Sans',sans-serif;}
+  .villa-popup button:hover{background:var(--clay);}
+  .leaflet-popup-content-wrapper{padding:0;border-radius:8px;overflow:hidden;}
+  .leaflet-popup-content{margin:0 !important;width:220px !important;}
+  .leaflet-popup-tip-container{margin-top:-1px;}
+
+  footer{background:rgba(10,61,98,.82);backdrop-filter:blur(8px);color:var(--sand);padding:40px 5%;font-size:.85rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+  footer .logo{color:var(--stone);}
+
+  @media(max-width:820px){
+    .fd-body{grid-template-columns:1fr;}
+    .fd-side{position:static;}
+    .banner-info h2{font-size:1.7rem;}
+    .filterbar{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<div class="splash-intro" id="splashIntro">
+  <div class="splash-slides" id="splashSlides">
+    <div class="splash-slide active" style="background-image:url('https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1600')"></div>
+    <div class="splash-slide" style="background-image:url('https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1600')"></div>
+    <div class="splash-slide" style="background-image:url('https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1600')"></div>
+    <div class="splash-slide" style="background-image:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600')"></div>
+    <div class="splash-slide" style="background-image:url('https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1600')"></div>
+  </div>
+  <div class="splash-overlay"></div>
+  <button class="splash-skip" id="splashSkipBtn" type="button">Atla ✕</button>
+  <div class="splash-content">
+    <div class="splash-eyebrow">Tanır Emlak Gayrimenkul</div>
+    <h1 class="splash-title">
+      <span class="line">Ege'nin Saklı Koylarında,</span>
+      <span class="line">Size Özel Bir Villa</span>
+    </h1>
+    <p class="splash-sub">Zeytinlikler, masmavi sular ve unutulmaz gün batımları arasında hayalinizdeki tatili keşfedin.</p>
+    <button class="splash-enter" id="splashEnterBtn" type="button">Siteye Gir</button>
+  </div>
+</div>
+<script>
+  (function(){
+    document.body.style.overflow='hidden';
+
+    function closeSplash(){
+      clearTimeout(autoTimer);
+      clearInterval(slideTimer);
+      var el = document.getElementById('splashIntro');
+      if(!el || el.classList.contains('closing')) return;
+      el.classList.add('closing');
+      document.body.style.overflow='';
+      setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 850);
+    }
+    window.closeSplash = closeSplash;
+
+    var enterBtn = document.getElementById('splashEnterBtn');
+    var skipBtn = document.getElementById('splashSkipBtn');
+    if(enterBtn) enterBtn.addEventListener('click', closeSplash);
+    if(skipBtn) skipBtn.addEventListener('click', closeSplash);
+
+    var autoTimer = setTimeout(closeSplash, 10000);
+
+    // Ana sayfadaki banner gibi görsel slaytları döndür
+    var slides = document.querySelectorAll('#splashSlides .splash-slide');
+    var sIdx = 0;
+    var slideTimer = setInterval(function(){
+      slides[sIdx].classList.remove('active');
+      sIdx = (sIdx + 1) % slides.length;
+      slides[sIdx].classList.add('active');
+    }, 4000);
+  })();
+</script>
+
+<div class="bg-scene"><img src="https://images.unsplash.com/photo-1601581875309-fafbf2d3ed3a?w=1800" alt="Kuşadası Long Beach"></div>
+
+<header>
+  <div class="logo">Tanır <span>Emlak Gayrimenkul</span></div>
+  <nav><a href="#grid">Villalar</a><a href="#">Hakkımızda</a><a href="#">İletişim</a><a href="#" class="nav-map-btn" onclick="openAllMap();return false;">📍 Haritada Gör</a></nav>
+</header>
+
+<div class="banner">
+  <div class="banner-track" id="bannerTrack"></div>
+  <button class="banner-arrow prev" onclick="shiftBanner(-1)">‹</button>
+  <button class="banner-arrow next" onclick="shiftBanner(1)">›</button>
+  <div class="banner-dots" id="bannerDots"></div>
+</div>
+
+<div class="filterbar">
+  <div class="field"><label>Bölge</label><select id="fRegion" onchange="onRegionChange()"><option value="">Tüm Bölgeler</option></select></div>
+  <div class="field"><label>Konum</label><select id="fKonum"><option value="">Tüm Konumlar</option></select></div>
+  <div class="field"><label>Giriş</label><input type="date" id="fStart"></div>
+  <div class="field"><label>Çıkış</label><input type="date" id="fEnd"></div>
+  <div class="field"><label>Misafir</label><input type="number" id="fGuest" min="1" placeholder="2"></div>
+  <div class="field price-field">
+    <label>Fiyat Aralığı / Gece <span class="price-range-vals" id="priceRangeVals"></span></label>
+    <div class="price-range">
+      <div class="price-range-track"><div class="price-range-fill" id="priceFill"></div></div>
+      <input type="range" id="fPriceMin" class="range-min" oninput="onPriceRangeInput()">
+      <input type="range" id="fPriceMax" class="range-max" oninput="onPriceRangeInput()">
+    </div>
+  </div>
+  <button class="search-btn" onclick="renderGrid()">Ara</button>
+</div>
+
+<div class="section-head" id="grid"><h3>Tüm Villalar</h3><span class="count mono" id="gridCount"></span></div>
+<div class="grid" id="villaGrid"></div>
+
+<div class="fulldetail" id="fullDetail"></div>
+<div class="lightbox" id="lightbox"></div>
+<div class="maplightbox" id="mapLightbox"></div>
+
+<div class="allmap-overlay" id="allMapOverlay">
+  <div class="allmap-topbar">
+    <div>
+      <h2>Tüm Villalar</h2>
+      <div class="loc">Konumları görmek için iğnelere tıklayın</div>
+    </div>
+    <button class="fd-close" onclick="closeAllMap()">✕</button>
+  </div>
+  <div class="allmap-canvas" id="allMapCanvas"></div>
+</div>
+<div class="resform" id="resForm"></div>
+
+<footer>
+  <div class="logo">Tanır <span style="color:var(--clay);font-style:italic;">Emlak Gayrimenkul</span></div>
+  <div>WhatsApp: +90 541 292 08 22 &nbsp;·&nbsp; info@tanirvilla.com</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+const TR_MONTHS = ["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"];
+const TR_DAYS = ["Pzt","Sal","Çar","Per","Cum","Cmt","Paz"];
+
+/* =========================================================
+   MOCK VERİ — canlı sürümde Google Sheets'ten (Apps Script
+   Web App) çekilecek. "seasons" dönemsel TL/EUR fiyatları,
+   "occupied" dolu günleri temsil eder (Sheets "Müsaitlik"
+   sayfasından beslenecek).
+   ========================================================= */
+const VILLAS = [
+  {
+    id:"v1", name:"Zeytin Bahçesi Villa", location:"Kuşadası, Soğucak", featured:true,
+    lat:37.8283, lng:27.2167, distanceToSea:0.4,
+    shortDesc:"Zeytinlikler arasında, denize yürüme mesafesinde, geniş infinity havuzlu bir aile villası. Sabahları kahvaltı terasından zeytin ağaçlarının arasından deniz görünür, akşamları ise havuz kenarında gün batımı izlenir. Sessiz ve korunaklı bir sokakta, şehir gürültüsünden uzak ama markete ve restorana yürüme mesafesinde konumlanmıştır.",
+    guests:8, bedrooms:4, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200",
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200",
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200",
+      "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:8500, eur:230},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:14000, eur:390},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:9500, eur:260}
+    ],
+    occupied:["2026-07-08","2026-07-09","2026-07-10","2026-07-11","2026-08-01","2026-08-02","2026-08-03"],
+    cleaningFee:{tl:2800, eur:78}, deposit:{tl:14000, eur:392},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","250 m²"],["Wi‑Fi","✓"],["TV","✓"],["Klima","5"]],
+      "Konum":[["Denize Yakın","✓"],["Doğa İçinde / Sakin","✓"],["Korunaklı Konum","✓"]],
+      "Yataklar & Uyuma Düzeni":[["Çift Kişilik Yataklar","3"],["Tek Kişilik Yataklar","2"],["Yataklı Kanepeler","1"],["Bebek Yatakları","1"],["Kaliteli Yatak","✓"],["Nevresim Dahil","✓"],["Alerji Dostu Nevresim","✓"]],
+      "Odalar":[["Salon Sayısı","1"],["Yatak Odası","4"],["Çift Kişilik Oda","3"],["Banyo","4"],["WC","5"]],
+      "Mutfak & Ev":[["Bulaşık Makinesi","✓"],["Buzdolabı","✓"],["Mikrodalga","✓"],["Çamaşır Makinesi","✓"],["Fırınlı Ocak","✓"],["Ütü","✓"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Infinity Havuz","✓"],["Havuz Derinliği","1.45 m"],["Havuz Boyutu","72 m²"],["Çocuk Havuzu","✓"],["Özel Bahçe","✓"],["Arsa Büyüklüğü","500 m²"],["Teras","✓"],["Balkon","✓"],["Şezlong","3"],["Barbekü / Izgara","✓"],["Deniz Manzarası","✓"]],
+      "Güvenlik & Sağlık":[["Duman Dedektörü","✓"],["Yangın Söndürücü","✓"],["İlk Yardım Seti","✓"],["Hastane","5 km"],["Eczane","3 km"]],
+      "Ek Hizmetler":[["VIP Havalimanı Transferi","✓"],["Araç Kiralama Hizmeti","✓"],["Yat Kiralama / Tekne Turu","✓"],["Balayı / Romantik Organizasyon","✓"]],
+      "Çevre":[["Plaja","0.4 km"],["Markete","0.3 km"],["Restorana","0.5 km"],["Havalimanına","79 km"]],
+      "Ev Kuralları & Koşullar":[["Çocuk Dostu","✓"],["Evcil Hayvan Kabul Edilir","✓"],["Sessizlik Saatleri","01:00–08:00"],["Maksimum Misafir Sayısı","8"],["Kimlik Gerekli","✓"]]
+    }
+  },
+  {
+    id:"v2", name:"Mavi Yalı", location:"Çeşme, Alaçatı",
+    lat:38.2833, lng:26.3667, distanceToSea:0.15,
+    shortDesc:"Alaçatı'nın rüzgarına açık, tasarım mobilyalarla döşenmiş, sahile birkaç dakika mesafede şık bir villa. Taş duvarları ve beyaz cepheleriyle bölgenin mimari dokusunu yansıtır, geniş bahçesinde akşam yemekleri için özel bir alan bulunur.",
+    guests:6, bedrooms:3, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1200",
+      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:7200, eur:195},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:12500, eur:340},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:8200, eur:220}
+    ],
+    occupied:["2026-07-15","2026-07-16","2026-07-17","2026-08-10","2026-08-11"],
+    cleaningFee:{tl:2200, eur:60}, deposit:{tl:11000, eur:300},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","180 m²"],["Wi‑Fi","✓"],["TV","✓"],["Klima","3"]],
+      "Konum":[["Denize Yakın","✓"],["Şehir Kenarı","✓"]],
+      "Odalar":[["Yatak Odası","3"],["Banyo","3"],["WC","3"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Özel Bahçe","✓"],["Teras","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.15 km"],["Restorana","0.3 km"]],
+      "Ev Kuralları & Koşullar":[["Evcil Hayvan Kabul Edilir","✓"],["Maksimum Misafir Sayısı","6"]]
+    }
+  },
+  {
+    id:"v3", name:"Çam Yuvası", location:"Fethiye, Ölüdeniz", featured:true,
+    lat:36.5502, lng:29.1167, distanceToSea:0.8,
+    shortDesc:"Ölüdeniz'e tepeden bakan, panoramik manzaralı, geniş aile ve arkadaş grupları için tasarlanmış villa. Çam ormanının içinde, jakuzili terası ve barbekü alanıyla kalabalık gruplar için özellikle tercih edilir.",
+    guests:10, bedrooms:5, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200",
+      "https://images.unsplash.com/photo-1616137466211-f939a420be84?w=1200",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:11000, eur:300},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:18500, eur:510},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:12500, eur:340}
+    ],
+    occupied:["2026-07-20","2026-07-21","2026-07-22","2026-07-23","2026-08-14"],
+    cleaningFee:{tl:3400, eur:95}, deposit:{tl:17000, eur:470},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","310 m²"],["Wi‑Fi","✓"],["Klima","6"]],
+      "Konum":[["Dağlık Bölge","✓"],["Doğa İçinde","✓"]],
+      "Odalar":[["Yatak Odası","5"],["Banyo","5"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Jakuzi","✓"],["Barbekü / Izgara","✓"],["Dağ Manzarası","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.8 km"],["Havalimanına","52 km"]]
+    }
+  },
+  {
+    id:"v4", name:"Badem Çiçeği Villa", location:"Datça",
+    lat:36.7278, lng:27.6889, distanceToSea:0.3,
+    shortDesc:"Datça'nın sakin koylarına yakın, çift kişilik butik kaçamaklar için ideal küçük bir villa. Badem ağaçlarıyla çevrili bahçesi ve gün batımına bakan terasıyla huzurlu bir kaçış sunar.",
+    guests:4, bedrooms:2, pool:false,
+    images:[
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200",
+      "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200",
+      "https://images.unsplash.com/photo-1521783988139-89397d761dce?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:5200, eur:140},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:9200, eur:250},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:6100, eur:165}
+    ],
+    occupied:["2026-07-04","2026-07-05","2026-08-20","2026-08-21"],
+    cleaningFee:{tl:1600, eur:45}, deposit:{tl:8000, eur:220},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","110 m²"],["Wi‑Fi","✓"]],
+      "Konum":[["Kırsal Alan","✓"],["Korunaklı Konum","✓"]],
+      "Odalar":[["Yatak Odası","2"],["Banyo","2"]],
+      "Dış Alan & Havuz":[["Teras","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.3 km"],["Markete","1.2 km"]]
+    }
+  },
+  {
+    id:"v5", name:"Gümüş Koy Villa", location:"Bodrum, Gümüşlük",
+    lat:37.0455, lng:27.2440, distanceToSea:0.25,
+    shortDesc:"Gümüşlük'ün gün batımıyla ünlü koyuna yürüme mesafesinde, beyaz taş mimarisiyle klasik Bodrum dokusunu yansıtan bir villa. Taş duvarlı bahçesinde zeytin ve nar ağaçları, geniş havuz terasında ise açık deniz manzarası bulunur.",
+    guests:8, bedrooms:4, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:9800, eur:265},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:16500, eur:450},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:11000, eur:300}
+    ],
+    occupied:["2026-07-05","2026-07-06","2026-07-07","2026-08-12","2026-08-13"],
+    cleaningFee:{tl:3000, eur:82}, deposit:{tl:15000, eur:410},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","230 m²"],["Wi‑Fi","✓"],["TV","✓"],["Klima","4"]],
+      "Konum":[["Denize Yakın","✓"],["Korunaklı Konum","✓"]],
+      "Odalar":[["Yatak Odası","4"],["Banyo","4"],["WC","4"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Teras","✓"],["Şezlong","4"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.25 km"],["Restorana","0.4 km"],["Havalimanına","38 km"]],
+      "Ev Kuralları & Koşullar":[["Çocuk Dostu","✓"],["Maksimum Misafir Sayısı","8"]]
+    }
+  },
+  {
+    id:"v6", name:"Rüzgar Tepe Villa", location:"Marmaris, İçmeler", featured:true,
+    lat:36.7972, lng:28.2569, distanceToSea:0.5,
+    shortDesc:"İçmeler koyuna hakim bir tepede, geniş infinity havuzu ve panoramik terasıyla kalabalık gruplara uygun ferah bir villa. Çam kokulu bahçesinde barbekü alanı, akşamları ise koyun ışıklarını izleyebileceğiniz bir gözlem terası bulunur.",
+    guests:10, bedrooms:5, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200",
+      "https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1200",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:10500, eur:285},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:17800, eur:485},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:12000, eur:325}
+    ],
+    occupied:["2026-07-18","2026-07-19","2026-08-05","2026-08-06","2026-08-07"],
+    cleaningFee:{tl:3200, eur:88}, deposit:{tl:16000, eur:440},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","320 m²"],["Wi‑Fi","✓"],["TV","✓"],["Klima","6"]],
+      "Konum":[["Doğa İçinde / Sakin","✓"],["Korunaklı Konum","✓"]],
+      "Odalar":[["Yatak Odası","5"],["Banyo","5"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Infinity Havuz","✓"],["Barbekü / Izgara","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.5 km"],["Havalimanına","95 km"]],
+      "Ev Kuralları & Koşullar":[["Evcil Hayvan Kabul Edilir","✓"],["Maksimum Misafir Sayısı","10"]]
+    }
+  },
+  {
+    id:"v7", name:"Lavanta Taş Ev", location:"Kalkan, Kaş",
+    lat:36.2667, lng:29.4167, distanceToSea:0.35,
+    shortDesc:"Kalkan'ın taş sokaklarına yakın, geleneksel mimariyi modern konforla birleştiren butik bir villa. Lavanta kokulu bahçesi ve gün batımına bakan terasıyla çiftler ve küçük aileler için sakin bir tatil vaat eder.",
+    guests:5, bedrooms:3, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1200",
+      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200",
+      "https://images.unsplash.com/photo-1521783988139-89397d761dce?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:8200, eur:220},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:14200, eur:385},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:9600, eur:260}
+    ],
+    occupied:["2026-07-11","2026-07-12","2026-08-22","2026-08-23"],
+    cleaningFee:{tl:2600, eur:72}, deposit:{tl:13000, eur:355},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","190 m²"],["Wi‑Fi","✓"],["Klima","3"]],
+      "Konum":[["Denize Yakın","✓"],["Şehir Kenarı","✓"]],
+      "Odalar":[["Yatak Odası","3"],["Banyo","3"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Teras","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.35 km"],["Restorana","0.2 km"]]
+    }
+  },
+  {
+    id:"v8", name:"Palmiye Körfez Villa", location:"Antalya, Kemer",
+    lat:36.6019, lng:30.5592, distanceToSea:0.2,
+    shortDesc:"Kemer'in palmiyelerle çevrili körfezinde, sahile birkaç adım mesafede geniş bir villa. Dağların denize kavuştuğu manzarası ve özel iskelesiyle tekne sahipleri ve deniz tutkunları için özellikle uygundur.",
+    guests:9, bedrooms:4, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200",
+      "https://images.unsplash.com/photo-1616137466211-f939a420be84?w=1200",
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:10800, eur:295},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:18200, eur:495},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:12400, eur:335}
+    ],
+    occupied:["2026-07-02","2026-07-03","2026-08-16","2026-08-17","2026-08-18"],
+    cleaningFee:{tl:3300, eur:90}, deposit:{tl:16500, eur:450},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","280 m²"],["Wi‑Fi","✓"],["TV","✓"],["Klima","5"]],
+      "Konum":[["Denize Yakın","✓"],["Korunaklı Konum","✓"]],
+      "Odalar":[["Yatak Odası","4"],["Banyo","4"],["WC","4"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["İskele","✓"],["Barbekü / Izgara","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.2 km"],["Havalimanına","45 km"]],
+      "Ev Kuralları & Koşullar":[["Çocuk Dostu","✓"],["Evcil Hayvan Kabul Edilir","✓"],["Maksimum Misafir Sayısı","9"]]
+    }
+  },
+  {
+    id:"v9", name:"Zeytin Yolu Köşk", location:"Foça, İzmir",
+    lat:38.6714, lng:26.7554, distanceToSea:0.4,
+    shortDesc:"Foça'nın sakin zeytinlik yollarında, taş cepheli ve beyaz kepenkli klasik bir Ege köşkü. Geniş avlusu ve serin gölgelikleriyle özellikle yaz sıcağında huzurlu bir kaçamak arayan aileler için idealdir.",
+    guests:6, bedrooms:3, pool:false,
+    images:[
+      "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200",
+      "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200",
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:6400, eur:172},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:10800, eur:295},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:7300, eur:198}
+    ],
+    occupied:["2026-07-09","2026-07-10","2026-08-04"],
+    cleaningFee:{tl:1900, eur:52}, deposit:{tl:9500, eur:260},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","160 m²"],["Wi‑Fi","✓"]],
+      "Konum":[["Kırsal Alan","✓"],["Doğa İçinde / Sakin","✓"]],
+      "Odalar":[["Yatak Odası","3"],["Banyo","2"]],
+      "Dış Alan & Havuz":[["Özel Bahçe","✓"],["Teras","✓"]],
+      "Çevre":[["Plaja","0.4 km"],["Markete","0.6 km"]]
+    }
+  },
+  {
+    id:"v10", name:"Şeytan Sofrası Villa", location:"Ayvalık, Sarımsaklı",
+    lat:39.3183, lng:26.6959, distanceToSea:0.3,
+    shortDesc:"Ayvalık'ın adalarla süslü kıyısına bakan, geniş bahçeli ve kalabalık gruplara uygun ferah bir villa. Sarımsaklı plajına yakınlığı ve sakin sokağıyla hem aile tatilleri hem de arkadaş buluşmaları için tercih edilir.",
+    guests:7, bedrooms:4, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200",
+      "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200",
+      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:7600, eur:205},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:13000, eur:355},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:8700, eur:235}
+    ],
+    occupied:["2026-07-14","2026-07-15","2026-08-09","2026-08-10"],
+    cleaningFee:{tl:2400, eur:66}, deposit:{tl:12000, eur:330},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","210 m²"],["Wi‑Fi","✓"],["TV","✓"],["Klima","4"]],
+      "Konum":[["Denize Yakın","✓"],["Korunaklı Konum","✓"]],
+      "Odalar":[["Yatak Odası","4"],["Banyo","3"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Özel Bahçe","✓"],["Barbekü / Izgara","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.3 km"],["Restorana","0.5 km"]],
+      "Ev Kuralları & Koşullar":[["Çocuk Dostu","✓"],["Maksimum Misafir Sayısı","7"]]
+    }
+  },
+  {
+    id:"v11", name:"Bağ Evi Bozcaada", location:"Bozcaada, Çanakkale",
+    lat:39.8306, lng:26.0722, distanceToSea:0.6,
+    shortDesc:"Bozcaada'nın üzüm bağları arasında, adanın sakin dokusunu yansıtan taş bir bağ evi. Rüzgar değirmenlerine ve kaleye yakın konumu, bisikletle gezilebilecek küçük ölçekli bir tatil deneyimi sunar.",
+    guests:4, bedrooms:2, pool:false,
+    images:[
+      "https://images.unsplash.com/photo-1521783988139-89397d761dce?w=1200",
+      "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=1200",
+      "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:5600, eur:150},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:9600, eur:260},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:6400, eur:172}
+    ],
+    occupied:["2026-07-25","2026-07-26","2026-08-19"],
+    cleaningFee:{tl:1700, eur:47}, deposit:{tl:8500, eur:232},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","120 m²"],["Wi‑Fi","✓"]],
+      "Konum":[["Kırsal Alan","✓"],["Doğa İçinde / Sakin","✓"]],
+      "Odalar":[["Yatak Odası","2"],["Banyo","2"]],
+      "Dış Alan & Havuz":[["Özel Bahçe","✓"],["Teras","✓"]],
+      "Çevre":[["Plaja","0.6 km"],["Markete","0.5 km"]]
+    }
+  },
+  {
+    id:"v12", name:"Ege Rüzgarı Villa", location:"Gökçeada, Aydıncık",
+    lat:40.1799, lng:25.8994, distanceToSea:0.45,
+    shortDesc:"Gökçeada'nın el değmemiş koylarına yakın, dalga sporları ve doğa yürüyüşleri için ideal bir konumda ferah bir villa. Geniş terası ve doğal taş dokusuyla adanın rüzgarlı, özgür atmosferini yansıtır.",
+    guests:6, bedrooms:3, pool:true,
+    images:[
+      "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200",
+      "https://images.unsplash.com/photo-1602343168117-bb8ffe3e2e9f?w=1200",
+      "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1200"
+    ],
+    youtubeId:"ScMzIvxBSi4",
+    whatsapp:"905412920822",
+    seasons:[
+      {label:"01 Haz – 30 Haz", start:"2026-06-01", end:"2026-06-30", tl:7000, eur:190},
+      {label:"01 Tem – 20 Ağu", start:"2026-07-01", end:"2026-08-20", tl:11800, eur:320},
+      {label:"21 Ağu – 15 Eyl", start:"2026-08-21", end:"2026-09-15", tl:7900, eur:213}
+    ],
+    occupied:["2026-07-28","2026-07-29","2026-08-24","2026-08-25"],
+    cleaningFee:{tl:2100, eur:58}, deposit:{tl:10500, eur:288},
+    specs:{
+      "İç Özellikler":[["Yaşam alanı","200 m²"],["Wi‑Fi","✓"],["Klima","3"]],
+      "Konum":[["Doğa İçinde / Sakin","✓"],["Korunaklı Konum","✓"]],
+      "Odalar":[["Yatak Odası","3"],["Banyo","3"]],
+      "Dış Alan & Havuz":[["Özel Havuz","✓"],["Teras","✓"],["Deniz Manzarası","✓"]],
+      "Çevre":[["Plaja","0.45 km"],["Restorana","0.7 km"]],
+      "Ev Kuralları & Koşullar":[["Evcil Hayvan Kabul Edilir","✓"],["Maksimum Misafir Sayısı","6"]]
+    }
+  }
+];
+
+/* Google Apps Script Web App URL — Code.gs'i yayınladıktan sonra buraya yapıştırın.
+   Boş/placeholder kaldığı sürece site otomatik olarak eski (manuel) akışa döner. */
+const APPS_SCRIPT_URL = "";
+
+const mapEmbed = (lat,lng,z=14) => `https://www.google.com/maps?q=${lat},${lng}&z=${z}&output=embed`;
+const directionsUrl = (lat,lng) => `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+const pinHtml = (v) => `<div class="map-pin" onclick="event.stopPropagation();window.open(directionsUrl(${v.lat},${v.lng}),'_blank')"><div class="pin-label">${v.name}</div><div class="pin-dot"></div></div>`;
+
+/* ---------------- ANA BANNER ---------------- */
+let bannerIndex = 0;
+function buildBanner(){
+  const track = document.getElementById('bannerTrack');
+  const dots = document.getElementById('bannerDots');
+  track.innerHTML = VILLAS.map(v => `
+    <div class="banner-slide">
+      <img src="${v.images[0]}" alt="${v.name}">
+      <div class="banner-info">
+        <div class="eyebrow">${v.location}</div>
+        <h2>${v.name}</h2>
+        <div class="banner-price">${v.seasons[0].tl.toLocaleString('tr-TR')} ₺ <span style="opacity:.85;font-size:.85em;">(~${v.seasons[0].eur} €)</span> / gece</div>
+      </div>
+    </div>`).join('');
+  dots.innerHTML = VILLAS.map((_,i)=>`<button class="${i===0?'active':''}" onclick="goBanner(${i})"></button>`).join('');
+}
+function goBanner(i){
+  bannerIndex = i;
+  document.getElementById('bannerTrack').style.transform = `translateX(-${i*100}%)`;
+  document.querySelectorAll('.banner-dots button').forEach((b,idx)=>b.classList.toggle('active', idx===i));
+}
+function shiftBanner(dir){
+  let n = bannerIndex + dir;
+  if(n<0) n=VILLAS.length-1; if(n>=VILLAS.length) n=0;
+  goBanner(n);
+}
+setInterval(()=>shiftBanner(1), 5000);
+
+/* ---------------- FİLTRE ---------------- */
+function splitLoc(loc){
+  const parts = loc.split(',').map(s=>s.trim());
+  return {region: parts[0]||'', sub: parts[1]||''};
+}
+
+function buildLocationOptions(){
+  // Bölge listesi
+  const regionSel = document.getElementById('fRegion');
+  [...new Set(VILLAS.map(v=>splitLoc(v.location).region))].sort((a,b)=>a.localeCompare(b,'tr')).forEach(r=>{
+    const o = document.createElement('option'); o.value=r; o.textContent=r; regionSel.appendChild(o);
+  });
+  buildKonumOptions();
+
+  // Fiyat aralığı slider'ı, tüm villaların tüm sezon fiyatlarına göre kurulur
+  const allPrices = VILLAS.flatMap(v => v.seasons.map(s=>s.tl));
+  const lo = Math.floor(Math.min(...allPrices)/500)*500;
+  const hi = Math.ceil(Math.max(...allPrices)/500)*500;
+  const minInp = document.getElementById('fPriceMin');
+  const maxInp = document.getElementById('fPriceMax');
+  [minInp, maxInp].forEach(inp=>{ inp.min=lo; inp.max=hi; inp.step=500; });
+  minInp.value = lo;
+  maxInp.value = hi;
+  updatePriceRangeUI();
+}
+
+function buildKonumOptions(){
+  const region = document.getElementById('fRegion').value;
+  const konumSel = document.getElementById('fKonum');
+  konumSel.innerHTML = '<option value="">Tüm Konumlar</option>';
+  const subs = [...new Set(
+    VILLAS.map(v=>splitLoc(v.location))
+          .filter(s => (!region || s.region===region) && s.sub)
+          .map(s=>s.sub)
+  )].sort((a,b)=>a.localeCompare(b,'tr'));
+  subs.forEach(s=>{
+    const o = document.createElement('option'); o.value=s; o.textContent=s; konumSel.appendChild(o);
+  });
+}
+
+function onRegionChange(){
+  buildKonumOptions();
+}
+
+function updatePriceRangeUI(){
+  const minInp = document.getElementById('fPriceMin');
+  const maxInp = document.getElementById('fPriceMax');
+  const lo = parseFloat(minInp.min), hi = parseFloat(minInp.max);
+  let minV = parseFloat(minInp.value), maxV = parseFloat(maxInp.value);
+  if(minV > maxV){ const t=minV; minV=maxV; maxV=t; minInp.value=minV; maxInp.value=maxV; }
+  const fill = document.getElementById('priceFill');
+  const range = hi - lo || 1;
+  const leftPct = ((minV - lo) / range) * 100;
+  const rightPct = ((maxV - lo) / range) * 100;
+  fill.style.left = leftPct + '%';
+  fill.style.width = (rightPct - leftPct) + '%';
+  document.getElementById('priceRangeVals').textContent =
+    `${minV.toLocaleString('tr-TR')} ₺ – ${maxV.toLocaleString('tr-TR')} ₺`;
+}
+
+function onPriceRangeInput(){
+  updatePriceRangeUI();
+}
+
+/* ---------------- KART GRID + KART İÇİ SLIDER ---------------- */
+const cardSlideState = {};
+const cardAutoIntervals = {};
+function getBadges(v){
+  const flat = {};
+  Object.values(v.specs).forEach(items => items.forEach(([k,val]) => { flat[k] = val; }));
+  const candidates = [
+    v.featured ? {label:'Özel Fırsat', cls:'badge-promo'} : null,
+    flat['Çocuk Dostu']==='✓' ? {label:'Çocuk Dostu', cls:'badge-kids'} : null,
+    flat['Evcil Hayvan Kabul Edilir']==='✓' ? {label:'Evcil Hayvan Kabul Edilir', cls:'badge-pet'} : null,
+    (flat['Korunaklı Konum']==='✓' || flat['Korunaklı']==='✓') ? {label:'Korunaklı', cls:'badge-safe'} : null,
+    flat['Deniz Manzarası']==='✓' ? {label:'Deniz Manzaralı', cls:'badge-sea'} : null
+  ].filter(Boolean);
+  return candidates.slice(0,3);
+}
+function clearCardIntervals(){
+  Object.values(cardAutoIntervals).forEach(clearInterval);
+  for(const k in cardAutoIntervals) delete cardAutoIntervals[k];
+}
+function renderGrid(){
+  clearCardIntervals();
+  const region = document.getElementById('fRegion').value;
+  const konum = document.getElementById('fKonum').value;
+  const minPrice = parseFloat(document.getElementById('fPriceMin').value) || 0;
+  const maxPrice = parseFloat(document.getElementById('fPriceMax').value) || Infinity;
+  const guest = parseInt(document.getElementById('fGuest').value) || 0;
+  const filtered = VILLAS.filter(v => {
+    const {region:vRegion, sub:vSub} = splitLoc(v.location);
+    return (!region || vRegion===region) &&
+      (!konum || vSub===konum) &&
+      (v.guests>=guest) &&
+      (v.seasons[0].tl>=minPrice && v.seasons[0].tl<=maxPrice);
+  });
+
+  document.getElementById('gridCount').textContent = filtered.length + ' villa';
+  document.getElementById('villaGrid').innerHTML = filtered.map(v => {
+    cardSlideState[v.id] = 0;
+    const badges = getBadges(v);
+    return `
+    <div class="card" data-vid="${v.id}">
+      <div class="card-slider" onclick="openDetail('${v.id}')">
+        ${v.images.map((img,i)=>`<img src="${img}" class="${i===0?'active':''}" data-idx="${i}">`).join('')}
+        <div class="card-loc">${v.location}</div>
+        ${badges.length ? `<div class="card-badges">${badges.map(b=>`<span class="card-badge ${b.cls}">${b.label}</span>`).join('')}</div>` : ''}
+        <button class="card-slide-btn prev" onclick="event.stopPropagation();cardSlide('${v.id}',-1)">‹</button>
+        <button class="card-slide-btn next" onclick="event.stopPropagation();cardSlide('${v.id}',1)">›</button>
+        <div class="card-slide-dots">${v.images.map((_,i)=>`<span class="${i===0?'active':''}"></span>`).join('')}</div>
+      </div>
+      <div class="card-body" onclick="openDetail('${v.id}')">
+        <h4>${v.name}</h4>
+        <div class="card-feats">${v.guests} kişilik · ${v.bedrooms} yatak odası ${v.pool?'· Havuz':''}</div>
+        <div class="card-desc">${v.shortDesc}</div>
+        <div class="card-foot">
+          <div class="card-price">${v.seasons[0].tl.toLocaleString('tr-TR')} ₺<small>≈ ${v.seasons[0].eur} € / gece</small></div>
+          <a class="card-wa" href="https://wa.me/${v.whatsapp}?text=${encodeURIComponent('Merhaba, '+v.name+' hakkında bilgi almak istiyorum.')}" target="_blank" onclick="event.stopPropagation()" title="WhatsApp'tan sor">☎</a>
+        </div>
+      </div>
+      <div class="card-map">
+        <iframe src="${mapEmbed(v.lat,v.lng,13)}" loading="lazy"></iframe>
+        ${pinHtml(v)}
+        <div class="card-map-tag">Denize ${v.distanceToSea} km</div>
+        <div class="card-map-overlay" onclick="openMapLightbox('${v.id}')"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  filtered.forEach((v,i) => {
+    cardAutoIntervals[v.id] = setInterval(()=>cardSlide(v.id,1), 4200);
+  });
+}
+function cardSlide(id, dir){
+  const v = VILLAS.find(x=>x.id===id);
+  let n = (cardSlideState[id] + dir + v.images.length) % v.images.length;
+  cardSlideState[id] = n;
+  const cardEl = document.querySelector(`.card[data-vid="${id}"]`);
+  if(!cardEl) return;
+  cardEl.querySelectorAll('.card-slider img').forEach((img,i)=>img.classList.toggle('active', i===n));
+  cardEl.querySelectorAll('.card-slide-dots span').forEach((d,i)=>d.classList.toggle('active', i===n));
+}
+
+/* ---------------- TAM SAYFA DETAY ---------------- */
+let fdGalleryIndex = 0;
+let currentVilla = null;
+let calState = {year:2026, month:6, checkin:null, checkout:null};
+
+function openDetail(id){
+  currentVilla = VILLAS.find(x=>x.id===id);
+  fdGalleryIndex = 0;
+  calState = {year:2026, month:6, checkin:null, checkout:null};
+  const v = currentVilla;
+  const el = document.getElementById('fullDetail');
+  el.innerHTML = `
+    <div class="fd-topbar">
+      <div><h2>${v.name}</h2><div class="loc">${v.location} · Denize ${v.distanceToSea} km</div></div>
+      <button class="fd-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="fd-gallery">
+      <div class="fd-gallery-track" id="fdTrack">
+        ${v.images.map((img,i)=>`<img src="${img}" onclick="openLightboxImage(${i})">`).join('')}
+      </div>
+      <button class="banner-arrow prev" onclick="fdShift(-1)">‹</button>
+      <button class="banner-arrow next" onclick="fdShift(1)">›</button>
+      <div class="fd-gallery-dots" id="fdDots">${v.images.map((_,i)=>`<span class="${i===0?'active':''}" onclick="fdGoto(${i})"></span>`).join('')}</div>
+      <div class="fd-zoom-hint">Büyütmek için görsele tıklayın ⤢</div>
+    </div>
+    <div class="fd-video">
+      <h3>Villa Tanıtım Videosu</h3>
+      <div class="fd-video-wrap" onclick="openLightboxVideo('${v.youtubeId}')">
+        <img src="https://img.youtube.com/vi/${v.youtubeId}/hqdefault.jpg">
+        <div class="fd-play"><span>▶</span></div>
+      </div>
+    </div>
+    <div class="fd-body">
+      <div>
+        <div class="fd-desc">${v.shortDesc}</div>
+        <div class="fd-map-block">
+          <h3>Konum</h3>
+          <div class="map-wrap">
+            <iframe src="${mapEmbed(v.lat,v.lng,14)}" loading="lazy"></iframe>
+            ${pinHtml(v)}
+            <div class="card-map-overlay" onclick="openMapLightbox('${v.id}')"></div>
+          </div>
+          <div class="fd-map-meta"><span><b>Denize:</b> ${v.distanceToSea} km</span></div>
+        </div>
+        ${Object.entries(v.specs).map(([cat,items])=>`
+          <div class="fd-spec-cat">
+            <h4>${cat}</h4>
+            <div class="fd-spec-grid">
+              ${items.map(([k,val])=>`<div class="fd-spec-item"><span>${k}</span><span class="v">${val}</span></div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="fd-side">
+        <table class="price-table">
+          <tr><th>Dönem</th><th>TL/gece</th><th>EUR/gece</th></tr>
+          ${v.seasons.map(p=>`<tr><td>${p.label}</td><td class="mono">${p.tl.toLocaleString('tr-TR')} ₺</td><td class="mono">${p.eur} €</td></tr>`).join('')}
+        </table>
+        <div class="booking-box">
+          <h4>Rezervasyon</h4>
+          <div class="cal-box" id="calBox"></div>
+          <div class="cal-summary" id="calSummary"></div>
+          <label>Ad Soyad</label><input type="text" id="bkName" placeholder="Adınız Soyadınız">
+          <label>Telefon</label><input type="tel" id="bkPhone" placeholder="05xx xxx xx xx">
+          <label>Misafir Sayısı</label><input type="number" id="bkGuests" min="1" max="${v.guests}" value="2">
+          <label>Not</label><textarea id="bkNote" placeholder="Eklemek istediğiniz not..."></textarea>
+          <div class="btn-row">
+            <button class="btn-primary" onclick="sendMail()">E-posta Gönder</button>
+            <button class="btn-wa" onclick="sendWhatsappReq()">WhatsApp</button>
+          </div>
+          <button class="btn-form-open" onclick="openResForm()">📄 Rezervasyon Talep Formu (PDF)</button>
+        </div>
+      </div>
+    </div>`;
+  el.classList.add('open');
+  window.scrollTo({top:0});
+  renderCalendar();
+}
+function closeDetail(){ document.getElementById('fullDetail').classList.remove('open'); }
+function fdShift(dir){
+  let n = (fdGalleryIndex + dir + currentVilla.images.length) % currentVilla.images.length;
+  fdGoto(n);
+}
+function fdGoto(n){
+  fdGalleryIndex = n;
+  document.getElementById('fdTrack').style.transform = `translateX(-${n*100}%)`;
+  document.querySelectorAll('#fdDots span').forEach((d,i)=>d.classList.toggle('active', i===n));
+}
+
+/* ---------------- TAKVİM ---------------- */
+function pad(n){ return String(n).padStart(2,'0'); }
+function isoFor(y,m,d){ return `${y}-${pad(m+1)}-${pad(d)}`; }
+function isoFromDate(d){ return isoFor(d.getFullYear(), d.getMonth(), d.getDate()); }
+function isoToday(){ return isoFromDate(new Date()); }
+function fmtDateTR(iso){ const [y,m,d]=iso.split('-').map(Number); return `${d} ${TR_MONTHS[m-1]} ${y}`; }
+
+let calTargetBox = 'calBox', calTargetSummary = 'calSummary';
+function renderCalendar(boxId, summaryId){
+  if(boxId) calTargetBox = boxId;
+  if(summaryId) calTargetSummary = summaryId;
+  const boxEl = document.getElementById(calTargetBox);
+  if(!boxEl) return;
+  const v = currentVilla;
+  const {year,month} = calState;
+  const first = new Date(year,month,1);
+  const startOffset = (first.getDay()+6)%7;
+  const daysInMonth = new Date(year,month+1,0).getDate();
+  const todayISO = isoToday();
+  let cells='';
+  for(let i=0;i<startOffset;i++) cells+='<div class="cal-day empty"></div>';
+  for(let d=1; d<=daysInMonth; d++){
+    const iso = isoFor(year,month,d);
+    let cls='cal-day';
+    if(iso < todayISO) cls+=' past';
+    else if(v.occupied.includes(iso)) cls+=' occ';
+    else if(iso===calState.checkin || iso===calState.checkout) cls+=' sel';
+    else if(calState.checkin && calState.checkout && iso>calState.checkin && iso<calState.checkout) cls+=' range';
+    cells += `<div class="${cls}" onclick="pickDay('${iso}')">${d}</div>`;
+  }
+  boxEl.innerHTML = `
+    <div class="cal-head">
+      <button onclick="calShift(-1)">‹</button>
+      <span class="cal-title">${TR_MONTHS[month]} ${year}</span>
+      <button onclick="calShift(1)">›</button>
+    </div>
+    <div class="cal-grid">
+      ${TR_DAYS.map(d=>`<div class="cal-dow">${d}</div>`).join('')}
+      ${cells}
+    </div>
+    <div class="cal-legend">
+      <span><i style="background:#fff;border:1px solid #ccc;"></i>Müsait</span>
+      <span><i style="background:#f1d9cf;"></i>Dolu</span>
+      <span><i style="background:var(--sand);"></i>Seçili aralık</span>
+      <span><i style="background:var(--deep);"></i>Giriş/Çıkış</span>
+    </div>`;
+  updateCalSummary();
+  updateRfPriceBox();
+}
+function calShift(dir){
+  let m = calState.month + dir, y = calState.year;
+  if(m<0){m=11;y--;} if(m>11){m=0;y++;}
+  calState.month=m; calState.year=y;
+  renderCalendar();
+}
+function hasOccupiedBetween(a,b,v){
+  let d = new Date(a+'T00:00:00'); const end = new Date(b+'T00:00:00');
+  while(d<end){ if(v.occupied.includes(isoFromDate(d))) return true; d.setDate(d.getDate()+1); }
+  return false;
+}
+function pickDay(iso){
+  const v = currentVilla;
+  if(iso < isoToday() || v.occupied.includes(iso)) return;
+  if(!calState.checkin || (calState.checkin && calState.checkout)){
+    calState.checkin = iso; calState.checkout = null;
+  } else {
+    if(iso <= calState.checkin){
+      calState.checkin = iso;
+    } else if(hasOccupiedBetween(calState.checkin, iso, v)){
+      alert('Seçilen aralıkta dolu gün var, lütfen tekrar seçin.');
+      calState.checkin = iso; calState.checkout = null;
+    } else {
+      calState.checkout = iso;
+    }
+  }
+  renderCalendar();
+}
+function nightRate(iso, v){
+  const season = v.seasons.find(s => iso>=s.start && iso<=s.end);
+  return season || v.seasons[0];
+}
+function calcPrice(checkinISO, checkoutISO, v){
+  let d = new Date(checkinISO+'T00:00:00'); const end = new Date(checkoutISO+'T00:00:00');
+  let nights=0, tl=0, eur=0;
+  while(d<end){
+    const r = nightRate(isoFromDate(d), v);
+    tl+=r.tl; eur+=r.eur; nights++;
+    d.setDate(d.getDate()+1);
+  }
+  return {nights,tl,eur};
+}
+function updateCalSummary(){
+  const el = document.getElementById(calTargetSummary);
+  if(!el) return;
+  if(calState.checkin && calState.checkout){
+    const {nights,tl,eur} = calcPrice(calState.checkin, calState.checkout, currentVilla);
+    el.innerHTML = `<b>${fmtDateTR(calState.checkin)} → ${fmtDateTR(calState.checkout)}</b> · ${nights} gece<br><span class="mono" style="color:var(--clay);">${tl.toLocaleString('tr-TR')} ₺ (~${eur} €)</span>`;
+  } else if(calState.checkin){
+    el.innerHTML = `Giriş: <b>${fmtDateTR(calState.checkin)}</b> — şimdi çıkış tarihini seçin`;
+  } else {
+    el.innerHTML = 'Giriş ve çıkış tarihini takvimden seçin.';
+  }
+}
+
+/* ---------------- REZERVASYON GÖNDER ---------------- */
+function buildSummary(){
+  if(!calState.checkin || !calState.checkout){ alert('Lütfen takvimden giriş ve çıkış tarihi seçin.'); return null; }
+  const name = document.getElementById('bkName').value.trim();
+  const phone = document.getElementById('bkPhone').value.trim();
+  const guests = document.getElementById('bkGuests').value;
+  const note = document.getElementById('bkNote').value.trim();
+  if(!name || !phone){ alert('Lütfen ad soyad ve telefon bilgisi girin.'); return null; }
+  const {nights,tl,eur} = calcPrice(calState.checkin, calState.checkout, currentVilla);
+  return `Villa: ${currentVilla.name} (${currentVilla.location})
+Giriş: ${fmtDateTR(calState.checkin)}
+Çıkış: ${fmtDateTR(calState.checkout)}
+Gece Sayısı: ${nights}
+Toplam Fiyat: ${tl.toLocaleString('tr-TR')} ₺ (~${eur} €)
+Misafir Sayısı: ${guests}
+Ad Soyad: ${name}
+Telefon: ${phone}
+Not: ${note || '-'}`;
+}
+function sendMail(){
+  const summary = buildSummary(); if(!summary) return;
+  const subject = encodeURIComponent(currentVilla.name + ' - Rezervasyon Talebi');
+  window.location.href = `mailto:info@tanirvilla.com?subject=${subject}&body=${encodeURIComponent(summary)}`;
+}
+function sendWhatsappReq(){
+  const summary = buildSummary(); if(!summary) return;
+  window.open(`https://wa.me/${currentVilla.whatsapp}?text=${encodeURIComponent(summary)}`, '_blank');
+}
+
+/* ---------------- LIGHTBOX (görsel/video) ---------------- */
+function openLightboxImage(idx){
+  const v = currentVilla;
+  const el = document.getElementById('lightbox');
+  el.innerHTML = `
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="banner-arrow prev" onclick="lbShift(-1)">‹</button>
+    <img id="lbImg" src="${v.images[idx]}">
+    <button class="banner-arrow next" onclick="lbShift(1)">›</button>`;
+  el.dataset.idx = idx;
+  el.classList.add('open');
+}
+function lbShift(dir){
+  const v = currentVilla;
+  let n = (parseInt(document.getElementById('lightbox').dataset.idx) + dir + v.images.length) % v.images.length;
+  document.getElementById('lightbox').dataset.idx = n;
+  document.getElementById('lbImg').src = v.images[n];
+}
+function openLightboxVideo(ytId){
+  const el = document.getElementById('lightbox');
+  el.innerHTML = `
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+  el.classList.add('open');
+}
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('open'); document.getElementById('lightbox').innerHTML=''; }
+
+/* ---------------- Harita tam ekran ---------------- */
+function openMapLightbox(id){
+  const v = VILLAS.find(x=>x.id===id);
+  const el = document.getElementById('mapLightbox');
+  el.innerHTML = `
+    <button class="lightbox-close" onclick="closeMapLightbox()">✕</button>
+    <div class="map-wrap">
+      <iframe src="${mapEmbed(v.lat,v.lng,15)}"></iframe>
+      ${pinHtml(v)}
+    </div>`;
+  el.classList.add('open');
+}
+function closeMapLightbox(){ document.getElementById('mapLightbox').classList.remove('open'); document.getElementById('mapLightbox').innerHTML=''; }
+
+/* ---------------- Tüm villalar / interaktif harita ---------------- */
+let allMap = null;
+const villaIcon = () => L.divIcon({
+  className:'villa-map-icon',
+  html:'<div class="vmi-pin"></div>',
+  iconSize:[26,34],
+  iconAnchor:[13,32],
+  popupAnchor:[0,-30]
+});
+function openAllMap(){
+  document.getElementById('allMapOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(!allMap){
+    allMap = L.map('allMapCanvas', {zoomControl:true});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom:19,
+      attribution:'&copy; OpenStreetMap katkıda bulunanlar'
+    }).addTo(allMap);
+
+    const bounds = [];
+    VILLAS.forEach(v=>{
+      const marker = L.marker([v.lat, v.lng], {icon:villaIcon()}).addTo(allMap);
+      marker.bindPopup(`
+        <div class="villa-popup">
+          <img src="${v.images[0]}" alt="${v.name}">
+          <div class="vp-body">
+            <h4>${v.name}</h4>
+            <div class="vp-loc">${v.location}</div>
+            <div class="vp-price">${v.seasons[0].tl.toLocaleString('tr-TR')} ₺ <small>/ gece (~${v.seasons[0].eur} €)</small></div>
+            <button onclick="goToVillaFromMap('${v.id}')">Villayı İncele</button>
+          </div>
+        </div>`, {maxWidth:240});
+      bounds.push([v.lat, v.lng]);
+    });
+    if(bounds.length) allMap.fitBounds(bounds, {padding:[50,50]});
+  }
+  setTimeout(()=>allMap.invalidateSize(), 60);
+}
+function closeAllMap(){
+  document.getElementById('allMapOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function goToVillaFromMap(id){
+  closeAllMap();
+  openDetail(id);
+}
+
+/* ================= REZERVASYON TALEP FORMU (ultra tasarım + PDF) ================= */
+function openResForm(){
+  if(!currentVilla) return;
+  const v = currentVilla;
+  const el = document.getElementById('resForm');
+  el.innerHTML = `
+    <div class="fd-topbar">
+      <div><h2>Rezervasyon Talep Formu</h2><div class="loc">${v.name} · ${v.location}</div></div>
+      <button class="fd-close" onclick="closeResForm()">✕</button>
+    </div>
+    <div class="resform-body">
+      <div class="rf-section">
+        <h3>Konaklama Tarihleri</h3>
+        <div class="cal-box" id="calBoxForm"></div>
+        <div class="cal-summary" id="calSummaryForm"></div>
+      </div>
+      <div class="rf-section rf-price-box" id="rfPriceBox"></div>
+      <div class="rf-section">
+        <h3>Sözleşme / İletişim Kişisi</h3>
+        <div class="rf-grid">
+          <div class="rf-field"><label>Adı</label><input id="rfAdi"></div>
+          <div class="rf-field"><label>Soyadı</label><input id="rfSoyadi"></div>
+          <div class="rf-field"><label>Doğum Tarihi</label><input type="date" id="rfDogum"></div>
+          <div class="rf-field"><label>Telefon</label><input id="rfTel" placeholder="05xx xxx xx xx"></div>
+          <div class="rf-field"><label>E-posta</label><input type="email" id="rfMail"></div>
+          <div class="rf-field"><label>Belge Türü</label><select id="rfBelgeTur"><option>Kimlik Kartı</option><option>Pasaport</option></select></div>
+          <div class="rf-field"><label>Belge Numarası</label><input id="rfBelgeNo"></div>
+        </div>
+      </div>
+      <div class="rf-section">
+        <h3>Konuklar <span style="font-size:.72rem;color:var(--ink-soft);font-weight:400;">(ilk satır zorunlu, maksimum ${v.guests} kişi)</span></h3>
+        <table class="rf-table">
+          <tr><th>Adı</th><th>Soyadı</th><th>Doğum Tarihi</th><th>Belge Türü</th><th>Belge No</th></tr>
+          ${Array.from({length:7}).map((_,i)=>`
+          <tr>
+            <td><input id="gAdi${i}"></td>
+            <td><input id="gSoyadi${i}"></td>
+            <td><input type="date" id="gDogum${i}"></td>
+            <td><select id="gBelgeTur${i}"><option>Kimlik Kartı</option><option>Pasaport</option></select></td>
+            <td><input id="gBelgeNo${i}"></td>
+          </tr>`).join('')}
+        </table>
+      </div>
+      <div class="rf-section">
+        <h3>Rezervasyon Şartları ve Bilgilendirme</h3>
+        <div class="rf-terms-box" id="rfTermsBox">
+          <p><b>1.</b> İşbu sözleşme, Tanır Emlak Gayrimenkul üzerinden sunulan mobilyalı bir tatil konutunun geçici süreli kiralanmasına ilişkin esasları düzenler. Kiralama yalnızca kısa süreli konaklama amacıyla yapılır. Konutun kiraya verilmesine yetkili taraf "Ev Sahibi", konaklama amacıyla kullanan taraf "Misafir" olarak anılır.</p>
+          <p><b>2.</b> Misafir tarafından yapılan rezervasyon talebi, kira sözleşmesi yapma niyetini ifade eder; ancak bu talep bağlayıcı değildir ve hukuki bir teklif niteliği taşımaz. Bağlayıcı bir sözleşme ancak Ev Sahibi'nin açık onayı ve sözleşme şartlarının kabulü ile kurulmuş olur.</p>
+          <p><b>3.</b> Elektrik, su ve gaz giderleri konaklama fiyatına dahildir; misafir bu hizmetler için ayrıca ücret ödemez. Konut, misafire temizlenmiş ve tüm ev eşyalarıyla eksiksiz teslim edilir; konaklama süresince ek temizlik hizmeti ücrete tabidir.</p>
+          <p><b>4.</b> Misafir, konutu ikamet amaçlı değil geçici süreli konaklama amaçlı kullanacağını kabul eder; konaklama bitiş tarihinde ve en geç saat 09:00'da, teslim aldığı tüm eşyalarıyla birlikte konutu eksiksiz olarak, ihtara gerek kalmadan ev sahibine teslim edecektir. Konaklama ücreti, konut tesliminden önce peşin olarak tahsil edilir.</p>
+          <p><b>5.</b> Misafir, konaklama süresince konutta ve/veya eşyada meydana gelebilecek tüm hasar, zarar ve ziyandan sorumludur. Ev sahibi, varsa ödenmiş teminat bedelinden bu zararı mahsup etme hakkını saklı tutar; zararın teminat bedelini aşması halinde fark misafirden tahsil edilebilir. Hasar/ziyan olmaması durumunda teminat bedelinin tamamı çıkışta iade edilir.</p>
+          <p><b>6.</b> Misafir, konaklama süresince T.C. yasalarına aykırı hiçbir faaliyette bulunmayacağını kabul eder. Ev sahibi ile arasında satın alınan konaklama hizmeti dışında bir bağı olmadığını beyan eder.</p>
+          <p><b>7.</b> İşbu sözleşmenin başlangıç tarihi konaklama başlangıç tarihi, bitiş tarihi ise konaklama bitiş tarihidir. Konaklama bitiş tarihi itibarıyla sözleşme sona erer ve yenilenmez.</p>
+          <p><b>8.</b> Misafir, kendisinin ve birlikte konaklayacak kişilerin kimlik bilgilerini ve kimlik fotokopilerini ev sahibine ibraz etmekle yükümlüdür. Beyan edilen toplam misafir sayısı sonradan değiştirilemez; kimlik beyanı yapılmamış misafir kabul edilemez. Bu nedenle doğabilecek her türlü yasal sorumluluk misafire aittir.</p>
+          <p><b>9.</b> Söz konusu konutta maksimum misafir sayısının üzerinde ek kişi konaklatılamaz. Evde izinsiz kedi, köpek veya başka bir evcil hayvan barındırmak ya da eve sokmak yasaktır.</p>
+          <p><b>10.</b> Covid-19 (Korona) nedeniyle müşterinin giriş tarihinde sokağa çıkma yasağı getirilmesi halinde, villalarda müsaitlik oldukça ücretsiz tarih değişikliği yapılabilir.</p>
+          <p><b>11. İptal Şartları:</b> Rezervasyon iptalleri yazılı olarak (e-posta ve/veya faks ile) bildirilmelidir. Girişe 60 gün ve daha fazla süre kala yapılan iptallerde toplam bedelin %50'si iade edilir, %50'si kesilir. 60–31 gün arası iptallerde %40'ı iade edilir, %60'ı kesilir. 30 gün ve daha az kala yapılan iptallerde iade yapılmaz.</p>
+          <p><b>12. Kişisel Verilerin Korunması:</b> Rezervasyon sürecinin yürütülmesi kapsamında, müsaitlik kontrolü, sözleşme hazırlanması ve kimlik doğrulama işlemleri için kişisel veriler işlenmektedir. Bu veri işleme faaliyetleri GDPR Madde 6/1 (b) sözleşme öncesi işlemler, (c) yasal yükümlülükler ve (f) dolandırıcılık önleme/güvenlik kontrolleri için meşru menfaat hükümlerine dayanmaktadır. Misafir, talep edilen tüm bilgileri eksiksiz ve doğru sağlamakla yükümlüdür; eksik/hatalı bilgi, sürecte gecikmeye veya talebin reddine neden olabilir. Veriler, rezervasyon işlemleri ve yasal saklama süreleri boyunca tutulur.</p>
+          <p><b>13.</b> Rezervasyon talebi, Tanır Emlak Gayrimenkul tarafından yazılı onay verilene kadar bağlayıcı değildir. Güncel Genel Koşullar geçerlidir; bu formun gönderilmesiyle talep sahibi sözleşme ve iptal şartlarını okuduğunu kabul eder.</p>
+          <p><b>14.</b> İş bu sözleşme on dört (14) maddeden oluşmuştur. İhtilaf durumunda Kuşadası Mahkemeleri yetkilidir.</p>
+        </div>
+        <label class="rf-accept-row">
+          <input type="checkbox" id="rfAccept">
+          <span>Yukarıdaki rezervasyon şartlarını ve kişisel veri işleme bilgilendirmesini okudum, anladım ve kabul ediyorum.</span>
+        </label>
+      </div>
+      <div class="rf-section">
+        <h3>Gönder</h3>
+        <div class="rf-actions">
+          <button class="rf-btn-pdf" onclick="generateReservationPDF('download')">PDF Oluştur ve İndir</button>
+          <button class="rf-btn-mail" onclick="generateReservationPDF('mail')">E-posta ile Gönder</button>
+          <button class="rf-btn-wa" onclick="generateReservationPDF('wa')">WhatsApp ile Gönder</button>
+        </div>
+        <div class="rf-note">"PDF Oluştur ve İndir" her zaman dosyayı bilgisayarınıza indirir. "E-posta" ve "WhatsApp" butonları, Code.gs backend'i kurulup APPS_SCRIPT_URL tanımlandığında PDF'i otomatik Drive'a yükler ve e-postayı ekli gönderir / WhatsApp mesajına PDF linkini ekler — hiçbir manuel dosya ekleme gerekmez. Backend henüz bağlanmadıysa (bu demoda böyledir) sistem otomatik olarak PDF indirip mail/WhatsApp'ı hazır metinle açan eski yönteme döner.</div>
+      </div>
+    </div>`;
+  el.classList.add('open');
+  window.scrollTo({top:0});
+  renderCalendar('calBoxForm','calSummaryForm');
+}
+function closeResForm(){
+  document.getElementById('resForm').classList.remove('open');
+  renderCalendar('calBox','calSummary');
+}
+function updateRfPriceBox(){
+  const box = document.getElementById('rfPriceBox');
+  if(!box || !currentVilla) return;
+  const v = currentVilla;
+  if(calState.checkin && calState.checkout){
+    const {nights,tl,eur} = calcPrice(calState.checkin, calState.checkout, v);
+    const totalTl = tl + v.cleaningFee.tl, totalEur = eur + v.cleaningFee.eur;
+    const prepayTl = Math.round(totalTl*0.3), prepayEur = Math.round(totalEur*0.3);
+    box.innerHTML = `
+      <h3 style="color:var(--stone);border-color:rgba(255,255,255,.2);">Fiyat Özeti</h3>
+      <div class="row"><span>Konaklama (${nights} gece)</span><span class="mono">${tl.toLocaleString('tr-TR')} ₺ / ${eur} €</span></div>
+      <div class="row"><span>Temizlik Ücreti</span><span class="mono">${v.cleaningFee.tl.toLocaleString('tr-TR')} ₺ / ${v.cleaningFee.eur} €</span></div>
+      <div class="row"><span>Depozito (girişte, çıkışta iade)</span><span class="mono">${v.deposit.tl.toLocaleString('tr-TR')} ₺ / ${v.deposit.eur} €</span></div>
+      <div class="row total"><span>Toplam Tutar</span><span class="mono">${totalTl.toLocaleString('tr-TR')} ₺ / ${totalEur} €</span></div>
+      <div class="row"><span>Ön Ödeme (%30)</span><span class="mono">${prepayTl.toLocaleString('tr-TR')} ₺ / ${prepayEur} €</span></div>`;
+  } else {
+    box.innerHTML = `<h3 style="color:var(--stone);border-color:rgba(255,255,255,.2);">Fiyat Özeti</h3><div class="row"><span>Toplam tutarı görmek için yukarıdan giriş-çıkış tarihi seçin.</span></div>`;
+  }
+}
+function collectGuestRows(){
+  const rows=[];
+  for(let i=0;i<7;i++){
+    const adi=document.getElementById('gAdi'+i).value.trim();
+    const soyadi=document.getElementById('gSoyadi'+i).value.trim();
+    if(!adi && !soyadi) continue;
+    rows.push({
+      adi, soyadi,
+      dogum:document.getElementById('gDogum'+i).value,
+      belgeTur:document.getElementById('gBelgeTur'+i).value,
+      belgeNo:document.getElementById('gBelgeNo'+i).value.trim()
+    });
+  }
+  return rows;
+}
+function buildPdfRoot(d){
+  const v = d.v;
+  const nowStr = new Date().toLocaleDateString('tr-TR');
+  const guestRowsHtml = d.guests.length ? d.guests.map(g=>`<tr><td>${g.adi}</td><td>${g.soyadi}</td><td>${g.dogum||'-'}</td><td>${g.belgeTur}${g.belgeNo?(' #'+g.belgeNo):''}</td></tr>`).join('') : '<tr><td colspan="4" style="color:#999;">Konuk bilgisi girilmedi</td></tr>';
+  const html = `
+  <div class="pdf-page">
+    <div class="pdf-band"></div>
+    <div class="pdf-header">
+      <div class="brand">Tanır <span>Emlak Gayrimenkul</span></div>
+      <div class="doc-meta">Belge Tarihi: ${nowStr}<br>Villa ID: ${v.id.toUpperCase()}</div>
+    </div>
+    <div class="pdf-title">Rezervasyon Talep Formu</div>
+    <div class="pdf-sub">${v.name} · ${v.location}</div>
+    <img class="pdf-photo" src="${v.images[0]}" crossorigin="anonymous">
+    <div class="pdf-kv">
+      <div><span>Giriş Tarihi</span><b>${fmtDateTR(calState.checkin)} (15:00 itibaren)</b></div>
+      <div><span>Çıkış Tarihi</span><b>${fmtDateTR(calState.checkout)} (09:00'a kadar)</b></div>
+      <div><span>Gece Sayısı</span><b>${d.nights}</b></div>
+      <div><span>Misafir Sayısı</span><b>${d.guests.length||1} / ${v.guests}</b></div>
+      <div><span>İletişim Kişisi</span><b>${d.adi} ${d.soyadi}</b></div>
+      <div><span>Telefon</span><b>${d.tel}</b></div>
+    </div>
+    <div class="pdf-price">
+      <div class="row"><span>Konaklama Bedeli</span><span>${d.tl.toLocaleString('tr-TR')} ₺ (~${d.eur} €)</span></div>
+      <div class="row"><span>Temizlik Ücreti</span><span>${v.cleaningFee.tl.toLocaleString('tr-TR')} ₺ (~${v.cleaningFee.eur} €)</span></div>
+      <div class="row"><span>Depozito (iade edilir)</span><span>${v.deposit.tl.toLocaleString('tr-TR')} ₺ (~${v.deposit.eur} €)</span></div>
+      <div class="row total"><span>Toplam Tutar</span><span>${d.totalTl.toLocaleString('tr-TR')} ₺ (~${d.totalEur} €)</span></div>
+      <div class="row"><span>Ön Ödeme (%30)</span><span>${d.prepayTl.toLocaleString('tr-TR')} ₺ (~${d.prepayEur} €)</span></div>
+    </div>
+    <div class="pdf-footer"><span>Tanır Emlak Gayrimenkul</span><span>Sayfa 1 / 3</span></div>
+  </div>
+  <div class="pdf-page">
+    <div class="pdf-band"></div>
+    <div class="pdf-section-title" style="margin-top:4mm;">Rezervasyon ve Kiralama Şartları</div>
+    <div class="pdf-clauses"><ol>
+      <li>İşbu sözleşme, mobilyalı bir tatil konutunun geçici süreli kiralanmasına ilişkin esasları düzenler; kiralama yalnızca kısa süreli konaklama amacıyla yapılır.</li>
+      <li>Rezervasyon talebi bağlayıcı değildir; bağlayıcı sözleşme ancak Ev Sahibi'nin yazılı onayı ile kurulur.</li>
+      <li>Elektrik, su ve gaz giderleri konaklama fiyatına dahildir; misafir bu hizmetler için ayrıca ücret ödemez.</li>
+      <li>Konut, misafire temizlenmiş ve eksiksiz olarak teslim edilir; konaklama süresince ek temizlik hizmeti ücrete tabidir.</li>
+      <li>Misafir konutu ikamet değil, geçici konaklama amacıyla kullanacağını kabul eder ve çıkış tarihinde saat 09:00'a kadar eksiksiz teslim eder.</li>
+      <li>Konaklama ücreti, konut tesliminden önce peşin olarak tahsil edilir.</li>
+      <li>Misafir, konaklama süresince oluşabilecek her türlü hasar ve zarardan sorumludur; hasar durumunda depozito bedelinden mahsup yapılabilir, hasar yoksa depozito çıkışta iade edilir.</li>
+      <li>Misafir, konaklama süresince yürürlükteki yasalara aykırı faaliyette bulunmayacağını kabul eder.</li>
+      <li>Sözleşme, konaklama başlangıç tarihinde başlar ve bitiş tarihinde kendiliğinden sona erer, yenilenmez.</li>
+      <li>Misafir, kendisi ve birlikte konaklayacak kişilerin kimlik bilgilerini ev sahibine ibraz etmekle yükümlüdür; beyan edilenden fazla kişi konaklayamaz.</li>
+      <li>Evcil hayvanlar (kedi, köpek vb.) izinsiz olarak eve alınamaz.</li>
+      <li>İptal koşulları: girişe 60 gün ve üzeri kala yapılan iptallerde %50 iade edilir; 60–31 gün arası %40 iade edilir; 30 gün ve altında iade yapılmaz.</li>
+      <li>Kişisel veriler; müsaitlik kontrolü, sözleşme hazırlanması ve kimlik doğrulama amacıyla GDPR Madde 6/1 (b), (c) ve (f) hükümlerine uygun olarak işlenir.</li>
+      <li>İhtilaf durumunda Kuşadası Mahkemeleri yetkilidir.</li>
+    </ol></div>
+    <div class="pdf-footer"><span>Tanır Emlak Gayrimenkul</span><span>Sayfa 2 / 3</span></div>
+  </div>
+  <div class="pdf-page">
+    <div class="pdf-band"></div>
+    <div class="pdf-section-title" style="margin-top:4mm;">Banka Bilgileri</div>
+    <div class="pdf-bank">
+      Banka: İş Bankası Kuşadası<br>
+      Hesap Sahibi: Murat Yıldırım<br>
+      IBAN (EUR): TR74 0006 4000 0023 0300 0619 63<br>
+      IBAN (TRY): TR44 0006 4000 0013 0300 1854 07<br>
+      IBAN (USD): TR61 0006 4000 0023 0300 0771 35<br>
+      Açıklama: Villa ID + İsim + Rezervasyon Tarihleri
+    </div>
+    <div class="pdf-section-title">Konuklar</div>
+    <table class="pdf-guest-table">
+      <tr><th>Adı</th><th>Soyadı</th><th>Doğum Tarihi</th><th>Belge</th></tr>
+      ${guestRowsHtml}
+    </table>
+    <div class="pdf-section-title">İletişim / Sözleşme Kişisi</div>
+    <div class="pdf-kv" style="margin-bottom:4mm;">
+      <div><span>Ad Soyad</span><b>${d.adi} ${d.soyadi}</b></div>
+      <div><span>Doğum Tarihi</span><b>${d.dogumC||'-'}</b></div>
+      <div><span>Telefon</span><b>${d.tel}</b></div>
+      <div><span>E-posta</span><b>${d.mail||'-'}</b></div>
+      <div><span>Belge</span><b>${d.belgeTurC}${d.belgeNoC?(' #'+d.belgeNoC):''}</b></div>
+      <div><span>Şartlar Kabul Edildi</span><b>Evet — ${new Date().toLocaleString('tr-TR')}</b></div>
+    </div>
+    <div class="pdf-sign">
+      <div>Ev Sahibi (Tanır Emlak Gayrimenkul)</div>
+      <div>Misafir İmzası</div>
+    </div>
+    <div class="pdf-footer"><span>Tanır Emlak Gayrimenkul</span><span>Sayfa 3 / 3</span></div>
+  </div>`;
+  const root = document.createElement('div');
+  root.id = 'pdfRoot';
+  root.innerHTML = html;
+  document.body.appendChild(root);
+}
+function showPdfLoading(){
+  const d = document.createElement('div');
+  d.id = 'pdfLoading';
+  d.innerHTML = '<div class="spin"></div><span>PDF oluşturuluyor...</span>';
+  document.body.appendChild(d);
+}
+function hidePdfLoading(){
+  const d = document.getElementById('pdfLoading');
+  if(d) d.remove();
+}
+
+function waitForImages(container){
+  const imgs = [...container.querySelectorAll('img')];
+  return Promise.all(imgs.map(img => {
+    if(img.complete && img.naturalWidth>0) return Promise.resolve();
+    return new Promise(res=>{ img.onload=res; img.onerror=res; setTimeout(res,4000); });
+  }));
+}
+function generateReservationPDF(mode){
+  if(typeof html2pdf === 'undefined'){
+    alert('PDF kütüphanesi yüklenemedi (internet bağlantısı veya CDN erişimi engellenmiş olabilir). Sayfayı yenileyip tekrar deneyin.');
+    return;
+  }
+  if(!calState.checkin || !calState.checkout){ alert('Lütfen giriş ve çıkış tarihini takvimden seçin.'); return; }
+  const adi=document.getElementById('rfAdi').value.trim();
+  const soyadi=document.getElementById('rfSoyadi').value.trim();
+  const tel=document.getElementById('rfTel').value.trim();
+  const mail=document.getElementById('rfMail').value.trim();
+  if(!adi || !soyadi || !tel){ alert('Lütfen iletişim kişisi ad, soyad ve telefon bilgisini girin.'); return; }
+  if(!document.getElementById('rfAccept').checked){ alert('Devam etmeden önce rezervasyon şartlarını ve kişisel veri işleme bilgilendirmesini kabul etmeniz gerekiyor.'); return; }
+  const v = currentVilla;
+  const {nights,tl,eur} = calcPrice(calState.checkin, calState.checkout, v);
+  const totalTl = tl+v.cleaningFee.tl, totalEur = eur+v.cleaningFee.eur;
+  const prepayTl = Math.round(totalTl*0.3), prepayEur = Math.round(totalEur*0.3);
+  const guests = collectGuestRows();
+  const dogumC = document.getElementById('rfDogum').value;
+  const belgeTurC = document.getElementById('rfBelgeTur').value;
+  const belgeNoC = document.getElementById('rfBelgeNo').value.trim();
+
+  buildPdfRoot({v,nights,tl,eur,totalTl,totalEur,prepayTl,prepayEur,adi,soyadi,tel,mail,dogumC,belgeTurC,belgeNoC,guests});
+  showPdfLoading();
+
+  const filename = `${v.name.replace(/\s+/g,'-')}-Rezervasyon-Talebi.pdf`;
+  const opt = {
+    margin:0,
+    filename,
+    image:{type:'jpeg',quality:0.95},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:'#ffffff',scrollX:0,scrollY:0},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+    pagebreak:{mode:['css']}
+  };
+
+  const reqCtx = {v,nights,totalTl,totalEur,adi,soyadi,tel,mail,filename};
+  const pdfRootEl = document.getElementById('pdfRoot');
+
+  waitForImages(pdfRootEl).then(()=>{
+    const worker = html2pdf().set(opt).from(pdfRootEl);
+
+    if(mode === 'download'){
+      worker.save().then(()=>{ const r=document.getElementById('pdfRoot'); if(r) r.remove(); hidePdfLoading(); })
+            .catch(err=>{ hidePdfLoading(); const r=document.getElementById('pdfRoot'); if(r) r.remove(); alert('PDF oluşturulurken bir hata oluştu: '+err.message); });
+      return;
+    }
+
+    // mail / wa: backend varsa PDF'i Drive'a yükle (+ mail ise ekli gönder), yoksa eski manuel akışa düş
+    if(APPS_SCRIPT_URL){
+      worker.outputPdf('datauristring').then(dataUri=>{
+        const base64 = dataUri.split(',')[1];
+        const root = document.getElementById('pdfRoot'); if(root) root.remove();
+        hidePdfLoading();
+        sendToBackend(mode, reqCtx, base64);
+      }).catch(err=>{ hidePdfLoading(); const r=document.getElementById('pdfRoot'); if(r) r.remove(); alert('PDF oluşturulurken bir hata oluştu: '+err.message); });
+    } else {
+      worker.save().then(()=>{
+        const root = document.getElementById('pdfRoot'); if(root) root.remove();
+        hidePdfLoading();
+        manualFallback(mode, reqCtx);
+      }).catch(err=>{ hidePdfLoading(); const r=document.getElementById('pdfRoot'); if(r) r.remove(); alert('PDF oluşturulurken bir hata oluştu: '+err.message); });
+    }
+  });
+}
+
+function sendToBackend(mode, ctx, base64){
+  const v = ctx.v;
+  const payload = {
+    action: mode==='mail' ? 'sendMail' : 'uploadOnly',
+    filename: ctx.filename,
+    dataBase64: base64,
+    villaId: v.id, villaName: v.name,
+    checkin: fmtDateTR(calState.checkin), checkout: fmtDateTR(calState.checkout),
+    guestName: `${ctx.adi} ${ctx.soyadi}`, phone: ctx.tel, email: ctx.mail,
+    totalTl: ctx.totalTl, totalEur: ctx.totalEur,
+    subject: v.name+' - Rezervasyon Talebi',
+    body: `${v.name} için ${fmtDateTR(calState.checkin)} - ${fmtDateTR(calState.checkout)} tarihleri arasında rezervasyon talebi.\nAd Soyad: ${ctx.adi} ${ctx.soyadi}\nTelefon: ${ctx.tel}\nToplam: ${ctx.totalTl.toLocaleString('tr-TR')} ₺ (~${ctx.totalEur} €)`
+  };
+  fetch(APPS_SCRIPT_URL, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'}, // Apps Script CORS preflight'ını önlemek için
+    body: JSON.stringify(payload)
+  }).then(r=>r.json()).then(res=>{
+    if(!res.success) throw new Error(res.error||'Bilinmeyen hata');
+    if(mode==='mail'){
+      alert('Rezervasyon talebiniz PDF ekli olarak e-posta ile gönderildi.');
+    } else if(mode==='wa'){
+      const text = `Merhaba, ${v.name} için ${fmtDateTR(calState.checkin)} - ${fmtDateTR(calState.checkout)} tarihleri arasında rezervasyon talebim var. Ad Soyad: ${ctx.adi} ${ctx.soyadi}, Tel: ${ctx.tel}. Toplam: ${ctx.totalTl.toLocaleString('tr-TR')} ₺ (~${ctx.totalEur} €).\n\nRezervasyon formu (PDF): ${res.url}`;
+      window.open(`https://wa.me/${v.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+  }).catch(err=>{
+    alert('Sunucuya bağlanırken bir sorun oluştu, manuel yönteme geçiliyor. (' + err.message + ')');
+    manualFallback(mode, ctx);
+  });
+}
+
+function manualFallback(mode, ctx){
+  const v = ctx.v;
+  if(mode==='mail'){
+    const subject = encodeURIComponent(v.name+' - Rezervasyon Talebi');
+    const body = encodeURIComponent(`Merhaba,\n\n${v.name} için ${fmtDateTR(calState.checkin)} - ${fmtDateTR(calState.checkout)} tarihleri arasında rezervasyon talebimi iletiyorum. Detaylar az önce indirdiğim PDF belgesindedir, lütfen bu e-postaya PDF'i ekleyerek gönderin.\n\nAd Soyad: ${ctx.adi} ${ctx.soyadi}\nTelefon: ${ctx.tel}\nToplam Tutar: ${ctx.totalTl.toLocaleString('tr-TR')} ₺ (~${ctx.totalEur} €)`);
+    window.location.href = `mailto:info@tanirvilla.com?subject=${subject}&body=${body}`;
+  } else if(mode==='wa'){
+    const text = `Merhaba, ${v.name} için ${fmtDateTR(calState.checkin)} - ${fmtDateTR(calState.checkout)} tarihleri arasında rezervasyon talebim var. Ad Soyad: ${ctx.adi} ${ctx.soyadi}, Tel: ${ctx.tel}. Toplam: ${ctx.totalTl.toLocaleString('tr-TR')} ₺ (~${ctx.totalEur} €). PDF'i az önce indirdim, ekte gönderiyorum.`;
+    window.open(`https://wa.me/${v.whatsapp}?text=${encodeURIComponent(text)}`, '_blank');
+  }
+}
+
+buildBanner();
+buildLocationOptions();
+renderGrid();
+</script>
+</body>
+</html>
