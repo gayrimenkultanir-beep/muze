@@ -635,6 +635,13 @@ tr:last-child td{border-bottom:none}
 /* Bayi fiyatları tablosu */
 .bfiyat-tablo{display:flex; flex-direction:column; gap:5px; margin-bottom:6px}
 .bfiyat-head,.bfiyat-satir{display:grid; grid-template-columns:1.5fr 1fr 0.6fr 1fr 1.1fr 0.9fr 0.5fr; gap:8px; align-items:center}
+/* Bayi fiyatları — alış (siyah) + satış (kırmızı), her biri taban + üst birim (9 sütun) */
+.bfiyat-a2{grid-template-columns:1.3fr 0.8fr 0.4fr 0.85fr 0.9fr 0.85fr 0.9fr 0.7fr 0.4fr !important}
+.bfiyat-a2 .bf-alis, .bfiyat-a2 .bf-alis-ust{color:var(--ink) !important}
+.bfiyat-a2 .bf-satis, .bfiyat-a2 .bf-satis-ust{color:var(--brand-d) !important}
+.bf-alis-ust{font-size:13px; font-weight:800}
+.bf-satis-ust{font-size:13px; font-weight:800}
+.bf-birim-et{font-size:9.5px; font-weight:600; color:var(--ink-3)}
 .bfiyat-head{padding:0 12px 4px; font-size:10.5px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.3px}
 .bfiyat-satir{background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
 .bfiyat-satir .bf-ad{font-size:13.5px; color:var(--ink)}
@@ -675,18 +682,29 @@ tr:last-child td{border-bottom:none}
 @media(max-width:720px){
   .bfiyat-head{display:none}
   .bfiyat-satir{grid-template-columns:1fr 1fr; gap:5px 8px; padding:12px}
+  .bfiyat-satir.bfiyat-a2{grid-template-columns:1fr 1fr !important}
   .bfiyat-satir .bf-ad{grid-column:1/3; font-size:14px; font-weight:800; margin-bottom:2px}
 }
-/* Sipariş ver ekranı — 6 sütun (dönüşüm sütunu eklendi) */
-.bsip-head,.bsip-satir{grid-template-columns:1.5fr 0.9fr 1.3fr 0.5fr 0.9fr 0.9fr !important}
+@media(min-width:721px) and (max-width:1100px){
+  /* dar tablette üst birim sütunlarını gizle — taban fiyatlar kalır */
+  .bfiyat-a2 .bf-alis-ust, .bfiyat-a2 .bf-satis-ust{display:none}
+  .bfiyat-a2{grid-template-columns:1.4fr 0.9fr 0.5fr 1fr 1fr 0.7fr 0.4fr !important}
+}
+/* Sipariş ver ekranı — 7 sütun (dönüşüm + satış üst birim) */
+.bsip-head,.bsip-satir{grid-template-columns:1.4fr 0.85fr 1.15fr 0.45fr 0.95fr 0.95fr 0.85fr !important}
 .bsip-satir .bf-islem{display:flex; align-items:center; gap:6px; justify-content:flex-end}
 .bsip-ekle{background:var(--brand)!important; color:#fff!important; border-color:var(--brand)!important; font-weight:800}
 .bsip-ekle:hover{filter:brightness(.94)}
+.bf-satis-ust{font-size:13px; font-weight:800; color:var(--brand-d)}
 .bf-donus{display:flex; align-items:center; min-width:0}
 .bf-donus-metin{font-size:11px; font-weight:600; color:var(--cocoa); line-height:1.35; background:var(--brand-soft); border-radius:7px; padding:4px 8px; white-space:normal}
 .bf-donus-yok{font-size:11px; font-weight:500; color:var(--ink-3); font-style:italic}
 @media(max-width:820px){
   .bsip-head .bf-donus,.bsip-satir .bf-donus{display:none}
+  .bsip-head,.bsip-satir{grid-template-columns:1.5fr 0.9fr 0.5fr 0.9fr 0.9fr 0.85fr !important}
+}
+@media(max-width:600px){
+  .bsip-head .bf-satis-ust,.bsip-satir .bf-satis-ust{display:none}
   .bsip-head,.bsip-satir{grid-template-columns:1.6fr 1.1fr 0.6fr 1.1fr 1fr !important}
 }
 /* Stok durum ekranı — 7 sütun */
@@ -1209,10 +1227,10 @@ tr:last-child td{border-bottom:none}
 .irs-arac-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; background:var(--surface-2); border-bottom:1px solid var(--line)}
 .irs-arac-baslik{font-size:15px; font-weight:800; color:var(--cocoa)}
 .irs-arac-btnlar{display:flex; gap:8px}
-.irs-kagit{padding:28px 30px; color:#1a1a1a; background:#fff}
-.irs-logo-orta{display:flex; flex-direction:column; align-items:center; gap:0; margin-bottom:16px}
-.irs-logo{width:80px; height:80px; object-fit:contain; flex:none; margin-bottom:-4px}
-.irs-logo-yazi{width:170px; object-fit:contain; flex:none}
+.irs-kagit{padding:44px 48px; color:#1a1a1a; background:#fff}
+.irs-logo-orta{display:flex; flex-direction:column; align-items:center; gap:0; margin-bottom:14px}
+.irs-logo{width:56px; height:56px; object-fit:contain; flex:none; margin-bottom:-2px}
+.irs-logo-yazi{width:120px; object-fit:contain; flex:none}
 .irs-ust{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid #4a0f2e; padding-bottom:14px; margin-bottom:16px}
 .irs-baslik-blok{display:flex; align-items:center; gap:12px}
 .irs-baslik-metin{display:flex; flex-direction:column}
@@ -1227,9 +1245,12 @@ tr:last-child td{border-bottom:none}
 .irs-tablo{width:100%; border-collapse:collapse; margin-bottom:14px}
 .irs-tablo th{background:#4a0f2e; color:#fff; font-size:11px; padding:9px 10px; text-align:left; font-weight:700}
 .irs-tablo td{padding:9px 10px; border-bottom:1px solid #eee; font-size:12.5px}
-.irs-tablo .irs-sira{width:36px; text-align:center; color:#999}
-.irs-tablo .irs-kod{width:92px; font-size:11px; color:#777; font-weight:700}
-.irs-tablo .irs-birim,.irs-tablo .irs-miktar{text-align:center; width:90px}
+.irs-tablo .irs-sira{width:30px; text-align:center; color:#999}
+.irs-tablo .irs-kod{width:88px; font-size:11px; color:#777; font-weight:700}
+.irs-tablo .irs-ad{width:auto; min-width:180px}
+.irs-tablo .irs-birim{text-align:center; width:64px}
+.irs-tablo .irs-miktar{text-align:center; width:64px}
+.irs-tablo .irs-icerik{text-align:center; width:104px; font-size:11px; color:#666; font-weight:600}
 .irs-tablo .irs-miktar{font-weight:800}
 .irs-taban{font-size:10px; color:#888; font-weight:600; margin-top:2px}
 .irs-tablo tfoot td{border-top:2px solid #4a0f2e; border-bottom:none; font-weight:800; background:#faf4ec}
@@ -2851,7 +2872,47 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .bayi-sube-ad{font-size:14px; font-weight:800; margin-bottom:8px}
 .bayi-sepet-miktar{font-size:13px; font-weight:800; color:var(--brand-d)}
 .bayi-sepet-ozet{position:sticky; bottom:0; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px 16px; margin-top:14px; box-shadow:var(--shadow-lg)}
-.bayi-sepet-baslik{font-size:14px; font-weight:800; margin-bottom:10px}
+.bayi-sepet-baslik{font-size:14px; font-weight:800; margin-bottom:10px; display:flex; align-items:center; gap:8px}
+.bayi-sepet-baslik .bsip-excel{margin-left:auto}
+/* Alt sepet ürün listesi */
+.bsepet-liste{display:flex; flex-direction:column; gap:7px; margin-bottom:12px; max-height:260px; overflow-y:auto}
+/* Sepet sütunlu tablo */
+.bsepet-tablo{margin-bottom:12px; max-height:280px; overflow-y:auto; border:1px solid var(--line); border-radius:11px}
+.bsepet-thead,.bsepet-trow{display:grid; grid-template-columns:1.8fr 1.3fr 1fr 0.9fr 1fr 0.4fr; gap:8px; align-items:center; padding:9px 12px}
+.bsepet-thead{background:var(--surface-2); font-size:10.5px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.3px; position:sticky; top:0; z-index:2; border-bottom:1px solid var(--line)}
+.bsepet-trow{border-bottom:1px solid var(--line); font-size:13px}
+.bsepet-trow:last-child{border-bottom:none}
+.bsc-ad{display:flex; align-items:center; gap:8px; min-width:0}
+.bsc-ad strong{font-size:13px; font-weight:700; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bsc-icerik{font-size:11px; font-weight:600; color:var(--cocoa); background:var(--brand-soft); border-radius:6px; padding:3px 7px; text-align:center; white-space:nowrap}
+.bsc-fiyat{font-size:12.5px; font-weight:700; color:var(--brand-d); text-align:right}
+.bsc-fiyat small{font-size:9.5px; font-weight:600; color:var(--ink-3)}
+.bsc-mik{font-size:13px; font-weight:800; color:var(--ink); text-align:center}
+.bsc-tutar{font-size:14px; font-weight:900; color:var(--cocoa); text-align:right}
+.bsc-sil{justify-self:end}
+.bayi-sip-tablo{margin-bottom:12px}
+.bayi-sip-tablo .bsepet-trow.bayi-kalem-silinmis{opacity:.55; background:var(--err-soft,#fdeeee)}
+.bayi-sip-tablo-sube .bsepet-thead, .bayi-sip-tablo-sube .bsepet-trow{grid-template-columns:1.8fr 1.3fr 1fr 0.9fr 1fr}
+@media(max-width:720px){
+  .bsepet-thead{display:none}
+  .bsepet-trow{grid-template-columns:1fr auto auto; gap:4px 8px; padding:10px}
+  .bsc-ad{grid-column:1/4; margin-bottom:2px}
+  .bsc-icerik{grid-column:1; justify-self:start}
+  .bsc-fiyat{grid-column:2; text-align:center}
+  .bsc-mik{grid-column:1; justify-self:start; font-size:12px}
+  .bsc-tutar{grid-column:2/3}
+  .bsc-sil{grid-column:3; grid-row:2/4}
+}
+.bsepet-satir{display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:11px; background:var(--surface-2); border:1px solid var(--line)}
+.bsepet-gorsel{flex:0 0 36px; width:36px; height:36px; border-radius:9px; overflow:hidden; background:var(--surface); border:1px solid var(--line); display:grid; place-items:center}
+.bsepet-gorsel img{width:100%; height:100%; object-fit:cover; display:block}
+.bsepet-bilgi{flex:1; min-width:0; display:flex; flex-direction:column; gap:1px}
+.bsepet-bilgi strong{font-size:13.5px; font-weight:700; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.bsepet-mik{font-size:11.5px; font-weight:600; color:var(--ink-3)}
+.bsepet-tutar{flex:none; font-size:13.5px; font-weight:800; color:var(--cocoa); white-space:nowrap}
+.bsepet-sil{flex:none; width:28px; height:28px; border-radius:8px; border:1px solid var(--err); background:var(--surface); color:var(--err); font-size:13px; font-weight:900; cursor:pointer; display:grid; place-items:center}
+.bsepet-sil:active,.bsepet-sil:hover{background:var(--err); color:#fff}
+.bayi-sepette-rozet{font-size:11px; font-weight:800; color:var(--basari,#2e7d4f); background:var(--basari-soft,#e8f6ec); border-radius:7px; padding:3px 8px; white-space:nowrap}
 /* Bayi ödeme modalı */
 .bom-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
 .bom-baslik{font-size:17px; font-weight:800}
@@ -19189,24 +19250,48 @@ function bayiGecmisHtml(isGenel){
       </div>`;
     if(acik){
       html += `<div class="gecmis-kart-govde">
-        <div class="bayi-sip-kalemler">`;
+        <div class="bsepet-tablo bayi-sip-tablo bayi-sip-tablo-sube">
+          <div class="bsepet-thead">
+            <span class="bsc-ad">Stok Kartı</span>
+            <span class="bsc-icerik">Birim İçeriği</span>
+            <span class="bsc-fiyat">Birim Fiyat</span>
+            <span class="bsc-mik">Miktar</span>
+            <span class="bsc-tutar">Tutar</span>
+          </div>`;
       aktifKalem.forEach(k=>{
-        const s = STOCK[k.kod]; const bf = bayiSatisFiyat(k.kod);
+        const s = STOCK[k.kod]; const fTaban = bayiSatisFiyat(k.kod);
         const u = s?uomAl(s):null;
-        // kullanıcının girdiği birim/miktar (örn "3 kutu"); yoksa taban okunaklı
-        let mikG;
-        if(u && k.girisBirim && k.girisMiktar!=null){
-          mikG = (k.girisBirim!==u.tabanBirim) ? `${k.girisMiktar} ${k.girisBirim} (${(+(k.miktar||0).toFixed(2))} ${u.tabanBirim})` : `${k.girisMiktar} ${k.girisBirim}`;
-        } else if(u){ mikG = uomGoster(u, k.miktar||0); } else { mikG = String(k.miktar); }
-        html += `<div class="bayi-sip-kalem"><span>${s?s.ad:k.kod}${s&&s.no?` <small class="gk-stokno">${s.no}</small>`:''}</span>
-          <span>${mikG} × ${bf.toFixed(2)} ₺ = <strong>${(k.miktar*bf).toFixed(2)} ₺</strong></span></div>`;
+        const secBirim = (k.girisBirim) ? k.girisBirim : (u?u.tabanBirim:"");
+        let secCarpan = 1;
+        if(u && secBirim!==u.tabanBirim){
+          const sv=u.seviyeler.find(x=>x.ad===secBirim);
+          if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
+        }
+        const secMiktar = (k.girisMiktar!=null && k.miktar===(k.girisMiktar*secCarpan)) ? k.girisMiktar : (secCarpan>1 ? +(k.miktar/secCarpan).toFixed(2) : k.miktar);
+        const birimFiyat = fTaban*secCarpan;
+        const icerik = (u && secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : (u?`— (${u.tabanBirim})`:"");
+        const satirTutar = k.miktar*fTaban;
+        html += `<div class="bsepet-trow">
+          <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong>${s&&s.no?`<small class="gk-stokno">${s.no}</small>`:''}</span>
+          <span class="bsc-icerik">${icerik}</span>
+          <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+          <span class="bsc-mik">${secMiktar} ${secBirim}</span>
+          <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+        </div>`;
+      });
+      // KDV oran satırları (farklı KDV'liler ayrı)
+      const gOranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+      let gKdvSatir="";
+      gOranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
+        gKdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
       });
       html += `</div>
         <div class="bayi-ozet-tablo">
           <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${t.brut.toFixed(2)} ₺</span></div>
           ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(2)} ₺</span></div>`:''}
-          <div class="bayi-ozet-satir"><span>Matrah</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
-          <div class="bayi-ozet-satir"><span>KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
+          <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
+          ${gKdvSatir}
+          <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
           <div class="bayi-ozet-satir bayi-ozet-net"><span>Net tutar</span><span>${t.net.toFixed(2)} ₺</span></div>
         </div>
         <div class="gecmis-kart-aksiyon">
@@ -19251,25 +19336,44 @@ function bayiGecmisXls(isGenel){
   const liste = bayiGecmisFiltrele(isGenel);
   if(liste.length===0){ note("İndirilecek kayıt yok"); return; }
   let satirlar = "";
-  let genelNet = 0;
+  let genelBrut = 0, genelMatrah = 0, genelKdv = 0, genelNet = 0;
   liste.forEach(sp=>{
     const isk = bayiIskonto(sp.sube);
+    const t = siparisTutar(sp);   // brut, isk, indirim, net, oranGrup, toplamMatrah, toplamKdv
     sp.kalemler.filter(k=>!k.silindi && k.miktar>0).forEach(k=>{
-      const s = STOCK[k.kod]; const bf = bayiFiyat(k.kod);
-      const brut = k.miktar*bf;
-      const net = brut*(1-isk/100);
-      genelNet += net;
+      const s = STOCK[k.kod];
       const u = s?uomAl(s):null;
-      // sipariş miktarı = kullanıcının girdiği (3), birim = girdiği (kutu), taban ayrı sütun (45 adet)
-      const sipMik = (k.girisMiktar!=null) ? k.girisMiktar : k.miktar;
+      const fTaban = bayiSatisFiyat(k.kod);
       const sipBirim = (k.girisBirim) ? k.girisBirim : (u?u.tabanBirim:"");
+      let secCarpan = 1;
+      if(u && sipBirim!==u.tabanBirim){
+        const sv=u.seviyeler.find(x=>x.ad===sipBirim);
+        if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
+      }
+      const sipMik = (k.girisMiktar!=null) ? k.girisMiktar : k.miktar;
+      const birimFiyat = fTaban*secCarpan;
+      const brut = k.miktar*fTaban;
+      const kdvOran = (s && s.satisKdv!=null) ? s.satisKdv : (s && s.kdv!=null ? s.kdv : 0);
       const tabanG = u ? `${(+(k.miktar||0).toFixed(2))} ${u.tabanBirim}` : String(k.miktar);
       satirlar += `<tr>
         <td>${sp.tarih}</td><td>#${sp.id}</td><td>${sp.sube}</td>
         <td>${s?s.ad:k.kod}</td><td>${sipMik}</td><td>${sipBirim}</td><td>${tabanG}</td>
-        <td>${bf}</td><td>${brut.toFixed(0)}</td><td>%${isk}</td><td>${net.toFixed(0)}</td>
+        <td>${birimFiyat.toFixed(2)}</td><td>%${kdvOran}</td><td>${brut.toFixed(2)}</td>
         <td>${SIPARIS_DURUM[sp.durum].ad}</td><td>${sp.odeme||''}</td></tr>`;
     });
+    // sipariş özeti: KDV oran grupları + iskonto + net
+    const oranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+    satirlar += `<tr style="background:#f5efe6"><td colspan="9" style="text-align:right;font-weight:bold">#${sp.id} · Toplam (KDV dahil)</td><td style="font-weight:bold">${t.brut.toFixed(2)}</td><td colspan="2"></td></tr>`;
+    if(t.isk>0){
+      satirlar += `<tr style="background:#faf4ec"><td colspan="9" style="text-align:right;color:#c0392b">↳ İskonto (%${t.isk})</td><td style="color:#c0392b">− ${t.indirim.toFixed(2)}</td><td colspan="2"></td></tr>`;
+    }
+    oranlar.forEach(oran=>{
+      const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
+      satirlar += `<tr style="background:#faf4ec"><td colspan="9" style="text-align:right;color:#555">↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)})</td><td style="color:#555">${g.kdv.toFixed(2)}</td><td colspan="2"></td></tr>`;
+    });
+    satirlar += `<tr style="background:#eef6ef"><td colspan="9" style="text-align:right;font-weight:bold">#${sp.id} · Matrah ${t.toplamMatrah.toFixed(2)} + KDV ${t.toplamKdv.toFixed(2)} = NET</td><td style="font-weight:bold">${t.net.toFixed(2)}</td><td colspan="2"></td></tr>`;
+    satirlar += `<tr><td colspan="12"></td></tr>`;
+    genelBrut += t.brut; genelMatrah += t.toplamMatrah; genelKdv += t.toplamKdv; genelNet += t.net;
   });
   const baslik = `MİNİPAN Bayi Kanalı — Geçmiş Siparişler`;
   const aralik = (state.gecmisBasUyg||state.gecmisBitUyg) ? `${state.gecmisBasUyg||'…'} → ${state.gecmisBitUyg||'…'}` : 'Tüm tarihler';
@@ -19277,15 +19381,16 @@ function bayiGecmisXls(isGenel){
   const tablo = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel">
     <head><meta charset="utf-8"></head><body>
     <table border="1">
-      <tr><td colspan="13" style="font-weight:bold;font-size:14px">${baslik}</td></tr>
-      <tr><td colspan="13">${subeBilgi} · ${aralik}</td></tr>
+      <tr><td colspan="12" style="font-weight:bold;font-size:14px">${baslik}</td></tr>
+      <tr><td colspan="12">${subeBilgi} · ${aralik}</td></tr>
       <tr></tr>
-      <tr style="background:#4a0f2e;font-weight:bold">
+      <tr style="background:#4a0f2e;color:#fff;font-weight:bold">
         <td>Tarih</td><td>Sipariş No</td><td>Şube</td><td>Ürün</td><td>Miktar</td><td>Birim</td><td>Taban Miktar</td>
-        <td>Birim Fiyat</td><td>Tutar (iskontosuz)</td><td>İskonto</td><td>Net Tutar</td><td>Durum</td><td>Ödeme</td></tr>
+        <td>Birim Fiyat (KDV dahil)</td><td>KDV Oranı</td><td>Tutar (KDV dahil)</td><td>Durum</td><td>Ödeme</td></tr>
       ${satirlar}
       <tr style="font-weight:bold;background:#e8f6ec">
-        <td colspan="10">GENEL TOPLAM (Net)</td><td>${genelNet.toFixed(0)} ₺</td><td colspan="2"></td></tr>
+        <td colspan="9" style="text-align:right">GENEL TOPLAM · KDV dahil ${genelBrut.toFixed(2)} · matrah ${genelMatrah.toFixed(2)} · KDV ${genelKdv.toFixed(2)} · NET</td>
+        <td>${genelNet.toFixed(2)} ₺</td><td colspan="2"></td></tr>
     </table></body></html>`;
   const blob = new Blob(["\ufeff"+tablo], {type:"application/vnd.ms-excel;charset=utf-8"});
   const a = document.createElement("a");
@@ -21033,12 +21138,14 @@ function bayiFiyatListeHtml(){
     html += `<div class="bsip-kat-baslik">${kat} <span class="bsip-kat-say">${liste.length}</span></div>`;
     html += `<div class="bfiyat-tablo">`;
     // başlık satırı
-    html += `<div class="bfiyat-head">
+    html += `<div class="bfiyat-head bfiyat-a2">
       <span class="bf-ad">Stok Kartı</span>
       <span class="bf-mik">Stok</span>
       <span class="bf-kdv">KDV</span>
-      <span class="bf-alis">Alış (KDV'li)</span>
-      <span class="bf-satis">Satış (KDV dahil)</span>
+      <span class="bf-alis">Alış birim (KDV'li)</span>
+      <span class="bf-alis-ust">Alış üst birim</span>
+      <span class="bf-satis">Satış birim (KDV dahil)</span>
+      <span class="bf-satis-ust">Satış üst birim</span>
       <span class="bf-durum">Satışa</span>
       <span class="bf-islem"></span>
     </div>`;
@@ -21047,14 +21154,25 @@ function bayiFiyatListeHtml(){
       const mevcut = s.mevcut||0;
       const acik = s.aktif!==false;
       const satisVar = d.satisDahil>0;
+      const u = uomAl(s);
       genelAlis += mevcut*d.alisDahil;
       genelSatis += mevcut*d.satisDahil;
-      html += `<div class="bfiyat-satir">
+      // taban + üst birim (KDV dahil) — alış siyah, satış kırmızı
+      const alisTaban = d.alisDahil;
+      const satisTaban = d.satisDahil;
+      const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
+      const ustCarpan = ustSeviye ? uomTabanCarpani(u, 0) : 1;
+      const alisUst = alisTaban * ustCarpan;
+      const satisUst = satisTaban * ustCarpan;
+      const ustEt = ustSeviye ? `/ ${ustSeviye.ad} (${ustCarpan} ${u.tabanBirim})` : "";
+      html += `<div class="bfiyat-satir bfiyat-a2">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${uomGoster(uomAl(s), mevcut)}</span></span>
+        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${uomGoster(u, mevcut)}</span></span>
         <span class="bf-kdv">%${d.alisKdv}</span>
-        <span class="bf-alis">${d.alisDahil>0?d.alisDahil.toFixed(2)+' ₺':'—'}</span>
-        <span class="bf-satis">${satisVar?d.satisDahil.toFixed(2)+' ₺':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-alis">${alisTaban>0?alisTaban.toFixed(2)+' ₺':'—'}<br><small class="bf-birim-et">/ ${u.tabanBirim}</small></span>
+        <span class="bf-alis-ust">${(ustSeviye&&alisUst>0)?`${alisUst.toFixed(2)} ₺<br><small class="bf-birim-et">${ustEt}</small>`:`<span style="color:var(--ink-3)">—</span>`}</span>
+        <span class="bf-satis">${satisVar?satisTaban.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+u.tabanBirim+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis-ust">${(ustSeviye&&satisVar&&satisUst>0)?`${satisUst.toFixed(2)} ₺<br><small class="bf-birim-et">${ustEt}</small>`:`<span style="color:var(--ink-3)">—</span>`}</span>
         <span class="bf-durum"><button class="bf-durum-btn ${acik?'acik':'kapali'}" onclick="bayiSatisDurum('${kod.replace(/'/g,"\\'")}')">${acik?'✓ Açık':'✕ Kapalı'}</button></span>
         <span class="bf-islem"><button class="bayi-mini" onclick="stokKartDuzenle('${kod.replace(/'/g,"\\'")}')">✏️</button></span>
       </div>`;
@@ -21087,20 +21205,27 @@ function bayiFiyatExcel(){
   let genelAlis=0, genelSatis=0, satirlar="";
   katSira.forEach(kat=>{
     const liste=gruplar[kat].sort((a,b)=>a[1].ad.localeCompare(b[1].ad,"tr"));
-    satirlar+=`<tr><td class="altbaslik" colspan="7">${E(kat)}</td></tr>`;
+    satirlar+=`<tr><td class="altbaslik" colspan="9">${E(kat)}</td></tr>`;
     liste.forEach(([kod,s])=>{
       const d=stokFiyatDetay(kod), mevcut=s.mevcut||0, acik=s.aktif!==false;
+      const u=uomAl(s);
+      const ustSeviye=u.seviyeler.length?u.seviyeler[0]:null;
+      const ustCarpan=ustSeviye?uomTabanCarpani(u,0):1;
+      const alisUst=d.alisDahil*ustCarpan, satisUst=d.satisDahil*ustCarpan;
+      const ustBilgi=ustSeviye?`${ustSeviye.ad}=${ustCarpan} ${u.tabanBirim}`:'';
+      const alisUstEt=ustSeviye?`${alisUst.toFixed(2)} (${ustBilgi})`:'—';
+      const satisUstEt=(ustSeviye&&d.satisDahil>0)?`${satisUst.toFixed(2)} (${ustBilgi})`:'—';
       const tAlis=mevcut*d.alisDahil, tSatis=mevcut*d.satisDahil;
       genelAlis+=tAlis; genelSatis+=tSatis;
-      satirlar+=`<tr><td>${E(s.ad)}</td><td class="sayi">${(+mevcut.toFixed(2))} ${E(s.birim||'gr')}</td><td class="sayi">%${d.alisKdv}</td><td class="tut">${d.alisDahil.toFixed(2)}</td><td class="tut">${d.satisDahil>0?d.satisDahil.toFixed(2):'—'}</td><td>${acik?'Açık':'Kapalı'}</td><td class="tut">${tSatis>0?tSatis.toFixed(2):'—'}</td></tr>`;
+      satirlar+=`<tr><td>${E(s.ad)}</td><td class="sayi">${uomGoster(u,mevcut)}</td><td class="sayi">%${d.alisKdv}</td><td class="tut">${d.alisDahil>0?d.alisDahil.toFixed(2)+' / '+u.tabanBirim:'—'}</td><td class="tut">${E(alisUstEt)}</td><td class="tut">${d.satisDahil>0?d.satisDahil.toFixed(2)+' / '+u.tabanBirim:'—'}</td><td class="tut">${E(satisUstEt)}</td><td>${acik?'Açık':'Kapalı'}</td><td class="tut">${tSatis>0?tSatis.toFixed(2):'—'}</td></tr>`;
     });
   });
   const tablo=`<table>
-    <tr><td class="baslik" colspan="7">MİNİPAN · Bayi Satış Fiyatları</td></tr>
-    <tr><th>Stok Kartı</th><th>Stok</th><th>KDV</th><th>Alış (KDV'li)</th><th>Satış (KDV dahil)</th><th>Satışa</th><th>Satış Değeri</th></tr>
+    <tr><td class="baslik" colspan="9">MİNİPAN · Bayi Satış Fiyatları</td></tr>
+    <tr><th>Stok Kartı</th><th>Stok</th><th>KDV</th><th>Alış birim (KDV'li)</th><th>Alış üst birim</th><th>Satış birim (KDV dahil)</th><th>Satış üst birim</th><th>Satışa</th><th>Satış Değeri</th></tr>
     ${satirlar}
-    <tr><td colspan="6" style="text-align:right"><b>Toplam alış değeri (KDV'li)</b></td><td class="tut">${genelAlis.toFixed(2)}</td></tr>
-    <tr><td colspan="6" style="text-align:right"><b>Toplam satış değeri (KDV dahil)</b></td><td class="tut">${genelSatis.toFixed(2)}</td></tr>
+    <tr><td colspan="8" style="text-align:right"><b>Toplam alış değeri (KDV'li)</b></td><td class="tut">${genelAlis.toFixed(2)}</td></tr>
+    <tr><td colspan="8" style="text-align:right"><b>Toplam satış değeri (KDV dahil)</b></td><td class="tut">${genelSatis.toFixed(2)}</td></tr>
   </table>`;
   _xlsIndir("MINIPAN_Bayi_Fiyatlari_"+new Date().toISOString().slice(0,10), tablo);
   note("📥 Bayi fiyatları indirildi");
@@ -21211,13 +21336,13 @@ function bayiStoklarHtml(){
   function miktarAl(bayiAd, kod){
     return bayiAd==="__merkez" ? (STOCK[kod].mevcut||0) : bayiStok(bayiAd, kod);
   }
-  // sütun toplam değeri
+  // sütun toplam değeri (merkez ana depo SATIŞ fiyatı, KDV dahil)
   function sutunToplam(bayiAd){
-    let t=0; Object.keys(STOCK).forEach(kod=>{ t += miktarAl(bayiAd,kod)*(bayiFiyat(kod)||0); });
+    let t=0; Object.keys(STOCK).forEach(kod=>{ t += miktarAl(bayiAd,kod)*(bayiSatisFiyat(kod)||0); });
     return t;
   }
 
-  let html = `<div class="bayi-aciklama">🏪 Bayi stok karşılaştırma. Merkez sabit; üstten bayi seçip Merkez'in yanına sütun ekleyin.</div>`;
+  let html = `<div class="bayi-aciklama">🏪 Bayi stok karşılaştırma. Merkez sabit; üstten bayi seçip Merkez'in yanına sütun ekleyin. <b>Tutarlar satış fiyatı (KDV dahil) ile hesaplanır.</b></div>`;
 
   // ── ÜST ŞERİT: çoklu seçim ──
   html += `<div class="bstok-serit">`;
@@ -21255,13 +21380,14 @@ function bayiStoklarHtml(){
     // en az bir sütunda kaydı olan kartları göster
     const herhangi = sutunlar.some(sc=> miktarAl(sc,kod)!==0);
     if(!herhangi) return;
-    let satir = `<tr><td class="bstok-sabit-col"><strong>${s.ad}</strong> <span style="color:var(--ink-3);font-size:11px">${s.birim||'gr'}</span></td>`;
+    let satir = `<tr><td class="bstok-sabit-col"><strong>${s.ad}</strong> <span style="color:var(--ink-3);font-size:11px">${uomAl(s).tabanBirim}</span></td>`;
     sutunlar.forEach(sc=>{
       const m = miktarAl(sc,kod);
-      const alis = bayiFiyat(kod)||0;
-      const tutar = m*alis;
+      const satisF = bayiSatisFiyat(kod)||0;   // merkez ana depo SATIŞ fiyatı (KDV dahil)
+      const tutar = m*satisF;
       const eksi = m<0;
-      satir += `<td style="text-align:right;border-left:2px solid var(--line)${eksi?';color:var(--danger);font-weight:800':''}">${m!==0?(+m.toFixed(2)):'—'}</td>
+      const u = uomAl(s);
+      satir += `<td style="text-align:right;border-left:2px solid var(--line)${eksi?';color:var(--danger);font-weight:800':''}">${m!==0?uomGoster(u,m):'—'}</td>
         <td style="text-align:right;font-weight:700;color:var(--brand-d)">${tutar!==0?tutar.toFixed(2):'—'}</td>`;
     });
     satir += `</tr>`;
@@ -21314,31 +21440,52 @@ function bayiSiparisKartGenel(sp){
     <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)} · ${sp.sube}</span>
       <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
     <div class="bayi-sip-tarih">${sp.tarih}</div>
-    <div class="bayi-sip-kalemler">`;
+    <div class="bsepet-tablo bayi-sip-tablo">
+      <div class="bsepet-thead">
+        <span class="bsc-ad">Stok Kartı</span>
+        <span class="bsc-icerik">Birim İçeriği</span>
+        <span class="bsc-fiyat">Birim Fiyat</span>
+        <span class="bsc-mik">Miktar</span>
+        <span class="bsc-tutar">Tutar</span>
+        <span class="bsc-sil"></span>
+      </div>`;
   sp.kalemler.forEach((k,i)=>{
     const s = STOCK[k.kod];
+    const u = s?uomAl(s):null;
     const talep = k.talepMiktar!=null ? k.talepMiktar : k.miktar;
     const degisti = talep!==k.miktar || k.silindi;
-    const u = s?uomAl(s):null;
-    // kullanıcının girdiği birim/miktar (örn "1 kutu"); yoksa taban okunaklı
-    const mikMetin = (mik)=>{
-      if(!u) return String(mik);
-      if(k.girisBirim && k.girisMiktar!=null && mik===k.miktar){
-        return (k.girisBirim!==u.tabanBirim) ? `${k.girisMiktar} ${k.girisBirim}` : `${k.girisMiktar} ${k.girisBirim}`;
-      }
-      return uomGoster(u, mik);
-    };
-    let miktarHtml;
-    if(k.silindi){
-      miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${mikMetin(talep)}</span> <span style="color:var(--err)">çıkarıldı</span>`;
-    } else if(degisti){
-      miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${uomGoster(u,talep)}</span> → <strong>${mikMetin(k.miktar)}</strong>${bayiSatisFiyat(k.kod)>0?' · '+(k.miktar*bayiSatisFiyat(k.kod)).toFixed(0)+' ₺':''}`;
-    } else {
-      miktarHtml = `${mikMetin(k.miktar)}${bayiSatisFiyat(k.kod)>0?' · '+(k.miktar*bayiSatisFiyat(k.kod)).toFixed(0)+' ₺':''}`;
+    const fTaban = bayiSatisFiyat(k.kod);
+    // seçilen birim (kutu/adet) ve o birimin fiyatı
+    const secBirim = (k.girisBirim) ? k.girisBirim : (u?u.tabanBirim:"");
+    let secCarpan = 1;
+    if(u && secBirim!==u.tabanBirim){
+      const sv=u.seviyeler.find(x=>x.ad===secBirim);
+      if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
     }
-    html += `<div class="bayi-sip-kalem${k.silindi?' bayi-kalem-silinmis':''}"><span>${s?s.ad:k.kod}</span>
-      <span>${miktarHtml}</span>
-      ${sp.durum==="onayda"?`<button class="bayi-kalem-sil" onclick="sipKalemDuzenle(${sp.id},${i})">✏️</button>`:''}</div>`;
+    // düzenlenmişse taban miktardan seçilen birime çevir
+    const secMiktar = (k.girisMiktar!=null && k.miktar===(k.girisMiktar*secCarpan)) ? k.girisMiktar : (secCarpan>1 ? +(k.miktar/secCarpan).toFixed(2) : k.miktar);
+    const birimFiyat = fTaban*secCarpan;
+    const icerik = (u && secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : (u?`— (${u.tabanBirim})`:"");
+    const satirTutar = k.miktar*fTaban;
+    const silinmisClass = k.silindi ? ' bayi-kalem-silinmis' : '';
+    // miktar hücresi: değişmişse eski→yeni
+    let mikHucre;
+    if(k.silindi){
+      mikHucre = `<span style="text-decoration:line-through;color:var(--ink-3)">${secMiktar} ${secBirim}</span><br><span style="color:var(--err);font-size:11px">çıkarıldı</span>`;
+    } else if(degisti){
+      const eskiSec = secCarpan>1 ? +(talep/secCarpan).toFixed(2) : talep;
+      mikHucre = `<span style="text-decoration:line-through;color:var(--ink-3);font-size:11px">${eskiSec} ${secBirim}</span><br><strong>${secMiktar} ${secBirim}</strong>`;
+    } else {
+      mikHucre = `${secMiktar} ${secBirim}`;
+    }
+    html += `<div class="bsepet-trow${silinmisClass}">
+      <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong></span>
+      <span class="bsc-icerik">${icerik}</span>
+      <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+      <span class="bsc-mik">${mikHucre}</span>
+      <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+      <span class="bsc-sil">${sp.durum==="onayda"?`<button class="bayi-kalem-sil" onclick="sipKalemDuzenle(${sp.id},${i})">✏️</button>`:''}</span>
+    </div>`;
   });
   html += `</div>`;
   const t = siparisTutar(sp);
@@ -21534,15 +21681,20 @@ function bayiSipGovdeHtml(){
       <span class="bf-mik">Ana Bayi Stok</span>
       <span class="bf-donus">Birim Dönüşümü</span>
       <span class="bf-kdv">KDV</span>
-      <span class="bf-satis">Satış (KDV dahil)</span>
+      <span class="bf-satis">Satış birim (KDV dahil)</span>
+      <span class="bf-satis-ust">Satış üst birim</span>
       <span class="bf-islem"></span>
     </div>`;
     kartlar.forEach(([kod,s])=>{
       const d = stokFiyatDetay(kod);
-      const f = d.satisDahil||0;         // bayi satış fiyatı (KDV dahil), alış gizli
+      const f = d.satisDahil||0;         // taban birim satış fiyatı (KDV dahil), alış gizli
       const merkezVar = s.mevcut||0;
       const u = uomAl(s);
       const donusAcik = uomDonusumAcik(u);
+      // üst birim satış fiyatı = taban × üst çarpan
+      const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
+      const ustCarpan = ustSeviye ? uomTabanCarpani(u, 0) : 1;
+      const satisUst = f * ustCarpan;
       const sepette = state.bayiSepet.find(x=>x.kod===kod);
       let birimGoster = "";
       if(sepette){
@@ -21557,10 +21709,11 @@ function bayiSipGovdeHtml(){
         <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${uomGoster(u, merkezVar)}</span></span>
         <span class="bf-donus">${donusAcik?`<span class="bf-donus-metin">${donusAcik}</span>`:`<span class="bf-donus-yok">tek birim (${u.tabanBirim})</span>`}</span>
         <span class="bf-kdv">%${d.satisKdv}</span>
-        <span class="bf-satis">${f>0?f.toFixed(2)+' ₺':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis">${f>0?f.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+u.tabanBirim+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis-ust">${(ustSeviye&&satisUst>0)?`${satisUst.toFixed(2)} ₺<br><small class="bf-birim-et">/ ${ustSeviye.ad} (${ustCarpan} ${u.tabanBirim})</small>`:`<span style="color:var(--ink-3)">—</span>`}</span>
         <span class="bf-islem">
           ${sepette
-            ? `<span class="bayi-sepet-miktar">${birimGoster}</span><button class="bayi-mini sil" onclick="bayiSepetCikar('${kod}')">✕</button>`
+            ? `<span class="bayi-sepette-rozet">✓ ${birimGoster}</span><button class="bayi-mini bsip-ekle" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`
             : `<button class="bayi-mini bsip-ekle" onclick="bayiSepetEkle('${kod}')">+ Sepete</button>`}
         </span>
       </div>`;
@@ -21582,8 +21735,44 @@ function bayiSipGovdeHtml(){
       kdvSatirlar += `<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
     });
     html += `<div class="bayi-sepet-ozet">
-      <div class="bayi-sepet-baslik">📝 Talep listesi · ${state.bayiSepet.length} kalem
+      <div class="bayi-sepet-baslik">🛒 Sepet · ${state.bayiSepet.length} kalem
         <button class="bsip-excel" onclick="bayiSiparisExcel()">📊 Excel indir</button></div>
+      <div class="bsepet-tablo">
+        <div class="bsepet-thead">
+          <span class="bsc-ad">Stok Kartı</span>
+          <span class="bsc-icerik">Birim İçeriği</span>
+          <span class="bsc-fiyat">Birim Fiyat</span>
+          <span class="bsc-mik">Miktar</span>
+          <span class="bsc-tutar">Tutar</span>
+          <span class="bsc-sil"></span>
+        </div>
+        ${state.bayiSepet.map((k,i)=>{
+          const s = STOCK[k.kod]; if(!s) return "";
+          const u = uomAl(s);
+          const fTaban = bayiSatisFiyat(k.kod);   // taban birim satış (KDV dahil)
+          // seçilen birim: kutu seçildiyse kutu fiyatı, adet seçildiyse adet fiyatı
+          const secBirim = (k.girisBirim) ? k.girisBirim : u.tabanBirim;
+          const secMiktar = (k.girisMiktar!=null) ? k.girisMiktar : (k.miktar||0);
+          // seçilen birimin çarpanı (kutu → 15, adet → 1)
+          let secCarpan = 1;
+          if(secBirim!==u.tabanBirim){
+            const sv = u.seviyeler.find(x=>x.ad===secBirim);
+            if(sv){ const idx=u.seviyeler.indexOf(sv); secCarpan=uomTabanCarpani(u,idx); }
+          }
+          const birimFiyat = fTaban*secCarpan;   // seçilen birim başına fiyat
+          // birim içeriği açıklaması
+          const icerik = (secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : `— (${u.tabanBirim})`;
+          const satirTutar = birimFiyat*secMiktar;
+          return `<div class="bsepet-trow">
+            <span class="bsc-ad"><span class="bsepet-gorsel">${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span>
+            <span class="bsc-icerik">${icerik}</span>
+            <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+            <span class="bsc-mik">${secMiktar} ${secBirim}</span>
+            <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+            <button class="bsc-sil bsepet-sil" onclick="bayiSepetCikarIdx(${i})" aria-label="Çıkar">✕</button>
+          </div>`;
+        }).join("")}
+      </div>
       <div class="bayi-ozet-tablo">
         <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${oz.brutToplam.toFixed(2)} ₺</span></div>
         ${oz.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${oz.isk})</span><span>− ${oz.indirimDahil.toFixed(2)} ₺</span></div>`:''}
@@ -21779,6 +21968,12 @@ function bayiSepetCikar(kod){
   state.bayiSepet = state.bayiSepet.filter(x=>x.kod!==kod);
   go("bayi", true);
 }
+/* Alt listede tek satırı (index ile) çıkar — aynı ürün birden çok kez eklenmişse doğru satırı siler */
+function bayiSepetCikarIdx(i){
+  if(!state.bayiSepet) return;
+  state.bayiSepet.splice(i, 1);
+  go("bayi", true);
+}
 /* Siparişin görünen numarası — yeni siparişlerde MNPN-XXX-00042, eskilerde #id */
 function siparisNo(sp){ return sp && sp.no ? sp.no : ("#"+(sp?sp.id:"")); }
 function bayiSiparisGonder(){
@@ -21815,28 +22010,61 @@ function bayiBenimSiparisHtml(){
       <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)}</span>
         <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
       <div class="bayi-sip-tarih">${sp.tarih}${sp.duzenlendi?' <span class="bayi-duzenlendi-rozet">✏️ genel müdür düzenledi</span>':''}</div>
-      <div class="bayi-sip-kalemler">`;
+      <div class="bsepet-tablo bayi-sip-tablo bayi-sip-tablo-sube">
+        <div class="bsepet-thead">
+          <span class="bsc-ad">Stok Kartı</span>
+          <span class="bsc-icerik">Birim İçeriği</span>
+          <span class="bsc-fiyat">Birim Fiyat</span>
+          <span class="bsc-mik">Miktar</span>
+          <span class="bsc-tutar">Tutar</span>
+        </div>`;
     sp.kalemler.forEach(k=>{
       const s = STOCK[k.kod];
-      const bf = bayiSatisFiyat(k.kod);
+      const u = s?uomAl(s):null;
+      const fTaban = bayiSatisFiyat(k.kod);
       const talep = k.talepMiktar!=null ? k.talepMiktar : k.miktar;
       const degisti = talep!==k.miktar || k.silindi;
-      let miktarHtml;
-      if(k.silindi){
-        miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${talep} ${s?(s.birim||"gr"):""}</span> <span style="color:var(--err)">çıkarıldı</span>`;
-      } else if(degisti){
-        miktarHtml = `<span style="text-decoration:line-through;color:var(--ink-3)">${talep}</span> → <strong>${k.miktar}</strong> ${s?(s.birim||"gr"):""} × ${bf} ₺ = ${(k.miktar*bf).toFixed(0)} ₺`;
-      } else {
-        miktarHtml = `${k.miktar} ${s?(s.birim||"gr"):""} × ${bf} ₺ = ${(k.miktar*bf).toFixed(0)} ₺`;
+      const secBirim = (k.girisBirim) ? k.girisBirim : (u?u.tabanBirim:"");
+      let secCarpan = 1;
+      if(u && secBirim!==u.tabanBirim){
+        const sv=u.seviyeler.find(x=>x.ad===secBirim);
+        if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
       }
-      html += `<div class="bayi-sip-kalem${k.silindi?' bayi-kalem-silinmis':''}"><span>${s?s.ad:k.kod}</span>
-        <span>${miktarHtml}</span></div>`;
+      const secMiktar = (k.girisMiktar!=null && k.miktar===(k.girisMiktar*secCarpan)) ? k.girisMiktar : (secCarpan>1 ? +(k.miktar/secCarpan).toFixed(2) : k.miktar);
+      const birimFiyat = fTaban*secCarpan;
+      const icerik = (u && secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : (u?`— (${u.tabanBirim})`:"");
+      const satirTutar = k.miktar*fTaban;
+      let mikHucre;
+      if(k.silindi){
+        mikHucre = `<span style="text-decoration:line-through;color:var(--ink-3)">${secMiktar} ${secBirim}</span><br><span style="color:var(--err);font-size:11px">çıkarıldı</span>`;
+      } else if(degisti){
+        const eskiSec = secCarpan>1 ? +(talep/secCarpan).toFixed(2) : talep;
+        mikHucre = `<span style="text-decoration:line-through;color:var(--ink-3);font-size:11px">${eskiSec} ${secBirim}</span><br><strong>${secMiktar} ${secBirim}</strong>`;
+      } else {
+        mikHucre = `${secMiktar} ${secBirim}`;
+      }
+      html += `<div class="bsepet-trow${k.silindi?' bayi-kalem-silinmis':''}">
+        <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong></span>
+        <span class="bsc-icerik">${icerik}</span>
+        <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+        <span class="bsc-mik">${mikHucre}</span>
+        <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+      </div>`;
+    });
+    // KDV oran satırları (farklı KDV'liler ayrı)
+    const oranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+    let kdvSatir="";
+    oranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
+      kdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
     });
     html += `</div>
       <div class="bayi-ozet-tablo">
-        <div class="bayi-ozet-satir"><span>Toplam (iskontosuz)</span><span>${t.brut.toFixed(0)} ₺</span></div>
-        ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(0)} ₺</span></div>`:''}
-        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek</span><span>${t.net.toFixed(0)} ₺</span></div>
+        <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${t.brut.toFixed(2)} ₺</span></div>
+        ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(2)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
+        ${kdvSatir}
+        <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek</span><span>${t.net.toFixed(2)} ₺</span></div>
       </div>`;
     // duruma göre aksiyon
     if(sp.durum==="onayda"){
@@ -21945,19 +22173,24 @@ function irsaliyeAc(id){
     // sevk birimi = kullanıcının sipariş verdiği birim (kutu), miktar = girdiği (3)
     const sevkBirim = (k.girisBirim) ? k.girisBirim : u.tabanBirim;
     const sevkMik = (k.girisMiktar!=null) ? k.girisMiktar : k.miktar;
-    // taban farklıysa açıklama (45 adet)
-    const tabanNot = (k.girisBirim && k.girisBirim!==u.tabanBirim) ? `<div class="irs-taban">= ${(+(k.miktar||0).toFixed(2))} ${u.tabanBirim}</div>` : "";
+    // birim içeriği: 1 kutu = 15 adet (taban farklıysa)
+    const icerik = (k.girisBirim && k.girisBirim!==u.tabanBirim)
+      ? `1 ${sevkBirim} = ${(+(k.miktar/sevkMik).toFixed(2))} ${u.tabanBirim}`
+      : `—`;
+    // toplam taban miktar açıklaması (45 adet)
+    const tabanNot = (k.girisBirim && k.girisBirim!==u.tabanBirim) ? `<div class="irs-taban">Toplam: ${(+(k.miktar||0).toFixed(2))} ${u.tabanBirim}</div>` : "";
     return `<tr>
       <td class="irs-sira">${i+1}</td>
       <td class="irs-kod">${s.no||""}</td>
       <td class="irs-ad">${s.ad || k.kod}${tabanNot}</td>
+      <td class="irs-icerik">${icerik}</td>
       <td class="irs-birim">${sevkBirim}</td>
       <td class="irs-miktar">${sevkMik}</td>
     </tr>`;
   }).join("");
-  if(!satirlar) satirlar = `<tr><td colspan="5" class="irs-bos">Aktarılacak kalem yok.</td></tr>`;
+  if(!satirlar) satirlar = `<tr><td colspan="6" class="irs-bos">Aktarılacak kalem yok.</td></tr>`;
   const toplamKalem = kalemler.length;
-  const toplamMiktar = kalemler.reduce((t,k)=>t+(k.miktar||0),0);
+  // Not: farklı birimlerdeki (kutu/adet/gr) miktarlar toplanamaz — sadece kalem sayısı anlamlı
 
   const m = MERKEZ_FIRMA;
   const html = `
@@ -22008,11 +22241,11 @@ function irsaliyeAc(id){
 
         <table class="irs-tablo">
           <thead>
-            <tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
+            <tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th><th class="irs-icerik">Birim İçeriği</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
           </thead>
           <tbody>${satirlar}</tbody>
           <tfoot>
-            <tr><td colspan="3" class="irs-toplam-lbl">TOPLAM</td><td class="irs-birim">${toplamKalem} kalem</td><td class="irs-miktar">${toplamMiktar}</td></tr>
+            <tr><td colspan="5" class="irs-toplam-lbl">TOPLAM</td><td class="irs-miktar">${toplamKalem} kalem</td></tr>
           </tfoot>
         </table>
 
@@ -22042,11 +22275,12 @@ function irsaliyeYazdir(){
   setTimeout(()=>{ pencere.focus(); pencere.print(); }, 300);
 }
 function irsaliyeYazdirCss(){
-  return `body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;margin:0;padding:24px;color:#1a1a1a;background:#fff}
+  return `@page{margin:22mm 18mm}
+  body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;margin:0;padding:0;color:#1a1a1a;background:#fff}
   .irs-kagit{max-width:720px;margin:0 auto}
-  .irs-logo-orta{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:16px}
-  .irs-logo{width:80px;height:80px;object-fit:contain;flex:none;margin-bottom:-4px}
-  .irs-logo-yazi{width:170px;object-fit:contain;flex:none}
+  .irs-logo-orta{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:14px}
+  .irs-logo{width:56px;height:56px;object-fit:contain;flex:none;margin-bottom:-2px}
+  .irs-logo-yazi{width:120px;object-fit:contain;flex:none}
   .irs-ust{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #4a0f2e;padding-bottom:14px;margin-bottom:16px}
   .irs-baslik-blok{display:flex;align-items:center;gap:12px}
   .irs-baslik-metin{display:flex;flex-direction:column}
@@ -22061,9 +22295,12 @@ function irsaliyeYazdirCss(){
   .irs-tablo{width:100%;border-collapse:collapse;margin-bottom:14px}
   .irs-tablo th{background:#4a0f2e;color:#fff;font-size:11px;padding:9px 10px;text-align:left;font-weight:700}
   .irs-tablo td{padding:9px 10px;border-bottom:1px solid #eee;font-size:12.5px}
-  .irs-tablo .irs-sira{width:36px;text-align:center;color:#999}
-  .irs-tablo .irs-kod{width:92px;font-size:11px;color:#777;font-weight:700}
-  .irs-tablo .irs-birim,.irs-tablo .irs-miktar{text-align:center;width:90px}
+  .irs-tablo .irs-sira{width:30px;text-align:center;color:#999}
+  .irs-tablo .irs-kod{width:88px;font-size:11px;color:#777;font-weight:700}
+  .irs-tablo .irs-ad{width:auto;min-width:180px}
+  .irs-tablo .irs-birim{text-align:center;width:64px}
+  .irs-tablo .irs-miktar{text-align:center;width:64px}
+  .irs-tablo .irs-icerik{text-align:center;width:104px;font-size:11px;color:#666;font-weight:600}
   .irs-tablo .irs-miktar{font-weight:800}
   .irs-tablo tfoot td{border-top:2px solid #4a0f2e;border-bottom:none;font-weight:800;background:#faf4ec}
   .irs-toplam-lbl{text-align:right}
@@ -27737,28 +27974,6 @@ setInterval(sessionsKaydet, 4000);
 window.addEventListener("beforeunload", sessionsKaydet);
 window.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="hidden") sessionsKaydet(); });
 
-// Doğrudan role atlayarak açılış: ör. minipan.html?rol=qrmenu  veya  minipan.html?rol=qrmenu&sube=Edirne%20Atatürk&masa=4
-(function(){
-  try{
-    const qp = new URLSearchParams(window.location.search);
-    const rol = qp.get("rol") || (qp.get("qr")==="1" ? "qrmenu" : null); // ?qr=1 eski bağlantılarla uyumluluk için
-    if(!rol) return;
-    if(rol==="qrmenu"){
-      openQR();
-      const subeParam = qp.get("sube");
-      const masaParam = qp.get("masa");
-      if(subeParam && typeof QR!=="undefined") QR.sube = subeParam;
-      if(masaParam && typeof QR!=="undefined") QR.masa = masaParam;
-      if((subeParam||masaParam) && typeof renderQR==="function") renderQR();
-    } else if(["kasa","mudur","genel","depo"].includes(rol) && typeof login==="function"){
-      login(rol);
-    } else if(rol==="kds" && typeof openKDS==="function"){
-      openKDS();
-    } else if(rol==="garson" && typeof openGarson==="function"){
-      openGarson();
-    }
-  }catch(e){ /* param yoksa normal giriş ekranı kalır */ }
-})();
 </script>
 </body>
 </html>
