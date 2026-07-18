@@ -5181,6 +5181,81 @@ button.fk-urun-btn::before,button.fk-urun-btn::after{
 .satis-aktar-uyari{ font-size:14px; color:var(--ink); line-height:1.5; margin-bottom:12px; }
 .satis-aktar-liste{ background:var(--surface-2); border:1.5px solid var(--gold-3); border-radius:11px; padding:12px 14px; font-size:13.5px; font-weight:700; color:var(--ink-2); line-height:1.7; margin-bottom:12px; }
 .satis-aktar-not{ font-size:13px; color:var(--ink-3); font-style:italic; }
+
+/* ═══ SİPARİŞ SEPETİ — sabit alt bar + modal ═══ */
+.bsip-bar-bosluk{ height:78px; }
+.bsip-sepet-bar{
+  position:fixed; left:calc(82px + 26px); right:26px; bottom:18px; z-index:120;
+  display:flex; align-items:center; gap:16px; cursor:pointer;
+  padding:14px 22px; border-radius:16px;
+  background:linear-gradient(180deg,#4a3524,#392b23 55%,#27180e);
+  border:2px solid var(--gold-3);
+  box-shadow:0 0 0 1px rgba(201,162,52,.4), 0 8px 26px rgba(45,29,18,.4), inset 0 1px 0 rgba(255,224,140,.3);
+  color:#f7efe9; transition:transform .15s ease, box-shadow .25s ease;
+}
+.bsip-sepet-bar:hover{ transform:translateY(-2px); box-shadow:0 0 0 1px rgba(201,162,52,.55), 0 14px 34px rgba(45,29,18,.5); }
+.bsip-bar-sol{ display:flex; align-items:center; gap:10px; }
+.bsip-bar-ic{ font-size:26px; }
+.bsip-bar-kalem{ font-size:15px; font-weight:800; background:rgba(255,224,140,.2); padding:4px 12px; border-radius:99px; border:1px solid var(--gold-3); }
+.bsip-bar-orta{ flex:1; font-size:13.5px; color:#e0cdb8; font-weight:600; }
+.bsip-bar-sag{ display:flex; align-items:center; gap:10px; }
+.bsip-bar-tutar-lbl{ font-size:12px; color:#c9b8a8; }
+.bsip-bar-tutar{ font-size:22px; font-weight:800; color:#f2dd8f; }
+.bsip-bar-ok{ font-size:20px; color:var(--gold-3); }
+/* sepet modalı */
+.bsm-ic{ background:var(--surface); border:2px solid var(--gold-3); border-radius:18px; max-width:640px; width:94vw; max-height:88vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 60px rgba(45,29,18,.4); }
+.bsm-head{ display:flex; align-items:center; justify-content:space-between; padding:16px 20px; background:linear-gradient(180deg,#c68d67,#865432 40%,#432a19); color:#f7efe9; }
+.bsm-head-baslik{ font-size:18px; font-weight:800; display:flex; align-items:center; gap:10px; }
+.bsm-kalem-rozet{ font-size:12px; background:rgba(255,224,140,.25); padding:3px 10px; border-radius:99px; border:1px solid var(--gold-3); }
+.bsm-kapat{ background:rgba(255,255,255,.15); border:none; color:#fff; width:34px; height:34px; border-radius:9px; cursor:pointer; font-size:16px; }
+.bsm-govde{ flex:1; overflow-y:auto; padding:16px 20px; }
+.bsm-bos{ text-align:center; padding:40px 20px; color:var(--ink-3); }
+.bsm-liste{ display:flex; flex-direction:column; gap:10px; margin-bottom:16px; }
+.bsm-satir{ display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:13px; background:var(--surface-2); border:1.5px solid var(--gold-3); box-shadow:var(--emboss-sm); }
+.bsm-gorsel{ width:44px; height:44px; border-radius:10px; overflow:hidden; flex:none; display:grid; place-items:center; background:var(--brand-soft); border:1px solid var(--line-2); }
+.bsm-gorsel img{ width:100%; height:100%; object-fit:cover; }
+.bsm-bilgi{ flex:1; min-width:0; }
+.bsm-ad{ font-size:14.5px; font-weight:800; color:var(--ink); }
+.bsm-detay{ font-size:12px; color:var(--ink-3); margin-top:2px; }
+.bsm-adet{ display:flex; align-items:center; gap:8px; flex:none; }
+.bsm-adet-btn{ width:34px; height:34px; border-radius:9px; border:1.5px solid var(--gold-3); background:linear-gradient(180deg,#fff,#f3ebe8); color:var(--brand-d); font-size:20px; font-weight:800; cursor:pointer; display:grid; place-items:center; line-height:1; }
+.bsm-adet-btn:active{ transform:scale(.92); }
+.bsm-adet-say{ min-width:52px; text-align:center; font-size:15px; font-weight:800; color:var(--ink); display:flex; flex-direction:column; line-height:1.1; }
+.bsm-adet-say small{ font-size:10px; font-weight:600; color:var(--ink-3); }
+.bsm-tutar{ min-width:80px; text-align:right; font-size:15px; font-weight:800; color:var(--brand-d); flex:none; }
+.bsm-sil{ background:none; border:none; cursor:pointer; font-size:17px; opacity:.6; flex:none; }
+.bsm-sil:hover{ opacity:1; }
+.bsm-ozet{ background:var(--surface-2); border:1.5px solid var(--line-2); border-radius:13px; padding:14px 16px; }
+.bsm-aksiyon{ display:flex; gap:10px; padding:14px 20px; border-top:2px solid var(--gold-3); background:var(--surface-2); }
+.bsm-aksiyon .btn-primary{ flex:1; }
+.bsm-onayla{ font-weight:800!important; }
+.bsm-excel{ background:var(--pal-gold)!important; color:#3d2f26!important; border:1.5px solid var(--gold-3)!important; border-radius:11px!important; padding:0 14px!important; font-weight:800!important; }
+
+/* ═══ SATIŞ FATURA KALEMLERİ — sepet-kart düzeni ═══ */
+.sfk-liste{ display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+.sfk-satir{ display:flex; align-items:center; gap:13px; padding:12px 15px; border-radius:13px; background:var(--surface-2); border:1.5px solid var(--gold-3); box-shadow:var(--emboss-sm); }
+.sfk-gorsel{ width:46px; height:46px; border-radius:10px; overflow:hidden; flex:none; display:grid; place-items:center; background:var(--brand-soft); border:1px solid var(--line-2); }
+.sfk-gorsel img{ width:100%; height:100%; object-fit:cover; }
+.sfk-bilgi{ flex:1; min-width:0; }
+.sfk-ad{ font-size:14.5px; font-weight:800; color:var(--ink); }
+.sfk-detay{ font-size:12px; color:var(--ink-3); margin-top:2px; }
+.sfk-adet{ display:flex; align-items:center; gap:8px; flex:none; }
+.sfk-adet-btn{ width:34px; height:34px; border-radius:9px; border:1.5px solid var(--gold-3); background:linear-gradient(180deg,#fff,#f3ebe8); color:var(--brand-d); font-size:20px; font-weight:800; cursor:pointer; display:grid; place-items:center; line-height:1; }
+.sfk-adet-btn:active{ transform:scale(.92); }
+.sfk-adet-say{ min-width:56px; text-align:center; font-size:15px; font-weight:800; color:var(--ink); display:flex; flex-direction:column; line-height:1.1; }
+.sfk-adet-say small{ font-size:10px; font-weight:600; color:var(--ink-3); }
+.sfk-tutar{ min-width:78px; text-align:right; font-size:15px; font-weight:800; color:var(--brand-d); flex:none; }
+.sfk-islem{ display:flex; gap:5px; flex:none; }
+.sfk-duz,.sfk-sil{ background:none; border:none; cursor:pointer; font-size:16px; opacity:.65; padding:3px; }
+.sfk-duz:hover,.sfk-sil:hover{ opacity:1; }
+/* satış fatura kalem butonları evrensel modelden muaf */
+.main button.sfk-adet-btn,.main button.sfk-duz,.main button.sfk-sil{ overflow:visible; }
+.main button.sfk-adet-btn::before,.main button.sfk-adet-btn::after,
+.main button.sfk-duz::before,.main button.sfk-duz::after,
+.main button.sfk-sil::before,.main button.sfk-sil::after{ display:none!important; }
+/* sepet modal butonları evrensel modelden muaf */
+#bayiSepetModal button::before,#bayiSepetModal button::after{ display:none!important; }
+#bayiSepetModal button{ overflow:visible; }
 /* iki seçenekli aktar butonları */
 .satis-aktar-secim{ display:flex; flex-direction:column; gap:10px; margin:14px 0; }
 .satis-aktar-sec{
@@ -22623,24 +22698,28 @@ function satisFaturaFormHtml(){
   if(t.kalemler.length===0){
     html+=`<div class="fat-bos">Henüz ürün eklenmedi. "+ Ürün ekle" ile başlayın · fiyatlar Bayi Fiyatları'ndan gelir (elle değiştirilebilir).</div>`;
   } else {
-    html+=`<div class="fat-tablo">
-      <div class="fat-tablo-head">
-        <span>Ürün</span><span>Miktar</span><span>Birim Fiyat</span><span>KDV</span><span>İskonto</span><span>Matrah</span><span>Tutar</span><span></span>
-      </div>`;
+    // sepet-kart düzeni: görsel + ad + fiyat + (−/+) miktar + tutar + düzenle/sil
+    html+=`<div class="sfk-liste">`;
     t.kalemler.forEach((k,i)=>{
       const h=faturaKalemHesap(k);
-      html+=`<div class="fat-tablo-satir">
-        <span class="fat-td-urun">${stokAd(k.kod)}<small> · ${(+(k.miktar)).toLocaleString("tr")} ${k.girisBirim||''}</small></span>
-        <span>${(+(k.miktar)).toLocaleString("tr")} ${k.girisBirim||''}</span>
-        <span>${tl(k.birimFiyat)} ₺${k.kdvDahil?' <small>(dahil)</small>':''}</span>
-        <span>%${k.kdv}</span>
-        <span>${k.iskonto>0?('%'+k.iskonto):'—'}</span>
-        <span class="fat-td-matrah">${tl(h.matrah)} ₺</span>
-        <span class="fat-td-tutar">${tl(h.satirTutar)} ₺</span>
-        <span class="fat-td-islem">
-          <button class="fat-kalem-duz" onclick="faturaKalemDuzenle(${i})">✏️</button>
-          <button class="fat-kalem-sil" onclick="satisKalemSil(${i})">✕</button>
-        </span>
+      const s=STOCK[k.kod];
+      const birim=k.girisBirim||'';
+      html+=`<div class="sfk-satir">
+        <span class="sfk-gorsel">${(s&&s.gorsel)?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span>
+        <div class="sfk-bilgi">
+          <div class="sfk-ad">${stokAd(k.kod)}</div>
+          <div class="sfk-detay">${tl(k.birimFiyat)} ₺ / ${birim}${k.kdvDahil?' (KDV dahil)':''} · KDV %${k.kdv}${k.iskonto>0?' · İsk %'+k.iskonto:''}</div>
+        </div>
+        <div class="sfk-adet">
+          <button class="sfk-adet-btn" onclick="satisKalemMiktar(${i},-1)">−</button>
+          <span class="sfk-adet-say">${(+(k.miktar)).toLocaleString("tr")}<small>${birim}</small></span>
+          <button class="sfk-adet-btn" onclick="satisKalemMiktar(${i},1)">+</button>
+        </div>
+        <div class="sfk-tutar">${tl(h.satirTutar)} ₺</div>
+        <div class="sfk-islem">
+          <button class="sfk-duz" onclick="faturaKalemDuzenle(${i})" title="Fiyat/detay düzenle">✏️</button>
+          <button class="sfk-sil" onclick="satisKalemSil(${i})" title="Sil">🗑️</button>
+        </div>
       </div>`;
     });
     html+=`</div>`;
@@ -22661,6 +22740,25 @@ function satisFaturaFormHtml(){
   return html;
 }
 function satisKalemSil(i){ state.satisTaslak.kalemler.splice(i,1); go("fatura", true); }
+/* satış fatura kaleminde +/− ile miktar değiştir (seçilen birim cinsinden) */
+function satisKalemMiktar(i, delta){
+  const t=state.satisTaslak; if(!t) return;
+  const k=t.kalemler[i]; if(!k) return;
+  const s=STOCK[k.kod];
+  const u=(s&&typeof uomAl==="function")?uomAl(s):null;
+  const secBirim=k.girisBirim||(u?u.tabanBirim:'');
+  // seçilen birim başına çarpan
+  let secCarpan=1;
+  if(u && secBirim!==u.tabanBirim){
+    const sv=u.seviyeler.find(x=>x.ad===secBirim);
+    if(sv){ const idx=u.seviyeler.indexOf(sv); secCarpan=uomTabanCarpani(u,idx); }
+  }
+  // görünen miktar = taban miktar / çarpan
+  let gorunen = Math.round((k.miktar/secCarpan) + delta);
+  if(gorunen<=0){ t.kalemler.splice(i,1); go("fatura", true); return; }
+  k.miktar = gorunen*secCarpan;   // taban miktar güncelle
+  go("fatura", true);
+}
 function satisFaturaKaydet(){
   const t=state.satisTaslak; if(!t) return;
   if(!t.sube){ note("Şube seçin"); return; }
@@ -23774,54 +23872,91 @@ function bayiSipGovdeHtml(){
   }
   if(state.bayiSepet.length>0){
     const oz = bayiSepetKdvOzet();
-    // KDV oran satırları (birden fazla oran varsa her biri ayrı)
-    const oranlar = Object.keys(oz.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
-    let kdvSatirlar = "";
-    oranlar.forEach(oran=>{
-      const g = oz.oranGrup[oran];
-      if(g.kdv<=0.005) return;
-      kdvSatirlar += `<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
-    });
-    html += `<div class="bayi-sepet-ozet">
-      <div class="bayi-sepet-baslik">🛒 Sepet · ${state.bayiSepet.length} kalem
-        <button class="bsip-excel" onclick="bayiSiparisExcel()">📊 Excel indir</button></div>
-      <div class="bsepet-tablo">
-        <div class="bsepet-thead">
-          <span class="bsc-ad">Stok Kartı</span>
-          <span class="bsc-icerik">Birim İçeriği</span>
-          <span class="bsc-fiyat">Birim Fiyat</span>
-          <span class="bsc-mik">Miktar</span>
-          <span class="bsc-tutar">Tutar</span>
-          <span class="bsc-sil"></span>
-        </div>
-        ${state.bayiSepet.map((k,i)=>{
-          const s = STOCK[k.kod]; if(!s) return "";
-          const u = uomAl(s);
-          const fTaban = bayiSatisFiyat(k.kod);   // taban birim satış (KDV dahil)
-          // seçilen birim: kutu seçildiyse kutu fiyatı, adet seçildiyse adet fiyatı
-          const secBirim = (k.girisBirim) ? k.girisBirim : u.tabanBirim;
-          const secMiktar = (k.girisMiktar!=null) ? k.girisMiktar : (k.miktar||0);
-          // seçilen birimin çarpanı (kutu → 15, adet → 1)
-          let secCarpan = 1;
-          if(secBirim!==u.tabanBirim){
-            const sv = u.seviyeler.find(x=>x.ad===secBirim);
-            if(sv){ const idx=u.seviyeler.indexOf(sv); secCarpan=uomTabanCarpani(u,idx); }
-          }
-          const birimFiyat = fTaban*secCarpan;   // seçilen birim başına fiyat
-          // birim içeriği açıklaması
-          const icerik = (secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : `— (${u.tabanBirim})`;
-          const satirTutar = birimFiyat*secMiktar;
-          return `<div class="bsepet-trow">
-            <span class="bsc-ad"><span class="bsepet-gorsel">${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s.ad}</strong></span>
-            <span class="bsc-icerik">${icerik}</span>
-            <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
-            <span class="bsc-mik">${secMiktar} ${secBirim}</span>
-            <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
-            <button class="bsc-sil bsepet-sil" onclick="bayiSepetCikarIdx(${i})" aria-label="Çıkar">✕</button>
-          </div>`;
-        }).join("")}
+    // Altta sabit özet bar — sadece kalem sayısı + net tutar + "Sepeti Aç"
+    html += `<div class="bsip-bar-bosluk"></div>
+    <div class="bsip-sepet-bar" onclick="bayiSepetModalAc()">
+      <div class="bsip-bar-sol">
+        <span class="bsip-bar-ic">🛒</span>
+        <span class="bsip-bar-kalem">${state.bayiSepet.length} kalem</span>
       </div>
-      <div class="bayi-ozet-tablo">
+      <div class="bsip-bar-orta">Sepeti gör · düzenle</div>
+      <div class="bsip-bar-sag">
+        <span class="bsip-bar-tutar-lbl">Net ödenecek</span>
+        <span class="bsip-bar-tutar">${oz.netDahil.toFixed(2)} ₺</span>
+        <span class="bsip-bar-ok">▸</span>
+      </div>
+    </div>`;
+  }
+  return html;
+}
+/* SEPET MODALI — kalemler listelenir, +/− ile miktar, onaya gönder */
+function bayiSepetModalAc(){
+  if(!state.bayiSepet || state.bayiSepet.length===0){ note("Sepet boş"); return; }
+  let mdl=document.getElementById("bayiSepetModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="bayiSepetModal"; mdl.className="modal-bg"; mdl.style.zIndex="240"; document.body.appendChild(mdl); }
+  mdl.innerHTML = bayiSepetModalHtml();
+  mdl.classList.add("on");
+}
+function bayiSepetModalKapat(){ const m=document.getElementById("bayiSepetModal"); if(m) m.classList.remove("on"); }
+function bayiSepetModalYenile(){
+  const m=document.getElementById("bayiSepetModal");
+  if(m && m.classList.contains("on")) m.innerHTML=bayiSepetModalHtml();
+  // arka plandaki bar da güncellensin
+  const cont=document.getElementById("bayiSipGovde");
+  if(cont) cont.innerHTML=bayiSipGovdeHtml();
+}
+function bayiSepetModalHtml(){
+  if(!state.bayiSepet || state.bayiSepet.length===0){
+    return `<div class="bsm-ic"><div class="bsm-head"><div class="bsm-head-baslik">🛒 Sipariş Sepetim</div>
+      <button class="bsm-kapat" onclick="bayiSepetModalKapat()">✕</button></div>
+      <div class="bsm-bos">Sepetiniz boş. Ürün listesinden "+ Ekle" ile ürün ekleyin.</div></div>`;
+  }
+  const oz = bayiSepetKdvOzet();
+  const oranlar = Object.keys(oz.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
+  let kdvSatirlar = "";
+  oranlar.forEach(oran=>{
+    const g = oz.oranGrup[oran];
+    if(g.kdv<=0.005) return;
+    kdvSatirlar += `<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+  });
+  let html = `<div class="bsm-ic">
+    <div class="bsm-head">
+      <div class="bsm-head-baslik">🛒 Sipariş Sepetim <span class="bsm-kalem-rozet">${state.bayiSepet.length} kalem</span></div>
+      <button class="bsm-kapat" onclick="bayiSepetModalKapat()">✕</button>
+    </div>
+    <div class="bsm-govde">
+      <div class="bsm-liste">`;
+  state.bayiSepet.forEach((k,i)=>{
+    const s = STOCK[k.kod]; if(!s) return;
+    const u = uomAl(s);
+    const fTaban = bayiSatisFiyat(k.kod);
+    const secBirim = (k.girisBirim) ? k.girisBirim : u.tabanBirim;
+    const secMiktar = (k.girisMiktar!=null) ? k.girisMiktar : (k.miktar||0);
+    let secCarpan = 1;
+    if(secBirim!==u.tabanBirim){
+      const sv = u.seviyeler.find(x=>x.ad===secBirim);
+      if(sv){ const idx=u.seviyeler.indexOf(sv); secCarpan=uomTabanCarpani(u,idx); }
+    }
+    const birimFiyat = fTaban*secCarpan;
+    const satirTutar = birimFiyat*secMiktar;
+    const icerik = (secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : `${u.tabanBirim}`;
+    html += `<div class="bsm-satir">
+      <span class="bsm-gorsel">${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span>
+      <div class="bsm-bilgi">
+        <div class="bsm-ad">${s.ad}</div>
+        <div class="bsm-detay">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺ / '+secBirim:'— / '+secBirim} · ${icerik}</div>
+      </div>
+      <div class="bsm-adet">
+        <button class="bsm-adet-btn" onclick="bayiSepetMiktarDegis(${i},-1)">−</button>
+        <span class="bsm-adet-say">${secMiktar}<small>${secBirim}</small></span>
+        <button class="bsm-adet-btn" onclick="bayiSepetMiktarDegis(${i},1)">+</button>
+      </div>
+      <div class="bsm-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</div>
+      <button class="bsm-sil" onclick="bayiSepetCikarIdx(${i});bayiSepetModalYenile()">🗑️</button>
+    </div>`;
+  });
+  html += `</div>
+      <div class="bsm-ozet">
         <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${oz.brutToplam.toFixed(2)} ₺</span></div>
         ${oz.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${oz.isk})</span><span>− ${oz.indirimDahil.toFixed(2)} ₺</span></div>`:''}
         <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${oz.toplamMatrah.toFixed(2)} ₺</span></div>
@@ -23829,10 +23964,38 @@ function bayiSipGovdeHtml(){
         <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${oz.toplamKdv.toFixed(2)} ₺</span></div>
         <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${oz.netDahil.toFixed(2)} ₺</span></div>
       </div>
-      <button class="btn btn-primary btn-full" onclick="bayiSiparisGonder()">Onaya gönder</button>
-    </div>`;
-  }
+    </div>
+    <div class="bsm-aksiyon">
+      <button class="btn btn-ghost" onclick="bayiSepetModalKapat()">Alışverişe devam</button>
+      <button class="bsm-excel" onclick="bayiSiparisExcel()">📊 Excel</button>
+      <button class="btn btn-primary bsm-onayla" onclick="bayiSepetModalKapat();bayiSiparisGonder()">✓ Onaya gönder</button>
+    </div>
+  </div>`;
   return html;
+}
+/* +/− ile sepet miktarı değiştir (seçilen birim cinsinden) */
+function bayiSepetMiktarDegis(i, delta){
+  const k=state.bayiSepet[i]; if(!k) return;
+  const s=STOCK[k.kod]; if(!s) return;
+  const u=uomAl(s);
+  const secBirim=(k.girisBirim)?k.girisBirim:u.tabanBirim;
+  let secMiktar=(k.girisMiktar!=null)?k.girisMiktar:(k.miktar||0);
+  secMiktar += delta;
+  if(secMiktar<=0){
+    // 0'a inince sepetten çıkar
+    state.bayiSepet.splice(i,1);
+    bayiSepetModalYenile();
+    return;
+  }
+  // seçilen birimi taban miktara çevir
+  let secCarpan=1;
+  if(secBirim!==u.tabanBirim){
+    const sv=u.seviyeler.find(x=>x.ad===secBirim);
+    if(sv){ const idx=u.seviyeler.indexOf(sv); secCarpan=uomTabanCarpani(u,idx); }
+  }
+  k.girisMiktar=secMiktar;
+  k.miktar=secMiktar*secCarpan;   // taban miktar
+  bayiSepetModalYenile();
 }
 function bayiSipAra(v){
   state.bayiSipAra=v;
