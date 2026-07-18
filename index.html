@@ -120,6 +120,65 @@
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 /* Android/iOS tarayıcıları dar sütunlardaki yazıyı otomatik büyütür → kapat */
 html{-webkit-text-size-adjust:100%; -moz-text-size-adjust:100%; text-size-adjust:100%}
+
+/* ═══════════════════════════════════════════════════════════
+   TEMA SİSTEMİ — 4 çeşit (2 açık + 2 koyu) · cihazda kalıcı
+   Kartela renklerinden türetilmiş. body.tema-* ile uygulanır.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ——— TEMA 2: SICAK FİLDİŞİ (açık, krem/bej aydınlık) ——— */
+body.tema-fildisi{
+  --bg:#f3ece0; --surface:#fffdf9; --surface-2:#f7f0e4;
+  --line:#e8ddc9; --line-2:#d9cbb2;
+  --ink:#3a2c1e; --ink-2:#7d6244; --ink-3:#b0a08a;
+  --brand:#9c8570; --brand-d:#7d6a58; --brand-soft:#f0e7da;
+  --cocoa:#645548;
+  --grad-surface:linear-gradient(180deg,#fffdf9,#f7f0e4);
+  --grad-panel:linear-gradient(180deg,#fffdf9,#f2e9da);
+  --grad-brand:var(--pal-satinbej);
+}
+body.tema-fildisi{
+  background:linear-gradient(180deg,#f7f1e6,#f0e7d8)!important;
+}
+
+/* ——— TEMA 3: ESPRESSO GECE (koyu — sıcak kahve dark mode) ——— */
+body.tema-espresso{
+  --bg:#241a12; --surface:#31241a; --surface-2:#3a2c20;
+  --line:#4a3826; --line-2:#5c4632;
+  --ink:#f2e6d8; --ink-2:#d3b896; --ink-3:#a0876a;
+  --brand:#a86d43; --brand-d:#8a5836; --brand-soft:#3f2f22;
+  --cocoa:#e0c989;
+  --grad-surface:linear-gradient(180deg,#352719,#2b2016);
+  --grad-panel:linear-gradient(180deg,#31241a,#281d14);
+}
+body.tema-espresso{
+  background:linear-gradient(180deg,#281d14,#1e1610)!important;
+}
+/* koyu temada kartlar koyu, metin açık */
+body.tema-espresso .kpi,body.tema-espresso .bcard,body.tema-espresso .stok-kart,
+body.tema-espresso .gecmis-kart,body.tema-espresso .bayi-satir{
+  color:var(--ink);
+}
+
+/* ——— TEMA 4: ANTRASİT (koyu — nötr gri dark mode) ——— */
+body.tema-antrasit{
+  --bg:#1e1f1d; --surface:#2a2b28; --surface-2:#323330;
+  --line:#3f403c; --line-2:#4f504b;
+  --ink:#eceae4; --ink-2:#c2beb4; --ink-3:#8a8c86;
+  --brand:#747773; --brand-d:#5f625e; --brand-soft:#343634;
+  --cocoa:#c9a234;
+  --grad-surface:linear-gradient(180deg,#2e2f2c,#252622);
+  --grad-panel:linear-gradient(180deg,#2a2b28,#212220);
+}
+body.tema-antrasit{
+  background:linear-gradient(180deg,#212220,#181917)!important;
+}
+body.tema-antrasit .kpi,body.tema-antrasit .bcard,body.tema-antrasit .stok-kart,
+body.tema-antrasit .gecmis-kart,body.tema-antrasit .bayi-satir{
+  color:var(--ink);
+}
+/* koyu temalarda filigran ve ışık halesi daha soluk */
+body.tema-espresso::before,body.tema-antrasit::before{opacity:.03!important}
 html,body{margin:0; height:100%}
 body{
   font-family:var(--font);
@@ -4917,6 +4976,59 @@ body::after{
   border-radius:10px!important;
 }
 
+/* tema kartları buton modelinden muaf (kendi tasarımı) */
+.main button.tema-kart{ background:var(--grad-panel); overflow:hidden; }
+.main button.tema-kart::before,.main button.tema-kart::after{ display:none!important; }
+
+/* ═══ POS ÜRÜN KARTI — COFFEE WAFLE referans modeli ═══ */
+.main button.prod.prod-foto{
+  padding:0!important;
+  border-radius:18px!important;
+  overflow:hidden!important;
+  background:linear-gradient(180deg,#fbf6ee,#f3ebdd)!important;
+  border:1.5px solid var(--gold-3)!important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.2), 0 4px 14px rgba(90,73,23,.14)!important;
+  display:flex!important; flex-direction:column!important;
+  text-align:center!important;
+  min-height:auto!important;
+}
+.main button.prod.prod-foto::before,.main button.prod.prod-foto::after{ display:none!important; }
+.main button.prod.prod-foto:hover{
+  transform:translateY(-3px)!important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.4), 0 10px 26px rgba(90,73,23,.24)!important;
+}
+.prod-foto .p-gorsel{
+  display:flex; align-items:center; justify-content:center;
+  height:120px; width:100%;
+  background:linear-gradient(180deg,#fffdf9,#f5ede0);
+  overflow:hidden;
+}
+.prod-foto .p-gorsel img{ width:100%; height:100%; object-fit:cover; display:block; }
+.prod-foto .p-gorsel .p-emoji{ font-size:52px; margin:0; filter:drop-shadow(0 3px 6px rgba(90,73,23,.2)); }
+.prod-foto .p-name{
+  font-weight:800; font-size:14px; line-height:1.25; color:var(--ink);
+  padding:11px 10px 9px; margin:0; min-height:2.4em;
+  display:flex; align-items:center; justify-content:center;
+}
+.prod-foto .p-fiyat-bant{
+  display:block; width:100%; margin-top:auto;
+  background:linear-gradient(180deg,#583923,#3d2717);
+  padding:11px 8px; border-top:2px solid var(--gold-3);
+}
+.prod-foto .p-fiyat-bant .p-price{ color:#f7efe9!important; font-size:16px; font-weight:800; text-shadow:0 1px 0 rgba(0,0,0,.3); }
+.prod-foto .p-fiyat-bant .p-price.indirimli{ display:flex; flex-direction:column; gap:1px; align-items:center; }
+.prod-foto .p-fiyat-bant .p-eski{ font-size:11px; text-decoration:line-through; opacity:.65; color:#e0cdb8; }
+.prod-foto .p-fiyat-bant .p-yeni{ color:#f2dd8f!important; font-size:16px; font-weight:800; }
+.prod-foto .p-ind-kose{
+  position:absolute; top:8px; left:8px; z-index:3;
+  background:var(--pal-gold); color:#3d2f26; font-size:11px; font-weight:800;
+  padding:3px 8px; border-radius:8px; border:1px solid var(--gold-3);
+  box-shadow:0 2px 5px rgba(90,73,23,.3);
+}
+.prod-foto .p-out{ position:absolute; top:8px; right:8px; z-index:3; background:rgba(45,29,18,.85); color:#f7efe9; }
+.prod-foto .p-kampanya{ display:block; font-size:11px; font-weight:700; color:var(--warn); padding:0 8px 6px; }
+.prod-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr))!important; gap:14px!important; }
+
 /* ——— ÜRÜN SEÇİM LİSTE BUTONLARI (fk-urun-btn) — okunabilir, köşeli ——— */
 /* Hammadde ekle, fatura kalem seç, satış geçmişi ürün seç listeleri */
 .fk-urun-btn,.main .fk-urun-btn,.skm-ic .fk-urun-btn,.op-ic .fk-urun-btn,
@@ -4999,6 +5111,262 @@ button.fk-urun-btn::before,button.fk-urun-btn::after{
 }
 .main .ode-np-tus::before,.ode-np-tus::before{ display:none!important; }
 .ode-np-tus.sil{ background:var(--pal-bej)!important; }
+
+/* ═══ TEMA SEÇİM EKRANI ═══ */
+.tema-bilgi-bar{
+  background:var(--brand-soft); border:1.5px solid var(--gold-3); border-radius:12px;
+  padding:12px 16px; margin:0 0 18px; font-size:13.5px; color:var(--ink-2); font-weight:600;
+  box-shadow:var(--emboss-sm);
+}
+.tema-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:16px;
+}
+.tema-kart{
+  text-align:left; cursor:pointer; padding:16px; border-radius:16px;
+  background:var(--grad-panel); border:2px solid var(--gold-3);
+  box-shadow:var(--gold-frame-sh); transition:transform .2s ease, box-shadow .3s ease;
+  display:flex; flex-direction:column; gap:12px; position:relative; overflow:hidden;
+}
+.tema-kart:hover{ transform:translateY(-3px); box-shadow:var(--gold-frame-sh-h); }
+.tema-kart.secili{ border-color:var(--gold-3); box-shadow:0 0 0 3px rgba(201,162,52,.4), var(--gold-frame-sh-h); }
+.tema-kart-ust{ display:flex; align-items:center; gap:12px; }
+.tema-kart-ic{ font-size:28px; line-height:1; }
+.tema-kart-bilgi{ flex:1; }
+.tema-kart-ad{ font-size:17px; font-weight:800; color:var(--ink); }
+.tema-kart-tip{ font-size:12px; font-weight:700; color:var(--ink-3); margin-top:2px; }
+.tema-kart-aktif{
+  font-size:12px; font-weight:800; color:#fff; background:var(--pal-gold);
+  padding:4px 10px; border-radius:99px; border:1px solid var(--gold-3);
+}
+/* mini önizleme — nav + gövde kartları */
+.tema-onizleme{
+  height:90px; border-radius:11px; overflow:hidden; display:flex;
+  border:1.5px solid var(--line-2); box-shadow:inset 0 1px 4px rgba(0,0,0,.12);
+}
+.tema-onizleme-nav{ width:26px; flex:none; }
+.tema-onizleme-govde{ flex:1; padding:10px; display:flex; flex-direction:column; gap:7px; }
+.tema-onizleme-kart{ height:20px; border-radius:6px; }
+/* her tema önizlemesi kendi renkleri */
+.tema-onizleme-klasik{ background:#efe7d6; }
+.tema-onizleme-klasik .tema-onizleme-nav{ background:linear-gradient(180deg,#fdfbf6,#f5efe2); border-right:2px solid #c9a234; }
+.tema-onizleme-klasik .tema-onizleme-kart{ background:#fff; border:1.5px solid #c9a234; }
+.tema-onizleme-fildisi{ background:#f0e7d8; }
+.tema-onizleme-fildisi .tema-onizleme-nav{ background:linear-gradient(180deg,#fffdf9,#f2e9da); border-right:2px solid #c9a234; }
+.tema-onizleme-fildisi .tema-onizleme-kart{ background:#fffdf9; border:1.5px solid #c9a234; }
+.tema-onizleme-espresso{ background:#241a12; }
+.tema-onizleme-espresso .tema-onizleme-nav{ background:linear-gradient(180deg,#31241a,#281d14); border-right:2px solid #c9a234; }
+.tema-onizleme-espresso .tema-onizleme-kart{ background:#31241a; border:1.5px solid #c9a234; }
+.tema-onizleme-antrasit{ background:#1e1f1d; }
+.tema-onizleme-antrasit .tema-onizleme-nav{ background:linear-gradient(180deg,#2a2b28,#212220); border-right:2px solid #c9a234; }
+.tema-onizleme-antrasit .tema-onizleme-kart{ background:#2a2b28; border:1.5px solid #c9a234; }
+.tema-kart-renkler{ display:flex; gap:7px; }
+.tema-renk-nokta{ width:26px; height:26px; border-radius:50%; border:1.5px solid rgba(0,0,0,.12); box-shadow:inset 0 1px 2px rgba(255,255,255,.3); }
+.tema-kart-aciklama{ font-size:12.5px; color:var(--ink-2); line-height:1.4; }
+
+/* ═══════════════════════════════════════════════════════════
+   KASA EKRANI REDESIGN — kullanıcı brief'i (renk atamaları)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ——— 1) ANA SAYFA ZEMİNİ = BEYAZ + şekil detayı + MERKEZ silik görsel ——— */
+body{
+  background:#ffffff!important;
+}
+/* mevcut filigran şekil detayı korunur (body::before) */
+body::before{ opacity:.06!important; }
+/* MERKEZDE silik marka: MİNİPAN logo (üstte) + MİNİPAN yazı (altta), biraz sola kaymış */
+body::after{
+  content:""!important;
+  position:fixed!important; inset:0!important; z-index:-1!important; pointer-events:none!important;
+  background:
+    var(--sayfa-gorseli, none) 42% 48% / auto 42% no-repeat,
+    var(--sayfa-yazi, none) 42% 84% / auto 18% no-repeat!important;
+  opacity:.2!important;
+}
+
+/* ——— 2) ÜST MENÜ + SOL MENÜ = AYNI BEJ + kabartma + birleşik ——— */
+/* ÜST MENÜ = bej (sol menüyle aynı) — KALIN gold ışıltılı çizgi */
+.topbar{
+  height:66px!important;
+  background:linear-gradient(180deg, #b7a596 0%, #9c8570 55%, #877158 100%)!important;
+  border-bottom:none!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.25),
+    inset 0 -1px 3px rgba(45,29,18,.15),
+    0 6px 16px rgba(201,162,52,.35),
+    0 8px 22px rgba(45,29,18,.16)!important;
+  position:relative; z-index:8!important;
+}
+/* üst menü KALIN gold ışıltılı şerit (::after) */
+.topbar::after{
+  content:""!important; position:absolute!important; left:0; right:0; bottom:-4px; height:5px!important;
+  background:linear-gradient(90deg, #a5852b 0%, #c9a234 18%, #f2dd8f 50%, #c9a234 82%, #a5852b 100%)!important;
+  box-shadow:0 0 12px rgba(201,162,52,.65), inset 0 1px 0 rgba(255,244,200,.7), 0 2px 4px rgba(90,73,23,.4)!important;
+  z-index:9; border-radius:0 0 2px 2px;
+}
+.topbar .tb-logo,.topbar .tb-branch,.topbar .role-chip,.topbar .tb-out{ color:#fbf2e6!important; }
+
+/* ——— ÜST BAR: Çıkış = GOLD buton · rol çipi = FİLDİŞİ ——— */
+/* Çıkış butonu — gold buton şekli */
+.topbar .tb-out{
+  background:linear-gradient(180deg,#e0c989,#c9a234 45%,#a5852b 75%,#816821 100%)!important;
+  color:#3d2f26!important;
+  border:1.5px solid #c9a234!important;
+  border-radius:99px!important; padding:8px 18px!important; font-weight:800!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.4)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 2px 6px rgba(90,73,23,.3), 0 2px 0 #6d5818!important;
+  transition:transform .15s ease, box-shadow .2s ease;
+}
+.topbar .tb-out:hover{
+  transform:translateY(-1px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7), 0 4px 10px rgba(90,73,23,.4), 0 3px 0 #6d5818!important;
+}
+.topbar .tb-out:active{ transform:translateY(1px); }
+/* rol çipi (Kasa görevlisi) — fildişi */
+.topbar .role-chip{
+  background:linear-gradient(180deg,#e7dfd2,#d6c7b2 55%,#c3b299)!important;
+  color:#4a3826!important; border:1.5px solid #c9a234!important;
+  border-radius:99px!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 2px 5px rgba(90,73,23,.2)!important;
+}
+.topbar .role-chip .rc-dot{ border:1px solid rgba(201,162,52,.5); }
+/* topbar logo görseli (ikon) — büyük, çerçevesiz, şeffaf */
+.topbar .mark.mark-foto{
+  width:48px!important; height:48px!important;
+  background:transparent!important; padding:0!important; overflow:visible;
+  border:none!important; border-radius:0!important; box-shadow:none!important;
+}
+.topbar .mark.mark-foto img{ width:100%; height:100%; object-fit:contain; display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,.25)); }
+/* emoji hali de büyüsün */
+.topbar .tb-logo .mark:not(.mark-foto){ width:40px!important; height:40px!important; font-size:22px!important; }
+/* wordmark (MİNİPAN yazısı) — büyütülmüş */
+.topbar .tb-logo{ font-size:24px!important; gap:11px!important; }
+.topbar .tb-wordmark-img{ height:34px!important; width:auto; display:block; vertical-align:middle; filter:brightness(0) invert(1) drop-shadow(0 1px 2px rgba(0,0,0,.35)); }
+.topbar .tb-branch{ background:rgba(255,255,255,.18)!important; color:#fbf2e6!important; }
+
+/* SOL MENÜ = bej + KALIN gold ışıltılı sağ kenar */
+.nav{
+  background:linear-gradient(180deg, #b2a08f 0%, #9c8570 45%, #806d5c 100%)!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset -1px 0 3px rgba(45,29,18,.12),
+    5px 0 0 0 #c9a234,
+    5px 0 0 1px #e6c964,
+    8px 0 16px rgba(201,162,52,.45),
+    4px 0 24px rgba(45,29,18,.15)!important;
+  z-index:7!important;
+  border:none!important;
+  position:relative;
+}
+/* nav içindeki ::after çizgisini iptal (box-shadow kullanıyoruz, overflow kırpmasın) */
+.nav::after{ display:none!important; }
+/* çıkıntı hilesini KALDIR */
+#app.on .body::before{ display:none!important; content:none!important; }
+
+/* ——— 4) SOL MENÜ BUTONLARI = FİLDİŞİ · aktif = ANA KAHVE ——— */
+.nav-grup-baslik{
+  background:linear-gradient(180deg,#e7dfd2,#d6c7b2 50%,#c3b299)!important;
+  color:#4a3826!important;
+  border:1.5px solid #c9a234!important;
+}
+.nav-grup-baslik.acik,.nav-tekli.aktif-tekli,
+.nav-grup-baslik.nr-kahve.acik,.nav-grup-baslik.nr-espresso.acik,
+.nav-grup-baslik.nr-satinbej.acik,.nav-grup-baslik.nr-antrasit.acik,
+.nav-grup-baslik.nr-zeytin.acik,.nav-grup-baslik.nr-gold.aktif-tekli,
+.nav-grup-baslik.nr-kum.aktif-tekli{
+  background:linear-gradient(180deg,#a86d43,#71492d 48%,#583923 100%)!important;
+  color:#fbf2e6!important; border-color:#c9a234!important;
+}
+/* alt menü öğeleri = BEYAZ */
+.nav-item{
+  background:linear-gradient(180deg,#ffffff,#f7f2ea)!important;
+  border:1px solid #c9a234!important;
+  color:#5a3820!important;
+}
+.nav-item.active,
+.nav-grup-govde.nr-kahve .nav-item.active,.nav-grup-govde.nr-espresso .nav-item.active,
+.nav-grup-govde.nr-satinbej .nav-item.active,.nav-grup-govde.nr-antrasit .nav-item.active,
+.nav-grup-govde.nr-zeytin .nav-item.active{
+  background:linear-gradient(180deg,#a86d43,#71492d 50%,#583923)!important;
+  color:#fbf2e6!important;
+}
+/* menü ikonları bej/kahve zeminde okunur */
+.nav-item .ni-ic,.nav-grup-baslik .ngb-ic{ filter:sepia(.4) saturate(1.15) brightness(.9); }
+.nav-item.active .ni-ic,.nav-grup-baslik.acik .ngb-ic,.nav-tekli.aktif-tekli .ngb-ic{ filter:none; }
+
+/* ——— 5) KATEGORİ BUTONLARI = FİLDİŞİ · aktif = BEJ ——— */
+.main .cat-pill{
+  background:linear-gradient(180deg,#e7dfd2,#d6c7b2 50%,#c3b299)!important;
+  color:#4a3826!important;
+}
+.main .cat-pill.on{
+  background:linear-gradient(180deg,#b2a08f,#9c8570 50%,#7d6a58)!important;
+  color:#fbf2e6!important; text-shadow:0 1px 0 rgba(0,0,0,.3)!important;
+}
+
+/* ——— 6) ÜRÜN KARTLARI = FİLDİŞİ · fiyat bandı = KOYU ESPRESSO ——— */
+.main button.prod.prod-foto{
+  background:linear-gradient(180deg,#e7dfd2,#d6c7b2)!important;
+  border:1.5px solid #c9a234!important;
+}
+.prod-foto .p-gorsel{
+  background:linear-gradient(180deg,#efe8dc,#e2d7c4)!important;
+}
+.prod-foto .p-fiyat-bant{
+  background:linear-gradient(180deg,#4a3524,#392b23 60%,#27180e)!important;
+  border-top:2px solid #c9a234!important;
+}
+
+/* ——— 7) SAĞ ÜST: GİDER = TAŞLI BEJ · KASA KAPAT = KOYU KAHVE ——— */
+.kvb-gider-btn{
+  background:linear-gradient(180deg,#f7f4ef,#efe6e2 60%,#ddd0c8)!important;
+  color:#4a3826!important; border:1.5px solid #c9a234!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.5)!important;
+}
+.kvb-kapat-btn{
+  background:linear-gradient(180deg,#6d4428,#432a19 55%,#2d1b10)!important;
+  color:#f7efe9!important; border:1.5px solid #c9a234!important;
+  text-shadow:0 1px 0 rgba(0,0,0,.4)!important;
+}
+
+/* ——— 8) SAĞ ADİSYON PANELİ ——— */
+/* kart arka planı = BEYAZ */
+.cart{
+  background:#ffffff!important;
+  border:2px solid #c9a234!important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.25), 0 8px 26px rgba(90,73,23,.14)!important;
+}
+/* kart başlığı (masa bilgisi) = BEJ */
+.cart-top{
+  background:linear-gradient(180deg,#b2a08f,#9c8570 60%,#806d5c)!important;
+  color:#fbf2e6!important;
+  border-radius:13px 13px 0 0!important;   /* alt köşeler düz — üst kartla birleşik */
+  padding:13px 15px!important;
+  border:1.5px solid #c9a234; border-bottom:none!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 2px 6px rgba(90,73,23,.2);
+}
+
+/* ——— ÜRÜN GRID: ilk satırı biraz aşağı + hover taşma engeli ——— */
+.pos-sol .prod-grid{
+  padding-top:12px!important;   /* ilk satır aşağı + hover'da kart üst kenardan taşmaz */
+  padding-left:3px!important; padding-right:6px!important;
+}
+.prod-grid{
+  padding-top:10px!important;
+}
+.cart-top .ct-table{ color:#fff!important; font-weight:800; }
+.cart-top .ct-session{ color:#f0e6d8!important; }
+/* kişi ismi bölümü = BEYAZ */
+.cart-top .btn-ghost{
+  background:linear-gradient(180deg,#ffffff,#f7f2ea)!important;
+  color:#4a3826!important; text-shadow:none!important;
+  border:1.5px solid #c9a234!important; border-radius:9px!important;
+}
+/* Ödeme Al butonu = KOYU ESPRESSO */
+.cart-actions .btn-primary,.cart-actions .btn-full{
+  background:linear-gradient(180deg,#4a3524,#392b23 55%,#27180e)!important;
+  color:#f7efe9!important; text-shadow:0 1px 0 rgba(0,0,0,.4)!important;
+  border:2px solid #c9a234!important;
+}
 </style>
 </head>
 <body>
@@ -5076,7 +5444,7 @@ button.fk-urun-btn::before,button.fk-urun-btn::after{
 <!-- ====================== UYGULAMA ====================== -->
 <div id="app">
   <div class="topbar">
-    <div class="tb-logo"><span class="mark">🧇</span> MİNİPAN</div>
+    <div class="tb-logo" id="tbLogo"><span class="mark" id="tbMark">🧇</span> <span id="tbWordmark">MİNİPAN</span></div>
     <span class="tb-branch" id="branchLabel">—</span>
     <div class="tb-spacer"></div>
     <div class="role-chip">
@@ -7567,7 +7935,7 @@ const ROLES = {
   depo:  { ad:"Depo / Lojistik", ic:"📦", renk:"var(--r-depo)", sube:"Tüm şubeler",
            nav:["bayi","stok","bildirim"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","masagecmis","masayonetim","recete","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","logo","subeler","personel","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
+           nav:["canli","masagecmis","masayonetim","recete","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","logo","tema","subeler","personel","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -8122,6 +8490,7 @@ const NAV_META = {
   magpuan:{ic:"🎁", ad:"Mag Puan"},
   intro:{ic:"📱", ad:"QR İntro"},
   logo:{ic:"🎨", ad:"Logo"},
+  tema:{ic:"🌈", ad:"Tema"},
 };
 
 /* Sol menü grupları — menüler bu sırayla ve başlıklar altında görünür.
@@ -8133,7 +8502,7 @@ const NAV_GRUPLAR = [
   { baslik:"QR Menü",     ic:"📱", uyeler:["fiyat","kampanya","magpuan","intro"] },
   { baslik:"Stoklar",     ic:"📦", uyeler:["stok","bayi","recete"] },
   { baslik:"Raporlar",    ic:"📊", uyeler:["rapor","denetim"] },
-  { baslik:"Yönetim",     ic:"⚙️", uyeler:["masayonetim","logo","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
+  { baslik:"Yönetim",     ic:"⚙️", uyeler:["masayonetim","logo","tema","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
 ];
 
 /* Her ana menü grubuna kartelanın farklı bir rengi — görsel ayrım + zenginlik */
@@ -10137,6 +10506,8 @@ function login(role){
   const dot = document.getElementById("roleDot");
   dot.textContent = r.ic; dot.style.background = r.renk;
   buildNav();
+  temaYukle();   // kaydedilmiş temayı uygula (cihazda kalıcı)
+  if(typeof sayfaGorseliUygula==="function") sayfaGorseliUygula();   // sağ-alt sayfa görseli
   // Masalar ekranı olan roller (kasa, müdür) girişte doğrudan Masalar'la başlasın
   const acilis = r.nav.includes("masalar") ? "masalar" : r.nav[0];
   go(acilis);
@@ -10256,7 +10627,7 @@ function go(key, scrollKoru){
     satis:viewSatis, masalar:viewMasalar, masagecmis:viewMasaGecmisi, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
     fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel, bayi:viewBayi,
     subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, odemeEkran:viewOdemeEkran, bildirim:viewBildirim,
-    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan, intro:viewIntro, logo:viewLogo
+    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan, intro:viewIntro, logo:viewLogo, tema:viewTema
   }[key] || viewSatis)(main);
   if(scrollKoru) main.scrollTop = eskiScroll;
   if(typeof bildirimBadgeGuncelle==="function") bildirimBadgeGuncelle();
@@ -10905,12 +11276,13 @@ function viewSatis(main){
               ? `<span class="p-price indirimli"><span class="p-eski">${fb.eski} ₺</span><span class="p-yeni blink">${fb.gecerli} ₺</span>${fb.indOran>0?`<span class="p-ind-rozet">%${fb.indOran}</span>`:''}</span>`
               : `<span class="p-price">${fb.gecerli} ₺</span>`;
             const aciklamaHtml = (fb.indirimli && fb.aciklama) ? `<span class="p-kampanya blink">🔥 ${fb.aciklama}</span>` : '';
-            return `<button class="prod ${satilir?'':'out'} ${fb.indirimli?'prod-indirimli blink-soft':''}" onclick="addToCart(${DEMO_PRODUCTS.indexOf(p)})">
+            return `<button class="prod prod-foto ${satilir?'':'out'} ${fb.indirimli?'prod-indirimli':''}" onclick="addToCart(${DEMO_PRODUCTS.indexOf(p)})">
               ${satilir?'':'<span class="p-out">Tükendi</span>'}
-              <span class="p-emoji">${p.emoji}</span>
+              ${fb.indirimli && fb.indOran>0?`<span class="p-ind-kose">%${fb.indOran}</span>`:''}
+              <span class="p-gorsel">${p.gorsel?`<img src="${p.gorsel}" alt="${p.ad}">`:`<span class="p-emoji">${p.emoji}</span>`}</span>
               <span class="p-name">${p.ad}</span>
               ${aciklamaHtml}
-              ${fiyatHtml}
+              <span class="p-fiyat-bant">${fiyatHtml}</span>
             </button>`;}).join("")}
         </div>
       </div>
@@ -23564,6 +23936,72 @@ function bayiStokAktar(id){
    - arka plan video, hero, WiFi, çerez, bildirim metni, duyurular
    ============================================================ */
 /* ══ MARKA LOGOLARI — 3 çeşit logo yükleme (PNG/WEBP) ══ */
+/* ============================================================
+   TEMA SİSTEMİ — 4 çeşit, cihazda kalıcı (localStorage)
+   ============================================================ */
+const TEMALAR = [
+  { k:"klasik",   ad:"Klasik Kahve",   tip:"Açık tema",  ic:"☕",
+    aciklama:"Sıcak kahve tonları · varsayılan",
+    ornek:["#71492d","#a86d43","#c9a234","#f5efe2"] },
+  { k:"fildisi",  ad:"Sıcak Fildişi",  tip:"Açık tema",  ic:"🕯️",
+    aciklama:"Aydınlık krem & bej · yumuşak",
+    ornek:["#9c8570","#c6b8ac","#e0c989","#fffdf9"] },
+  { k:"espresso", ad:"Espresso Gece",  tip:"Koyu tema",  ic:"🌙",
+    aciklama:"Koyu kahve · göz yormayan gece modu",
+    ornek:["#e0c989","#a86d43","#3a2c20","#241a12"] },
+  { k:"antrasit", ad:"Antrasit",       tip:"Koyu tema",  ic:"🖤",
+    aciklama:"Nötr koyu gri · modern & sakin",
+    ornek:["#c9a234","#747773","#323330","#1e1f1d"] },
+];
+function temaUygula(k){
+  document.body.classList.remove("tema-klasik","tema-fildisi","tema-espresso","tema-antrasit");
+  if(k && k!=="klasik") document.body.classList.add("tema-"+k);
+  try{ localStorage.setItem("MP_TEMA", k||"klasik"); }catch(e){}
+  state._tema = k||"klasik";
+}
+function temaSec(k){
+  temaUygula(k);
+  if(state.ekran==="tema" && typeof viewTema==="function") viewTema(document.getElementById("main"));
+  note("Tema uygulandı: "+(TEMALAR.find(t=>t.k===k)?.ad||k));
+}
+function temaYukle(){
+  let k="klasik";
+  try{ k = localStorage.getItem("MP_TEMA") || "klasik"; }catch(e){}
+  temaUygula(k);
+}
+function viewTema(main){
+  const aktif = state._tema || "klasik";
+  main.innerHTML = `
+    <div class="sec-head"><div><h2>🌈 Tema</h2>
+    <div class="sh-sub">Uygulama görünümünü seç · seçimin bu cihazda kalıcı olur</div></div></div>
+    <div class="tema-bilgi-bar">💡 Seçtiğin tema tüm ekranlarda geçerli olur (QR menü hariç). Cihaza kaydedilir, bir daha seçmene gerek kalmaz.</div>
+    <div class="tema-grid">
+      ${TEMALAR.map(t=>`
+        <button class="tema-kart${aktif===t.k?' secili':''}" onclick="temaSec('${t.k}')">
+          <div class="tema-kart-ust">
+            <span class="tema-kart-ic">${t.ic}</span>
+            <div class="tema-kart-bilgi">
+              <div class="tema-kart-ad">${t.ad}</div>
+              <div class="tema-kart-tip">${t.tip}</div>
+            </div>
+            ${aktif===t.k?'<span class="tema-kart-aktif">✓ Aktif</span>':''}
+          </div>
+          <div class="tema-onizleme tema-onizleme-${t.k}">
+            <div class="tema-onizleme-nav"></div>
+            <div class="tema-onizleme-govde">
+              <div class="tema-onizleme-kart"></div>
+              <div class="tema-onizleme-kart"></div>
+            </div>
+          </div>
+          <div class="tema-kart-renkler">
+            ${t.ornek.map(c=>`<span class="tema-renk-nokta" style="background:${c}"></span>`).join("")}
+          </div>
+          <div class="tema-kart-aciklama">${t.aciklama}</div>
+        </button>
+      `).join("")}
+    </div>`;
+}
+
 function viewLogo(main){
   const kartlar = [
     { anahtar:"logo",     ad:"MİNİPAN Logo",       ic:"🏷️", aciklama:"Ana marka logosu" },
@@ -23610,11 +24048,36 @@ function logoYukle(anahtar, input){
   okuyucu.onload = e=>{
     MARKA_LOGOLAR[anahtar] = e.target.result;   // base64 data URL
     subeKaydet();
+    if(typeof sayfaGorseliUygula==="function") sayfaGorseliUygula();   // logo/yazı/arkaplan → topbar + zemin
     note("✓ Logo yüklendi");
     go("logo", true);
   };
   okuyucu.onerror = ()=> note("⚠️ Dosya okunamadı");
   okuyucu.readAsDataURL(dosya);
+}
+/* Yönetimden yüklenen marka görsellerini uygular:
+   - logo (ikon) → topbar sol ikon + orta zemin
+   - yazi (wordmark) → topbar "MİNİPAN" yazısı yerine
+   - arkaplan → (ayrı, arka plan görseli) */
+function sayfaGorseliUygula(){
+  const L = (typeof MARKA_LOGOLAR!=="undefined") ? MARKA_LOGOLAR : {};
+  // orta zemin görseli: MİNİPAN logosu (üstte) + MİNİPAN yazısı (altta) — silik marka izi
+  const zemin = L.logo || "";
+  const zeminYazi = L.yazi || "";
+  document.documentElement.style.setProperty("--sayfa-gorseli", zemin ? `url("${zemin}")` : "none");
+  document.documentElement.style.setProperty("--sayfa-yazi", zeminYazi ? `url("${zeminYazi}")` : "none");
+  // topbar sol ikon (logo görseli)
+  const mark = document.getElementById("tbMark");
+  if(mark){
+    if(L.logo){ mark.innerHTML = `<img src="${L.logo}" alt="logo">`; mark.classList.add("mark-foto"); }
+    else { mark.textContent = "🧇"; mark.classList.remove("mark-foto"); }
+  }
+  // topbar wordmark (yazı logosu)
+  const wm = document.getElementById("tbWordmark");
+  if(wm){
+    if(L.yazi){ wm.innerHTML = `<img src="${L.yazi}" alt="MİNİPAN" class="tb-wordmark-img">`; }
+    else { wm.textContent = "MİNİPAN"; }
+  }
 }
 function logoSil(anahtar){
   MARKA_LOGOLAR[anahtar] = "";
