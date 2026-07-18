@@ -342,7 +342,10 @@ input,select{font-family:inherit; font-size:15px}
   display:flex; flex-direction:column; padding:12px 0 20px; gap:5px;
   overflow-y:auto; overflow-x:hidden;
   scrollbar-width:none;
+  align-content:flex-start;
 }
+/* nav öğeleri asla sıkışmasın — uzarsa scroll olsun */
+.nav > *,.nav-grup-baslik,.nav-item,.nav-grup-govde,.nav-tekli{ flex:none!important; flex-shrink:0!important; }
 .nav::-webkit-scrollbar{display:none}
 
 /* ——— Alt menü öğeleri (Stok, Reçete, Bayi Kanalı...) — GİRİNTİLİ, HAFİF ——— */
