@@ -5163,6 +5163,94 @@ button.fk-urun-btn::before,button.fk-urun-btn::after{
 .tema-renk-nokta{ width:26px; height:26px; border-radius:50%; border:1.5px solid rgba(0,0,0,.12); box-shadow:inset 0 1px 2px rgba(255,255,255,.3); }
 .tema-kart-aciklama{ font-size:12.5px; color:var(--ink-2); line-height:1.4; }
 
+/* ═══ SATIŞ FATURALARI ═══ */
+.sf-satir{ display:block; padding:14px 16px; }
+.sf-ust{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; }
+.sf-baslik{ font-size:15px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.sf-alt{ font-size:12.5px; color:var(--ink-3); margin-top:3px; }
+.sf-tutar{ font-size:17px; font-weight:800; color:var(--brand-d); white-space:nowrap; }
+.sf-rozet{ font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px; border:1px solid; }
+.sf-rozet.aktarildi{ color:#816821; background:#f5ecd2; border-color:#c9a234; }
+.sf-rozet.bekliyor{ color:#a86d43; background:#f3e6d6; border-color:#d4a574; }
+.sf-aksiyon{ display:flex; gap:8px; flex-wrap:wrap; }
+.sf-aktar-btn{ background:var(--pal-gold)!important; color:#3d2f26!important; font-weight:800!important; }
+/* stok aktar onay modalı */
+.satis-aktar-uyari{ font-size:14px; color:var(--ink); line-height:1.5; margin-bottom:12px; }
+.satis-aktar-liste{ background:var(--surface-2); border:1.5px solid var(--gold-3); border-radius:11px; padding:12px 14px; font-size:13.5px; font-weight:700; color:var(--ink-2); line-height:1.7; margin-bottom:12px; }
+.satis-aktar-not{ font-size:13px; color:var(--ink-3); font-style:italic; }
+/* iki seçenekli aktar butonları */
+.satis-aktar-secim{ display:flex; flex-direction:column; gap:10px; margin:14px 0; }
+.satis-aktar-sec{
+  display:flex; align-items:center; gap:13px; text-align:left; cursor:pointer;
+  padding:14px 16px; border-radius:13px; border:2px solid var(--gold-3);
+  background:var(--surface-2); transition:transform .15s ease, box-shadow .2s ease;
+  box-shadow:var(--emboss-sm);
+}
+.satis-aktar-sec:hover{ transform:translateY(-2px); box-shadow:var(--gold-frame-sh-h); }
+.satis-aktar-sec.merkez{ background:linear-gradient(180deg,#f0e6dc,#e6d3c0); }
+.satis-aktar-sec.haric{ background:linear-gradient(180deg,#f5ecd2,#ecd89a); }
+.sas-ic{ font-size:26px; flex:none; }
+.sas-metin{ display:flex; flex-direction:column; gap:3px; }
+.sas-bas{ font-size:15px; font-weight:800; color:var(--ink); }
+.sas-alt{ font-size:12.5px; color:var(--ink-2); line-height:1.4; }
+/* aktar seçim butonları evrensel buton modelinden muaf */
+.ypm-ic button.satis-aktar-sec{ border-radius:13px; overflow:visible; }
+.ypm-ic button.satis-aktar-sec::before,.ypm-ic button.satis-aktar-sec::after{ display:none!important; }
+.fat-kalem-duz{ background:var(--surface-2); border:1px solid var(--line-2); border-radius:7px; padding:4px 8px; cursor:pointer; font-size:13px; }
+.fat-td-islem{ display:flex; gap:5px; align-items:center; justify-content:center; }
+
+/* ═══ KULLANICI YETKİLERİ EKRANI ═══ */
+.yetki-bilgi-bar{
+  background:var(--brand-soft); border:1.5px solid var(--gold-3); border-radius:12px;
+  padding:12px 16px; margin:0 0 18px; font-size:13.5px; color:var(--ink-2); font-weight:600;
+  box-shadow:var(--emboss-sm); line-height:1.5;
+}
+.yetki-tablo-sar{
+  background:var(--surface); border:2px solid var(--gold-3); border-radius:16px;
+  box-shadow:var(--gold-frame-sh); overflow:hidden; margin-bottom:18px;
+}
+.yetki-tablo{ width:100%; border-collapse:collapse; }
+.yetki-tablo thead th{
+  background:linear-gradient(180deg,#c68d67,#865432 40%,#432a19 100%);
+  color:#f7efe9; padding:14px 12px; font-size:13px; font-weight:800; text-align:center;
+  border-bottom:2px solid var(--gold-3);
+}
+.yetki-tablo thead th.yt-blok-bas{ text-align:left; padding-left:18px; }
+.yetki-tablo .yt-rol-ic{ font-size:20px; display:block; margin-bottom:3px; }
+.yetki-tablo .yt-rol-ad{ font-size:12px; line-height:1.2; }
+.yetki-tablo tbody tr{ border-bottom:1px solid var(--line); }
+.yetki-tablo tbody tr:last-child{ border-bottom:none; }
+.yetki-tablo tbody tr:nth-child(even){ background:var(--surface-2); }
+.yetki-tablo .yt-blok{
+  padding:14px 18px; font-size:14.5px; font-weight:800; color:var(--ink);
+  border-right:2px solid var(--gold-3); white-space:nowrap;
+}
+.yetki-tablo .yt-blok-ic{ font-size:17px; margin-right:6px; }
+.yetki-tablo .yt-hucre{ padding:10px 12px; text-align:center; }
+/* aç/kapa toggle */
+.yt-toggle{
+  display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+  padding:7px 12px 7px 8px; border-radius:99px; border:1.5px solid var(--line-2);
+  background:var(--surface-2); transition:all .2s ease; min-width:96px; justify-content:flex-start;
+}
+.yt-toggle-knob{
+  width:22px; height:22px; border-radius:50%; flex:none;
+  background:#fff; box-shadow:0 1px 3px rgba(45,29,18,.3); transition:all .2s ease;
+  border:1px solid var(--line-2);
+}
+.yt-toggle-yazi{ font-size:12.5px; font-weight:800; color:var(--ink-3); }
+.yt-toggle.on{
+  background:linear-gradient(180deg,#e0c989,#c9a234 55%,#a5852b);
+  border-color:var(--gold-3); flex-direction:row-reverse;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 2px 5px rgba(90,73,23,.25);
+}
+.yt-toggle.on .yt-toggle-knob{ background:#fff; border-color:#fff; }
+.yt-toggle.on .yt-toggle-yazi{ color:#3d2f26; }
+.yt-toggle:hover{ transform:translateY(-1px); }
+/* toplu butonlar */
+.yetki-toplu{ display:flex; gap:12px; flex-wrap:wrap; }
+.yetki-toplu-btn{ padding:11px 18px!important; border-radius:12px!important; font-weight:800!important; font-size:13.5px!important; }
+
 /* ═══════════════════════════════════════════════════════════
    KASA EKRANI REDESIGN — kullanıcı brief'i (renk atamaları)
    ═══════════════════════════════════════════════════════════ */
@@ -7933,9 +8021,9 @@ const ROLES = {
   mudur: { ad:"Şube müdürü",   ic:"📋", renk:"var(--r-mudur)", subeSec:true,
            nav:["canli","satis","masalar","masagecmis","masayonetim","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","personel","yazarkasa","yazicilar","musteriekran","rapor"] },
   depo:  { ad:"Depo / Lojistik", ic:"📦", renk:"var(--r-depo)", sube:"Tüm şubeler",
-           nav:["bayi","stok","bildirim"] },
+           nav:["bayi","stok","fatura","bildirim"] },
   genel: { ad:"Genel müdür",   ic:"🗺️", renk:"var(--r-genel)", sube:"Tüm şubeler",
-           nav:["canli","masagecmis","masayonetim","recete","stok","fiyat","bayi","bildirim","kampanya","magpuan","intro","logo","tema","subeler","personel","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
+           nav:["canli","masagecmis","masayonetim","recete","stok","fatura","fiyat","bayi","bildirim","kampanya","magpuan","intro","logo","tema","yetki","subeler","personel","yazarkasa","yazicilar","musteriekran","rapor","denetim"] },
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -8484,6 +8572,7 @@ const NAV_META = {
   rapor:   {ic:"📊", ad:"Rapor"},
   denetim: {ic:"🔍", ad:"Denetim"},
   stok:    {ic:"📦", ad:"Stok"},
+  fatura:  {ic:"🧾", ad:"Alış-Satış Fatura"},
   yazarkasa:{ic:"🧾", ad:"Yazarkasa"},
   yazicilar:{ic:"🖨️", ad:"Yazıcılar"},
   musteriekran:{ic:"🖥️", ad:"Müşteri Ekranı"},
@@ -8491,6 +8580,7 @@ const NAV_META = {
   intro:{ic:"📱", ad:"QR İntro"},
   logo:{ic:"🎨", ad:"Logo"},
   tema:{ic:"🌈", ad:"Tema"},
+  yetki:{ic:"🔐", ad:"Kullanıcı Yetkileri"},
 };
 
 /* Sol menü grupları — menüler bu sırayla ve başlıklar altında görünür.
@@ -8500,10 +8590,63 @@ const NAV_GRUPLAR = [
   { baslik:null,          ic:"",   uyeler:["canli","bildirim"] },
   { baslik:"Kasa",        ic:"💳", uyeler:["satis","masalar","masagecmis"] },
   { baslik:"QR Menü",     ic:"📱", uyeler:["fiyat","kampanya","magpuan","intro"] },
-  { baslik:"Stoklar",     ic:"📦", uyeler:["stok","bayi","recete"] },
+  { baslik:"Stoklar",     ic:"📦", uyeler:["stok","bayi","fatura","recete"] },
   { baslik:"Raporlar",    ic:"📊", uyeler:["rapor","denetim"] },
-  { baslik:"Yönetim",     ic:"⚙️", uyeler:["masayonetim","logo","tema","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
+  { baslik:"Yönetim",     ic:"⚙️", uyeler:["masayonetim","logo","tema","yetki","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
 ];
+
+/* ═══════════════════════════════════════════════════════════════
+   MENÜ YETKİLERİ — genel müdür rol bazında ana grupları aç/kapa
+   Kapalı grup/öğe o role hiç gösterilmez ve girişi engellenir.
+   genel + mudur HER ZAMAN tam yetkili (matrise tabi değil).
+   ═══════════════════════════════════════════════════════════════ */
+/* Yetki matrisine tabi roller ve kontrol edilen menü blokları */
+const YETKI_ROLLERI = [
+  { k:"mudur",  ad:"Şube müdürleri",    ic:"📋" },
+  { k:"kasa",   ad:"Kasa görevlileri",  ic:"💳" },
+  { k:"depo",   ad:"Depo / Lojistik",   ic:"📦" },
+  { k:"mutfak", ad:"Mutfak kullanıcıları", ic:"👨‍🍳" },
+  { k:"garson", ad:"Garsonlar",         ic:"🧑‍🍽️" },
+];
+/* Aç/kapa yapılabilen menü blokları (sol menü ana grupları + QR menü) */
+const YETKI_BLOKLARI = [
+  { k:"canli",    ad:"Canlı",    ic:"📡", uyeler:["canli"] },
+  { k:"bildirim", ad:"Bildirim", ic:"🔔", uyeler:["bildirim"] },
+  { k:"Kasa",     ad:"Kasa",     ic:"💳", uyeler:["satis","masalar","masagecmis"] },
+  { k:"QR Menü",  ad:"QR Menü",  ic:"📱", uyeler:["fiyat","kampanya","magpuan","intro"] },
+  { k:"Stoklar",  ad:"Stoklar",  ic:"📦", uyeler:["stok","bayi","fatura","recete"] },
+  { k:"Raporlar", ad:"Raporlar", ic:"📊", uyeler:["rapor","denetim"] },
+  { k:"Yönetim",  ad:"Yönetim",  ic:"⚙️", uyeler:["masayonetim","logo","tema","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
+];
+/* Varsayılan: ŞU AN sadece Stoklar açık (bayi testi için), gerisi kapalı.
+   Yapı: MENU_YETKI[rol][blok] = true/false */
+function menuYetkiVarsayilan(){
+  const v = {};
+  YETKI_ROLLERI.forEach(r=>{
+    v[r.k] = {};
+    YETKI_BLOKLARI.forEach(b=>{ v[r.k][b.k] = (b.k==="Stoklar"); });  // sadece Stoklar açık
+  });
+  return v;
+}
+let MENU_YETKI = menuYetkiVarsayilan();
+function menuYetkiYukle(){
+  try{
+    const s = localStorage.getItem("MP_MENU_YETKI");
+    if(s){ MENU_YETKI = Object.assign(menuYetkiVarsayilan(), JSON.parse(s)); }
+  }catch(e){}
+}
+function menuYetkiKaydet(){
+  try{ localStorage.setItem("MP_MENU_YETKI", JSON.stringify(MENU_YETKI)); }catch(e){}
+}
+/* Bir öğe (ekran key) verilen rol için açık mı? genel/mudur → her zaman açık */
+function menuAcikMi(rol, ekranKey){
+  if(rol==="genel") return true;                        // sadece genel müdür tam yetkili
+  if(!MENU_YETKI[rol]) return true;                     // tanımsız rol → engelleme
+  // ekranKey hangi bloğa ait?
+  const blok = YETKI_BLOKLARI.find(b=>b.uyeler.includes(ekranKey));
+  if(!blok) return true;                                // blok dışı (artan) → serbest
+  return !!MENU_YETKI[rol][blok.k];
+}
 
 /* Her ana menü grubuna kartelanın farklı bir rengi — görsel ayrım + zenginlik */
 const NAV_GRUP_RENK = {
@@ -9779,6 +9922,8 @@ let STOK_KATEGORILERI = ["Hammadde","İçecekler","Soslar","Meyveler","Süslemel
 let BAYI_STOK = {};          // {"Edirne Atatürk": {hamur:5000, cikolata:2000}}
 let BAYI_FIYAT = {};         // {hamur:120, cikolata:340} — ₺/birim (gr için ₺/kg mantıklı ama basit tutuyoruz)
 let IRSALIYELER = [];        // alış faturaları {id, faturaNo, tarih, tedarikci, aciklama, kalemler:[...], toplam, kdvToplam, iskontoToplam, faturaTutar}
+let SATIS_FATURALARI = [];   // şubeye satış faturaları {id, faturaNo, tarih, sube, aciklama, kalemler, matrah, kdvToplam, iskontoToplam, faturaTutar, aktarildi:false}
+let _satisFaturaId = 1;
 let TEDARIKCILER = [];       // tedarikçi/firma adları (kalıcı)
 let BILDIRIMLER = [];        // {id,tip,baslik,mesaj,kanal,hedefRol,hedefSube,link,okundu,tarih,ts}
 let _bildirimId = 1;
@@ -9804,6 +9949,7 @@ function bayiStokYaz(sube, kod, miktar){
 function bayiFiyat(kod){ return BAYI_FIYAT[kod]||0; }
 /* Bayinin sipariş ekranında gördüğü/ödediği fiyat = stok kartı satış fiyatı (KDV dahil).
    Satış fiyatı girilmemişse 0 döner. */
+function stokAd(kod){ return (STOCK[kod] && STOCK[kod].ad) ? STOCK[kod].ad : kod; }
 function bayiSatisFiyat(kod){
   const d = stokFiyatDetay(kod);
   return d.satisDahil||0;
@@ -10007,8 +10153,8 @@ function siparisExcelToplu(){
 const B2B_KEY = "minipan_b2b_v1";
 function b2bKaydet(){
   return MPStore.set(B2B_KEY, {
-    BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, BAYI_SIPARISLER, TEDARIKCILER, BILDIRIMLER, _bildirimId, STOK_HAREKET,
-    _irsaliyeId, _siparisId, _stokNoSayac,
+    BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, SATIS_FATURALARI, BAYI_SIPARISLER, TEDARIKCILER, BILDIRIMLER, _bildirimId, STOK_HAREKET,
+    _irsaliyeId, _siparisId, _stokNoSayac, _satisFaturaId,
     // merkez stok mevcut miktarları da kalıcı (irsaliye/sayım/aktarım değiştiriyor)
     STOCK_MEVCUT: Object.fromEntries(Object.entries(STOCK).map(([k,v])=>[k,v.mevcut])),
     // stok kartı meta bilgileri (ad, birim, kritik, kcal, kdv, aktif) — kart oluştur/düzenle kalıcı olsun
@@ -10023,6 +10169,8 @@ function b2bYukle(){
   if(v.BAYI_FIYAT) BAYI_FIYAT = v.BAYI_FIYAT;
   if(v.BAYI_ISKONTO) BAYI_ISKONTO = v.BAYI_ISKONTO;
   if(v.IRSALIYELER) IRSALIYELER = v.IRSALIYELER;
+  if(v.SATIS_FATURALARI) SATIS_FATURALARI = v.SATIS_FATURALARI;
+  if(v._satisFaturaId) _satisFaturaId = v._satisFaturaId;
   if(v.TEDARIKCILER) TEDARIKCILER = v.TEDARIKCILER;
   if(v.BILDIRIMLER) BILDIRIMLER = v.BILDIRIMLER;
   if(v.STOK_HAREKET) STOK_HAREKET = v.STOK_HAREKET;
@@ -10505,9 +10653,13 @@ function login(role){
   document.getElementById("roleLabel").textContent = r.ad;
   const dot = document.getElementById("roleDot");
   dot.textContent = r.ic; dot.style.background = r.renk;
-  buildNav();
-  temaYukle();   // kaydedilmiş temayı uygula (cihazda kalıcı)
+  // ÖNCE yetkileri yükle + nav durumunu sıfırla, SONRA nav'ı kur
+  menuYetkiYukle();              // kaydedilmiş menü yetkilerini yükle
+  state._navIlkYukleme = true;   // ilk ekran açılışında gruplar kapalı gelsin
+  state.navAcikGrup = null;      // her girişte gruplar kapalı başlar
+  temaYukle();                   // kaydedilmiş temayı uygula (cihazda kalıcı)
   if(typeof sayfaGorseliUygula==="function") sayfaGorseliUygula();   // sağ-alt sayfa görseli
+  buildNav();                    // nav'ı kur (yetki + kapalı gruplar uygulanmış olarak)
   // Masalar ekranı olan roller (kasa, müdür) girişte doğrudan Masalar'la başlasın
   const acilis = r.nav.includes("masalar") ? "masalar" : r.nav[0];
   go(acilis);
@@ -10550,7 +10702,8 @@ function logout(){
 function buildNav(){
   const nav = document.getElementById("nav");
   const rolNav = ROLES[state.role].nav;          // bu rolün görebildiği menüler
-  const rolSet = new Set(rolNav);
+  // menü yetkisine göre de filtrele (genel/mudur her zaman tam yetkili)
+  const rolSet = new Set(rolNav.filter(k=>menuAcikMi(state.role, k)));
   const badgeHtml = (k)=>{
     if(k==="bildirim" && typeof bildirimOkunmamis==="function"){
       const say = bildirimOkunmamis();
@@ -10566,7 +10719,12 @@ function buildNav(){
   };
   // aktif ekranın hangi grupta olduğunu bul (o grup varsayılan açık olsun)
   const grupBul = (key)=>{ const g=NAV_GRUPLAR.find(gr=>gr.baslik && gr.uyeler.includes(key)); return g?g.baslik:null; };
-  if(state.navAcikGrup===undefined) state.navAcikGrup = grupBul(state.ekran) || null;
+  // Gruplar KAPALI başlar — kullanıcı grup başlığına tıklayınca açılır.
+  if(state.navAcikGrup===undefined) state.navAcikGrup = null;
+  // güvenlik: navAcikGrup geçerli bir grup başlığı değilse null'a çek (bozuk state → hepsi kapalı)
+  if(state.navAcikGrup!==null && !NAV_GRUPLAR.some(g=>g.baslik===state.navAcikGrup)){
+    state.navAcikGrup = null;
+  }
 
   const kullanilan = new Set();
   let html = "";
@@ -10593,7 +10751,7 @@ function buildNav(){
       }).join("");
     }
   });
-  const artan = rolNav.filter(k=>!kullanilan.has(k) && NAV_META[k]);
+  const artan = rolNav.filter(k=>!kullanilan.has(k) && NAV_META[k] && menuAcikMi(state.role, k));
   if(artan.length) html += artan.map(itemHtml).join("");
   nav.innerHTML = html;
 }
@@ -10604,6 +10762,11 @@ function navGrupTikla(baslik){
 }
 
 function go(key, scrollKoru){
+  // 🔐 MENÜ YETKİSİ — bu rol için kapalı menüye giriş engellenir (genel/mudur muaf)
+  if(!menuAcikMi(state.role, key)){
+    note("🔒 Bu bölüme erişim yetkiniz yok");
+    return;
+  }
   // 🔐 KASA + RAPOR → müdür onayı gerekir (her girişte yeniden)
   if(key==="rapor" && state.role==="kasa" && !state._raporErisimAcik){
     raporErisimIste();
@@ -10617,8 +10780,14 @@ function go(key, scrollKoru){
   state.ekran = key;                       // aktif ekran (nav vurgusu için)
   // seçilen ekran bir grupta ise o grubu aç; grupsuz (Canlı/Bildirim) ise açık grubu kapat
   const grupBul = (k)=>{ const g=NAV_GRUPLAR.find(gr=>gr.baslik && gr.uyeler.includes(k)); return g?g.baslik:null; };
-  const grubu = grupBul(key);
-  state.navAcikGrup = grubu || null;       // grupluysa o grup açılır, grupsuzsa hepsi kapanır
+  // Sadece kullanıcı bir menüye TIKLAYINCA grubu aç (ilk açılışta gruplar kapalı kalır)
+  if(state._navIlkYukleme){
+    state._navIlkYukleme = false;   // ilk render — grup açma, kapalı bırak
+    state.navAcikGrup = null;
+  } else {
+    const grubu = grupBul(key);
+    state.navAcikGrup = grubu || null;     // grupluysa o grup açılır, grupsuzsa hepsi kapanır
+  }
   if(typeof buildNav==="function") buildNav();   // nav'ı yeniden çiz (aktif vurgu + akordeon)
   const main = document.getElementById("main");
   const eskiScroll = main.scrollTop;
@@ -10626,8 +10795,8 @@ function go(key, scrollKoru){
   ({
     satis:viewSatis, masalar:viewMasalar, masagecmis:viewMasaGecmisi, masayonetim:viewMasaYonetim, canli:viewCanli, recete:viewRecete,
     fiyat:viewFiyat, kampanya:viewKampanya, personel:viewPersonel, bayi:viewBayi,
-    subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, odemeEkran:viewOdemeEkran, bildirim:viewBildirim,
-    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan, intro:viewIntro, logo:viewLogo, tema:viewTema
+    subeler:viewSubeler, rapor:viewRapor, denetim:viewDenetim, stok:viewStok, fatura:viewFatura, odemeEkran:viewOdemeEkran, bildirim:viewBildirim,
+    yazarkasa:viewYazarkasa, yazicilar:viewYazicilar, musteriekran:viewMusteriEkran, magpuan:viewMagPuan, intro:viewIntro, logo:viewLogo, tema:viewTema, yetki:viewYetki
   }[key] || viewSatis)(main);
   if(scrollKoru) main.scrollTop = eskiScroll;
   if(typeof bildirimBadgeGuncelle==="function") bildirimBadgeGuncelle();
@@ -20460,13 +20629,69 @@ function kullaniciFormKaydet(){
 // ============================================================
 // BAYİ KANALI (B2B) — genel müdür ↔ bayi tedarik
 // ============================================================
+/* ============================================================
+   ALIŞ-SATIŞ FATURA — Stoklar menüsü altında
+   Alış Faturaları (taşındı) + Satış Faturaları (şubeye satış)
+   ============================================================ */
+function viewFatura(main){
+  // alış faturası taslağı açıksa onun formunu göster
+  if(state.faturaTaslak){ main.innerHTML = faturaFormHtml(); return; }
+  // satış faturası taslağı açıksa onun formunu göster
+  if(state.satisTaslak){ main.innerHTML = satisFaturaFormHtml(); return; }
+  if(!state.faturaSekme) state.faturaSekme = "alis";
+  const sekme = state.faturaSekme;
+  let html = `<div class="sec-head"><div><h2>🧾 Alış-Satış Fatura</h2>
+    <div class="sh-sub">Merkez tedarik faturaları ve şubeye satış faturaları</div></div></div>`;
+  html += `<div class="bayi-sekme-row">
+    <button class="bayi-sekme${sekme==="alis"?' on':''}" onclick="faturaSekmeSec('alis')">🧾 Alış Faturaları</button>
+    <button class="bayi-sekme${sekme==="satis"?' on':''}" onclick="faturaSekmeSec('satis')">🏪 Satış Faturaları</button>
+  </div><div class="bayi-icerik">`;
+  if(sekme==="alis") html += bayiIrsaliyeHtml();
+  else html += satisFaturaListeHtml();
+  html += `</div>`;
+  main.innerHTML = html;
+}
+function faturaSekmeSec(k){ state.faturaSekme=k; go("fatura"); }
+
+/* === SATIŞ FATURALARI listesi === */
+function satisFaturaListeHtml(){
+  let html = `<div class="bayi-aciklama">🏪 Şubelere satış faturaları. Fiyatlar <strong>Bayi Fiyatları</strong>'ndan gelir, iskonto elle ayarlanabilir. Fatura kaydedildikten sonra <strong>Stok Aktar</strong> ile merkez stoğundan düşülüp şube stoğuna eklenir.</div>`;
+  html += `<div class="stok-bar-aksiyon" style="margin-bottom:14px">
+    <button class="btn-primary" onclick="satisFaturaYeni()">+ Yeni satış faturası</button>
+  </div>`;
+  if(SATIS_FATURALARI.length===0){
+    return html + `<div class="bayi-bos">Henüz satış faturası yok. "+ Yeni satış faturası" ile başlayın.</div>`;
+  }
+  // yeniden eskiye
+  const liste = [...SATIS_FATURALARI].sort((a,b)=>(b.id-a.id));
+  liste.forEach(f=>{
+    const durum = f.aktarildi
+      ? `<span class="sf-rozet aktarildi">✓ ${f.aktarimTuru==='haric'?'Hariçten eklendi':'Merkezden aktarıldı'}</span>`
+      : `<span class="sf-rozet bekliyor">⏳ Aktarım bekliyor</span>`;
+    html += `<div class="bayi-satir sf-satir">
+      <div class="sf-ust">
+        <div class="sf-bilgi">
+          <div class="sf-baslik">🏪 ${f.sube} ${durum}</div>
+          <div class="sf-alt">${f.faturaNo?('Fatura No: '+f.faturaNo+' · '):''}${f.tarih} · ${f.kalemler.length} kalem</div>
+        </div>
+        <div class="sf-tutar">${tl(f.faturaTutar)} ₺</div>
+      </div>
+      <div class="sf-aksiyon">
+        ${!f.aktarildi ? `<button class="bayi-mini sf-aktar-btn" onclick="satisFaturaAktarOnay(${f.id})">📦 Stok Aktar</button>` : ''}
+        <button class="bayi-mini" onclick="satisFaturaDuzenle(${f.id})">✏️ Düzenle</button>
+        <button class="bayi-mini sil" onclick="satisFaturaSilOnay(${f.id})">🗑️ Sil</button>
+      </div>
+    </div>`;
+  });
+  return html;
+}
+
 function viewBayi(main){
   const isGenel = depoVeyaGenel();
-  if(!state.bayiSekme) state.bayiSekme = isGenel ? "irsaliye" : "siparis";
+  if(!state.bayiSekme) state.bayiSekme = isGenel ? "bfiyat" : "siparis";
   const sekme = state.bayiSekme;
   // genel müdür sekmeleri (stok kartları/bayi stokları/sayım → STOK menüsüne taşındı)
   const genelSekmeler = [
-    {k:"irsaliye", ad:"🧾 Alış Faturaları"},
     {k:"bfiyat",   ad:"🏷️ Bayi Fiyatları"},
     {k:"siparis",  ad:"📥 Siparişler"},
     {k:"gecmis",   ad:"📊 Geçmiş"},
@@ -22202,17 +22427,17 @@ function bayiIrsaliyeHtml(){
   }
   return html;
 }
-function faturaFiltre(alan, val){ state.fatFiltre[alan]=val; go("bayi", true); }
+function faturaFiltre(alan, val){ state.fatFiltre[alan]=val; go("fatura", true); }
 function faturaFiltreTemizle(){
   const bugun=new Date(), ayOnce=new Date(); ayOnce.setMonth(ayOnce.getMonth()-1);
   state.fatFiltre={tedarikci:"__tum", bas:ayOnce.toISOString().slice(0,10), bit:bugun.toISOString().slice(0,10)};
-  go("bayi", true);
+  go("fatura", true);
 }
 /* ─── Fatura formu ─── */
 function faturaBasla(){
   const bugunISO=new Date().toISOString().slice(0,10);
   state.faturaTaslak = {id:null, faturaNo:"", tarihISO:bugunISO, tedarikci:"", aciklama:"", kalemler:[]};
-  go("bayi", true);
+  go("fatura", true);
 }
 function faturaDuzenle(id){
   const ir=IRSALIYELER.find(x=>x.id===id); if(!ir) return;
@@ -22220,14 +22445,14 @@ function faturaDuzenle(id){
     id:ir.id, faturaNo:ir.faturaNo||"", tarihISO:ir.tarihISO||new Date().toISOString().slice(0,10),
     tedarikci:ir.tedarikci||"", aciklama:ir.aciklama||"", kalemler:ir.kalemler||[]
   }));
-  go("bayi", true);
+  go("fatura", true);
 }
-function faturaIptal(){ state.faturaTaslak=null; go("bayi", true); }
+function faturaIptal(){ state.faturaTaslak=null; go("fatura", true); }
 function faturaAlan(alan, val){ if(state.faturaTaslak){ state.faturaTaslak[alan]=val; } }
 function faturaTedarikciSec(v){
   const t=state.faturaTaslak; if(!t) return;
   if(v==="__yeni__"){ firmaEkleModalAc(); return; }
-  t.tedarikci=v; go("bayi", true);
+  t.tedarikci=v; go("fatura", true);
 }
 /* Yeni firma ekleme modalı */
 function firmaEkleModalAc(){
@@ -22237,7 +22462,7 @@ function firmaEkleModalAc(){
 function firmaEkleModalKapat(){
   const m=document.getElementById("firmaModal"); if(m) m.classList.remove("on");
   state._firmaModal=null;
-  go("bayi", true);   // dropdown'ı önceki haline döndür
+  go("fatura", true);   // dropdown'ı önceki haline döndür
 }
 function firmaEkleKaydet(){
   const inp=document.getElementById("firmaAdInput");
@@ -22259,7 +22484,7 @@ function firmaEkleKaydet(){
   const m=document.getElementById("firmaModal"); if(m) m.classList.remove("on");
   state._firmaModal=null;
   note("✓ Firma eklendi: "+ad);
-  go("bayi", true);
+  go("fatura", true);
 }
 function firmaEkleModalCiz(){
   const p=state._firmaModal;
@@ -22287,7 +22512,7 @@ function firmaEkleModalCiz(){
   mdl.classList.add("on");
   setTimeout(()=>{ const i=document.getElementById("firmaAdInput"); if(i){ i.focus(); i.select(); } },80);
 }
-function faturaKalemSil(i){ state.faturaTaslak.kalemler.splice(i,1); go("bayi", true); }
+function faturaKalemSil(i){ state.faturaTaslak.kalemler.splice(i,1); go("fatura", true); }
 function faturaKaydet(){
   const t=state.faturaTaslak;
   if(!t){ return; }
@@ -22330,8 +22555,239 @@ function faturaKaydet(){
   state.faturaTaslak=null;
   note("✓ Alış faturası kaydedildi · "+t.kalemler.length+" ürün stoğa işlendi");
   b2bKaydet();
-  go("bayi", true);
+  go("fatura", true);
 }
+/* ═══════════════════════════════════════════════════════════
+   SATIŞ FATURASI — şubeye satış (alış faturasının satış versiyonu)
+   Fiyatlar Bayi Fiyatları'ndan gelir, iskonto elle, stok Aktar'da işlenir
+   ═══════════════════════════════════════════════════════════ */
+function satisFaturaYeni(){
+  const bugunISO=new Date().toISOString().slice(0,10);
+  state.satisTaslak={id:null, faturaNo:"", tarihISO:bugunISO, sube:"", aciklama:"", kalemler:[]};
+  go("fatura", true);
+}
+function satisFaturaDuzenle(id){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  if(f.aktarildi){ note("⚠️ Stoğu aktarılmış fatura düzenlenemez. Önce aktarımı geri almanız gerekir."); return; }
+  state.satisTaslak=JSON.parse(JSON.stringify({
+    id:f.id, faturaNo:f.faturaNo, tarihISO:f.tarihISO, sube:f.sube, aciklama:f.aciklama, kalemler:f.kalemler
+  }));
+  go("fatura", true);
+}
+function satisFaturaIptal(){ state.satisTaslak=null; go("fatura", true); }
+function satisFaturaAlan(alan,val){ if(state.satisTaslak){ state.satisTaslak[alan]=val; } }
+
+/* satış fatura formu — alış faturasıyla aynı kalem modalını kullanır */
+function satisFaturaFormHtml(){
+  const t=state.satisTaslak;
+  const top=faturaToplamlar(t.kalemler);
+  const duzenle=t.id!=null;
+  let html=`<div class="fat-belge">
+    <div class="fat-form-head">
+      <div class="fat-form-baslik">${duzenle?'✏️ Satış Faturası Düzenle':'🏪 Yeni Satış Faturası'}</div>
+      <button class="fat-kapat" onclick="satisFaturaIptal()">✕</button>
+    </div>`;
+  html+=`<div class="fat-bilgi-kart">
+    <div class="fat-bilgi-baslik">📋 Fatura Bilgileri</div>
+    <div class="fat-ust-grid">
+      <div class="fat-alan">
+        <label>Fatura tarihi</label>
+        <input type="date" class="fat-input" value="${t.tarihISO}" onchange="satisFaturaAlan('tarihISO',this.value)">
+      </div>
+      <div class="fat-alan">
+        <label>Fatura numarası</label>
+        <input type="text" class="fat-input" value="${(t.faturaNo||'').replace(/"/g,'&quot;')}" placeholder="örn. S-2024-1058" oninput="satisFaturaAlan('faturaNo',this.value)">
+      </div>
+      <div class="fat-alan">
+        <label>Şube (alıcı)</label>
+        <select class="fat-input" onchange="satisFaturaAlan('sube',this.value)">
+          <option value=""${!t.sube?' selected':''}>— şube seç —</option>
+          ${DEMO_BRANCHES.map(b=>b.ad).map(s=>`<option value="${s.replace(/"/g,'&quot;')}"${t.sube===s?' selected':''}>${s}</option>`).join("")}
+        </select>
+      </div>
+      <div class="fat-alan">
+        <label>Açıklama</label>
+        <input type="text" class="fat-input" value="${(t.aciklama||'').replace(/"/g,'&quot;')}" placeholder="opsiyonel not" oninput="satisFaturaAlan('aciklama',this.value)">
+      </div>
+    </div>
+  </div>`;
+  // kalemler — alış faturasıyla aynı tablo yapısı
+  html+=`<div class="fat-kalem-bolum">
+    <div class="fat-kalem-baslik-bar">
+      <span>🧾 Fatura Kalemleri</span>
+      <span class="fat-kalem-adet">${t.kalemler.length} kalem</span>
+    </div>`;
+  if(t.kalemler.length===0){
+    html+=`<div class="fat-bos">Henüz ürün eklenmedi. "+ Ürün ekle" ile başlayın · fiyatlar Bayi Fiyatları'ndan gelir (elle değiştirilebilir).</div>`;
+  } else {
+    html+=`<div class="fat-tablo">
+      <div class="fat-tablo-head">
+        <span>Ürün</span><span>Miktar</span><span>Birim Fiyat</span><span>KDV</span><span>İskonto</span><span>Matrah</span><span>Tutar</span><span></span>
+      </div>`;
+    t.kalemler.forEach((k,i)=>{
+      const h=faturaKalemHesap(k);
+      html+=`<div class="fat-tablo-satir">
+        <span class="fat-td-urun">${stokAd(k.kod)}<small> · ${(+(k.miktar)).toLocaleString("tr")} ${k.girisBirim||''}</small></span>
+        <span>${(+(k.miktar)).toLocaleString("tr")} ${k.girisBirim||''}</span>
+        <span>${tl(k.birimFiyat)} ₺${k.kdvDahil?' <small>(dahil)</small>':''}</span>
+        <span>%${k.kdv}</span>
+        <span>${k.iskonto>0?('%'+k.iskonto):'—'}</span>
+        <span class="fat-td-matrah">${tl(h.matrah)} ₺</span>
+        <span class="fat-td-tutar">${tl(h.satirTutar)} ₺</span>
+        <span class="fat-td-islem">
+          <button class="fat-kalem-duz" onclick="faturaKalemDuzenle(${i})">✏️</button>
+          <button class="fat-kalem-sil" onclick="satisKalemSil(${i})">✕</button>
+        </span>
+      </div>`;
+    });
+    html+=`</div>`;
+  }
+  html+=`<button class="fat-urun-ekle" onclick="faturaUrunEkleAc()">+ Ürün ekle</button>`;
+  html+=`</div>`;
+  html+=`<div class="fat-ozet">
+    <div class="fat-ozet-satir"><span>Ara toplam (matrah)</span><span>${tl(top.matrah)} ₺</span></div>
+    <div class="fat-ozet-satir"><span>İskonto</span><span>−${tl(top.iskontoToplam)} ₺</span></div>
+    <div class="fat-ozet-satir"><span>KDV tutarı</span><span>${tl(top.kdvToplam)} ₺</span></div>
+    <div class="fat-ozet-satir fat-ozet-toplam"><span>Fatura tutarı</span><span>${tl(top.faturaTutar)} ₺</span></div>
+  </div>`;
+  html+=`<div class="fat-form-aksiyon">
+    <button class="btn btn-ghost" onclick="satisFaturaIptal()">İptal</button>
+    <button class="btn btn-primary" onclick="satisFaturaKaydet()">${duzenle?'Değişiklikleri kaydet':'Satış faturasını kaydet'}</button>
+  </div>`;
+  html+=`</div>`;
+  return html;
+}
+function satisKalemSil(i){ state.satisTaslak.kalemler.splice(i,1); go("fatura", true); }
+function satisFaturaKaydet(){
+  const t=state.satisTaslak; if(!t) return;
+  if(!t.sube){ note("Şube seçin"); return; }
+  if(t.kalemler.length===0){ note("En az bir ürün ekleyin"); return; }
+  const top=faturaToplamlar(t.kalemler);
+  const tarihGoster=new Date(t.tarihISO).toLocaleDateString("tr-TR");
+  const kayit={
+    id:(t.id!=null?t.id:_satisFaturaId++),
+    faturaNo:t.faturaNo, tarihISO:t.tarihISO, tarih:tarihGoster,
+    sube:t.sube, aciklama:t.aciklama, kalemler:t.kalemler,
+    matrah:top.matrah, kdvToplam:top.kdvToplam, iskontoToplam:top.iskontoToplam, faturaTutar:top.faturaTutar,
+    aktarildi:false
+  };
+  if(t.id!=null){
+    const i=SATIS_FATURALARI.findIndex(x=>x.id===t.id);
+    // düzenlemede aktarım durumunu koru (ama düzenleme sadece aktarılmamışlarda mümkün)
+    if(i>=0){ kayit.aktarildi=SATIS_FATURALARI[i].aktarildi; SATIS_FATURALARI[i]=kayit; }
+  } else {
+    SATIS_FATURALARI.push(kayit);
+  }
+  state.satisTaslak=null;
+  note("✓ Satış faturası kaydedildi. Stoğu şubeye aktarmak için 'Stok Aktar' butonunu kullanın.");
+  b2bKaydet();
+  go("fatura", true);
+}
+/* STOK AKTAR — onay pop-up'lı: merkezden düş, şubeye ekle */
+function satisFaturaAktarOnay(id){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  if(f.aktarildi){ note("Bu fatura zaten aktarılmış"); return; }
+  const birimAdi=k=>{ const u=(typeof uomAl==="function"&&STOCK[k.kod])?uomAl(STOCK[k.kod]):null; return k.girisBirim||(u?u.tabanBirim:'')||''; };
+  const kalemOzet=f.kalemler.map(k=>`${stokAd(k.kod)} — ${(+(k.miktar)).toLocaleString("tr")} ${birimAdi(k)}`).join("<br>");
+  let mdl=document.getElementById("satisAktarModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="satisAktarModal"; mdl.className="modal-bg"; mdl.style.zIndex="250"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="ypm-ic" style="max-width:480px">
+    <div class="ypm-head"><div class="ypm-head-ic">📦</div>
+      <div class="ypm-head-baslik">Stok İşleme Yöntemi</div>
+      <div class="ypm-head-alt">${f.sube} · ${f.kalemler.length} kalem</div></div>
+    <div class="ypm-body">
+      <div class="satis-aktar-liste">${kalemOzet}</div>
+      <div class="satis-aktar-secim">
+        <button class="satis-aktar-sec merkez" onclick="satisFaturaAktar(${id},'merkez')">
+          <span class="sas-ic">🔄</span>
+          <span class="sas-metin">
+            <span class="sas-bas">Merkezden Aktar</span>
+            <span class="sas-alt">Merkez stoğundan <b>düşülür</b> → ${f.sube} şubesine eklenir</span>
+          </span>
+        </button>
+        <button class="satis-aktar-sec haric" onclick="satisFaturaAktar(${id},'haric')">
+          <span class="sas-ic">➕</span>
+          <span class="sas-metin">
+            <span class="sas-bas">Hariçten Stok Girişi</span>
+            <span class="sas-alt">Merkez düşmez · dış alım gibi doğrudan ${f.sube} stoğuna <b>eklenir</b></span>
+          </span>
+        </button>
+      </div>
+      <div class="satis-aktar-not">Aktarım sonrası fatura düzenlenemez.</div>
+      <div class="ypm-btn-row" style="margin-top:14px">
+        <button class="ypm-iptal" onclick="satisAktarKapat()">Vazgeç</button>
+      </div>
+    </div></div>`;
+  mdl.classList.add("on");
+}
+function satisAktarKapat(){ const m=document.getElementById("satisAktarModal"); if(m) m.classList.remove("on"); }
+function satisFaturaAktar(id, mod){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f||f.aktarildi){ satisAktarKapat(); return; }
+  mod = mod || "merkez";
+  f.kalemler.forEach(k=>{
+    const taban=k.tabanMiktar||0;
+    // merkezden aktarımda merkez stoğu düşer; hariçten girişte düşmez
+    if(mod==="merkez" && STOCK[k.kod]) STOCK[k.kod].mevcut -= taban;
+    // her iki modda da şube stoğuna eklenir
+    if(typeof BAYI_STOK==="object"){
+      if(!BAYI_STOK[f.sube]) BAYI_STOK[f.sube]={};
+      BAYI_STOK[f.sube][k.kod]=(BAYI_STOK[f.sube][k.kod]||0)+taban;
+    }
+  });
+  f.aktarildi=true;
+  f.aktarimTuru=mod;   // silmede geri alma için sakla
+  satisAktarKapat();
+  note(mod==="merkez"
+    ? "✓ Merkezden "+f.sube+" şubesine aktarıldı ("+f.kalemler.length+" kalem)"
+    : "✓ Hariçten "+f.sube+" şube stoğuna eklendi ("+f.kalemler.length+" kalem)");
+  b2bKaydet();
+  go("fatura", true);
+}
+/* SATIŞ FATURA SİL — onaylı */
+function satisFaturaSilOnay(id){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  let mdl=document.getElementById("satisSilModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="satisSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="250"; document.body.appendChild(mdl); }
+  const uyari=f.aktarildi
+    ? `⚠️ Bu fatura silinecek ve <strong>${f.sube} şubesine aktarılan stok geri alınacak</strong> (merkeze iade). Bu işlem geri alınamaz.`
+    : `⚠️ Bu satış faturası silinecek. Bu işlem geri alınamaz.`;
+  mdl.innerHTML=`<div class="ypm-ic" style="max-width:400px">
+    <div class="ypm-head"><div class="ypm-head-ic">🗑️</div>
+      <div class="ypm-head-baslik">Satış Faturasını Sil</div>
+      <div class="ypm-head-alt">${f.sube} · ${f.tarih} · ${(f.faturaTutar||0).toFixed(2)} ₺</div></div>
+    <div class="ypm-body">
+      <div class="sdon-uyari">${uyari}</div>
+      <div class="ypm-btn-row" style="margin-top:16px">
+        <button class="ypm-iptal" onclick="satisSilKapat()">Vazgeç</button>
+        <button class="ypm-basla" style="background:var(--danger)" onclick="satisFaturaSil(${id})">Evet, sil</button>
+      </div>
+    </div></div>`;
+  mdl.classList.add("on");
+}
+function satisSilKapat(){ const m=document.getElementById("satisSilModal"); if(m) m.classList.remove("on"); }
+function satisFaturaSil(id){
+  const i=SATIS_FATURALARI.findIndex(x=>x.id===id);
+  if(i<0){ satisSilKapat(); return; }
+  const f=SATIS_FATURALARI[i];
+  // aktarılmışsa stok etkisini geri al (aktarım türüne göre)
+  if(f.aktarildi){
+    f.kalemler.forEach(k=>{
+      const taban=k.tabanMiktar||0;
+      // sadece MERKEZDEN aktarıldıysa merkeze iade et; hariçten girişte merkez etkilenmemişti
+      if(f.aktarimTuru!=="haric" && STOCK[k.kod]) STOCK[k.kod].mevcut += taban;
+      // her iki türde de şube stoğundan düş
+      if(BAYI_STOK[f.sube] && BAYI_STOK[f.sube][k.kod]!=null){
+        BAYI_STOK[f.sube][k.kod]=Math.max(0, BAYI_STOK[f.sube][k.kod]-taban);
+      }
+    });
+  }
+  SATIS_FATURALARI.splice(i,1);
+  satisSilKapat();
+  note("Satış faturası silindi");
+  b2bKaydet();
+  go("fatura", true);
+}
+
 function faturaSilOnay(id){
   const ir=IRSALIYELER.find(x=>x.id===id); if(!ir) return;
   let mdl=document.getElementById("fatSilModal");
@@ -22497,9 +22953,19 @@ function fatKalemUrunSec(kod){
   if(s){
     const u=uomAl(s);
     p.girisBirim = u.seviyeler.length ? u.seviyeler[0].ad : u.tabanBirim;
-    if(bayiFiyat(kod)>0 && !p.birimFiyat) p.birimFiyat=String(bayiFiyat(kod));
-    if(s.kdv!=null) p.kdv=String(s.kdv);
-    if(s.alisKdvDahil!=null) p.kdvDahil=!!s.alisKdvDahil;
+    if(state.satisTaslak){
+      // SATIŞ: fiyat bayi satış fiyatından (KDV dahil, üst birim başına)
+      const sf = (typeof bayiSatisFiyat==="function") ? bayiSatisFiyat(kod) : 0;
+      if(sf>0) p.birimFiyat=String(sf);
+      p.kdvDahil=true;   // satış fiyatı KDV dahil
+      if(s.satisKdv!=null) p.kdv=String(s.satisKdv);
+      else if(s.kdv!=null) p.kdv=String(s.kdv);
+    } else {
+      // ALIŞ: fiyat bayi alış fiyatından
+      if(bayiFiyat(kod)>0 && !p.birimFiyat) p.birimFiyat=String(bayiFiyat(kod));
+      if(s.kdv!=null) p.kdv=String(s.kdv);
+      if(s.alisKdvDahil!=null) p.kdvDahil=!!s.alisKdvDahil;
+    }
   }
   faturaKalemModalCiz();
 }
@@ -22536,10 +23002,15 @@ function fatKalemOnayla(){
     birimFiyat:sayi(p.birimFiyat), kdv:sayi(p.kdv), kdvDahil:!!p.kdvDahil,
     iskonto:sayi(p.iskonto), iskontoDahil:!!p.iskontoDahil
   };
-  if(p.mod==="duzenle" && p.idx!=null) state.faturaTaslak.kalemler[p.idx]=kalem;
-  else state.faturaTaslak.kalemler.push(kalem);
+  if(p.mod==="duzenle" && p.idx!=null){
+    if(state.satisTaslak) state.satisTaslak.kalemler[p.idx]=kalem;
+    else state.faturaTaslak.kalemler[p.idx]=kalem;
+  } else {
+    if(state.satisTaslak) state.satisTaslak.kalemler.push(kalem);
+    else state.faturaTaslak.kalemler.push(kalem);
+  }
   faturaKalemModalKapat();
-  go("bayi", true);
+  go(state.satisTaslak?"fatura":"bayi", true);
 }
 function faturaKalemModalCiz(){
   const p=state._fatKalem;
@@ -23969,6 +24440,74 @@ function temaYukle(){
   try{ k = localStorage.getItem("MP_TEMA") || "klasik"; }catch(e){}
   temaUygula(k);
 }
+/* ============================================================
+   KULLANICI YETKİLERİ — genel müdür rol bazında menü aç/kapa
+   ============================================================ */
+function viewYetki(main){
+  main.innerHTML = `
+    <div class="sec-head"><div><h2>🔐 Kullanıcı Yetkileri</h2>
+    <div class="sh-sub">Rollere göre sol menü erişimini aç/kapat · şube müdürü ve genel müdür her zaman tam yetkili</div></div></div>
+    <div class="yetki-bilgi-bar">💡 Kapalı bölümlere o roldeki kullanıcılar giriş yapamaz ve menüde göremez. Şu an test için sadece <b>Stoklar</b> açık; istediğin bölümü açıp bayilere test ettirebilirsin. Değişiklikler bu cihazda kalıcı olur.</div>
+    <div class="yetki-tablo-sar">
+      <table class="yetki-tablo">
+        <thead>
+          <tr>
+            <th class="yt-blok-bas">Menü Bölümü</th>
+            ${YETKI_ROLLERI.map(r=>`<th><span class="yt-rol-ic">${r.ic}</span><div class="yt-rol-ad">${r.ad}</div></th>`).join("")}
+          </tr>
+        </thead>
+        <tbody>
+          ${YETKI_BLOKLARI.map(b=>`
+            <tr>
+              <td class="yt-blok"><span class="yt-blok-ic">${b.ic}</span> ${b.ad}</td>
+              ${YETKI_ROLLERI.map(r=>{
+                const acik = !!(MENU_YETKI[r.k] && MENU_YETKI[r.k][b.k]);
+                return `<td class="yt-hucre">
+                  <button class="yt-toggle${acik?' on':''}" onclick="yetkiToggle('${r.k}','${b.k}')" title="${acik?'Açık':'Kapalı'}">
+                    <span class="yt-toggle-knob"></span>
+                    <span class="yt-toggle-yazi">${acik?'Açık':'Kapalı'}</span>
+                  </button>
+                </td>`;
+              }).join("")}
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+    </div>
+    <div class="yetki-toplu">
+      <button class="btn-gold yetki-toplu-btn" onclick="yetkiTumu(true)">✓ Hepsini Aç</button>
+      <button class="btn-ghost yetki-toplu-btn" onclick="yetkiTumu(false)">✕ Hepsini Kapat</button>
+      <button class="btn-ghost yetki-toplu-btn" onclick="yetkiSadece('Stoklar')">📦 Sadece Stoklar (test)</button>
+    </div>`;
+}
+function yetkiToggle(rol, blok){
+  if(!MENU_YETKI[rol]) MENU_YETKI[rol] = {};
+  MENU_YETKI[rol][blok] = !MENU_YETKI[rol][blok];
+  menuYetkiKaydet();
+  viewYetki(document.getElementById("main"));
+  if(typeof buildNav==="function") buildNav();
+}
+function yetkiTumu(deger){
+  YETKI_ROLLERI.forEach(r=>{
+    if(!MENU_YETKI[r.k]) MENU_YETKI[r.k] = {};
+    YETKI_BLOKLARI.forEach(b=>{ MENU_YETKI[r.k][b.k] = deger; });
+  });
+  menuYetkiKaydet();
+  viewYetki(document.getElementById("main"));
+  buildNav();
+  note(deger?"Tüm bölümler açıldı":"Tüm bölümler kapatıldı");
+}
+function yetkiSadece(blokAcik){
+  YETKI_ROLLERI.forEach(r=>{
+    if(!MENU_YETKI[r.k]) MENU_YETKI[r.k] = {};
+    YETKI_BLOKLARI.forEach(b=>{ MENU_YETKI[r.k][b.k] = (b.k===blokAcik); });
+  });
+  menuYetkiKaydet();
+  viewYetki(document.getElementById("main"));
+  buildNav();
+  note("Sadece "+blokAcik+" açık — diğerleri kapalı");
+}
+
 function viewTema(main){
   const aktif = state._tema || "klasik";
   main.innerHTML = `
