@@ -3405,7 +3405,55 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .bayi-sip-toplam{font-size:14px; font-weight:800; text-align:right; margin-bottom:10px}
 .bayi-sip-aksiyon{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 /* Reçete listesinde kullanım rozeti */
-.mr-kullanim{color:var(--brand-d); font-weight:700}
+/* Reçete üst barı — "Tümünü Excel indir" .kys-btn (32px kare ikon) ile
+   yapılmıştı, inline style ile zorlanıyordu. Kendi sınıfı verildi. */
+.mr-excel-btn{
+  padding:10px 16px; border-radius:10px;
+  background:var(--grad-panel); border:1.5px solid var(--line-2);
+  color:var(--brand-d); font-size:13px; font-weight:800; cursor:pointer;
+  box-shadow:var(--emboss-sm); white-space:nowrap;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:all .15s ease;
+}
+.mr-excel-btn:hover{ border-color:var(--brand); box-shadow:var(--emboss); }
+.mr-excel-btn:active{ transform:translateY(1px); box-shadow:var(--inset); }
+@media (max-width:640px){
+  .mr-excel-btn{ padding:9px 13px; font-size:12.5px; }
+  .bayi-bar{ padding:12px 14px !important; }
+  .bayi-bar > div[style*="display:flex"]{ flex:1 1 100%; }
+  .mr-excel-btn, .bayi-ekle-btn{ flex:1 1 auto; justify-content:center; }
+}
+/* ── Maliyet reçetesi kartı ── */
+.fat-satir-alt.mr-meta{
+  display:flex; flex-wrap:wrap; gap:5px; margin-top:6px;
+}
+.mr-rz{
+  display:inline-flex; align-items:center; gap:4px;
+  background:var(--surface-2); border:1px solid var(--line);
+  border-radius:7px; padding:3px 8px;
+  font-size:11.5px; font-weight:600; color:var(--ink-2);
+  white-space:nowrap;
+}
+.mr-kullanim{ background:var(--brand-soft) !important; border-color:var(--brand) !important; color:var(--brand-d) !important; font-weight:700 !important; }
+/* kart yerleşimi: sol esner, tutar ve butonlar sabit kalır */
+.bayi-tablo .fat-satir{ align-items:flex-start; gap:10px; }
+.bayi-tablo .fat-satir-sol{ flex:1 1 auto; min-width:0; }
+.bayi-tablo .fat-satir-tutar{ flex:0 0 auto; text-align:right; white-space:nowrap; }
+.bayi-tablo .fat-satir-aksiyon{ flex:0 0 auto; align-self:center; }
+/* aksiyon butonları eşit kare */
+.fat-satir-aksiyon .bayi-mini{
+  width:36px; height:36px; padding:0 !important;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:15px; line-height:1;
+}
+@media (max-width:640px){
+  /* dar ekran: tutar ve butonlar alt satıra, kart dikey akmasın */
+  .bayi-tablo .fat-satir{ flex-wrap:wrap; }
+  .bayi-tablo .fat-satir-sol{ flex:1 1 100%; }
+  .bayi-tablo .fat-satir-tutar{ flex:1 1 auto; text-align:left; font-size:15px; }
+  .bayi-tablo .fat-satir-aksiyon{ margin-left:auto; }
+  .mr-rz{ font-size:11px; padding:3px 7px; }
+}
 /* Sipariş kartı aksiyon satırındaki .btn'ler komşu .bayi-sip-excel-btn ile
    aynı ölçüde olsun — genel .btn (15px padding, flex:1) burada fazla iri kalıyor. */
 .bayi-sip-aksiyon .btn,
@@ -16659,7 +16707,7 @@ function viewRecete(main){
   if(sekme==="maliyet"){
     html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${MALIYET_RECETELERI.length} maliyet reçetesi</div>
       <div style="display:flex;gap:8px">
-        ${MALIYET_RECETELERI.length?`<button class="kys-btn" style="width:auto;padding:0 14px;font-size:12.5px" onclick="maliyetReceteExcelToplu()">📊 Tümünü Excel indir</button>`:''}
+        ${MALIYET_RECETELERI.length?`<button class="mr-excel-btn" onclick="maliyetReceteExcelToplu()">📊 Tümünü Excel indir</button>`:''}
         <button class="bayi-ekle-btn" onclick="maliyetReceteYeni()">+ Yeni maliyet reçetesi</button>
       </div></div>`;
     if(MALIYET_RECETELERI.length===0){
@@ -16671,7 +16719,13 @@ function viewRecete(main){
         html += `<div class="fat-satir">
           <div class="fat-satir-sol">
             <div class="fat-satir-ust"><strong>${mr.ad}</strong></div>
-            <div class="fat-satir-alt">${mr.kalemler.length} hammadde · ${mr.cikanMiktar||1} ${mr.cikanBirim||'adet'} çıkıyor · birim maliyet ${h.birimMaliyet.toFixed(2)} ₺${h.birimKcal>0?' · '+Math.round(h.birimKcal)+' kcal':''}${(()=>{const n=receteKullanimSayisi(mr.id); return n>0?` · <span class="mr-kullanim">🔗 ${n} seçenekte kullanılıyor</span>`:'';})()}</div>
+            <div class="fat-satir-alt mr-meta">
+              <span class="mr-rz">🧾 ${mr.kalemler.length} hammadde</span>
+              <span class="mr-rz">📦 ${mr.cikanMiktar||1} ${mr.cikanBirim||'adet'}</span>
+              <span class="mr-rz">💰 ${h.birimMaliyet.toFixed(2)} ₺/birim</span>
+              ${h.birimKcal>0?`<span class="mr-rz">🔥 ${Math.round(h.birimKcal)} kcal</span>`:''}
+              ${(()=>{const n=receteKullanimSayisi(mr.id); return n>0?`<span class="mr-rz mr-kullanim">🔗 ${n} seçenekte</span>`:'';})()}
+            </div>
           </div>
           <div class="fat-satir-tutar">${h.satisFiyat>0?h.satisFiyat.toFixed(2)+' ₺':'—'}<div style="font-size:11px;font-weight:600;color:var(--ink-3)">${h.karOran>0?'%'+h.karOran.toFixed(0)+' kâr':''}</div></div>
           <div class="fat-satir-aksiyon">
@@ -19191,8 +19245,8 @@ function secenekPoolHtml(){
   }
   html += `<div class="bayi-bar"><div class="bayi-bar-bilgi">${OPTION_POOL.length} seçenek${kapaliSay?` · <span style="color:var(--err)">${kapaliSay} kapalı</span>`:''}</div>
     ${isGenel?`<div style="display:flex;gap:8px;flex-wrap:wrap">
-    <button class="kys-btn" style="width:auto;padding:0 12px;font-size:12px" onclick="secStokDonusturOnay()" title="Tüm seçenekleri bayi stok kartına dönüştür">📦 Stok kartına çevir</button>
-    <button class="kys-btn" style="width:auto;padding:0 12px;font-size:12px" onclick="secHavuzTazele()" title="Ürünlerdeki fiyatları havuza çek">🔄 Fiyatları tazele</button>
+    <button class="mr-excel-btn" onclick="secStokDonusturOnay()" title="Tüm seçenekleri bayi stok kartına dönüştür">📦 Stok kartına çevir</button>
+    <button class="mr-excel-btn" onclick="secHavuzTazele()" title="Ürünlerdeki fiyatları havuza çek">🔄 Fiyatları tazele</button>
     <button class="bayi-ekle-btn" onclick="secPoolEkle()">+ Yeni seçenek</button></div>`:''}</div>`;
   if(!isGenel) html += `<div class="fy-mudur-not">🏬 <strong>${hedefSube}</strong> şubesi için seçenek açıp/kapatabilirsiniz (kasa ile koordineli). Seçenek ekleme/silme genel müdür yetkisindedir.</div>`;
   html += `<div class="sec-ara-kutu"><input class="uf-input" placeholder="🔍 Seçenek ara..." value="${(state.secAra||'').replace(/"/g,'&quot;')}" oninput="secPoolAra(this.value)"></div>`;
