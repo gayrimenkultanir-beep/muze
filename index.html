@@ -1228,6 +1228,29 @@ tr:last-child td{border-bottom:none}
 .uf-tasi-sec{display:flex; flex-direction:column; gap:2px; flex-shrink:0}
 /* Ürün doğrudan stok bağlantısı */
 .uf-stok-baglanti{background:var(--surface-2); border:1px solid var(--line); border-radius:12px; padding:12px}
+/* ═══ Seçenek satırı aramalı seçici ═══ */
+.ufsec{position:relative; flex:1; min-width:0}
+.ufsec-inp-wrap{position:relative}
+.ufsec-inp{width:100%; box-sizing:border-box; padding:10px 32px 10px 12px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface-2); font-size:13.5px; font-weight:700; color:var(--ink); font-family:inherit}
+.ufsec-inp.ile-rozet{padding-left:32px}
+.ufsec-inp:focus{outline:none; border-color:var(--brand); background:var(--surface)}
+.ufsec-inp::placeholder{color:var(--ink-3); font-weight:500}
+.ufsec-rozet{position:absolute; left:9px; top:50%; transform:translateY(-50%); font-size:14px; pointer-events:none}
+.ufsec-temizle{position:absolute; right:6px; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; border:none; background:var(--surface-3,#efe7dc); color:var(--ink-2); font-size:11px; font-weight:900; cursor:pointer; display:grid; place-items:center}
+.ufsec-temizle:hover{background:var(--danger); color:#fff}
+.ufsec-liste{position:absolute; top:calc(100% + 4px); left:0; right:0; z-index:70; max-height:280px; overflow-y:auto; background:var(--surface); border:1.5px solid var(--brand); border-radius:12px; box-shadow:var(--shadow-lg)}
+.ufsec-baslik{position:sticky; top:0; background:var(--surface-2); padding:7px 12px; font-size:11px; font-weight:800; color:var(--brand-d); border-bottom:1px solid var(--line); letter-spacing:.3px}
+.ufsec-sat{display:flex; align-items:center; justify-content:space-between; gap:8px; padding:10px 12px; cursor:pointer; border-bottom:1px solid var(--line)}
+.ufsec-sat:last-child{border-bottom:none}
+.ufsec-sat:hover,.ufsec-sat:active{background:var(--brand-soft)}
+.ufsec-sat-ad{font-size:13px; font-weight:700; color:var(--ink); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ufsec-sat-bilgi{font-size:11px; font-weight:700; color:var(--brand-d); flex:none; background:var(--brand-soft); padding:2px 7px; border-radius:6px; white-space:nowrap}
+.ufsec-sat-birim{font-size:10.5px; font-weight:700; color:var(--ink-2); flex:none; background:var(--surface-2); padding:2px 7px; border-radius:6px}
+.ufsec-eylem .ufsec-sat-ad{color:var(--brand-d)}
+.ufsec-bos{padding:11px 12px; font-size:12.5px; color:var(--ink-3); text-align:center; font-weight:600}
+/* Seçenek satırında maliyet reçetesi rozeti */
+.uf-sec-recete{display:inline-flex; align-items:center; gap:4px; background:var(--surface-3,#f3ece2); border:1px solid var(--line); border-radius:8px; padding:3px 8px; font-size:11px; font-weight:700; color:var(--brand-d); white-space:nowrap}
+.uf-sec-recete.uyari{color:var(--danger); border-color:var(--danger)}
 .uf-stok-row{display:flex; gap:8px; align-items:center}
 .uf-stok-sel{flex:1; min-width:0}
 .uf-stok-mik{position:relative; width:110px; flex-shrink:0}
@@ -2016,6 +2039,10 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-uye-btn-row{display:flex; gap:10px}
 .qr-uye-btn-row .qr-btn-uye{flex:1}
 .qr-btn-uye-ol{background:var(--cocoa); color:#fff; border-color:var(--cocoa)}
+/* Karşılamada birleşik giriş kartı — sadakat açıklaması */
+.qr-krs-sadakat-not{margin-top:10px; font-size:11.5px; line-height:1.5; color:var(--ink-3); text-align:center}
+.qr-karsilama .qr-btn-ghost{margin-top:8px}
+.qr-karsilama .qr-btn-uye-ol{margin-top:8px}
 .qr-hero{text-align:center; margin-bottom:30px}
 .qr-logo{font-size:64px; margin-bottom:6px}
 .qr-brand{font-size:30px; font-weight:800; letter-spacing:-.5px}
@@ -11850,11 +11877,11 @@ function optSecenekHtml(p, grup, gi, sec, si, m, n, istege){
   const ekDeger = grup.ucretsiz ? 0 : (sec.ek||0);
   const fiyatTxt = ekDeger ? '+'+ekDeger+' ₺' : '';
   const kcalTxt = (sec.kcal && !secIstemiyorum(sec)) ? '🔥 '+sec.kcal : '';
-  // gram/porsiyon bilgisi (stok kaynaklı → gram, reçete kaynaklı → 1 porsiyon)
+  // gram/porsiyon bilgisi — SADECE personel ekranında (kasa/garson).
+  // QR/müşteri menüsünde miktar bilgisi gösterilmez.
   let gramTxt = '';
-  if(!secIstemiyorum(sec)){
-    if(sec.kaynak==="maliyet"){ gramTxt = '1 porsiyon'; }
-    else if(sec.recete && sec.recete[0] && STOCK[sec.recete[0].ing]){
+  if(!secIstemiyorum(sec) && !OPT_STATE.qr){
+    if(sec.recete && sec.recete[0] && STOCK[sec.recete[0].ing]){
       const r=sec.recete[0]; gramTxt = r.g+' '+(uomAl(STOCK[r.ing]).tabanBirim||'gr');
     }
   }
@@ -11929,8 +11956,9 @@ function confirmOpt(){
           const mr=MALIYET_RECETELERI.find(x=>x.id===sec.receteId);
           if(mr && mr.kalemler){
             const cikan=Math.max(parseFloat(mr.cikanMiktar)||1, 0.0001);
+            const _por=(sec.recetePorsiyon>0?sec.recetePorsiyon:1);
             mr.kalemler.forEach(k=>{
-              const porsiyonMiktar=(parseFloat(k.miktar)||0)/cikan;
+              const porsiyonMiktar=((parseFloat(k.miktar)||0)/cikan)*_por;
               if(porsiyonMiktar>0 && STOCK[k.kod]) ekstraRecete.push({ing:k.kod, g:porsiyonMiktar});
             });
           }
@@ -11959,8 +11987,9 @@ function confirmOpt(){
         const mr=MALIYET_RECETELERI.find(x=>x.id===sec.receteId);
         if(mr && mr.kalemler){
           const cikan=Math.max(parseFloat(mr.cikanMiktar)||1, 0.0001);
+          const _por=(sec.recetePorsiyon>0?sec.recetePorsiyon:1);
           mr.kalemler.forEach(k=>{
-            const porsiyonMiktar=(parseFloat(k.miktar)||0)/cikan;   // 1 porsiyona düşen hammadde
+            const porsiyonMiktar=((parseFloat(k.miktar)||0)/cikan)*_por;   // seçenekteki porsiyona düşen hammadde
             if(porsiyonMiktar>0 && STOCK[k.kod]) for(let q=0;q<adet;q++) ekstraRecete.push({ing:k.kod, g:porsiyonMiktar});
           });
         }
@@ -18873,9 +18902,8 @@ function sppOnayla(){
   const birimSec = birimSecEl ? birimSecEl.value : (p.birim||"adet");
   const birim = birimSec==='__diger' ? ((birimOzelEl?birimOzelEl.value.trim():'')||'adet') : birimSec;
   // stok bağı
-  const stokSelEl = document.getElementById("sppStok");
   const stokMikEl = document.getElementById("sppStokMik");
-  const stokKod = stokSelEl ? stokSelEl.value : (p.stokKod||"");
+  const stokKod = p.stokKod || "";
   const stokMik = stokMikEl ? (parseFloat(String(stokMikEl.value).replace(",","."))||0) : (parseFloat(p.stokMiktar)||0);
   if(p.mod==='ekle'){
     if(OPTION_POOL.find(s=>s.ad===ad)){ note("Bu seçenek zaten var"); return; }
@@ -19514,27 +19542,27 @@ function renderUrunForm(){
       // seçenek adı dropdown (havuzdan) + özel
       const havuzAdlar = OPTION_POOL.map(x=>x.ad);
       const stokBagli = s.recete && s.recete[0] && STOCK[s.recete[0].ing];
-      const ozelSec = s.ad && !havuzAdlar.includes(s.ad) && !stokBagli;
+      const receteBagli = s.kaynak==="maliyet" && s.receteId!=null;
+      const ozelSec = s.ad && !havuzAdlar.includes(s.ad) && !stokBagli && !receteBagli;
       const stokBirim = stokBagli ? (uomAl(STOCK[s.recete[0].ing]).tabanBirim||"adet") : "";
       html += `<div class="uf-secenek-satir">
         <div class="uf-tasi-sec">
           <button class="uf-tasi-btn sm" ${si===0?'disabled':''} onclick="ufSecTasi(${gi},${si},-1)" title="Yukarı">▲</button>
           <button class="uf-tasi-btn sm" ${si===g.secenekler.length-1?'disabled':''} onclick="ufSecTasi(${gi},${si},1)" title="Aşağı">▼</button>
         </div>
-        <select class="uf-sec-ad" onchange="ufSecAdSec(${gi},${si},this.value)">
-          <option value=""${!s.ad?' selected':''}>— seçenek seç —</option>
-          <optgroup label="📦 Stok kartları (otomatik bağlanır)">
-            ${Object.keys(STOCK).map(k=>`<option value="stok::${k}"${(s.recete&&s.recete[0]&&s.recete[0].ing===k&&s.ad===STOCK[k].ad)?' selected':''}>${STOCK[k].ad} · ${uomAl(STOCK[k]).tabanBirim||"adet"}</option>`).join("")}
-          </optgroup>
-          ${OPTION_POOL.length?`<optgroup label="🏷️ Seçenek havuzu">
-            ${OPTION_POOL.map(x=>`<option value="${x.ad.replace(/"/g,'&quot;')}"${s.ad===x.ad&&!(s.recete&&s.recete.length)?' selected':''}>${x.ad}</option>`).join("")}
-          </optgroup>`:""}
-          <option value="__yenistok__">➕ Yeni stok kartı oluştur...</option>
-          <option value="__ozel__"${ozelSec?' selected':''}>✏️ Serbest yaz (stoksuz)...</option>
-        </select>
-        ${ozelSec?`<input class="uf-sec-ozel" value="${(s.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ad=this.value" placeholder="Ad">`:''}
+        ${ufSecSeciciHtml(gi, si, s)}
+        ${ozelSec?`<input class="uf-sec-ozel" value="${(s.ad||'').replace(/"/g,'&quot;')}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ad=this.value" placeholder="Seçenek adı">`:''}
         <div class="uf-sec-alt-satir">
           ${stokBagli?`<span class="uf-sec-miktar" title="Bu seçenek seçilince stoktan düşecek miktar">📦<input id="ufMik-${gi}-${si}" class="uf-sec-miktar-input" inputmode="decimal" value="${s.recete[0].g}" oninput="ufSecMiktarGir(${gi},${si},this.value)" placeholder="0"><b>${stokBirim}</b></span>`:''}
+          ${receteBagli?(()=>{
+            const _m=MALIYET_RECETELERI.find(x=>x.id===s.receteId);
+            if(!_m) return `<span class="uf-sec-recete uyari">🍳 reçete bulunamadı</span>`;
+            const _hh=maliyetReceteHesap(_m);
+            const _por=(s.recetePorsiyon>0?s.recetePorsiyon:1);
+            const _br=_m.cikanBirim||'porsiyon';
+            return `<span class="uf-sec-miktar" title="Bu seçenek seçilince stoktan düşecek porsiyon/adet">🍳<input id="ufPor-${gi}-${si}" class="uf-sec-miktar-input" inputmode="decimal" value="${_por}" oninput="ufSecPorsiyonGir(${gi},${si},this.value)" placeholder="1"><b>${_br}</b></span>
+              <span class="uf-sec-recete" title="${(_m.kalemler||[]).length} hammadde · her satışta stoktan düşer">💰 ${(_hh.birimMaliyet*_por).toFixed(2)} ₺</span>`;
+          })():''}
           ${g.ucretsiz
             ? `<span class="uf-sec-ek ucretsiz">🆓 ücretsiz</span>`
             : `<span class="uf-sec-ek">+<input class="uf-sec-ek-input" inputmode="numeric" value="${s.ek||0}" oninput="state.urunForm.gruplar[${gi}].secenekler[${si}].ek=parseInt(this.value)||0">₺</span>`}
@@ -19858,19 +19886,173 @@ function ufSecMiktarGir(gi, si, val){
     if(kcalInp && document.activeElement!==kcalInp) kcalInp.value = s.kcal;
   }
 }
+/* Reçete bağlı seçeneğin porsiyon/adet miktarı — kaloriyi ve maliyeti canlı günceller */
+/* ═══ Seçenek satırı için ARAMALI seçici ═══
+   Reçeteler + stok kartları + seçenek havuzu tek kutuda aranır.
+   Uzun listelerde dropdown yerine bunu kullanırız. */
+function ufSecSeciciHtml(gi, si, s){
+  let gosterim = "", rozet = "";
+  if(s.kaynak==="maliyet" && s.receteId!=null){
+    const mr=(typeof MALIYET_RECETELERI!=="undefined")?MALIYET_RECETELERI.find(x=>x.id===s.receteId):null;
+    gosterim = mr ? mr.ad : (s.ad||"");
+    rozet = "🍳";
+  } else if(s.recete && s.recete[0] && STOCK[s.recete[0].ing]){
+    gosterim = STOCK[s.recete[0].ing].ad;
+    rozet = "📦";
+  } else if(s.ad){
+    gosterim = s.ad;
+    rozet = "🏷️";
+  }
+  const esc=v=>String(v==null?"":v).replace(/"/g,'&quot;');
+  return `<div class="ufsec" id="ufsec-${gi}-${si}">
+    <div class="ufsec-inp-wrap">
+      ${rozet?`<span class="ufsec-rozet">${rozet}</span>`:''}
+      <input class="ufsec-inp${rozet?' ile-rozet':''}" id="ufsecInp-${gi}-${si}" type="text" autocomplete="off"
+        value="${esc(gosterim)}"
+        placeholder="🔍 Reçete, stok veya seçenek ara…"
+        onfocus="ufSecSeciciAc(${gi},${si},true)"
+        oninput="ufSecSeciciFiltre(${gi},${si})"
+        onclick="ufSecSeciciAc(${gi},${si},true)">
+      ${gosterim?`<button class="ufsec-temizle" onclick="ufSecAdSec(${gi},${si},'__ozel__')" tabindex="-1" title="Temizle">✕</button>`:''}
+    </div>
+    <div class="ufsec-liste" id="ufsecListe-${gi}-${si}" style="display:none"></div>
+  </div>`;
+}
+function ufSecSeciciAc(gi, si, ilk){
+  const l=document.getElementById(`ufsecListe-${gi}-${si}`); if(!l) return;
+  l.style.display="block";
+  ufSecSeciciFiltre(gi, si, ilk);
+}
+function ufSecSeciciFiltre(gi, si, ilk){
+  const inp=document.getElementById(`ufsecInp-${gi}-${si}`);
+  const liste=document.getElementById(`ufsecListe-${gi}-${si}`);
+  if(!inp||!liste) return;
+  const q=(ilk?"":inp.value).trim().toLocaleLowerCase("tr-TR");
+  const uy=t=>(t||"").toLocaleLowerCase("tr-TR").includes(q);
+  liste.style.display="block";
+  const esc=v=>String(v==null?"":v).replace(/</g,'&lt;');
+  const tirnak=v=>String(v==null?"":v).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+  let html="", sayac=0;
+  const LIMIT=50;
+
+  // 1) MALİYET REÇETELERİ
+  const rec=(typeof MALIYET_RECETELERI!=="undefined"?MALIYET_RECETELERI:[])
+    .filter(mr=>!q||uy(mr.ad)).sort((a,b)=>(a.ad||"").localeCompare(b.ad||"","tr"));
+  if(rec.length){
+    html+=`<div class="ufsec-baslik">🍳 Maliyet reçeteleri</div>`;
+    rec.slice(0,LIMIT).forEach(mr=>{
+      const h=maliyetReceteHesap(mr); sayac++;
+      html+=`<div class="ufsec-sat" onclick="ufSecAdSec(${gi},${si},'recete::${mr.id}')">
+        <span class="ufsec-sat-ad">${esc(mr.ad)}</span>
+        <span class="ufsec-sat-bilgi">${h.birimMaliyet.toFixed(2)} ₺/${esc(mr.cikanBirim||'adet')}</span>
+      </div>`;
+    });
+  }
+  // 2) STOK KARTLARI
+  const stk=Object.entries(STOCK).filter(([k,st])=>!q||uy(st.ad)||uy(st.no))
+    .sort((a,b)=>(a[1].ad||"").localeCompare(b[1].ad||"","tr"));
+  if(stk.length){
+    html+=`<div class="ufsec-baslik">📦 Stok kartları</div>`;
+    stk.slice(0,LIMIT).forEach(([kod,st])=>{
+      sayac++;
+      html+=`<div class="ufsec-sat" onclick="ufSecAdSec(${gi},${si},'stok::${tirnak(kod)}')">
+        <span class="ufsec-sat-ad">${esc(st.ad)}</span>
+        <span class="ufsec-sat-birim">${esc(uomAl(st).tabanBirim||'adet')}</span>
+      </div>`;
+    });
+    if(stk.length>LIMIT) html+=`<div class="ufsec-bos">${stk.length-LIMIT} stok daha… aramayı daraltın</div>`;
+  }
+  // 3) SEÇENEK HAVUZU
+  const hav=(typeof OPTION_POOL!=="undefined"?OPTION_POOL:[]).filter(x=>!q||uy(x.ad));
+  if(hav.length){
+    html+=`<div class="ufsec-baslik">🏷️ Seçenek havuzu</div>`;
+    hav.slice(0,LIMIT).forEach(x=>{
+      sayac++;
+      html+=`<div class="ufsec-sat" onclick="ufSecAdSec(${gi},${si},'${tirnak(x.ad)}')">
+        <span class="ufsec-sat-ad">${esc(x.ad)}</span>
+        ${x.ek?`<span class="ufsec-sat-bilgi">+${x.ek} ₺</span>`:''}
+      </div>`;
+    });
+  }
+  // 4) EYLEMLER
+  html+=`<div class="ufsec-baslik">⚙️ Diğer</div>
+    <div class="ufsec-sat ufsec-eylem" onclick="ufSecAdSec(${gi},${si},'__yenistok__')">
+      <span class="ufsec-sat-ad">➕ Yeni stok kartı oluştur…</span></div>
+    <div class="ufsec-sat ufsec-eylem" onclick="ufSecSerbest(${gi},${si})">
+      <span class="ufsec-sat-ad">✏️ Serbest yaz (stoksuz)…</span></div>`;
+
+  if(!sayac && q) html=`<div class="ufsec-bos">"${esc(inp.value.trim())}" için sonuç yok</div>`+html;
+  liste.innerHTML=html;
+}
+/* Serbest yaz: aramaya yazılan metni doğrudan seçenek adı yap */
+function ufSecSerbest(gi, si){
+  const inp=document.getElementById(`ufsecInp-${gi}-${si}`);
+  const yazi=inp?inp.value.trim():"";
+  const s=state.urunForm.gruplar[gi].secenekler[si];
+  s.ad=yazi; s.recete=[];
+  delete s.kaynak; delete s.receteId; delete s.recetePorsiyon; delete s.kcal;
+  renderUrunForm();
+}
+/* dışarı tıklanınca seçenek listelerini kapat */
+document.addEventListener("click", function(e){
+  document.querySelectorAll(".ufsec-liste").forEach(l=>{
+    const wrap=l.closest(".ufsec");
+    if(wrap && !wrap.contains(e.target)) l.style.display="none";
+  });
+}, true);
+
+function ufSecPorsiyonGir(gi, si, val){
+  const s = state.urunForm.gruplar[gi].secenekler[si];
+  if(s.kaynak!=="maliyet" || s.receteId==null) return;
+  const por = parseFloat(String(val).replace(",","."))||0;
+  s.recetePorsiyon = por;
+  const mr = (typeof MALIYET_RECETELERI!=="undefined") ? MALIYET_RECETELERI.find(x=>x.id===s.receteId) : null;
+  if(!mr) return;
+  const h = maliyetReceteHesap(mr);
+  // kalori = reçetenin birim kalorisi × porsiyon
+  if(h.birimKcal>0){
+    s.kcal = Math.round(h.birimKcal * por);
+    const kcalInp = document.getElementById(`ufKcal-${gi}-${si}`);
+    if(kcalInp && document.activeElement!==kcalInp) kcalInp.value = s.kcal;
+  }
+  // maliyet rozetini yeniden çizmeden güncelle (focus porsiyon kutusunda kalsın)
+  const porInp = document.getElementById(`ufPor-${gi}-${si}`);
+  if(porInp){
+    const roz = porInp.closest(".uf-sec-alt-satir");
+    const mEl = roz ? roz.querySelector(".uf-sec-recete") : null;
+    if(mEl) mEl.innerHTML = "💰 " + (h.birimMaliyet*por).toFixed(2) + " ₺";
+  }
+}
 function ufSecAdSec(gi, si, val){
   const s = state.urunForm.gruplar[gi].secenekler[si];
-  if(val==="__ozel__"){ s.ad=""; s.recete=[]; renderUrunForm(); return; }
+  if(val==="__ozel__"){ s.ad=""; s.recete=[]; delete s.kaynak; delete s.receteId; delete s.recetePorsiyon; delete s.kcal; renderUrunForm(); return; }
   if(val==="__yenistok__"){
     // seçenek satırından hızlı stok kartı oluştur; oluşunca bu seçeneğe bağla
     state._stokDonus = {gi, si};
     stokKartEkle();
     return;
   }
+  if(val.startsWith("recete::")){
+    // maliyet reçetesinden seçenek — satışta 1 porsiyon reçete stoktan düşer
+    const rid = parseInt(val.slice(8))||0;
+    const mr = (typeof MALIYET_RECETELERI!=="undefined") ? MALIYET_RECETELERI.find(x=>x.id===rid) : null;
+    if(!mr) return;
+    s.ad = mr.ad;
+    s.kaynak = "maliyet";
+    s.receteId = rid;
+    s.recete = [];                       // stok kartı bağı değil, reçete bağı
+    // porsiyon miktarı: önceki değer korunur, yoksa 1
+    if(!(s.recetePorsiyon>0)) s.recetePorsiyon = 1;
+    const h = maliyetReceteHesap(mr);
+    if(h.birimKcal>0) s.kcal = Math.round(h.birimKcal * s.recetePorsiyon);
+    renderUrunForm();
+    return;
+  }
   if(val.startsWith("stok::")){
     // stok kartından seçenek — otomatik bağlan
     const kod = val.slice(6);
     const st = STOCK[kod]; if(!st) return;
+    delete s.kaynak; delete s.receteId; delete s.recetePorsiyon;   // reçete bağı varsa kalksın
     s.ad = st.ad;
     // mevcut miktar varsa koru, yoksa varsayılan 1
     const eskiG = (s.recete&&s.recete[0]&&s.recete[0].ing===kod)?s.recete[0].g:1;
@@ -19881,9 +20063,10 @@ function ufSecAdSec(gi, si, val){
     return;
   }
   // seçenek havuzundan (stoksuz) seçim
-  s.ad = val; s.recete = [];
+  s.ad = val; s.recete = []; delete s.kaynak; delete s.receteId; delete s.recetePorsiyon;
   const havuz = OPTION_POOL.find(x=>x.ad===val);
-  if(havuz) s.ek = havuz.ek||0;
+  if(havuz){ s.ek = havuz.ek||0; if(havuz.kcal!=null) s.kcal = havuz.kcal; else delete s.kcal; }
+  else delete s.kcal;
   renderUrunForm();
 }
 function ufSecSil(gi,si){ state.urunForm.gruplar[gi].secenekler.splice(si,1); renderUrunForm(); }
@@ -19946,9 +20129,10 @@ function urunKaydet(){
           const gecerli = s.recete.filter(r=>r.ing && STOCK[r.ing] && r.g>0);
           if(gecerli.length) o.recete = gecerli;
         }
-        // maliyet reçetesi kaynağı — satışta 1 porsiyon düşecek
+        // maliyet reçetesi kaynağı — satışta porsiyon kadar düşecek
         if(s.kaynak==="maliyet" && s.receteId!=null){
           o.kaynak = "maliyet"; o.receteId = s.receteId;
+          o.recetePorsiyon = (s.recetePorsiyon>0 ? s.recetePorsiyon : 1);
         }
         return o;
       })
@@ -27969,11 +28153,11 @@ function qrBildirimHtml(){
 }
 function bildirimGec(){
   clearTimeout(QR._bildirimTimer);
-  // cihaz hafızası varsa → tanı, yoksa → karşılama
+  // cihaz hafızası varsa → tanı ve kampanya sayfasına, yoksa → karşılama
   if(DEVICE_MEMORY && musteriBul(DEVICE_MEMORY)){
     QR.musteri = musteriBul(DEVICE_MEMORY);
     QR.kisi = QR.musteri.ad; QR.tel = QR.musteri.tel;
-    QR.view = "kategoriler";
+    QR.view = "splash";   // tanınan üye de kampanyaları görsün
   } else {
     QR.view = "karsilama";
   }
@@ -27990,6 +28174,7 @@ function qrKarsilamaHtml(){
   const yaziHtml = yazi
     ? '<img class="qr-krs-yazi-img" src="'+yazi+'" alt="MİNİPAN">'
     : '<div class="qr-krs-yazi-ph">MİNİPAN</div>';
+  const kademeMetni = SADAKAT.kademeler.map(k=>k.ic+k.ad).join(" → ");
   return '<div class="qr-screen qr-giris qr-karsilama">'+
     qrIntroVideoKatman()+
     '<button class="qr-close" onclick="closeQR()">✕</button>'+
@@ -28000,12 +28185,17 @@ function qrKarsilamaHtml(){
       '<div class="qr-masa-rozet">📍 '+QR.sube+' · Masa '+QR.masa+'</div>'+
     '</div>'+
     '<div class="qr-giris-kart">'+
-      '<div class="qr-sadakat-ikon">🎁</div>'+
-      '<div class="qr-g-baslik">MİNİPAN Sadakat</div>'+
-      '<div class="qr-g-alt">Kaydol, her siparişte Mag puan kazan. Puanların biriktikçe '+SADAKAT.kademeler.map(k=>k.ic+k.ad).join(" → ")+' seviyelerine yüksel, daha çok kazan! Tüm MİNİPAN şubelerinde geçerli.</div>'+
-      '<button class="qr-btn-primary" onclick="QR.view=\'kayit\';renderQR()">🎁 Sadakate kaydol</button>'+
-      '<button class="qr-btn-ghost" onclick="QR.view=\'kurtarma\';renderQR()">Hesabım var · giriş yap</button>'+
-      '<button class="qr-btn-ghost" onclick="QR.view=\'giris\';renderQR()">Şimdilik atla, isimle sipariş ver</button>'+
+      // 1) İSİMLE HIZLI GİRİŞ — birincil yol
+      '<div class="qr-g-baslik">Hoş geldin!</div>'+
+      '<div class="qr-g-alt">Sipariş vermek için adını yaz. Aynı masada herkes kendi adına sipariş verebilir.</div>'+
+      '<input class="qr-ad-input" id="qrAdInput" placeholder="Adın (örn. Ayşe)" value="'+QR.kisi+'" autocomplete="given-name" onkeydown="if(event.key===\'Enter\')qrGirisYap()" oninput="QR.kisi=this.value">'+
+      '<button class="qr-btn-primary" onclick="qrGirisYap()">Menüye geç →</button>'+
+      // 2) MEVCUT ÜYE GİRİŞİ
+      '<div class="qr-giris-ayrac"><span>üye misin?</span></div>'+
+      '<button class="qr-btn-ghost" onclick="QR.view=\'kurtarma\';renderQR()">🔑 Hesabım var · giriş yap</button>'+
+      // 3) SADAKATE KAYDOL
+      '<button class="qr-btn-uye qr-btn-uye-ol" onclick="QR.view=\'kayit\';renderQR()">🎁 Sadakate kaydol · Mag Puan kazan</button>'+
+      '<div class="qr-krs-sadakat-not">Kaydol, her siparişte Mag puan kazan. '+kademeMetni+' seviyelerine yüksel. Tüm MİNİPAN şubelerinde geçerli.</div>'+
     '</div>'+
     // WiFi + Çerezler açılır çekmecesi
     '<div class="qr-krs-cekmece-tetik">'+
@@ -28032,7 +28222,12 @@ function qrKarsilamaBaslat(){
       QR._krsDaktilo = setInterval(()=>{
         sloEl.textContent = slogan.slice(0,i+1);
         i++;
-        if(i>=slogan.length) clearInterval(QR._krsDaktilo);
+        if(i>=slogan.length){
+          clearInterval(QR._krsDaktilo);
+          // slogan bitince isim alanına odaklan (mobilde klavye açılmasın diye sadece masaüstünde)
+          const adEl=document.getElementById("qrAdInput");
+          if(adEl && window.matchMedia && window.matchMedia("(min-width:768px)").matches) adEl.focus();
+        }
       }, 38);
     }, 900);
   }, 1500);
@@ -28152,8 +28347,10 @@ function qrGirisHtml(){
     '</div></div>';
 }
 function qrGirisYap(){
-  const ad = (document.getElementById("qrAdInput").value||"").trim();
-  if(!ad){ note("Lütfen adını yaz"); return; }
+  const el = document.getElementById("qrAdInput");
+  const ad = (el ? el.value : QR.kisi||"").trim();
+  if(!ad){ note("Lütfen adını yaz"); if(el) el.focus(); return; }
+  // Akış: karşılama (isim) → kampanya/duyuru sayfası → kategoriler
   QR.kisi = ad; QR.view="splash"; renderQR();
 }
 
