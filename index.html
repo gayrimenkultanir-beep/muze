@@ -2039,6 +2039,211 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .qr-uye-btn-row{display:flex; gap:10px}
 .qr-uye-btn-row .qr-btn-uye{flex:1}
 .qr-btn-uye-ol{background:var(--cocoa); color:#fff; border-color:var(--cocoa)}
+/* ═══ KARŞILAMA: tek ekrana sığdırma ═══
+   Üst blok (logo/yazı/slogan) esnek küçülür, kart hiç kırpılmaz,
+   WiFi/çerez tetiği her zaman ekranın altında görünür kalır. */
+.qr-karsilama{
+  display:flex; flex-direction:column;
+  height:100dvh; min-height:100dvh; max-height:100dvh;
+  overflow:hidden;                      /* sayfa kaymaz */
+  padding-top:max(10px, env(safe-area-inset-top));
+  padding-bottom:max(8px, env(safe-area-inset-bottom));
+  box-sizing:border-box;
+}
+/* üst blok: yer kalmadıkça küçülür */
+.qr-karsilama .qr-krs-ust{
+  flex:0 1 auto; min-height:0; overflow:hidden;
+  margin-bottom:clamp(6px, 1.6vh, 14px);
+}
+/* logo: ekran yüksekliğine göre ölçeklenir */
+.qr-karsilama .qr-krs-logo{
+  height:clamp(58px, 12vh, 120px) !important;
+  margin-bottom:clamp(2px, .6vh, 8px) !important;
+  flex:0 1 auto; min-height:0;
+}
+.qr-karsilama .qr-krs-logo-img{
+  width:clamp(54px, 11.5vh, 112px) !important;
+  height:clamp(54px, 11.5vh, 112px) !important;
+}
+.qr-karsilama .qr-krs-logo-ph{ font-size:clamp(38px, 8vh, 66px) !important; }
+.qr-karsilama .qr-krs-logo::after{
+  width:clamp(56px, 12vh, 114px) !important; height:clamp(56px, 12vh, 114px) !important;
+  margin:calc(clamp(56px, 12vh, 114px) / -2) 0 0 calc(clamp(56px, 12vh, 114px) / -2) !important;
+}
+.qr-karsilama .qr-krs-yazi-img{ width:clamp(128px, 42vw, 230px) !important; }
+/* slogan: en fazla 2 satır, taşarsa kırpılır */
+.qr-karsilama .qr-krs-slogan{
+  /* Daktilo yazarken alan büyümesin: 3 satırlık yükseklik BAŞTAN ayrılır.
+     height = font-size × line-height × 3  (clamp ile ekrana göre ölçeklenir) */
+  --slo-fs:clamp(10.5px, 1.55vh, 13px);
+  --slo-lh:1.4;
+  font-size:var(--slo-fs) !important;
+  line-height:var(--slo-lh) !important;
+  height:calc(var(--slo-fs) * var(--slo-lh) * 3) !important;
+  min-height:calc(var(--slo-fs) * var(--slo-lh) * 3) !important;
+  max-height:calc(var(--slo-fs) * var(--slo-lh) * 3) !important;
+  flex:0 0 auto;
+  margin:0 auto clamp(4px, 1vh, 10px) !important;
+  max-width:320px !important;
+  overflow:hidden;
+  /* metin alanın üstünden başlar, 3 satırı aşarsa kırpılır */
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+}
+.qr-karsilama .qr-masa-rozet{
+  margin-top:clamp(4px, 1vh, 10px) !important;
+  padding:clamp(4px,.9vh,7px) 14px !important;
+  font-size:clamp(10.5px, 1.5vh, 12.5px) !important;
+}
+/* kart: asla kırpılmaz, gerekirse kendi içinde kayar */
+.qr-karsilama .qr-giris-kart{
+  flex:0 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  padding:clamp(12px, 2vh, 20px) 16px !important;
+}
+.qr-karsilama .qr-g-baslik{ font-size:clamp(15px, 2.1vh, 18px) !important; margin-bottom:3px !important; }
+.qr-karsilama .qr-g-alt{
+  font-size:clamp(10.5px, 1.5vh, 12.5px) !important; line-height:1.4 !important;
+  margin-bottom:clamp(8px, 1.4vh, 13px) !important;
+}
+.qr-karsilama .qr-ad-input{
+  padding:clamp(10px, 1.6vh, 14px) 14px !important;
+  font-size:clamp(13px, 1.8vh, 15px) !important;
+  margin-bottom:clamp(8px, 1.3vh, 12px) !important;
+}
+.qr-karsilama .qr-btn-primary{
+  padding:clamp(11px, 1.7vh, 15px) !important; font-size:clamp(13.5px, 1.9vh, 15px) !important;
+}
+.qr-karsilama .qr-giris-ayrac{ margin:clamp(8px,1.4vh,14px) 0 clamp(6px,1vh,10px) !important; font-size:11px !important; }
+.qr-karsilama .qr-btn-ghost{
+  padding:clamp(9px, 1.45vh, 13px) !important; font-size:clamp(12.5px, 1.75vh, 14px) !important;
+  margin-top:clamp(5px, .9vh, 9px) !important;
+}
+.qr-karsilama .qr-btn-uye,.qr-karsilama .qr-btn-uye-ol{
+  padding:clamp(9px, 1.45vh, 13px) !important; font-size:clamp(12.5px, 1.75vh, 14px) !important;
+  margin-top:clamp(5px, .9vh, 9px) !important;
+}
+/* tetik: her zaman en altta, ekranda kalır */
+.qr-karsilama .qr-krs-cekmece-tetik{
+  flex:0 0 auto; margin-top:clamp(6px, 1.2vh, 14px) !important; padding-bottom:2px;
+}
+/* çok kısa ekranlarda sadakat notunu gizle — yer açar */
+@media (max-height:700px){
+  .qr-karsilama .qr-krs-sadakat-not{display:none}
+}
+@media (max-height:600px){
+  /* çok kısa ekran: slogan gizlenir — gizliyken de yer kaplamaz (sabit alan iptal) */
+  .qr-karsilama .qr-krs-slogan{
+    display:none !important;
+    height:0 !important; min-height:0 !important; max-height:0 !important; margin:0 !important;
+  }
+  .qr-karsilama .qr-g-alt{-webkit-line-clamp:2; display:-webkit-box; -webkit-box-orient:vertical; overflow:hidden}
+}
+/* ═══ KARŞILAMA: MARKA TEMASI ═══
+   Düz siyah/koyu renkler yerine kahve-gold gradyan sistemi. */
+
+/* MİNİPAN yazısı — siyah değil kahve, gradyan dolgulu */
+.qr-karsilama .qr-krs-yazi-ph{
+  background:var(--grad-brand);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:var(--brand-d);
+  font-weight:900; letter-spacing:1.5px;
+  filter:drop-shadow(0 1px 0 rgba(255,244,225,.5));
+}
+/* slogan — orta kahve, daha okunur */
+.qr-karsilama .qr-krs-slogan{ color:var(--ink-2) !important; font-weight:600 !important; }
+.qr-karsilama .qr-krs-slogan::after{ color:var(--brand) !important; }
+
+/* MASA ROZETİ — kahve gradyan + gold çerçeve + kabartma */
+.qr-karsilama .qr-masa-rozet{
+  background:var(--grad-brand) !important;
+  color:var(--brand-ink) !important;
+  border:1px solid rgba(201,162,52,.45) !important;
+  box-shadow:var(--emboss-sm), inset 0 1px 0 rgba(255,214,180,.28) !important;
+  letter-spacing:.2px; font-weight:700 !important;
+}
+
+/* KART — hafif gradyan yüzey + sıcak çerçeve */
+.qr-karsilama .qr-giris-kart{
+  background:var(--grad-surface) !important;
+  border:1px solid var(--line-2) !important;
+  box-shadow:var(--emboss-lg) !important;
+}
+.qr-karsilama .qr-g-baslik{ color:var(--brand-d) !important; }
+.qr-karsilama .qr-g-alt{ color:var(--ink-2) !important; }
+
+/* İSİM ALANI — krem zemin, kahve odak halkası */
+.qr-karsilama .qr-ad-input{
+  background:var(--surface-2) !important;
+  border:1.5px solid var(--line-2) !important;
+  color:var(--ink) !important; font-weight:600 !important;
+  box-shadow:var(--inset) !important;
+}
+.qr-karsilama .qr-ad-input:focus{
+  outline:none !important;
+  border-color:var(--brand) !important;
+  background:var(--surface) !important;
+  box-shadow:var(--ring-brand), var(--inset) !important;
+}
+.qr-karsilama .qr-ad-input::placeholder{ color:var(--ink-3) !important; font-weight:500 !important; }
+
+/* MENÜYE GEÇ — birincil kahve buton, 3D kabartma */
+.qr-karsilama .qr-btn-primary{
+  background:var(--grad-brand) !important;
+  color:var(--brand-ink) !important;
+  border:none !important; border-radius:12px !important;
+  box-shadow:var(--btn-brand-sh) !important;
+  letter-spacing:.2px; text-shadow:0 1px 1px rgba(0,0,0,.22);
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.qr-karsilama .qr-btn-primary:hover{
+  background:var(--grad-brand-h) !important; box-shadow:var(--btn-brand-sh-h) !important;
+}
+.qr-karsilama .qr-btn-primary:active{ transform:translateY(2px); box-shadow:var(--inset) !important; }
+
+/* AYRAÇ — gold ince çizgi */
+.qr-karsilama .qr-giris-ayrac{ color:var(--ink-3) !important; }
+.qr-karsilama .qr-giris-ayrac::before,
+.qr-karsilama .qr-giris-ayrac::after{ background:var(--grad-gold-line) !important; height:1.5px !important; }
+
+/* HESABIM VAR — krem zemin, kahve metin, gold kenar */
+.qr-karsilama .qr-btn-ghost{
+  background:var(--grad-panel) !important;
+  color:var(--brand-d) !important;
+  border:1.5px solid var(--line-2) !important; border-radius:12px !important;
+  font-weight:800 !important;
+  box-shadow:var(--emboss-sm) !important;
+  transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.qr-karsilama .qr-btn-ghost:hover{ border-color:var(--brand) !important; box-shadow:var(--emboss) !important; }
+.qr-karsilama .qr-btn-ghost:active{ transform:translateY(1px); box-shadow:var(--inset) !important; }
+
+/* SADAKATE KAYDOL — gold premium buton (siyah değil) */
+.qr-karsilama .qr-btn-uye-ol{
+  background:var(--grad-gold-btn) !important;
+  color:var(--gold-text) !important;
+  border:1px solid #c9a234 !important; border-radius:12px !important;
+  font-weight:900 !important; letter-spacing:.2px;
+  box-shadow:var(--gold-btn-sh) !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.45);
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.qr-karsilama .qr-btn-uye-ol:hover{
+  background:linear-gradient(180deg,#e8d59d 0%,#dcc06f 20%,#d0ab3c 42%,#ad8d2f 62%,#8a7024 82%,#634f19 100%) !important;
+  box-shadow:var(--gold-btn-sh-h) !important;
+}
+.qr-karsilama .qr-btn-uye-ol:active{ transform:translateY(2px); box-shadow:var(--inset) !important; }
+
+/* sadakat notu — açık kahve */
+.qr-karsilama .qr-krs-sadakat-not{ color:var(--ink-3) !important; }
+
+/* WiFi/çerez tetiği — kahve tonunda */
+.qr-karsilama .qr-cekmece-cizgi.koyu{ background:var(--brand) !important; opacity:.55; }
+.qr-karsilama .qr-cekmece-ipucu.koyu{ color:var(--ink-2) !important; font-weight:600; }
+
+/* kapat butonu — krem zemin kahve ikon */
+.qr-karsilama .qr-close{
+  background:var(--grad-panel) !important; color:var(--brand-d) !important;
+  border:1px solid var(--line-2) !important; box-shadow:var(--emboss-sm) !important;
+}
 /* Karşılamada birleşik giriş kartı — sadakat açıklaması */
 .qr-krs-sadakat-not{margin-top:10px; font-size:11.5px; line-height:1.5; color:var(--ink-3); text-align:center}
 .qr-karsilama .qr-btn-ghost{margin-top:8px}
