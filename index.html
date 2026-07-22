@@ -3404,6 +3404,31 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .bayi-sip-kalem span:first-child{flex:1; font-weight:600}
 .bayi-sip-toplam{font-size:14px; font-weight:800; text-align:right; margin-bottom:10px}
 .bayi-sip-aksiyon{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+/* Reçete listesinde kullanım rozeti */
+.mr-kullanim{color:var(--brand-d); font-weight:700}
+/* Sipariş kartı aksiyon satırındaki .btn'ler komşu .bayi-sip-excel-btn ile
+   aynı ölçüde olsun — genel .btn (15px padding, flex:1) burada fazla iri kalıyor. */
+.bayi-sip-aksiyon .btn,
+.gecmis-kart-aksiyon .btn{
+  flex:0 0 auto !important;
+  padding:9px 14px !important;
+  font-size:13px !important;
+  font-weight:800 !important;
+  border-radius:9px !important;
+  min-height:0 !important;
+  max-width:none !important;
+  line-height:1.25;
+}
+.gecmis-kart-aksiyon{ flex-wrap:wrap; }
+/* dar ekranda satıra sığmayınca alt alta geçsin, tam genişliğe yayılmasın */
+@media (max-width:520px){
+  .bayi-sip-aksiyon .btn,
+  .gecmis-kart-aksiyon .btn,
+  .bayi-sip-aksiyon .bayi-sip-excel-btn{
+    flex:1 1 auto !important;
+    justify-content:center;
+  }
+}
 .bayi-sip-not-bekle{font-size:12.5px; color:#e08a1e; font-weight:700; text-align:center; padding:8px; background:#fdf0dc; border-radius:8px}
 .bayi-sip-not-ok{font-size:12.5px; color:var(--ok); font-weight:700; text-align:center; padding:8px; background:var(--ok-soft); border-radius:8px}
 .bayi-sip-not-red{font-size:12.5px; color:var(--err); font-weight:700; text-align:center; padding:8px; background:var(--err-soft); border-radius:8px}
@@ -5764,6 +5789,212 @@ body::after{
   background:linear-gradient(180deg,#4a3524,#392b23 55%,#27180e)!important;
   color:#f7efe9!important; text-shadow:0 1px 0 rgba(0,0,0,.4)!important;
   border:2px solid #c9a234!important;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBİL UYUMLULUK KATMANI
+   En sonda durur — önceki kuralları bilinçli olarak ezer.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── 1. iOS OTOMATİK ZOOM ENGELİ ──
+   iOS Safari, 16px'ten küçük yazı tipli bir alana dokunulunca
+   sayfayı zorla yakınlaştırır ve geri çıkmaz. Dokunmatik
+   cihazlarda tüm giriş alanları en az 16px olmalı. */
+@media (hover:none) and (pointer:coarse){
+  input, select, textarea,
+  .uf-input, .uf-sec-ek-input, .uf-sec-miktar-input, .uf-sec-kcal-input, .uf-mm-input,
+  .ufsec-inp, .stoksec-inp, .skm-input, .skm-uom-select, .skm-uom-cinput,
+  .mr-inp, .ka-input, .ka-input-not, .ode-not-input, .ode-bol-input, .ode-bol-n-input,
+  .ode-mag-input, .fat-input, .fat-fil-select, .fat-fil-date, .gf-input, .gf-select,
+  .gf-date, .mnb-input, .ukm-input, .mag-kademe-input, .od-tel-input, .intro-input,
+  .yym-urun-select, .qr-ad-input, .spp-input, .sg-input, .bldr-input, .ci-input{
+    font-size:16px !important;
+  }
+  /* görsel olarak küçük kalması gerekenler: yazıyı büyütmek yerine
+     kutuyu daraltıp yazıyı 16px tut (zoom yine tetiklenmez) */
+  .uf-sec-ek-input, .uf-sec-miktar-input, .uf-sec-kcal-input, .uf-mm-input,
+  .ode-bol-n-input, .ci-input{
+    padding-left:6px !important; padding-right:6px !important;
+  }
+}
+
+/* ── 2. DOKUNMA HEDEFİ EN AZ 44px ──
+   Apple ve Google'ın erişilebilirlik eşiği. Küçük ikon
+   butonlar görsel boyutunu korur, dokunma alanı büyür. */
+@media (hover:none) and (pointer:coarse){
+  .uf-tasi-btn, .uf-tasi-btn.sm, .sg-chip-x, .sg-sec-sil, .my-masa-sil,
+  .grs-sp-sil, .ci-sil, .bayi-kalem-sil, .bldr-sil, .uy-sira-btn,
+  .mte-reklam-sil, .mrk-sil, .ci-mik-btn, .fy-h-tik, .stoksec-temizle,
+  .ufsec-temizle, .osa-btn, .qr-close, .bom-kapat, .spp-mik-btn{
+    position:relative;
+  }
+  /* görünmez dokunma yastığı — düzeni bozmadan alanı 44px'e çıkarır */
+  .uf-tasi-btn::before, .uf-tasi-btn.sm::before, .sg-chip-x::before,
+  .sg-sec-sil::before, .my-masa-sil::before, .grs-sp-sil::before,
+  .ci-sil::before, .bayi-kalem-sil::before, .bldr-sil::before,
+  .uy-sira-btn::before, .mte-reklam-sil::before, .mrk-sil::before,
+  .ci-mik-btn::before, .fy-h-tik::before, .stoksec-temizle::before,
+  .ufsec-temizle::before, .osa-btn::before{
+    content:""; position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+    width:max(100%,44px); height:max(100%,44px);
+    z-index:1;
+  }
+}
+
+/* ── 3. TABLOLARI YATAY KAYDIRILABİLİR YAP ──
+   20 adet <table> var; dar ekranda sayfayı yana taşırıyorlardı. */
+@media (max-width:720px){
+  /* Zaten kaydırma sarmalayıcısı olan tablolara DOKUNMA.
+     display:block, sticky sütunları (position:sticky left:0) bozuyor. */
+  .mag-uye-tablo-sar, .fy-tablo-sar, .tablo-sar{
+    overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%;
+  }
+  .mag-uye-tablo-sar > table, .fy-tablo-sar > table, .tablo-sar > table{
+    min-width:max-content;
+  }
+  /* Sarmalayıcısı OLMAYAN tabloları kendi içinde kaydırılabilir yap */
+  table:not(.fy-tablo):not(.mag-uye-tablo){
+    display:block; width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  }
+  table:not(.fy-tablo):not(.mag-uye-tablo) thead,
+  table:not(.fy-tablo):not(.mag-uye-tablo) tbody{
+    display:table; width:100%; min-width:max-content;
+  }
+  table th, table td{ white-space:nowrap; }
+}
+
+/* ── 4. ÇOK KOLONLU IZGARALAR ──
+   NOT: .bfiyat-* ve .bsip-* satırlarının kendi mobil düzeni
+   zaten var (720px'te 2 kolona döner, ürün adı üste geçer).
+   Onlara DOKUNMUYORUZ — kolon gizlemek fiyatları yok ediyordu. */
+@media (max-width:560px){
+  .qr-kat-grid{ grid-template-columns:1fr 1fr !important; }
+}
+@media (max-width:380px){
+  /* .qr-kat-grid'in 359px'te kendi 2 kolonlu kuralı var — dokunmuyoruz */
+  .prod-grid{ grid-template-columns:repeat(auto-fill,minmax(120px,1fr)) !important; }
+}
+
+/* ── 4b. FİYAT YÖNETİMİ EKRANI (mobil) ──
+   Üst bardaki kanal filtresi flex-shrink:0 olduğu için dar ekranda
+   sığmıyor ve satırı taşırıyordu. Şube chip listesi de uzun. */
+@media (max-width:720px){
+  /* üst bar: arama tam satır, kanal filtresi altına geçsin */
+  .fy-ust-bar{ gap:8px; }
+  .fy-arama-kutu{ flex:1 1 100%; min-width:0; }
+  .fy-kanal-fil{
+    flex:1 1 auto; min-width:0;
+    overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .fy-kanal-fil::-webkit-scrollbar{ display:none; }
+  .fy-kf-btn{ flex:1 0 auto; padding:8px 11px; font-size:12px; }
+  .fy-excel-btn{ flex:0 0 auto; padding:9px 13px; font-size:12.5px; }
+
+  /* şube filtresi: yükseklik sınırlı, kendi içinde kaysın */
+  .fy-sube-filtre{
+    max-height:104px; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:8px 10px; gap:5px;
+  }
+  .fy-sf-chip, .fy-sf-tumunu{ padding:5px 10px; font-size:11.5px; }
+
+  /* kategori sekmeleri: tek satır yatay kaydırma (sarmak yerine) */
+  .cat-row{
+    flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; padding-bottom:2px;
+  }
+  .cat-row::-webkit-scrollbar{ display:none; }
+  .cat-pill{ flex:0 0 auto; padding:8px 13px; font-size:12.5px; }
+
+  /* tablo: sticky ürün sütunu dar ekranda daralsın */
+  .fy-th-urun{ min-width:130px !important; }
+  .fy-th-sube{ min-width:96px !important; }
+  .fy-tablo{ font-size:12px; }
+  .fy-tablo th{ padding:9px 8px; font-size:11px; }
+  .fy-tablo td{ height:56px; }
+}
+@media (max-width:430px){
+  .fy-th-urun{ min-width:112px !important; }
+  .fy-th-sube{ min-width:88px !important; }
+  .fy-bilgi-not, .fy-mudur-not{ font-size:11.5px; line-height:1.45; }
+}
+
+/* ── 4c. ÜRÜN YÖNETİMİ LİSTESİ (mobil) ──
+   .uy-bilgi flex:1 ama min-width:0 yok — uzun ürün adı satırı taşırıyor. */
+@media (max-width:720px){
+  .uy-satir{ gap:8px; padding:9px 11px; }
+  .uy-bilgi{ min-width:0; }
+  .uy-ad{ font-size:13.5px; overflow-wrap:anywhere; }
+  .uy-meta{ font-size:11.5px; overflow-wrap:anywhere; }
+  .uy-gorsel{ flex:0 0 auto; }
+  .uy-aksiyon{ flex:0 0 auto; flex-wrap:wrap; justify-content:flex-end; }
+}
+@media (max-width:430px){
+  /* dar ekranda aksiyon butonları alt satıra */
+  .uy-satir{ flex-wrap:wrap; }
+  .uy-aksiyon{ width:100%; justify-content:flex-start; margin-top:4px; }
+}
+
+/* ── 5. YATAY TAŞMA KİLİDİ ──
+   Tek bir geniş öğe tüm sayfayı yana kaydırılabilir yapar. */
+html, body{ max-width:100%; overflow-x:hidden; }
+@media (max-width:720px){
+  .main, .modal-ic, .ypm-ic, .skm-ic, .uf-govde, .qr-screen{
+    max-width:100vw; overflow-x:hidden;
+  }
+  /* uzun kelime/kod/mail satırı taşırmasın */
+  .stoksec-sat-ad, .ufsec-sat-ad, .uf-sec-ozel, .qr-g-alt,
+  .bayi-ad, .mrk-ad, .fis-satir{
+    overflow-wrap:anywhere; word-break:break-word;
+  }
+}
+
+/* ── 6. KLAVYE AÇILINCA SABİT ÖGELER ──
+   position:fixed öğeler iOS'ta klavyeyle birlikte kayar.
+   dvh (dynamic viewport height) bunu düzeltir. */
+@media (hover:none) and (pointer:coarse){
+  .modal-bg, .qr-pop-bg, .irs-modal-bg, .mag-kutlama-bg{
+    height:100dvh; max-height:100dvh;
+  }
+  .modal-ic, .ypm-ic, .skm-ic, .qr-pop{
+    max-height:calc(100dvh - 32px); overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  /* sabit alt barlar çentik altına girmesin */
+  .qr-alt-sabit, .qr-sepet-bar, .qr-splash2-altbar{
+    padding-bottom:max(10px, env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* ── 7. DOKUNMA GERİ BİLDİRİMİ ──
+   90 :hover kuralı var; dokunmatikte hiçbiri çalışmaz.
+   Hover efektlerini kapat, :active geri bildirimini garanti et. */
+@media (hover:none) and (pointer:coarse){
+  *:hover{ transition:none !important; }
+  button:active, .btn:active, [onclick]:active{ opacity:.85; }
+  /* iOS gri vurgu kutusunu kaldır — kendi geri bildirimimiz var */
+  *{ -webkit-tap-highlight-color:transparent; }
+  /* metin seçimi kazara tetiklenmesin (girdi alanları hariç) */
+  button, .btn, .chip, .sekme, .tab-btn, .qr-card, .fk-urun-btn{
+    -webkit-user-select:none; user-select:none;
+  }
+}
+
+/* ── 8. MODAL VE LİSTELERDE MOMENTUM KAYDIRMA ── */
+@media (hover:none) and (pointer:coarse){
+  .skm-body, .uf-govde, .ufsec-liste, .stoksec-liste, .fk-urun-list,
+  .qr-splash2-scroll, .gsm-liste, .main{
+    -webkit-overflow-scrolling:touch; overscroll-behavior:contain;
+  }
+}
+
+/* ── 9. YAZDIRMA ÇIKTISINI KORU ──
+   Yukarıdaki mobil kuralları kağıda sızmasın. */
+@media print{
+  table{ display:table !important; overflow:visible !important; }
+  table thead, table tbody{ display:table-row-group !important; min-width:0 !important; }
+  html, body{ overflow:visible !important; }
 }
 </style>
 </head>
@@ -16197,6 +16428,77 @@ function maliyetReceteDuzenle(id){
   go("recete", true);
 }
 function maliyetReceteIptal(){ state.maliyetTaslak=null; go("recete", true); }
+/* ═══ REÇETE → BAĞLI SEÇENEKLER SENKRONU ═══
+   Bir maliyet reçetesi düzenlenince (hammadde eklendi/çıkarıldı, miktar veya
+   çıkan miktar değişti), o reçeteye bağlı TÜM seçeneklerin kalorisi yeniden
+   hesaplanır. Kalori kaydedilmiş bir sayıdır — canlı bağlantı değildir; bu
+   fonksiyon olmadan ürünler eski değerde kalır.
+   Stok düşümü zaten satış anında reçeteden okunur, orada senkron gerekmez.
+   Dönüş: {urun:n, havuz:n, toplam:n, detay:[...]} */
+function receteBagliSecenekleriGuncelle(receteId){
+  const sonuc = {urun:0, havuz:0, toplam:0, detay:[]};
+  if(receteId==null || typeof MALIYET_RECETELERI==="undefined") return sonuc;
+  const mr = MALIYET_RECETELERI.find(x=>x.id===receteId);
+  if(!mr) return sonuc;
+  const h = maliyetReceteHesap(mr);
+  const birimKcal = h.birimKcal;
+
+  const secGuncelle = (s)=>{
+    if(!(s && s.kaynak==="maliyet" && s.receteId===receteId)) return false;
+    const por = (s.recetePorsiyon>0 ? s.recetePorsiyon : 1);
+    const yeni = birimKcal>0 ? Math.round(birimKcal*por) : 0;
+    const eski = (s.kcal!=null ? s.kcal : 0);
+    if(yeni!==eski){
+      if(yeni>0) s.kcal = yeni; else delete s.kcal;
+      return true;
+    }
+    return false;
+  };
+
+  // 1) ürüne özel seçenek grupları
+  if(typeof PRODUCT_OPTIONS!=="undefined"){
+    Object.keys(PRODUCT_OPTIONS).forEach(urunAd=>{
+      (PRODUCT_OPTIONS[urunAd]||[]).forEach(g=>{
+        (g.secenekler||[]).forEach(s=>{
+          const eski = (s.kcal!=null?s.kcal:0);
+          if(secGuncelle(s)){
+            sonuc.urun++;
+            sonuc.detay.push({yer:"ürün", ad:urunAd, secenek:s.ad, eski:eski, yeni:(s.kcal||0)});
+          }
+        });
+      });
+    });
+  }
+  // 2) paylaşılan seçenek havuzu (OPTION_GROUPS)
+  if(typeof OPTION_GROUPS!=="undefined"){
+    Object.keys(OPTION_GROUPS).forEach(grupAd=>{
+      const g = OPTION_GROUPS[grupAd];
+      ((g&&g.secenekler)||[]).forEach(s=>{
+        const eski = (s.kcal!=null?s.kcal:0);
+        if(secGuncelle(s)){
+          sonuc.havuz++;
+          sonuc.detay.push({yer:"havuz", ad:grupAd, secenek:s.ad, eski:eski, yeni:(s.kcal||0)});
+        }
+      });
+    });
+  }
+  sonuc.toplam = sonuc.urun + sonuc.havuz;
+  return sonuc;
+}
+/* Bir reçetenin kaç seçenekte kullanıldığını say (silmeden önce uyarı için) */
+function receteKullanimSayisi(receteId){
+  let n=0;
+  const say = (s)=>{ if(s && s.kaynak==="maliyet" && s.receteId===receteId) n++; };
+  if(typeof PRODUCT_OPTIONS!=="undefined"){
+    Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+      (gruplar||[]).forEach(g=>((g.secenekler)||[]).forEach(say));
+    });
+  }
+  if(typeof OPTION_GROUPS!=="undefined"){
+    Object.values(OPTION_GROUPS).forEach(g=>((g&&g.secenekler)||[]).forEach(say));
+  }
+  return n;
+}
 function maliyetReceteKaydet(){
   const t=state.maliyetTaslak; if(!t) return;
   if(!t.ad.trim()){ note("Reçete adı girin"); return; }
@@ -16209,11 +16511,19 @@ function maliyetReceteKaydet(){
     cikanMiktar:sayi(t.cikanMiktar)||1, cikanBirim:t.cikanBirim,
     kdv:sayi(t.kdv), karTipi:t.karTipi, karOran:sayi(t.karOran), satisFiyat:sayi(t.satisFiyat)
   };
-  if(t.id!=null){ const i=MALIYET_RECETELERI.findIndex(x=>x.id===t.id); if(i>=0) MALIYET_RECETELERI[i]=kayit; }
+  const duzenleme = (t.id!=null);
+  if(duzenleme){ const i=MALIYET_RECETELERI.findIndex(x=>x.id===t.id); if(i>=0) MALIYET_RECETELERI[i]=kayit; }
   else MALIYET_RECETELERI.push(kayit);
   state.maliyetTaslak=null;
-  note("✓ Maliyet reçetesi kaydedildi: "+kayit.ad);
+
+  // Düzenlemede: bu reçeteye bağlı seçeneklerin kalorisi yeniden hesaplansın.
+  // Aksi halde ürünler eski kalori değerinde kalırdı.
+  let snk = {toplam:0};
+  if(duzenleme) snk = receteBagliSecenekleriGuncelle(kayit.id);
+
   menuKaydet();
+  note("✓ Maliyet reçetesi kaydedildi: "+kayit.ad
+       + (snk.toplam>0 ? " · "+snk.toplam+" seçeneğin kalorisi güncellendi" : ""));
   go("recete", true);
 }
 function maliyetReceteSilOnay(id){
@@ -16226,6 +16536,9 @@ function maliyetReceteSilOnay(id){
       <div class="ypm-head-alt">${mr.ad}</div></div>
     <div class="ypm-body">
       <div class="sdon-uyari">⚠️ Bu maliyet reçetesi silinecek. Geri alınamaz.</div>
+      ${(()=>{ const n=receteKullanimSayisi(id); return n>0
+        ? `<div class="sdon-uyari" style="margin-top:8px">🔗 Bu reçete <strong>${n} seçenekte</strong> kullanılıyor. Silerseniz o seçenekler stoktan düşmeyi durdurur (kalorileri kalır, elle düzeltmeniz gerekir).</div>`
+        : ''; })()}
       <div class="ypm-btn-row" style="margin-top:16px">
         <button class="ypm-iptal" onclick="mrSilKapat()">Vazgeç</button>
         <button class="ypm-basla" style="background:var(--danger)" onclick="maliyetReceteSil(${id})">Evet, sil</button>
@@ -16236,7 +16549,24 @@ function maliyetReceteSilOnay(id){
 function mrSilKapat(){ const m=document.getElementById("mrSilModal"); if(m) m.classList.remove("on"); }
 function maliyetReceteSil(id){
   const i=MALIYET_RECETELERI.findIndex(x=>x.id===id);
-  if(i>=0){ MALIYET_RECETELERI.splice(i,1); menuKaydet(); note("Reçete silindi"); }
+  if(i<0){ mrSilKapat(); return; }
+  // Bağlı seçeneklerin reçete bağını temizle — yetim receteId kalmasın.
+  // Seçenek adı ve kalorisi korunur; sadece stok düşümü bağı kopar.
+  let kopan=0;
+  const temizle=(s)=>{ if(s && s.kaynak==="maliyet" && s.receteId===id){
+    delete s.kaynak; delete s.receteId; delete s.recetePorsiyon; kopan++;
+  }};
+  if(typeof PRODUCT_OPTIONS!=="undefined"){
+    Object.values(PRODUCT_OPTIONS).forEach(gruplar=>{
+      (gruplar||[]).forEach(g=>((g.secenekler)||[]).forEach(temizle));
+    });
+  }
+  if(typeof OPTION_GROUPS!=="undefined"){
+    Object.values(OPTION_GROUPS).forEach(g=>((g&&g.secenekler)||[]).forEach(temizle));
+  }
+  MALIYET_RECETELERI.splice(i,1);
+  menuKaydet();
+  note("Reçete silindi"+(kopan>0?" · "+kopan+" seçeneğin stok bağı koptu":""));
   mrSilKapat(); go("recete", true);
 }
 /* ─── Excel indirme (HTML-tablo tabanlı .xls · Türkçe uyumlu, bağımlılıksız) ─── */
@@ -16341,7 +16671,7 @@ function viewRecete(main){
         html += `<div class="fat-satir">
           <div class="fat-satir-sol">
             <div class="fat-satir-ust"><strong>${mr.ad}</strong></div>
-            <div class="fat-satir-alt">${mr.kalemler.length} hammadde · ${mr.cikanMiktar||1} ${mr.cikanBirim||'adet'} çıkıyor · birim maliyet ${h.birimMaliyet.toFixed(2)} ₺</div>
+            <div class="fat-satir-alt">${mr.kalemler.length} hammadde · ${mr.cikanMiktar||1} ${mr.cikanBirim||'adet'} çıkıyor · birim maliyet ${h.birimMaliyet.toFixed(2)} ₺${h.birimKcal>0?' · '+Math.round(h.birimKcal)+' kcal':''}${(()=>{const n=receteKullanimSayisi(mr.id); return n>0?` · <span class="mr-kullanim">🔗 ${n} seçenekte kullanılıyor</span>`:'';})()}</div>
           </div>
           <div class="fat-satir-tutar">${h.satisFiyat>0?h.satisFiyat.toFixed(2)+' ₺':'—'}<div style="font-size:11px;font-weight:600;color:var(--ink-3)">${h.karOran>0?'%'+h.karOran.toFixed(0)+' kâr':''}</div></div>
           <div class="fat-satir-aksiyon">
