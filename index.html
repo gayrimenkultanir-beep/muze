@@ -4154,6 +4154,15 @@ select.uf-sec-ad{flex:1; cursor:pointer; padding:8px 11px; border-radius:8px; bo
 .ka-btn{width:100%; padding:16px; border-radius:13px; background:var(--brand); color:#fff; border:none; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 4px 14px rgba(88,57,35,.3)}
 .ka-btn:active{transform:scale(.98); background:var(--brand-d)}
 .ka-uyari{font-size:11.5px; color:var(--ink-3); margin-top:14px; line-height:1.5; background:var(--surface-2); border-radius:9px; padding:9px 12px}
+.main button.kd-zorla-link,.kd-zorla-link{
+  overflow:visible!important; box-shadow:none!important; text-shadow:none!important;
+  display:block; width:100%; margin-top:10px; padding:9px!important;
+  background:transparent!important; border:1px dashed #c4a88f!important;
+  border-radius:9px!important; color:#9a7856!important;
+  font-size:11.5px!important; font-weight:700!important; cursor:pointer;
+}
+.main button.kd-zorla-link::before,.main button.kd-zorla-link::after{ display:none!important }
+.main button.kd-zorla-link:hover{ background:#f7efe6!important; color:#7a5a42!important; border-color:#a9866a!important; transform:none!important }
 .ka-rol{font-size:10.5px; font-weight:800; background:var(--cocoa-soft); color:var(--cocoa); padding:2px 8px; border-radius:99px; margin-left:5px}
 .ka-mudur-not{background:var(--cocoa-soft); border:1px solid var(--cocoa); border-radius:12px; padding:12px 14px; margin-bottom:18px; font-size:12.5px; color:var(--cocoa); line-height:1.55; text-align:left}
 .ka-ayrac{display:flex; align-items:center; gap:10px; margin:14px 0; color:var(--ink-3); font-size:12px}
@@ -10752,6 +10761,38 @@ function acikVardiyalar(sube){
 }
 function kasaVardiyaTekillikKontrol(){
   let toplam = 0;
+  // ── ONARIM: şube adı değişince yetim kalan vardiyaları geçerli şubeye taşı ──
+  // Eski sürümlerde şube yeniden adlandırılınca KASA_VARDIYALAR taşınmıyordu;
+  // vardiya, artık var olmayan bir şube anahtarı altında "açık" kalıyor ve
+  // "kasayı kapatamıyorum" kilidine yol açıyordu. Geçerli şube adları,
+  // aktif şube listesinden (DEMO_BRANCHES) belirlenir.
+  try{
+    const gecerliSubeler = (typeof DEMO_BRANCHES!=="undefined")
+      ? new Set(DEMO_BRANCHES.map(b=>b.ad)) : null;
+    if(gecerliSubeler){
+      Object.keys(KASA_VARDIYALAR||{}).forEach(anahtar=>{
+        if(gecerliSubeler.has(anahtar)) return;              // anahtar geçerli şube → dokunma
+        const liste = KASA_VARDIYALAR[anahtar]||[];
+        if(!liste.length){ delete KASA_VARDIYALAR[anahtar]; return; }
+        // Bu anahtar geçerli bir şube DEĞİL (yeniden adlandırılmış). Vardiyaların
+        // kendi v.sube etiketine bakıp geçerli hedefe taşımaya çalış.
+        let tasindi = false;
+        liste.slice().forEach(v=>{
+          const hedef = (v.sube && gecerliSubeler.has(v.sube)) ? v.sube : null;
+          if(hedef){
+            if(!KASA_VARDIYALAR[hedef]) KASA_VARDIYALAR[hedef]=[];
+            KASA_VARDIYALAR[hedef].push(v);
+            tasindi = true;
+          }
+        });
+        if(tasindi){
+          delete KASA_VARDIYALAR[anahtar];
+          console.warn("[onarım] '"+anahtar+"' altındaki yetim vardiyalar geçerli şubeye taşındı");
+        }
+      });
+    }
+  }catch(e){ /* onarım başarısızsa satış durmasın */ }
+
   Object.keys(KASA_VARDIYALAR||{}).forEach(sube=>{
     const acik = acikVardiyalar(sube);
     if(acik.length>1){
@@ -10759,7 +10800,7 @@ function kasaVardiyaTekillikKontrol(){
       // en eskisi "asıl", diğerleri eski sürüm artığı olarak işaretlenir
       acik.sort((a,b)=>(a.acilisTs||0)-(b.acilisTs||0));
       acik.slice(1).forEach(v=>{ v.artikVardiya = true; });
-      console.warn("[v28] "+sube+" şubesinde "+acik.length+" açık vardiya bulundu (eski sürüm artığı)");
+      console.warn("["+sube+"] "+acik.length+" açık vardiya bulundu (eski sürüm artığı)");
     }
   });
   return toplam;
@@ -13467,6 +13508,58 @@ function kasaKapatAc(){
   kasaKapatFarkGuncelle();
 }
 function kasaKapatKapat(){ const w=document.getElementById("kasaKapatWrap"); if(w) w.innerHTML=""; }
+/* SON ÇARE — normal kapatma vardiyayı bulamadığında (yetim/bozuk kayıt).
+   Yalnızca müdür/genel müdür. Sayım yapılmaz; kayıt "sorunlu" olarak
+   kapatılıp kasa serbest bırakılır. Denetim izi düşer. */
+function kasaZorlaKapatOnay(){
+  if(state.role!=="mudur" && state.role!=="genel"){ note("⛔ Yalnızca müdür yapabilir"); return; }
+  let mdl=document.getElementById("kasaZorlaModal");
+  if(!mdl){ mdl=document.createElement("div"); mdl.id="kasaZorlaModal"; mdl.className="modal-bg"; mdl.style.zIndex="300"; document.body.appendChild(mdl); }
+  mdl.innerHTML=`<div class="ypm-ic" style="max-width:440px">
+    <div class="ypm-head"><div class="ypm-head-ic">🛠️</div>
+      <div class="ypm-head-baslik">Sorunlu Kasayı Sıfırla</div>
+      <div class="ypm-head-alt">${AKTIF_SUBE}</div></div>
+    <div class="ypm-body">
+      <div class="iad-onay-not">Bu, kasa normal yolla kapatılamadığında kullanılır (ör. şube adı
+        değişmiş, kayıt bozulmuş). Bu şubede <b>açık görünen tüm kasalar</b> sayım yapılmadan
+        kapatılır ve kasa yeni vardiyaya serbest bırakılır.<br><br>
+        İşlem denetim kaydına <b>sizin adınıza</b> düşer. Devam edilsin mi?</div>
+      <div class="ypm-btn-row" style="margin-top:14px">
+        <button class="ypm-iptal" onclick="kasaZorlaKapat_kapat()">Vazgeç</button>
+        <button class="ypm-basla iad-sil-btn" onclick="kasaZorlaKapatYap()">🛠️ Sıfırla ve serbest bırak</button>
+      </div>
+    </div></div>`;
+  mdl.classList.add("on");
+}
+function kasaZorlaKapat_kapat(){ const m=document.getElementById("kasaZorlaModal"); if(m) m.classList.remove("on"); }
+function kasaZorlaKapatYap(){
+  if(state.role!=="mudur" && state.role!=="genel"){ note("⛔ Yalnızca müdür yapabilir"); return; }
+  const sube = AKTIF_SUBE;
+  const _kapatanAd = (typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD) ? AKTIF_PERSONEL_AD : "";
+  const _kapatanId = (typeof AKTIF_PERSONEL_ID!=="undefined") ? AKTIF_PERSONEL_ID : null;
+  let n = 0;
+  // 1) Doğru şube anahtarındaki açık vardiyalar
+  (KASA_VARDIYALAR[sube]||[]).filter(v=>v.durum==="acik").forEach(v=>{
+    v.durum="kapali"; v.kapanisTs=Date.now();
+    v.sorunluKapatildi=true; v.kapatanAd=_kapatanAd; v.kapatanId=_kapatanId;
+    v.kapatanRol=state.role; v.farkNot=(v.farkNot||"")+" [sorunlu kayıt — sayımsız sıfırlandı]";
+    n++;
+  });
+  // 2) Yetim anahtarlardaki (v.sube===bu şube) açık vardiyalar da kapatılır
+  Object.keys(KASA_VARDIYALAR||{}).forEach(anahtar=>{
+    if(anahtar===sube) return;
+    (KASA_VARDIYALAR[anahtar]||[]).filter(v=>v.durum==="acik" && v.sube===sube).forEach(v=>{
+      v.durum="kapali"; v.kapanisTs=Date.now();
+      v.sorunluKapatildi=true; v.kapatanAd=_kapatanAd; v.kapatanId=_kapatanId;
+      v.kapatanRol=state.role; v.farkNot=(v.farkNot||"")+" [yetim kayıt — sayımsız sıfırlandı]";
+      n++;
+    });
+  });
+  kasaVardiyaKaydet();
+  kasaZorlaKapat_kapat();
+  note(n>0 ? ("🛠️ "+n+" sorunlu kasa sıfırlandı · kasa serbest") : "Sıfırlanacak açık kasa bulunamadı");
+  go("satis", true);
+}
 function kasaKapatFarkGuncelle(){
   const st = state._kasaKapat; if(!st) return;
   const g = id => { const e=document.getElementById(id); return e ? formatKurus(e.value)/100 : 0; };
@@ -13764,6 +13857,9 @@ function kasaDevralmaEkrani(main, v){
           <span class="ka-goruntule-not">Kasayı kapatmadan durumu izleyin · işlem yapılamaz</span>
         </button>
         <div class="ka-uyari">⚠️ Kapatma işlemi denetim kaydına <b>sizin adınıza</b> düşer.</div>
+        <button class="kd-zorla-link" onclick="kasaZorlaKapatOnay()">
+          🛠️ Kasa kapanmıyorsa: sorunlu kaydı sıfırla
+        </button>
       ` : `
         <div class="kd-not bekle">
           ⏳ Bu şubede <b>${v.kasiyerAd}</b> adına açık bir kasa var. Aynı anda yalnızca
@@ -29899,6 +29995,27 @@ function subeFormKaydet(){
       if(SUBE_FIYAT[eski]){ SUBE_FIYAT[yeniAd]=SUBE_FIYAT[eski]; delete SUBE_FIYAT[eski]; }
       if(POS_AYAR[eski]){ POS_AYAR[yeniAd]=POS_AYAR[eski]; delete POS_AYAR[eski]; posAyarKaydet(); }
       if(YAZICILAR[eski]){ YAZICILAR[yeniAd]=YAZICILAR[eski]; delete YAZICILAR[eski]; yaziciKaydet(); }
+      // KASA VARDİYALARI — şube adına göre saklanır; taşınmazsa açık kasa
+      // eski ad altında yetim kalır ve "kapatamıyorum, hâlâ açık" kilidine yol açar.
+      // Her vardiyanın içindeki v.sube etiketi de güncellenir.
+      if(KASA_VARDIYALAR[eski]){
+        (KASA_VARDIYALAR[eski]||[]).forEach(v=>{ v.sube=yeniAd; });
+        KASA_VARDIYALAR[yeniAd]=(KASA_VARDIYALAR[yeniAd]||[]).concat(KASA_VARDIYALAR[eski]);
+        delete KASA_VARDIYALAR[eski];
+        kasaVardiyaKaydet();
+      }
+      // Gün sonu (Z raporu) kayıtları
+      if(GUN_SONU[eski]){
+        GUN_SONU[yeniAd]=Object.assign({}, GUN_SONU[yeniAd]||{}, GUN_SONU[eski]);
+        delete GUN_SONU[eski]; gunSonuKaydet();
+      }
+      // Şube stoğu, iskonto, ürün-kapatma, müşteri reklamları
+      if(typeof BAYI_STOK!=="undefined" && BAYI_STOK[eski]){ BAYI_STOK[yeniAd]=BAYI_STOK[eski]; delete BAYI_STOK[eski]; }
+      if(typeof BAYI_ISKONTO!=="undefined" && BAYI_ISKONTO[eski]!=null){ BAYI_ISKONTO[yeniAd]=BAYI_ISKONTO[eski]; delete BAYI_ISKONTO[eski]; }
+      if(typeof URUN_KAPALI!=="undefined" && URUN_KAPALI[eski]){ URUN_KAPALI[yeniAd]=URUN_KAPALI[eski]; delete URUN_KAPALI[eski]; }
+      if(typeof MUSTERI_REKLAMLAR!=="undefined" && MUSTERI_REKLAMLAR[eski]){ MUSTERI_REKLAMLAR[yeniAd]=MUSTERI_REKLAMLAR[eski]; delete MUSTERI_REKLAMLAR[eski]; }
+      if(typeof SUBE_ALIS_FATURALARI!=="undefined"){ SUBE_ALIS_FATURALARI.forEach(f2=>{ if(f2.sube===eski) f2.sube=yeniAd; }); }
+      if(typeof b2bKaydet==="function") b2bKaydet();
       delete BRANCH_INFO[eski];
       // SESSIONS anahtarları "eskiAd::kat|masa" biçiminde — şube adı önekini yeniAd'a taşı
       // (yukarıdaki kontrol sayesinde bu noktada açık masa yok, ama kapalı/geçmiş kayıtlar da korunsun)
