@@ -7425,6 +7425,195 @@ html, body{ max-width:100%; overflow-x:hidden; }
   table thead, table tbody{ display:table-row-group !important; min-width:0 !important; }
   html, body{ overflow:visible !important; }
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   DÜZ BUTON SİSTEMİ v2 — TÜM UYGULAMADA 3D KABARTMA KALDIRILDI
+   Evrensel gold 3D buton modeli, gloss/glare katmanları, "ledge"
+   (0 Npx 0) gölgeleri ve translateY kabarma hareketleri düzleştirildi.
+   Sade · tek katmanlı · düz butonlar.
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 1) Kabartma değişkenleri düzleştirildi (tüm temalar) ── */
+:root, body[class*="tema-"]{
+  --emboss:      none;
+  --emboss-sm:   none;
+  --emboss-lg:   none;
+  --inset:       none;
+  --btn-brand-sh:   0 1px 2px rgba(45,29,18,.10);
+  --btn-brand-sh-h: 0 2px 6px rgba(45,29,18,.14);
+  --btn-cocoa-sh:   0 1px 2px rgba(45,29,18,.10);
+  --gold-btn-sh:    0 1px 2px rgba(45,29,18,.10);
+  --gold-btn-sh-h:  0 2px 6px rgba(45,29,18,.14);
+  --gold-frame-sh:   0 0 0 1px rgba(201,162,52,.28), 0 1px 3px rgba(45,29,18,.05);
+  --gold-frame-sh-h: 0 0 0 1px rgba(201,162,52,.42), 0 2px 8px rgba(45,29,18,.09);
+  --grad-brand:    var(--brand);
+  --grad-brand-h:  var(--brand-d);
+  --grad-cocoa:    var(--cocoa);
+  --grad-ok:       var(--ok);
+  --grad-gold:     var(--gold-4);
+  --grad-gold-btn: var(--gold-4);
+  --pal-kahve:    var(--brand);
+  --pal-espresso: var(--cocoa);
+  --pal-gold:     var(--gold-4);
+  --pal-bej:      var(--surface-2);
+}
+
+/* ── 2) EVRENSEL GOLD 3D BUTON MODELİ → DÜZ ──
+   İçerik alanındaki tüm butonlar (qr menü hariç). Gradyan + bevel
+   + gloss katmanları kaldırılıp düz gold-outline butona indirildi. */
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle),
+.bom button:not([class*="qr-"]),
+.ypm-ic button, .skm-ic button, .op-ic button, .ikm-ic button, .kg-ic button,
+.myp-ic button, .uf-ic button, .bldr-ic button, .kmpf-ic button, .pop-ic button,
+.fat-belge button{
+  background:var(--surface) !important;
+  color:var(--ink) !important;
+  border:1.5px solid var(--gold-3) !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+  transition:background .15s ease, border-color .15s ease, box-shadow .15s ease !important;
+}
+/* gloss (::after tepe ışığı) ve glare (::before parıltı) katmanları iptal */
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle)::after,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle)::before,
+.ypm-ic button::after, .skm-ic button::after, .fat-belge button::after,
+.ypm-ic button::before, .skm-ic button::before{
+  display:none !important;
+}
+/* hover / active — kabarma yerine düz vurgu */
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):hover,
+.ypm-ic button:hover, .skm-ic button:hover, .fat-belge button:hover{
+  transform:none !important;
+  background:var(--surface-2) !important;
+  box-shadow:0 1px 3px rgba(45,29,18,.10) !important;
+}
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):active,
+.ypm-ic button:active, .skm-ic button:active{
+  transform:none !important;
+  box-shadow:none !important;
+}
+
+/* ── 3) BİRİNCİL / VURGU butonları → düz kahve dolgu ── */
+.main .btn-primary, .main .bayi-ekle-btn, .main .bsip-ekle, .main .ypm-basla,
+.main .skm-kaydet, .ypm-ic .ypm-basla, .skm-ic .skm-kaydet,
+.main .ode-onay, .main .myp-onay, .main button.onay{
+  background:var(--brand) !important;
+  color:var(--brand-ink) !important;
+  border-color:var(--brand-d) !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+}
+.main .btn-primary:hover, .main .bayi-ekle-btn:hover, .main .bsip-ekle:hover,
+.main .ypm-basla:hover, .main .skm-kaydet:hover, .main .ode-onay:hover,
+.main .myp-onay:hover, .main button.onay:hover{
+  background:var(--brand-d) !important; color:#fff !important;
+  box-shadow:0 1px 3px rgba(45,29,18,.12) !important;
+}
+
+/* ── 4) AKTİF sekme/segment (koyu kahve dolgulu) → düz ── */
+.main button.on, .main .bayi-sekme.on, .main .skf-chip.on{
+  background:var(--cocoa) !important; color:#fff !important;
+  border-color:var(--cocoa) !important; text-shadow:none !important;
+  box-shadow:none !important;
+}
+
+/* ── 5) ytb-* varyantları (Hepsini Aç/Kapat/Stoklar) → düz ── */
+.main button.ytb-ac{
+  background:var(--gold-4) !important; color:#3d2f26 !important;
+  border:1.5px solid #8a6f1e !important; text-shadow:none !important;
+  box-shadow:none !important;
+}
+.main button.ytb-kapat{
+  background:var(--brand) !important; color:#f7efe6 !important;
+  border:1.5px solid var(--brand-d) !important; text-shadow:none !important;
+  box-shadow:none !important;
+}
+.main button.ytb-not{
+  background:var(--surface-2) !important; color:#5e4630 !important;
+  border:1.5px solid #b89f7d !important; text-shadow:none !important;
+  box-shadow:none !important;
+}
+.main button.ytb-ac:hover, .main button.ytb-kapat:hover, .main button.ytb-not:hover{
+  filter:none !important; box-shadow:0 1px 3px rgba(45,29,18,.12) !important;
+}
+.main button.ytb-ac:active, .main button.ytb-kapat:active, .main button.ytb-not:active{
+  transform:none !important; box-shadow:none !important;
+}
+
+/* ── 6) op-btn işlem butonları → düz ── */
+.op-btn{ box-shadow:none !important; }
+.op-btn::after{ display:none !important; }
+.op-btn:hover{ transform:none !important; box-shadow:0 1px 3px rgba(45,29,18,.12) !important; }
+.op-btn:active{ transform:none !important; }
+
+/* ── 7) NAV MENÜ BAŞLIKLARI → düz (ledge/gloss/shimmer iptal) ── */
+.nav-grup-baslik{
+  background:var(--surface-2) !important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.25) !important;
+  text-shadow:none !important;
+  transition:background .18s ease, box-shadow .18s ease !important;
+}
+.nav-grup-baslik::after{ display:none !important; }
+.nav-grup-baslik:hover{ transform:none !important; box-shadow:0 0 0 1px rgba(201,162,52,.40), 0 2px 6px rgba(90,73,23,.12) !important; }
+.nav-grup-baslik:active{ transform:none !important; box-shadow:0 0 0 1px rgba(201,162,52,.35) !important; }
+.nav-grup-baslik.acik, .nav-tekli.aktif-tekli{
+  background:var(--brand) !important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.45) !important;
+  text-shadow:none !important;
+}
+.nav-grup-baslik.acik::before, .nav-tekli.aktif-tekli::before{ display:none !important; }
+.nav-grup-baslik.acik:active, .nav-tekli.aktif-tekli:active{ transform:none !important; }
+
+/* ── 8) NAV alt öğeler (aktif) → düz ── */
+.nav-item.active{
+  background:var(--brand) !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+.nav-item:active{ transform:none !important; }
+.nav-item:hover{ box-shadow:none !important; }
+
+/* ── 9) ÜST BAR: Çıkış butonu + rol çipi → düz ── */
+.topbar{ box-shadow:0 1px 0 rgba(45,29,18,.08), 0 2px 8px rgba(45,29,18,.06) !important; }
+.topbar::after{ box-shadow:none !important; }
+.topbar .tb-out{
+  background:var(--gold-4) !important; color:#3d2f26 !important;
+  border:1.5px solid var(--gold-3) !important; text-shadow:none !important;
+  box-shadow:none !important;
+}
+.topbar .tb-out:hover{ transform:none !important; box-shadow:0 1px 3px rgba(90,73,23,.2) !important; }
+.topbar .tb-out:active{ transform:none !important; }
+.topbar .role-chip{
+  background:var(--surface-2) !important; color:#4a3826 !important;
+  border:1.5px solid var(--gold-3) !important; text-shadow:none !important;
+  box-shadow:none !important;
+}
+
+/* ── 10) QR menü KATEGORİ KARTLARI → düz (ledge/çökme iptal) ── */
+.qr-kat-kart{
+  background:var(--surface) !important;
+  box-shadow:0 1px 3px rgba(45,29,18,.10) !important;
+  transform:none !important;
+}
+.qr-kat-kart:active{ transform:none !important; box-shadow:0 1px 3px rgba(45,29,18,.12) !important; }
+#qrApp .qr-topbar .qr-close{ box-shadow:0 1px 3px rgba(0,0,0,.12) !important; }
+#qrApp .qr-topbar .qr-close:active{ transform:translateY(-50%) !important; box-shadow:0 1px 2px rgba(0,0,0,.10) !important; }
+
+/* ── 11) Segment/pill genel → metin gölgesi kaldır ── */
+button{ text-shadow:none; }
+.skf-chip.on{ box-shadow:none !important; text-shadow:none !important; }
+
+/* ── 12) QR karşılama / kasa masa butonları → düz ── */
+.qr-karsilama .qr-btn-primary:active,
+.qr-karsilama .qr-btn-ghost:active,
+.qr-karsilama .qr-btn-uye-ol:active,
+.kasa-masa-btn:active{ transform:none !important; box-shadow:none !important; }
+
+/* ── 13) Excel/CSV nötr butonlar → düz ── */
+.mr-excel-btn:hover{ box-shadow:0 1px 3px rgba(45,29,18,.10) !important; }
+.mr-excel-btn:active{ transform:none !important; box-shadow:none !important; }
+
 </style>
 </head>
 <body>
