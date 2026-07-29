@@ -7687,8 +7687,87 @@ button{ text-shadow:none; }
 .mr-excel-btn:hover{ box-shadow:0 1px 3px rgba(45,29,18,.10) !important; }
 .mr-excel-btn:active{ transform:none !important; box-shadow:none !important; }
 
-/* ── 14) YETKİ TOGGLE (Açık/Kapalı) → düz; AKTİF koyu + AÇIK yazı ── */
-.yt-toggle{
+/* ── 13b) MODAL SEÇİM ÇİPLERİ (alerjen, ölçü birimi) → AKTİF koyu + açık yazı ── */
+.uf-alerjen-btn.on{
+  background:var(--brand) !important;
+  border-color:var(--brand-d) !important;
+  color:#fbf2e6 !important;
+  box-shadow:none !important;
+}
+/* otomatik (stok kaynaklı) alerjen — ayrı koyu ton, karışmasın */
+.uf-alerjen-btn.oto{
+  background:var(--cocoa) !important;
+  border-color:var(--cocoa) !important;
+  color:#fbf2e6 !important;
+  box-shadow:none !important;
+}
+/* Ölçü birimi çipi zaten koyu (--cocoa); kabartma garantisi */
+.skm-birim-chip.on{
+  background:var(--cocoa) !important; border-color:var(--cocoa) !important;
+  color:#fff !important; box-shadow:none !important;
+}
+
+/* ── 13a) MODAL BAŞLIK BANDI (.skm-head vb) → tema uyumlu düz renk ──
+   Koyu, sert grad-cocoa gradyanı yerine düz koyu kahve (--brand-d). */
+.ypm-head, .skm-head, .fat-form-head, .bom-head, .ikm-head{
+  background:var(--brand-d) !important;
+  color:#fbf2e6 !important;
+  box-shadow:none !important;
+}
+.ypm-head *, .skm-head *, .fat-form-head *, .ikm-head *{ color:#fbf2e6 !important; }
+
+/* Fatura Kalemi modalı — ALIM BİRİMİ (kutu/adet) seçimi: AKTİF koyu + açık yazı */
+.ikm-hizli-btn.on{
+  background:var(--brand) !important;
+  border-color:var(--brand-d) !important;
+  color:#fbf2e6 !important;
+  box-shadow:none !important;
+}
+
+/* ── 13a2) KDV Hariç/Dahil segmenti → düz KOYU kahve (near-black değil) ── */
+.skm-kdv-btn.on,
+.main .kdv-btn.on, .main .tip-btn.on, .main .birim-chip.on, .main .h-btn.on{
+  background:var(--brand) !important;
+  border-color:var(--brand-d) !important;
+  color:#fbf2e6 !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+}
+.skm-kdv-btn{ box-shadow:none !important; }
+
+/* ── 13c) DURUM segmenti (Kullanımda/Kapalı) → yeşil kalksın, tema+düz ── */.skm-durum-satir{
+  background:var(--surface-2) !important;
+  border:1.5px solid var(--line) !important;
+  box-shadow:none !important;
+}
+.skm-durum-satir.kapali{
+  background:var(--surface-2) !important;
+  border-color:var(--line) !important;
+}
+.skm-durum-rozet{ color:var(--brand-d) !important; }
+.skm-durum-satir.kapali .skm-durum-rozet{ color:var(--ink-3) !important; }
+.skm-durum-alt{ color:var(--ink-3) !important; }
+.skm-durum-segment{
+  background:var(--surface) !important;
+  border:1.5px solid var(--line) !important;
+  box-shadow:none !important;
+}
+/* seçili: Kullanımda → düz KOYU kahve + açık yazı (yeşil kaldırıldı) */
+.skm-ic button.skm-dsg.on, .main button.skm-dsg.on{
+  background:var(--brand) !important;
+  color:#fbf2e6 !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+/* seçili: Kapalı → düz espresso (kullanımdan ayrışsın) + açık yazı */
+.skm-ic button.skm-dsg.kapat.on, .main button.skm-dsg.kapat.on{
+  background:var(--cocoa) !important;
+  color:#fbf2e6 !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+
+/* ── 14) YETKİ TOGGLE (Açık/Kapalı) → düz; AKTİF koyu + AÇIK yazı ── */.yt-toggle{
   background:var(--surface-2) !important;
   border:1.5px solid var(--line) !important;
   box-shadow:none !important;
@@ -25669,9 +25748,9 @@ function stokKartDuzenle(kod){
   const ustAd = ustSeviye ? ustSeviye.ad : null;
   // taban fiyatları ÜST BİRİM başına çevir (giriş üst birimle yapılacak)
   const alisTaban = bayiFiyat(kod);
-  const alisUst = (alisTaban>0) ? +(alisTaban*ustCarpan).toFixed(4) : "";
+  const alisUst = (alisTaban>0) ? +(alisTaban*ustCarpan).toFixed(2) : "";
   const satisTaban = s.satisFiyat;
-  const satisUst = (satisTaban!=null&&satisTaban>0) ? +(satisTaban*ustCarpan).toFixed(4) : "";
+  const satisUst = (satisTaban!=null&&satisTaban>0) ? +(satisTaban*ustCarpan).toFixed(2) : "";
   state._stokModal = {
     mod:"duzenle", kod:kod,
     ad:s.ad||"", mevcut:String(s.mevcut||0), birim:s.birim||"adet", kritik:String(s.kritik||0),
@@ -25956,9 +26035,9 @@ function stokFiyatOzet(p){
   const parts=[];
   let alisMatrah=0, satisMatrah=0;
   if(af>0){ const h=hesapla(af,ak,p.alisKdvDahil); alisMatrah=h.matrah;
-    parts.push(`Alış: ${h.matrah.toFixed(2)} + %${ak} = <strong>${h.toplam.toFixed(2)} ₺</strong> ${p.alisKdvDahil?'(dahil)':'(hariç)'}`); }
+    parts.push(`Alış: <strong>${h.matrah.toFixed(2)} ₺</strong> hariç · <strong>${h.toplam.toFixed(2)} ₺</strong> dahil <small>(%${ak} KDV)</small>`); }
   if(sf>0){ const h=hesapla(sf,sk,p.satisKdvDahil); satisMatrah=h.matrah;
-    parts.push(`Bayi satış: ${h.matrah.toFixed(2)} + %${sk} = <strong>${h.toplam.toFixed(2)} ₺</strong> ${p.satisKdvDahil?'(dahil)':'(hariç)'}`); }
+    parts.push(`Bayi satış: <strong>${h.matrah.toFixed(2)} ₺</strong> hariç · <strong>${h.toplam.toFixed(2)} ₺</strong> dahil <small>(%${sk} KDV)</small>`); }
   let ozet=parts.join("<br>");
   if(alisMatrah>0 && satisMatrah>0){ const marj=((satisMatrah-alisMatrah)/alisMatrah*100); ozet+=`<br>📈 Kâr marjı (KDV hariç): <strong>%${marj.toFixed(0)}</strong>`; }
   return ozet;
@@ -25973,9 +26052,9 @@ function stokModalFiyatOzet(){
     const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
     const af=sayi(p.alisFiyat), sf=sayi(p.satisFiyat);
     const at=document.getElementById("skmAlisTaban");
-    if(at) at.textContent = af>0 ? (af/p._ustCarpan).toFixed(4)+" ₺" : "—";
+    if(at) at.textContent = af>0 ? (af/p._ustCarpan).toFixed(2)+" ₺" : "—";
     const st=document.getElementById("skmSatisTaban");
-    if(st) st.textContent = sf>0 ? (sf/p._ustCarpan).toFixed(4)+" ₺" : "—";
+    if(st) st.textContent = sf>0 ? (sf/p._ustCarpan).toFixed(2)+" ₺" : "—";
   }
 }
 /* KDV dahil/hariç seçimi (alis|satis) */
@@ -26257,8 +26336,8 @@ function stokModalCiz(){
   if(p._ustCarpan && p._ustCarpan>1){
     const _sy=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
     const _af=_sy(p.alisFiyat), _sf=_sy(p.satisFiyat);
-    const _at=document.getElementById("skmAlisTaban"); if(_at) _at.textContent = _af>0?(_af/p._ustCarpan).toFixed(4)+" ₺":"—";
-    const _st=document.getElementById("skmSatisTaban"); if(_st) _st.textContent = _sf>0?(_sf/p._ustCarpan).toFixed(4)+" ₺":"—";
+    const _at=document.getElementById("skmAlisTaban"); if(_at) _at.textContent = _af>0?(_af/p._ustCarpan).toFixed(2)+" ₺":"—";
+    const _st=document.getElementById("skmSatisTaban"); if(_st) _st.textContent = _sf>0?(_sf/p._ustCarpan).toFixed(2)+" ₺":"—";
   }
   // saklanan scroll pozisyonunu geri yükle (yeniden çizim başa atmasın).
   // innerHTML sonrası tarayıcı layout'u bitirmeden scrollTop atanırsa etkisiz kalır;
