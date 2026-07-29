@@ -7709,12 +7709,14 @@ button{ text-shadow:none; }
 
 /* ── 13a) MODAL BAŞLIK BANDI (.skm-head vb) → tema uyumlu düz renk ──
    Koyu, sert grad-cocoa gradyanı yerine düz koyu kahve (--brand-d). */
-.ypm-head, .skm-head, .fat-form-head, .bom-head, .ikm-head{
+.ypm-head, .skm-head, .fat-form-head, .bom-head, .ikm-head, .bsm-head{
   background:var(--brand-d) !important;
   color:#fbf2e6 !important;
   box-shadow:none !important;
 }
 .ypm-head *, .skm-head *, .fat-form-head *, .ikm-head *{ color:#fbf2e6 !important; }
+/* bsm-head içindeki kapat butonu/rozet kendi rengini korusun, sadece başlık açık */
+.bsm-head .bsm-head-baslik{ color:#fbf2e6 !important; }
 
 /* Fatura Kalemi modalı — ALIM BİRİMİ (kutu/adet) seçimi: AKTİF koyu + açık yazı */
 .ikm-hizli-btn.on{
@@ -7766,6 +7768,32 @@ button{ text-shadow:none; }
   box-shadow:none !important;
   text-shadow:none !important;
 }
+
+/* ── 13d) GLOBAL btn-primary (modal dışı/dahili) → düz kahve, gloss/emboss iptal ──
+   button.btn-primary evrensel kuralı grad-brand + bevel + glossla 3D
+   yapıyordu (örn. Onaya gönder). Düzleştirilir. */
+button.btn-primary, .btn-primary, .bsm-onayla, .op-btn.onay, .fk-ekle{
+  background:var(--brand) !important;
+  color:var(--brand-ink) !important;
+  border:1.5px solid var(--brand-d) !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+button.btn-primary::after, .btn-primary::after, .bsm-onayla::after, .fk-ekle::after,
+button.btn-primary::before, .btn-primary::before{ display:none !important; }
+button.btn-primary:hover, .btn-primary:hover, .bsm-onayla:hover, .fk-ekle:hover{
+  background:var(--brand-d) !important; color:#fff !important;
+  transform:none !important; box-shadow:0 1px 3px rgba(45,29,18,.14) !important;
+}
+button.btn-primary:active, .btn-primary:active, .bsm-onayla:active{
+  transform:none !important; box-shadow:none !important;
+}
+
+/* ── 13e) SİPARİŞ SEPETİM modalı (.bsm-*) → kabartma/gradyan iptal ── */
+.bsm-satir{ box-shadow:none !important; }
+.bsm-adet-btn{ background:var(--surface) !important; box-shadow:none !important; }
+.bsm-adet-btn:active{ transform:none !important; }
+.bsm-excel{ background:var(--gold-4) !important; box-shadow:none !important; text-shadow:none !important; }
 
 /* ── 14) YETKİ TOGGLE (Açık/Kapalı) → düz; AKTİF koyu + AÇIK yazı ── */.yt-toggle{
   background:var(--surface-2) !important;
@@ -25305,7 +25333,7 @@ function stokSonucHtml(){
     // alış: BAYI_FIYAT her zaman KDV HARİÇ matrah → dahil=false ile hesapla (çifte indirim yok)
     const alisH = (alisF>0) ? hesap(alisF,alisK,false) : null;
     const satisH = (satisF>0) ? hesap(satisF,satisK,s.satisKdvDahil) : null;
-    const marj = (alisH && satisH) ? ((satisH.matrah-alisH.matrah)/alisH.matrah*100) : null;
+    const marj = (alisH && satisH) ? ((satisH.toplam-alisH.toplam)/alisH.toplam*100) : null;
     // UoM: üst birim (koli/kutu) fiyatları = taban × çarpan
     const u = uomAl(s);
     const ustSeviye = u.seviyeler.length ? u.seviyeler[0] : null;
@@ -25338,12 +25366,12 @@ function stokSonucHtml(){
         ${marj!=null?`<div class="stok-kutu stok-kutu-marj">
           <span class="sk-etiket">📈 Marj</span>
           <span class="sk-deger">%${marj.toFixed(0)}</span>
-          <span class="sk-alt">KDV hariç</span>
+          <span class="sk-alt">KDV dahil</span>
         </div>`:''}
         <div class="stok-kutu stok-kutu-satis">
           <span class="sk-etiket">💰 Satış birim</span>
           <span class="sk-deger">${satisH?satisH.toplam.toFixed(2)+' ₺':'—'}</span>
-          <span class="sk-alt">${satisK!=null?'%'+satisK+' '+(s.satisKdvDahil?'dahil':'hariç')+' / '+u.tabanBirim:''}</span>
+          <span class="sk-alt">${satisK!=null?'%'+satisK+' dahil / '+u.tabanBirim:''}</span>
         </div>
         ${ustSeviye?`<div class="stok-kutu stok-kutu-satis">
           <span class="sk-etiket">💰 Satış ${ustSeviye.ad}</span>
@@ -26033,13 +26061,13 @@ function stokFiyatOzet(p){
     else { const toplam=fiyat*(1+kdv/100); return {matrah:fiyat, toplam}; }
   };
   const parts=[];
-  let alisMatrah=0, satisMatrah=0;
-  if(af>0){ const h=hesapla(af,ak,p.alisKdvDahil); alisMatrah=h.matrah;
+  let alisMatrah=0, satisMatrah=0, alisToplam=0, satisToplam=0;
+  if(af>0){ const h=hesapla(af,ak,p.alisKdvDahil); alisMatrah=h.matrah; alisToplam=h.toplam;
     parts.push(`Alış: <strong>${h.matrah.toFixed(2)} ₺</strong> hariç · <strong>${h.toplam.toFixed(2)} ₺</strong> dahil <small>(%${ak} KDV)</small>`); }
-  if(sf>0){ const h=hesapla(sf,sk,p.satisKdvDahil); satisMatrah=h.matrah;
+  if(sf>0){ const h=hesapla(sf,sk,p.satisKdvDahil); satisMatrah=h.matrah; satisToplam=h.toplam;
     parts.push(`Bayi satış: <strong>${h.matrah.toFixed(2)} ₺</strong> hariç · <strong>${h.toplam.toFixed(2)} ₺</strong> dahil <small>(%${sk} KDV)</small>`); }
   let ozet=parts.join("<br>");
-  if(alisMatrah>0 && satisMatrah>0){ const marj=((satisMatrah-alisMatrah)/alisMatrah*100); ozet+=`<br>📈 Kâr marjı (KDV hariç): <strong>%${marj.toFixed(0)}</strong>`; }
+  if(alisToplam>0 && satisToplam>0){ const marj=((satisToplam-alisToplam)/alisToplam*100); ozet+=`<br>📈 Kâr marjı (KDV dahil): <strong>%${marj.toFixed(0)}</strong>`; }
   return ozet;
 }
 function stokModalFiyatOzet(){
@@ -27723,7 +27751,7 @@ function bayiStoklarHtml(){
     const deger = sutunToplam(b.ad);
     html += `<button class="bstok-kart${sec?' on':''}" onclick="bstokTogglBayi('${b.ad.replace(/'/g,"\\'")}')">
       <span class="bsk-ad">${sec?'✓ ':''}🏬 ${b.ad}</span>
-      <span class="bsk-deger">${deger.toFixed(0)} ₺</span>
+      <span class="bsk-deger">${deger.toFixed(2)} ₺</span>
     </button>`;
   });
   html += `</div>`;
@@ -27770,7 +27798,7 @@ function bayiStoklarHtml(){
   // toplam satırı
   let tfoot = `<tr class="bstok-toplam"><td class="bstok-sabit-col" style="font-weight:800">GENEL TOPLAM</td>`;
   sutunlar.forEach(sc=>{
-    tfoot += `<td style="border-left:2px solid var(--cocoa)"></td><td style="text-align:right;font-weight:900;color:var(--brand-d)">${sutunToplam(sc).toFixed(0)} ₺</td>`;
+    tfoot += `<td style="border-left:2px solid var(--cocoa)"></td><td style="text-align:right;font-weight:900;color:var(--brand-d)">${sutunToplam(sc).toFixed(2)} ₺</td>`;
   });
   tfoot += `</tr>`;
 
