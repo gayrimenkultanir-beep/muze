@@ -7462,11 +7462,11 @@ html, body{ max-width:100%; overflow-x:hidden; }
 /* ── 2) EVRENSEL GOLD 3D BUTON MODELİ → DÜZ ──
    İçerik alanındaki tüm butonlar (qr menü hariç). Gradyan + bevel
    + gloss katmanları kaldırılıp düz gold-outline butona indirildi. */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle),
-.bom button:not([class*="qr-"]),
-.ypm-ic button, .skm-ic button, .op-ic button, .ikm-ic button, .kg-ic button,
-.myp-ic button, .uf-ic button, .bldr-ic button, .kmpf-ic button, .pop-ic button,
-.fat-belge button{
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.on):not(.aktif),
+.bom button:not([class*="qr-"]):not(.on):not(.aktif),
+.ypm-ic button:not(.on):not(.aktif), .skm-ic button:not(.on):not(.aktif), .op-ic button:not(.on):not(.aktif), .ikm-ic button:not(.on):not(.aktif), .kg-ic button:not(.on):not(.aktif),
+.myp-ic button:not(.on):not(.aktif), .uf-ic button:not(.on):not(.aktif), .bldr-ic button:not(.on):not(.aktif), .kmpf-ic button:not(.on):not(.aktif), .pop-ic button:not(.on):not(.aktif),
+.fat-belge button:not(.on):not(.aktif){
   background:var(--surface) !important;
   color:var(--ink) !important;
   border:1.5px solid var(--gold-3) !important;
@@ -7482,14 +7482,14 @@ html, body{ max-width:100%; overflow-x:hidden; }
   display:none !important;
 }
 /* hover / active — kabarma yerine düz vurgu */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):hover,
-.ypm-ic button:hover, .skm-ic button:hover, .fat-belge button:hover{
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.on):not(.aktif):hover,
+.ypm-ic button:not(.on):hover, .skm-ic button:not(.on):hover, .fat-belge button:not(.on):hover{
   transform:none !important;
   background:var(--surface-2) !important;
   box-shadow:0 1px 3px rgba(45,29,18,.10) !important;
 }
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):active,
-.ypm-ic button:active, .skm-ic button:active{
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.on):not(.aktif):active,
+.ypm-ic button:not(.on):active, .skm-ic button:not(.on):active{
   transform:none !important;
   box-shadow:none !important;
 }
@@ -7511,10 +7511,42 @@ html, body{ max-width:100%; overflow-x:hidden; }
   box-shadow:0 1px 3px rgba(45,29,18,.12) !important;
 }
 
-/* ── 4) AKTİF sekme/segment (koyu kahve dolgulu) → düz ── */
-.main button.on, .main .bayi-sekme.on, .main .skf-chip.on{
-  background:var(--cocoa) !important; color:#fff !important;
-  border-color:var(--cocoa) !important; text-shadow:none !important;
+/* ── 4) AKTİF sekme/segment/pill → KOYU dolgu (tüm menülerde) ──
+   Bazı aktif durumlar önceden açık satin-bej/krem paletle
+   boyanıyordu; hepsi koyu kahve/espresso dolguya zorlanır. */
+.main button.on,
+.main .bayi-sekme.on, .main .tab-btn.on, .main .sec-tab.on,
+.main .stok-sekme.on, .main .kds-sekme.on, .main .yym-sekme.on,
+.main .kasa-sekme.on, .main .rapor-sekme.on, .main .fyt-sekme.on,
+.main .mag-sekme.on, .main .grs-sekme.on, .main .qr-cekmece-sekme.on,
+.main .cat-pill.on, .main .fy-kanal.on, .main .fy-hs-btn.on,
+.main .skf-chip.on,
+.main .bayi-sekme.aktif, .main .stok-sekme.aktif, .main .tab-btn.aktif{
+  background:var(--brand) !important;
+  color:#fff !important;
+  border-color:var(--brand-d) !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+}
+/* aktif sekmenin gold alt-çizgi süsü kalsın ama kabartma yok */
+.main .bayi-sekme.on::after, .main .tab-btn.on::after,
+.main .stok-sekme.on::after{ box-shadow:none !important; }
+
+/* ── 4b) Garanti: sekme satırı içindeki AKTİF buton kesinlikle KOYU ──
+   Satır sarmalayıcısıyla özgüllük artırılır; hiçbir açık palet kuralı geçemez. */
+.main .bayi-sekme-row .bayi-sekme.on,
+.main .fyt-sekme-row .fyt-sekme.on,
+.main .rapor-sekme-bar .rapor-sekme.on,
+.main .kasa-sekme-row .kasa-sekme.on,
+.main .grs-sekme-row .grs-sekme.on,
+.main .mag-sekme-row .mag-sekme.on,
+.main [class*="sekme-row"] button.on,
+.main [class*="sekme-bar"] button.on,
+.main [class*="sekme-row"] button.aktif{
+  background:var(--brand-d) !important;
+  color:#fff !important;
+  border-color:var(--brand-d) !important;
+  text-shadow:none !important;
   box-shadow:none !important;
 }
 
@@ -7559,15 +7591,56 @@ html, body{ max-width:100%; overflow-x:hidden; }
 .nav-grup-baslik:active{ transform:none !important; box-shadow:0 0 0 1px rgba(201,162,52,.35) !important; }
 .nav-grup-baslik.acik, .nav-tekli.aktif-tekli{
   background:var(--brand) !important;
+  color:#fbf2e6 !important;
   box-shadow:0 0 0 1px rgba(201,162,52,.45) !important;
   text-shadow:none !important;
 }
 .nav-grup-baslik.acik::before, .nav-tekli.aktif-tekli::before{ display:none !important; }
 .nav-grup-baslik.acik:active, .nav-tekli.aktif-tekli:active{ transform:none !important; }
 
+/* ── 7b) NAV RENK VARYANTLARI (nr-*) → gradyan/kabartma iptal ──
+   Her ana menü tonunun (kahve/espresso/satinbej/gold/kum...) pasif ve
+   aktif gradyanları düz renge indirilir; (0,3,0) özgüllükle üsttekileri ezer. */
+.nav-grup-baslik.nr-kahve, .nav-grup-baslik.nr-espresso,
+.nav-grup-baslik.nr-satinbej, .nav-grup-baslik.nr-antrasit,
+.nav-grup-baslik.nr-zeytin, .nav-grup-baslik.nr-gold,
+.nav-grup-baslik.nr-kum, .nav-grup-baslik.nr-duman,
+.nav-grup-baslik.nr-buz, .nav-grup-baslik.nr-ivory{
+  background:var(--surface-2) !important;
+  color:var(--ink) !important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.25) !important;
+  text-shadow:none !important;
+}
+.nav-grup-baslik.nr-kahve.acik, .nav-grup-baslik.nr-espresso.acik,
+.nav-grup-baslik.nr-satinbej.acik, .nav-grup-baslik.nr-antrasit.acik,
+.nav-grup-baslik.nr-zeytin.acik, .nav-grup-baslik.nr-kum.acik,
+.nav-grup-baslik.nr-duman.acik, .nav-grup-baslik.nr-buz.acik,
+.nav-grup-baslik.nr-ivory.acik,
+.nav-grup-baslik.nr-kahve.aktif-tekli, .nav-grup-baslik.nr-espresso.aktif-tekli,
+.nav-grup-baslik.nr-satinbej.aktif-tekli, .nav-grup-baslik.nr-antrasit.aktif-tekli,
+.nav-grup-baslik.nr-zeytin.aktif-tekli, .nav-grup-baslik.nr-kum.aktif-tekli,
+.nav-grup-baslik.nr-duman.aktif-tekli, .nav-grup-baslik.nr-buz.aktif-tekli,
+.nav-grup-baslik.nr-ivory.aktif-tekli{
+  background:var(--brand) !important;
+  color:#fbf2e6 !important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.45) !important;
+  text-shadow:none !important;
+}
+/* gold varyantı — koyu zeminde okunur açık gold değil, düz koyu kalsın */
+.nav-grup-baslik.nr-gold.acik, .nav-grup-baslik.nr-gold.aktif-tekli{
+  background:var(--brand) !important; color:#fbf2e6 !important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.45) !important; text-shadow:none !important;
+}
+/* nr-* grup gövdesindeki aktif alt öğeler → düz koyu (gradyan iptal) */
+.nav-grup-govde[class*="nr-"] .nav-item.active{
+  background:var(--brand) !important; color:#fbf2e6 !important;
+  box-shadow:none !important; text-shadow:none !important;
+}
+
 /* ── 8) NAV alt öğeler (aktif) → düz ── */
 .nav-item.active{
   background:var(--brand) !important;
+  color:#fbf2e6 !important;
   box-shadow:none !important;
   text-shadow:none !important;
 }
@@ -7613,6 +7686,33 @@ button{ text-shadow:none; }
 /* ── 13) Excel/CSV nötr butonlar → düz ── */
 .mr-excel-btn:hover{ box-shadow:0 1px 3px rgba(45,29,18,.10) !important; }
 .mr-excel-btn:active{ transform:none !important; box-shadow:none !important; }
+
+/* ── 14) YETKİ TOGGLE (Açık/Kapalı) → düz; AKTİF koyu + AÇIK yazı ── */
+.yt-toggle{
+  background:var(--surface-2) !important;
+  border:1.5px solid var(--line) !important;
+  box-shadow:none !important;
+}
+.yt-toggle .yt-toggle-yazi{ color:var(--ink-2) !important; }
+.yt-toggle .yt-toggle-knob{
+  background:#fff !important; border:1px solid var(--line-2) !important;
+  box-shadow:0 1px 2px rgba(45,29,18,.18) !important;
+}
+/* AKTİF (Açık) — koyu kahve dolgu, iç yazı ve topuz açık renk */
+.yt-toggle.on{
+  background:var(--brand) !important;
+  border-color:var(--brand-d) !important;
+  box-shadow:none !important;
+}
+.yt-toggle.on .yt-toggle-yazi{ color:#fbf2e6 !important; }
+.yt-toggle.on .yt-toggle-knob{ background:#fff !important; border-color:#fff !important; }
+.yt-toggle:hover{ transform:none !important; border-color:var(--gold-3) !important; }
+
+/* Hepsini Aç / Hepsini Kapat / Sadece Stoklar — düz (zaten ytb-* kuralında,
+   burada iç yazı kontrastı garanti) */
+.main button.ytb-ac{ color:#3d2f26 !important; }
+.main button.ytb-kapat{ color:#fbf2e6 !important; }
+.main button.ytb-not{ color:#5e4630 !important; }
 
 </style>
 </head>
@@ -10712,7 +10812,7 @@ const NAV_META = {
   masalar: {ic:"🪑", ad:"Masalar"},
   masagecmis:{ic:"🕘", ad:"Satış Geçmişi"},
   masayonetim:{ic:"🗂️", ad:"Masa Yönetimi"},
-  bayi:{ic:"📦", ad:"Bayi Kanalı"},
+  bayi:{ic:"📦", ad:"Siparişler"},
   bildirim:{ic:"🔔", ad:"Bildirim"},
   canli:   {ic:"📡", ad:"Canlı"},
   recete:  {ic:"📖", ad:"Reçete"},
@@ -12375,9 +12475,13 @@ function bildirimEkle(opts){
 }
 function bildirimListesi(){
   const rol = state.role, sube = AKTIF_SUBE;
+  // Depo / Lojistik: SADECE Bayi Kanalı mesajları görür, diğer bildirimler gelmez
+  if(rol==="depo"){
+    return BILDIRIMLER.filter(b=>b.kanal==="Bayi Kanalı").sort((a,b)=>b.ts-a.ts);
+  }
   return BILDIRIMLER.filter(b=>{
-    if(b.hedefSube){ return rol!=="genel" && rol!=="depo" && b.hedefSube===sube; }   // şube hedefli: sadece o şube müdürü
-    if(b.hedefRol){ return b.hedefRol===rol || (rol==="depo" && b.hedefRol==="genel"); }  // depo, genel bildirimleri de görür
+    if(b.hedefSube){ return rol!=="genel" && b.hedefSube===sube; }   // şube hedefli: sadece o şube müdürü
+    if(b.hedefRol){ return b.hedefRol===rol; }
     return true;                                      // herkese
   }).sort((a,b)=>b.ts-a.ts);
 }
@@ -12388,7 +12492,10 @@ function bildirimSil(id){ const i=BILDIRIMLER.findIndex(x=>x.id===id); if(i>=0){
 function bildirimTemizle(){
   const rol=state.role, sube=AKTIF_SUBE;
   BILDIRIMLER = BILDIRIMLER.filter(b=>{
-    const gorunur = b.hedefSube ? b.hedefSube===sube : (b.hedefRol ? b.hedefRol===rol : true);
+    // Depo: yalnız Bayi Kanalı mesajları görünür → yalnız onları temizler
+    const gorunur = (rol==="depo")
+      ? (b.kanal==="Bayi Kanalı")
+      : (b.hedefSube ? b.hedefSube===sube : (b.hedefRol ? b.hedefRol===rol : true));
     return !gorunur;   // görünenleri sil
   });
   b2bKaydet(); go("bildirim", true);
