@@ -7687,12 +7687,75 @@ button{ text-shadow:none; }
 .mr-excel-btn:hover{ box-shadow:0 1px 3px rgba(45,29,18,.10) !important; }
 .mr-excel-btn:active{ transform:none !important; box-shadow:none !important; }
 
-/* ── 13b) MODAL SEÇİM ÇİPLERİ (alerjen, ölçü birimi) → AKTİF koyu + açık yazı ── */
+/* ── 13i) LİSTE/İÇERİK KARTLARI → düz (gradyan + emboss + gold-frame kabartma iptal) ──
+   .bayi-satir, .stok-kart, .gecmis-kart vb. grad-surface + emboss-sm +
+   gold-frame-sh ile 3D kabarık görünüyordu. Düz yüzey + ince kenar. */
+.bayi-satir, .stok-kart, .gecmis-kart, .bayi-sip-kart, .kasa-kart, .rapor-kart,
+.op-kart, .canli-kart, .dash-kart, .kpi, .bcard, .gsm-kart, .kv-kart,
+.mag-kdg-kart, .mag-rapor-kart, .my-kat-kart, .kmp-kart, .logo-kart,
+.isletme-gun-kart, .kasa-acilis-kart, .kasa-paket-kart, .fy-urun-kart,
+.bayi-form, .kg-nakit-kart, .gider-ozet-kart, .op-secim-kart{
+  background:var(--surface) !important;
+  box-shadow:0 0 0 1px rgba(201,162,52,.18) !important;
+  border:1px solid var(--line) !important;
+}
+.stok-kart:hover, .bayi-satir:hover, .gecmis-kart:hover, .bayi-sip-kart:hover,
+.rapor-kart:hover, .op-kart:hover, .dash-kart:hover, .kpi:hover, .bcard:hover,
+.gsm-kart:hover, .my-kat-kart:hover, .op-secim-kart:hover{
+  box-shadow:0 1px 4px rgba(45,29,18,.08) !important;
+  transform:none !important;
+}
+
+/* ── 13h) MİNİ/GHOST BUTONLAR (Sayım gir, Excel, düzenle/sil, İptal) → düz ──
+   .bayi-mini ve btn-ghost grad-surface + emboss ile 3D idi. Düzleştirilir. */
+.bayi-mini, .fk-degistir, button.btn-ghost, .btn-ghost, .stok-csv-btn, .bstok-mini-btn{
+  background:var(--surface) !important;
+  border:1.5px solid var(--line-2) !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+.bayi-mini:hover, .fk-degistir:hover, button.btn-ghost:hover, .btn-ghost:hover,
+.stok-csv-btn:hover, .bstok-mini-btn:hover{
+  background:var(--surface-2) !important;
+  border-color:var(--brand) !important;
+  box-shadow:0 1px 3px rgba(45,29,18,.10) !important;
+  transform:none !important;
+}
+.bayi-mini:active, .btn-ghost:active{ transform:none !important; box-shadow:none !important; }
+
+/* ── 13g) AKTİF şube seçim çipi (.bstok-kart.on) → iç yazı AÇIK renk ──
+   Aktif çip koyu dolgu alıyor; içindeki ad/değer açık renk olmalı. */
+.bstok-kart.on{ background:var(--brand) !important; border-color:var(--brand-d) !important; }
+.bstok-kart.on .bsk-ad,
+.bstok-kart.on .bsk-deger{ color:#fbf2e6 !important; }
+
+/* ── 13f) ŞUBE İSKONTO KARTLARI → eşit genişlik ──
+   Grid hücreleri eşit (1fr), butonlar hücreyi tam doldurur. */
+.bayi-iskonto-grid{
+  grid-template-columns:repeat(4, 1fr) !important;
+}
+.bayi-iskonto-grid .bayi-iskonto-kart{
+  width:100% !important;
+  min-width:0 !important;
+  box-sizing:border-box !important;
+}
+@media(max-width:900px){
+  .bayi-iskonto-grid{ grid-template-columns:repeat(3, 1fr) !important; }
+}
+@media(max-width:620px){
+  .bayi-iskonto-grid{ grid-template-columns:repeat(2, 1fr) !important; }
+}
+
+/* ── 13b) MODAL SEÇİM ÇİPLERİ (alerjen, ölçü birimi) → AKTİF koyu + açık yazı ── *//* Modal butonlarında kabartma text-shadow'u kaldır (yazılar 3D görünmesin) */
+.skm-ic button, .uf-ic button, .ypm-ic button, .op-ic button, .ikm-ic button,
+.kg-ic button, .myp-ic button, .bldr-ic button, .kmpf-ic button, .pop-ic button,
+.fat-belge button, .bsm-ic button{ text-shadow:none !important; }
 .uf-alerjen-btn.on{
   background:var(--brand) !important;
   border-color:var(--brand-d) !important;
   color:#fbf2e6 !important;
   box-shadow:none !important;
+  text-shadow:none !important;
 }
 /* otomatik (stok kaynaklı) alerjen — ayrı koyu ton, karışmasın */
 .uf-alerjen-btn.oto{
@@ -7700,11 +7763,12 @@ button{ text-shadow:none; }
   border-color:var(--cocoa) !important;
   color:#fbf2e6 !important;
   box-shadow:none !important;
+  text-shadow:none !important;
 }
 /* Ölçü birimi çipi zaten koyu (--cocoa); kabartma garantisi */
 .skm-birim-chip.on{
   background:var(--cocoa) !important; border-color:var(--cocoa) !important;
-  color:#fff !important; box-shadow:none !important;
+  color:#fff !important; box-shadow:none !important; text-shadow:none !important;
 }
 
 /* ── 13a) MODAL BAŞLIK BANDI (.skm-head vb) → tema uyumlu düz renk ──
