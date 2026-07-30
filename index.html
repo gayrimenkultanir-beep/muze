@@ -792,10 +792,13 @@ tr:last-child td{border-bottom:none}
 .bstok-mini-aksiyon{display:flex; gap:8px; margin-bottom:12px}
 .bstok-mini-btn{padding:6px 14px; border-radius:8px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink-2); font-size:12px; font-weight:700; cursor:pointer}
 .bstok-mini-btn:hover{border-color:var(--cocoa); color:var(--cocoa)}
-.bstok-wrap{overflow-x:auto}
-.bstok-tablo{min-width:100%; border-collapse:collapse}
+.bstok-wrap{overflow-x:auto; overflow-y:visible}
+.bstok-tablo{width:auto; min-width:100%; border-collapse:collapse}
 .bstok-tablo th,.bstok-tablo td{padding:9px 12px; white-space:nowrap}
-.bstok-sabit-col{position:sticky; left:0; background:var(--surface); z-index:2; box-shadow:2px 0 0 var(--line)}
+.bstok-sabit-col{position:sticky; left:0; background:var(--surface); z-index:2; box-shadow:2px 0 0 var(--line); width:280px; min-width:280px; max-width:280px; white-space:normal}
+.bstok-tablo th.bstok-sabit-col,.bstok-tablo td.bstok-sabit-col{overflow:hidden; text-overflow:ellipsis}
+/* veri sütunları sabit genişlik → yeni bayi eklenince stok-kartı kolonu daralmaz, tablo sağa büyür */
+.bstok-tablo th:not(.bstok-sabit-col),.bstok-tablo td:not(.bstok-sabit-col){min-width:92px}
 .bstok-tablo tbody tr:nth-child(even) .bstok-sabit-col{background:var(--surface-2)}
 .bstok-tablo tfoot .bstok-sabit-col{background:var(--brand-soft)}
 /* Sipariş Ver — arama + kategori grupları */
@@ -1368,7 +1371,7 @@ tr:last-child td{border-bottom:none}
   .ftc-mik::before{content:"Miktar: "; color:var(--ink-3); font-weight:600}
   .ftc-fiyat::before{content:"Birim: "; color:var(--ink-3); font-weight:600}
   .ftc-kdv::before{content:"KDV: "; color:var(--ink-3); font-weight:600}
-  .ftc-matrah::before{content:"Matrah: "; color:var(--ink-3); font-weight:600}
+  .ftc-matrah::before{content:"Temel fiyat: "; color:var(--ink-3); font-weight:600}
   .ftc-tutar{grid-column:2; grid-row:2/6; align-self:center; font-size:16px}
   .ftc-islem{grid-column:1/3; justify-content:flex-start; margin-top:6px}
   .fat-belge{margin:0}
@@ -10847,7 +10850,16 @@ const MPStore = {
   },
   set(key, data, version){
     try{ localStorage.setItem(key, JSON.stringify({__v: version||0, data})); return true; }
-    catch(e){ /* kota dolu / localStorage yok — satış durmasın, sessiz geç */ return false; }
+    catch(e){
+      // kota dolu / localStorage yok — SATIŞ DURMASIN, ama sessiz veri kaybı olmasın:
+      // oturumda bir kez görünür uyarı ver (backend'e geçiş sinyali).
+      if(!window.__kotaUyarildi){
+        window.__kotaUyarildi = true;
+        try{ if(typeof note==="function") note("⚠️ Cihaz depolama alanı doldu — yeni kayıtlar kalıcı olmayabilir. Verileri yedekleyip (Excel indir) sunucuya aktarım planlayın."); }catch(_){}
+        console.warn("MPStore: localStorage kotası doldu — kayıt yapılamadı.", e);
+      }
+      return false;
+    }
   },
   /* Düz metin (JSON olmayan) tekil değerler için — örn. personel adı */
   getRaw(key, fallback){
@@ -11765,6 +11777,16 @@ function gunSonuKapat(sube, gun, kapatanAd, kapatanRol, kapatanId, hazirlik){
   if(!GUN_SONU[sube]) GUN_SONU[sube] = {};
   GUN_SONU[sube][gun] = kayit;
   gunSonuKaydet();
+  // ── GÜN SONU STOK KAYDI: o günün tüketimini ürün başına tek satır yaz ──
+  let tuketimSatir = 0;
+  try{
+    tuketimSatir = gunlukTuketimFlush(sube, gun);
+    // eski tüketimleri aylık özete indir (birikimi durdur)
+    // 30 günden eski tüketimleri aylık özete indir (çok şubede kotayı korur)
+    tuketimArsivle(30);
+    b2bKaydet();
+  }catch(e){ console.warn("gün sonu tüketim flush:", e); }
+  kayit.tuketimSatirSayisi = tuketimSatir;
   return {ok:true, kayit};
 }
 /* ── GÜN KİLİDİNİ AÇ (sadece genel müdür) ── */
@@ -11923,8 +11945,8 @@ function stokGeriAl(cart, sube){
       const miktar = (r.g!=null ? r.g : (r.miktar||0)) * (item.q||1);
       if(!kod || !miktar) return;
       const mevcut = bayiStok(sube, kod);
-      subeStokDegistir(sube, kod, Math.round((mevcut + miktar)*100)/100,
-        {tip:"iade", aciklama:"İade — "+item.ad});
+      bayiStokYaz(sube, kod, Math.round((mevcut + miktar)*100)/100);  // stok geri döner + kritik kontrol
+      gunlukTuketimEkle(sube, kod, -miktar);   // aynı günün net tüketiminden düş (satılan − iade)
       geriDonenler.push({kod, miktar});
     });
   });
@@ -11948,6 +11970,22 @@ function stokUyariYukle(){ STOK_UYARI_DURUM = MPStore.get(STOK_UYARI_KEY, {}, {v
 function stokSeviye(sube, kod){
   const s = STOCK[kod];
   if(!s) return "yok";
+  // ── MERKEZ (ana depo) ──
+  if(sube === "_MERKEZ_"){
+    // Merkezde kalemin seviyesi doğrudan STOCK.mevcut'a bakılır.
+    // "Ölü kart" elemesi: hiç hareket görmemiş (mevcut 0 + geçmiş yok) kartlar
+    // uyarı üretmez — yoksa hiç mal girmemiş yüzlerce kart panele dolar.
+    const mevcutM = +(s.mevcut||0);
+    const kritikM = s.kritik || 0;
+    if(mevcutM <= 0){
+      const hicHareket = !STOK_HAREKET.some(h=>h.kod===kod && h.sube==="_MERKEZ_");
+      if(hicHareket && kritikM<=0) return "yok";   // hiç kullanılmamış kart → sayma
+      return "tukendi";                             // kullanılmış ama bitmiş / eşik tanımlı
+    }
+    if(kritikM > 0 && mevcutM <= kritikM) return "kritik";
+    return "normal";
+  }
+  // ── ŞUBE ──
   // şubede bu kalemin kaydı hiç yoksa (undefined) → henüz sevk edilmemiş, uyarı verme
   const kayit = BAYI_STOK[sube] ? BAYI_STOK[sube][kod] : undefined;
   if(kayit === undefined) return "yok";
@@ -11959,6 +11997,7 @@ function stokSeviye(sube, kod){
 }
 /* Şubedeki kritik/tükenen stoklar */
 function subeKritikStoklar(sube){
+  const merkezMi = (sube === "_MERKEZ_");
   const out = [];
   Object.keys(STOCK).forEach(kod=>{
     const s = STOCK[kod];
@@ -11967,7 +12006,7 @@ function subeKritikStoklar(sube){
     if(sev === "normal" || sev === "yok") return;
     out.push({
       kod, ad: s.ad || kod,
-      mevcut: bayiStok(sube, kod),
+      mevcut: merkezMi ? +(s.mevcut||0) : bayiStok(sube, kod),
       kritik: s.kritik || 0,
       birim: s.birim || "",
       seviye: sev
@@ -12005,7 +12044,9 @@ function stokSeviyeKontrol(sube, kodlar){
 /* Kritik stok bildirimi — şube müdürü + genel müdür + depo */
 function kritikStokBildirimi(sube, kod, s, seviye){
   if(typeof bildirimEkle !== "function") return;
-  const mevcut = bayiStok(sube, kod);
+  const merkezMi = (sube === "_MERKEZ_");
+  const subeAd = merkezMi ? "Ana Depo (Merkez)" : sube;
+  const mevcut = merkezMi ? +(s.mevcut||0) : bayiStok(sube, kod);
   const birim = s.birim || "";
   const tukendi = (seviye === "tukendi");
   const baslik = tukendi ? "🔴 STOK TÜKENDİ" : "🟡 Kritik Stok Seviyesi";
@@ -12013,14 +12054,16 @@ function kritikStokBildirimi(sube, kod, s, seviye){
       ? "stok bitti (" + mevcut + " " + birim + ")"
       : "kritik seviyede: " + mevcut + " " + birim + " (kritik eşik: " + (s.kritik||0) + " " + birim + ")");
 
-  // o şubenin müdürüne
-  bildirimEkle({ tip:"stok", baslik: baslik, mesaj: mesaj,
-    kanal:"Stok", hedefSube: sube, link:"stok" });
+  // merkez uyarısında şube müdürüne gönderme (merkez onların değil)
+  if(!merkezMi){
+    bildirimEkle({ tip:"stok", baslik: baslik, mesaj: mesaj,
+      kanal:"Stok", hedefSube: sube, link:"stok" });
+  }
   // depo/lojistik (merkez)
-  bildirimEkle({ tip:"stok", baslik: baslik + " · " + sube, mesaj: mesaj,
+  bildirimEkle({ tip:"stok", baslik: baslik + " · " + subeAd, mesaj: mesaj,
     kanal:"Stok", hedefRol:"depo", link:"stok" });
   // genel müdür
-  bildirimEkle({ tip:"stok", baslik: baslik + " · " + sube, mesaj: mesaj,
+  bildirimEkle({ tip:"stok", baslik: baslik + " · " + subeAd, mesaj: mesaj,
     kanal:"Stok", hedefRol:"genel", link:"stok" });
 }
 
@@ -12696,27 +12739,55 @@ function viewBildirim(main){
   main.innerHTML = html;
 }
 /* Bir siparişin brüt ve net (iskontolu) tutarı */
+/* Para yuvarlama — 2 kuruş. Fiyat taban birimde saklandığı için
+   (ör. 2000₺/kutu → 133.3333₺/adet), miktar×fiyat çarpımı binde birlik
+   sapma üretir (750×133.3333=99999.975). Satır tutarını burada yuvarlayarak
+   kullanıcının gördüğü/ödediği tutarı tam tutuyoruz; saklama biçimi değişmez. */
+function kr2(n){ return Math.round((+n + Number.EPSILON) * 100) / 100; }
+/* Bir kalemin KDV dahil satır tutarı — yuvarlanmış.
+   Fiyat taban birimde saklanır (2000₺/kutu → 133.3333₺/adet). Ham
+   taban×adet çarpımı 99999.975 gibi sapar. Bunun yerine ambalaj birimi
+   fiyatını (133.3333×15=2000) yuvarlayıp o birimdeki miktarla çarparız →
+   50 kutu × 2000 = 100000 tam çıkar. Karışık/kısmi miktarlar için taban
+   çarpımına düşülür. */
+function kalemSatirDahil(kod, tabanMiktar, girisBirim, girisMiktar){
+  const s = STOCK[kod]; if(!s) return 0;
+  const fTaban = bayiSatisFiyat(kod)||0;
+  const u = uomAl(s);
+  // ambalaj birimi + o birimde tam sayı miktar verilmişse: birim fiyatı yuvarla
+  if(girisBirim && girisBirim!==u.tabanBirim && girisMiktar!=null){
+    const sv = u.seviyeler.find(x=>x.ad===girisBirim);
+    if(sv){
+      const carpan = uomTabanCarpani(u, u.seviyeler.indexOf(sv));
+      // taban miktar bu ambalajın tam katıysa → temiz hesap
+      if(Math.abs(tabanMiktar - girisMiktar*carpan) < 1e-6){
+        return kr2( kr2(fTaban*carpan) * girisMiktar );
+      }
+    }
+  }
+  return kr2(tabanMiktar * fTaban);
+}
 function siparisTutar(sp){
   const gecerli = sp.kalemler.filter(k=>!k.silindi && k.miktar>0);
-  const brut = gecerli.reduce((a,k)=>a+k.miktar*bayiSatisFiyat(k.kod),0);  // KDV dahil
+  const brut = gecerli.reduce((a,k)=>a+kalemSatirDahil(k.kod, k.miktar, k.girisBirim, k.girisMiktar),0);  // KDV dahil, ambalaj-birimi bazında yuvarlı
   const isk = bayiIskonto(sp.sube);
-  const indirim = brut*isk/100;
-  const net = brut-indirim;
+  const indirim = kr2(brut*isk/100);
+  const net = kr2(brut-indirim);
   // KDV oran grupları — bayi fiyatı KDV dahil kabul edilir
   const oranGrup = {};
   gecerli.forEach(k=>{
     const s = STOCK[k.kod]; if(!s) return;
-    const satirDahil = k.miktar*bayiSatisFiyat(k.kod);
+    const satirDahil = kalemSatirDahil(k.kod, k.miktar, k.girisBirim, k.girisMiktar);
     const oran = (s.satisKdv!=null ? s.satisKdv : (s.kdv!=null ? s.kdv : 0));
     if(!oranGrup[oran]) oranGrup[oran]={brutDahil:0, matrah:0, kdv:0};
     oranGrup[oran].brutDahil += satirDahil;
   });
   Object.keys(oranGrup).forEach(oran=>{
-    const g=oranGrup[oran], gn=g.brutDahil*(1-isk/100), o=parseFloat(oran)||0;
-    g.matrah=gn/(1+o/100); g.kdv=gn-g.matrah;
+    const g=oranGrup[oran], gn=kr2(g.brutDahil*(1-isk/100)), o=parseFloat(oran)||0;
+    g.matrah=kr2(gn/(1+o/100)); g.kdv=kr2(gn-g.matrah);
   });
-  const toplamMatrah = Object.values(oranGrup).reduce((a,g)=>a+g.matrah,0);
-  const toplamKdv = Object.values(oranGrup).reduce((a,g)=>a+g.kdv,0);
+  const toplamMatrah = kr2(Object.values(oranGrup).reduce((a,g)=>a+g.matrah,0));
+  const toplamKdv = kr2(Object.values(oranGrup).reduce((a,g)=>a+g.kdv,0));
   return { brut, isk, indirim, net, oranGrup, toplamMatrah, toplamKdv };
 }
 /* Bir siparişin Excel tablosu (KDV detaylı) */
@@ -12726,7 +12797,7 @@ function _siparisExcelTablo(sp){
   let satirlar="";
   sp.kalemler.filter(k=>!k.silindi && k.miktar>0).forEach(k=>{
     const s=STOCK[k.kod]; if(!s) return;
-    const f=bayiSatisFiyat(k.kod), tutar=k.miktar*f, oran=(s.satisKdv!=null?s.satisKdv:(s.kdv!=null?s.kdv:0));
+    const f=bayiSatisFiyat(k.kod), tutar=kr2(k.miktar*f), oran=(s.satisKdv!=null?s.satisKdv:(s.kdv!=null?s.kdv:0));
     const u=uomAl(s);
     let mikG;
     if(k.girisBirim && k.girisMiktar!=null){
@@ -12737,7 +12808,7 @@ function _siparisExcelTablo(sp){
   const oranlar=Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
   let kdvSatir="";
   oranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005)return;
-    kdvSatir+=`<tr><td colspan="5" style="text-align:right">KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</td><td class="tut">${g.kdv.toFixed(2)}</td></tr>`;
+    kdvSatir+=`<tr><td colspan="5" style="text-align:right">KDV %${oran} (temel fiyat ${tl(g.matrah)} ₺)</td><td class="tut">${g.kdv.toFixed(2)}</td></tr>`;
   });
   return `<table>
     <tr><td class="baslik" colspan="6">Sipariş #${sp.id} · ${E(sp.sube)}</td></tr>
@@ -12746,7 +12817,7 @@ function _siparisExcelTablo(sp){
     ${satirlar}
     <tr><td colspan="5" style="text-align:right"><b>Toplam (KDV dahil)</b></td><td class="tut">${t.brut.toFixed(2)}</td></tr>
     ${t.isk>0?`<tr><td colspan="5" style="text-align:right">İskonto (%${t.isk})</td><td class="tut">− ${t.indirim.toFixed(2)}</td></tr>`:''}
-    <tr><td colspan="5" style="text-align:right">Ara toplam (matrah)</td><td class="tut">${t.toplamMatrah.toFixed(2)}</td></tr>
+    <tr><td colspan="5" style="text-align:right">Ara toplam (temel fiyat)</td><td class="tut">${t.toplamMatrah.toFixed(2)}</td></tr>
     ${kdvSatir}
     <tr><td colspan="5" style="text-align:right">Toplam KDV</td><td class="tut">${t.toplamKdv.toFixed(2)}</td></tr>
     <tr><td colspan="5" style="text-align:right"><b>Net Ödenecek</b></td><td class="tut">${t.net.toFixed(2)}</td></tr>
@@ -12763,7 +12834,7 @@ function siparisExcelToplu(){
   const E=_xlsHucreEsc;
   // özet tablo
   let ozet=`<table><tr><td class="baslik" colspan="6">MİNİPAN · Onay Bekleyen Siparişler</td></tr>
-    <tr><th>Sipariş</th><th>Şube</th><th>Tarih</th><th>Matrah ₺</th><th>KDV ₺</th><th>Net ₺</th></tr>`;
+    <tr><th>Sipariş</th><th>Şube</th><th>Tarih</th><th>Temel fiyat ₺</th><th>KDV ₺</th><th>Net ₺</th></tr>`;
   let gToplamNet=0, gToplamKdv=0, gToplamMatrah=0;
   bekleyen.forEach(sp=>{
     const t=siparisTutar(sp);
@@ -12780,7 +12851,7 @@ function siparisExcelToplu(){
 const B2B_KEY = "minipan_b2b_v1";
 function b2bKaydet(){
   return MPStore.set(B2B_KEY, {
-    BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, SATIS_FATURALARI, BAYI_SIPARISLER, TEDARIKCILER, TEDARIKCI_KAYIT, BILDIRIMLER, _bildirimId, STOK_HAREKET,
+    BAYI_STOK, BAYI_FIYAT, BAYI_ISKONTO, IRSALIYELER, SATIS_FATURALARI, BAYI_SIPARISLER, TEDARIKCILER, TEDARIKCI_KAYIT, BILDIRIMLER, _bildirimId, STOK_HAREKET, GUNLUK_TUKETIM,
     IADE_FATURALARI, _iadeFaturaId,
     SUBE_ALIS_FATURALARI, _subeAlisId,
     _irsaliyeId, _siparisId, _stokNoSayac, _satisFaturaId,
@@ -12809,6 +12880,7 @@ function b2bYukle(){
   tedarikciKayitGoc();
   if(v.BILDIRIMLER) BILDIRIMLER = v.BILDIRIMLER;
   if(v.STOK_HAREKET) STOK_HAREKET = v.STOK_HAREKET;
+  if(v.GUNLUK_TUKETIM) GUNLUK_TUKETIM = v.GUNLUK_TUKETIM;
   if(v._bildirimId) _bildirimId = v._bildirimId;
   if(v.BAYI_SIPARISLER) BAYI_SIPARISLER = v.BAYI_SIPARISLER;
   if(v._irsaliyeId) _irsaliyeId = v._irsaliyeId;
@@ -12865,6 +12937,74 @@ let CONSUMED = {};
    {sube, kod, tip:"tuketim"|"alinan", miktar, ts} · sube="_MERKEZ_" merkez için */
 let STOK_HAREKET = [];
 /* ══════════════════════════════════════════════════════════════
+   GÜNLÜK TÜKETİM TAMPONU
+   Satışlar stoğu ANLIK düşürür (stok her an doğru) ama her satış
+   için ayrı hareket YAZMAZ — yoksa günde binlerce kayıt birikir.
+   Tüketim burada gün + şube + ürün bazında toplanır; gün sonu
+   (kasa kapanışı) her ürün için TEK satır STOK_HAREKET'e yazar.
+   Yapı: GUNLUK_TUKETIM[sube][isletmeGunu]["kod"] = toplamMiktar (+)
+   ══════════════════════════════════════════════════════════════ */
+let GUNLUK_TUKETIM = {};
+/* Tampona tüketim ekle (miktar pozitif gram/adet) */
+function gunlukTuketimEkle(sube, kod, miktar){
+  const g = (typeof isletmeGunu==="function") ? isletmeGunu() : new Date().toISOString().slice(0,10);
+  const s = sube || "_MERKEZ_";
+  if(!GUNLUK_TUKETIM[s]) GUNLUK_TUKETIM[s]={};
+  if(!GUNLUK_TUKETIM[s][g]) GUNLUK_TUKETIM[s][g]={};
+  GUNLUK_TUKETIM[s][g][kod] = (GUNLUK_TUKETIM[s][g][kod]||0) + miktar;
+}
+/* Gün sonu: bir şubenin bir işletme gününün tüketimini ürün başına
+   TEK STOK_HAREKET satırı olarak yazar, sonra o günü tampondan siler. */
+function gunlukTuketimFlush(sube, gun){
+  const s = sube || "_MERKEZ_";
+  const gunler = gun ? [gun] : Object.keys((GUNLUK_TUKETIM[s]||{}));
+  let yazilan = 0;
+  gunler.forEach(g=>{
+    const kayit = GUNLUK_TUKETIM[s] && GUNLUK_TUKETIM[s][g];
+    if(!kayit) return;
+    // gün sonu zaman damgası (o günün 23:59'u gibi) — sıralama tutarlı olsun
+    const ts = new Date(g+"T23:59:00").getTime() || Date.now();
+    Object.keys(kayit).forEach(kod=>{
+      const mik = kayit[kod];
+      if(!mik) return;
+      // net tüketim: pozitif = çıkış (satış), negatif = net iade fazlası (giriş)
+      stokHareketYaz({ sube:s, kod, tip:(mik>=0?"tuketim":"iade"), miktar:-mik, ts,
+        belge:"GÜN-"+g, aciklama:"Günlük net satış tüketimi ("+g+")" });
+      yazilan++;
+    });
+    delete GUNLUK_TUKETIM[s][g];
+  });
+  if(GUNLUK_TUKETIM[s] && Object.keys(GUNLUK_TUKETIM[s]).length===0) delete GUNLUK_TUKETIM[s];
+  return yazilan;
+}
+/* Arşivleme: 60 günden eski "tuketim" hareketlerini AY + şube + ürün
+   bazında tek satıra toplar. Detay son ~2 ay tutulur, eskiler aylık
+   özete iner — böylece ürün başına günlük kayıt birikimi durur. */
+function tuketimArsivle(gunEsik){
+  const esik = gunEsik || 30;
+  const sinirTs = Date.now() - esik*24*60*60*1000;
+  const ozet = {};      // key: sube||kod||YYYY-MM → {miktar, ts}
+  const kalan = [];
+  STOK_HAREKET.forEach(h=>{
+    if(h.tip==="tuketim" && h.ts < sinirTs && (h.belge||"").indexOf("AYÖZET")!==0){
+      const ay = new Date(h.ts).toISOString().slice(0,7);   // YYYY-MM
+      const key = h.sube+"||"+h.kod+"||"+ay;
+      if(!ozet[key]) ozet[key] = {sube:h.sube, kod:h.kod, ay, miktar:0, ts:new Date(ay+"-15T23:59:00").getTime()};
+      ozet[key].miktar += (h.miktar||0);   // negatifler toplanır
+    } else {
+      kalan.push(h);
+    }
+  });
+  const ozetSatirlari = Object.values(ozet).map(o=>({
+    id: (STOK_HAREKET._id = (STOK_HAREKET._id||0)+1),
+    ts:o.ts, sube:o.sube, kod:o.kod, tip:"tuketim",
+    once:null, sonra:null, miktar:+(+o.miktar).toFixed(3),
+    belge:"AYÖZET-"+o.ay, aciklama:o.ay+" aylık tüketim özeti", kullanici:"", rol:""
+  }));
+  STOK_HAREKET = [...ozetSatirlari, ...kalan].sort((a,b)=>b.ts-a.ts);
+  return ozetSatirlari.length;
+}
+/* ══════════════════════════════════════════════════════════════
    MERKEZİ STOK HAREKET KAYDI
    Stoğu değiştiren HER işlem buradan geçer. Eskiden yalnızca
    3 nokta (iade, tüketim, aktarım) kayıt tutuyordu; sayım,
@@ -12916,6 +13056,8 @@ function merkezStokDegistir(kod, yeniDeger, meta){
   const sonra = +(+yeniDeger).toFixed(3);
   s.mevcut = sonra;
   stokHareketYaz({...(meta||{}), sube:"_MERKEZ_", kod, once, sonra, miktar:+(sonra-once).toFixed(3)});
+  // ── merkez kritik seviye kontrolü (tükendi/kritik bildirimi) ──
+  try{ if(typeof stokSeviyeKontrol==="function") stokSeviyeKontrol("_MERKEZ_", [kod]); }catch(e){}
 }
 /* Şube deposunu kayıt tutarak değiştirir. */
 function subeStokDegistir(sube, kod, yeniDeger, meta){
@@ -14968,9 +15110,9 @@ function cartHtml(){
         ${state.odenen>0 ? `
         <div class="cart-odenen">
           <div class="co-satir"><span>Toplam</span><span>${total} ₺</span></div>
-          <div class="co-satir odendi"><span>✓ Ödenen</span><span>−${state.odenen.toFixed(2)} ₺</span></div>
+          <div class="co-satir odendi"><span>✓ Ödenen</span><span>−${tl(state.odenen)} ₺</span></div>
         </div>
-        <div class="cart-total"><span class="cf-lbl">Kalan</span><span class="cf-amt">${(total-state.odenen).toFixed(2)} ₺</span></div>
+        <div class="cart-total"><span class="cf-lbl">Kalan</span><span class="cf-amt">${tl((total-state.odenen))} ₺</span></div>
         ` : `
         <div class="cart-total"><span class="cf-lbl">Toplam</span><span class="cf-amt">${total} ₺</span></div>
         `}
@@ -15170,7 +15312,7 @@ function renderBol(){
         (!odendi && odenmemisSayisi()>1 ? '<button class="bol-tumu'+(tekKisiAktif?' on':'')+'" onclick="bolTumunuAl('+ki+')">'+(tekKisiAktif?'✓ tümü':'tümünü al')+'</button>':'')+
       '</div>'+
       '<div class="bol-pay-sag">'+
-        '<span class="bol-pay-tutar">'+paylar[ki].toFixed(2)+' ₺</span>'+
+        '<span class="bol-pay-tutar">'+tl(paylar[ki])+' ₺</span>'+
         (odendi?'<span class="bol-pay-durum">ödendi'+yontemTxt+'</span>'
                :'<button class="bol-pay-al" onclick="bolPayAl('+ki+','+paylar[ki].toFixed(2)+')">Al</button>')+
       '</div></div>';
@@ -15212,7 +15354,7 @@ function renderOdemeYontem(){
 
   let html = '<div class="opt-head"><span class="opt-emoji">'+(m?'🎁':'👤')+'</span>'+
     '<div><div class="opt-name">'+(BOL.tekOdeme?'Ödeme al':BOL.kisiler[ki]+' · ödeme')+'</div>'+
-    '<div class="opt-base">'+(BOL.tekOdeme?'Adisyon toplamı':'Pay')+': '+ob.tutar.toFixed(2)+' ₺</div></div>'+
+    '<div class="opt-base">'+(BOL.tekOdeme?'Adisyon toplamı':'Pay')+': '+tl(ob.tutar)+' ₺</div></div>'+
     '<button class="opt-x" onclick="odemeKapat()">✕</button></div>'+
     '<div class="opt-body">';
 
@@ -15269,7 +15411,7 @@ function renderOdemeYontem(){
             '<button class="od-bz-btn" onclick="odMagAyarla(10)">+10</button>'+
             '<button class="od-bz-max" onclick="odMagMax()">Max</button>'+
           '</div>'+
-          (indirim>0?'<div class="od-bz-indirim">−'+indirim.toFixed(2)+' ₺ '+SADAKAT.ad+' indirimi</div>':'')+
+          (indirim>0?'<div class="od-bz-indirim">−'+tl(indirim)+' ₺ '+SADAKAT.ad+' indirimi</div>':'')+
         '</div>';
       }
     }
@@ -15278,7 +15420,7 @@ function renderOdemeYontem(){
   }
 
   // TAHSİLAT
-  html += '<div class="od-tahsil-baslik">Tahsil edilecek: <strong>'+tahsil.toFixed(2)+' ₺</strong>'+
+  html += '<div class="od-tahsil-baslik">Tahsil edilecek: <strong>'+tl(tahsil)+' ₺</strong>'+
           (indirim>0?' <s>'+ob.tutar.toFixed(2)+'</s>':'')+'</div>';
   const yontemler = [
     {k:"nakit", ad:"Nakit", ic:"💵"},{k:"kredi", ad:"Kredi Kartı", ic:"💳"},
@@ -15397,14 +15539,14 @@ function odemeTamamla(yontem, yontemAd){
   odemeKapat();
   // TEK ÖDEME (bölmesiz) → adisyonu direkt kapat
   if(BOL.tekOdeme){
-    note(BOL.kisiler[ki]+" · "+tahsil.toFixed(2)+" ₺ · "+yontemAd+sadakatNot);
+    note(BOL.kisiler[ki]+" · "+tl(tahsil)+" ₺ · "+yontemAd+sadakatNot);
     tekOdemeTamamla();
     return;
   }
   // BÖLME → payı işaretle, adisyon açık kalır
   state.odenen = (state.odenen||0) + ob.tutar;
   BOL.tekKisiKalan = undefined;   // override sıfırla (kalan normal moda döner)
-  note(BOL.kisiler[ki]+" ödedi · "+tahsil.toFixed(2)+" ₺ · "+yontemAd+sadakatNot);
+  note(BOL.kisiler[ki]+" ödedi · "+tl(tahsil)+" ₺ · "+yontemAd+sadakatNot);
   renderBol();
   if(document.querySelector(".cart")) refreshCart();
 }
@@ -15460,16 +15602,17 @@ function consumeRecipe(cart, sube){
     if(item.ekstraRecete) item.ekstraRecete.forEach(r=>tumKalemler.push(r));
     tumKalemler.forEach(r=>{
       const toplam = r.g * item.q;              // gram × satılan adet
-      // ŞUBE STOĞU — her bayi kendi deposundan düşer (eksiye düşebilir, satış engellenmez)
+      // ŞUBE STOĞU — anlık düşer (stok her an doğru) ama hareket YAZILMAZ;
+      // tüketim tampona toplanır, gün sonu tek satır yazılır.
       if(sube){
         if(!BAYI_STOK[sube]) BAYI_STOK[sube]={};
         const mevcut = BAYI_STOK[sube][r.ing]||0;
-        // subeStokDegistir → hem kritik seviye kontrolü hem hareket kaydı
-        subeStokDegistir(sube, r.ing, Math.round((mevcut - toplam)*100)/100,
-          {tip:"tuketim", aciklama:"Satış tüketimi · "+(item.ad||"")});
+        const yeni = Math.round((mevcut - toplam)*100)/100;
+        bayiStokYaz(sube, r.ing, yeni);          // stok düşer + kritik kontrol (hareket yazmaz)
+        gunlukTuketimEkle(sube, r.ing, toplam);  // gün sonu için tampona ekle
       } else {
-        stokHareketYaz({sube:"_MERKEZ_", kod:r.ing, tip:"tuketim", miktar:-toplam,
-          aciklama:"Satış tüketimi · "+(item.ad||"")});
+        // merkez tüketimi (nadiren) — o da tampona
+        gunlukTuketimEkle("_MERKEZ_", r.ing, toplam);
       }
       // MERKEZ STOCK — referans/denetim için düşmeye devam eder
       if(STOCK[r.ing]){
@@ -19061,12 +19204,12 @@ function viewRecete(main){
             <div class="fat-satir-alt mr-meta">
               <span class="mr-rz">🧾 ${mr.kalemler.length} hammadde</span>
               <span class="mr-rz">📦 ${mr.cikanMiktar||1} ${mr.cikanBirim||'adet'}</span>
-              <span class="mr-rz">💰 ${h.birimMaliyet.toFixed(2)} ₺/birim</span>
+              <span class="mr-rz">💰 ${tl(h.birimMaliyet)} ₺/birim</span>
               ${h.birimKcal>0?`<span class="mr-rz">🔥 ${Math.round(h.birimKcal)} kcal</span>`:''}
               ${(()=>{const n=receteKullanimSayisi(mr.id); return n>0?`<span class="mr-rz mr-kullanim">🔗 ${n} seçenekte</span>`:'';})()}
             </div>
           </div>
-          <div class="fat-satir-tutar">${h.satisFiyat>0?h.satisFiyat.toFixed(2)+' ₺':'—'}<div style="font-size:11px;font-weight:600;color:var(--ink-3)">${h.karOran>0?'%'+h.karOran.toFixed(0)+' kâr':''}</div></div>
+          <div class="fat-satir-tutar">${h.satisFiyat>0?tl(h.satisFiyat)+' ₺':'—'}<div style="font-size:11px;font-weight:600;color:var(--ink-3)">${h.karOran>0?'%'+h.karOran.toFixed(0)+' kâr':''}</div></div>
           <div class="fat-satir-aksiyon">
             <button class="bayi-mini" onclick="maliyetReceteExcelTek(${mr.id})" title="Excel indir">📊</button>
             <button class="bayi-mini" onclick="maliyetReceteDuzenle(${mr.id})">✏️</button>
@@ -19145,7 +19288,7 @@ function maliyetReceteFormHtml(){
         <span class="mrk-mik"><input class="mr-inp" type="number" inputmode="decimal" value="${esc(k.miktar)}" oninput="maliyetKalemAlan(${i},'miktar',this.value)"> <small>${k.birim}</small></span>
         <span class="mrk-fiyat"><input class="mr-inp" type="number" inputmode="decimal" value="${esc(k.alisFiyat)}" oninput="maliyetKalemAlan(${i},'alisFiyat',this.value)"> ₺/${k.birim}</span>
         <span class="mrk-kcal">${birimKcal>0?Math.round(kalemKcal)+' kcal':'—'}</span>
-        <span class="mrk-tut">${tutar.toFixed(2)} ₺</span>
+        <span class="mrk-tut">${tl(tutar)} ₺</span>
         <button class="mrk-sil" onclick="maliyetKalemSil(${i})">✕</button>
       </div>`;
     });
@@ -19180,9 +19323,9 @@ function maliyetHesapAlanHtml(t,h){
   // Hesaplanan değerlerin hepsi id'li span. Böylece yazarken
   // input'lara DOKUNMADAN sadece bu span'lar güncellenebiliyor.
   let html=`<div class="mr-hesap">
-    <div class="mr-hesap-satir"><span>Toplam hammadde maliyeti</span><strong id="mrToplamMaliyet">${h.toplamMaliyet.toFixed(2)} ₺</strong></div>
+    <div class="mr-hesap-satir"><span>Toplam hammadde maliyeti</span><strong id="mrToplamMaliyet">${tl(h.toplamMaliyet)} ₺</strong></div>
     <div class="mr-hesap-satir" id="mrToplamKcalSatir" style="${h.toplamKcal>0?'':'display:none'}"><span>Toplam kalori</span><strong id="mrToplamKcal">🔥 ${Math.round(h.toplamKcal)} kcal</strong></div>
-    <div class="mr-hesap-satir mr-birim"><span id="mrBirimEtiket">1 ${t.cikanBirim} maliyeti <small>(${t.cikanMiktar||1} ${t.cikanBirim} için)</small></span><strong id="mrBirimMaliyet">${h.birimMaliyet.toFixed(2)} ₺</strong></div>
+    <div class="mr-hesap-satir mr-birim"><span id="mrBirimEtiket">1 ${t.cikanBirim} maliyeti <small>(${t.cikanMiktar||1} ${t.cikanBirim} için)</small></span><strong id="mrBirimMaliyet">${tl(h.birimMaliyet)} ₺</strong></div>
     <div class="mr-hesap-satir mr-birim-kcal" id="mrBirimKcalSatir" style="${h.birimKcal>0?'':'display:none'}"><span>1 ${t.cikanBirim} kalorisi</span><strong id="mrBirimKcal">🔥 ${Math.round(h.birimKcal)} kcal</strong></div>
   </div>`;
   // KDV
@@ -19191,7 +19334,7 @@ function maliyetHesapAlanHtml(t,h){
       <label>KDV oranı (%)</label>
       <input type="number" class="fat-input" inputmode="decimal" value="${esc(t.kdv)}" oninput="maliyetAlan('kdv',this.value)">
     </div>
-    <div class="mr-kdv-tutar"><span>KDV tutarı</span><strong id="mrKdvTutar">${h.kdvTutar.toFixed(2)} ₺</strong></div>
+    <div class="mr-kdv-tutar"><span>KDV tutarı</span><strong id="mrKdvTutar">${tl(h.kdvTutar)} ₺</strong></div>
   </div>`;
   // kârlılık — çift yönlü
   html+=`<div class="mr-kar-baslik">Satış Kârlılığı</div>
@@ -19205,9 +19348,9 @@ function maliyetHesapAlanHtml(t,h){
         <input type="number" class="fat-input" inputmode="decimal" value="${esc(t.karOran)}" oninput="maliyetAlan('karOran',this.value)"></div>
     </div>
     <div class="mr-sonuc">
-      <div class="mr-sonuc-satir"><span>Kâr tutarı (birim)</span><strong id="mrKarMiktar">${h.karMiktar.toFixed(2)} ₺</strong></div>
-      <div class="mr-sonuc-satir"><span>Satış matrahı (KDV hariç)</span><strong id="mrSatisMatrah">${h.satisMatrah.toFixed(2)} ₺</strong></div>
-      <div class="mr-sonuc-satir mr-sonuc-fiyat"><span>Satış fiyatı (KDV dahil)</span><strong id="mrSatisFiyat">${h.satisFiyat.toFixed(2)} ₺</strong></div>
+      <div class="mr-sonuc-satir"><span>Kâr tutarı (birim)</span><strong id="mrKarMiktar">${tl(h.karMiktar)} ₺</strong></div>
+      <div class="mr-sonuc-satir"><span>Satış matrahı (KDV hariç)</span><strong id="mrSatisMatrah">${tl(h.satisMatrah)} ₺</strong></div>
+      <div class="mr-sonuc-satir mr-sonuc-fiyat"><span>Satış fiyatı (KDV dahil)</span><strong id="mrSatisFiyat">${tl(h.satisFiyat)} ₺</strong></div>
     </div>`;
   } else {
     html+=`<div class="mr-kar-giris">
@@ -19215,8 +19358,8 @@ function maliyetHesapAlanHtml(t,h){
         <input type="number" class="fat-input" inputmode="decimal" value="${esc(t.satisFiyat)}" oninput="maliyetAlan('satisFiyat',this.value)"></div>
     </div>
     <div class="mr-sonuc">
-      <div class="mr-sonuc-satir"><span>Satış matrahı (KDV hariç)</span><strong id="mrSatisMatrah">${h.satisMatrah.toFixed(2)} ₺</strong></div>
-      <div class="mr-sonuc-satir"><span>Kâr tutarı (birim)</span><strong id="mrKarMiktar">${h.karMiktar.toFixed(2)} ₺</strong></div>
+      <div class="mr-sonuc-satir"><span>Satış matrahı (KDV hariç)</span><strong id="mrSatisMatrah">${tl(h.satisMatrah)} ₺</strong></div>
+      <div class="mr-sonuc-satir"><span>Kâr tutarı (birim)</span><strong id="mrKarMiktar">${tl(h.karMiktar)} ₺</strong></div>
       <div class="mr-sonuc-satir mr-sonuc-fiyat"><span>Kâr oranı</span><strong id="mrKarOran">%${h.karOran.toFixed(1)}</strong></div>
     </div>`;
   }
@@ -19258,8 +19401,8 @@ function maliyetHesapGuncelle(aktifAlan){
   if(et) et.innerHTML="1 "+t.cikanBirim+" maliyeti <small>("+(t.cikanMiktar||1)+" "+t.cikanBirim+" için)</small>";
 
   // maliyet bloğu
-  yaz("mrToplamMaliyet", h.toplamMaliyet.toFixed(2)+" ₺");
-  yaz("mrBirimMaliyet",  h.birimMaliyet.toFixed(2)+" ₺");
+  yaz("mrToplamMaliyet", tl(h.toplamMaliyet)+" ₺");
+  yaz("mrBirimMaliyet",  tl(h.birimMaliyet)+" ₺");
   goster("mrToplamKcalSatir", h.toplamKcal>0);
   goster("mrBirimKcalSatir",  h.birimKcal>0);
   if(h.toplamKcal>0) yaz("mrToplamKcal","🔥 "+Math.round(h.toplamKcal)+" kcal");
@@ -19268,14 +19411,14 @@ function maliyetHesapGuncelle(aktifAlan){
   if(bkEl){ const sp=bkEl.querySelector("span"); if(sp) sp.textContent="1 "+t.cikanBirim+" kalorisi"; }
 
   // KDV + kârlılık sonuçları
-  yaz("mrKdvTutar",    h.kdvTutar.toFixed(2)+" ₺");
-  yaz("mrKarMiktar",   h.karMiktar.toFixed(2)+" ₺");
-  yaz("mrSatisMatrah", h.satisMatrah.toFixed(2)+" ₺");
+  yaz("mrKdvTutar",    tl(h.kdvTutar)+" ₺");
+  yaz("mrKarMiktar",   tl(h.karMiktar)+" ₺");
+  yaz("mrSatisMatrah", tl(h.satisMatrah)+" ₺");
 
   // Çift yönlü alanlar: KULLANICININ YAZDIĞI alanı asla geri yazma.
   // "oran" modunda satış fiyatı hesaplanır, "fiyat" modunda kâr oranı.
   if(t.karTipi==="oran"){
-    if(aktifAlan!=="satisFiyat") yaz("mrSatisFiyat", h.satisFiyat.toFixed(2)+" ₺");
+    if(aktifAlan!=="satisFiyat") yaz("mrSatisFiyat", tl(h.satisFiyat)+" ₺");
   } else {
     if(aktifAlan!=="karOran") yaz("mrKarOran", "%"+h.karOran.toFixed(1));
   }
@@ -19291,7 +19434,7 @@ function maliyetKalemTutarGuncelle(i){
   const kalemKcal=birimKcal*mik;
   const satir=document.querySelectorAll(".mr-kalem")[i];
   if(satir){
-    const tut=satir.querySelector(".mrk-tut"); if(tut) tut.textContent=tutar.toFixed(2)+" ₺";
+    const tut=satir.querySelector(".mrk-tut"); if(tut) tut.textContent=tl(tutar)+" ₺";
     const kc=satir.querySelector(".mrk-kcal"); if(kc) kc.textContent=birimKcal>0?Math.round(kalemKcal)+" kcal":"—";
   }
 }
@@ -19334,7 +19477,7 @@ function maliyetKalemModalCiz(){
         ${harfler.map(h=>`<button class="fk-harf${p.harf===h?' on':''}" onclick="maliyetKalemHarf('${h.replace(/'/g,"\\'")}')">${h}</button>`).join("")}
       </div>
       <div class="fk-urun-list">
-        ${urunler.map(([kod,st])=>`<button class="fk-urun-btn" onclick="maliyetKalemUrunEkle('${kod.replace(/'/g,"\\'")}')">${st.ad} <small>${st.birim||"adet"} · alış ${(bayiFiyat(kod)||0).toFixed(2)} ₺${st.kategori?' · '+st.kategori:''}</small></button>`).join("")}
+        ${urunler.map(([kod,st])=>`<button class="fk-urun-btn" onclick="maliyetKalemUrunEkle('${kod.replace(/'/g,"\\'")}')">${st.ad} <small>${st.birim||"adet"} · alış ${tl((bayiFiyat(kod)||0))} ₺${st.kategori?' · '+st.kategori:''}</small></button>`).join("")}
       </div>
     </div>
     <div class="skm-foot"><button class="skm-iptal" onclick="maliyetKalemModalKapat()">Kapat</button></div>
@@ -21381,7 +21524,7 @@ function sgSecEkleModalCiz(){
       </div>
       ${receteler.length?`<div class="ykm-etiket">🍳 Maliyet reçetelerinden (üretilen ürünler)</div>
         <div class="fk-urun-list" style="margin-bottom:14px">
-          ${receteler.map(mr=>{ const h=maliyetReceteHesap(mr); return `<button class="fk-urun-btn sg-kaynak-recete" onclick="sgSecEkleReceteSec(${mr.id})">${mr.ad} <small>1 porsiyon · maliyet ${h.birimMaliyet.toFixed(2)} ₺</small></button>`; }).join("")}
+          ${receteler.map(mr=>{ const h=maliyetReceteHesap(mr); return `<button class="fk-urun-btn sg-kaynak-recete" onclick="sgSecEkleReceteSec(${mr.id})">${mr.ad} <small>1 porsiyon · maliyet ${tl(h.birimMaliyet)} ₺</small></button>`; }).join("")}
         </div>`:''}
       <div class="ykm-etiket">📦 Stok kartlarından</div>
       <div class="fk-urun-list">
@@ -22362,7 +22505,7 @@ function renderUrunForm(){
             const _por=(s.recetePorsiyon>0?s.recetePorsiyon:1);
             const _br=_m.cikanBirim||'porsiyon';
             return `<span class="uf-sec-miktar" title="Bu seçenek seçilince stoktan düşecek porsiyon/adet">🍳<input id="ufPor-${gi}-${si}" class="uf-sec-miktar-input" inputmode="decimal" value="${_por}" oninput="ufSecPorsiyonGir(${gi},${si},this.value)" placeholder="1"><b>${_br}</b></span>
-              <span class="uf-sec-recete" title="${(_m.kalemler||[]).length} hammadde · her satışta stoktan düşer">💰 ${(_hh.birimMaliyet*_por).toFixed(2)} ₺</span>`;
+              <span class="uf-sec-recete" title="${(_m.kalemler||[]).length} hammadde · her satışta stoktan düşer">💰 ${tl((_hh.birimMaliyet*_por))} ₺</span>`;
           })():''}
           ${g.ucretsiz
             ? `<span class="uf-sec-ek ucretsiz">🆓 ücretsiz</span>`
@@ -22720,7 +22863,7 @@ function ufSecSeciciFiltre(gi, si, ilk){
       const h=maliyetReceteHesap(mr); sayac++;
       html+=`<div class="ufsec-sat" onclick="ufSecAdSec(${gi},${si},'recete::${mr.id}')">
         <span class="ufsec-sat-ad">${esc(mr.ad)}</span>
-        <span class="ufsec-sat-bilgi">${h.birimMaliyet.toFixed(2)} ₺/${esc(mr.cikanBirim||'adet')}</span>
+        <span class="ufsec-sat-bilgi">${tl(h.birimMaliyet)} ₺/${esc(mr.cikanBirim||'adet')}</span>
       </div>`;
     });
   }
@@ -22796,7 +22939,7 @@ function ufSecPorsiyonGir(gi, si, val){
   if(porInp){
     const roz = porInp.closest(".uf-sec-alt-satir");
     const mEl = roz ? roz.querySelector(".uf-sec-recete") : null;
-    if(mEl) mEl.innerHTML = "💰 " + (h.birimMaliyet*por).toFixed(2) + " ₺";
+    if(mEl) mEl.innerHTML = "💰 " + tl((h.birimMaliyet*por)) + " ₺";
   }
 }
 function ufSecAdSec(gi, si, val){
@@ -24159,11 +24302,11 @@ function subeAlisDetayAc(id){
       <td class="sad-sira">${i+1}</td>
       <td class="sad-ad"><strong>${st.ad||k.kod}</strong>${st.no?`<div class="sad-kod">${st.no}</div>`:''}</td>
       <td class="sad-mik">${k.miktar} ${k.girisBirim||''}${tabanNot}</td>
-      <td class="sad-sag">${(+k.birimFiyat||0).toFixed(2)} ₺<div class="sad-kucuk">${k.kdvDahil?'KDV dahil':'KDV hariç'}</div></td>
+      <td class="sad-sag">${tl((+k.birimFiyat||0))} ₺<div class="sad-kucuk">${k.kdvDahil?'KDV dahil':'KDV hariç'}</div></td>
       <td class="sad-sag">${(+k.iskonto>0)?('%'+k.iskonto):'—'}</td>
-      <td class="sad-sag">${h.matrah.toFixed(2)} ₺</td>
+      <td class="sad-sag">${tl(h.matrah)} ₺</td>
       <td class="sad-sag">%${k.kdv||0}</td>
-      <td class="sad-sag"><strong>${h.satirTutar.toFixed(2)} ₺</strong></td>
+      <td class="sad-sag"><strong>${tl(h.satirTutar)} ₺</strong></td>
     </tr>`;
   }).join("");
   if(!satirlar) satirlar=`<tr><td colspan="8" class="sad-bos">Kalem yok.</td></tr>`;
@@ -24192,16 +24335,16 @@ function subeAlisDetayAc(id){
           <thead><tr>
             <th class="sad-sira">#</th><th class="sad-ad">Ürün</th><th class="sad-mik">Miktar</th>
             <th class="sad-sag">Birim Fiyat</th><th class="sad-sag">İsk.</th>
-            <th class="sad-sag">Matrah</th><th class="sad-sag">KDV</th><th class="sad-sag">Tutar</th>
+            <th class="sad-sag">Temel fiyat</th><th class="sad-sag">KDV</th><th class="sad-sag">Tutar</th>
           </tr></thead>
           <tbody>${satirlar}</tbody>
         </table>
       </div>
       <div class="sad-ozet">
-        <div class="sad-ozet-satir"><span>Ara toplam (matrah)</span><strong>${top.matrah.toFixed(2)} ₺</strong></div>
-        ${top.iskontoToplam>0?`<div class="sad-ozet-satir"><span>İskonto</span><strong>− ${top.iskontoToplam.toFixed(2)} ₺</strong></div>`:''}
-        <div class="sad-ozet-satir"><span>KDV tutarı</span><strong>${top.kdvToplam.toFixed(2)} ₺</strong></div>
-        <div class="sad-ozet-satir sad-ozet-net"><span>Fatura tutarı</span><strong>${top.faturaTutar.toFixed(2)} ₺</strong></div>
+        <div class="sad-ozet-satir"><span>Ara toplam (temel fiyat)</span><strong>${tl(top.matrah)} ₺</strong></div>
+        ${top.iskontoToplam>0?`<div class="sad-ozet-satir"><span>İskonto</span><strong>− ${tl(top.iskontoToplam)} ₺</strong></div>`:''}
+        <div class="sad-ozet-satir"><span>KDV tutarı</span><strong>${tl(top.kdvToplam)} ₺</strong></div>
+        <div class="sad-ozet-satir sad-ozet-net"><span>Fatura tutarı</span><strong>${tl(top.faturaTutar)} ₺</strong></div>
       </div>
       ${f.islendi?`<div class="sad-bilgi-not">ℹ️ Bu fatura ${f.sube} stoğuna işlenmiş durumda. Düzenlerseniz stok etkisi önce geri alınır.</div>`:''}
       <div class="ypm-btn-row sad-btn-row">
@@ -24279,7 +24422,7 @@ function subeAlisFormHtml(){
       <div class="fat-thead">
         <span class="ftc-ad">Ürün / Stok Kartı</span><span class="ftc-mik">Miktar</span>
         <span class="ftc-fiyat">Birim Fiyat</span><span class="ftc-kdv">KDV</span>
-        <span class="ftc-isk">İskonto</span><span class="ftc-matrah">Matrah</span>
+        <span class="ftc-isk">İskonto</span><span class="ftc-matrah">Temel fiyat</span>
         <span class="ftc-tutar">Tutar</span><span class="ftc-islem"></span>
       </div>`;
     t.kalemler.forEach((k,i)=>{
@@ -24287,11 +24430,11 @@ function subeAlisFormHtml(){
       html+=`<div class="fat-trow">
         <span class="ftc-ad"><span class="fat-gorsel">${st&&st.gorsel?`<img src="${st.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="fat-ad-metin"><strong>${st?st.ad:k.kod}</strong>${st&&st.no?`<small>${st.no}</small>`:''}</span></span>
         <span class="ftc-mik">${k.miktar} ${k.girisBirim||''}</span>
-        <span class="ftc-fiyat">${(+k.birimFiyat||0).toFixed(2)} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
+        <span class="ftc-fiyat">${tl((+k.birimFiyat||0))} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
         <span class="ftc-kdv">%${k.kdv||0}</span>
         <span class="ftc-isk">${(+k.iskonto>0)?`%${k.iskonto}`:'<span class="ftc-bos">—</span>'}</span>
-        <span class="ftc-matrah">${h.matrah.toFixed(2)} ₺</span>
-        <span class="ftc-tutar">${h.satirTutar.toFixed(2)} ₺</span>
+        <span class="ftc-matrah">${tl(h.matrah)} ₺</span>
+        <span class="ftc-tutar">${tl(h.satirTutar)} ₺</span>
         <span class="ftc-islem">
           <button class="fat-kalem-btn duzenle" onclick="faturaKalemDuzenle(${i})" title="Düzenle">✏️</button>
           <button class="fat-kalem-btn sil" onclick="subeAlisKalemSil(${i})" title="Çıkar">✕</button>
@@ -24302,10 +24445,10 @@ function subeAlisFormHtml(){
   html+=`<button class="fat-urun-ekle" onclick="faturaUrunEkleAc()">+ Ürün ekle</button></div>`;
 
   html+=`<div class="fat-ozet">
-    <div class="fat-ozet-satir"><span>Ara toplam (matrah)</span><strong>${top.matrah.toFixed(2)} ₺</strong></div>
-    ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${top.iskontoToplam.toFixed(2)} ₺</strong></div>`:''}
-    <div class="fat-ozet-satir"><span>KDV tutarı</span><strong>${top.kdvToplam.toFixed(2)} ₺</strong></div>
-    <div class="fat-ozet-satir fat-ozet-toplam"><span>Fatura tutarı</span><strong>${top.faturaTutar.toFixed(2)} ₺</strong></div>
+    <div class="fat-ozet-satir"><span>Ara toplam (temel fiyat)</span><strong>${tl(top.matrah)} ₺</strong></div>
+    ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${tl(top.iskontoToplam)} ₺</strong></div>`:''}
+    <div class="fat-ozet-satir"><span>KDV tutarı</span><strong>${tl(top.kdvToplam)} ₺</strong></div>
+    <div class="fat-ozet-satir fat-ozet-toplam"><span>Fatura tutarı</span><strong>${tl(top.faturaTutar)} ₺</strong></div>
   </div>`;
 
   html+=`<div class="fat-form-foot">
@@ -24534,7 +24677,7 @@ function iadeFaturaFormHtml(){
         <span class="ftc-fiyat">Birim Fiyat</span>
         <span class="ftc-kdv">KDV</span>
         <span class="ftc-isk">İskonto</span>
-        <span class="ftc-matrah">Matrah</span>
+        <span class="ftc-matrah">Temel fiyat</span>
         <span class="ftc-tutar">Tutar</span>
         <span class="ftc-islem"></span>
       </div>`;
@@ -24546,11 +24689,11 @@ function iadeFaturaFormHtml(){
       html+=`<div class="fat-trow">
         <span class="ftc-ad"><span class="fat-gorsel">${st&&st.gorsel?`<img src="${st.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="fat-ad-metin"><strong>${ad}</strong>${st&&st.no?`<small>${st.no}</small>`:''}</span></span>
         <span class="ftc-mik">${birimBilgi}</span>
-        <span class="ftc-fiyat">${(+k.birimFiyat||0).toFixed(2)} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
+        <span class="ftc-fiyat">${tl((+k.birimFiyat||0))} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
         <span class="ftc-kdv">%${k.kdv||0}</span>
         <span class="ftc-isk">${(+k.iskonto>0)?`%${k.iskonto}<br><small>${k.iskontoDahil?'dahil':'hariç'}</small>`:'<span class="ftc-bos">—</span>'}</span>
-        <span class="ftc-matrah">${h.matrah.toFixed(2)} ₺</span>
-        <span class="ftc-tutar">${h.satirTutar.toFixed(2)} ₺</span>
+        <span class="ftc-matrah">${tl(h.matrah)} ₺</span>
+        <span class="ftc-tutar">${tl(h.satirTutar)} ₺</span>
         <span class="ftc-islem">
           <button class="fat-kalem-btn duzenle" onclick="faturaKalemDuzenle(${i})" title="Düzenle">✏️</button>
           <button class="fat-kalem-btn sil" onclick="iadeKalemSil(${i})" title="Çıkar">✕</button>
@@ -24565,10 +24708,10 @@ function iadeFaturaFormHtml(){
   // mevcut fatura özet sınıfları (.fat-ozet) kullanılır; önceki sürümde
   // olmayan sınıf adları yazıldığı için kart stilsiz görünüyordu.
   html+=`<div class="fat-ozet">
-    <div class="fat-ozet-satir"><span>Ara toplam (matrah)</span><strong>${top.matrah.toFixed(2)} ₺</strong></div>
-    ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${top.iskontoToplam.toFixed(2)} ₺</strong></div>`:''}
-    <div class="fat-ozet-satir"><span>KDV tutarı</span><strong>${top.kdvToplam.toFixed(2)} ₺</strong></div>
-    <div class="fat-ozet-satir fat-ozet-toplam"><span>İade tutarı</span><strong>${top.faturaTutar.toFixed(2)} ₺</strong></div>
+    <div class="fat-ozet-satir"><span>Ara toplam (temel fiyat)</span><strong>${tl(top.matrah)} ₺</strong></div>
+    ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${tl(top.iskontoToplam)} ₺</strong></div>`:''}
+    <div class="fat-ozet-satir"><span>KDV tutarı</span><strong>${tl(top.kdvToplam)} ₺</strong></div>
+    <div class="fat-ozet-satir fat-ozet-toplam"><span>İade tutarı</span><strong>${tl(top.faturaTutar)} ₺</strong></div>
   </div>`;
 
   html+=`<div class="fat-form-foot">
@@ -24776,10 +24919,20 @@ function iadeFaturaKaydet(){
     olusturan:(typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD)||""
   };
   const i=IADE_FATURALARI.findIndex(x=>x.id===id);
+  const yeniKayit = (i<0);
   if(i>=0){ kayit.islendi=IADE_FATURALARI[i].islendi; IADE_FATURALARI[i]=kayit; }
   else IADE_FATURALARI.push(kayit);
   state.iadeTaslak=null;
   b2bKaydet();
+  // ── ŞUBE→MERKEZ iadesi: depo/lojistik + genel müdüre onay bildirimi ──
+  // (yalnızca yeni oluşturulan, şubeden gelen ve henüz işlenmemiş iadelerde)
+  if(yeniKayit && kayit.yon==="subeden" && !kayit.islendi && typeof bildirimEkle==="function"){
+    const mesaj = kayit.sube+" · "+kayit.kalemler.length+" kalem · "+tl((kayit.faturaTutar||0))+" ₺ · "+iadeSebepAd(kayit.sebep);
+    ["depo","genel"].forEach(rol=>{
+      bildirimEkle({ tip:"stok", baslik:"↩️ Onay bekleyen iade · "+kayit.no,
+        mesaj:mesaj, kanal:"Stok", hedefRol:rol, link:"fatura" });
+    });
+  }
   note("✓ İade faturası kaydedildi · stoğa işlemek için \"İşle\" butonunu kullanın");
   go("fatura", true);
 }
@@ -24807,6 +24960,12 @@ function iadeFaturaIsle(id){
   f.islendi=true; f.islemTs=Date.now();
   f.isleyen=(typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD)||"";
   b2bKaydet();
+  // ── şube→merkez iadesi onaylandı: iadeyi açan şubeye geri bilgi ──
+  if(f.yon==="subeden" && f.sube && typeof bildirimEkle==="function"){
+    bildirimEkle({ tip:"stok", baslik:"✓ İadeniz merkeze işlendi · "+f.no,
+      mesaj:f.kalemler.length+" kalem merkez deposuna alındı"+(eksikler.length?" · ⚠️ bazı kalemler şube stoğunda yetersizdi":""),
+      kanal:"Stok", hedefSube:f.sube, link:"fatura" });
+  }
   iadeIsleKapat();
   note("✓ "+f.no+" işlendi · stok güncellendi"+(eksikler.length?" ⚠️ eksiye düşen: "+eksikler.join(", "):""));
   go("fatura", true);
@@ -25108,7 +25267,7 @@ function bayiGecmisHtml(isGenel){
     : AKTIF_SUBE;
   html += `<div class="gecmis-ozet-bar">
     <div class="go-bilgi"><span class="go-sayi">${liste.length}</span> sipariş · <strong>${kapsamMetin}</strong></div>
-    <div class="go-toplam">Genel Toplam: <strong>${genelToplam.toFixed(2)} ₺</strong></div>
+    <div class="go-toplam">Genel Toplam: <strong>${tl(genelToplam)} ₺</strong></div>
     <button class="go-xls" onclick="bayiGecmisXls(${isGenel})" ${liste.length===0?'disabled':''}>📥 Tümünü Excel</button>
   </div>`;
   if(liste.length===0){ return html+`<div class="bayi-bos">Seçilen aralıkta tamamlanmış sipariş yok.</div>`; }
@@ -25130,7 +25289,7 @@ function bayiGecmisHtml(isGenel){
           </div>
         </div>
         <div class="gk-sag">
-          <div class="gk-tutar">${t.net.toFixed(2)} ₺</div>
+          <div class="gk-tutar">${tl(t.net)} ₺</div>
           <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span>
         </div>
       </div>`;
@@ -25154,31 +25313,31 @@ function bayiGecmisHtml(isGenel){
           if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
         }
         const secMiktar = (k.girisMiktar!=null && k.miktar===(k.girisMiktar*secCarpan)) ? k.girisMiktar : (secCarpan>1 ? +(k.miktar/secCarpan).toFixed(2) : k.miktar);
-        const birimFiyat = fTaban*secCarpan;
+        const birimFiyat = kr2(fTaban*secCarpan);
         const icerik = (u && secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : (u?`— (${u.tabanBirim})`:"");
-        const satirTutar = k.miktar*fTaban;
+        const satirTutar = kr2(k.miktar*fTaban);
         html += `<div class="bsepet-trow">
           <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong>${s&&s.no?`<small class="gk-stokno">${s.no}</small>`:''}</span>
           <span class="bsc-icerik">${icerik}</span>
-          <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+          <span class="bsc-fiyat">${birimFiyat>0?tl(birimFiyat)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
           <span class="bsc-mik">${secMiktar} ${secBirim}</span>
-          <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+          <span class="bsc-tutar">${satirTutar>0?tl(satirTutar)+' ₺':'—'}</span>
         </div>`;
       });
       // KDV oran satırları (farklı KDV'liler ayrı)
       const gOranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
       let gKdvSatir="";
       gOranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
-        gKdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+        gKdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (temel fiyat ${tl(g.matrah)} ₺)</span><span>${tl(g.kdv)} ₺</span></div>`;
       });
       html += `</div>
         <div class="bayi-ozet-tablo">
-          <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${t.brut.toFixed(2)} ₺</span></div>
-          ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(2)} ₺</span></div>`:''}
-          <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
+          <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${tl(t.brut)} ₺</span></div>
+          ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${tl(t.indirim)} ₺</span></div>`:''}
+          <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (temel fiyat)</span><span>${tl(t.toplamMatrah)} ₺</span></div>
           ${gKdvSatir}
-          <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
-          <div class="bayi-ozet-satir bayi-ozet-net"><span>Net tutar</span><span>${t.net.toFixed(2)} ₺</span></div>
+          <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${tl(t.toplamKdv)} ₺</span></div>
+          <div class="bayi-ozet-satir bayi-ozet-net"><span>Net tutar</span><span>${tl(t.net)} ₺</span></div>
         </div>
         <div class="gecmis-kart-aksiyon">
           <button class="gka-excel" onclick="siparisExcelTek(${sp.id})">📊 Excel indir</button>
@@ -25237,8 +25396,8 @@ function bayiGecmisXls(isGenel){
         if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
       }
       const sipMik = (k.girisMiktar!=null) ? k.girisMiktar : k.miktar;
-      const birimFiyat = fTaban*secCarpan;
-      const brut = k.miktar*fTaban;
+      const birimFiyat = kr2(fTaban*secCarpan);
+      const brut = kr2(k.miktar*fTaban);
       const kdvOran = (s && s.satisKdv!=null) ? s.satisKdv : (s && s.kdv!=null ? s.kdv : 0);
       const tabanG = u ? `${(+(k.miktar||0).toFixed(2))} ${u.tabanBirim}` : String(k.miktar);
       satirlar += `<tr>
@@ -25255,9 +25414,9 @@ function bayiGecmisXls(isGenel){
     }
     oranlar.forEach(oran=>{
       const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
-      satirlar += `<tr style="background:#faf4ec"><td colspan="9" style="text-align:right;color:#555">↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)})</td><td style="color:#555">${g.kdv.toFixed(2)}</td><td colspan="2"></td></tr>`;
+      satirlar += `<tr style="background:#faf4ec"><td colspan="9" style="text-align:right;color:#555">↳ KDV %${oran} (temel fiyat ${g.matrah.toFixed(2)})</td><td style="color:#555">${g.kdv.toFixed(2)}</td><td colspan="2"></td></tr>`;
     });
-    satirlar += `<tr style="background:#f5efe2"><td colspan="9" style="text-align:right;font-weight:bold">#${sp.id} · Matrah ${t.toplamMatrah.toFixed(2)} + KDV ${t.toplamKdv.toFixed(2)} = NET</td><td style="font-weight:bold">${t.net.toFixed(2)}</td><td colspan="2"></td></tr>`;
+    satirlar += `<tr style="background:#f5efe2"><td colspan="9" style="text-align:right;font-weight:bold">#${sp.id} · Temel fiyat ${t.toplamMatrah.toFixed(2)} + KDV ${t.toplamKdv.toFixed(2)} = NET</td><td style="font-weight:bold">${t.net.toFixed(2)}</td><td colspan="2"></td></tr>`;
     satirlar += `<tr><td colspan="12"></td></tr>`;
     genelBrut += t.brut; genelMatrah += t.toplamMatrah; genelKdv += t.toplamKdv; genelNet += t.net;
   });
@@ -25276,7 +25435,7 @@ function bayiGecmisXls(isGenel){
       ${satirlar}
       <tr style="font-weight:bold;background:#f0e6dc">
         <td colspan="9" style="text-align:right">GENEL TOPLAM · KDV dahil ${genelBrut.toFixed(2)} · matrah ${genelMatrah.toFixed(2)} · KDV ${genelKdv.toFixed(2)} · NET</td>
-        <td>${genelNet.toFixed(2)} ₺</td><td colspan="2"></td></tr>
+        <td>${tl(genelNet)} ₺</td><td colspan="2"></td></tr>
     </table></body></html>`;
   const blob = new Blob(["\ufeff"+tablo], {type:"application/vnd.ms-excel;charset=utf-8"});
   const a = document.createElement("a");
@@ -25371,12 +25530,12 @@ function stokSonucHtml(){
       <div class="stok-kutular">
         <div class="stok-kutu stok-kutu-alis">
           <span class="sk-etiket">🛒 Alış birim</span>
-          <span class="sk-deger">${alisH?alisH.toplam.toFixed(2)+' ₺':'—'}</span>
+          <span class="sk-deger">${alisH?tl(alisH.toplam)+' ₺':'—'}</span>
           <span class="sk-alt">${alisK!=null?'%'+alisK+' dahil / '+u.tabanBirim:''}</span>
         </div>
         ${ustSeviye?`<div class="stok-kutu stok-kutu-alis">
           <span class="sk-etiket">🛒 Alış ${ustSeviye.ad}</span>
-          <span class="sk-deger">${alisUst!=null?alisUst.toFixed(2)+' ₺':'—'}</span>
+          <span class="sk-deger">${alisUst!=null?tl(alisUst)+' ₺':'—'}</span>
           <span class="sk-alt">${ustCarpan} ${u.tabanBirim}</span>
         </div>`:''}
         ${marj!=null?`<div class="stok-kutu stok-kutu-marj">
@@ -25386,12 +25545,12 @@ function stokSonucHtml(){
         </div>`:''}
         <div class="stok-kutu stok-kutu-satis${satisH?'':' bos'}">
           <span class="sk-etiket">💰 Satış birim</span>
-          <span class="sk-deger">${satisH?satisH.toplam.toFixed(2)+' ₺':'— fiyat girilmedi'}</span>
+          <span class="sk-deger">${satisH?tl(satisH.toplam)+' ₺':'— fiyat girilmedi'}</span>
           <span class="sk-alt">${satisH?(satisK!=null?'%'+satisK+' dahil / '+u.tabanBirim:''):'düzenle ile ekleyin'}</span>
         </div>
         ${ustSeviye?`<div class="stok-kutu stok-kutu-satis">
           <span class="sk-etiket">💰 Satış ${ustSeviye.ad}</span>
-          <span class="sk-deger">${satisUst!=null?satisUst.toFixed(2)+' ₺':'—'}</span>
+          <span class="sk-deger">${satisUst!=null?tl(satisUst)+' ₺':'—'}</span>
           <span class="sk-alt">${ustCarpan} ${u.tabanBirim}</span>
         </div>`:''}
         <div class="stok-kutu ${aktif?'stok-kutu-acik':'stok-kutu-kapali'}">
@@ -26079,9 +26238,9 @@ function stokFiyatOzet(p){
   const parts=[];
   let alisMatrah=0, satisMatrah=0, alisToplam=0, satisToplam=0;
   if(af>0){ const h=hesapla(af,ak,p.alisKdvDahil); alisMatrah=h.matrah; alisToplam=h.toplam;
-    parts.push(`Alış: <strong>${h.matrah.toFixed(2)} ₺</strong> hariç · <strong>${h.toplam.toFixed(2)} ₺</strong> dahil <small>(%${ak} KDV)</small>`); }
+    parts.push(`Alış: <strong>${tl(h.matrah)} ₺</strong> hariç · <strong>${tl(h.toplam)} ₺</strong> dahil <small>(%${ak} KDV)</small>`); }
   if(sf>0){ const h=hesapla(sf,sk,p.satisKdvDahil); satisMatrah=h.matrah; satisToplam=h.toplam;
-    parts.push(`Bayi satış: <strong>${h.matrah.toFixed(2)} ₺</strong> hariç · <strong>${h.toplam.toFixed(2)} ₺</strong> dahil <small>(%${sk} KDV)</small>`); }
+    parts.push(`Bayi satış: <strong>${tl(h.matrah)} ₺</strong> hariç · <strong>${tl(h.toplam)} ₺</strong> dahil <small>(%${sk} KDV)</small>`); }
   let ozet=parts.join("<br>");
   if(alisToplam>0 && satisToplam>0){ const marj=((satisToplam-alisToplam)/alisToplam*100); ozet+=`<br>📈 Kâr marjı (KDV dahil): <strong>%${marj.toFixed(0)}</strong>`; }
   return ozet;
@@ -26096,9 +26255,9 @@ function stokModalFiyatOzet(){
     const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
     const af=sayi(p.alisFiyat), sf=sayi(p.satisFiyat);
     const at=document.getElementById("skmAlisTaban");
-    if(at) at.textContent = af>0 ? (af/p._ustCarpan).toFixed(2)+" ₺" : "—";
+    if(at) at.textContent = af>0 ? tl((af/p._ustCarpan))+" ₺" : "—";
     const st=document.getElementById("skmSatisTaban");
-    if(st) st.textContent = sf>0 ? (sf/p._ustCarpan).toFixed(2)+" ₺" : "—";
+    if(st) st.textContent = sf>0 ? tl((sf/p._ustCarpan))+" ₺" : "—";
   }
 }
 /* KDV dahil/hariç seçimi (alis|satis) */
@@ -26380,8 +26539,8 @@ function stokModalCiz(){
   if(p._ustCarpan && p._ustCarpan>1){
     const _sy=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
     const _af=_sy(p.alisFiyat), _sf=_sy(p.satisFiyat);
-    const _at=document.getElementById("skmAlisTaban"); if(_at) _at.textContent = _af>0?(_af/p._ustCarpan).toFixed(2)+" ₺":"—";
-    const _st=document.getElementById("skmSatisTaban"); if(_st) _st.textContent = _sf>0?(_sf/p._ustCarpan).toFixed(2)+" ₺":"—";
+    const _at=document.getElementById("skmAlisTaban"); if(_at) _at.textContent = _af>0?tl((_af/p._ustCarpan))+" ₺":"—";
+    const _st=document.getElementById("skmSatisTaban"); if(_st) _st.textContent = _sf>0?tl((_sf/p._ustCarpan))+" ₺":"—";
   }
   // saklanan scroll pozisyonunu geri yükle (yeniden çizim başa atmasın).
   // innerHTML sonrası tarayıcı layout'u bitirmeden scrollTop atanırsa etkisiz kalır;
@@ -26734,7 +26893,7 @@ function bayiIrsaliyeHtml(){
   }).sort((a,b)=>(b.tarihISO||"").localeCompare(a.tarihISO||""));
   const toplamTutar = filtreli.reduce((a,ir)=>a+(ir.faturaTutar||0),0);
 
-  let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${filtreli.length} alış faturası · toplam <strong>${toplamTutar.toFixed(2)} ₺</strong></div>
+  let html = `<div class="bayi-bar"><div class="bayi-bar-bilgi">${filtreli.length} alış faturası · toplam <strong>${tl(toplamTutar)} ₺</strong></div>
     <button class="bayi-ekle-btn" onclick="faturaBasla()">+ Yeni alış faturası</button></div>`;
 
   // filtre çubuğu
@@ -26769,7 +26928,7 @@ function bayiIrsaliyeHtml(){
           <div class="fat-satir-ust"><strong>${ir.tedarikci||'—'}</strong> ${ir.faturaNo?`<span class="fat-no">No: ${ir.faturaNo}</span>`:''}</div>
           <div class="fat-satir-alt">${tarihGoster} · ${ir.kalemler.length} kalem${ir.aciklama?' · '+ir.aciklama:''}</div>
         </div>
-        <div class="fat-satir-tutar">${(ir.faturaTutar||0).toFixed(2)} ₺</div>
+        <div class="fat-satir-tutar">${tl((ir.faturaTutar||0))} ₺</div>
         <div class="fat-satir-aksiyon">
           <button class="bayi-mini" onclick="faturaDuzenle(${ir.id})">✏️</button>
           <button class="bayi-mini sil" onclick="faturaSilOnay(${ir.id})">🗑️</button>
@@ -26984,7 +27143,7 @@ function satisFaturaFormHtml(){
   html+=`<button class="fat-urun-ekle" onclick="faturaUrunEkleAc()">+ Ürün ekle</button>`;
   html+=`</div>`;
   html+=`<div class="fat-ozet">
-    <div class="fat-ozet-satir"><span>Ara toplam (matrah)</span><span>${tl(top.matrah)} ₺</span></div>
+    <div class="fat-ozet-satir"><span>Ara toplam (temel fiyat)</span><span>${tl(top.matrah)} ₺</span></div>
     <div class="fat-ozet-satir"><span>İskonto</span><span>−${tl(top.iskontoToplam)} ₺</span></div>
     <div class="fat-ozet-satir"><span>KDV tutarı</span><span>${tl(top.kdvToplam)} ₺</span></div>
     <div class="fat-ozet-satir fat-ozet-toplam"><span>Fatura tutarı</span><span>${tl(top.faturaTutar)} ₺</span></div>
@@ -27113,7 +27272,7 @@ function satisFaturaSilOnay(id){
   mdl.innerHTML=`<div class="ypm-ic" style="max-width:400px">
     <div class="ypm-head"><div class="ypm-head-ic">🗑️</div>
       <div class="ypm-head-baslik">Satış Faturasını Sil</div>
-      <div class="ypm-head-alt">${f.sube} · ${f.tarih} · ${(f.faturaTutar||0).toFixed(2)} ₺</div></div>
+      <div class="ypm-head-alt">${f.sube} · ${f.tarih} · ${tl((f.faturaTutar||0))} ₺</div></div>
     <div class="ypm-body">
       <div class="sdon-uyari">${uyari}</div>
       <div class="ypm-btn-row" style="margin-top:16px">
@@ -27150,19 +27309,41 @@ function satisFaturaSil(id){
   go("fatura", true);
 }
 
+/* Fatura silinince merkez hangi ürünlerde eksiye düşecek?
+   silmeSonrası = mevcut − faturaMiktarı. <0 ise o miktarın bir kısmı
+   şubeye transfer / tüketime çıkmış demektir → merkez eksiye düşer. */
+function faturaSilmeEtkisi(ir){
+  const eksiye = [];
+  (ir.kalemler||[]).forEach(k=>{
+    const s = STOCK[k.kod]; if(!s) return;
+    const geriAl = (k.tabanMiktar||k.miktar||0);
+    const sonra = +( (s.mevcut||0) - geriAl ).toFixed(3);
+    if(sonra < 0){
+      eksiye.push({ ad:s.ad||k.kod, sonra, birim:uomAl(s).tabanBirim||"" });
+    }
+  });
+  return eksiye;
+}
 function faturaSilOnay(id){
   const ir=IRSALIYELER.find(x=>x.id===id); if(!ir) return;
+  const eksiye = faturaSilmeEtkisi(ir);
   let mdl=document.getElementById("fatSilModal");
   if(!mdl){ mdl=document.createElement("div"); mdl.id="fatSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="250"; document.body.appendChild(mdl); }
-  mdl.innerHTML=`<div class="ypm-ic" style="max-width:380px">
+  const eksiUyari = eksiye.length ? `
+      <div class="sdon-uyari" style="background:var(--danger-soft);border-color:var(--danger);color:var(--danger);margin-top:10px">
+        ⚠️ <strong>Bu malın bir kısmı şubeye transfer edilmiş.</strong> Silersen merkez deposu eksiye düşecek (şubedeki miktar korunur):
+        <div style="margin-top:6px;font-weight:600">${eksiye.map(e=>`• ${e.ad}: <strong>${(+e.sonra.toFixed(2))} ${e.birim}</strong>`).join("<br>")}</div>
+      </div>` : "";
+  mdl.innerHTML=`<div class="ypm-ic" style="max-width:400px">
     <div class="ypm-head"><div class="ypm-head-ic">🗑️</div>
       <div class="ypm-head-baslik">Faturayı Sil</div>
-      <div class="ypm-head-alt">${ir.tedarikci} · ${ir.tarih} · ${(ir.faturaTutar||0).toFixed(2)} ₺</div></div>
+      <div class="ypm-head-alt">${ir.tedarikci} · ${ir.tarih} · ${tl((ir.faturaTutar||0))} ₺</div></div>
     <div class="ypm-body">
       <div class="sdon-uyari">⚠️ Bu fatura silinecek ve <strong>${ir.kalemler.length} ürünün stok girişi geri alınacak</strong>. Bu işlem geri alınamaz.</div>
+      ${eksiUyari}
       <div class="ypm-btn-row" style="margin-top:16px">
         <button class="ypm-iptal" onclick="fatSilKapat()">Vazgeç</button>
-        <button class="ypm-basla" style="background:var(--danger)" onclick="faturaSil(${id})">Evet, sil</button>
+        <button class="ypm-basla" style="background:var(--danger)" onclick="faturaSil(${id})">${eksiye.length?'Yine de sil':'Evet, sil'}</button>
       </div>
     </div></div>`;
   mdl.classList.add("on");
@@ -27228,7 +27409,7 @@ function faturaFormHtml(){
         <span class="ftc-fiyat">Birim Fiyat</span>
         <span class="ftc-kdv">KDV</span>
         <span class="ftc-isk">İskonto</span>
-        <span class="ftc-matrah">Matrah</span>
+        <span class="ftc-matrah">Temel fiyat</span>
         <span class="ftc-tutar">Tutar</span>
         <span class="ftc-islem"></span>
       </div>`;
@@ -27240,11 +27421,11 @@ function faturaFormHtml(){
       html+=`<div class="fat-trow">
         <span class="ftc-ad"><span class="fat-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="fat-ad-metin"><strong>${ad}</strong>${s&&s.no?`<small>${s.no}</small>`:''}</span></span>
         <span class="ftc-mik">${birimBilgi}</span>
-        <span class="ftc-fiyat">${(+k.birimFiyat).toFixed(2)} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
+        <span class="ftc-fiyat">${tl((+k.birimFiyat))} ₺<br><small>${k.kdvDahil?'KDV dahil':'KDV hariç'}</small></span>
         <span class="ftc-kdv">%${k.kdv}</span>
         <span class="ftc-isk">${(+k.iskonto>0)?`%${k.iskonto}<br><small>${k.iskontoDahil?'dahil':'hariç'}</small>`:'<span class="ftc-bos">—</span>'}</span>
-        <span class="ftc-matrah">${h.matrah.toFixed(2)} ₺</span>
-        <span class="ftc-tutar">${h.satirTutar.toFixed(2)} ₺</span>
+        <span class="ftc-matrah">${tl(h.matrah)} ₺</span>
+        <span class="ftc-tutar">${tl(h.satirTutar)} ₺</span>
         <span class="ftc-islem">
           <button class="fat-kalem-btn duzenle" onclick="faturaKalemDuzenle(${i})" title="Düzenle">✏️</button>
           <button class="fat-kalem-btn sil" onclick="faturaKalemSil(${i})" title="Çıkar">✕</button>
@@ -27258,10 +27439,10 @@ function faturaFormHtml(){
 
   // ── ÖZET (renkli alt bölüm) ──
   html+=`<div class="fat-ozet">
-    <div class="fat-ozet-satir"><span>Ara toplam (matrah)</span><strong>${top.matrah.toFixed(2)} ₺</strong></div>
-    ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${top.iskontoToplam.toFixed(2)} ₺</strong></div>`:''}
-    <div class="fat-ozet-satir"><span>KDV tutarı</span><strong>${top.kdvToplam.toFixed(2)} ₺</strong></div>
-    <div class="fat-ozet-satir fat-ozet-toplam"><span>Fatura tutarı</span><strong>${top.faturaTutar.toFixed(2)} ₺</strong></div>
+    <div class="fat-ozet-satir"><span>Ara toplam (temel fiyat)</span><strong>${tl(top.matrah)} ₺</strong></div>
+    ${top.iskontoToplam>0?`<div class="fat-ozet-satir fat-ozet-isk"><span>İskonto tutarı</span><strong>− ${tl(top.iskontoToplam)} ₺</strong></div>`:''}
+    <div class="fat-ozet-satir"><span>KDV tutarı</span><strong>${tl(top.kdvToplam)} ₺</strong></div>
+    <div class="fat-ozet-satir fat-ozet-toplam"><span>Fatura tutarı</span><strong>${tl(top.faturaTutar)} ₺</strong></div>
   </div>`;
 
   html+=`<div class="fat-form-foot">
@@ -27353,7 +27534,7 @@ function fatKalemOzetMetin(p){
   const gecici={...p, tabanMiktar};
   const h=faturaKalemHesap(gecici);
   const u=uomAl(s);
-  return `Matrah: <strong>${h.matrah.toFixed(2)} ₺</strong> · KDV: ${h.kdvTutar.toFixed(2)} ₺${h.iskontoTutar>0?` · İsk: ${h.iskontoTutar.toFixed(2)} ₺`:''} · Satır: <strong>${h.satirTutar.toFixed(2)} ₺</strong><br><small>Stoğa girecek: <b>${(+tabanMiktar.toFixed(2)).toLocaleString("tr")} ${u.tabanBirim}</b></small>`;
+  return `Temel fiyat: <strong>${tl(h.matrah)} ₺</strong> · KDV: ${tl(h.kdvTutar)} ₺${h.iskontoTutar>0?` · İsk: ${tl(h.iskontoTutar)} ₺`:''} · Satır: <strong>${tl(h.satirTutar)} ₺</strong><br><small>Stoğa girecek: <b>${(+tabanMiktar.toFixed(2)).toLocaleString("tr")} ${u.tabanBirim}</b></small>`;
 }
 function fatKalemOnayla(){
   const p=state._fatKalem; if(!p) return;
@@ -27481,13 +27662,16 @@ function faturaSil(id){
   if(i>=0){
     // stok girişini geri al
     const _silFatNo = IRSALIYELER[i].faturaNo||"";
+    const eksiye = faturaSilmeEtkisi(IRSALIYELER[i]);
     IRSALIYELER[i].kalemler.forEach(k=>{ if(STOCK[k.kod])
       merkezStokDegistir(k.kod, (STOCK[k.kod].mevcut||0) - (k.tabanMiktar||k.miktar||0),
-        {tip:"alisIptal", belge:_silFatNo, aciklama:"Alış faturası silindi"});
+        {tip:"alisIptal", belge:_silFatNo, aciklama:"Alış faturası silindi"+(  ((STOCK[k.kod].mevcut||0)-(k.tabanMiktar||k.miktar||0))<0 ? " · şubeye çıkan korundu, merkez eksiye düştü":"")});
     });
     IRSALIYELER.splice(i,1);
     b2bKaydet();
-    note("Fatura silindi · stok girişi geri alındı");
+    note(eksiye.length
+      ? "Fatura silindi · "+eksiye.length+" üründe merkez eksiye düştü (şubeye çıkan korundu)"
+      : "Fatura silindi · stok girişi geri alındı");
   }
   fatSilKapat();
   // Silme sonrası da bulunulan ekranda kal. Alış faturası listesi
@@ -27509,8 +27693,16 @@ function stokFiyatDetay(kod){
   const sKdv = s.satisKdv!=null?s.satisKdv:aKdv;
   let satisMatrah=0, satisDahil=0;
   if(s.satisFiyat!=null && s.satisFiyat>0){
-    satisMatrah = s.satisKdvDahil ? s.satisFiyat/(1+sKdv/100) : s.satisFiyat;
-    satisDahil = satisMatrah*(1+sKdv/100);
+    if(s.satisKdvDahil){
+      // KDV DAHİL girildi → girilen değer AYNEN korunur (yuvarlama sapması olmasın),
+      // matrah ondan türetilir. Aksi halde 2000/1.01*1.01 = 1999.9996 gibi küsürat oluşur.
+      satisDahil = s.satisFiyat;
+      satisMatrah = satisDahil/(1+sKdv/100);
+    } else {
+      // KDV HARİÇ girildi → matrah girilen değer, dahil ondan hesaplanır
+      satisMatrah = s.satisFiyat;
+      satisDahil = satisMatrah*(1+sKdv/100);
+    }
   }
   return {alisMatrah, alisDahil, alisKdv:aKdv, satisMatrah, satisDahil, satisKdv:sKdv};
 }
@@ -27599,8 +27791,8 @@ function bayiFiyatListeHtml(){
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
         <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
         <span class="bf-kdv">%${d.alisKdv}</span>
-        <span class="bf-alis">${alisUst>0?alisUst.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
-        <span class="bf-satis">${(satisVar&&satisUst>0)?satisUst.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-alis">${alisUst>0?tl(alisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis">${(satisVar&&satisUst>0)?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-durum"><button class="bf-durum-btn ${acik?'acik':'kapali'}" onclick="bayiSatisDurum('${kod.replace(/'/g,"\\'")}')">${acik?'✓ Açık':'✕ Kapalı'}</button></span>
         <span class="bf-islem"><button class="bayi-mini" onclick="stokKartDuzenle('${kod.replace(/'/g,"\\'")}')">✏️</button></span>
       </div>`;
@@ -27610,8 +27802,8 @@ function bayiFiyatListeHtml(){
 
   // genel toplam (ana bayi = merkez stok değeri)
   html += `<div class="bfiyat-toplam">
-    <div class="bfiyat-toplam-satir"><span>🏢 Ana bayi (merkez) stok · toplam alış değeri (KDV'li)</span><strong>${genelAlis.toFixed(2)} ₺</strong></div>
-    <div class="bfiyat-toplam-satir bfiyat-toplam-satis"><span>Toplam satış değeri (KDV dahil)</span><strong>${genelSatis.toFixed(2)} ₺</strong></div>
+    <div class="bfiyat-toplam-satir"><span>🏢 Ana bayi (merkez) stok · toplam alış değeri (KDV'li)</span><strong>${tl(genelAlis)} ₺</strong></div>
+    <div class="bfiyat-toplam-satir bfiyat-toplam-satis"><span>Toplam satış değeri (KDV dahil)</span><strong>${tl(genelSatis)} ₺</strong></div>
   </div>`;
   return html;
 }
@@ -27767,7 +27959,7 @@ function bayiStoklarHtml(){
     const deger = sutunToplam(b.ad);
     html += `<button class="bstok-kart${sec?' on':''}" onclick="bstokTogglBayi('${b.ad.replace(/'/g,"\\'")}')">
       <span class="bsk-ad">${sec?'✓ ':''}🏬 ${b.ad}</span>
-      <span class="bsk-deger">${deger.toFixed(2)} ₺</span>
+      <span class="bsk-deger">${tl(deger)} ₺</span>
     </button>`;
   });
   html += `</div>`;
@@ -27814,7 +28006,7 @@ function bayiStoklarHtml(){
   // toplam satırı
   let tfoot = `<tr class="bstok-toplam"><td class="bstok-sabit-col" style="font-weight:800">GENEL TOPLAM</td>`;
   sutunlar.forEach(sc=>{
-    tfoot += `<td style="border-left:2px solid var(--cocoa)"></td><td style="text-align:right;font-weight:900;color:var(--brand-d)">${sutunToplam(sc).toFixed(2)} ₺</td>`;
+    tfoot += `<td style="border-left:2px solid var(--cocoa)"></td><td style="text-align:right;font-weight:900;color:var(--brand-d)">${tl(sutunToplam(sc))} ₺</td>`;
   });
   tfoot += `</tr>`;
 
@@ -27880,9 +28072,9 @@ function bayiSiparisKartGenel(sp){
     }
     // düzenlenmişse taban miktardan seçilen birime çevir
     const secMiktar = (k.girisMiktar!=null && k.miktar===(k.girisMiktar*secCarpan)) ? k.girisMiktar : (secCarpan>1 ? +(k.miktar/secCarpan).toFixed(2) : k.miktar);
-    const birimFiyat = fTaban*secCarpan;
+    const birimFiyat = kr2(fTaban*secCarpan);
     const icerik = (u && secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : (u?`— (${u.tabanBirim})`:"");
-    const satirTutar = k.miktar*fTaban;
+    const satirTutar = kr2(k.miktar*fTaban);
     const silinmisClass = k.silindi ? ' bayi-kalem-silinmis' : '';
     // miktar hücresi: değişmişse eski→yeni
     let mikHucre;
@@ -27897,9 +28089,9 @@ function bayiSiparisKartGenel(sp){
     html += `<div class="bsepet-trow${silinmisClass}">
       <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong></span>
       <span class="bsc-icerik">${icerik}</span>
-      <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+      <span class="bsc-fiyat">${birimFiyat>0?tl(birimFiyat)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
       <span class="bsc-mik">${mikHucre}</span>
-      <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+      <span class="bsc-tutar">${satirTutar>0?tl(satirTutar)+' ₺':'—'}</span>
       <span class="bsc-sil">${sp.durum==="onayda"?`<button class="bayi-kalem-sil" onclick="sipKalemDuzenle(${sp.id},${i})">✏️</button>`:''}</span>
     </div>`;
   });
@@ -27908,15 +28100,15 @@ function bayiSiparisKartGenel(sp){
   const oranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
   let kdvSatir="";
   oranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
-    kdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+    kdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (temel fiyat ${tl(g.matrah)} ₺)</span><span>${tl(g.kdv)} ₺</span></div>`;
   });
   html += `<div class="bayi-ozet-tablo">
-    <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${t.brut.toFixed(2)} ₺</span></div>
-    ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>Şube iskontosu (%${t.isk})</span><span>− ${t.indirim.toFixed(2)} ₺</span></div>`:''}
-    <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
+    <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${tl(t.brut)} ₺</span></div>
+    ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>Şube iskontosu (%${t.isk})</span><span>− ${tl(t.indirim)} ₺</span></div>`:''}
+    <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (temel fiyat)</span><span>${tl(t.toplamMatrah)} ₺</span></div>
     ${kdvSatir}
-    <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
-    <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${t.net.toFixed(2)} ₺</span></div>
+    <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${tl(t.toplamKdv)} ₺</span></div>
+    <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${tl(t.net)} ₺</span></div>
   </div>`;
   if(sp.durum==="onayda"){
     html += `<div class="bayi-sip-aksiyon">
@@ -27968,19 +28160,19 @@ function sipKalemModalCiz(){
   const f = bayiSatisFiyat(k.kod);
   const sayi=v=>{ const n=parseFloat(String(v).replace(",",".")); return isNaN(n)?0:n; };
   const m = sayi(p.deger);
-  const tutar = m*f;
+  const tutar = kr2(m*f);
   const esc=v=>String(v==null?"":v).replace(/"/g,'&quot;');
   mdl.innerHTML=`<div class="ypm-ic">
     <div class="ypm-head">
       <div class="ypm-head-ic">✏️</div>
       <div class="ypm-head-baslik">${s.ad}</div>
-      <div class="ypm-head-alt">Talep edilen: ${talep} ${taban}${f>0?` · ${f.toFixed(2)} ₺/${taban}`:""}</div>
+      <div class="ypm-head-alt">Talep edilen: ${talep} ${taban}${f>0?` · ${tl(f)} ₺/${taban}`:""}</div>
     </div>
     <div class="ypm-body">
       <div class="ykm-etiket">Onaylanacak miktar (${taban})</div>
       <input class="ypm-input" id="skmDeger" type="number" inputmode="decimal" value="${esc(p.deger)}"
         placeholder="0" oninput="sipKalemModalCanli()">
-      <div class="skm-ambalaj-ozet" id="skmOzet" style="margin-top:12px">🛒 ${m>0?m:"—"} ${taban}${f>0?` · ≈ ${tutar.toFixed(2)} ₺`:""}</div>
+      <div class="skm-ambalaj-ozet" id="skmOzet" style="margin-top:12px">🛒 ${m>0?m:"—"} ${taban}${f>0?` · ≈ ${tl(tutar)} ₺`:""}</div>
       <div class="ypm-ipucu" style="margin-top:8px">💡 <strong>0</strong> girerseniz kalem siparişten çıkarılır (iz kalır, bayi görür).</div>
       <div class="ypm-btn-row" style="margin-top:14px">
         <button class="ypm-iptal" onclick="sipKalemModalKapat()">Vazgeç</button>
@@ -27999,7 +28191,7 @@ function sipKalemModalCanli(){
   const taban=s.birim||"adet"; const f=bayiSatisFiyat(k.kod);
   const m=(parseFloat(String(p.deger).replace(",","."))||0);
   const oz=document.getElementById("skmOzet");
-  if(oz) oz.innerHTML=`🛒 ${m>0?m:"—"} ${taban}${f>0?` · ≈ ${(m*f).toFixed(2)} ₺`:""}`;
+  if(oz) oz.innerHTML=`🛒 ${m>0?m:"—"} ${taban}${f>0?` · ≈ ${tl(kr2(m*f))} ₺`:""}`;
 }
 function sipKalemModalKapat(){ state._sipKalemModal=null; const mdl=document.getElementById("sipKalemModal"); if(mdl) mdl.classList.remove("on"); }
 function sipKalemModalKaydet(){
@@ -28128,7 +28320,7 @@ function bayiSipGovdeHtml(){
         <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
         <span class="bf-donus">${donusAcik?`<span class="bf-donus-metin">${donusAcik}</span>`:`<span class="bf-donus-yok">tek birim (${ustBirimAd})</span>`}</span>
         <span class="bf-kdv">%${d.satisKdv}</span>
-        <span class="bf-satis">${satisUst>0?satisUst.toFixed(2)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis">${satisUst>0?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-islem">
           ${sepette
             ? `<span class="bayi-sepette-rozet">✓ ${birimGoster}</span><button class="bayi-mini bsip-ekle" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`
@@ -28154,7 +28346,7 @@ function bayiSipGovdeHtml(){
       <div class="bsip-bar-orta">Sepeti gör · düzenle</div>
       <div class="bsip-bar-sag">
         <span class="bsip-bar-tutar-lbl">Net ödenecek</span>
-        <span class="bsip-bar-tutar">${oz.netDahil.toFixed(2)} ₺</span>
+        <span class="bsip-bar-tutar">${tl(oz.netDahil)} ₺</span>
         <span class="bsip-bar-ok">▸</span>
       </div>
     </div>`;
@@ -28189,7 +28381,7 @@ function bayiSepetModalHtml(){
   oranlar.forEach(oran=>{
     const g = oz.oranGrup[oran];
     if(g.kdv<=0.005) return;
-    kdvSatirlar += `<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+    kdvSatirlar += `<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (temel fiyat ${tl(g.matrah)} ₺)</span><span>${tl(g.kdv)} ₺</span></div>`;
   });
   let html = `<div class="bsm-ic">
     <div class="bsm-head">
@@ -28209,32 +28401,32 @@ function bayiSepetModalHtml(){
       const sv = u.seviyeler.find(x=>x.ad===secBirim);
       if(sv){ const idx=u.seviyeler.indexOf(sv); secCarpan=uomTabanCarpani(u,idx); }
     }
-    const birimFiyat = fTaban*secCarpan;
-    const satirTutar = birimFiyat*secMiktar;
+    const birimFiyat = kr2(fTaban*secCarpan);
+    const satirTutar = kr2(birimFiyat*secMiktar);
     const icerik = (secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : `${u.tabanBirim}`;
     html += `<div class="bsm-satir">
       <span class="bsm-gorsel">${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span>
       <div class="bsm-bilgi">
         <div class="bsm-ad">${s.ad}</div>
-        <div class="bsm-detay">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺ / '+secBirim:'— / '+secBirim} · ${icerik}</div>
+        <div class="bsm-detay">${birimFiyat>0?tl(birimFiyat)+' ₺ / '+secBirim:'— / '+secBirim} · ${icerik}</div>
       </div>
       <div class="bsm-adet">
         <button class="bsm-adet-btn" onclick="bayiSepetMiktarDegis(${i},-1)">−</button>
         <span class="bsm-adet-say">${secMiktar}<small>${secBirim}</small></span>
         <button class="bsm-adet-btn" onclick="bayiSepetMiktarDegis(${i},1)">+</button>
       </div>
-      <div class="bsm-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</div>
+      <div class="bsm-tutar">${satirTutar>0?tl(satirTutar)+' ₺':'—'}</div>
       <button class="bsm-sil" onclick="bayiSepetCikarIdx(${i});bayiSepetModalYenile()">🗑️</button>
     </div>`;
   });
   html += `</div>
       <div class="bsm-ozet">
-        <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${oz.brutToplam.toFixed(2)} ₺</span></div>
-        ${oz.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${oz.isk})</span><span>− ${oz.indirimDahil.toFixed(2)} ₺</span></div>`:''}
-        <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${oz.toplamMatrah.toFixed(2)} ₺</span></div>
+        <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${tl(oz.brutToplam)} ₺</span></div>
+        ${oz.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${oz.isk})</span><span>− ${tl(oz.indirimDahil)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (temel fiyat)</span><span>${tl(oz.toplamMatrah)} ₺</span></div>
         ${kdvSatirlar}
-        <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${oz.toplamKdv.toFixed(2)} ₺</span></div>
-        <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${oz.netDahil.toFixed(2)} ₺</span></div>
+        <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${tl(oz.toplamKdv)} ₺</span></div>
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Net ödenecek tutar</span><span>${tl(oz.netDahil)} ₺</span></div>
       </div>
     </div>
     <div class="bsm-aksiyon">
@@ -28333,7 +28525,7 @@ function bayiSiparisExcel(){
   const oranlar = Object.keys(oz.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
   let kdvSatir="";
   oranlar.forEach(oran=>{ const g=oz.oranGrup[oran]; if(g.kdv<=0.005)return;
-    kdvSatir+=`<tr><td colspan="5" style="text-align:right">KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</td><td class="tut">${g.kdv.toFixed(2)}</td></tr>`;
+    kdvSatir+=`<tr><td colspan="5" style="text-align:right">KDV %${oran} (temel fiyat ${tl(g.matrah)} ₺)</td><td class="tut">${g.kdv.toFixed(2)}</td></tr>`;
   });
   let tablo=`<table>
     <tr><td class="baslik" colspan="6">MİNİPAN · Sipariş Talebi</td></tr>
@@ -28342,7 +28534,7 @@ function bayiSiparisExcel(){
     ${satirlar}
     <tr><td colspan="5" style="text-align:right"><b>Toplam (KDV dahil)</b></td><td class="tut">${oz.brutToplam.toFixed(2)}</td></tr>
     ${oz.isk>0?`<tr><td colspan="5" style="text-align:right">İskonto (%${oz.isk})</td><td class="tut">− ${oz.indirimDahil.toFixed(2)}</td></tr>`:''}
-    <tr><td colspan="5" style="text-align:right">Ara toplam (matrah)</td><td class="tut">${oz.toplamMatrah.toFixed(2)}</td></tr>
+    <tr><td colspan="5" style="text-align:right">Ara toplam (temel fiyat)</td><td class="tut">${oz.toplamMatrah.toFixed(2)}</td></tr>
     ${kdvSatir}
     <tr><td colspan="5" style="text-align:right">Toplam KDV</td><td class="tut">${oz.toplamKdv.toFixed(2)}</td></tr>
     <tr><td colspan="5" style="text-align:right"><b>Net Ödenecek</b></td><td class="tut">${oz.netDahil.toFixed(2)}</td></tr>
@@ -28397,14 +28589,14 @@ function bayiSiparisModalCiz(){
   const tb=m*carpan;
   // canlı özet: en üst birim → taban karşılığı + tutar
   let ozet = carpan>1
-    ? `${m>0?m:"—"} ${p.birim} = <strong>${tb.toLocaleString("tr")} ${taban}</strong>${ustFiyat>0?` · ≈ ${(m*ustFiyat).toFixed(2)} ₺`:""}`
-    : `${m>0?m:"—"} ${taban}${f>0?` · ≈ ${(m*f).toFixed(2)} ₺`:""}`;
+    ? `${m>0?m:"—"} ${p.birim} = <strong>${tb.toLocaleString("tr")} ${taban}</strong>${ustFiyat>0?` · ≈ ${tl((m*ustFiyat))} ₺`:""}`
+    : `${m>0?m:"—"} ${taban}${f>0?` · ≈ ${tl(kr2(m*f))} ₺`:""}`;
   const esc=v=>String(v==null?"":v).replace(/"/g,'&quot;');
   mdl.innerHTML=`<div class="ypm-ic">
     <div class="ypm-head">
       <div class="ypm-head-ic">🛒</div>
       <div class="ypm-head-baslik">${s.ad}</div>
-      <div class="ypm-head-alt">Merkez stok: ${uomGoster(u, s.mevcut||0)}${ustFiyat>0?` · ${ustFiyat.toFixed(2)} ₺/${p.birim}`:""}</div>
+      <div class="ypm-head-alt">Merkez stok: ${uomGoster(u, s.mevcut||0)}${ustFiyat>0?` · ${tl(ustFiyat)} ₺/${p.birim}`:""}</div>
     </div>
     <div class="ypm-body">
       ${carpan>1?`<div class="ykm-etiket">Sipariş birimi</div>
@@ -28439,8 +28631,8 @@ function bayiSiparisModalCanli(){
   const secObj=secenekler.find(o=>o.ad===p.birim)||secenekler[secenekler.length-1];
   const carpan=secObj.carpan; const tb=m*carpan;
   oz.innerHTML = carpan>1
-    ? `🛒 ${m>0?m:"—"} ${p.birim} = <strong>${tb.toLocaleString("tr")} ${taban}</strong>${f>0?` · ≈ ${(tb*f).toFixed(2)} ₺`:""}`
-    : `🛒 ${m>0?m:"—"} ${taban}${f>0?` · ≈ ${(m*f).toFixed(2)} ₺`:""}`;
+    ? `🛒 ${m>0?m:"—"} ${p.birim} = <strong>${tb.toLocaleString("tr")} ${taban}</strong>${f>0?` · ≈ ${tl((tb*f))} ₺`:""}`
+    : `🛒 ${m>0?m:"—"} ${taban}${f>0?` · ≈ ${tl(kr2(m*f))} ₺`:""}`;
 }
 /* Alt listede tek satırı (index ile) çıkar — aynı ürün birden çok kez eklenmişse doğru satırı siler */
 function bayiSepetCikarIdx(i){
@@ -28505,9 +28697,9 @@ function bayiBenimSiparisHtml(){
         if(sv){ secCarpan=uomTabanCarpani(u,u.seviyeler.indexOf(sv)); }
       }
       const secMiktar = (k.girisMiktar!=null && k.miktar===(k.girisMiktar*secCarpan)) ? k.girisMiktar : (secCarpan>1 ? +(k.miktar/secCarpan).toFixed(2) : k.miktar);
-      const birimFiyat = fTaban*secCarpan;
+      const birimFiyat = kr2(fTaban*secCarpan);
       const icerik = (u && secBirim!==u.tabanBirim) ? `1 ${secBirim} = ${secCarpan} ${u.tabanBirim}` : (u?`— (${u.tabanBirim})`:"");
-      const satirTutar = k.miktar*fTaban;
+      const satirTutar = kr2(k.miktar*fTaban);
       let mikHucre;
       if(k.silindi){
         mikHucre = `<span style="text-decoration:line-through;color:var(--ink-3)">${secMiktar} ${secBirim}</span><br><span style="color:var(--err);font-size:11px">çıkarıldı</span>`;
@@ -28520,25 +28712,25 @@ function bayiBenimSiparisHtml(){
       html += `<div class="bsepet-trow${k.silindi?' bayi-kalem-silinmis':''}">
         <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong></span>
         <span class="bsc-icerik">${icerik}</span>
-        <span class="bsc-fiyat">${birimFiyat>0?birimFiyat.toFixed(2)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
+        <span class="bsc-fiyat">${birimFiyat>0?tl(birimFiyat)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
         <span class="bsc-mik">${mikHucre}</span>
-        <span class="bsc-tutar">${satirTutar>0?satirTutar.toFixed(2)+' ₺':'—'}</span>
+        <span class="bsc-tutar">${satirTutar>0?tl(satirTutar)+' ₺':'—'}</span>
       </div>`;
     });
     // KDV oran satırları (farklı KDV'liler ayrı)
     const oranlar = Object.keys(t.oranGrup).sort((a,b)=>parseFloat(a)-parseFloat(b));
     let kdvSatir="";
     oranlar.forEach(oran=>{ const g=t.oranGrup[oran]; if(g.kdv<=0.005) return;
-      kdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (matrah ${g.matrah.toFixed(2)} ₺)</span><span>${g.kdv.toFixed(2)} ₺</span></div>`;
+      kdvSatir+=`<div class="bayi-ozet-satir bayi-ozet-kdv"><span>↳ KDV %${oran} (temel fiyat ${tl(g.matrah)} ₺)</span><span>${tl(g.kdv)} ₺</span></div>`;
     });
     html += `</div>
       <div class="bayi-ozet-tablo">
-        <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${t.brut.toFixed(2)} ₺</span></div>
-        ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${t.indirim.toFixed(2)} ₺</span></div>`:''}
-        <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (matrah)</span><span>${t.toplamMatrah.toFixed(2)} ₺</span></div>
+        <div class="bayi-ozet-satir"><span>Toplam (KDV dahil)</span><span>${tl(t.brut)} ₺</span></div>
+        ${t.isk>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto (%${t.isk})</span><span>− ${tl(t.indirim)} ₺</span></div>`:''}
+        <div class="bayi-ozet-satir bayi-ozet-ayrac"><span>Ara toplam (temel fiyat)</span><span>${tl(t.toplamMatrah)} ₺</span></div>
         ${kdvSatir}
-        <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${t.toplamKdv.toFixed(2)} ₺</span></div>
-        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek</span><span>${t.net.toFixed(2)} ₺</span></div>
+        <div class="bayi-ozet-satir"><span>Toplam KDV</span><span>${tl(t.toplamKdv)} ₺</span></div>
+        <div class="bayi-ozet-satir bayi-ozet-net"><span>Ödenecek</span><span>${tl(t.net)} ₺</span></div>
       </div>`;
     // duruma göre aksiyon
     if(sp.durum==="onayda"){
@@ -28861,16 +29053,16 @@ function iadeBelgeAc(id, tip){
   const thead = fiyatli
     ? `<tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th>
        <th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th><th class="irs-tut">Birim Fiyat</th>
-       <th class="irs-tut">İsk.</th><th class="irs-tut">Matrah</th><th class="irs-tut">KDV</th><th class="irs-tut">Tutar</th></tr>`
+       <th class="irs-tut">İsk.</th><th class="irs-tut">Temel fiyat</th><th class="irs-tut">KDV</th><th class="irs-tut">Tutar</th></tr>`
     : `<tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th>
        <th class="irs-icerik">Birim İçeriği</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>`;
 
   // ── alt toplam ──
   const tfoot = fiyatli
-    ? `<tr><td colspan="7" class="irs-toplam-lbl">ARA TOPLAM (MATRAH)</td><td class="irs-tut" colspan="3">${top.matrah.toFixed(2)} ₺</td></tr>
-       ${top.iskontoToplam>0?`<tr><td colspan="7" class="irs-toplam-lbl">İSKONTO</td><td class="irs-tut" colspan="3">− ${top.iskontoToplam.toFixed(2)} ₺</td></tr>`:''}
-       <tr><td colspan="7" class="irs-toplam-lbl">KDV TOPLAMI</td><td class="irs-tut" colspan="3">${top.kdvToplam.toFixed(2)} ₺</td></tr>
-       <tr class="irs-genel-toplam"><td colspan="7" class="irs-toplam-lbl">GENEL TOPLAM</td><td class="irs-tut" colspan="3"><strong>${top.faturaTutar.toFixed(2)} ₺</strong></td></tr>`
+    ? `<tr><td colspan="7" class="irs-toplam-lbl">ARA TOPLAM (TEMEL FİYAT)</td><td class="irs-tut" colspan="3">${tl(top.matrah)} ₺</td></tr>
+       ${top.iskontoToplam>0?`<tr><td colspan="7" class="irs-toplam-lbl">İSKONTO</td><td class="irs-tut" colspan="3">− ${tl(top.iskontoToplam)} ₺</td></tr>`:''}
+       <tr><td colspan="7" class="irs-toplam-lbl">KDV TOPLAMI</td><td class="irs-tut" colspan="3">${tl(top.kdvToplam)} ₺</td></tr>
+       <tr class="irs-genel-toplam"><td colspan="7" class="irs-toplam-lbl">GENEL TOPLAM</td><td class="irs-tut" colspan="3"><strong>${tl(top.faturaTutar)} ₺</strong></td></tr>`
     : `<tr><td colspan="5" class="irs-toplam-lbl">TOPLAM</td><td class="irs-miktar">${(f.kalemler||[]).length} kalem</td></tr>`;
 
   const belgeTip = fiyatli ? "İADE FATURASI" : "İADE İRSALİYESİ";
@@ -31365,8 +31557,9 @@ function raporUrunSatisExcel(){
 // --- STOK (canlı · motor düşürür) ---
 /* ══ KRİTİK STOK UYARI PANELİ ══ */
 function kritikStokPaneliHtml(isGenel){
-  // genel müdür/depo → tüm şubeler · şube müdürü → kendi şubesi
-  const subeler = isGenel ? DEMO_BRANCHES.map(b=>b.ad) : [AKTIF_SUBE];
+  // genel müdür / depo-lojistik → MERKEZ (ana depo) · şube müdürü → kendi şubesi
+  const subeler = isGenel ? ["_MERKEZ_"] : [AKTIF_SUBE];
+  const kapsamAd = isGenel ? "Ana Depo (Merkez)" : AKTIF_SUBE;
   const tumUyarilar = [];
   subeler.forEach(sube=>{
     subeKritikStoklar(sube).forEach(u=> tumUyarilar.push({...u, sube}));
@@ -31374,7 +31567,7 @@ function kritikStokPaneliHtml(isGenel){
   if(tumUyarilar.length === 0){
     return `<div class="kso-panel ok">
       <span class="kso-ikon">✓</span>
-      <span>Tüm stoklar normal seviyede${isGenel?' (tüm şubeler)':''}</span>
+      <span>Tüm stoklar normal seviyede${isGenel?' (ana depo)':''}</span>
     </div>`;
   }
   const tukenen = tumUyarilar.filter(u=>u.seviye==="tukendi");
@@ -31391,7 +31584,7 @@ function kritikStokPaneliHtml(isGenel){
             ${tukenen.length&&kritik.length?' · ':''}
             ${kritik.length?`<b>${kritik.length} ürün kritik seviyede</b>`:''}
           </div>
-          <div class="kso-alt">${isGenel?'Tüm şubeler':AKTIF_SUBE} · detay için tıkla</div>
+          <div class="kso-alt">${isGenel?'Ana Depo (Merkez)':AKTIF_SUBE} · detay için tıkla</div>
         </div>
       </div>
       <span class="kso-ok">${acik?'▲':'▼'}</span>
@@ -31405,7 +31598,7 @@ function kritikStokPaneliHtml(isGenel){
         <div class="kso-s-sol">
           <span class="kso-s-nokta"></span>
           <div>
-            <div class="kso-s-ad">${u.ad}${isGenel?` <span class="kso-s-sube">🏢 ${u.sube}</span>`:''}</div>
+            <div class="kso-s-ad">${u.ad}${(isGenel && u.sube!=="_MERKEZ_")?` <span class="kso-s-sube">🏢 ${u.sube}</span>`:''}</div>
             <div class="kso-s-bar"><div class="kso-s-dolgu" style="width:${yuzde}%"></div></div>
           </div>
         </div>
@@ -31523,15 +31716,27 @@ function stokHareketHtml(){
     + Object.entries(STOK_HAREKET_TIP).map(([k,t])=>
         `<option value="${k}"${f.tip===k?" selected":""}>${t.ic} ${t.ad}</option>`).join("");
 
-  // özet: giriş / çıkış / sayım farkı
-  let giris=0, cikis=0, sayimFark=0, sayimAdet=0;
+  // özet: giriş / çıkış / sayım farkı / iç transfer
+  // "Tüm depolar"da iç transferler (merkez→şube çıkış + şubeye giriş, ve iade
+  // çıkış/giriş) aynı malı iki kez sayar → dış akışı şişirir. Bu kapsamda
+  // iç hareketleri giriş/çıkıştan ayırıp ayrı "iç transfer" sayacında gösteririz.
+  // Tek depo seçiliyse o deponun bakışında her hareket gerçektir → hepsi sayılır.
+  const tumDepolar = (f.sube==="__tum");
+  const icTransferTipleri = ["cikis","alinan","iadeCikis","iadeGiris"];
+  let giris=0, cikis=0, sayimFark=0, sayimAdet=0, icTransfer=0;
   kayitlar.forEach(h=>{
     const m = h.miktar||0;
-    if(h.tip==="sayim"){ sayimFark += m; sayimAdet++; }
-    else if(m>0) giris += m; else cikis += Math.abs(m);
+    if(h.tip==="sayim"){ sayimFark += m; sayimAdet++; return; }
+    if(tumDepolar && icTransferTipleri.includes(h.tip)){
+      icTransfer += Math.abs(m);   // iç akış — dış giriş/çıkışa katma
+      return;
+    }
+    if(m>0) giris += m; else cikis += Math.abs(m);
   });
+  // iç transfer çift kayıt (çıkış+giriş) olduğu için gerçek transfer hacmi yarısı
+  icTransfer = icTransfer/2;
 
-  let html = `<div class="bayi-aciklama">📜 Stoğu değiştiren tüm işlemler — sayım, fatura, aktarım, tüketim ve iadeler.</div>`;
+  let html = `<div class="bayi-aciklama">📜 Stoğu değiştiren tüm işlemler — sayım, fatura, aktarım, tüketim ve iadeler.${(f.sube==="__tum")?' <b>Tüm depolar</b> görünümünde giriş/çıkış yalnızca sisteme dıştan giren/çıkan malı sayar; merkez↔şube transferleri ayrı <b>iç transfer</b> olarak gösterilir.':''}</div>`;
 
   // ── FİLTRE BARI ──
   html += `<div class="hrk-filtre">
@@ -31561,10 +31766,13 @@ function stokHareketHtml(){
   </div>`;
 
   // ── ÖZET ──
+  const girisLbl = tumDepolar ? "📥 Dış giriş" : "📥 Toplam giriş";
+  const cikisLbl = tumDepolar ? "📤 Dış çıkış" : "📤 Toplam çıkış";
   html += `<div class="hrk-ozet">
     <div class="hrk-oz-kart"><div class="hrk-oz-lbl">Kayıt</div><div class="hrk-oz-deg">${kayitlar.length}</div></div>
-    <div class="hrk-oz-kart giris"><div class="hrk-oz-lbl">📥 Toplam giriş</div><div class="hrk-oz-deg">+${(+giris.toFixed(2)).toLocaleString("tr")}</div></div>
-    <div class="hrk-oz-kart cikis"><div class="hrk-oz-lbl">📤 Toplam çıkış</div><div class="hrk-oz-deg">−${(+cikis.toFixed(2)).toLocaleString("tr")}</div></div>
+    <div class="hrk-oz-kart giris"><div class="hrk-oz-lbl">${girisLbl}</div><div class="hrk-oz-deg">+${(+giris.toFixed(2)).toLocaleString("tr")}</div></div>
+    <div class="hrk-oz-kart cikis"><div class="hrk-oz-lbl">${cikisLbl}</div><div class="hrk-oz-deg">−${(+cikis.toFixed(2)).toLocaleString("tr")}</div></div>
+    ${tumDepolar && icTransfer>0 ? `<div class="hrk-oz-kart"><div class="hrk-oz-lbl">🔁 İç transfer</div><div class="hrk-oz-deg">${(+icTransfer.toFixed(2)).toLocaleString("tr")}</div></div>` : ''}
     <div class="hrk-oz-kart ${sayimFark<0?'cikis':(sayimFark>0?'giris':'')}">
       <div class="hrk-oz-lbl">🔢 Sayım farkı (${sayimAdet})</div>
       <div class="hrk-oz-deg">${sayimFark>0?'+':''}${(+sayimFark.toFixed(2)).toLocaleString("tr")}</div></div>
@@ -31687,6 +31895,51 @@ function stokHareketToplam(sube, kod, tip, basTs, bitTs){
   });
   return t;
 }
+/* İşaretli NET hareket toplamı: miktar alanının işaretini korur (+giriş / −çıkış).
+   Bu sayede iptaller (alisIptal = −) giriş toplamından otomatik düşer;
+   silinen/iptal edilen fatura "Giren" sütununda artık iz bırakmaz. */
+function stokHareketNet(sube, kod, tipler, basTs, bitTs){
+  const liste = Array.isArray(tipler) ? tipler : [tipler];
+  let net=0;
+  STOK_HAREKET.forEach(h=>{
+    if(h.sube!==sube || h.kod!==kod || !liste.includes(h.tip)) return;
+    if(basTs && h.ts<basTs) return;
+    if(bitTs && h.ts>bitTs) return;
+    net += (h.miktar||0);   // işaretli
+  });
+  return net;
+}
+/* Belirli bir depoda bir kartın NET GİREN ve NET ÇIKAN miktarı.
+   Giren tipleri pozitif hareketler; iptal/çıkış tipleri onları geri götürür. */
+function stokGirenCikan(sube, kod, merkezMi, basTs, bitTs){
+  // Merkez: alış + iade girişi + manuel düzeltme, iptaller/çıkışlar dahil net.
+  // Şube: şubeye giriş + iade girişi + dış alım vs. şubeye çıkış/tüketim.
+  const girisTipleri = merkezMi
+    ? ["alis","alisIptal","iade","iadeGiris","duzeltme"]        // alisIptal negatif → düşer
+    : ["alinan","iadeGiris","subeDisAlim","duzeltme"];
+  const cikisTipleri = merkezMi
+    ? ["cikis","iadeCikis"]
+    : ["tuketim","iadeCikis","cikis"];
+  const netGiris = stokHareketNet(sube, kod, girisTipleri, basTs, bitTs);
+  const netCikis = stokHareketNet(sube, kod, cikisTipleri, basTs, bitTs);
+  // Henüz gün sonu yapılmamış (tampondaki) tüketim de "Çıkan"a eklenir ki
+  // gün içinde de doğru görünsün. Tarih filtresi: tampon günü aralıktaysa say.
+  let tamponCikis = 0;
+  const buf = GUNLUK_TUKETIM[sube];
+  if(buf){
+    Object.keys(buf).forEach(gun=>{
+      const gts = new Date(gun+"T23:59:00").getTime();
+      if(basTs && gts<basTs) return;
+      if(bitTs && gts>bitTs) return;
+      tamponCikis += Math.abs(buf[gun][kod]||0);
+    });
+  }
+  return {
+    giren: Math.max(0, netGiris),        // net giriş (iptaller sonrası; negatife düşmez)
+    cikan: Math.abs(netCikis) + tamponCikis  // yazılmış çıkış + gün sonu bekleyen tüketim
+  };
+}
+
 function stokDurumHtml(){
   const isGenel = depoVeyaGenel();
   // seçili şube: genel müdür / depo-lojistikte seçmeli (varsayılan Ana Depo), bayi müdüründe kendi şubesi
@@ -31766,8 +32019,8 @@ function stokDurumListeHtml(secili, merkezMi, kapsamAd, basTs, bitTs){
         <span class="sd-kdv">KDV</span>
         <span class="sd-bfiyat">Birim ₺ <small>(KDV'li)</small></span>
         <span class="sd-tfiyat">Toplam ₺</span>
-        <span class="sd-tuk">Tüketilen</span>
-        <span class="sd-alin">Alınan</span>
+        <span class="sd-tuk">Çıkan</span>
+        <span class="sd-alin">Giren</span>
       </div>`;
     liste.forEach(([kod,s])=>{
       const d = stokFiyatDetay(kod);
@@ -31778,18 +32031,16 @@ function stokDurumListeHtml(secili, merkezMi, kapsamAd, basTs, bitTs){
       const bfiyat = isk>0 ? hamFiyat*(1-isk/100) : hamFiyat;
       const tfiyat = mevcut*bfiyat;
       genelDeger += tfiyat;
-      const tuketilen = stokHareketToplam(secili, kod, "tuketim", basTs, bitTs);
-      // "Alınan" = depoya giren tüm hareketler. Merkezde alış faturası (alis) + iade girişi;
-      // şubede şubeye giriş (alinan) + iade girişi + dış alım. Böylece alış faturası da görünür.
-      const alinanTipleri = merkezMi ? ["alis","alinan","iade","iadeGiris"] : ["alinan","iadeGiris","subeDisAlim"];
-      const alinan = stokHareketToplam(secili, kod, alinanTipleri, basTs, bitTs);
+      const gc = stokGirenCikan(secili, kod, merkezMi, basTs, bitTs);
+      const tuketilen = gc.cikan;   // Çıkan
+      const alinan = gc.giren;      // Giren (iptaller düşülmüş net)
       const eksi = mevcut<0;
       html += `<div class="bfiyat-satir sdurum-satir">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
         <span class="sd-mik"><span class="bf-mik-kutu${eksi?' eksi':''}">${uomGoster(u, mevcut)}</span></span>
         <span class="sd-kdv">%${d.satisKdv||d.alisKdv||0}</span>
-        <span class="sd-bfiyat">${bfiyat>0?bfiyat.toFixed(2)+' ₺':'<span class="sd-fiyatyok">fiyat girilmemiş</span>'}${(isk>0&&bfiyat>0)?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)} · %${isk} isk</small>`:''}</span>
-        <span class="sd-tfiyat">${tfiyat!==0?tfiyat.toFixed(2)+' ₺':'—'}</span>
+        <span class="sd-bfiyat">${bfiyat>0?tl(bfiyat)+' ₺':'<span class="sd-fiyatyok">fiyat girilmemiş</span>'}${(isk>0&&bfiyat>0)?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)} · %${isk} isk</small>`:''}</span>
+        <span class="sd-tfiyat">${tfiyat!==0?tl(tfiyat)+' ₺':'—'}</span>
         <span class="sd-tuk">${tuketilen>0?'−'+(+tuketilen.toFixed(2))+' '+birim:'—'}</span>
         <span class="sd-alin">${alinan>0?'+'+(+alinan.toFixed(2))+' '+birim:'—'}</span>
       </div>`;
@@ -31798,7 +32049,7 @@ function stokDurumListeHtml(secili, merkezMi, kapsamAd, basTs, bitTs){
   });
 
   html += `<div class="bfiyat-toplam">
-    <div class="bfiyat-toplam-satir bfiyat-toplam-satis"><span>${kapsamAd} · toplam stok değeri (KDV dahil)</span><strong>${genelDeger.toFixed(2)} ₺</strong></div>
+    <div class="bfiyat-toplam-satir bfiyat-toplam-satis"><span>${kapsamAd} · toplam stok değeri (KDV dahil)</span><strong>${tl(genelDeger)} ₺</strong></div>
   </div>`;
   return html;
 }
@@ -31844,14 +32095,14 @@ function stokDurumExcel(){
       const bfiyat=isk>0?hamFiyat*(1-isk/100):hamFiyat;
       const tfiyat=mevcut*bfiyat;
       genelDeger+=tfiyat;
-      const tuk=stokHareketToplam(secili,kod,"tuketim",basTs,bitTs), aln=stokHareketToplam(secili,kod,merkezMi?["alis","alinan","iade","iadeGiris"]:["alinan","iadeGiris","subeDisAlim"],basTs,bitTs);
+      const gc=stokGirenCikan(secili,kod,merkezMi,basTs,bitTs), tuk=gc.cikan, aln=gc.giren;
       satirlar+=`<tr><td>${E(s.ad)}</td><td class="sayi">${(+mevcut.toFixed(2))} ${E(birim)}</td><td class="sayi">%${d.satisKdv||d.alisKdv||0}</td><td class="tut">${bfiyat.toFixed(2)}</td><td class="tut">${tfiyat.toFixed(2)}</td><td class="sayi">${tuk>0?(+tuk.toFixed(2)):0} ${E(birim)}</td><td class="sayi">${aln>0?(+aln.toFixed(2)):0} ${E(birim)}</td></tr>`;
     });
   });
   const tablo=`<table>
     <tr><td class="baslik" colspan="7">MİNİPAN · Stok Durumu</td></tr>
     <tr><td class="altbaslik" colspan="7">${E(kapsamAd)} · ${state.durumBasUyg} → ${state.durumBitUyg}${(!merkezMi&&bayiIskonto(secili)>0)?' · %'+bayiIskonto(secili)+' iskontolu':''}</td></tr>
-    <tr><th>Stok Kartı</th><th>Miktar</th><th>KDV</th><th>Birim ₺</th><th>Toplam ₺</th><th>Tüketilen</th><th>Alınan</th></tr>
+    <tr><th>Stok Kartı</th><th>Miktar</th><th>KDV</th><th>Birim ₺</th><th>Toplam ₺</th><th>Çıkan</th><th>Giren</th></tr>
     ${satirlar}
     <tr><td colspan="4" style="text-align:right"><b>Toplam stok değeri (KDV dahil)</b></td><td class="tut">${genelDeger.toFixed(2)}</td><td colspan="2"></td></tr>
   </table>`;
