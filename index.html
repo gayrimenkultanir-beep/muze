@@ -10510,8 +10510,8 @@ function personelGirisTamamla(u, bolum){
 
   // ── KESİNTİ SONRASI: kasası hâlâ açık mı? ──
   const av = (typeof acikVardiya==="function") ? acikVardiya(AKTIF_SUBE) : null;
-  const kasamAcik = av && av.kasiyerId === u.id;
-  const baskasininKasasi = av && av.kasiyerId !== u.id;
+  const kasamAcik = av && vardiyaBenimMi(av);
+  const baskasininKasasi = av && !vardiyaBenimMi(av);
 
   if(bolum==="genel"){ login("genel"); }              // genel müdür — tüm şubeler
   else if(bolum==="mudur"){
@@ -10566,7 +10566,7 @@ function kasaAcikKapat(){ const w=document.getElementById("kasaAcikWrap"); if(w)
 function personelCikis(){
   const av = (typeof acikVardiya==="function") ? acikVardiya(AKTIF_SUBE) : null;
   // kasası açıksa özel uyarı pop-up'ı
-  if(av && AKTIF_PERSONEL && av.kasiyerId===AKTIF_PERSONEL.id){
+  if(av && vardiyaBenimMi(av)){
     const sure = Math.floor((Date.now() - av.acilisTs)/60000);
     const saat = Math.floor(sure/60), dk = sure%60;
     const html = `
@@ -11060,15 +11060,59 @@ const NAV_TEKLI_RENK = {
 
 /* --- 8 GERÇEK ŞUBE --- */
 let DEMO_BRANCHES = [
-  {ad:"Bolu Tabaklar",          ciro:6200, masa:6,  bekleyen:2, durum:"green",  fire:"normal"},
-  {ad:"Çanakkale Kemalpaşa",     ciro:4800, masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
-  {ad:"Çankırı Cumhuriyet",      ciro:3900, masa:3,  bekleyen:1, durum:"green",  fire:"normal"},
-  {ad:"Edirne Zübeyde Hanım",    ciro:7100, masa:8,  bekleyen:4, durum:"yellow", fire:"normal"},
-  {ad:"Edirne Atatürk",          ciro:5600, masa:5,  bekleyen:2, durum:"green",  fire:"warn"},
-  {ad:"Lüleburgaz",             ciro:5200, masa:5,  bekleyen:3, durum:"green",  fire:"normal"},
-  {ad:"Süleymanpaşa Değirmenaltı",ciro:4400,masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
-  {ad:"Çorlu Express",           ciro:6800, masa:7,  bekleyen:5, durum:"yellow", fire:"normal"},
+  {id:"sube_01", ad:"Bolu Tabaklar",          ciro:6200, masa:6,  bekleyen:2, durum:"green",  fire:"normal"},
+  {id:"sube_02", ad:"Çanakkale Kemalpaşa",     ciro:4800, masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
+  {id:"sube_03", ad:"Çankırı Cumhuriyet",      ciro:3900, masa:3,  bekleyen:1, durum:"green",  fire:"normal"},
+  {id:"sube_04", ad:"Edirne Zübeyde Hanım",    ciro:7100, masa:8,  bekleyen:4, durum:"yellow", fire:"normal"},
+  {id:"sube_05", ad:"Edirne Atatürk",          ciro:5600, masa:5,  bekleyen:2, durum:"green",  fire:"warn"},
+  {id:"sube_06", ad:"Lüleburgaz",             ciro:5200, masa:5,  bekleyen:3, durum:"green",  fire:"normal"},
+  {id:"sube_07", ad:"Süleymanpaşa Değirmenaltı",ciro:4400,masa:4,  bekleyen:1, durum:"green",  fire:"normal"},
+  {id:"sube_08", ad:"Çorlu Express",           ciro:6800, masa:7,  bekleyen:5, durum:"yellow", fire:"normal"},
 ];
+
+/* ══════════════════════════════════════════════════════════════
+   ŞUBE KİMLİĞİ (subeId) ÇÖZÜMLEME
+   Şubelerin kalıcı kimliği "id" alanıdır (sube_01…). "ad" yalnızca
+   görünen isimdir ve değiştirilebilir — kimliğe dokunmaz.
+   Kod içinde bazı eski veriler hâlâ şube ADIYLA anahtarlanmış olabilir;
+   bu yardımcılar hem id hem ad girişini kabul edip doğru şubeyi bulur.
+   "_MERKEZ_" özel kimliktir (ana depo), olduğu gibi geçer.
+   ══════════════════════════════════════════════════════════════ */
+/* Silinen şubelerin arşiv kaydı — mali geçmiş korunduğu için raporlar
+   silinmiş şubenin adını hâlâ çözebilmeli. { subeId|ad: {id, ad, silinmeTs} } */
+let SILINEN_SUBELER = {};
+function subeBul(anahtar){
+  if(!anahtar || anahtar==="_MERKEZ_" || anahtar==="__tum") return null;
+  return DEMO_BRANCHES.find(b=> b.id===anahtar) ||
+         DEMO_BRANCHES.find(b=> b.ad===anahtar) || null;
+}
+/* Verilen anahtarı (id veya ad) kalıcı id'ye çevirir. Bulamazsa girişi aynen döndürür
+   (_MERKEZ_, __tum ve tanımsızlar için güvenli). */
+function subeId(anahtar){
+  if(anahtar==="_MERKEZ_" || anahtar==="__tum") return anahtar;
+  const b = subeBul(anahtar);
+  return b ? b.id : anahtar;
+}
+/* Verilen anahtarı (id veya ad) görünen ada çevirir. */
+function subeAd(anahtar){
+  if(anahtar==="_MERKEZ_") return "Ana Depo (Merkez)";
+  if(anahtar==="__tum") return "Tüm depolar";
+  const b = subeBul(anahtar);
+  if(b) return b.ad;
+  // silinmiş şube olabilir — arşivden çöz
+  const sil = SILINEN_SUBELER[anahtar] || Object.values(SILINEN_SUBELER).find(s=>s.ad===anahtar);
+  if(sil) return sil.ad + " (silinmiş)";
+  return anahtar;
+}
+/* Yeni benzersiz şube id üretir (sube_09, sube_10 …). */
+function yeniSubeId(){
+  let max = 0;
+  DEMO_BRANCHES.forEach(b=>{
+    const m = /^sube_(\d+)$/.exec(b.id||"");
+    if(m){ const n=parseInt(m[1],10); if(n>max) max=n; }
+  });
+  return "sube_" + String(max+1).padStart(2,"0");
+}
 
 /* ŞUBE-BAZLI MASA YAPISI — her şubenin kendi kategorileri + masaları */
 let BRANCH_TABLES = {
@@ -11251,6 +11295,55 @@ function kasaVardiyaTekillikKontrol(){
 function acikVardiya(sube){
   return (KASA_VARDIYALAR[sube]||[]).find(v=>v.durum==="acik") || null;
 }
+/* Bir açık vardiya ŞU ANKİ kullanıcıya mı ait? "Kasa açıldı ama başkasında
+   diyor" hatasının kökü: kasa personel girişi olmadan (kasiyerId=null,
+   ad="Kasa görevlisi") açılınca hiçbir zaman "benim" olamıyordu — ID
+   karşılaştırması null'ı reddediyor. Bu yardımcı, ID eşleşmesine EK olarak:
+   - kasadaki kasiyerId null/boşsa (kimliksiz açılmış) → devralınabilir sayar
+   - ID yoksa ada göre eşleştirir (aynı görevli tekrar girince tanınsın)  */
+function vardiyaBenimMi(v){
+  if(!v) return false;
+  const uid = (typeof AKTIF_PERSONEL_ID!=="undefined") ? AKTIF_PERSONEL_ID : null;
+  const uad = (typeof AKTIF_PERSONEL_AD!=="undefined") ? AKTIF_PERSONEL_AD : "";
+  // 1) net ID eşleşmesi
+  if(uid!=null && v.kasiyerId===uid) return true;
+  // 2) kasa kimliksiz açılmış (kasiyerId yok) → sahipsiz, devralınabilir
+  if(v.kasiyerId==null) return true;
+  // 3) ID yok ama ad eşleşiyor (aynı görevli)
+  if(uid==null && uad && v.kasiyerAd && v.kasiyerAd===uad) return true;
+  return false;
+}
+/* ══════════════════════════════════════════════════════════════
+   HAYALET VARDİYA TEMİZLİĞİ
+   "Kasa hiç açılmadı ama açık diyor" sorunu: durum:"acik" olan ama
+   HİÇ İŞLEM görmemiş (satış/tahsilat yok) vardiyalar. Bunlar açmayı
+   engeller ama gerçek bir kasa değildir — güvenle silinebilir.
+   İçinde işlem OLAN vardiyaya DOKUNULMAZ (gerçek açık kasa olabilir).
+   Dönüş: temizlenen hayalet vardiya sayısı.
+   ══════════════════════════════════════════════════════════════ */
+function vardiyaIslemGordu(v){
+  if(!v) return false;
+  // özet varsa ve işlem sayısı > 0 → gerçek kullanım
+  if(v.ozet && (v.ozet.islemSayisi||0) > 0) return true;
+  // devir dışında bir hareket olduysa (kapanış alanları dolmuşsa) → dokunma
+  if(v.sayilanNakit!=null || v.kapanisTs) return true;
+  return false;
+}
+function hayaletVardiyaTemizle(sube){
+  let silinen = 0;
+  const subeler = sube ? [sube] : Object.keys(KASA_VARDIYALAR||{});
+  subeler.forEach(s=>{
+    const liste = KASA_VARDIYALAR[s]||[];
+    const kalan = liste.filter(v=>{
+      if(v.durum==="acik" && !vardiyaIslemGordu(v)){ silinen++; return false; }
+      return true;
+    });
+    if(kalan.length) KASA_VARDIYALAR[s] = kalan;
+    else delete KASA_VARDIYALAR[s];
+  });
+  if(silinen){ kasaVardiyaKaydet(); }
+  return silinen;
+}
 /* Son kapanmış vardiya (devir hesabı için) */
 function sonKapananVardiya(sube){
   const list = (KASA_VARDIYALAR[sube]||[]).filter(v=>v.durum==="kapali");
@@ -11297,7 +11390,15 @@ function kasaVardiyaNo(n){ return "KV-"+String(n).padStart(6,"0"); }
 
 /* ── VARDİYA AÇ ── */
 function kasaVardiyaAc(sube, kasiyerId, kasiyerAd, devirNakit, rol, devirBozuk){
-  if(acikVardiya(sube)) return {hata:"Bu şubede zaten açık bir kasa var. Önce kapatılmalı."};
+  const acik = acikVardiya(sube);
+  if(acik){
+    // Açık görünen vardiya HAYALET mi (hiç işlem görmemiş)? Öyleyse temizle ve devam et.
+    if(!vardiyaIslemGordu(acik)){
+      hayaletVardiyaTemizle(sube);
+    } else {
+      return {hata:"Bu şubede zaten açık bir kasa var. Önce kapatılmalı."};
+    }
+  }
   if(gunKapaliMi(sube, isletmeGunu())) return {hata:"Bu işletme günü KAPATILMIŞ. Satış yapılamaz. (Genel müdür kilidi açabilir)"};
   const beklenen = devredenTutar(sube);
   const alinanNakit = Math.round((devirNakit||0)*100)/100;
@@ -11429,16 +11530,18 @@ function kasaVardiyaKapat(sube, sayilanNakit, hazirlikNakit, farkNot, hazirlikBo
   v.sayilanNakit = sayilan;
   v.nakitFark = Math.round((sayilan - beklenenToplam)*100)/100;   // + fazla, − eksik
   v.farkNot = (farkNot||"").trim();
-  // Sabaha bırakılan hazırlık parası (satış dışı — sabah açan teslim alır)
+  // Sabaha bırakılan hazırlık parası (bilgi amaçlı — ayrı izlenir)
   v.hazirlik = hazirlik;                     // toplam (nakit + bozukluk)
   v.hazirlikNakit = hazNakit;
   v.hazirlikBozuk = hazBozuk;
-  // Geriye dönük uyum: eski "devredilen*" alanları hazırlık ile aynı değerde tutulur
-  v.devredilen = hazirlik;
-  v.devredilenNakit = hazNakit;
-  v.devredilenBozuk = hazBozuk;
-  // Kasadan alınan (bankaya/merkeze giden) = satış nakiti (hazırlık kasada kalır)
-  v.kasadanAlinan = Math.round((sayilan - hazirlik)*100)/100;
+  // DEVİR: sayılan TÜM nakit sonraki vardiyaya devreder (hazırlık + gün içi satış nakiti).
+  // Kasa boşaltılmaz; para fiziksel olarak sonraki vardiyaya aktarılır.
+  const sayilanBozuk = hazBozuk;             // sayımda ayrı bozukluk girildiyse onu koru
+  v.devredilen = sayilan;                    // tüm sayılan nakit devreder
+  v.devredilenNakit = Math.round((sayilan - sayilanBozuk)*100)/100;
+  v.devredilenBozuk = sayilanBozuk;
+  // Kasadan alınan (bankaya/merkeze giden) = 0 — tüm nakit kasada kalıp devrediyor
+  v.kasadanAlinan = 0;
   // KAPATMA İZİ: kasayı kimin kapattığı ayrıca kaydedilir.
   // Müdür başka bir kasiyerin kasasını kapattığında sayım o kasiyerin
   // vardiyasına işlenir ama sorumluluğu kimin aldığı denetimde görünür.
@@ -12511,6 +12614,36 @@ let BAYI_FIYAT = {};         // {hamur:120, cikolata:340} — ₺/birim (gr içi
 let IRSALIYELER = [];        // alış faturaları {id, faturaNo, tarih, tedarikci, aciklama, kalemler:[...], toplam, kdvToplam, iskontoToplam, faturaTutar}
 let SATIS_FATURALARI = [];   // şubeye satış faturaları {id, faturaNo, tarih, sube, aciklama, kalemler, matrah, kdvToplam, iskontoToplam, faturaTutar, aktarildi:false}
 let _satisFaturaId = 1;
+/* ══════════════════════════════════════════════════════════════
+   BENZERSİZ KİMLİK (UID) ÜRETECİ — backend hazırlığı
+   Sayaç bazlı id'ler (_siparisId++ vb.) TEK cihazda benzersiz ama
+   çok cihaz/backend ortamında ÇAKIŞIR: iki cihaz aynı anda "#47"
+   üretir → veri kaybı. Çözüm: her cihaza kalıcı, rastgele bir önek
+   ver; UID = cihazÖneki + zaman + sayaç. Böylece iki cihaz aynı
+   sayaç değerini üretse bile önekleri farklı olduğu için çakışmaz.
+   Mevcut sayısal sayaçlar KORUNUR (geriye uyumluluk); yeni benzersiz
+   kimlik gereken yerlerde uid() kullanılır.
+   ══════════════════════════════════════════════════════════════ */
+const CIHAZ_ONEK = (function(){
+  try{
+    let d = localStorage.getItem("mp_cihaz_onek");
+    if(!d){
+      d = Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4);
+      localStorage.setItem("mp_cihaz_onek", d);
+    }
+    return d;
+  }catch(e){
+    return Math.random().toString(36).slice(2,8);
+  }
+})();
+let _uidSayac = 0;
+/* Global benzersiz kimlik üretir. İsteğe bağlı önek (ör. "sip", "fat"). */
+function uid(onek){
+  _uidSayac = (_uidSayac + 1) % 1000000;
+  const zaman = Date.now().toString(36);
+  const sira = _uidSayac.toString(36);
+  return (onek ? onek+"_" : "") + CIHAZ_ONEK + zaman + sira;
+}
 /* ══════════════════════════════════════════════════════════════
    İADE FATURALARI (iki yönlü)
    yon:"subeden"  → Şube merkeze iade eder.
@@ -14225,8 +14358,7 @@ function kasaVardiyaGerekli(){
   // Açık vardiya BAŞKASINA aitse kasa ekranı kullanılamaz; devralma ekranı çıkar.
   // Aynı anda tek kasa açık olabilir; müdür de bu kuraldan muaf değil.
   if(v){
-    const benimMi = (typeof AKTIF_PERSONEL_ID!=="undefined") && AKTIF_PERSONEL_ID!=null
-                    && v.kasiyerId===AKTIF_PERSONEL_ID;
+    const benimMi = vardiyaBenimMi(v);
     return !benimMi;                                     // başkasınınsa → devralma ekranı
   }
   return true;                                           // vardiya açılmalı
@@ -14285,7 +14417,7 @@ function kasaAcilisEkrani(main){
            </div>`
         : `<div class="ka-devir">
              <div class="ka-devir-satir">
-               <span>🌅 Sabah için bırakılan hazırlık parası</span>
+               <span>➡️ Önceki vardiyadan devreden</span>
                <strong>${tl(devir)} ₺</strong>
              </div>
              <div class="ka-devir-kirilim">
@@ -14295,7 +14427,7 @@ function kasaAcilisEkrani(main){
              <div class="ka-devir-not">Bırakan: ${son.kasiyerAd} · ${new Date(son.kapanisTs).toLocaleString('tr')}</div>
            </div>`}
 
-      <div class="ka-teslim-bas">${ilkAcilis?'Kasa başlangıcı':'Teslim aldığınız hazırlık parası'}</div>
+      <div class="ka-teslim-bas">${ilkAcilis?'Kasa başlangıcı':'Teslim aldığınız nakit'}</div>
       <div class="ka-devir-ikili">
         <div class="ka-alan">
           <label>💵 Nakit</label>
@@ -14316,7 +14448,7 @@ function kasaAcilisEkrani(main){
       </div>
       <div class="ka-input-not">${ilkAcilis
         ? 'Kasada başlangıç için nakit / bozuk para varsa yazın, yoksa 0 bırakın.'
-        : 'Kasadaki hazırlık parasını sayıp onaylayın. Bırakılan tutarla farklıysa kayda geçer.'}</div>
+        : 'Kasadaki nakti sayıp onaylayın. Devredilen tutarla farklıysa kayda geçer.'}</div>
 
       <div id="kaFark" class="ka-fark"></div>
 
@@ -14352,8 +14484,7 @@ function kasaDevralmaEkrani(main, v){
   // tamamını baştan göster.
   const _tumAcik = acikVardiyalar(AKTIF_SUBE);
   const _coklu = _tumAcik.length > 1;
-  const benimMi = (typeof AKTIF_PERSONEL_ID!=="undefined") && AKTIF_PERSONEL_ID!=null
-                  && v.kasiyerId===AKTIF_PERSONEL_ID;
+  const benimMi = vardiyaBenimMi(v);
   const sure = Math.floor((Date.now() - v.acilisTs)/60000);
   const saat = Math.floor(sure/60), dk = sure%60;
   const o = vardiyaOzetHesapla(v);
@@ -16254,6 +16385,42 @@ function masaQrIcerik(masaId){
   // masaId = "şube::kat|ad" → URL parametresi olarak kodla
   return QR_BASE_URL + "?t=" + encodeURIComponent(masaId);
 }
+/* QR kodundaki "?t=şube::kat|ad" parametresini çözer.
+   Müşteri masadaki QR'ı okutunca hangi şube + hangi masa olduğu BURADAN gelir;
+   yoksa cihazın aktif şubesi kullanılır ve masalar karışır.
+   Dönüş: {sube, kat, masa} veya null. */
+function qrParamCoz(){
+  try{
+    const sp = new URLSearchParams(window.location.search);
+    let t = sp.get("t");
+    // hash tabanlı yönlendirme de desteklensin (#/m?t=... veya #t=...)
+    if(!t && window.location.hash){
+      const h = window.location.hash;
+      const qi = h.indexOf("?");
+      if(qi>=0){ t = new URLSearchParams(h.slice(qi+1)).get("t"); }
+    }
+    if(!t) return null;
+    // format: "şube::kat|ad"
+    const [sube, rest] = t.split("::");
+    if(!sube || !rest) return null;
+    const bar = rest.indexOf("|");
+    const kat = bar>=0 ? rest.slice(0,bar) : "İç Salon";
+    const masa = bar>=0 ? rest.slice(bar+1) : rest;
+    // şube adı hâlâ geçerli mi? (id ile de eşleşebilir)
+    const b = (typeof subeBul==="function") ? subeBul(sube) : null;
+    return { sube: b ? b.ad : sube, kat, masa };
+  }catch(e){ return null; }
+}
+/* QR nesnesini okunan koddan doldur — açılışta çağrılır */
+function qrKodUygula(){
+  const p = qrParamCoz();
+  if(!p) return false;
+  QR.sube = p.sube;
+  QR.masaKat = p.kat;
+  QR.masa = p.masa;
+  QR.icerideMi = true;   // masadan okutuldu → içeride
+  return true;
+}
 /* Bir masa için QR SVG üret (string döner) */
 function masaQrSvg(masaId, cellSize){
   const qr = window.qrcode(0, "M");
@@ -16799,7 +16966,7 @@ function kasaPaketGonder(){
   const kp=state.kasaPaket;
   if(!kp || kp.sepet.length===0){ note("Paket sepeti boş"); return; }
   const t=kp.sepet.reduce((s,c)=>s+c.fiyat,0);
-  const takipId="S"+(_takipId++);
+  const takipId="S"+CIHAZ_ONEK+(_takipId++);
   const yeniId=_paketId++;
   const eve = kp.tip==="eve";
   PAKET_ORDERS.push({
@@ -22226,16 +22393,20 @@ function kcalMigrasyon(){
 /* === ŞUBE VERİLERİ KALICILIĞI === */
 const SUBE_KEY = "minipan_subeler_v1";
 function subeKaydet(){
-  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES, MERKEZ_FIRMA, MARKA_LOGOLAR, _subeKodSayac }, 1);
+  MPStore.set(SUBE_KEY, { DEMO_BRANCHES, BRANCH_INFO, BRANCH_TABLES, MERKEZ_FIRMA, MARKA_LOGOLAR, _subeKodSayac, SILINEN_SUBELER }, 1);
 }
 function subeYukle(){
   const v = MPStore.get(SUBE_KEY, {}, {version:1});
   if(v.DEMO_BRANCHES) DEMO_BRANCHES = v.DEMO_BRANCHES;
+  // MİGRASYON: eski kayıtlarda şube "id" yoktu — kalıcı id ata (bir kez).
+  // Böylece isim değişse de referans kopmaz ve backend'e geçişte id hazır olur.
+  DEMO_BRANCHES.forEach(b=>{ if(!b.id) b.id = yeniSubeId(); });
   if(v.BRANCH_INFO) BRANCH_INFO = v.BRANCH_INFO;
   if(v.BRANCH_TABLES) BRANCH_TABLES = v.BRANCH_TABLES;
   if(v.MERKEZ_FIRMA) MERKEZ_FIRMA = Object.assign({}, MERKEZ_FIRMA, v.MERKEZ_FIRMA);
   if(v.MARKA_LOGOLAR) MARKA_LOGOLAR = Object.assign({}, MARKA_LOGOLAR, v.MARKA_LOGOLAR);
   if(v._subeKodSayac) _subeKodSayac = v._subeKodSayac;
+  if(v.SILINEN_SUBELER) SILINEN_SUBELER = v.SILINEN_SUBELER;
   subeKoduMigrasyon();   // her şubeye özgü kalıcı kod ata (MNPN-B-001)
 }
 /* Şubelere özgü kalıcı kod — sipariş no'sunda ve belgelerde kullanılır */
@@ -29598,6 +29769,7 @@ function introOnizle(){
   splashKaydet();
   // QR önizleme: yeni sekmede değil, mevcut QR motorunu splash'tan başlat
   QR = { masa:"1", masaKat:"İç Salon", sube:AKTIF_SUBE, kisi:"", tel:"", musteri:null, sepet:[], view:"karsilama", aktifKat:DEMO_KATEGORILER[0]?.ad||"Tatlılar" };
+  qrKodUygula();   // URL'de ?t=şube::masa varsa gerçek masaya bağla (yoksa aktif şube kalır)
   document.getElementById("qrApp").style.display="block";
   renderQR();
 }
@@ -30578,7 +30750,8 @@ function subeFormKaydet(){
   if(f.yeni){
     if(DEMO_BRANCHES.find(b=>b.ad===yeniAd)){ note("Bu isimde şube zaten var"); return; }
     const kopyaSube = (f.kaynak && DEMO_BRANCHES.find(b=>b.ad===f.kaynak)) ? f.kaynak : (DEMO_BRANCHES[0]?DEMO_BRANCHES[0].ad:"");
-    DEMO_BRANCHES.push({ad:yeniAd, ciro:0, masa:0, bekleyen:0, durum:"green", fire:"normal"});
+    const _yeniId = yeniSubeId();
+    DEMO_BRANCHES.push({id:_yeniId, ad:yeniAd, ciro:0, masa:0, bekleyen:0, durum:"green", fire:"normal"});
     BRANCH_INFO[yeniAd]={
       kod: subeKoduBiçim(_subeKodSayac++), kisaKod: subeKisaKod(yeniAd),
       vkn:(f.vkn||"").trim(), tckn:(f.tckn||"").trim(),
@@ -30630,6 +30803,14 @@ function subeFormKaydet(){
       if(typeof URUN_KAPALI!=="undefined" && URUN_KAPALI[eski]){ URUN_KAPALI[yeniAd]=URUN_KAPALI[eski]; delete URUN_KAPALI[eski]; }
       if(typeof MUSTERI_REKLAMLAR!=="undefined" && MUSTERI_REKLAMLAR[eski]){ MUSTERI_REKLAMLAR[yeniAd]=MUSTERI_REKLAMLAR[eski]; delete MUSTERI_REKLAMLAR[eski]; }
       if(typeof SUBE_ALIS_FATURALARI!=="undefined"){ SUBE_ALIS_FATURALARI.forEach(f2=>{ if(f2.sube===eski) f2.sube=yeniAd; }); }
+      // stok hareket kayıtları + günlük tüketim tamponu (ad ile anahtarlı) — taşınmazsa
+      // rapor/durum ekranında geçmiş kopar
+      if(typeof STOK_HAREKET!=="undefined"){ STOK_HAREKET.forEach(h=>{ if(h.sube===eski) h.sube=yeniAd; }); }
+      if(typeof GUNLUK_TUKETIM!=="undefined" && GUNLUK_TUKETIM[eski]){ GUNLUK_TUKETIM[yeniAd]=GUNLUK_TUKETIM[eski]; delete GUNLUK_TUKETIM[eski]; }
+      if(typeof BAYI_FIYAT!=="undefined" && BAYI_FIYAT[eski]){ BAYI_FIYAT[yeniAd]=BAYI_FIYAT[eski]; delete BAYI_FIYAT[eski]; }
+      if(typeof BAYI_SIPARISLER!=="undefined"){ BAYI_SIPARISLER.forEach(sp=>{ if(sp.sube===eski) sp.sube=yeniAd; }); }
+      if(typeof IADE_FATURALARI!=="undefined"){ IADE_FATURALARI.forEach(f2=>{ if(f2.sube===eski) f2.sube=yeniAd; }); }
+      if(typeof SUBE_YORUM_SAYAC!=="undefined" && SUBE_YORUM_SAYAC[eski]!=null){ SUBE_YORUM_SAYAC[yeniAd]=SUBE_YORUM_SAYAC[eski]; delete SUBE_YORUM_SAYAC[eski]; if(typeof yorumKaydet==="function") yorumKaydet(); }
       if(typeof b2bKaydet==="function") b2bKaydet();
       delete BRANCH_INFO[eski];
       // SESSIONS anahtarları "eskiAd::kat|masa" biçiminde — şube adı önekini yeniAd'a taşı
@@ -30678,7 +30859,7 @@ function subeSil(i){
   const acikMasa=subeMasalari(b.ad).some(mm=>{ const id=b.ad+"::"+mm.id; return SESSIONS[id]&&SESSIONS[id].acik; });
   if(acikMasa){ note("⛔ Açık masa var — önce hesapları kapatın"); return; }
   subeOnayAc('sil', i, b.ad,
-    b.ad+" KALICI olarak silinecek. Masa düzeni, fiyatlar ve tüm ayarları gidecek.");
+    b.ad+" şube listesinden silinecek. Masa düzeni, fiyatlar ve ayarları gidecek. Satış/gün-sonu mali geçmişi denetim için korunur.");
 }
 /* Şube kapatma/silme onay popup'ı (tehlikeli işlemler için ortak) */
 function subeOnayAc(tip, i, ad, mesaj){
@@ -30709,6 +30890,7 @@ function subeOnayUygula(){
     b.kapali=true; note("⛔ "+b.ad+" kapatıldı (geçici)");
     subeKaydet();
   } else {
+    // AYARLARI sil (masa, fiyat, POS, yazıcı, oturumlar) — bunlar şubeye özgü konfigürasyon
     delete BRANCH_TABLES[b.ad];
     delete BRANCH_INFO[b.ad];
     delete SUBE_FIYAT[b.ad];
@@ -30716,9 +30898,16 @@ function subeOnayUygula(){
     delete YAZICILAR[b.ad];
     const onek = b.ad+"::";
     Object.keys(SESSIONS).filter(id=>id.startsWith(onek)).forEach(id=>delete SESSIONS[id]);
+    // MALİ GEÇMİŞİ KORU: satış/iade faturaları, stok hareketleri, gün sonu (Z),
+    // vardiyalar denetim için silinmez. Şube listeden kalkar ama geçmiş raporlarda
+    // adıyla okunabilir kalır. (Backend'de bu bağ kalıcı id ile tutulacak.)
+    // Silinen şubeyi arşiv olarak işaretle ki raporlar "silinmiş şube" ayrımı yapabilsin.
+    if(typeof SILINEN_SUBELER!=="undefined"){
+      SILINEN_SUBELER[b.id||b.ad] = { id:b.id||null, ad:b.ad, silinmeTs:Date.now() };
+    }
     DEMO_BRANCHES.splice(p.i,1);
     subeKaydet(); menuKaydet(); posAyarKaydet(); yaziciKaydet(); sessionsKaydet();
-    note("🗑️ "+b.ad+" kalıcı olarak silindi");
+    note("🗑️ "+b.ad+" silindi · mali geçmişi raporlarda korunuyor");
   }
   subeOnayKapat();
   go("subeler");
@@ -30897,7 +31086,7 @@ function raporGunSonuHtml(){
       <thead><tr>
         <th>Vardiya</th><th>Kasiyer</th><th>Saat</th>
         <th class="sag">Net tahsilat</th><th class="sag">Devir aldı</th>
-        <th class="sag">Fark</th><th class="sag">🌅 Hazırlık</th><th class="sag">Kasadan alınan</th>
+        <th class="sag">Fark</th><th class="sag">➡️ Devreden</th><th class="sag">🏦 Bankaya</th>
       </tr></thead><tbody>`;
     vardiyalar.forEach(v=>{
       const farkVar = Math.abs(v.fark||0)>=0.01;
@@ -30989,6 +31178,10 @@ function gunSonuKapatModal(sube, gun){
   const ozet = gunSonuOzetHesapla(sube, gun);
   const vardiyalar = gunSonuVardiyalari(sube, gun);
   const kasaFark = Math.round(vardiyalar.reduce((t,v)=>t+(v.fark||0),0)*100)/100;
+  // GÜN BAŞI HAZIRLIK: günün ilk açılışında dışarıdan konan para (satış değil).
+  // Devir zincirinin başındaki "ilkAcilis" vardiyanın teslim aldığı tutar.
+  const _ilkV = vardiyalar.find(v=>v.ilkAcilis) || vardiyalar[0];
+  const gunBasiHazirlik = _ilkV ? Math.round((_ilkV.devirAlinan||0)*100)/100 : 0;
   const html = `
   <div class="modal-bg on" id="gsKapatModal" style="z-index:200" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) gsModalKapat()">
     <div class="gs-modal-ic">
@@ -31001,11 +31194,13 @@ function gunSonuKapatModal(sube, gun){
           <div class="kk-satir"><span>💵 Nakit</span><span>${tl(ozet.nakit)} ₺</span></div>
           <div class="kk-satir"><span>💳 Kredi kartı</span><span>${tl(ozet.kredi)} ₺</span></div>
           <div class="kk-satir"><span>📱 Diğer / QR</span><span>${tl(ozet.diger)} ₺</span></div>
+          ${(ozet.digerNakit>0||ozet.digerKredi>0)?`<div class="kk-satir kucuk"><span>↳ 💵 nakit ${tl(ozet.digerNakit||0)} · 💳 kredi ${tl(ozet.digerKredi||0)}</span><span></span></div>`:''}
           ${ozet.indirim>0?`<div class="kk-satir ind"><span>🏷️ İndirim</span><span>−${tl(ozet.indirim)} ₺</span></div>`:''}
           ${ozet.ikram>0?`<div class="kk-satir ikram"><span>🎁 İkram</span><span>−${tl(ozet.ikram)} ₺</span></div>`:''}
           ${ozet.iptalAdet>0?`<div class="kk-satir ind"><span>✕ İptal (${ozet.iptalAdet})</span><span>${tl(ozet.iptalTutar)} ₺</span></div>`:''}
           <div class="kk-satir toplam"><span>NET CİRO</span><span>${tl(ozet.net)} ₺</span></div>
           <div class="kk-satir kucuk"><span>${ozet.islemSayisi} işlem · ${ozet.urunAdet} ürün · ${vardiyalar.length} vardiya</span><span></span></div>
+          ${gunBasiHazirlik>0?`<div class="kk-satir"><span>🌅 Gün başı hazırlık (satış değil)</span><span>${tl(gunBasiHazirlik)} ₺</span></div>`:''}
           ${Math.abs(kasaFark)>=0.01?`<div class="kk-satir ${kasaFark<0?'ind':'fazla'}"><span>Kasa farkı toplamı</span><span>${kasaFark>0?'+':''}${tl(kasaFark)} ₺</span></div>`:''}
         </div>
 
@@ -31323,9 +31518,10 @@ function raporKasaVardiyaHtml(){
               <span>${farkVar?(v.nakitFark<0?'📉 EKSİK':'📈 FAZLA'):'✓ Kasa tam'}</span>
               <span>${farkVar?((v.nakitFark>0?'+':'')+tl(v.nakitFark)+' ₺'):'—'}</span></div>
             ${v.farkNot?`<div class="kv-not">📝 ${v.farkNot}</div>`:''}
-            <div class="kv-satir ayrac"><span>🌅 Sabah hazırlık parası (bırakılan)</span><span>${tl(v.hazirlik!=null?v.hazirlik:(v.devredilen||0))} ₺</span></div>
-            ${(v.hazirlikNakit!=null||v.hazirlikBozuk!=null||v.devredilenNakit!=null)?`<div class="kv-satir alt"><span>↳ 💵 nakit ${tl(v.hazirlikNakit!=null?v.hazirlikNakit:(v.devredilenNakit||0))} · 🪙 bozukluk ${tl(v.hazirlikBozuk!=null?v.hazirlikBozuk:(v.devredilenBozuk||0))}</span><span></span></div>`:''}
-            <div class="kv-satir"><span>🏦 Kasadan alınan (satış nakiti)</span><span>${tl(v.kasadanAlinan||0)} ₺</span></div>
+            <div class="kv-satir ayrac"><span>➡️ Sonraki vardiyaya devreden</span><span>${tl(v.devredilen!=null?v.devredilen:(v.hazirlik||0))} ₺</span></div>
+            ${(v.devredilenNakit!=null||v.devredilenBozuk!=null||v.hazirlikNakit!=null)?`<div class="kv-satir alt"><span>↳ 💵 nakit ${tl(v.devredilenNakit!=null?v.devredilenNakit:(v.hazirlikNakit||0))} · 🪙 bozukluk ${tl(v.devredilenBozuk!=null?v.devredilenBozuk:(v.hazirlikBozuk||0))}</span><span></span></div>`:''}
+            ${(v.hazirlik)?`<div class="kv-satir alt"><span>↳ 🌅 bunun ${tl(v.hazirlik)} ₺'si sabah hazırlığı</span><span></span></div>`:''}
+            <div class="kv-satir"><span>🏦 Kasadan alınan (bankaya)</span><span>${tl(v.kasadanAlinan||0)} ₺</span></div>
           ` : `<div class="kv-satir toplam"><span>Şu anki beklenen nakit</span><span>${tl(vardiyaBeklenenNakit(v))} ₺</span></div>
                <div class="kv-devam">🔓 Kasa hâlâ açık — kapanış bilgileri henüz yok</div>`}
         </div>
@@ -32595,6 +32791,7 @@ function urunGorsel(p, buyuk){
 function openQR(){
   document.getElementById("login").style.display="none";
   QR = { masa:"1", masaKat:"İç Salon", sube:"Edirne Atatürk", kisi:"", tel:"", musteri:null, sepet:[], view:"karsilama", aktifKat:"Tatlılar" };
+  qrKodUygula();   // masadaki QR'dan gelen şube+masa'yı uygula (yoksa varsayılan kalır)
   cerezOnayYukle();   // çerez tercihi + cihaz hafızası (tanınan müşteri) geri yüklenir
   // çerez kabul edilmiş + cihaz tanınıyorsa → karşılamayı atla, üyeyi yükle
   if(DEVICE_MEMORY && typeof musteriBulMail==="function"){
@@ -32650,6 +32847,7 @@ function renderQR(){
   else if(QR.view==="yorumlar")  el.innerHTML = qrYorumlarHtml();
   else if(QR.view==="yorumEkle") el.innerHTML = qrYorumEkleHtml();
   else if(QR.view==="onay")     el.innerHTML = qrOnayHtml();
+  else if(QR.view==="baglantiYok") el.innerHTML = qrBaglantiYokHtml();
   el.scrollTop = 0;
   qrSepetBarGuncelle();   // body-seviyesi sabit sepet bar (viewport altında)
   if(QR.view==="opening") qrOpeningBaslat();   // logo/yazı/daktilo animasyon zinciri
@@ -34066,6 +34264,44 @@ function qrKalemPaket(i){
   QR.sepet[i].paket = !QR.sepet[i].paket;
   renderQR();
 }
+/* ══════════════════════════════════════════════════════════════
+   QR MENÜ — OFFLINE SİPARİŞ KUYRUĞU
+   Müşteri "gönder"e bastığında bağlantı yoksa sipariş kaybolmamalı ve
+   müşteriye "gönderildi" yalanı söylenmemeli. Sipariş telefonda tutulur,
+   bağlantı gelince otomatik yollanır. Uzun süre gelmezse garson çağrılır.
+   NOT: Gerçek çözüm backend gerektirir; bu, tek-cihaz demoda müşteriyi
+   koruyan ve kayıp siparişi önleyen güvenlik katmanıdır.
+   ══════════════════════════════════════════════════════════════ */
+let QR_BEKLEYEN = [];   // [{sepet, siparetTipi bilgisi, ts}]
+function qrSiparisKuyrukla(){
+  // mevcut sepeti bekleyen kuyruğa al (kopyayla) — bağlantı gelince yollanacak
+  QR_BEKLEYEN.push({ sepet: JSON.parse(JSON.stringify(QR.sepet)),
+    siparisTipi: QR.siparisTipi, masa: QR.masa, kisi: QR.kisi,
+    musteri: QR.musteri, icerideMi: QR.icerideMi, sube: QR.sube, ts: Date.now() });
+  QR.view = "baglantiYok";
+  renderQR();
+}
+/* Bağlantı geldiğinde bekleyen QR siparişlerini otomatik yollar */
+function qrKuyrukGonder(){
+  if(!QR_BEKLEYEN.length) return;
+  if(typeof navigator!=="undefined" && navigator.onLine===false) return;
+  const bekleyen = QR_BEKLEYEN.slice();
+  QR_BEKLEYEN = [];
+  bekleyen.forEach(b=>{
+    // QR bağlamını geçici olarak bu siparişe ayarlayıp normal gönderimi çalıştır
+    const yedek = {sepet:QR.sepet, siparisTipi:QR.siparisTipi, masa:QR.masa, kisi:QR.kisi, musteri:QR.musteri, icerideMi:QR.icerideMi, sube:QR.sube, view:QR.view};
+    QR.sepet=b.sepet; QR.siparisTipi=b.siparisTipi; QR.masa=b.masa; QR.kisi=b.kisi; QR.musteri=b.musteri; QR.icerideMi=b.icerideMi; QR.sube=b.sube;
+    QR._hediyeOnaylandi = true;   // kuyruğa alınırken zaten onaylanmıştı
+    try{ qrSiparisGonderDevam(); }catch(e){ QR_BEKLEYEN.push(b); }
+    // bağlamı geri yükle (kullanıcı o an başka ekranı görüyor olabilir)
+    Object.assign(QR, yedek);
+  });
+  if(typeof note==="function") note("✓ Bekleyen sipariş(ler) gönderildi");
+}
+// bağlantı geri geldiğinde otomatik dene
+if(typeof window!=="undefined"){
+  window.addEventListener("online", ()=>{ try{ qrKuyrukGonder(); }catch(e){} });
+}
 function qrSiparisGonder(){
   // 🎁 hediye varsa müşteriye net bilgilendirme yap (kasada ücret alınmayacak)
   const hediyeler = QR.sepet.filter(c=>c.hediye);
@@ -34092,10 +34328,19 @@ function qrHediyeOnayGonder(){
   qrSiparisGonderDevam();
 }
 function qrSiparisGonderDevam(){
+  // ── BAĞLANTI KONTROLÜ (QR menü) ──
+  // QR menü müşterinin telefonunda çalışır; sipariş mutfağa ulaşmak için
+  // bağlantı ister. Bağlantı yoksa sipariş SESSIONS'a yazılıp "gönderildi"
+  // denmemeli — yoksa müşteri gönderdiğini sanır, mutfak görmez.
+  // Bağlantı yoksa: kuyruğa al, müşteriye dürüst uyarı ver, bağlantı gelince yolla.
+  if(typeof navigator!=="undefined" && navigator.onLine===false){
+    qrSiparisKuyrukla();
+    return;
+  }
   const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
   // NOT: Stok düşümü ödeme anında yapılır (masaGecmiseArsivle) — burada değil.
   const kalemlerKopya = QR.sepet.map(c=>({ad:c.ad, secimler:c.secimler, secimGruplu:c.secimGruplu, fiyat:c.fiyat*c.q, paket:!!c.paket, hediye:!!c.hediye, hediyeId:c.hediyeId||null}));
-  let takipId = "S"+(_takipId++);
+  let takipId = "S"+CIHAZ_ONEK+(_takipId++);
   let fisMasaRef = QR.masa;   // mutfak fişini doğru kayda bağlamak için (varsayılan: masa siparişi)
   // EVE TESLİMAT → adresli paket kaydı
   if(QR.siparisTipi==="eve" && QR.musteri){
@@ -34183,6 +34428,25 @@ function qrSiparisGonderDevam(){
     QR.kazanim = {puan:puanKazanc, carpan:kademe.carpan, kademeAd:kademe.ad, beklemede:true};
   }
   QR.sepet = []; QR.view = "onay"; renderQR();
+}
+function qrBaglantiYokHtml(){
+  // Müşteriye DÜRÜST bilgilendirme: sipariş henüz mutfağa ulaşmadı.
+  const bekleyenAdet = QR_BEKLEYEN.length;
+  return `<div class="qr-onay-wrap" style="text-align:center;padding:32px 22px">
+    <div style="font-size:52px;line-height:1;margin-bottom:14px">📡</div>
+    <div style="font-size:20px;font-weight:700;color:var(--err);margin-bottom:10px">Bağlantı kurulamadı</div>
+    <div style="font-size:14.5px;color:var(--ink-2);line-height:1.6;margin-bottom:18px">
+      Siparişiniz <b>henüz mutfağa iletilemedi</b>. İnternet bağlantısı beklendiği için
+      telefonunuzda güvende tutuluyor.<br><br>
+      Bağlantı gelince <b>otomatik gönderilecek</b>. Acele ediyorsanız lütfen
+      <b>garsonu çağırın</b> — siparişinizi elle alabilir.
+    </div>
+    <div style="background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:13px;color:var(--ink-2)">
+      ⏳ Bekleyen sipariş: <b>${bekleyenAdet}</b>
+    </div>
+    <button class="qr-pop-btn" style="width:100%;margin-bottom:10px" onclick="qrKuyrukGonder(); if(!QR_BEKLEYEN.length){QR.view='onay';renderQR();}">🔄 Tekrar dene</button>
+    <button class="qr-pop-btn" style="width:100%;background:var(--surface-2);color:var(--ink-1);border:1px solid var(--line)" onclick="QR.view='menu';renderQR()">Menüye dön</button>
+  </div>`;
 }
 function qrOnayHtml(){
   let sadakatBlok = '';
@@ -35224,7 +35488,7 @@ function garsonMasaGonder(){
 function garsonPaketGonder(){
   if(!GARSON.paketSepet || GARSON.paketSepet.length===0){ note("Paket sepeti boş"); return; }
   const t=GARSON.paketSepet.reduce((s,c)=>s+c.fiyat,0);
-  const takipId="S"+(_takipId++);
+  const takipId="S"+CIHAZ_ONEK+(_takipId++);
   const yeniId=_paketId++;
   const eve = GARSON.paketTip==="eve";
   PAKET_ORDERS.push({
