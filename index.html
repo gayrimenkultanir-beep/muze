@@ -308,17 +308,18 @@ input,select{font-family:inherit; font-size:15px}
   /* Sol menü: ekran dışına gizli bir çekmece (drawer). Açılınca kayar gelir. */
   .nav{
     position:fixed;
-    top:60px; left:0; bottom:0;
+    top:60px; left:0;
     width:82vw!important; max-width:320px!important;
-    height:auto!important;
+    height:calc(100vh - 60px)!important;
+    max-height:calc(100vh - 60px)!important;
     transform:translateX(-100%);
     transition:transform .28s ease;
     z-index:60;
     box-shadow:4px 0 26px rgba(45,29,18,.35);
-    overflow-y:auto!important;
+    overflow-y:scroll!important;
     -webkit-overflow-scrolling:touch;
     overscroll-behavior:contain;
-    padding-bottom:40px!important;
+    padding-bottom:60px!important;
   }
   .nav.acik{transform:translateX(0)}
 
@@ -13902,6 +13903,38 @@ function navGrupTikla(baslik){
   buildNav();
 }
 
+/* ── TELEFON GERİ TUŞU (popstate) ──
+   Geri tuşuna basınca: önce açık bir modal/panel varsa onu kapat;
+   yoksa tarayıcı geçmişindeki önceki ekrana dön. Böylece geri tuşu
+   uygulamadan atmak yerine bir önceki adıma/sayfaya gider. */
+(function(){
+  if(typeof window==="undefined") return;
+  window.addEventListener("popstate", function(ev){
+    // 1) Açık bir modal varsa önce onu kapat (geri = modalı kapat)
+    const acikModal = document.querySelector(".modal-bg.on, .qr-pop-bg.on, .irs-modal-bg.on");
+    if(acikModal){
+      // modalın kendi kapatma yolu: arka plana tıklama simülasyonu yerine gizle
+      acikModal.classList.remove("on");
+      // geçmişe bir adım daha ekle ki bir sonraki geri yine uygulamada kalsın
+      try{ history.pushState({minipanEkran: state.ekran}, ""); }catch(e){}
+      return;
+    }
+    // 2) Mobil menü açıksa önce onu kapat
+    const nav = document.getElementById("nav");
+    if(nav && nav.classList.contains("acik")){
+      if(typeof navDrawerKapat==="function") navDrawerKapat();
+      try{ history.pushState({minipanEkran: state.ekran}, ""); }catch(e){}
+      return;
+    }
+    // 3) Önceki ekrana dön (history.state'teki ekran)
+    const hedef = (ev.state && ev.state.minipanEkran) ? ev.state.minipanEkran : null;
+    if(hedef && typeof go==="function"){
+      window._geriTusundan = true;   // go içinde tekrar pushState yapma
+      go(hedef, true);
+    }
+  });
+})();
+
 function go(key, scrollKoru){
   // Mobilde menüden seçim yapılınca drawer otomatik kapansın
   if(typeof navDrawerKapat==="function") navDrawerKapat();
@@ -13921,6 +13954,16 @@ function go(key, scrollKoru){
     state._raporErisimAcik = false;
   }
   state.ekran = key;                       // aktif ekran (nav vurgusu için)
+  // ── TELEFON GERİ TUŞU DESTEĞİ ──
+  // Her ekran değişiminde tarayıcı geçmişine kayıt ekle. Geri tuşuna basınca
+  // popstate tetiklenir ve bir önceki ekrana döneriz (aşağıdaki dinleyici).
+  // _geriTusundan: popstate'ten gelen çağrıda tekrar push etme (döngü önlemi).
+  try{
+    if(!window._geriTusundan && typeof history!=="undefined" && history.pushState){
+      history.pushState({minipanEkran:key}, "");
+    }
+  }catch(e){}
+  window._geriTusundan = false;
   // seçilen ekran bir grupta ise o grubu aç; grupsuz (Canlı/Bildirim) ise açık grubu kapat
   const grupBul = (k)=>{ const g=NAV_GRUPLAR.find(gr=>gr.baslik && gr.uyeler.includes(k)); return g?g.baslik:null; };
   // Sadece kullanıcı bir menüye TIKLAYINCA grubu aç (ilk açılışta gruplar kapalı kalır)
