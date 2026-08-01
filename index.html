@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -260,6 +260,12 @@ input,select{font-family:inherit; font-size:15px}
   display:flex; align-items:center; gap:14px; padding:0 18px;
 }
 .tb-logo{font-weight:800; font-size:18px; letter-spacing:-.3px; display:flex; align-items:center; gap:8px}
+/* Hamburger — masaüstünde GİZLİ, sadece mobilde görünür (aşağıda @media) */
+.tb-ham{display:none; background:var(--brand); color:#fff; border:none; width:40px; height:40px; border-radius:10px; font-size:20px; line-height:1; cursor:pointer; align-items:center; justify-content:center; flex:none}
+.tb-ham:active{transform:scale(.94)}
+/* Menü karartısı (backdrop) — sadece mobilde drawer açıkken görünür */
+.nav-backdrop{display:none; position:fixed; inset:0; background:rgba(45,29,18,.5); z-index:5; opacity:0; transition:opacity .28s}
+.nav-backdrop.acik{opacity:1}
 .tb-logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand-d));display:grid;place-items:center;font-size:17px}
 .tb-branch{
   font-size:13px; color:var(--ink-2); padding:5px 12px;
@@ -291,6 +297,91 @@ input,select{font-family:inherit; font-size:15px}
 /* nav öğeleri asla sıkışmasın — uzarsa scroll olsun */
 .nav > *,.nav-grup-baslik,.nav-item,.nav-grup-govde,.nav-tekli{ flex:none!important; flex-shrink:0!important; }
 .nav::-webkit-scrollbar{display:none}
+
+/* ═══ MOBİL HAMBURGER MENÜ ═══
+   Dar ekranda (≤820px) sol menü açılır-kapanır drawer olur.
+   Masaüstünde (>820px) hiçbir şey değişmez — menü sabit kalır. */
+@media(max-width:820px){
+  /* Hamburger butonu görünsün */
+  .tb-ham{display:flex}
+
+  /* Sol menü: ekran dışına gizli bir çekmece (drawer). Açılınca kayar gelir. */
+  .nav{
+    position:fixed;
+    top:60px; left:0; bottom:0;
+    width:82vw!important; max-width:320px!important;
+    transform:translateX(-100%);
+    transition:transform .28s ease;
+    z-index:60;
+    box-shadow:4px 0 26px rgba(45,29,18,.35);
+    overflow-y:auto;
+  }
+  .nav.acik{transform:translateX(0)}
+
+  /* nav position:fixed → akıştan çıkar. body'yi düz block yapıyoruz ki
+     flex-column'da nav'a hayalet satır ayrılmasın (üstteki boşluğun sebebi buydu).
+     main tek çocuk gibi tüm alanı üstten doldurur ve kendi içinde kayar. */
+  .body{display:block!important; position:relative!important; height:100%; overflow:hidden}
+  .main{position:absolute!important; top:0; left:0; right:0; bottom:0;
+        width:auto!important; height:auto!important;
+        overflow-y:auto!important; -webkit-overflow-scrolling:touch;
+        padding:16px 14px; display:block!important}
+
+  /* Karartı */
+  .nav-backdrop{top:60px}
+  .nav-backdrop.acik{display:block}
+
+  /* Menü açıkken öğeler BÜYÜK ve satır stili (gerçek yapıya göre) */
+  .nav-grup-baslik{
+    width:auto!important; margin:4px 10px!important;
+    flex-direction:row!important; align-items:center!important; justify-content:flex-start!important;
+    gap:12px!important; padding:16px!important;
+  }
+  .nav-grup-baslik .ngb-ic{font-size:22px!important}
+  .nav-grup-baslik .ngb-ad{font-size:16px!important; font-weight:700!important}
+  .nav-grup-baslik .ngb-ok{margin-left:auto!important; font-size:14px!important}
+  .nav-item{
+    width:auto!important; margin:3px 12px 3px 28px!important;
+    flex-direction:row!important; align-items:center!important; justify-content:flex-start!important;
+    gap:12px!important; padding:14px 16px!important;
+    font-size:15px!important; text-align:left!important;
+  }
+  .nav-item .ni-ic{font-size:19px!important}
+  .nav-tekli{
+    width:auto!important; margin:4px 10px!important;
+    flex-direction:row!important; align-items:center!important; justify-content:flex-start!important;
+    gap:12px!important; padding:16px!important; font-size:16px!important;
+  }
+  .nav-tekli .ni-ic{font-size:22px!important}
+
+  /* ═══ MOBİL TİPOGRAFİ & BOŞLUK İYİLEŞTİRME ═══
+     Masaüstü boyutları mobilde biraz büyük kalıyor; ekranı verimli
+     kullanmak için ölçülü küçültme. Sadece boyut/boşluk — layout'a dokunmaz. */
+
+  /* Sayfa başlıkları biraz küçülsün */
+  .sec-head h2{font-size:17px!important}
+  .sec-head .sh-sub{font-size:12px!important}
+
+  /* KPI kartları (Günlük ciro vb.) daha kompakt */
+  .kpi{padding:13px 14px!important}
+  .kpi .k-val{font-size:22px!important}
+  .kpi .k-lbl{font-size:11.5px!important}
+
+  /* Stok kartları daha derli toplu */
+  .stok-kart{padding:11px 12px!important}
+  .sk-etiket{font-size:11.5px!important}
+  .sk-deger{font-size:15px!important}
+  .sk-alt{font-size:11px!important}
+
+  /* Bilgi/uyarı şeritleri ve genel gövde metni */
+  .sh-info, .bayi-aciklama, .info-serit{font-size:12.5px!important}
+
+  /* Butonlar taşmasın, dokunmatik-dostu ama kompakt */
+  button{max-width:100%}
+
+  /* Yatay taşma güvenlik ağı — hiçbir kart ekranı aşmasın */
+  .kpi-row, .bstok-serit, .prod-grid{max-width:100%}
+}
 
 /* ——— Alt menü öğeleri (Stok, Reçete, Bayi Kanalı...) — GİRİNTİLİ, HAFİF ——— */
 /* Ana menüden görsel olarak AYRI: daha küçük, çerçevesiz, içeri girintili */
@@ -782,6 +873,13 @@ tr:last-child td{border-bottom:none}
 .skp-tarih-alan{display:flex; gap:10px; margin-top:12px}
 .skp-tarih-alan .fat-alan{flex:1}
 /* ═══ Bayi Stokları — seçim şeridi + tablo ═══ */
+.bstok-ara-sar{display:flex; align-items:center; gap:8px; margin:2px 0 12px; padding:10px 14px; border:1.5px solid var(--line); border-radius:12px; background:var(--surface)}
+.bstok-ara-ikon{font-size:15px; opacity:.7}
+.bstok-ara-input{flex:1; border:none; background:transparent; outline:none; font-size:14.5px; color:var(--ink-1); font-family:inherit}
+.bstok-ara-input::placeholder{color:var(--ink-3)}
+.bstok-ara-temizle{border:none; background:transparent; color:var(--ink-3); font-size:15px; cursor:pointer; padding:2px 6px; border-radius:8px}
+.bstok-ara-temizle:hover{background:var(--surface-2); color:var(--ink-1)}
+.bstok-ara-bos{padding:16px; text-align:center; color:var(--ink-3); font-size:14px; background:var(--surface); border:1.5px dashed var(--line); border-radius:12px; margin-bottom:10px}
 .bstok-serit{display:flex; gap:9px; overflow-x:auto; padding:4px 2px 10px; margin-bottom:6px}
 .bstok-kart{flex:0 0 auto; min-width:130px; display:flex; flex-direction:column; gap:4px; padding:12px 15px; border-radius:12px; border:1.5px solid var(--line); background:var(--surface); cursor:pointer; text-align:left; transition:all .15s ease}
 .bstok-kart:hover{border-color:var(--brand)}
@@ -869,9 +967,26 @@ tr:last-child td{border-bottom:none}
 .bfiyat-toplam-satis strong{color:var(--brand-d); font-size:18px}
 @media(max-width:720px){
   .bfiyat-head{display:none}
-  .bfiyat-satir{grid-template-columns:1fr 1fr; gap:5px 8px; padding:12px}
+  .bfiyat-satir{grid-template-columns:1fr 1fr !important; gap:10px !important; padding:14px !important}
   .bfiyat-satir.bfiyat-a2{grid-template-columns:1fr 1fr !important}
-  .bfiyat-satir .bf-ad{grid-column:1/3; font-size:14px; font-weight:800; margin-bottom:2px}
+  .bfiyat-satir .bf-ad{grid-column:1/3; font-size:15px; font-weight:800; margin-bottom:6px}
+  /* Her değer kendi kutusunda: etiket üstte, değer altta */
+  .bfiyat-satir .bf-mik,
+  .bfiyat-satir .bf-kdv,
+  .bfiyat-satir .bf-alis,
+  .bfiyat-satir .bf-satis,
+  .bfiyat-satir .bf-durum{
+    display:flex; flex-direction:column; gap:5px; align-items:flex-start;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:11px 13px; font-size:16px; font-weight:700;
+  }
+  .bfiyat-satir [data-l]::before{
+    content:attr(data-l);
+    font-size:12px; font-weight:700; color:var(--ink-3);
+    text-transform:uppercase; letter-spacing:.4px;
+  }
+  .bfiyat-satir .bf-birim-et{font-size:11px; font-weight:400; color:var(--ink-3)}
+  .bfiyat-satir .bf-islem{grid-column:1/3; display:flex; justify-content:flex-end}
 }
 /* Sipariş ver ekranı — 6 sütun (tek satış üst birim sütunu) */
 .bsip-head,.bsip-satir{grid-template-columns:1.5fr 0.95fr 1.25fr 0.5fr 1.05fr 0.9fr !important}
@@ -901,8 +1016,34 @@ tr:last-child td{border-bottom:none}
 .sd-alin{color:#8a6a47; font-weight:700}
 @media(max-width:720px){
   .sdurum-head{display:none}
-  .sdurum-satir{grid-template-columns:1fr 1fr !important; gap:5px 8px}
-  .sdurum-satir .bf-ad{grid-column:1/3; font-weight:800; margin-bottom:2px}
+  .sdurum-satir{grid-template-columns:1fr 1fr !important; gap:10px !important; padding:14px !important}
+  .sdurum-satir .bf-ad{grid-column:1/3; font-weight:800; font-size:15px; margin-bottom:6px}
+  /* Her değer kendi kutusunda: etiket üstte, değer altta — ferah ve okunaklı */
+  .sdurum-satir .sd-mik,
+  .sdurum-satir .sd-kdv,
+  .sdurum-satir .sd-bfiyat,
+  .sdurum-satir .sd-tfiyat,
+  .sdurum-satir .sd-tuk,
+  .sdurum-satir .sd-alin{
+    display:flex; flex-direction:column; gap:5px;
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:11px 13px;
+  }
+  .sdurum-satir [data-l]::before{
+    content:attr(data-l);
+    font-size:12px; font-weight:700; color:var(--ink-3);
+    text-transform:uppercase; letter-spacing:.4px;
+  }
+  /* Değerlerin kendisi büyük ve net */
+  .sdurum-satir .sd-mik,
+  .sdurum-satir .sd-kdv,
+  .sdurum-satir .sd-bfiyat,
+  .sdurum-satir .sd-tfiyat,
+  .sdurum-satir .sd-tuk,
+  .sdurum-satir .sd-alin{
+    font-size:16.5px; font-weight:700;
+  }
+  .sdurum-satir .sd-fiyatyok{font-size:13.5px; font-weight:400; font-style:italic; color:var(--ink-3)}
 }
 @media(max-width:720px){
   .bsip-satir{grid-template-columns:1fr 1fr !important}
@@ -1444,7 +1585,7 @@ tr:last-child td{border-bottom:none}
 .fk-ambalaj-ici .skm-lbl{color:var(--brand-d)}
 .kalem-kcal{display:inline-block; font-size:11px; font-weight:700; color:#785342; background:#fdecea; border-radius:6px; padding:1px 6px; margin-left:4px; white-space:nowrap; vertical-align:middle}
 .opt-kcal{display:inline-block; font-size:11.5px; font-weight:700; color:#785342; margin-left:6px}
-.qr-card-kcal{display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:700; color:#583923; background:#ffe6df; border-radius:99px; padding:3px 9px; white-space:nowrap}
+.qr-card-kcal{display:inline-flex; align-items:center; gap:3px; font-size:12.5px; font-weight:700; color:#583923; background:#ffe6df; border-radius:99px; padding:4px 10px; white-space:nowrap}
 .qr-card-kcal-row{margin:3px 0 5px}
 /* ══ Sevk İrsaliyesi önizleme modalı ══ */
 .irs-modal-bg{position:fixed; inset:0; z-index:300; background:rgba(20,10,20,.55); display:flex; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto}
@@ -2740,8 +2881,8 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .qkk-gorsel.qkk-foto{overflow:hidden; display:block; position:relative; background-size:cover; background-position:center; background-repeat:no-repeat; background-color:#faf6ec}
 .qkk-gorsel span{font-size:38px; opacity:.9}
 .qkk-bilgi{flex:1 1 auto; padding:9px 8px 11px; text-align:center}
-.qkk-ad{font-size:12.5px; font-weight:800; line-height:1.25}
-.qkk-adet{font-size:10.5px; color:var(--ink-2); margin-top:2px}
+.qkk-ad{font-size:15px; font-weight:800; line-height:1.25}
+.qkk-adet{font-size:12.5px; color:var(--ink-2); margin-top:3px}
 .qr-anamenu-row{position:sticky; top:57px; z-index:4; display:flex; align-items:center; gap:12px; padding:12px 16px; background:var(--surface); border-bottom:1px solid var(--line)}
 .qr-anamenu-btn{padding:10px 16px; border-radius:99px; background:var(--cocoa); color:#fff; font-size:13.5px; font-weight:800; flex:none}
 .qr-anamenu-btn:active{transform:scale(.96)}
@@ -4339,7 +4480,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .qr-img-ph{display:flex !important; align-items:center; justify-content:center}
 .qr-card-body{flex:1 1 auto; display:block; padding:14px 16px 66px}
 .qr-card-info{min-width:0; padding-right:0}
-.qr-card-ad{font-weight:800; font-size:17px; line-height:1.25}
+.qr-card-ad{font-weight:800; font-size:19px; line-height:1.25}
 .qr-card-ad-row .qr-card-ad{margin-bottom:0; word-break:break-word}
 /* Görsel kapsayıcı — kart genişliğine göre KARE alan, görsel alanı TAM doldurur */
 .qr-card-gorsel-wrap{position:relative; display:block; width:100%; height:0 !important; padding-bottom:100% !important; box-sizing:content-box !important; flex:none !important; overflow:hidden; background:#faf6ec; min-height:0}
@@ -4350,8 +4491,8 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 /* Fiyat + Mag puan aynı satırda: fiyat solda, mag sağında */
 .qr-card-fiyat-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:5px}
 .qr-card-fiyat-row .qr-mag-rozet{margin:0; font-size:11px; padding:3px 9px; border-radius:99px; gap:3px; box-shadow:none; animation:none}
-.qr-card-desc{font-size:12.5px; color:var(--ink-2); line-height:1.45; margin-bottom:7px; text-align:justify; hyphens:auto}
-.qr-card-fiyat{font-weight:800; font-size:19px; color:var(--brand-d)}
+.qr-card-desc{font-size:14px; color:var(--ink-2); line-height:1.5; margin-bottom:7px; text-align:justify; hyphens:auto}
+.qr-card-fiyat{font-weight:800; font-size:21px; color:var(--brand-d)}
 #qrApp .qr-card-add{position:absolute; right:16px; bottom:16px; z-index:3; width:46px; height:46px; border-radius:99px; background:var(--brand); color:#fff; display:grid; place-items:center; font-size:28px; font-weight:700; box-shadow:0 3px 10px rgba(88,57,35,.35); border:none}
 .qr-card-add:active{transform:scale(.92); background:var(--brand-d); color:#fff}
 .qr-card-tukendi{position:absolute; right:16px; bottom:16px; z-index:3; flex:none; font-size:11.5px; font-weight:800; color:var(--danger); background:var(--danger-soft); padding:8px 13px; border-radius:9px}
@@ -7635,14 +7776,15 @@ body{ background:var(--bg) !important; }    /* düz krem zemin (temaya göre) */
 .grs-sekme-row .grs-sekme,
 .mag-sekme-row .mag-sekme,
 .yym-sekme-row .yym-sekme{
-  flex:1 1 0 !important;
+  flex:1 1 auto !important;
   min-width:90px !important;
   justify-content:center !important;
   text-align:center !important;
   display:flex !important;
   align-items:center !important;
   gap:6px !important;
-  white-space:nowrap !important;
+  white-space:normal !important;
+  line-height:1.2 !important;
 }
 @media(max-width:640px){
   .bayi-sekme-row, .fyt-sekme-row, .rapor-sekme-bar, .kasa-sekme-row,
@@ -7917,6 +8059,7 @@ input, select, textarea{ max-width:100% !important; box-sizing:border-box; }
 <!-- ====================== UYGULAMA ====================== -->
 <div id="app">
   <div class="topbar">
+    <button class="tb-ham" id="tbHam" onclick="navDrawerToggle()" aria-label="Menü">☰</button>
     <div class="tb-logo" id="tbLogo"><span class="mark" id="tbMark">🧇</span> <span id="tbWordmark">MİNİPAN</span></div>
     <span class="tb-branch" id="branchLabel">—</span>
     <div class="tb-spacer"></div>
@@ -7927,6 +8070,7 @@ input, select, textarea{ max-width:100% !important; box-sizing:border-box; }
     <button class="tb-out" onclick="AKTIF_PERSONEL?personelCikis():logout()">Çıkış</button>
   </div>
   <div class="body">
+    <div class="nav-backdrop" id="navBackdrop" onclick="navDrawerKapat()"></div>
     <div class="nav" id="nav"></div>
     <div class="main" id="main"></div>
   </div>
@@ -13676,8 +13820,24 @@ function logout(){
   location.reload();          // giriş ekranını temiz yükle (şube seçimi sıfırlanır)
 }
 
-function buildNav(){
-  const nav = document.getElementById("nav");
+/* ═══ MOBİL HAMBURGER DRAWER — aç/kapa/toggle ═══
+   Masaüstünde CSS zaten menüyü sabit tuttuğu için bu fonksiyonlar
+   sadece mobilde görsel etki yapar (class ekler/çıkarır). */
+function navDrawerAc(){
+  const n=document.getElementById("nav"), b=document.getElementById("navBackdrop");
+  if(n) n.classList.add("acik");
+  if(b) b.classList.add("acik");
+}
+function navDrawerKapat(){
+  const n=document.getElementById("nav"), b=document.getElementById("navBackdrop");
+  if(n) n.classList.remove("acik");
+  if(b) b.classList.remove("acik");
+}
+function navDrawerToggle(){
+  const n=document.getElementById("nav");
+  if(n && n.classList.contains("acik")) navDrawerKapat(); else navDrawerAc();
+}
+function buildNav(){  const nav = document.getElementById("nav");
   const rolNav = ROLES[state.role].nav;          // bu rolün görebildiği menüler
   // menü yetkisine göre de filtrele (genel/mudur her zaman tam yetkili)
   const rolSet = new Set(rolNav.filter(k=>menuAcikMi(state.role, k)));
@@ -13739,6 +13899,8 @@ function navGrupTikla(baslik){
 }
 
 function go(key, scrollKoru){
+  // Mobilde menüden seçim yapılınca drawer otomatik kapansın
+  if(typeof navDrawerKapat==="function") navDrawerKapat();
   // 🔐 MENÜ YETKİSİ — bu rol için kapalı menüye giriş engellenir (genel/mudur muaf)
   if(!menuAcikMi(state.role, key)){
     note("🔒 Bu bölüme erişim yetkiniz yok");
@@ -14136,7 +14298,7 @@ function kasaKapatAc(){
           <div class="kk-satir"><span>🌅 Açılış parası (hazırlık)</span><span>${tl(v.devirAlinan||0)} ₺</span></div>
           <div class="kk-satir kucuk"><span>↳ satış değildir · ciroya dahil değil</span><span></span></div>
           <div class="kk-satir"><span>💵 Nakit satış</span><span>${tl(ozet.nakit)} ₺</span></div>
-          ${ozet.digerNakit>0?`<div class="kk-satir alt"><span>↳ Diğer/QR nakit kısmı</span><span>${tl(ozet.digerNakit)} ₺</span></div>`:''}
+          ${ozet.diger>0?`<div class="kk-satir alt"><span>↳ Diğer/QR: 💵 nakit ${tl(ozet.digerNakit||0)} · 💳 kredi ${tl(ozet.digerKredi||0)}</span><span></span></div>`:''}
           <div class="kk-satir"><span>💳 Kredi kartı</span><span>${tl(ozet.kredi)} ₺</span></div>
           <div class="kk-satir"><span>📱 Diğer / QR</span><span>${tl(ozet.diger)} ₺</span></div>
           ${ozet.indirim>0?`<div class="kk-satir ind"><span>🏷️ İndirim</span><span>−${tl(ozet.indirim)} ₺</span></div>`:''}
@@ -25709,11 +25871,11 @@ function stokSonucHtml(){
           <span class="sk-deger">${alisUst!=null?tl(alisUst)+' ₺':'—'}</span>
           <span class="sk-alt">${ustCarpan} ${u.tabanBirim}</span>
         </div>`:''}
-        ${marj!=null?`<div class="stok-kutu stok-kutu-marj">
+        <div class="stok-kutu stok-kutu-marj">
           <span class="sk-etiket">📈 Marj</span>
-          <span class="sk-deger">%${marj.toFixed(0)}</span>
-          <span class="sk-alt">KDV dahil</span>
-        </div>`:''}
+          <span class="sk-deger">${marj!=null?'%'+marj.toFixed(0):'—'}</span>
+          <span class="sk-alt">${marj!=null?'KDV dahil':'fiyat girilince'}</span>
+        </div>
         <div class="stok-kutu stok-kutu-satis${satisH?'':' bos'}">
           <span class="sk-etiket">💰 Satış birim</span>
           <span class="sk-deger">${satisH?tl(satisH.toplam)+' ₺':'— fiyat girilmedi'}</span>
@@ -25964,7 +26126,7 @@ function _csvSatirBol(satir){
   return alanlar;
 }
 
-const STOK_CSV_BASLIK = ["Ürün No","Ad","Kategori","Taban Birim","Üst Birim","Üst Çarpan","Kritik Stok","Alış Fiyatı (KDV hariç)","Alış KDV %","Satış Fiyatı","Satış KDV %","Satış KDV Dahil (E/H)","Kcal (taban birim başına)","Durum (Açık/Kapalı)","Açıklama","Sistem Kodu (değiştirmeyin)"];
+const STOK_CSV_BASLIK = ["Ürün No","Ad","Kategori","Taban Birim","Üst Birim","Üst Çarpan","Kritik Stok","Alış Fiyatı (KDV hariç)","Alış KDV %","Satış Fiyatı","Satış KDV %","Satış KDV Dahil (E/H)","Kcal (taban birim başına)","Durum (Açık/Kapalı)","Açıklama"];
 
 function stokKartCsvIndir(){
   const satirlar=[STOK_CSV_BASLIK.map(_csvHucre).join(";")];
@@ -25987,8 +26149,7 @@ function stokKartCsvIndir(){
       s.satisKdvDahil?"E":"H",
       s.kcal!=null?s.kcal:"",
       (s.aktif!==false)?"Açık":"Kapalı",
-      s.aciklama||"",
-      kod
+      s.aciklama||""
     ];
     satirlar.push(satir.map(_csvHucre).join(";"));
   });
@@ -26038,10 +26199,13 @@ function stokKartCsvYukle(ev){
         if(noDeger && noHarita[noDeger]) kod = noHarita[noDeger];        // no eşleşti → mevcut kart
         else if(kodDeger && STOCK[kodDeger]) kod = kodDeger;             // teknik kod eşleşti
         const yeniKart = !kod;
+        let _yeniNo = "";
         if(yeniKart){
-          // yeni kart: teknik kod üret (kullanıcı görmez)
-          kod = kodDeger || ad.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,12) || ("stok"+Date.now());
-          if(STOCK[kod]) kod=kod+Date.now();
+          // yeni kart: iç kimlik = Ürün No, sistematik MNPN-S formatı.
+          // CSV'de eski bir sistem kodu verilmişse ona saygı göster (geriye uyum),
+          // yoksa yeni MNPN-S üret.
+          if(kodDeger && !STOCK[kodDeger]){ kod = kodDeger; }
+          else { _yeniNo = stokNoBiçim(_stokNoSayac++); kod = _yeniNo; }
         }
         const mevcutKart = STOCK[kod] || {};
         // UoM kur: üst birim + çarpan varsa tek seviye
@@ -26054,8 +26218,8 @@ function stokKartCsvYukle(ev){
         }
         const kart={...mevcutKart};
         kart.ad=ad;
-        // Ürün No: yeni kartsa otomatik MNPN-S ata; mevcut kartın no'su korunur (eşleştirme anahtarı)
-        if(yeniKart){ kart.no = stokNoBiçim(_stokNoSayac++); }
+        // Ürün No: yeni kartsa iç kod ile AYNI (MNPN-S); mevcut kartın no'su korunur
+        if(yeniKart){ kart.no = _yeniNo || kod; }
         else if(!kart.no){ kart.no = stokNoBiçim(_stokNoSayac++); }
         if(iKat>=0 && al(a,iKat)) kart.kategori=al(a,iKat); else if(!kart.kategori) kart.kategori="Hammadde";
         kart.tabanBirim=tabanBirim;
@@ -26345,8 +26509,10 @@ function stokModalKaydet(){
   let kayitCarpan = 1;
   if(sevGecerli.length){
     // en üst seviyeden tabana toplam çarpan
-    kayitCarpan = sevGecerli.reduce((a,s)=>a*s.carpan, 1);
+    kayitCarpan = sevGecerli.reduce((a,s)=>a*(s.carpan||1), 1);
   }
+  // GÜVENLİK: çarpan 0/negatif/geçersizse fiyat Infinity/NaN olur — 1'e sabitle
+  if(!(kayitCarpan>0) || !isFinite(kayitCarpan)) kayitCarpan = 1;
   // Alış fiyatı → BAYI_FIYAT her zaman KDV HARİÇ TABAN matrah olarak saklanır.
   let fiyatV = null;
   if(p.alisFiyat!==""&&p.alisFiyat!=null){
@@ -26354,19 +26520,25 @@ function stokModalKaydet(){
     const aKdv = sayi(p.alisKdv,0);
     const matrahUst = (p.alisKdvDahil && aKdv>0) ? hamUst/(1+aKdv/100) : hamUst;
     fiyatV = +(matrahUst/kayitCarpan).toFixed(4);           // tabana böl
+    if(!isFinite(fiyatV)) fiyatV = null;                     // bozuk sonucu kaydetme
   }
   // Satış fiyatı da ÜST BİRİM başına girildi → tabana böl (satisKdvDahil bayrağı korunur)
   if(veri.satisFiyat!=null && veri.satisFiyat>0){
-    veri.satisFiyat = +(veri.satisFiyat/kayitCarpan).toFixed(4);
+    const _sf = +(veri.satisFiyat/kayitCarpan).toFixed(4);
+    veri.satisFiyat = isFinite(_sf) ? _sf : null;
   }
 
   let kod=p.kod;
   if(p.mod==="yeni"){
-    kod = ad.toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,12) || ("stok"+Date.now());
-    if(STOCK[kod]) kod = kod+Date.now();
+    // Yeni kartın iç kimliği = görünür Ürün No ile AYNI, sistematik MNPN-S formatı.
+    // (Eskiden addan türetiliyordu: "ikolatalso" gibi karışık kodlar oluşuyordu.)
+    const yeniNo = stokNoBiçim(_stokNoSayac++);
+    kod = yeniNo;
+    STOCK[kod] = {...(STOCK[kod]||{}), ...veri, no: yeniNo};
+  } else {
+    STOCK[kod] = {...(STOCK[kod]||{}), ...veri};
   }
-  STOCK[kod] = {...(STOCK[kod]||{}), ...veri};
-  // yeni kartsa görünür sıralı no ata (mevcut kartın no'su korunur)
+  // güvence: no yoksa ata (eski kartlar)
   if(!STOCK[kod].no) STOCK[kod].no = stokNoBiçim(_stokNoSayac++);
   BAYI_FIYAT[kod] = fiyatV;   // fiyat ayrı tabloda; null = fiyat yok
   const kayitOk = b2bKaydet();
@@ -27960,11 +28132,11 @@ function bayiFiyatListeHtml(){
       const stokGoster = uomGoster(u, mevcut);
       html += `<div class="bfiyat-satir bfiyat-a2">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
-        <span class="bf-kdv">%${d.alisKdv}</span>
-        <span class="bf-alis">${alisUst>0?tl(alisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
-        <span class="bf-satis">${(satisVar&&satisUst>0)?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
-        <span class="bf-durum"><button class="bf-durum-btn ${acik?'acik':'kapali'}" onclick="bayiSatisDurum('${kod.replace(/'/g,"\\'")}')">${acik?'✓ Açık':'✕ Kapalı'}</button></span>
+        <span class="bf-mik" data-l="Stok"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
+        <span class="bf-kdv" data-l="KDV">%${d.alisKdv}</span>
+        <span class="bf-alis" data-l="Alış (KDV dahil)">${alisUst>0?tl(alisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis" data-l="Satış (KDV dahil)">${(satisVar&&satisUst>0)?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-durum" data-l="Satışa"><button class="bf-durum-btn ${acik?'acik':'kapali'}" onclick="bayiSatisDurum('${kod.replace(/'/g,"\\'")}')">${acik?'✓ Açık':'✕ Kapalı'}</button></span>
         <span class="bf-islem"><button class="bayi-mini" onclick="stokKartDuzenle('${kod.replace(/'/g,"\\'")}')">✏️</button></span>
       </div>`;
     });
@@ -28106,6 +28278,27 @@ function iskontoModalKaldir(){
 }
 
 /* === BAYİ STOKLARI (genel müdür görüntüler) === */
+/* Bayi Stokları — stok arama (FOCUS-GÜVENLİ)
+   Ekranı yeniden çizmez; sadece satırları CSS ile gizler/gösterir.
+   Böylece input odağı kaybolmaz, klavye kapanmaz, kullanıcı "dışarı atılmaz". */
+function bstokAraFiltre(q){
+  const term = String(q||"").trim().toLocaleLowerCase("tr");
+  const satirlar = document.querySelectorAll(".bstok-satir");
+  let gorunen = 0;
+  satirlar.forEach(tr=>{
+    const metin = tr.getAttribute("data-ara")||"";
+    const esles = !term || metin.indexOf(term)>=0;
+    tr.style.display = esles ? "" : "none";
+    if(esles) gorunen++;
+  });
+  const bos = document.getElementById("bstokAraBos");
+  if(bos) bos.style.display = (gorunen===0 && term) ? "block" : "none";
+}
+function bstokAraTemizle(){
+  const inp = document.getElementById("bstokAraInput");
+  if(inp){ inp.value=""; inp.focus(); }
+  bstokAraFiltre("");
+}
 function bayiStoklarHtml(){
   // çoklu seçili bayiler (varsayılan: ilk bayi seçili)
   if(!state.bstokSecililer) state.bstokSecililer = DEMO_BRANCHES.length ? [DEMO_BRANCHES[0].ad] : [];
@@ -28139,6 +28332,15 @@ function bayiStoklarHtml(){
     <button class="bstok-mini-btn" onclick="bstokHicBayi()">Temizle</button>
   </div>`;
 
+  // ── STOK ARAMA (focus-güvenli: satırları CSS ile gizler, ekranı yeniden ÇİZMEZ) ──
+  html += `<div class="bstok-ara-sar">
+    <span class="bstok-ara-ikon">🔍</span>
+    <input type="text" id="bstokAraInput" class="bstok-ara-input" placeholder="Stok kartı ara (ad veya no)…"
+      oninput="bstokAraFiltre(this.value)" autocomplete="off">
+    <button class="bstok-ara-temizle" onclick="bstokAraTemizle()" title="Temizle">✕</button>
+  </div>
+  <div id="bstokAraBos" class="bstok-ara-bos" style="display:none">Aramaya uygun stok kartı bulunamadı.</div>`;
+
   // ── TEK TABLO: Merkez (sabit) + seçili bayiler ──
   const sutunlar = ["__merkez", ...secililer];
   // başlıklar
@@ -28159,7 +28361,8 @@ function bayiStoklarHtml(){
     // en az bir sütunda kaydı olan kartları göster
     const herhangi = sutunlar.some(sc=> miktarAl(sc,kod)!==0);
     if(!herhangi) return;
-    let satir = `<tr><td class="bstok-sabit-col"><strong>${s.ad}</strong> <span style="color:var(--ink-3);font-size:11px">${uomAl(s).tabanBirim}</span></td>`;
+    const _araMetin = ((s.ad||"")+" "+(s.no||"")).toLocaleLowerCase("tr");
+    let satir = `<tr class="bstok-satir" data-ara="${_araMetin.replace(/"/g,'')}"><td class="bstok-sabit-col"><strong>${s.ad}</strong> <span style="color:var(--ink-3);font-size:11px">${uomAl(s).tabanBirim}</span></td>`;
     sutunlar.forEach(sc=>{
       const m = miktarAl(sc,kod);
       const satisF = bayiSatisFiyat(kod)||0;   // merkez ana depo SATIŞ fiyatı (KDV dahil)
@@ -31492,8 +31695,7 @@ function raporKasaVardiyaHtml(){
           <div class="kv-satir"><span>💵 Nakit</span><span>${tl(o.nakit)} ₺</span></div>
           <div class="kv-satir"><span>💳 Kredi kartı</span><span>${tl(o.kredi)} ₺</span></div>
           <div class="kv-satir"><span>📱 Diğer / QR</span><span>${tl(o.diger)} ₺</span></div>
-          ${o.digerNakit>0?`<div class="kv-satir alt"><span>↳ nakit kısmı</span><span>${tl(o.digerNakit)} ₺</span></div>`:''}
-          ${o.digerKredi>0?`<div class="kv-satir alt"><span>↳ kredi kısmı</span><span>${tl(o.digerKredi)} ₺</span></div>`:''}
+          ${o.diger>0?`<div class="kv-satir alt"><span>↳ 💵 nakit ${tl(o.digerNakit||0)} · 💳 kredi ${tl(o.digerKredi||0)}</span><span></span></div>`:''}
           ${o.indirim>0?`<div class="kv-satir ind"><span>🏷️ İndirim</span><span>−${tl(o.indirim)} ₺</span></div>`:''}
           ${o.ikram>0?`<div class="kv-satir ikram"><span>🎁 İkram (hediye)</span><span>−${tl(o.ikram)} ₺</span></div>`:''}
           ${o.iade>0?`<div class="kv-satir ind"><span>↩️ İade (${o.iadeAdet})</span><span>−${tl(o.iade)} ₺</span></div>`:''}
@@ -32233,12 +32435,12 @@ function stokDurumListeHtml(secili, merkezMi, kapsamAd, basTs, bitTs){
       const eksi = mevcut<0;
       html += `<div class="bfiyat-satir sdurum-satir">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
-        <span class="sd-mik"><span class="bf-mik-kutu${eksi?' eksi':''}">${uomGoster(u, mevcut)}</span></span>
-        <span class="sd-kdv">%${d.satisKdv||d.alisKdv||0}</span>
-        <span class="sd-bfiyat">${bfiyat>0?tl(bfiyat)+' ₺':'<span class="sd-fiyatyok">fiyat girilmemiş</span>'}${(isk>0&&bfiyat>0)?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)} · %${isk} isk</small>`:''}</span>
-        <span class="sd-tfiyat">${tfiyat!==0?tl(tfiyat)+' ₺':'—'}</span>
-        <span class="sd-tuk">${tuketilen>0?'−'+(+tuketilen.toFixed(2))+' '+birim:'—'}</span>
-        <span class="sd-alin">${alinan>0?'+'+(+alinan.toFixed(2))+' '+birim:'—'}</span>
+        <span class="sd-mik" data-l="Miktar"><span class="bf-mik-kutu${eksi?' eksi':''}">${uomGoster(u, mevcut)}</span></span>
+        <span class="sd-kdv" data-l="KDV">%${d.satisKdv||d.alisKdv||0}</span>
+        <span class="sd-bfiyat" data-l="Birim ₺">${bfiyat>0?tl(bfiyat)+' ₺':'<span class="sd-fiyatyok">fiyat girilmemiş</span>'}${(isk>0&&bfiyat>0)?`<br><small style="color:var(--ink-3);font-weight:400">ham ${hamFiyat.toFixed(2)} · %${isk} isk</small>`:''}</span>
+        <span class="sd-tfiyat" data-l="Toplam ₺">${tfiyat!==0?tl(tfiyat)+' ₺':'—'}</span>
+        <span class="sd-tuk" data-l="Çıkan">${tuketilen>0?'−'+(+tuketilen.toFixed(2))+' '+birim:'—'}</span>
+        <span class="sd-alin" data-l="Giren">${alinan>0?'+'+(+alinan.toFixed(2))+' '+birim:'—'}</span>
       </div>`;
     });
     html += `</div>`;
