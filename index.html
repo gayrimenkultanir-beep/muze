@@ -779,6 +779,9 @@ input,select{font-family:inherit; font-size:15px}
 .cart-total{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:14px}
 .cart-total .cf-lbl{font-size:14px; color:var(--ink-2); font-weight:600}
 .cart-total .cf-amt{font-size:26px; font-weight:800; letter-spacing:-.5px}
+.cart-kampanya{margin-bottom:10px; padding:9px 12px; background:var(--warn-soft); border-radius:var(--radius-sm)}
+.ck-satir{display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--ink-2)}
+.ck-satir.ck-ind{color:var(--warn); font-weight:800; margin-top:3px}
 .cart-odenen{margin-bottom:10px; padding:10px 12px; background:var(--ok-soft); border-radius:var(--radius-sm)}
 .co-satir{display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--ink-2)}
 .co-satir.odendi{color:var(--ok); font-weight:800; margin-top:3px}
@@ -2624,6 +2627,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .ode-mag-kullan-ipuc{margin-top:8px; text-align:center; font-size:11px; color:#a98a4e}
 .ode-ozet-satir.mag{color:#b8860b; font-weight:700}
 .ode-ozet-satir.hediye{color:var(--brand-d); font-weight:800}
+.ode-ozet-satir.kampanya{color:var(--warn); font-weight:800}
 .ode-onay-ikram{background:var(--brand-soft); border:1.5px solid var(--brand); border-radius:12px; padding:12px 14px; margin-top:10px}
 .ode-onay-ikram-bas{font-size:13px; font-weight:800; color:var(--brand-d); margin-bottom:7px}
 .ode-onay-ikram-not{font-size:11.5px; color:var(--ink-2); margin-top:8px; line-height:1.45}
@@ -3168,6 +3172,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .grs-sp-kalem{display:flex; justify-content:space-between; align-items:center; font-size:13.5px; padding:5px 0; border-bottom:1px solid var(--line)}
 .grs-sp-sag{display:flex; align-items:center; gap:8px; font-weight:700}
 .grs-sp-sil{width:22px; height:22px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800}
+.grs-sp-kampanya{display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:8px 12px; background:var(--warn-soft); color:var(--warn); border-radius:var(--radius-sm); font-size:13px; font-weight:800}
 .grs-sepet-bar{display:flex; gap:12px; align-items:center; margin-top:12px}
 .grs-sepet-bar .grs-pb-bilgi{flex:1; font-size:15px; font-weight:800}
 /* Kasa sepet kişi seçimi */
@@ -13670,6 +13675,43 @@ function fiyatKapaliMetin(kayit){
   if(kayit.tip==="saat") return "bugün "+kayit.deger+"'e kadar";
   return "";
 }
+/* ============================================================
+   SEPET (CART) KAMPANYALARI
+   ------------------------------------------------------------
+   kapsam:"sepet" olan kampanyalar tüm sepete uygulanır.
+   Ek alanlar:  esik  → sepet ara toplamı bu ₺ değerini geçerse aktif
+                tip   → "oran" (%) | "fiyat" (sabit ₺ indirim tutarı)
+                deger → oran ise %, fiyat ise indirilecek ₺
+   Örn: "150 ₺ üzeri %10"  → {kapsam:"sepet", esik:150, tip:"oran", deger:10}
+        "200 ₺ üzeri 30 ₺"  → {kapsam:"sepet", esik:200, tip:"fiyat", deger:30}
+   ============================================================ */
+/* Belirli ara toplam + şube + kanal için geçerli EN İYİ sepet kampanyası */
+function sepetKampanyaBul(araToplam, sube, kanal){
+  sube = sube || AKTIF_SUBE; kanal = kanal || "masa";
+  const adaylar = KAMPANYALAR.filter(k=>
+    k.kapsam==="sepet" && k.kanal===kanal && kampanyaAktifMi(k) &&
+    (araToplam >= (k.esik||0)) &&
+    (k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(sube)))
+  );
+  if(adaylar.length===0) return null;
+  // müşteri lehine: en yüksek indirim tutarını veren kazansın
+  let en=null, enInd=-1;
+  adaylar.forEach(k=>{
+    const ind = k.tip==="oran" ? araToplam*(k.deger/100) : k.deger;
+    if(ind>enInd){ enInd=ind; en=k; }
+  });
+  return en;
+}
+/* Sepet kampanya indirimini hesapla → {kampanya, indirim, yeniToplam, aciklama} | null */
+function sepetKampanyaIndirimi(araToplam, sube, kanal){
+  if(araToplam<=0) return null;
+  const k = sepetKampanyaBul(araToplam, sube, kanal);
+  if(!k) return null;
+  let indirim = k.tip==="oran" ? Math.round(araToplam*(k.deger/100)) : Math.min(k.deger, araToplam);
+  if(indirim<=0) return null;
+  const aciklama = k.ad + " · " + (k.tip==="oran" ? "%"+k.deger : k.deger+" ₺") + " indirim";
+  return { kampanya:k, indirim:indirim, yeniToplam:Math.max(0, araToplam-indirim), aciklama:aciklama };
+}
 /* Satışta gösterilecek nihai fiyat */
 function urunGecerliFiyat(ad, sube, kanal){ return urunFiyatBilgi(ad, sube, kanal).gecerli; }
 /* QR servis tipine göre kanal belirle */
@@ -15579,7 +15621,10 @@ function cartHtml(){
         </div>
       </div></div>`;
   }
-  const total = state.cart.reduce((s,c)=>s+c.fiyat*c.q,0);
+  const araToplam = state.cart.reduce((s,c)=>s+c.fiyat*c.q,0);
+  const kasaKanal = (state.satisKanal==="eve") ? "eve" : "masa";
+  const sepetInd = sepetKampanyaIndirimi(araToplam, AKTIF_SUBE, kasaKanal);
+  const total = sepetInd ? sepetInd.yeniToplam : araToplam;
   const isKasa = state.role==="kasa";
   const items = state.cart.length===0
     ? '<div class="cart-empty">Adisyon boş.<br>Soldan ürün ekleyin.</div>'
@@ -15598,6 +15643,12 @@ function cartHtml(){
       </div>
       <div class="cart-items">${items}</div>
       <div class="cart-foot">
+        ${sepetInd ? `
+        <div class="cart-kampanya">
+          <div class="ck-satir"><span>Ara toplam</span><span>${tl(araToplam)} ₺</span></div>
+          <div class="ck-satir ck-ind"><span>🔥 ${sepetInd.kampanya.ad}</span><span>−${tl(sepetInd.indirim)} ₺</span></div>
+        </div>
+        ` : ``}
         ${state.odenen>0 ? `
         <div class="cart-odenen">
           <div class="co-satir"><span>Toplam</span><span>${total} ₺</span></div>
@@ -17992,7 +18043,18 @@ function viewOdemeEkran(main){
   const magIndirimHam = (o.musteri && o.kullanilanMag>0) ? o.kullanilanMag * SADAKAT.magTl : 0;
   const elleInd = Math.min(o.indirim, Math.max(0, hamToplam - hediyeIndirim));
   const magIndirim = Math.min(magIndirimHam, Math.max(0, hamToplam - hediyeIndirim - elleInd));
-  const indirim = Math.round((hediyeIndirim + elleInd + magIndirim)*100)/100;
+  // 🔥 SEPET KAMPANYASI — sadece TÜM masa/adisyon tek seferde ödenirken uygulanır.
+  // Eşik, masanın hediye hariç tam ara toplamı üzerinden değerlendirilir.
+  const masaAraToplam = (m===HIZLI_SATIS_ID)
+    ? Math.round(masaKalemleri(m).filter(it=>it.durum!=="iptal" && !it.hediye).reduce((a,it)=>a+it.fiyat,0)*100)/100
+    : Math.round(masaKalemleri(m).filter(it=>it.durum!=="iptal" && !it.hediye).reduce((a,it)=>a+it.fiyat,0)*100)/100;
+  const _subeOde = (m===HIZLI_SATIS_ID) ? (s.sube||AKTIF_SUBE) : (String(m).indexOf("::")>=0 ? String(m).slice(0,String(m).indexOf("::")) : AKTIF_SUBE);
+  const _kanalOde = "masa";
+  const _tumMasaSecili = Math.abs((hamToplam - hediyeIndirim) - Math.max(0, masaAraToplam - masaOdenen(m))) < 0.01 && (hamToplam - hediyeIndirim) > 0.01;
+  const _sepetK = _tumMasaSecili ? sepetKampanyaIndirimi(masaAraToplam, _subeOde, _kanalOde) : null;
+  let sepetKampInd = _sepetK ? Math.min(_sepetK.indirim, Math.max(0, hamToplam - hediyeIndirim - elleInd - magIndirim)) : 0;
+  sepetKampInd = Math.round(sepetKampInd*100)/100;
+  const indirim = Math.round((hediyeIndirim + elleInd + magIndirim + sepetKampInd)*100)/100;
   const odenecek = Math.round(Math.max(0, hamToplam - indirim)*100)/100;
   const girilen = Math.round((o.yontem.nakit + o.yontem.kredi + o.yontem.diger)*100)/100;
 
@@ -18015,6 +18077,7 @@ function viewOdemeEkran(main){
     <div class="ode-ozet-kutu">
       <div class="ode-ozet-satir"><span>Seçilen tutar</span><span>${tl(hamToplam)} ₺</span></div>
       ${hediyeIndirim>0?`<div class="ode-ozet-satir hediye"><span>🎁 Hediye indirimi</span><span>−${tl(hediyeIndirim)} ₺</span></div>`:''}
+      ${sepetKampInd>0?`<div class="ode-ozet-satir kampanya"><span>🔥 ${_sepetK.kampanya.ad}</span><span>−${tl(sepetKampInd)} ₺</span></div>`:''}
       <div class="ode-ozet-satir ind"><span>İndirim</span><span>${elleInd>0?'−'+tl(elleInd):'0,00'} ₺</span></div>
       ${magIndirim>0?`<div class="ode-ozet-satir mag"><span>🎁 ${SADAKAT.ad} indirimi</span><span>−${tl(magIndirim)} ₺</span></div>`:''}
       <div class="ode-ozet-satir ana"><span>Ödenecek</span><span>${tl(odenecek)} ₺</span></div>
@@ -18808,7 +18871,13 @@ function odemeOnayla(m){
   // Mag indirimi (kullanılan Mag × kur), elle indirimden sonra kalan tutarı geçemez
   const magIndirimHam=(o.musteri && o.kullanilanMag>0) ? o.kullanilanMag*SADAKAT.magTl : 0;
   const magIndirim=Math.round(Math.min(magIndirimHam, Math.max(0, hamToplam-hediyeIndirim-elleInd))*100)/100;
-  const indirim=Math.round((hediyeIndirim+elleInd+magIndirim)*100)/100;   // hediye + elle + Mag
+  // 🔥 SEPET KAMPANYASI — tüm masa tek seferde ödenirken (viewOdemeEkran ile aynı kural)
+  const _subeOde2 = (m===HIZLI_SATIS_ID) ? ((SESSIONS[m]&&SESSIONS[m].sube)||AKTIF_SUBE) : (String(m).indexOf("::")>=0 ? String(m).slice(0,String(m).indexOf("::")) : AKTIF_SUBE);
+  const _masaAra2 = Math.round(masaKalemleri(m).filter(it=>it.durum!=="iptal" && !it.hediye).reduce((a,it)=>a+it.fiyat,0)*100)/100;
+  const _tumSecili2 = Math.abs((hamToplam - hediyeIndirim) - Math.max(0, _masaAra2 - masaOdenen(m))) < 0.01 && (hamToplam - hediyeIndirim) > 0.01;
+  const _sepetK2 = _tumSecili2 ? sepetKampanyaIndirimi(_masaAra2, _subeOde2, "masa") : null;
+  const sepetKampInd = _sepetK2 ? Math.round(Math.min(_sepetK2.indirim, Math.max(0, hamToplam-hediyeIndirim-elleInd-magIndirim))*100)/100 : 0;
+  const indirim=Math.round((hediyeIndirim+elleInd+magIndirim+sepetKampInd)*100)/100;   // hediye + elle + Mag + sepet kampanyası
   const odenecek=Math.round(Math.max(0, hamToplam-indirim)*100)/100;
   const girilen=Math.round((o.yontem.nakit+o.yontem.kredi+o.yontem.diger)*100)/100;
   // ödenecek 0 ise (tamamı hediye/indirim) ödeme yöntemine tutar girmeye gerek yok
@@ -18839,7 +18908,8 @@ function odemeOnayla(m){
     eksik: girilen < odenecek-0.01 ? Math.round((odenecek-girilen)*100)/100 : 0,
     yontemler: aktifYontemler,
     hamToplam, indirim, magIndirim, kullanilanMag:(o.musteri?o.kullanilanMag:0),
-    hediyeIndirim, hediyeKalemler
+    hediyeIndirim, hediyeKalemler,
+    sepetKampInd, sepetKampAd:(_sepetK2?_sepetK2.kampanya.ad:"")
   });
 }
 /* ═══ DİĞER/QR BÖLÜMLEME POP-UP ═══
@@ -19136,6 +19206,9 @@ function odemeOnayModal(veri){
     });
     ic+=`<div class="ode-onay-ikram-not">Kasa yazıcısından <b>ikram fişi</b> çıkacak. Mali fişe girmez.</div>
     </div>`;
+  }
+  if(veri.sepetKampInd>0){
+    ic+=`<div class="ode-onay-mag" style="background:var(--warn-soft);color:var(--warn)">🔥 ${veri.sepetKampAd||'Sepet kampanyası'}: −${tl(veri.sepetKampInd)} ₺</div>`;
   }
   if(veri.magIndirim>0){
     ic+=`<div class="ode-onay-mag">🎁 ${veri.kullanilanMag} ${SADAKAT.ad} indirimi: −${tl(veri.magIndirim)} ₺</div>`;
@@ -23711,19 +23784,25 @@ function viewKampanya(main){
     html+=`<div class="kmp-liste">`;
     gorunur.slice().reverse().forEach(k=>{
       const aktif = kampanyaAktifMi(k);
+      const sepetMod = k.kapsam==="sepet";
       const urun = DEMO_PRODUCTS.find(p=>p.ad===k.urun);
       const kapsamAd = k.subeler==="hepsi" ? "Tüm şubeler" : (Array.isArray(k.subeler)?k.subeler.join(", "):"-");
       const gunAd = (k.gunler&&k.gunler.length>0&&k.gunler.length<7) ? k.gunler.map(g=>GUN_ADLARI[g]).join(",") : "Her gün";
       const saatAd = (k.saatBas&&k.saatBit) ? k.saatBas+"–"+k.saatBit : "Tüm gün";
-      const indAd = k.tip==="oran" ? "%"+k.deger+" indirim" : k.deger+" ₺ özel fiyat";
+      const indAd = sepetMod
+        ? (k.tip==="oran" ? "%"+k.deger+" sepet indirimi" : k.deger+" ₺ sepet indirimi")
+        : (k.tip==="oran" ? "%"+k.deger+" indirim" : k.deger+" ₺ özel fiyat");
       // müdür sadece kendi eklediği şube-özel kampanyayı silebilir; genel müdür hepsini
       const silebilir = isGenel || (Array.isArray(k.subeler) && !k.subeler.includes("__merkez__") && k.olusturan===AKTIF_SUBE);
+      const satirMetin = sepetMod
+        ? `🧾 Sepet ${k.esik}+ ₺ · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`
+        : `${k.urun} · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`;
       html+=`<div class="kmp-kart${aktif?' kmp-aktif':''}">
         <div class="kmp-kart-ust">
-          <div class="kmp-ad">${urun?urun.emoji+' ':''}${k.ad}</div>
+          <div class="kmp-ad">${sepetMod?'🧾 ':(urun?urun.emoji+' ':'')}${k.ad}</div>
           <span class="kmp-durum ${aktif?'on':'off'}">${aktif?'🟢 Aktif':'⚪ Pasif'}</span>
         </div>
-        <div class="kmp-urun-satir">${k.urun} · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}</div>
+        <div class="kmp-urun-satir">${satirMetin}</div>
         <div class="kmp-detay">
           <span class="kmp-rozet">🏬 ${kapsamAd}</span>
           <span class="kmp-rozet">📅 ${gunAd}</span>
@@ -23745,7 +23824,7 @@ function viewKampanya(main){
 function kampanyaFormAc(){
   const isGenel = state.role==="genel";
   state.kmpForm = {
-    ad:"", urun:DEMO_PRODUCTS[0].ad, tip:"oran", deger:"",
+    ad:"", kapsam:"urun", esik:"", urun:DEMO_PRODUCTS[0].ad, tip:"oran", deger:"",
     kanal:"masa", subeKapsam:isGenel?"hepsi":"secili",
     subeler:isGenel?[]:[AKTIF_SUBE],
     gunler:[], saatBas:"", saatBit:"", tekrar:false
@@ -23783,30 +23862,55 @@ function renderKampanyaForm(){
     <button class="bom-kapat" onclick="kampanyaFormKapat()">✕</button></div>
     <div class="kmpf-govde">`;
 
+  const sepetMod = f.kapsam==="sepet";
+
   // kampanya adı
   html+=`<div class="kmpf-alan"><label>Kampanya adı</label>
     <input class="kmpf-input" id="kmpAdInput" placeholder="örn. Happy Hour" value="${f.ad}" oninput="state.kmpForm.ad=this.value"></div>`;
 
-  // ürün seçimi
-  html+=`<div class="kmpf-alan"><label>Ürün</label>
-    <select class="kmpf-input" onchange="kmpFormSet('urun',this.value)">`;
-  kategoriler.forEach(kat=>{
-    html+=`<optgroup label="${kat}">`;
-    DEMO_PRODUCTS.filter(p=>p.kat===kat).forEach(p=>{
-      html+=`<option value="${p.ad}"${f.urun===p.ad?' selected':''}>${p.ad}</option>`;
+  // kampanya kapsamı: ürün mü, sepet mi?
+  html+=`<div class="kmpf-alan"><label>Kampanya kapsamı</label>
+    <div class="kmpf-secim-row">
+      <button class="kmpf-secim${!sepetMod?' on':''}" onclick="kmpFormSet('kapsam','urun')">🍔 Ürün kampanyası</button>
+      <button class="kmpf-secim${sepetMod?' on':''}" onclick="kmpFormSet('kapsam','sepet')">🧾 Sepet kampanyası</button>
+    </div></div>`;
+
+  if(!sepetMod){
+    // ÜRÜN seçimi
+    html+=`<div class="kmpf-alan"><label>Ürün</label>
+      <select class="kmpf-input" onchange="kmpFormSet('urun',this.value)">`;
+    kategoriler.forEach(kat=>{
+      html+=`<optgroup label="${kat}">`;
+      DEMO_PRODUCTS.filter(p=>p.kat===kat).forEach(p=>{
+        html+=`<option value="${p.ad}"${f.urun===p.ad?' selected':''}>${p.ad}</option>`;
+      });
+      html+=`</optgroup>`;
     });
-    html+=`</optgroup>`;
-  });
-  html+=`</select></div>`;
+    html+=`</select></div>`;
+  } else {
+    // SEPET eşiği
+    html+=`<div class="kmpf-alan"><label>Sepet alt sınırı (₺) — bu tutarı geçince indirim uygulanır</label>
+      <input class="kmpf-input" inputmode="numeric" placeholder="örn. 150" value="${f.esik}" oninput="state.kmpForm.esik=this.value"></div>`;
+  }
 
   // indirim tipi
-  html+=`<div class="kmpf-alan"><label>İndirim tipi</label>
-    <div class="kmpf-secim-row">
-      <button class="kmpf-secim${f.tip==="oran"?' on':''}" onclick="kmpFormSet('tip','oran')">% Yüzde indirim</button>
-      <button class="kmpf-secim${f.tip==="fiyat"?' on':''}" onclick="kmpFormSet('tip','fiyat')">₺ Yeni satış fiyatı</button>
-    </div></div>`;
-  html+=`<div class="kmpf-alan"><label>${f.tip==="oran"?"İndirim oranı (%)":"Yeni satış fiyatı (₺)"}</label>
-    <input class="kmpf-input" inputmode="numeric" placeholder="${f.tip==="oran"?"örn. 20":"örn. 75"}" value="${f.deger}" oninput="state.kmpForm.deger=this.value"></div>`;
+  if(!sepetMod){
+    html+=`<div class="kmpf-alan"><label>İndirim tipi</label>
+      <div class="kmpf-secim-row">
+        <button class="kmpf-secim${f.tip==="oran"?' on':''}" onclick="kmpFormSet('tip','oran')">% Yüzde indirim</button>
+        <button class="kmpf-secim${f.tip==="fiyat"?' on':''}" onclick="kmpFormSet('tip','fiyat')">₺ Yeni satış fiyatı</button>
+      </div></div>`;
+    html+=`<div class="kmpf-alan"><label>${f.tip==="oran"?"İndirim oranı (%)":"Yeni satış fiyatı (₺)"}</label>
+      <input class="kmpf-input" inputmode="numeric" placeholder="${f.tip==="oran"?"örn. 20":"örn. 75"}" value="${f.deger}" oninput="state.kmpForm.deger=this.value"></div>`;
+  } else {
+    html+=`<div class="kmpf-alan"><label>İndirim tipi</label>
+      <div class="kmpf-secim-row">
+        <button class="kmpf-secim${f.tip==="oran"?' on':''}" onclick="kmpFormSet('tip','oran')">% Sepete yüzde indirim</button>
+        <button class="kmpf-secim${f.tip==="fiyat"?' on':''}" onclick="kmpFormSet('tip','fiyat')">₺ Sepetten sabit indirim</button>
+      </div></div>`;
+    html+=`<div class="kmpf-alan"><label>${f.tip==="oran"?"İndirim oranı (%)":"İndirim tutarı (₺)"}</label>
+      <input class="kmpf-input" inputmode="numeric" placeholder="${f.tip==="oran"?"örn. 10":"örn. 30"}" value="${f.deger}" oninput="state.kmpForm.deger=this.value"></div>`;
+  }
 
   // kanal
   html+=`<div class="kmpf-alan"><label>Uygulanacak kanal</label>
@@ -23865,6 +23969,12 @@ function kampanyaKaydet(){
   const deger=parseFloat(f.deger);
   if(isNaN(deger)||deger<=0){ note("Geçerli bir indirim değeri girin"); return; }
   if(f.tip==="oran" && deger>100){ note("İndirim oranı %100'den fazla olamaz"); return; }
+  const sepetMod = f.kapsam==="sepet";
+  let esik = 0;
+  if(sepetMod){
+    esik = parseFloat(f.esik);
+    if(isNaN(esik)||esik<=0){ note("Sepet alt sınırını girin (₺)"); return; }
+  }
   // şube kapsamı
   let subeler;
   if(isGenel){
@@ -23874,7 +23984,10 @@ function kampanyaKaydet(){
     subeler=[AKTIF_SUBE];
   }
   KAMPANYALAR.push({
-    id:_kampanyaId++, ad:f.ad.trim(), urun:f.urun, tip:f.tip, deger:deger,
+    id:_kampanyaId++, ad:f.ad.trim(),
+    kapsam: sepetMod?"sepet":"urun",
+    urun: sepetMod?null:f.urun, esik: sepetMod?esik:0,
+    tip:f.tip, deger:deger,
     kanal:f.kanal, subeler:subeler,
     gunler:f.gunler.slice(), saatBas:f.saatBas, saatBit:f.saatBit,
     tekrar:f.tekrar, aktif:true, olusturan:isGenel?"__merkez__":AKTIF_SUBE
@@ -35055,6 +35168,13 @@ function openOptionModalQR(idx){
 
 function qrSepetHtml(){
   const t = QR.sepet.reduce((s,c)=>s+c.fiyat*c.q,0);
+  // 🎁 hediye + 🔥 sepet kampanyası indirimleri (buton yazısı ve altbilgi ortak kullanır)
+  const hediyeInd = QR.sepet.reduce((s,c)=>s+(c.hediye?c.fiyat*c.q:0),0);
+  const qrKanal = (QR.siparisTipi==="eve") ? "eve" : "masa";
+  const araNet = Math.max(0, t - hediyeInd);
+  const qrSepetInd = sepetKampanyaIndirimi(araNet, (QR.sube||AKTIF_SUBE), qrKanal);
+  const kampInd = qrSepetInd ? qrSepetInd.indirim : 0;
+  const odenecekT = Math.max(0, araNet - kampInd);
   let html = '<div class="qr-screen">'+
     '<div class="qr-topbar"><button class="qr-close" onclick="QR.view=\'menu\';renderQR()">←</button>'+
       '<div class="qr-tb-mid"><div class="qr-tb-brand">Sepetim</div>'+
@@ -35150,22 +35270,26 @@ function qrSepetHtml(){
       const izin = QR.icerideMi || QR.musteri;
       const isimVar = (QR.kisi||"").trim().length>0;
       butonAktif = izin && isimVar;
-      butonYazi = QR.odemeTipi==="online" ? "Online öde · "+t+" ₺" : "🥡 Paketi gönder · gel-al";
+      butonYazi = QR.odemeTipi==="online" ? "Online öde · "+odenecekT+" ₺" : "🥡 Paketi gönder · gel-al";
       pasifYazi = !izin ? "Üyelik gerekli" : "İsim gerekli";
     } else { // eve
       butonAktif = QR.musteri && QR.musteri.adresler && QR.musteri.adresler.length>0;
-      butonYazi = QR.odemeTipi==="online" ? "Online öde · "+t+" ₺" : "Siparişi ver · kapıda öde";
+      butonYazi = QR.odemeTipi==="online" ? "Online öde · "+odenecekT+" ₺" : "Siparişi ver · kapıda öde";
       pasifYazi = "Adres/üyelik gerekli";
     }
-    // 🎁 hediye indirimi — sepette görünsün, müşteri ne ödeyeceğini bilsin
-    const hediyeInd = QR.sepet.reduce((s,c)=>s+(c.hediye?c.fiyat*c.q:0),0);
-    const odenecekT = Math.max(0, t - hediyeInd);
+    // hediye + sepet kampanyası indirimleri fonksiyon başında hesaplandı
+    const araGoster = hediyeInd>0 || kampInd>0;
     html += '<div class="qr-sepet-foot">'+
-      (hediyeInd>0
-        ? '<div class="qr-sf-ara"><span>Ara toplam</span><span>'+t+' ₺</span></div>'+
-          '<div class="qr-sf-hediye"><span>🎁 Hediye indirimi</span><span>−'+hediyeInd+' ₺</span></div>'
+      (araGoster
+        ? '<div class="qr-sf-ara"><span>Ara toplam</span><span>'+t+' ₺</span></div>'
         : '')+
-      '<div class="qr-sf-toplam"><span>'+(hediyeInd>0?'Ödenecek':'Toplam')+'</span><strong>'+odenecekT+' ₺</strong></div>'+
+      (hediyeInd>0
+        ? '<div class="qr-sf-hediye"><span>🎁 Hediye indirimi</span><span>−'+hediyeInd+' ₺</span></div>'
+        : '')+
+      (kampInd>0
+        ? '<div class="qr-sf-hediye"><span>🔥 '+qrSepetInd.kampanya.ad+'</span><span>−'+kampInd+' ₺</span></div>'
+        : '')+
+      '<div class="qr-sf-toplam"><span>'+(araGoster?'Ödenecek':'Toplam')+'</span><strong>'+odenecekT+' ₺</strong></div>'+
       (butonAktif
         ? '<button class="qr-btn-primary" onclick="qrSiparisGonder()">'+butonYazi+'</button>'
         : '<button class="qr-btn-primary" disabled style="opacity:.4">'+pasifYazi+'</button>')+
@@ -36332,7 +36456,12 @@ function garsonMenuHtml(){
         '<span class="grs-sp-sag"><span class="ci-miktar"><button class="ci-mik-btn" onclick="garsonSepetMiktar('+i+',-1)">−</button><span class="ci-mik-say">'+(c.q||1)+'</span><button class="ci-mik-btn" onclick="garsonSepetMiktar('+i+',1)">+</button></span> '+(c.fiyat*(c.q||1))+' ₺ <button class="grs-sp-sil" onclick="garsonSepetSil('+i+')">✕</button></span></div>';
     });
     const gonderAktif=!!GARSON.kisi;
-    html+='<div class="grs-sepet-bar"><div class="grs-pb-bilgi">'+mt+' ₺'+(GARSON.kisi?' · '+GARSON.kisi:'')+'</div>'+
+    const grsSepetInd = sepetKampanyaIndirimi(mt, AKTIF_SUBE, "masa");
+    const grsToplam = grsSepetInd ? grsSepetInd.yeniToplam : mt;
+    if(grsSepetInd){
+      html+='<div class="grs-sp-kampanya"><span>🔥 '+grsSepetInd.kampanya.ad+'</span><span>−'+grsSepetInd.indirim+' ₺</span></div>';
+    }
+    html+='<div class="grs-sepet-bar"><div class="grs-pb-bilgi">'+(grsSepetInd?'<s style="opacity:.5">'+mt+' ₺</s> ':'')+grsToplam+' ₺'+(GARSON.kisi?' · '+GARSON.kisi:'')+'</div>'+
       (gonderAktif
         ? '<button class="grs-pb-gonder" onclick="garsonMasaGonder()">✓ Siparişi gönder →</button>'
         : '<button class="grs-pb-gonder" disabled style="opacity:.4">Kişi seç</button>')+'</div>';
