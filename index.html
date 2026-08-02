@@ -1047,24 +1047,40 @@ tr:last-child td{border-bottom:none}
   .bfiyat-head{display:none}
   .bfiyat-satir{grid-template-columns:1fr 1fr !important; gap:10px !important; padding:14px !important}
   .bfiyat-satir.bfiyat-a2{grid-template-columns:1fr 1fr !important}
-  .bfiyat-satir .bf-ad{grid-column:1/3; font-size:15px; font-weight:800; margin-bottom:6px}
-  /* Her değer kendi kutusunda: etiket üstte, değer altta */
+  .bfiyat-satir .bf-ad{grid-column:1/3; grid-row:1; font-size:15px; font-weight:800; margin-bottom:6px}
+  /* Sabit 2 sütun × 3 satır ızgara: her kutu kendi hücresinde, satışa+düzenle de aynı satırda eşleşir */
+  .bfiyat-satir .bf-mik{grid-column:1; grid-row:2}
+  .bfiyat-satir .bf-kdv{grid-column:2; grid-row:2}
+  .bfiyat-satir .bf-alis{grid-column:1; grid-row:3}
+  .bfiyat-satir .bf-satis{grid-column:2; grid-row:3}
+  .bfiyat-satir .bf-durum{grid-column:1; grid-row:4}
+  .bfiyat-satir .bf-islem{grid-column:2; grid-row:4}
+  /* Her değer kendi kutusunda: etiket üstte, değer altta — hepsi eşit genişlik (ızgara sütunu) ve eşit yükseklik (sabit min-height) */
   .bfiyat-satir .bf-mik,
   .bfiyat-satir .bf-kdv,
   .bfiyat-satir .bf-alis,
   .bfiyat-satir .bf-satis,
-  .bfiyat-satir .bf-durum{
-    display:flex; flex-direction:column; gap:5px; align-items:flex-start;
+  .bfiyat-satir .bf-durum,
+  .bfiyat-satir .bf-islem{
+    display:flex; flex-direction:column; gap:5px; align-items:flex-start; justify-content:center;
     background:var(--surface); border:1px solid var(--line); border-radius:10px;
     padding:11px 13px; font-size:16px; font-weight:700;
+    min-height:88px; box-sizing:border-box;
   }
   .bfiyat-satir [data-l]::before{
     content:attr(data-l);
     font-size:12px; font-weight:700; color:var(--ink-3);
     text-transform:uppercase; letter-spacing:.4px;
+    white-space:nowrap; max-width:100%; overflow:hidden; text-overflow:ellipsis;
   }
   .bfiyat-satir .bf-birim-et{font-size:11px; font-weight:400; color:var(--ink-3)}
-  .bfiyat-satir .bf-islem{grid-column:1/3; display:flex; justify-content:flex-end}
+  /* Düzenle kutusu: etiketsiz, kalem ikonu ortalanır */
+  .bfiyat-satir .bf-islem{align-items:center; justify-content:center}
+}
+/* Çok dar ekranlarda (≤380px) etiket iki satıra kaçmasın diye biraz daha küçültülür,
+   böylece STOK/KDV satırı ile ALIŞ/SATIŞ satırının yüksekliği hep eşit kalır. */
+@media(max-width:380px){
+  .bfiyat-satir [data-l]::before{ font-size:10.5px; letter-spacing:.2px }
 }
 /* Sipariş ver ekranı — 6 sütun (tek satış üst birim sütunu) */
 .bsip-head,.bsip-satir{grid-template-columns:1.5fr 0.95fr 1.25fr 0.5fr 1.05fr 0.9fr !important}
@@ -3335,6 +3351,11 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .skm-alan:last-child{margin-bottom:0}
 .skm-lbl{display:block; font-size:12.5px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
 .skm-lbl small{font-weight:600; color:var(--ink-3)}
+/* Fiyat/KDV gibi yan yana alanlarda bir etiket ("Alış fiyatı (kutu başına)") diğerinden
+   ("Alış KDV") daha uzun olup 2 satıra kaçabiliyor — bu da altındaki kutuların farklı
+   hizada başlamasına yol açıyordu. Etiket alanına sabit yükseklik ayırarak ikisini de
+   aynı çizgide hizalıyoruz (metin tek satır olsa bile boşluk üstte ayrılmış olur). */
+.skm-satir2 .skm-lbl{min-height:33px}
 .skm-input{width:100%; padding:12px 14px; border-radius:11px; border:1.5px solid var(--line); font-size:15px; font-weight:700; background:var(--surface-2); color:var(--ink); box-sizing:border-box; font-family:inherit}
 .skm-input:focus{outline:none; border-color:var(--brand); background:var(--surface)}
 .skm-input.eksik{border-color:var(--danger); background:var(--danger-soft)}
@@ -3378,6 +3399,27 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .skm-ipucu{font-size:11.5px; color:var(--danger); min-height:15px; margin-top:8px; font-weight:600}
 .skm-ambalaj-ozet{margin-top:12px; padding:12px 14px; border-radius:11px; background:var(--brand-soft); border:1px solid var(--brand); color:var(--cocoa); font-size:13px; font-weight:700; line-height:1.6}
 .skm-uom-sonuc{margin-top:8px; padding-top:8px; border-top:1px dashed var(--brand); font-size:13.5px}
+/* ── Mobilde modal başlığı ve alt buton çubuğu çok yer kaplıyordu → küçültüldü ── */
+@media(max-width:720px){
+  .skm-head{padding:13px 18px 11px}
+  .skm-head-ic{font-size:19px; margin-bottom:3px}
+  .skm-head-baslik{font-size:16.5px; letter-spacing:-.2px}
+  .skm-head-alt{font-size:11px; margin-top:2px}
+  .skm-foot{padding:10px 16px; gap:8px}
+  .skm-iptal,.skm-kaydet{padding:11px; font-size:13.5px; border-radius:10px}
+  /* Alerjen ve ölçü birimi çipleri metin uzunluğuna göre rastgele satır dolduruyordu
+     (kısa kelimeler yan yana, uzun olanlar tek başına geniş satır) → sabit ızgara. */
+  .uf-alerjen-grid{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .uf-alerjen-btn{
+    width:100%; box-sizing:border-box; border-radius:12px; padding:10px 12px;
+    display:flex; align-items:center; gap:6px; text-align:left; white-space:normal; line-height:1.25;
+  }
+  .skm-birim-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px}
+  .skm-birim-chip,.skm-birim-yeni{
+    width:100%; box-sizing:border-box; text-align:center; white-space:normal; line-height:1.25;
+    display:flex; align-items:center; justify-content:center;
+  }
+}
 /* Çok seviyeli UoM editörü */
 .skm-chip-yeni{border-style:dashed!important; color:var(--brand)!important}
 .skm-uom-liste{margin-top:6px}
@@ -29050,8 +29092,8 @@ function bayiFiyatListeHtml(){
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
         <span class="bf-mik" data-l="Stok"><span class="bf-mik-kutu${mevcut<0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
         <span class="bf-kdv" data-l="KDV">%${d.alisKdv}</span>
-        <span class="bf-alis" data-l="Alış (KDV dahil)">${alisUst>0?tl(alisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
-        <span class="bf-satis" data-l="Satış (KDV dahil)">${(satisVar&&satisUst>0)?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-alis" data-l="Alış (dahil)">${alisUst>0?tl(alisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-satis" data-l="Satış (dahil)">${(satisVar&&satisUst>0)?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-durum" data-l="Satışa"><button class="bf-durum-btn ${acik?'acik':'kapali'}" onclick="bayiSatisDurum('${kod.replace(/'/g,"\\'")}')">${acik?'✓ Açık':'✕ Kapalı'}</button></span>
         <span class="bf-islem"><button class="bayi-mini" onclick="stokKartDuzenle('${kod.replace(/'/g,"\\'")}')">✏️</button></span>
       </div>`;
