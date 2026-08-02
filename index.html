@@ -3766,6 +3766,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .yym-filtre-ozet{font-size:12px; color:var(--ink-3); font-weight:600; margin-bottom:10px}
 .fy-sf-tumunu{padding:6px 12px; border-radius:20px; border:1.5px solid var(--brand); background:var(--brand-soft); color:var(--brand-d); font-size:12.5px; font-weight:700; cursor:pointer; white-space:nowrap}
 .fy-tablo-sar{overflow-x:auto; border:1px solid var(--line); border-radius:14px; background:var(--surface)}
+.fy-mobil-liste{display:none}
 .fy-tablo{border-collapse:collapse; width:100%; font-size:13px}
 .fy-tablo th{background:var(--surface-2); padding:11px 12px; text-align:center; font-weight:800; font-size:12px; color:var(--cocoa); position:sticky; top:0; z-index:3; border-bottom:2px solid var(--cocoa); white-space:nowrap}
 .fy-th-urun{text-align:left!important; position:sticky; left:0; z-index:4; min-width:190px}
@@ -5351,8 +5352,10 @@ body::after{
 /* ═══════════════════════════════════════════════════════════
    MOBİL — ÜRÜN YÖNETİMİ / FİYAT EKRANI
    Üst bar dikey diziliyor; kanal filtresi ve şube chip'leri
-   yatay kaydırılabilir; fiyat tablosu zaten yatay kayıyor,
-   ürün sütunu sabit kalıyor.
+   yatay kaydırılabilir. Fiyat tablosu (çok şubede okunmuyor ve
+   yatay kaydırma tüm sayfayı — kategori çipleri dahil — birlikte
+   kaydırıyordu) yerine, her ürün için tam genişlikte, dikey
+   satırlı bir KART listesi gösterilir — yatay kaydırma yok.
    ═══════════════════════════════════════════════════════════ */
 @media(max-width:560px){
   .fy-ust-bar{ flex-direction:column; align-items:stretch; gap:8px }
@@ -5365,16 +5368,65 @@ body::after{
   .fy-sube-filtre{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding:9px 10px }
   .fy-sube-filtre-lbl{ position:sticky; left:0; background:var(--surface); padding-right:4px; z-index:1 }
   .fy-sf-chip,.fy-sf-tumunu{ flex-shrink:0 }
-  /* kategori pill'leri de tek satır kaydırma */
+  /* kategori pill'leri de tek satır kaydırma — tablo artık altında olmadığı için sayfayla birlikte kaymaz */
   .cat-row{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:4px }
   .cat-pill{ flex-shrink:0 }
-  /* fiyat tablosu: ürün sütunu biraz daralsın, şube sütunları okunur kalsın */
-  .fy-th-urun,.fy-td-urun{ min-width:140px!important }
-  .fy-th-sube{ min-width:100px }
-  .fy-td-urun .fy-ad{ font-size:12px; word-break:break-word }
-  .fy-tablo{ font-size:12px }
-  .fy-tablo th{ padding:9px 8px; font-size:11px }
   .fy-bilgi-not,.fy-mudur-not{ font-size:12px; line-height:1.5 }
+
+  /* fiyat TABLOSU gizli, KART listesi görünür */
+  .fy-tablo-sar{ display:none }
+  .fy-mobil-liste{ display:block }
+  .fy-kart-kat-ayrac{
+    margin:16px 2px 6px; font-weight:800; font-size:12.5px; color:var(--cocoa);
+    text-transform:uppercase; letter-spacing:.03em;
+  }
+  .fy-kart-kat-ayrac:first-child{ margin-top:2px }
+  .fy-kart{
+    background:var(--surface); border:1px solid var(--line); border-radius:14px;
+    padding:12px; margin-bottom:10px;
+  }
+  .fy-kart-bas{ display:flex; align-items:center; gap:8px; margin-bottom:8px; padding-bottom:8px; border-bottom:1.5px solid var(--line) }
+  .fy-kart-bas .fy-emoji{ font-size:19px }
+  .fy-kart-bas .fy-ad{ font-weight:800; font-size:14.5px; line-height:1.3 }
+
+  /* KART İÇİ MİNİ TABLO — tüm satırlar (Tavsiye + her şube) TEK grid'i paylaşır,
+     bu yüzden Şube/M-E/Fiyat/Buton sütunları dikey çizgilerle her satırda aynı hizada durur.
+     .fy-kg (bir şube grubu) display:contents ile bu paylaşılan grid'e "eriyor". */
+  .fy-kart-tablo{
+    display:grid; grid-template-columns:1fr 26px 68px 34px;
+    border:1px solid var(--line); border-radius:10px; overflow:hidden;
+    font-size:12.5px;
+  }
+  .fy-kg{ display:contents }
+  .fy-kg-lbl,.fy-kg-etk,.fy-kg-fiyat,.fy-kg-tik{
+    display:flex; align-items:center; min-height:30px;
+    border-right:1px solid var(--line); border-bottom:1px dashed var(--line);
+    box-sizing:border-box;
+  }
+  .fy-kg-tik{ border-right:none }
+  .fy-kg-lbl.son,.fy-kg-etk.son,.fy-kg-fiyat.son,.fy-kg-tik.son{ border-bottom:1px solid var(--line) }
+  .fy-kart-tablo>.fy-kg:last-child .fy-kg-lbl,
+  .fy-kart-tablo>.fy-kg:last-child .fy-kg-etk,
+  .fy-kart-tablo>.fy-kg:last-child .fy-kg-fiyat,
+  .fy-kart-tablo>.fy-kg:last-child .fy-kg-tik{ border-bottom:none }
+  .fy-kg-lbl{
+    padding:0 8px; font-weight:700; color:var(--ink-2);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .fy-kg-lbl.tavsiye{ background:#f5ecd2; color:#8a6212 }
+  .fy-kg-etk{ justify-content:center; font-size:9.5px; font-weight:800; color:var(--cocoa) }
+  .fy-kg-etk.tavsiye{ background:#f5ecd2 }
+  .fy-kg-fiyat{
+    justify-content:flex-end; padding:0 8px; font-weight:800; color:var(--ink);
+  }
+  .fy-kg-fiyat.fy-tav{ color:var(--ink-3); font-weight:600; font-style:italic }
+  .fy-kg-fiyat.fy-dusuk{ color:var(--err) }
+  .fy-kg-fiyat.fy-yuksek{ color:#6f4e2e }
+  .fy-kg-fiyat.tavsiye{ background:#f5ecd2 }
+  .fy-kg-fiyat[onclick]{ cursor:pointer }
+  .fy-kg-tik{ justify-content:center }
+  .fy-kg-tik.tavsiye{ background:#f5ecd2 }
+  .fy-kg-tik .fy-h-tik{ width:20px; height:20px }
 }
 /* ═══════════════════════════════════════════════════════════
    MOBİL — STOK KARTLARI
@@ -11182,7 +11234,7 @@ const NAV_META = {
   kampanya:{ic:"🎯", ad:"Kampanya"},
   personel:{ic:"👥", ad:"Personel"},
   subeler: {ic:"🏬", ad:"Şubeler"},
-  rapor:   {ic:"📊", ad:"Rapor"},
+  rapor:   {ic:"💳", ad:"Kasa Raporları"},
   denetim: {ic:"🔍", ad:"Denetim"},
   stok:    {ic:"📦", ad:"Stok"},
   fatura:  {ic:"🧾", ad:"Alış-Satış Fatura"},
@@ -11201,10 +11253,10 @@ const NAV_META = {
    Gruba dahil olmayan menüler (satış, masalar, canlı, bildirim vb.) en üstte grupsuz kalır. */
 const NAV_GRUPLAR = [
   { baslik:null,          ic:"",   uyeler:["canli","bildirim"] },
-  { baslik:"Kasa",        ic:"💳", uyeler:["satis","masalar","masagecmis"] },
+  { baslik:"Kasa",        ic:"💳", uyeler:["satis","masalar","masagecmis","rapor"] },
   { baslik:"QR Menü",     ic:"📱", uyeler:["fiyat","kampanya","magpuan","intro"] },
   { baslik:"Stoklar",     ic:"📦", uyeler:["stok","bayi","fatura","recete"] },
-  { baslik:"Raporlar",    ic:"📊", uyeler:["rapor","denetim"] },
+  { baslik:"Raporlar",    ic:"📊", uyeler:["denetim"] },
   { baslik:"Yönetim",     ic:"⚙️", uyeler:["masayonetim","logo","tema","yetki","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
 ];
 
@@ -11225,10 +11277,10 @@ const YETKI_ROLLERI = [
 const YETKI_BLOKLARI = [
   { k:"canli",    ad:"Canlı",    ic:"📡", uyeler:["canli"] },
   { k:"bildirim", ad:"Bildirim", ic:"🔔", uyeler:["bildirim"] },
-  { k:"Kasa",     ad:"Kasa",     ic:"💳", uyeler:["satis","masalar","masagecmis"] },
+  { k:"Kasa",     ad:"Kasa",     ic:"💳", uyeler:["satis","masalar","masagecmis","rapor"] },
   { k:"QR Menü",  ad:"QR Menü",  ic:"📱", uyeler:["fiyat","kampanya","magpuan","intro"] },
   { k:"Stoklar",  ad:"Stoklar",  ic:"📦", uyeler:["stok","bayi","fatura","recete"] },
-  { k:"Raporlar", ad:"Raporlar", ic:"📊", uyeler:["rapor","denetim"] },
+  { k:"Raporlar", ad:"Raporlar", ic:"📊", uyeler:["denetim"] },
   { k:"Yönetim",  ad:"Yönetim",  ic:"⚙️", uyeler:["masayonetim","logo","tema","yazicilar","yazarkasa","musteriekran","subeler","personel"] },
 ];
 /* Varsayılan: ŞU AN sadece Stoklar açık (bayi testi için), gerisi kapalı.
@@ -20842,7 +20894,7 @@ function fiyatGenelHtml(isGenel){
   kategoriler.forEach(k=>{ html+=`<button class="cat-pill${state.fiyatKat===k?' on':''}" onclick="fiyatKatSec('${k.replace(/'/g,"\\'")}')">${k}</button>`; });
   html += `</div>`;
 
-  // TABLO — seçili şubeler + tavsiye sütunu
+  // TABLO — seçili şubeler + tavsiye sütunu (masaüstü)
   const gosterilen = subeler.length===0 ? [] : subeler;
   html += `<div class="fy-tablo-sar"><table class="fy-tablo"><thead><tr>`;
   html += `<th class="fy-th-urun">Ürün</th>`;
@@ -20850,10 +20902,15 @@ function fiyatGenelHtml(isGenel){
   gosterilen.forEach(sb=>{ html += `<th class="fy-th-sube">${sb}</th>`; });
   html += `</tr></thead><tbody>`;
 
+  // KART LİSTESİ — mobilde tablo yerine gösterilir (yatay kaydırma yok, her satır tam genişlik)
+  let kartHtml = `<div class="fy-mobil-liste">`;
+
   if(prods.length===0){
     html += `<tr><td colspan="${2+gosterilen.length}" class="fy-bos">Eşleşen ürün yok.</td></tr>`;
+    kartHtml += `<div class="fy-bos">Eşleşen ürün yok.</div>`;
   } else if(gosterilen.length===0){
     html += `<tr><td colspan="2" class="fy-bos">En az bir şube seçin.</td></tr>`;
+    kartHtml += `<div class="fy-bos">En az bir şube seçin.</div>`;
   }
   let sonKat="";
   prods.forEach(p=>{
@@ -20861,15 +20918,25 @@ function fiyatGenelHtml(isGenel){
     if(state.fiyatKat==="__tum" && p.kat!==sonKat){
       sonKat=p.kat;
       html += `<tr class="fy-kat-ayrac"><td colspan="${2+gosterilen.length}">${p.kat}</td></tr>`;
+      kartHtml += `<div class="fy-kart-kat-ayrac">${p.kat}</div>`;
     }
     html += `<tr>`;
     html += `<td class="fy-td-urun"><div class="fy-td-urun-ic"><span class="fy-emoji">${p.emoji||'🍽️'}</span><span class="fy-ad">${p.ad}</span></div></td>`;
     html += fiyatHucre(p, pi, null, isGenel, state.fiyatKanal);
     gosterilen.forEach(sb=>{ html += fiyatHucre(p, pi, sb, isGenel, state.fiyatKanal); });
     html += `</tr>`;
+
+    kartHtml += `<div class="fy-kart">
+      <div class="fy-kart-bas"><span class="fy-emoji">${p.emoji||'🍽️'}</span><span class="fy-ad">${p.ad}</span></div>
+      <div class="fy-kart-tablo">
+        ${fiyatKartGrupHtml('📋 Tavsiye', p, pi, null, isGenel, state.fiyatKanal, true)}
+        ${gosterilen.map(sb=>fiyatKartGrupHtml(sb, p, pi, sb, isGenel, state.fiyatKanal, false)).join("")}
+      </div>
+    </div>`;
   });
   html += `</tbody></table></div>`;
-  return html;
+  kartHtml += `</div>`;
+  return html + kartHtml;
 }
 function fiyatSubeFiltreCevir(sb){
   if(!state.fiyatSubeFiltre) state.fiyatSubeFiltre = DEMO_BRANCHES.map(b=>b.ad);
@@ -20888,6 +20955,12 @@ function fiyatSubeFiltreTumu(){
    kanalFil: "tum" | "masa" | "eve" */
 function fiyatHucre(p, pi, sube, isGenel, kanalFil){
   kanalFil = kanalFil || "tum";
+  const tavsiyeBlok = (sube===null);
+  const hucreIc = fiyatHucreIcerik(p, pi, sube, isGenel, kanalFil);
+  return `<td class="fy-td-fiyat${tavsiyeBlok?' tavsiye':''}${kanalFil!=='tum'?' tek-kanal':''}">${hucreIc}</td>`;
+}
+/* Ortak hesaplama — hem tablo hücresi hem kart ızgarası bunu kullanır */
+function fiyatDegerHesapla(p, pi, sube, isGenel){
   const tavMasa = p.fiyat||0;
   const tavEve = (p.fiyatEve!=null && p.fiyatEve>0) ? p.fiyatEve : null;
   // Düzenleme yetkisi:
@@ -20917,25 +20990,60 @@ function fiyatHucre(p, pi, sube, isGenel, kanalFil){
     if(fiyat>tavF) return ' fy-yuksek';
     return '';
   };
+  return {tavsiyeBlok, duzenle, subeArg, farkCls, mFiyat, eFiyat, mTavsiyeMi, eTavsiyeMi, mKapali, eKapali};
+}
+/* Hücre içeriği — masaüstü tablo <td>'sinde kullanılır */
+function fiyatHucreIcerik(p, pi, sube, isGenel, kanalFil){
+  kanalFil = kanalFil || "tum";
+  const d = fiyatDegerHesapla(p, pi, sube, isGenel);
   const satir=(kanal,fiyat,tavsiyeMi,kapali)=>{
     const etk = kanal==="masa" ? "M" : "E";
-    const fc = farkCls(kanal,fiyat,tavsiyeMi);
+    const fc = d.farkCls(kanal,fiyat,tavsiyeMi);
     let ic = `<span class="fy-h-etk">${etk}</span>`;
-    if(duzenle){
-      ic += `<span class="fy-h-fiyat${fc}${tavsiyeMi?' fy-tav':''}" onclick="fiyatHucreDuzenle(${pi},${subeArg},'${kanal}')">${tl(fiyat)}</span>`;
+    if(d.duzenle){
+      ic += `<span class="fy-h-fiyat${fc}${tavsiyeMi?' fy-tav':''}" onclick="fiyatHucreDuzenle(${pi},${d.subeArg},'${kanal}')">${tl(fiyat)}</span>`;
     } else {
       ic += `<span class="fy-h-fiyat${fc}${tavsiyeMi?' fy-tav':''}">${tl(fiyat)}</span>`;
     }
-    if(!tavsiyeBlok){
-      ic += `<button class="fy-h-tik ${kapali?'kapali':'acik'}" onclick="fiyatKanalKapat(${subeArg},'${p.ad.replace(/'/g,"\\'")}','${kanal}')" title="${kapali?'Kapalı — aç':'Açık — kapat'}">${kapali?'✕':'✓'}</button>`;
+    if(!d.tavsiyeBlok){
+      ic += `<button class="fy-h-tik ${kapali?'kapali':'acik'}" onclick="fiyatKanalKapat(${d.subeArg},'${p.ad.replace(/'/g,"\\'")}','${kanal}')" title="${kapali?'Kapalı — aç':'Açık — kapat'}">${kapali?'✕':'✓'}</button>`;
     }
     return `<div class="fy-h-satir${kapali?' kapali':''}">${ic}</div>`;
   };
-  let hucreIc="";
-  if(kanalFil==="masa") hucreIc = satir("masa",mFiyat,mTavsiyeMi,mKapali);
-  else if(kanalFil==="eve") hucreIc = satir("eve",eFiyat,eTavsiyeMi,eKapali);
-  else hucreIc = satir("masa",mFiyat,mTavsiyeMi,mKapali) + satir("eve",eFiyat,eTavsiyeMi,eKapali);
-  return `<td class="fy-td-fiyat${tavsiyeBlok?' tavsiye':''}${kanalFil!=='tum'?' tek-kanal':''}">${hucreIc}</td>`;
+  if(kanalFil==="masa") return satir("masa",d.mFiyat,d.mTavsiyeMi,d.mKapali);
+  if(kanalFil==="eve") return satir("eve",d.eFiyat,d.eTavsiyeMi,d.eKapali);
+  return satir("masa",d.mFiyat,d.mTavsiyeMi,d.mKapali) + satir("eve",d.eFiyat,d.eTavsiyeMi,d.eKapali);
+}
+/* Mobil KART IZGARASI — tek bir CSS grid'i paylaşan hücreler (display:contents ile).
+   Etiket sütunu 2 satıra (M/E) yayılır; M/E, fiyat ve buton sütunları TÜM satırlarda
+   aynı dikey çizgilerde hizalanır. kanalFil: "tum" | "masa" | "eve" */
+function fiyatKartGrupHtml(etiket, p, pi, sube, isGenel, kanalFil, tavsiyeBlok){
+  kanalFil = kanalFil || "tum";
+  const d = fiyatDegerHesapla(p, pi, sube, isGenel);
+  const kanallar = kanalFil==="masa" ? [["masa",d.mFiyat,d.mTavsiyeMi,d.mKapali]]
+                  : kanalFil==="eve"  ? [["eve",d.eFiyat,d.eTavsiyeMi,d.eKapali]]
+                  : [["masa",d.mFiyat,d.mTavsiyeMi,d.mKapali],["eve",d.eFiyat,d.eTavsiyeMi,d.eKapali]];
+  const satirSayisi = kanallar.length;
+  const tavCls = tavsiyeBlok ? ' tavsiye' : '';
+  let html = `<div class="fy-kg-lbl${tavCls} son" style="grid-row:span ${satirSayisi}">${etiket}</div>`;
+  kanallar.forEach(([kanal,fiyat,tavsiyeMi,kapali],i)=>{
+    const sonSatir = (i===satirSayisi-1);
+    const etk = kanal==="masa" ? "M" : "E";
+    const fc = d.farkCls(kanal,fiyat,tavsiyeMi);
+    const sinirCls = tavCls + (sonSatir?' son':'');
+    html += `<div class="fy-kg-etk${sinirCls}">${etk}</div>`;
+    if(d.duzenle){
+      html += `<div class="fy-kg-fiyat${fc}${tavsiyeMi?' fy-tav':''}${sinirCls}" onclick="fiyatHucreDuzenle(${pi},${d.subeArg},'${kanal}')">${tl(fiyat)}</div>`;
+    } else {
+      html += `<div class="fy-kg-fiyat${fc}${tavsiyeMi?' fy-tav':''}${sinirCls}">${tl(fiyat)}</div>`;
+    }
+    if(!tavsiyeBlok){
+      html += `<div class="fy-kg-tik${sinirCls}"><button class="fy-h-tik ${kapali?'kapali':'acik'}" onclick="fiyatKanalKapat(${d.subeArg},'${p.ad.replace(/'/g,"\\'")}','${kanal}')" title="${kapali?'Kapalı — aç':'Açık — kapat'}">${kapali?'✕':'✓'}</button></div>`;
+    } else {
+      html += `<div class="fy-kg-tik${sinirCls}"></div>`;
+    }
+  });
+  return `<div class="fy-kg">${html}</div>`;
 }
 function fiyatKanalFil(k){ state.fiyatKanal=k; go("fiyat", true); }
 function fiyatAramaYaz(v){
@@ -31650,11 +31758,12 @@ const RAPOR_SEKMELER = [
 ];
 function viewRapor(main){
   if(!state.raporSekme) state.raporSekme = "urunSatis";
-  if(!state.raporTarih) state.raporTarih = isletmeGunu();   // bugünün İŞLETME günü
+  if(!state.raporTarihBas) state.raporTarihBas = isletmeGunu();   // bugünün İŞLETME günü
+  if(!state.raporTarihBit) state.raporTarihBit = state.raporTarihBas;
   const isGenel = state.role==="genel";
   if(isGenel && !state.raporSube) state.raporSube = "__tum";
 
-  let html = `<div class="sec-head"><div><h2>📊 Raporlar</h2>
+  let html = `<div class="sec-head"><div><h2>💳 Kasa Raporları</h2>
     <div class="sh-sub">${isGenel?'Genel müdür · tüm şubeler':AKTIF_SUBE}</div></div></div>`;
 
   // sekme barı
@@ -32300,26 +32409,37 @@ function kvExcelIndir(){
   a.click();
   note("📗 Excel indirildi");
 }
-function raporTarihSec(t){ state.raporTarih=t; go("rapor", true); }
+function raporTarihBasSec(t){
+  state.raporTarihBas=t;
+  if(state.raporTarihBit < t) state.raporTarihBit = t;   // bitiş başlangıçtan önce kalmasın
+  go("rapor", true);
+}
+function raporTarihBitSec(t){
+  state.raporTarihBit=t;
+  if(state.raporTarihBas > t) state.raporTarihBas = t;   // başlangıç bitişten sonra kalmasın
+  go("rapor", true);
+}
 function raporSubeSec(s){ state.raporSube=s; go("rapor", true); }
 
 /* ── Günlük Ürün Satışları ── */
 function raporUrunSatisVeri(){
-  const tarih = state.raporTarih || isletmeGunu();   // varsayılan: bugünün İŞLETME günü
+  let tarihBas = state.raporTarihBas || isletmeGunu();   // varsayılan: bugünün İŞLETME günü
+  let tarihBit = state.raporTarihBit || tarihBas;
+  if(tarihBit < tarihBas){ const t=tarihBas; tarihBas=tarihBit; tarihBit=t; }   // güvenlik: ters aralık
   const isGenel = state.role==="genel";
   const subeFiltre = isGenel ? (state.raporSube||"__tum") : AKTIF_SUBE;
-  // işletme günü aralığı (örn. değişim 06:00 → 12 Tem 06:00 ile 13 Tem 06:00 arası)
-  const ara = isletmeGunAraligi(tarih);
-  const gunBas = ara.bas, gunBit = ara.bit;
+  // işletme günü aralığı (örn. değişim 06:00 → başlangıç gününün 06:00'ından bitiş gününün ertesi 06:00'ına)
+  const araBas = isletmeGunAraligi(tarihBas).bas;
+  const araBit = isletmeGunAraligi(tarihBit).bit;
 
-  // o İŞLETME GÜNÜNE ait kapanmış masalar/paketler
+  // o İŞLETME GÜNÜ ARALIĞINA ait kapanmış masalar/paketler
   const kayitlar = MASA_GECMISI.filter(g=>{
     // kayıtta işletme günü varsa doğrudan onu kullan (en güvenilir)
-    if(g.isletmeGunu) { if(g.isletmeGunu !== tarih) return false; }
+    if(g.isletmeGunu) { if(g.isletmeGunu < tarihBas || g.isletmeGunu > tarihBit) return false; }
     else {
       // eski kayıt: zaman damgasından hesapla
       const t = g.kapanis || g.ts || 0;
-      if(t < gunBas || t >= gunBit) return false;
+      if(t < araBas || t >= araBit) return false;
     }
     if(subeFiltre!=="__tum" && g.sube!==subeFiltre) return false;
     return true;
@@ -32370,16 +32490,21 @@ function raporUrunSatisVeri(){
     r.hediyeTutar = Math.round(r.hediyeTutar*100)/100;
     r.indirim = Math.round(r.indirim*100)/100;
   });
-  return {tarih, satirlar, subeFiltre, isGenel};
+  return {tarihBas, tarihBit, satirlar, subeFiltre, isGenel};
 }
 function raporUrunSatisHtml(){
-  const {tarih, satirlar, subeFiltre, isGenel} = raporUrunSatisVeri();
+  const {tarihBas, tarihBit, satirlar, subeFiltre, isGenel} = raporUrunSatisVeri();
   const tumSube = isGenel && subeFiltre==="__tum";
+  const araligiGoster = tarihBas===tarihBit
+    ? isletmeGunuGoster(tarihBas)
+    : isletmeGunuGoster(tarihBas)+" – "+isletmeGunuGoster(tarihBit);
 
   let html = `<div class="rapor-arac-bar">
     <div class="rab-sol">
-      <label class="rab-lbl">📅 Tarih</label>
-      <input class="rab-tarih" type="date" value="${tarih}" onchange="raporTarihSec(this.value)">
+      <label class="rab-lbl">📅 Başlangıç</label>
+      <input class="rab-tarih" type="date" value="${tarihBas}" max="${tarihBit}" onchange="raporTarihBasSec(this.value)">
+      <label class="rab-lbl">Bitiş</label>
+      <input class="rab-tarih" type="date" value="${tarihBit}" min="${tarihBas}" onchange="raporTarihBitSec(this.value)">
     </div>`;
   if(isGenel){
     html += `<div class="rab-sube-row">
@@ -32393,7 +32518,7 @@ function raporUrunSatisHtml(){
   </div>`;
 
   if(satirlar.length===0){
-    return html + `<div class="rapor-bos">📭 ${new Date(tarih).toLocaleDateString('tr')} tarihinde ${tumSube?'hiçbir şubede':'bu şubede'} satış kaydı yok.</div>`;
+    return html + `<div class="rapor-bos">📭 ${araligiGoster} tarih${tarihBas===tarihBit?'inde':' aralığında'} ${tumSube?'hiçbir şubede':'bu şubede'} satış kaydı yok.</div>`;
   }
 
   // toplamlar
@@ -32447,7 +32572,7 @@ function raporUrunSatisHtml(){
 }
 /* Excel (CSV) indirme */
 function raporUrunSatisExcel(){
-  const {tarih, satirlar, subeFiltre, isGenel} = raporUrunSatisVeri();
+  const {tarihBas, tarihBit, satirlar, subeFiltre, isGenel} = raporUrunSatisVeri();
   const tumSube = isGenel && subeFiltre==="__tum";
   if(satirlar.length===0){ note("İndirilecek veri yok"); return; }
   const bas = ["Kategori","Ürün"].concat(tumSube?["Şube"]:[])
@@ -32469,7 +32594,7 @@ function raporUrunSatisExcel(){
   const blob = new Blob([csv], {type:"text/csv;charset=utf-8;"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "MINIPAN_UrunSatis_"+tarih+(tumSube?"_TumSubeler":"_"+(subeFiltre||AKTIF_SUBE).replace(/\s+/g,"_"))+".csv";
+  a.download = "MINIPAN_UrunSatis_"+tarihBas+(tarihBit!==tarihBas?"_"+tarihBit:"")+(tumSube?"_TumSubeler":"_"+(subeFiltre||AKTIF_SUBE).replace(/\s+/g,"_"))+".csv";
   a.click();
   note("📥 Excel dosyası indirildi");
 }
