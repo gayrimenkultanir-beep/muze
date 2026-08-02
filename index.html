@@ -25227,6 +25227,20 @@ function iadeFaturaFormHtml(){
   </div>`;
 
   html+=`<div class="fat-bilgi-kart">
+    <div class="fat-bilgi-baslik">🔗 İade Edilecek Fatura</div>
+    <div class="fat-ust-grid">
+      <div class="fat-alan">
+        <label>Fatura numarası</label>
+        <input type="text" class="fat-input" value="${esc(t.kaynakFaturaNo)}" placeholder="örn. FTR-2026-000123" oninput="iadeFaturaAlan('kaynakFaturaNo',this.value)">
+      </div>
+      <div class="fat-alan">
+        <label>Fatura tarihi</label>
+        <input type="date" class="fat-input" value="${esc(t.kaynakFaturaTarihi)}" onchange="iadeFaturaAlan('kaynakFaturaTarihi',this.value)">
+      </div>
+    </div>
+  </div>`;
+
+  html+=`<div class="fat-bilgi-kart">
     <div class="fat-bilgi-baslik">📋 İade Bilgileri</div>
     <div class="fat-ust-grid">
       <div class="fat-alan">
@@ -25472,6 +25486,7 @@ function iadeFaturaListeHtml(){
           <div class="sf-baslik">${yonEt} ${durum}</div>
           <div class="sf-alt"><strong>${x.no}</strong> · ${hedef||'—'} · ${x.tarih} · ${x.kalemler.length} kalem
             · ${iadeSebepAd(x.sebep)}${x.aciklama?' · '+x.aciklama:''}</div>
+          ${x.kaynakFaturaNo?`<div class="sf-alt">🔗 Kaynak fatura: <strong>${x.kaynakFaturaNo}</strong>${x.kaynakFaturaTarihi?' · '+new Date(x.kaynakFaturaTarihi).toLocaleDateString("tr-TR"):''}</div>`:''}
         </div>
         <div class="sf-tutar">${tl(x.faturaTutar)} ₺</div>
       </div>
@@ -25500,7 +25515,9 @@ function iadeFaturaYeni(yon){
   state.iadeTaslak = {
     id:null, yon:_yon, tarihISO:bugunISO,
     sube: _yon==="subeden" ? (isGenel ? "" : AKTIF_SUBE) : "",
-    tedarikci:"", sebep:"bozuk", aciklama:"", kalemler:[]
+    tedarikci:"", sebep:"bozuk", aciklama:"",
+    kaynakFaturaNo:"", kaynakFaturaTarihi:"",
+    kalemler:[]
   };
   go("fatura", true);
 }
@@ -25510,7 +25527,9 @@ function iadeFaturaDuzenle(id){
   if(f.yon==="subeden" && f.onaySunuldu!==false){ note("⚠️ Onaya gönderilmiş iade düzenlenemez."); return; }
   state.iadeTaslak = JSON.parse(JSON.stringify({
     id:f.id, yon:f.yon, tarihISO:f.tarihISO, sube:f.sube||"", tedarikci:f.tedarikci||"",
-    sebep:f.sebep||"bozuk", aciklama:f.aciklama||"", kalemler:f.kalemler||[]
+    sebep:f.sebep||"bozuk", aciklama:f.aciklama||"",
+    kaynakFaturaNo:f.kaynakFaturaNo||"", kaynakFaturaTarihi:f.kaynakFaturaTarihi||"",
+    kalemler:f.kalemler||[]
   }));
   go("fatura", true);
 }
@@ -25537,7 +25556,9 @@ function iadeFaturaKaydet(){
     id, no: iadeFaturaNo(id), yon:t.yon,
     sube:t.sube||"", tedarikci:t.tedarikci||"",
     tarihISO:t.tarihISO, tarih:new Date(t.tarihISO).toLocaleDateString("tr-TR"),
-    sebep:t.sebep, aciklama:t.aciklama, kalemler:t.kalemler,
+    sebep:t.sebep, aciklama:t.aciklama,
+    kaynakFaturaNo:t.kaynakFaturaNo||"", kaynakFaturaTarihi:t.kaynakFaturaTarihi||"",
+    kalemler:t.kalemler,
     matrah:top.matrah, kdvToplam:top.kdvToplam, faturaTutar:top.faturaTutar,
     islendi:false, islemTs:null,
     onaySunuldu: t.yon==="subeden" ? false : true,
@@ -30167,6 +30188,7 @@ function iadeBelgeAc(id, tip){
         </div>
 
         <div class="irs-iade-sebep">İade Sebebi: <strong>${iadeSebepAd(f.sebep)}</strong>${f.aciklama?` · ${f.aciklama}`:''}</div>
+        ${f.kaynakFaturaNo?`<div class="irs-iade-sebep">İade Edilecek Fatura No: <strong>${f.kaynakFaturaNo}</strong>${f.kaynakFaturaTarihi?` · Tarihi: <strong>${new Date(f.kaynakFaturaTarihi).toLocaleDateString("tr-TR")}</strong>`:''}</div>`:''}
 
         <table class="irs-tablo${fiyatli?' irs-tablo-fiyatli':''}">
           <thead>${thead}</thead>
