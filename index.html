@@ -24274,26 +24274,32 @@ function viewFatura(main){
   if(state.satisTaslak){ main.innerHTML = satisFaturaFormHtml(); return; }
   // iade faturası taslağı
   if(state.iadeTaslak){ main.innerHTML = iadeFaturaFormHtml(); return; }
-  // şube dış alım taslağı
-  if(state.subeAlisTaslak){ main.innerHTML = subeAlisFormHtml(); return; }
+  // şube dış alım taslağı — yalnızca şube müdürü
+  if(state.subeAlisTaslak && !depoVeyaGenel()){ main.innerHTML = subeAlisFormHtml(); return; }
+  if(state.subeAlisTaslak && depoVeyaGenel()) state.subeAlisTaslak = null;
   const isGenel = depoVeyaGenel();
   // şube müdürü yalnızca iade sekmesini görür (alış/satış merkez işi)
   if(!isGenel && state.faturaSekme!=="iade" && state.faturaSekme!=="disalim") state.faturaSekme = "disalim";
+  // dış alım yalnızca şube müdüründe: genel müdür/depo bu sekmede kalmışsa alışa dön
+  if(isGenel && state.faturaSekme==="disalim") state.faturaSekme = "alis";
   if(!state.faturaSekme) state.faturaSekme = "alis";
   const sekme = state.faturaSekme;
   const bekleyenIade = IADE_FATURALARI.filter(x=>!x.islendi &&
     (isGenel || (x.yon==="subeden" && x.sube===AKTIF_SUBE))).length;
   let html = `<div class="sec-head"><div><h2>🧾 ${isGenel?'Alış-Satış Fatura':'Şube Faturaları'}</h2>
-    <div class="sh-sub">${isGenel?'Merkez tedarik, şubeye satış, dış alım ve iade faturaları':AKTIF_SUBE+' · dış alım ve merkeze iade'}</div></div></div>`;
+    <div class="sh-sub">${isGenel?'Merkez tedarik, şubeye satış ve iade faturaları':AKTIF_SUBE+' · dış alım ve merkeze iade'}</div></div></div>`;
   html += `<div class="bayi-sekme-row">`;
   if(isGenel){
     html += `<button class="bayi-sekme${sekme==="alis"?' on':''}" onclick="faturaSekmeSec('alis')">🧾 Alış Faturaları</button>
       <button class="bayi-sekme${sekme==="satis"?' on':''}" onclick="faturaSekmeSec('satis')">🏪 Satış Faturaları</button>`;
   }
-  const bekleyenDisAlim = SUBE_ALIS_FATURALARI.filter(x=>!x.islendi &&
-    (isGenel || x.sube===AKTIF_SUBE)).length;
-  html += `<button class="bayi-sekme${sekme==="disalim"?' on':''}" onclick="faturaSekmeSec('disalim')">🛒 Dış Alım${
-    bekleyenDisAlim>0?` <span class="sekme-rozet">${bekleyenDisAlim}</span>`:''}</button>`;
+  // Dış Alım sekmesi yalnızca şube müdüründe: genel müdür ve depo/lojistik göremez
+  if(!isGenel){
+    const bekleyenDisAlim = SUBE_ALIS_FATURALARI.filter(x=>!x.islendi &&
+      x.sube===AKTIF_SUBE).length;
+    html += `<button class="bayi-sekme${sekme==="disalim"?' on':''}" onclick="faturaSekmeSec('disalim')">🛒 Dış Alım${
+      bekleyenDisAlim>0?` <span class="sekme-rozet">${bekleyenDisAlim}</span>`:''}</button>`;
+  }
   html += `<button class="bayi-sekme${sekme==="iade"?' on':''}" onclick="faturaSekmeSec('iade')">↩️ İade Faturaları${
     bekleyenIade>0?` <span class="sekme-rozet">${bekleyenIade}</span>`:''}</button>`;
   if(isGenel){
@@ -24302,7 +24308,7 @@ function viewFatura(main){
   html += `</div><div class="bayi-icerik">`;
   if(sekme==="alis" && isGenel) html += bayiIrsaliyeHtml();
   else if(sekme==="satis" && isGenel) html += satisFaturaListeHtml();
-  else if(sekme==="disalim") html += subeAlisListeHtml();
+  else if(sekme==="disalim" && !isGenel) html += subeAlisListeHtml();
   else if(sekme==="tedarikci" && isGenel) html += tedarikciListeHtml();
   else html += iadeFaturaListeHtml();
   html += `</div>`;
@@ -24589,6 +24595,10 @@ function tedarikciAra(v){
    ══════════════════════════════════════════════════════════════ */
 function subeAlisYeni(){
   const isGenel=depoVeyaGenel();
+  if(isGenel){
+    note("⚠️ Dış alım faturası yalnızca şube müdürü tarafından oluşturulabilir.");
+    return;
+  }
   if(disAlimUrunleri().length===0){
     note("⚠️ Dış alıma açık ürün yok — stok kartında izin verilmeli");
     return;
@@ -24600,6 +24610,10 @@ function subeAlisYeni(){
   go("fatura", true);
 }
 function subeAlisDuzenle(id){
+  if(depoVeyaGenel()){
+    note("⚠️ Dış alım faturası yalnızca şube müdürü tarafından düzenlenebilir.");
+    return;
+  }
   const f=SUBE_ALIS_FATURALARI.find(x=>x.id===id); if(!f) return;
   // İşlenmiş fatura da düzenlenebilir: stok etkisi önce otomatik geri alınır,
   // düzenleme sonrası "İşle" ile yeni hâliyle tekrar uygulanır. Böylece stok
@@ -25568,7 +25582,7 @@ function satisFatAra(v){
   }, 220);
 }
 function satisFaturaListeHtml(){
-  let html = `<div class="bayi-aciklama">🏪 Şubelere satış faturaları. Fiyatlar <strong>Bayi Fiyatları</strong>'ndan gelir, iskonto elle ayarlanabilir. Fatura kaydedildikten sonra <strong>Stok Aktar</strong> ile merkez stoğundan düşülüp şube stoğuna eklenir.</div>`;
+  let html = `<div class="bayi-aciklama">🏪 Şubelere satış faturaları. Fiyatlar <strong>Bayi Fiyatları</strong>'ndan gelir, iskonto elle ayarlanabilir. Fatura kaydedildikten sonra <strong>Ödeme İste</strong> ile şubeye bildirim gider; şube ödemesini tamamlayınca <strong>Stok Aktar</strong> ile merkez stoğundan düşülüp şube stoğuna eklenir.</div>`;
   html += `<div class="stok-bar-aksiyon" style="margin-bottom:14px">
     <button class="sf-yeni-btn" onclick="satisFaturaYeni()">+ Yeni satış faturası</button>
   </div>`;
@@ -25639,9 +25653,16 @@ function satisFaturaListeHtml(){
     return html + `<div class="bayi-bos">Bu filtreyle eşleşen satış faturası yok.</div>`;
   }
   liste.forEach(f=>{
-    const durum = f.aktarildi
-      ? `<span class="sf-rozet aktarildi">✓ ${f.aktarimTuru==='haric'?'Hariçten eklendi':'Merkezden aktarıldı'}</span>`
-      : `<span class="sf-rozet bekliyor">⏳ Aktarım bekliyor</span>`;
+    let durum;
+    if(f.aktarildi){
+      durum = `<span class="sf-rozet aktarildi">✓ ${f.aktarimTuru==='haric'?'Hariçten eklendi':'Merkezden aktarıldı'}</span>`;
+    } else if(f.odemeDurum==="odendi"){
+      durum = `<span class="sf-rozet aktarildi">💰 Ödendi · aktarım bekliyor</span>`;
+    } else if(f.odemeDurum==="istendi"){
+      durum = `<span class="sf-rozet bekliyor">⏳ Ödeme bekleniyor</span>`;
+    } else {
+      durum = `<span class="sf-rozet bekliyor">📝 Ödeme istenmedi</span>`;
+    }
     html += `<div class="bayi-satir sf-satir">
       <div class="sf-ust">
         <div class="sf-bilgi">
@@ -25651,9 +25672,12 @@ function satisFaturaListeHtml(){
         <div class="sf-tutar">${tl(f.faturaTutar)} ₺</div>
       </div>
       <div class="sf-aksiyon">
-        ${!f.aktarildi ? `<button class="bayi-mini sf-aktar-btn" onclick="satisFaturaAktarOnay(${f.id})">📦 Stok Aktar</button>` : ''}
-        <button class="bayi-mini" onclick="satisFaturaDuzenle(${f.id})">✏️ Düzenle</button>
-        <button class="bayi-mini sil" onclick="satisFaturaSilOnay(${f.id})">🗑️ Sil</button>
+        ${(!f.odemeDurum && !f.aktarildi) ? `<button class="bayi-mini sf-aktar-btn" onclick="satisFaturaOdemeIste(${f.id})">💳 Ödeme İste</button>` : ''}
+        ${(f.odemeDurum==="odendi" && !f.aktarildi) ? `<button class="bayi-mini sf-aktar-btn" onclick="satisFaturaAktarOnay(${f.id})">📦 Stok Aktar</button>` : ''}
+        ${f.odemeDurum ? `<button class="bayi-mini" onclick="satisFaturaBelgeAc(${f.id},'irsaliye')">🧾 İrsaliye/Fatura</button>` : ''}
+        ${f.odemeDurum ? `<button class="bayi-mini" onclick="satisFaturaGeriAlOnay(${f.id})">↩️ Geri Al</button>` : ''}
+        ${!f.odemeDurum ? `<button class="bayi-mini" onclick="satisFaturaDuzenle(${f.id})">✏️ Düzenle</button>` : ''}
+        ${!f.odemeDurum ? `<button class="bayi-mini sil" onclick="satisFaturaSilOnay(${f.id})">🗑️ Sil</button>` : ''}
       </div>
     </div>`;
   });
@@ -27569,6 +27593,7 @@ function satisFaturaYeni(){
 function satisFaturaDuzenle(id){
   const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
   if(f.aktarildi){ note("⚠️ Stoğu aktarılmış fatura düzenlenemez. Önce aktarımı geri almanız gerekir."); return; }
+  if(f.odemeDurum){ note("⚠️ Ödeme talebi gönderilmiş fatura düzenlenemez."); return; }
   state.satisTaslak=JSON.parse(JSON.stringify({
     id:f.id, faturaNo:f.faturaNo, tarihISO:f.tarihISO, sube:f.sube, aciklama:f.aciklama, kalemler:f.kalemler
   }));
@@ -27692,17 +27717,22 @@ function satisFaturaKaydet(){
     faturaNo:t.faturaNo, tarihISO:t.tarihISO, tarih:tarihGoster,
     sube:t.sube, aciklama:t.aciklama, kalemler:t.kalemler,
     matrah:top.matrah, kdvToplam:top.kdvToplam, iskontoToplam:top.iskontoToplam, faturaTutar:top.faturaTutar,
-    aktarildi:false
+    aktarildi:false, odemeDurum:null, odemeYontemi:null
   };
   if(t.id!=null){
     const i=SATIS_FATURALARI.findIndex(x=>x.id===t.id);
-    // düzenlemede aktarım durumunu koru (ama düzenleme sadece aktarılmamışlarda mümkün)
-    if(i>=0){ kayit.aktarildi=SATIS_FATURALARI[i].aktarildi; SATIS_FATURALARI[i]=kayit; }
+    // düzenlemede aktarım/ödeme durumunu koru (ama düzenleme sadece hiçbiri başlamamışken mümkün)
+    if(i>=0){
+      kayit.aktarildi=SATIS_FATURALARI[i].aktarildi;
+      kayit.odemeDurum=SATIS_FATURALARI[i].odemeDurum||null;
+      kayit.odemeYontemi=SATIS_FATURALARI[i].odemeYontemi||null;
+      SATIS_FATURALARI[i]=kayit;
+    }
   } else {
     SATIS_FATURALARI.push(kayit);
   }
   state.satisTaslak=null;
-  note("✓ Satış faturası kaydedildi. Stoğu şubeye aktarmak için 'Stok Aktar' butonunu kullanın.");
+  note("✓ Satış faturası kaydedildi. Şubeden ödeme almak için 'Ödeme İste' butonunu kullanın.");
   b2bKaydet();
   go("fatura", true);
 }
@@ -27710,6 +27740,7 @@ function satisFaturaKaydet(){
 function satisFaturaAktarOnay(id){
   const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
   if(f.aktarildi){ note("Bu fatura zaten aktarılmış"); return; }
+  if(f.odemeDurum!=="odendi"){ note("⚠️ Stok aktarımı için önce şube ödemesi tamamlanmalı."); return; }
   const birimAdi=k=>{ const u=(typeof uomAl==="function"&&STOCK[k.kod])?uomAl(STOCK[k.kod]):null; return k.girisBirim||(u?u.tabanBirim:'')||''; };
   const kalemOzet=f.kalemler.map(k=>`${stokAd(k.kod)} — ${(+(k.miktar)).toLocaleString("tr")} ${birimAdi(k)}`).join("<br>");
   let mdl=document.getElementById("satisAktarModal");
@@ -27746,6 +27777,7 @@ function satisFaturaAktarOnay(id){
 function satisAktarKapat(){ const m=document.getElementById("satisAktarModal"); if(m) m.classList.remove("on"); }
 function satisFaturaAktar(id, mod){
   const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f||f.aktarildi){ satisAktarKapat(); return; }
+  if(f.odemeDurum!=="odendi"){ satisAktarKapat(); note("⚠️ Stok aktarımı için önce şube ödemesi tamamlanmalı."); return; }
   mod = mod || "merkez";
   f.kalemler.forEach(k=>{
     const taban=k.tabanMiktar||0;
@@ -27767,9 +27799,275 @@ function satisFaturaAktar(id, mod){
   b2bKaydet();
   go("fatura", true);
 }
+/* ══════════════════════════════════════════════════════════════
+   SATIŞ FATURASI — ÖDEME İSTE / ŞUBE ÖDEMESİ
+   Akış: fatura kaydedilir → genel müdür/depo "Ödeme İste" der →
+   şubeye bildirim gider, fatura+irsaliye şubenin Siparişler
+   kısmında kayıt olarak görünür → şube "sipariş" ödeme ekranıyla
+   ödeme yapar → depo + genel müdüre bildirim gider → ancak o zaman
+   Stok Aktar yapılabilir.
+   ══════════════════════════════════════════════════════════════ */
+function satisFaturaOdemeIste(id){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  if(f.odemeDurum){ note("Bu fatura için ödeme zaten istendi."); return; }
+  f.odemeDurum="istendi";
+  f.odemeIstendiTs=Date.now();
+  note("✓ Ödeme talebi "+f.sube+" şubesine gönderildi.");
+  bildirimEkle({tip:"odeme", baslik:"Ödeme bekleyen satış faturası",
+    mesaj:(f.faturaNo?("Fatura No: "+f.faturaNo+" · "):"")+tl(f.faturaTutar)+" ₺ tutarında satış faturası için ödeme bekleniyor.",
+    kanal:"Bayi Kanalı", hedefSube:f.sube, link:{ekran:"bayi", sekme:"benimsip"}});
+  b2bKaydet();
+  go("fatura", true);
+}
+/* ─ Şube: satış faturası ödeme ekranı (sipariş ödeme ekranıyla aynı modal) ─ */
+function satisOdemeAc(id){
+  const f = SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  if(f.odemeDurum!=="istendi") return;
+  state.satisOdeme = {id:id, toplam:f.faturaTutar, yontem:"kredi"};
+  renderSatisOdeme();
+  document.getElementById("bayiOdemeModal").classList.add("on");
+}
+function satisOdemeKapat(){
+  const m=document.getElementById("bayiOdemeModal"); if(m) m.classList.remove("on");
+  state.satisOdeme=null;
+}
+function satisOdemeYontem(y){ state.satisOdeme.yontem=y; renderSatisOdeme(); }
+function renderSatisOdeme(){
+  const o = state.satisOdeme; if(!o) return;
+  const f = SATIS_FATURALARI.find(x=>x.id===o.id); if(!f) return;
+  let html = `<div class="bom-head">
+    <div class="bom-baslik">💳 Satış Faturası Ödemesi</div>
+    <button class="bom-kapat" onclick="satisOdemeKapat()">✕</button>
+  </div>
+  <div class="bom-ozet">
+    <div class="bom-ozet-satir"><span>Fatura</span><span>${f.faturaNo?f.faturaNo:('#'+f.id)} · ${f.kalemler.length} kalem</span></div>
+    <div class="bom-ozet-satir bom-toplam"><span>Ödenecek tutar</span><span>${tl(o.toplam)} ₺</span></div>
+  </div>
+  <div class="bom-yontem-baslik">Ödeme yöntemi</div>
+  <div class="bom-yontem-row">
+    <button class="bom-yontem${o.yontem==="kredi"?' on':''}" onclick="satisOdemeYontem('kredi')">
+      <span class="bom-y-ic">💳</span><span class="bom-y-ad">Kredi Kartı</span></button>
+    <button class="bom-yontem${o.yontem==="eft"?' on':''}" onclick="satisOdemeYontem('eft')">
+      <span class="bom-y-ic">🏦</span><span class="bom-y-ad">EFT / Havale</span></button>
+  </div>`;
+  if(o.yontem==="kredi"){
+    html += `<div class="bom-alan-grup">
+      <div class="bom-alan"><label>Kart numarası</label><input class="bom-input" inputmode="numeric" placeholder="**** **** **** ****" maxlength="19" oninput="kartFormatla(this)"></div>
+      <div class="bom-alan-ikili">
+        <div class="bom-alan"><label>Son kullanma</label><input class="bom-input" placeholder="AA/YY" maxlength="5"></div>
+        <div class="bom-alan"><label>CVV</label><input class="bom-input" inputmode="numeric" placeholder="***" maxlength="3"></div>
+      </div>
+      <div class="bom-alan"><label>Kart üzerindeki isim</label><input class="bom-input" placeholder="${AKTIF_SUBE}"></div>
+    </div>`;
+  } else {
+    html += `<div class="bom-alan-grup">
+      <div class="bom-eft-bilgi">
+        <div class="bom-eft-baslik">MİNİPAN Merkez — Havale/EFT Bilgileri</div>
+        <div class="bom-eft-satir"><span>Banka</span><strong>Ziraat Bankası</strong></div>
+        <div class="bom-eft-satir"><span>IBAN</span><strong>TR00 0001 0000 0000 0000 0000 00</strong></div>
+        <div class="bom-eft-satir"><span>Açıklama</span><strong>${f.faturaNo?f.faturaNo:('Fatura #'+f.id)} · ${AKTIF_SUBE}</strong></div>
+      </div>
+      <div class="bom-eft-not">EFT/havale yaptıktan sonra "Ödemeyi onayla" ile faturayı tamamlayın.</div>
+    </div>`;
+  }
+  html += `<button class="bom-ode-btn" onclick="satisOdemeTamamla()">${o.yontem==="kredi"?"💳 "+tl(o.toplam)+" ₺ Öde":"✓ Ödemeyi onayla"}</button>`;
+  document.getElementById("bayiOdemeInner").innerHTML = html;
+}
+function satisOdemeTamamla(){
+  const o = state.satisOdeme; if(!o) return;
+  const f = SATIS_FATURALARI.find(x=>x.id===o.id); if(!f) return;
+  const yontem = o.yontem==="eft" ? "EFT/Havale" : "Kredi kartı";
+  f.odemeDurum="odendi"; f.odemeYontemi=yontem; f.odemeTs=Date.now();
+  satisOdemeKapat();
+  note("✓ Ödeme alındı ("+yontem+") · stok aktarımı bekleniyor");
+  const bildirimMetin = f.sube+" şubesi "+(f.faturaNo?f.faturaNo:('#'+f.id))+" satış faturası için "+yontem+" ile ödeme yaptı. Stok aktarabilirsiniz.";
+  // depo/lojistik (merkez)
+  bildirimEkle({tip:"odeme", baslik:"Satış faturası ödemesi alındı",
+    mesaj:bildirimMetin, kanal:"Bayi Kanalı", hedefRol:"depo", link:"fatura"});
+  // genel müdür
+  bildirimEkle({tip:"odeme", baslik:"Satış faturası ödemesi alındı",
+    mesaj:bildirimMetin, kanal:"Bayi Kanalı", hedefRol:"genel", link:"fatura"});
+  b2bKaydet();
+  go("bayi", true);
+}
+/* ─ Satış faturası belgesi: fiyatlı (fatura) / fiyatsız (irsaliye) görünüm ─ */
+function satisFaturaBelgeAc(id, tip){
+  const f = SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  const fiyatli = (tip==="fatura");
+  const m = MERKEZ_FIRMA;
+  const alici = BRANCH_INFO[f.sube] || {};
+  const bugun = new Date().toLocaleDateString("tr-TR",{day:'2-digit',month:'2-digit',year:'numeric'});
+  const saat  = new Date().toLocaleTimeString("tr-TR",{hour:'2-digit',minute:'2-digit'});
+  const top   = faturaToplamlar(f.kalemler||[]);
+
+  let satirlar = (f.kalemler||[]).map((k,i)=>{
+    const st = STOCK[k.kod] || {};
+    const u  = uomAl(st);
+    const sevkBirim = k.girisBirim || u.tabanBirim;
+    const sevkMik   = k.miktar;
+    const taban     = (k.tabanMiktar!=null) ? k.tabanMiktar : k.miktar;
+    const tabanNot  = (k.girisBirim && k.girisBirim!==u.tabanBirim)
+      ? `<div class="irs-taban">Toplam: ${(+(taban||0).toFixed(2))} ${u.tabanBirim}</div>` : "";
+    if(!fiyatli){
+      const icerik = (k.girisBirim && k.girisBirim!==u.tabanBirim && sevkMik)
+        ? `1 ${sevkBirim} = ${(+(taban/sevkMik).toFixed(2))} ${u.tabanBirim}` : "—";
+      return `<tr>
+        <td class="irs-sira">${i+1}</td>
+        <td class="irs-kod">${st.no||""}</td>
+        <td class="irs-ad">${st.ad || k.kod}${tabanNot}</td>
+        <td class="irs-icerik">${icerik}</td>
+        <td class="irs-birim">${sevkBirim}</td>
+        <td class="irs-miktar">${sevkMik}</td>
+      </tr>`;
+    }
+    const h = faturaKalemHesap(k);
+    return `<tr>
+      <td class="irs-sira">${i+1}</td>
+      <td class="irs-kod">${st.no||""}</td>
+      <td class="irs-ad">${st.ad || k.kod}${tabanNot}</td>
+      <td class="irs-birim">${sevkBirim}</td>
+      <td class="irs-miktar">${sevkMik}</td>
+      <td class="irs-tut">${(+k.birimFiyat||0).toFixed(2)}</td>
+      <td class="irs-tut">${(+k.iskonto>0)?('%'+k.iskonto):'—'}</td>
+      <td class="irs-tut">${h.matrah.toFixed(2)}</td>
+      <td class="irs-tut">%${k.kdv||0}</td>
+      <td class="irs-tut"><strong>${h.satirTutar.toFixed(2)}</strong></td>
+    </tr>`;
+  }).join("");
+  const sutunSayisi = fiyatli ? 10 : 6;
+  if(!satirlar) satirlar = `<tr><td colspan="${sutunSayisi}" class="irs-bos">Kalem yok.</td></tr>`;
+
+  const thead = fiyatli
+    ? `<tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th>
+       <th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th><th class="irs-tut">Birim Fiyat</th>
+       <th class="irs-tut">İsk.</th><th class="irs-tut">Temel fiyat</th><th class="irs-tut">KDV</th><th class="irs-tut">Tutar</th></tr>`
+    : `<tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th>
+       <th class="irs-icerik">Birim İçeriği</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>`;
+
+  const tfoot = fiyatli
+    ? `<tr><td colspan="7" class="irs-toplam-lbl">ARA TOPLAM (TEMEL FİYAT)</td><td class="irs-tut" colspan="3">${tl(top.matrah)} ₺</td></tr>
+       ${top.iskontoToplam>0?`<tr><td colspan="7" class="irs-toplam-lbl">İSKONTO</td><td class="irs-tut" colspan="3">− ${tl(top.iskontoToplam)} ₺</td></tr>`:''}
+       <tr><td colspan="7" class="irs-toplam-lbl">KDV TOPLAMI</td><td class="irs-tut" colspan="3">${tl(top.kdvToplam)} ₺</td></tr>
+       <tr class="irs-genel-toplam"><td colspan="7" class="irs-toplam-lbl">GENEL TOPLAM</td><td class="irs-tut" colspan="3"><strong>${tl(top.faturaTutar)} ₺</strong></td></tr>`
+    : `<tr><td colspan="5" class="irs-toplam-lbl">TOPLAM</td><td class="irs-miktar">${(f.kalemler||[]).length} kalem</td></tr>`;
+
+  const belgeTip = fiyatli ? "SATIŞ FATURASI" : "SEVK İRSALİYESİ";
+  const belgeIkon = fiyatli ? "🧾" : "📋";
+  const altNot = fiyatli
+    ? `Bu belge merkezden şubeye yapılan satışa ait bedelleri gösterir.`
+    : `Bu belge şubeye yapılan mal sevkiyatı içindir; fiyat ve bedel içermez. Malın fiili sevk tarihi düzenleme tarihidir.`;
+
+  const html = `
+  <div class="irs-modal-bg" id="irsModal" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) irsaliyeKapat()">
+    <div class="irs-modal-ic">
+      <div class="irs-arac-bar no-print">
+        <span class="irs-arac-baslik">${belgeIkon} ${belgeTip} · Önizleme</span>
+        <div class="irs-arac-btnlar">
+          <button class="gka-excel" onclick="irsaliyeKapat()">Kapat</button>
+          <button class="gka-excel" onclick="satisFaturaBelgeAc(${id},'${fiyatli?'irsaliye':'fatura'}')">${fiyatli?'📋 İrsaliyeye geç':'🧾 Faturaya geç'}</button>
+          <button class="gka-irsaliye" onclick="irsaliyeYazdir()">🖨️ Yazdır</button>
+        </div>
+      </div>
+      <div class="irs-kagit${fiyatli?' irs-genis':''}" id="irsKagit">
+        ${(MARKA_LOGOLAR.logo || MARKA_LOGOLAR.yazi) ? `<div class="irs-logo-orta">
+          ${MARKA_LOGOLAR.logo ? `<img class="irs-logo" src="${MARKA_LOGOLAR.logo}" alt="">` : ''}
+          ${MARKA_LOGOLAR.yazi ? `<img class="irs-logo-yazi" src="${MARKA_LOGOLAR.yazi}" alt="MİNİPAN">` : ''}
+        </div>` : ''}
+        <div class="irs-ust">
+          <div class="irs-baslik-blok">
+            <div class="irs-baslik-metin">
+              <div class="irs-belge-tip">${belgeTip}</div>
+              <div class="irs-belge-no">Belge No: ${f.faturaNo?f.faturaNo:('SAT-'+String(f.id).padStart(6,'0'))}</div>
+            </div>
+          </div>
+          <div class="irs-tarih-blok">
+            <div>Düzenleme: <strong>${bugun}</strong></div>
+            <div>Saat: <strong>${saat}</strong></div>
+            <div>Fatura Tarihi: <strong>${f.tarih}</strong></div>
+          </div>
+        </div>
+
+        <div class="irs-taraflar">
+          <div class="irs-taraf">
+            <div class="irs-taraf-etiket">GÖNDEREN (Satıcı)</div>
+            <div class="irs-taraf-unvan">${m.unvan||"—"}</div>
+            <div class="irs-taraf-satir">VKN: ${m.vkn||"—"}${m.vergiDairesi?" · "+m.vergiDairesi:""}</div>
+            <div class="irs-taraf-satir">${m.adres||""}${m.sehir?", "+m.sehir:""}</div>
+            <div class="irs-taraf-satir">Tel: ${m.tel||"—"}</div>
+          </div>
+          <div class="irs-taraf">
+            <div class="irs-taraf-etiket">ALICI (Şube)</div>
+            <div class="irs-taraf-unvan">${alici.unvan || f.sube}</div>
+            <div class="irs-taraf-satir">${(alici.vkn?"VKN: "+alici.vkn:(alici.tckn?"TCKN: "+alici.tckn:"VKN/TCKN: —"))}${alici.vergiDairesi?" · "+alici.vergiDairesi:""}</div>
+            <div class="irs-taraf-satir">${alici.adres||""}${alici.sehir?", "+alici.sehir:""}</div>
+            <div class="irs-taraf-satir">Tel: ${alici.tel||"—"}</div>
+          </div>
+        </div>
+
+        ${f.aciklama?`<div class="irs-iade-sebep">Açıklama: <strong>${f.aciklama}</strong></div>`:''}
+
+        <table class="irs-tablo${fiyatli?' irs-tablo-fiyatli':''}">
+          <thead>${thead}</thead>
+          <tbody>${satirlar}</tbody>
+          <tfoot>${tfoot}</tfoot>
+        </table>
+
+        ${fiyatli?`<div class="irs-yaziyla">Yalnız: <strong>${tutarYaziyla(top.faturaTutar)}</strong></div>`:''}
+
+        <div class="irs-not">${altNot}</div>
+
+        <div class="irs-imza-blok">
+          <div class="irs-imza"><div class="irs-imza-cizgi"></div><div class="irs-imza-lbl">Teslim Eden<br><small>${m.unvan||""}</small></div></div>
+          <div class="irs-imza"><div class="irs-imza-cizgi"></div><div class="irs-imza-lbl">Teslim Alan<br><small>${alici.unvan||f.sube}</small></div></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  let el = document.getElementById("irsModalWrap");
+  if(!el){ el=document.createElement("div"); el.id="irsModalWrap"; document.body.appendChild(el); }
+  el.innerHTML = html;
+}
+/* Satış faturasını geri al — ödeme/aktarım zincirini sıfırlar, gerekirse stok etkisini tersine çevirir */
+function satisFaturaGeriAlOnay(id){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f || !f.odemeDurum) return;
+  onayPop({ tehlike:true, baslik:"Satış Faturası Geri Alınacak",
+    metin:"<b>"+(f.faturaNo?f.faturaNo:('#'+f.id))+"</b> numaralı fatura geri alınacak."
+      +(f.aktarildi?" Şube stoğuna aktarılan miktarlar geri çekilecek.":"")
+      +" Ödeme durumu sıfırlanacak; fatura yeniden düzenlenebilir/silinebilir hâle gelecek.",
+    onayYazi:"↩️ Geri Al", onOnay:()=>satisFaturaGeriAl(id) });
+}
+function satisFaturaGeriAl(id){
+  const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f || !f.odemeDurum) return;
+  if(f.aktarildi){
+    f.kalemler.forEach(k=>{
+      const taban=k.tabanMiktar||0;
+      // sadece MERKEZDEN aktarıldıysa merkeze iade et; hariçten girişte merkez etkilenmemişti
+      if(f.aktarimTuru!=="haric" && STOCK[k.kod])
+        merkezStokDegistir(k.kod, (STOCK[k.kod].mevcut||0) + taban,
+          {tip:"alinan", belge:f.faturaNo||"", aciklama:"Satış faturası geri alındı — merkeze iade"});
+      // her iki türde de şube stoğundan düş
+      if(BAYI_STOK[f.sube] && BAYI_STOK[f.sube][k.kod]!=null){
+        subeStokDegistir(f.sube, k.kod, Math.max(0, bayiStok(f.sube,k.kod)-taban),
+          {tip:"cikis", belge:f.faturaNo||"", aciklama:"Satış faturası geri alındı — şubeden düşüldü"});
+      }
+    });
+  }
+  const eskiNo = f.faturaNo?f.faturaNo:('#'+f.id);
+  const subeyeBildir = f.sube;
+  f.aktarildi=false; f.aktarimTuru=null;
+  f.odemeDurum=null; f.odemeYontemi=null; f.odemeTs=null; f.odemeIstendiTs=null;
+  note("↩️ "+eskiNo+" geri alındı · fatura yeniden düzenlenebilir");
+  bildirimEkle({tip:"bilgi", baslik:"Satış faturası geri alındı",
+    mesaj:eskiNo+" numaralı satış faturası merkez tarafından geri alındı.",
+    kanal:"Bayi Kanalı", hedefSube:subeyeBildir, link:{ekran:"bayi", sekme:"benimsip"}});
+  b2bKaydet();
+  go("fatura", true);
+}
 /* SATIŞ FATURA SİL — onaylı */
 function satisFaturaSilOnay(id){
   const f=SATIS_FATURALARI.find(x=>x.id===id); if(!f) return;
+  if(f.odemeDurum && !f.aktarildi){ note("⚠️ Ödeme talebi gönderilmiş/ödenmiş fatura silinemez."); return; }
   let mdl=document.getElementById("satisSilModal");
   if(!mdl){ mdl=document.createElement("div"); mdl.id="satisSilModal"; mdl.className="modal-bg"; mdl.style.zIndex="250"; document.body.appendChild(mdl); }
   const uyari=f.aktarildi
@@ -29201,12 +29499,72 @@ function bayiSiparisGonder(){
 }
 
 /* === MÜDÜR: SİPARİŞLERİM (durum takip + ödeme + stok aktar) === */
+/* Merkezden gelen, ödeme istenmiş satış faturasının şube ekranındaki kartı */
+function satisFaturaSubeKartHtml(f){
+  const top = faturaToplamlar(f.kalemler||[]);
+  let durumRozet;
+  if(f.aktarildi) durumRozet = `<span class="bayi-sip-durum" style="background:#efe6e2;color:#6f4e2e">Stok aktarıldı</span>`;
+  else if(f.odemeDurum==="odendi") durumRozet = `<span class="bayi-sip-durum" style="background:#f5ecd2;color:#6f4e2e">Ödendi</span>`;
+  else durumRozet = `<span class="bayi-sip-durum" style="background:#fdf0dc;color:#e08a1e">Ödeme bekleniyor</span>`;
+  let html = `<div class="bayi-sip-kart" id="satfat-kart-${f.id}">
+    <div class="bayi-sip-ust"><span class="bayi-sip-no">🏪 ${f.faturaNo?f.faturaNo:('#'+f.id)} · Merkez Satış Faturası</span>${durumRozet}</div>
+    <div class="bayi-sip-tarih">${f.tarih}${f.aciklama?' · '+f.aciklama:''}</div>
+    <div class="bsepet-tablo bayi-sip-tablo bayi-sip-tablo-sube">
+      <div class="bsepet-thead">
+        <span class="bsc-ad">Stok Kartı</span>
+        <span class="bsc-fiyat">Birim Fiyat</span>
+        <span class="bsc-mik">Miktar</span>
+        <span class="bsc-tutar">Tutar</span>
+      </div>`;
+  (f.kalemler||[]).forEach(k=>{
+    const s = STOCK[k.kod];
+    const h = faturaKalemHesap(k);
+    const birim = k.girisBirim || (s?uomAl(s).tabanBirim:'');
+    html += `<div class="bsepet-trow">
+      <span class="bsc-ad"><span class="bsepet-gorsel">${s&&s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><strong>${s?s.ad:k.kod}</strong></span>
+      <span class="bsc-fiyat">${tl(k.birimFiyat)} ₺<br><small>/ ${birim}</small></span>
+      <span class="bsc-mik">${k.miktar} ${birim}</span>
+      <span class="bsc-tutar">${tl(h.satirTutar)} ₺</span>
+    </div>`;
+  });
+  html += `</div>
+    <div class="bayi-ozet-tablo">
+      <div class="bayi-ozet-satir"><span>Ara toplam (temel fiyat)</span><span>${tl(top.matrah)} ₺</span></div>
+      ${top.iskontoToplam>0?`<div class="bayi-ozet-satir bayi-ozet-ind"><span>İskonto</span><span>− ${tl(top.iskontoToplam)} ₺</span></div>`:''}
+      <div class="bayi-ozet-satir"><span>KDV tutarı</span><span>${tl(top.kdvToplam)} ₺</span></div>
+      <div class="bayi-ozet-satir bayi-ozet-net"><span>Fatura tutarı</span><span>${tl(top.faturaTutar)} ₺</span></div>
+    </div>`;
+  if(f.odemeDurum==="istendi"){
+    html += `<div class="bayi-sip-aksiyon">
+      <button class="btn btn-ghost" onclick="satisFaturaBelgeAc(${f.id},'irsaliye')">🧾 İrsaliye/Fatura</button>
+      <button class="btn btn-primary btn-full" onclick="satisOdemeAc(${f.id})">💳 Ödeme yap (${tl(top.faturaTutar)} ₺)</button></div>`;
+  } else if(f.odemeDurum==="odendi" && !f.aktarildi){
+    html += `<div class="bayi-sip-aksiyon">
+      <span class="bayi-odendi-rozet">✓ Ödendi (${f.odemeYontemi||''})</span>
+      <button class="btn btn-ghost" onclick="satisFaturaBelgeAc(${f.id},'irsaliye')">🧾 İrsaliye/Fatura</button>
+      <span class="bayi-sip-not-bekle" style="margin:0">📦 Merkez stok aktarımı bekleniyor...</span></div>`;
+  } else if(f.aktarildi){
+    html += `<div class="bayi-sip-aksiyon">
+      <span class="bayi-sip-not-ok">✓ Stoklar aktarıldı</span>
+      <button class="btn btn-ghost" onclick="satisFaturaBelgeAc(${f.id},'irsaliye')">🧾 İrsaliye/Fatura</button></div>`;
+  }
+  html += `</div>`;
+  return html;
+}
 function bayiBenimSiparisHtml(){
   // aktarımı tamamlanmış siparişler burada görünmez; onlar Geçmiş sekmesine geçer
   const benim = BAYI_SIPARISLER.filter(s=>s.sube===AKTIF_SUBE && s.durum!=="aktarildi").slice().reverse();
+  // ödeme istenmiş satış faturaları — durumu ne olursa olsun kayıt olarak burada kalır
+  const satisFat = SATIS_FATURALARI.filter(x=>x.sube===AKTIF_SUBE && x.odemeDurum).slice().reverse();
   let html = `<div class="bayi-aciklama">📋 Devam eden siparişleriniz ve durumları. <span style="color:var(--ink-3)">Tamamlanan siparişler <strong>Geçmiş</strong> sekmesindedir.</span></div>`;
-  if(benim.length===0) return html+`<div class="bayi-bos">Devam eden sipariş yok. Tamamlanan siparişler için <strong>Geçmiş</strong> sekmesine bakın.</div>`;
-  benim.forEach(sp=>{
+  if(benim.length===0 && satisFat.length===0) return html+`<div class="bayi-bos">Devam eden sipariş yok. Tamamlanan siparişler için <strong>Geçmiş</strong> sekmesine bakın.</div>`;
+  if(satisFat.length){
+    html += `<div class="bayi-gecmis-baslik">🏪 Merkezden Gelen Satış Faturaları</div>`;
+    satisFat.forEach(f=> html += satisFaturaSubeKartHtml(f));
+  }
+  if(benim.length){
+    if(satisFat.length) html += `<div class="bayi-gecmis-baslik">🛒 Siparişlerim</div>`;
+    benim.forEach(sp=>{
     const dm = SIPARIS_DURUM[sp.durum];
     const t = siparisTutar(sp);
     html += `<div class="bayi-sip-kart" id="sip-kart-${sp.id}">
@@ -29286,6 +29644,7 @@ function bayiBenimSiparisHtml(){
     }
     html += `</div>`;
   });
+  }
   return html;
 }
 function bayiOdemeAc(id){
