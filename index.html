@@ -2901,13 +2901,22 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .rapor-sekme.on{background:var(--brand); color:#fff; border-color:var(--brand)}
 .rapor-arac-bar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:16px; padding:14px 16px; background:var(--surface); border:1px solid var(--line); border-radius:13px}
 .rab-sol{display:flex; align-items:center; gap:8px}
-.rab-lbl{font-size:13px; font-weight:700; color:var(--ink-2)}
-.rab-tarih{padding:8px 11px; border-radius:9px; border:1.5px solid var(--line); font-size:14px; font-family:inherit; background:var(--surface)}
+.rab-lbl{font-size:12px; font-weight:700; color:var(--ink-3)}
+.rab-tarih{padding:8px 11px; border-radius:9px; border:1.5px solid var(--line); font-size:14px; font-family:inherit; background:var(--surface); color:var(--ink)}
+/* ── Hızlı aralık butonları (Bugün / Bu ay / Tarih aralığı) ── */
+.rab-hizli-row{display:flex; gap:8px; flex:1 1 100%; order:0}
+.rab-hizli{flex:1 1 0; padding:10px 12px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:800; white-space:nowrap; cursor:pointer}
+.rab-hizli.on{background:var(--cocoa); color:#fff; border-color:var(--cocoa)}
+/* ── Başlangıç/Bitiş tarih satırı ── */
+.rab-tarih-row{display:flex; align-items:flex-end; gap:10px; flex:1 1 100%; order:1}
+.rab-tarih-grup{display:flex; flex-direction:column; gap:5px; flex:1 1 0; min-width:0}
+.rab-tarih-grup .rab-tarih{width:100%; box-sizing:border-box}
+.rab-tarih-tire{padding-bottom:9px; color:var(--ink-3); font-weight:800; flex:0 0 auto}
 .rab-sube-row{display:flex; gap:6px; flex-wrap:wrap; flex:1}
 .rab-sube{padding:7px 12px; border-radius:9px; border:1px solid var(--line); background:var(--surface-2); font-size:12.5px; font-weight:700; color:var(--ink-2); cursor:pointer; white-space:nowrap}
 .rab-sube.on{background:var(--cocoa); color:#fff; border-color:var(--cocoa)}
 .rab-excel{padding:10px 16px !important; font-size:13.5px !important}
-.rab-filtrele, .rab-bugun{padding:8px 14px !important; font-size:13px !important; border-radius:9px !important; font-weight:700 !important; white-space:nowrap}
+.rab-filtrele, .rab-bugun{padding:9px 14px !important; font-size:13px !important; border-radius:9px !important; font-weight:700 !important; white-space:nowrap; flex:0 0 auto}
 .rab-bugun{background:var(--surface-2) !important; color:var(--ink-2) !important; border:1.5px solid var(--line) !important}
 .rapor-ozet-row{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px}
 .rapor-ozet{flex:1; min-width:130px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:13px 15px}
@@ -3522,10 +3531,9 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 }
 
 /* ── RAPORLAR: araç barı ──
-   .rab-sube-row{flex:1} 9 şube chip'iyle satırı taşırıyor, Excel butonu
-   en alta itiliyordu. Şube listesi kendi bloğunda, buton sağda sabit. */
+   Hızlı butonlar üstte, Başlangıç/Bitiş yan yana etiketli, şube listesi
+   kendi bloğunda, Excel/Filtrele düzgün yerleşir. */
 .rapor-arac-bar{ align-items:flex-start; }
-.rab-sol{ flex:0 0 auto; }
 .rab-sube-row{ flex:1 1 100%; order:3; }
 .rapor-arac-bar .rab-excel{
   flex:0 0 auto; order:2; margin-left:auto;
@@ -3534,13 +3542,18 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 }
 @media (max-width:720px){
   .rapor-arac-bar{ gap:10px; padding:12px 13px; }
-  .rab-sol{ flex:1 1 auto; flex-wrap:wrap; }
-  .rab-tarih{ flex:1 1 45%; min-width:0; padding:8px 10px; }
-  .rab-filtrele, .rab-bugun{ flex:1 1 auto; justify-content:center; }
+  .rab-hizli-row{ order:0; }
+  .rab-hizli{ padding:9px 8px; font-size:12.5px; }
+  /* Başlangıç–Bitiş yan yana, etiketler üstte; tire ortada; Filtrele alta tam genişlik */
+  .rab-tarih-row{ flex-wrap:wrap; align-items:flex-end; gap:8px; order:1; }
+  .rab-tarih-grup{ flex:1 1 40%; min-width:0; }
+  .rab-tarih{ width:100%; padding:9px 10px; font-size:14px; }
+  .rab-tarih-tire{ flex:0 0 auto; }
+  .rab-filtrele{ flex:1 1 100% !important; justify-content:center; order:5; }
   /* şube listesi uzunsa kendi içinde kaysın, paneli şişirmesin */
   .rab-sube-row{
     max-height:96px; overflow-y:auto; -webkit-overflow-scrolling:touch;
-    gap:5px;
+    gap:5px; order:3;
   }
   .rab-sube{ padding:6px 10px; font-size:11.5px; }
   .rapor-arac-bar .rab-excel{
@@ -3555,7 +3568,8 @@ select.uf-grup-ad{flex:1; cursor:pointer}
   .rapor-sekme{ flex:0 0 auto; padding:9px 13px; font-size:13px; }
 }
 @media (max-width:430px){
-  .rab-lbl, .rab-tarih-lbl{ font-size:12px; }
+  .rab-lbl, .rab-tarih-lbl{ font-size:11.5px; }
+  .rab-hizli{ font-size:12px; padding:9px 6px; }
   .rab-sube-row{ max-height:84px; }
 }
 
@@ -4477,9 +4491,10 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .kmp-urun-satir{font-size:13px; color:var(--ink-2); margin-bottom:8px}
 .kmp-detay{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px}
 .kmp-rozet{font-size:11px; font-weight:700; background:var(--surface-2); color:var(--ink-2); padding:3px 9px; border-radius:99px}
-.kmp-aksiyon{display:flex; gap:8px}
+.kmp-aksiyon{display:flex; gap:8px; flex-wrap:wrap}
 .kmp-toggle{padding:8px 14px; border-radius:9px; background:var(--brand-soft); color:var(--brand-d); font-size:12.5px; font-weight:800; border:1px solid var(--brand)}
 .kmp-toggle.pasif{background:var(--surface-2); color:var(--ink-2); border-color:var(--line)}
+.kmp-duzenle{padding:8px 14px; border-radius:9px; background:var(--info-soft); color:var(--info); font-size:12.5px; font-weight:800; border:1px solid var(--gold-3)}
 .kmp-sil{padding:8px 14px; border-radius:9px; background:var(--err-soft); color:var(--err); font-size:12.5px; font-weight:800; border:1px solid #e8a59e; margin-left:auto}
 /* Kampanya formu */
 .kmpf-head{display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line)}
@@ -4487,9 +4502,24 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .kmpf-govde{padding:16px 20px; max-height:60vh; overflow-y:auto; display:flex; flex-direction:column; gap:14px}
 .kmpf-alan{display:flex; flex-direction:column; gap:6px}
 .kmpf-alan label{font-size:12px; font-weight:700; color:var(--ink-3)}
+.kmpf-lbl-flex{display:flex; align-items:center; justify-content:space-between; gap:8px}
 .kmpf-input{padding:11px 13px; border-radius:10px; border:1.5px solid var(--line); font-size:14px; font-weight:600; background:var(--surface); color:var(--ink); width:100%; box-sizing:border-box}
 .kmpf-input:focus{border-color:var(--brand); outline:none}
 .kmpf-secim-row{display:flex; gap:8px}
+.kmpf-kapsam-row{flex-wrap:wrap}
+.kmpf-kapsam-row .kmpf-secim{flex:1 1 45%; padding:10px 6px; font-size:12px}
+.kmpf-not-kucuk{font-size:11.5px; color:var(--ink-3); margin:-4px 0 4px; padding:0 2px}
+.kmpf-sec-say{font-size:11px; font-weight:800; color:var(--brand); background:var(--brand-soft); padding:2px 9px; border-radius:99px; white-space:nowrap}
+.kmpf-urun-secici{display:block; max-height:340px; overflow-y:auto; overflow-x:hidden; padding:10px; background:var(--surface-2); border:1.5px solid var(--line); border-radius:12px; -webkit-overflow-scrolling:touch; width:100%}
+.kmpf-us-grup{display:block; width:100%}
+.kmpf-us-grup + .kmpf-us-grup{margin-top:14px; padding-top:12px; border-top:1px dashed var(--line-2)}
+.kmpf-us-grup-bas{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12.5px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
+.kmpf-us-grup-bas > span{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.kmpf-us-topsec{flex:0 0 auto; font-size:11px; font-weight:700; color:var(--brand); background:var(--surface); border:1px solid var(--line-2); border-radius:8px; padding:5px 11px; white-space:nowrap}
+.kmpf-us-topsec.on{background:var(--brand); color:var(--brand-ink); border-color:var(--brand)}
+.kmpf-us-urunler{display:flex; flex-wrap:wrap; gap:7px; width:100%}
+.kmpf-us-chip{flex:0 0 auto; max-width:100%; font-size:12.5px; font-weight:700; color:var(--ink-2); background:var(--surface); border:1.5px solid var(--line-2); border-radius:10px; padding:9px 13px; white-space:normal; text-align:left; line-height:1.25}
+.kmpf-us-chip.on{background:var(--brand); color:var(--brand-ink); border-color:var(--brand)}
 .kmpf-secim{flex:1; padding:10px; border-radius:10px; background:var(--surface); border:1.5px solid var(--line); font-size:12.5px; font-weight:700; color:var(--ink-2)}
 .kmpf-secim.on{background:var(--brand-soft); border-color:var(--brand); color:var(--brand-d)}
 .kmpf-sube-grid{display:flex; flex-wrap:wrap; gap:6px}
@@ -13613,15 +13643,44 @@ function kampanyaAktifMi(k){
   }
   return true;
 }
-/* Bir ürün+şube+kanal için geçerli aktif kampanya (varsa en iyisini döner) */
+/* Bir ürün+şube+kanal için geçerli aktif kampanya (varsa müşteri lehine olanı döner).
+   Kapsam: tekil ürün (k.urun===ad) · kategori (k.kategori===ürünün kategorisi) ·
+           seçili ürünler (k.urunler dizisi ürün adını içerir). */
 function urunKampanya(ad, sube, kanal){
+  const p = DEMO_PRODUCTS.find(x=>x.ad===ad);
+  const urunKat = p ? p.kat : null;
   const adaylar = KAMPANYALAR.filter(k=>
-    k.urun===ad && k.kanal===kanal && kampanyaAktifMi(k) &&
+    k.kapsam!=="sepet" && k.kanal===kanal && kampanyaAktifMi(k) &&
+    (k.urun===ad
+      || (k.kategori && urunKat && k.kategori===urunKat)
+      || (Array.isArray(k.urunler) && k.urunler.includes(ad))) &&
     (k.subeler==="hepsi" || (Array.isArray(k.subeler)&&k.subeler.includes(sube)))
   );
   if(adaylar.length===0) return null;
-  // birden fazla varsa en düşük fiyatı veren kazansın
-  return adaylar[0];
+  if(adaylar.length===1) return adaylar[0];
+  // birden fazla → o üründe EN DÜŞÜK fiyatı veren kazansın (müşteri lehine).
+  // fiyat için genel fiyatı bilmemiz gerekir → çağıran urunFiyatBilgi zaten genel'i biliyor;
+  // burada tekil "oran" > yüksek oran, "fiyat" > mutlak fiyat karşılaştırması yapılır.
+  const gen = _kampanyaGenelFiyat(ad, sube, kanal);
+  let en=null, enFiyat=Infinity;
+  adaylar.forEach(k=>{
+    const f = k.tip==="oran" ? Math.round(gen*(1-k.deger/100)) : k.deger;
+    if(f<enFiyat){ enFiyat=f; en=k; }
+  });
+  return en;
+}
+/* urunKampanya içi yardımcı — kampanya UYGULANMADAN önceki genel fiyat */
+function _kampanyaGenelFiyat(ad, sube, kanal){
+  const p = DEMO_PRODUCTS.find(x=>x.ad===ad);
+  const tavMasa = p ? (p.fiyat||0) : 0;
+  const tavEve = (p && p.fiyatEve!=null && p.fiyatEve>0) ? p.fiyatEve : tavMasa;
+  const masaK = fiyatKayit(sube, ad, "masa");
+  const masaGenel = (masaK.genel!=null && masaK.genel>0) ? masaK.genel : tavMasa;
+  if(kanal==="eve"){
+    const k = fiyatKayit(sube, ad, "eve");
+    return (k.genel!=null && k.genel>0) ? k.genel : ((masaK.genel!=null && masaK.genel>0) ? masaGenel : tavEve);
+  }
+  return masaGenel;
 }
 /* Bir ürünün bir şubedeki, bir kanaldaki NİHAİ fiyat bilgisi (kampanya dahil) */
 function urunFiyatBilgi(ad, sube, kanal){
@@ -23785,21 +23844,35 @@ function viewKampanya(main){
     gorunur.slice().reverse().forEach(k=>{
       const aktif = kampanyaAktifMi(k);
       const sepetMod = k.kapsam==="sepet";
+      const katMod = k.kapsam==="kategori";
+      const seciliMod = k.kapsam==="secili";
       const urun = DEMO_PRODUCTS.find(p=>p.ad===k.urun);
+      const katAdet = katMod ? DEMO_PRODUCTS.filter(p=>p.kat===k.kategori).length : 0;
+      const secAdet = seciliMod && Array.isArray(k.urunler) ? k.urunler.length : 0;
+      const secOzet = seciliMod && Array.isArray(k.urunler)
+        ? (k.urunler.length<=3 ? k.urunler.join(", ") : k.urunler.slice(0,3).join(", ")+" +"+(k.urunler.length-3))
+        : "";
       const kapsamAd = k.subeler==="hepsi" ? "Tüm şubeler" : (Array.isArray(k.subeler)?k.subeler.join(", "):"-");
       const gunAd = (k.gunler&&k.gunler.length>0&&k.gunler.length<7) ? k.gunler.map(g=>GUN_ADLARI[g]).join(",") : "Her gün";
       const saatAd = (k.saatBas&&k.saatBit) ? k.saatBas+"–"+k.saatBit : "Tüm gün";
       const indAd = sepetMod
         ? (k.tip==="oran" ? "%"+k.deger+" sepet indirimi" : k.deger+" ₺ sepet indirimi")
-        : (k.tip==="oran" ? "%"+k.deger+" indirim" : k.deger+" ₺ özel fiyat");
+        : (katMod ? "%"+k.deger+" grup indirimi"
+                  : (seciliMod ? "%"+k.deger+" indirim"
+                              : (k.tip==="oran" ? "%"+k.deger+" indirim" : k.deger+" ₺ özel fiyat")));
       // müdür sadece kendi eklediği şube-özel kampanyayı silebilir; genel müdür hepsini
       const silebilir = isGenel || (Array.isArray(k.subeler) && !k.subeler.includes("__merkez__") && k.olusturan===AKTIF_SUBE);
       const satirMetin = sepetMod
         ? `🧾 Sepet ${k.esik}+ ₺ · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`
-        : `${k.urun} · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`;
+        : (katMod
+            ? `🗂️ ${k.kategori} (${katAdet} ürün) · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`
+            : (seciliMod
+                ? `🎯 ${secAdet} ürün: ${secOzet} · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`
+                : `${k.urun} · <strong>${indAd}</strong> · ${k.kanal==="eve"?"🛵 Eve":"🍽️ Masada"}`));
+      const kartIkon = sepetMod?'🧾 ':(katMod?'🗂️ ':(seciliMod?'🎯 ':(urun?urun.emoji+' ':'')));
       html+=`<div class="kmp-kart${aktif?' kmp-aktif':''}">
         <div class="kmp-kart-ust">
-          <div class="kmp-ad">${sepetMod?'🧾 ':(urun?urun.emoji+' ':'')}${k.ad}</div>
+          <div class="kmp-ad">${kartIkon}${k.ad}</div>
           <span class="kmp-durum ${aktif?'on':'off'}">${aktif?'🟢 Aktif':'⚪ Pasif'}</span>
         </div>
         <div class="kmp-urun-satir">${satirMetin}</div>
@@ -23811,6 +23884,7 @@ function viewKampanya(main){
         </div>
         <div class="kmp-aksiyon">
           <button class="kmp-toggle ${k.aktif?'':'pasif'}" onclick="kampanyaAcKapa(${k.id})">${k.aktif?'⏸ Duraklat':'▶ Etkinleştir'}</button>
+          ${silebilir?`<button class="kmp-duzenle" onclick="kampanyaDuzenle(${k.id})">✏️ Düzenle</button>`:''}
           ${silebilir?`<button class="kmp-sil" onclick="kampanyaSil(${k.id})">🗑️ Sil</button>`:''}
         </div>
       </div>`;
@@ -23824,10 +23898,39 @@ function viewKampanya(main){
 function kampanyaFormAc(){
   const isGenel = state.role==="genel";
   state.kmpForm = {
-    ad:"", kapsam:"urun", esik:"", urun:DEMO_PRODUCTS[0].ad, tip:"oran", deger:"",
+    duzenleId:null,
+    ad:"", kapsam:"urun", esik:"", urun:DEMO_PRODUCTS[0].ad, kategori:"", urunler:[], tip:"oran", deger:"",
     kanal:"masa", subeKapsam:isGenel?"hepsi":"secili",
     subeler:isGenel?[]:[AKTIF_SUBE],
     gunler:[], saatBas:"", saatBit:"", tekrar:false
+  };
+  renderKampanyaForm();
+  document.getElementById("kmpModal").classList.add("on");
+}
+/* Var olan kampanyayı düzenlemek için formu değerleriyle doldurup açar */
+function kampanyaDuzenle(id){
+  const k = KAMPANYALAR.find(x=>x.id===id); if(!k) return;
+  const isGenel = state.role==="genel";
+  // şube kapsamını forma çevir
+  let subeKapsam, subeler;
+  if(k.subeler==="hepsi"){ subeKapsam="hepsi"; subeler=[]; }
+  else { subeKapsam="secili"; subeler=Array.isArray(k.subeler)?k.subeler.filter(s=>s!=="__merkez__"):[]; }
+  state.kmpForm = {
+    duzenleId: k.id,
+    ad: k.ad||"",
+    kapsam: k.kapsam || "urun",
+    esik: (k.esik!=null && k.esik>0) ? String(k.esik) : "",
+    urun: k.urun || DEMO_PRODUCTS[0].ad,
+    kategori: k.kategori || "",
+    urunler: Array.isArray(k.urunler) ? k.urunler.slice() : [],
+    tip: k.tip || "oran",
+    deger: (k.deger!=null) ? String(k.deger) : "",
+    kanal: k.kanal || "masa",
+    subeKapsam: isGenel ? subeKapsam : "secili",
+    subeler: isGenel ? subeler : [AKTIF_SUBE],
+    gunler: Array.isArray(k.gunler) ? k.gunler.slice() : [],
+    saatBas: k.saatBas || "", saatBit: k.saatBit || "",
+    tekrar: !!k.tekrar
   };
   renderKampanyaForm();
   document.getElementById("kmpModal").classList.add("on");
@@ -23838,7 +23941,33 @@ function kampanyaFormKapat(){
 }
 function kmpFormSet(alan, deger){
   if(!state.kmpForm) return;
-  state.kmpForm[alan]=deger;
+  const f=state.kmpForm;
+  f[alan]=deger;
+  // kapsam "kategori" seçilince: ilk kategoriyi ata + tip'i orana kilitle (kategoride sabit fiyat mantıksız)
+  if(alan==="kapsam" && deger==="kategori"){
+    if(!f.kategori){ const kats=[...new Set(DEMO_PRODUCTS.map(p=>p.kat))]; f.kategori=kats[0]||""; }
+    f.tip="oran";
+  }
+  // kapsam "secili" seçilince: karışık fiyatlı ürünler → sadece % oran
+  if(alan==="kapsam" && deger==="secili"){ f.tip="oran"; }
+  renderKampanyaForm();
+}
+/* Seçili ürünler kapsamında bir ürünü ekle/çıkar */
+function kmpFormUrunToggle(ad){
+  const f=state.kmpForm; if(!f) return;
+  if(!Array.isArray(f.urunler)) f.urunler=[];
+  if(f.urunler.includes(ad)) f.urunler=f.urunler.filter(x=>x!==ad);
+  else f.urunler.push(ad);
+  renderKampanyaForm();
+}
+/* Seçili ürünler: bir kategorinin tümünü seç/kaldır (hızlı) */
+function kmpFormKatTopluSec(kat){
+  const f=state.kmpForm; if(!f) return;
+  if(!Array.isArray(f.urunler)) f.urunler=[];
+  const katUrunler=DEMO_PRODUCTS.filter(p=>p.kat===kat).map(p=>p.ad);
+  const hepsiVar=katUrunler.every(a=>f.urunler.includes(a));
+  if(hepsiVar) f.urunler=f.urunler.filter(a=>!katUrunler.includes(a));   // hepsi seçiliyse kaldır
+  else katUrunler.forEach(a=>{ if(!f.urunler.includes(a)) f.urunler.push(a); });  // eksikleri ekle
   renderKampanyaForm();
 }
 function kmpFormGun(g){
@@ -23857,25 +23986,62 @@ function renderKampanyaForm(){
   const f=state.kmpForm; if(!f) return;
   const isGenel=state.role==="genel";
   const kategoriler=[...new Set(DEMO_PRODUCTS.map(p=>p.kat))];
+  const duzenleMod = f.duzenleId!=null;
   let html=`<div class="kmpf-head">
-    <div class="kmpf-baslik">🔥 Yeni Kampanya</div>
+    <div class="kmpf-baslik">${duzenleMod?'✏️ Kampanyayı Düzenle':'🔥 Yeni Kampanya'}</div>
     <button class="bom-kapat" onclick="kampanyaFormKapat()">✕</button></div>
     <div class="kmpf-govde">`;
 
   const sepetMod = f.kapsam==="sepet";
+  const katMod = f.kapsam==="kategori";
+  const seciliMod = f.kapsam==="secili";
 
   // kampanya adı
   html+=`<div class="kmpf-alan"><label>Kampanya adı</label>
     <input class="kmpf-input" id="kmpAdInput" placeholder="örn. Happy Hour" value="${f.ad}" oninput="state.kmpForm.ad=this.value"></div>`;
 
-  // kampanya kapsamı: ürün mü, sepet mi?
+  // kampanya kapsamı: ürün / seçili ürünler / ürün grubu / sepet
   html+=`<div class="kmpf-alan"><label>Kampanya kapsamı</label>
-    <div class="kmpf-secim-row">
-      <button class="kmpf-secim${!sepetMod?' on':''}" onclick="kmpFormSet('kapsam','urun')">🍔 Ürün kampanyası</button>
-      <button class="kmpf-secim${sepetMod?' on':''}" onclick="kmpFormSet('kapsam','sepet')">🧾 Sepet kampanyası</button>
+    <div class="kmpf-secim-row kmpf-kapsam-row">
+      <button class="kmpf-secim${(!sepetMod&&!katMod&&!seciliMod)?' on':''}" onclick="kmpFormSet('kapsam','urun')">🍔 Ürün</button>
+      <button class="kmpf-secim${seciliMod?' on':''}" onclick="kmpFormSet('kapsam','secili')">🎯 Seçili ürünler</button>
+      <button class="kmpf-secim${katMod?' on':''}" onclick="kmpFormSet('kapsam','kategori')">🗂️ Ürün grubu</button>
+      <button class="kmpf-secim${sepetMod?' on':''}" onclick="kmpFormSet('kapsam','sepet')">🧾 Sepet</button>
     </div></div>`;
 
-  if(!sepetMod){
+  if(seciliMod){
+    // SEÇİLİ ÜRÜNLER — listeden çoklu seçim (kategoriye göre gruplu)
+    const secSay=(f.urunler||[]).length;
+    html+=`<div class="kmpf-alan"><label class="kmpf-lbl-flex">Ürünleri seç <span class="kmpf-sec-say">${secSay} seçili</span></label></div>`;
+    html+=`<div class="kmpf-urun-secici">`;
+    kategoriler.forEach(kat=>{
+      const katUrunler=DEMO_PRODUCTS.filter(p=>p.kat===kat);
+      const hepsiVar=katUrunler.every(p=>(f.urunler||[]).includes(p.ad));
+      html+=`<div class="kmpf-us-grup">
+        <div class="kmpf-us-grup-bas">
+          <span>${kat}</span>
+          <button class="kmpf-us-topsec${hepsiVar?' on':''}" onclick="kmpFormKatTopluSec('${kat.replace(/'/g,"\\'")}')">${hepsiVar?'✓ Tümü':'Tümünü seç'}</button>
+        </div>
+        <div class="kmpf-us-urunler">`;
+      katUrunler.forEach(p=>{
+        const secili=(f.urunler||[]).includes(p.ad);
+        html+=`<button class="kmpf-us-chip${secili?' on':''}" onclick="kmpFormUrunToggle('${p.ad.replace(/'/g,"\\'")}')">${secili?'✓ ':''}${p.ad}</button>`;
+      });
+      html+=`</div></div>`;
+    });
+    html+=`</div>`;
+    html+=`<div class="kmpf-not-kucuk">Yalnızca işaretlediğin ürünlere indirim uygulanır.</div>`;
+  } else if(katMod){
+    // KATEGORİ (ürün grubu) seçimi
+    html+=`<div class="kmpf-alan"><label>Ürün grubu (kategori)</label>
+      <select class="kmpf-input" onchange="kmpFormSet('kategori',this.value)">`;
+    kategoriler.forEach(kat=>{
+      const adet = DEMO_PRODUCTS.filter(p=>p.kat===kat).length;
+      html+=`<option value="${kat}"${f.kategori===kat?' selected':''}>${kat} (${adet} ürün)</option>`;
+    });
+    html+=`</select></div>`;
+    html+=`<div class="kmpf-not-kucuk">Bu gruptaki tüm ürünlere indirim uygulanır.</div>`;
+  } else if(!sepetMod){
     // ÜRÜN seçimi
     html+=`<div class="kmpf-alan"><label>Ürün</label>
       <select class="kmpf-input" onchange="kmpFormSet('urun',this.value)">`;
@@ -23894,7 +24060,11 @@ function renderKampanyaForm(){
   }
 
   // indirim tipi
-  if(!sepetMod){
+  if(katMod || seciliMod){
+    // birden çok ürün → fiyatları farklı → sadece % oran
+    html+=`<div class="kmpf-alan"><label>İndirim oranı (%)</label>
+      <input class="kmpf-input" inputmode="numeric" placeholder="örn. 15" value="${f.deger}" oninput="state.kmpForm.deger=this.value"></div>`;
+  } else if(!sepetMod){
     html+=`<div class="kmpf-alan"><label>İndirim tipi</label>
       <div class="kmpf-secim-row">
         <button class="kmpf-secim${f.tip==="oran"?' on':''}" onclick="kmpFormSet('tip','oran')">% Yüzde indirim</button>
@@ -23959,7 +24129,7 @@ function renderKampanyaForm(){
     <span>🔁 Her hafta tekrarla (seçili gün/saatlerde otomatik aktif olsun)</span></div>`;
 
   html+=`</div>
-    <button class="kmpf-kaydet" onclick="kampanyaKaydet()">Kampanyayı kaydet</button>`;
+    <button class="kmpf-kaydet" onclick="kampanyaKaydet()">${duzenleMod?'✓ Değişiklikleri kaydet':'Kampanyayı kaydet'}</button>`;
   document.getElementById("kmpModalInner").innerHTML=html;
 }
 function kampanyaKaydet(){
@@ -23970,11 +24140,15 @@ function kampanyaKaydet(){
   if(isNaN(deger)||deger<=0){ note("Geçerli bir indirim değeri girin"); return; }
   if(f.tip==="oran" && deger>100){ note("İndirim oranı %100'den fazla olamaz"); return; }
   const sepetMod = f.kapsam==="sepet";
+  const katMod = f.kapsam==="kategori";
+  const seciliMod = f.kapsam==="secili";
   let esik = 0;
   if(sepetMod){
     esik = parseFloat(f.esik);
     if(isNaN(esik)||esik<=0){ note("Sepet alt sınırını girin (₺)"); return; }
   }
+  if(katMod && !f.kategori){ note("Bir ürün grubu seçin"); return; }
+  if(seciliMod && (!f.urunler || f.urunler.length===0)){ note("En az bir ürün seçin"); return; }
   // şube kapsamı
   let subeler;
   if(isGenel){
@@ -23983,17 +24157,35 @@ function kampanyaKaydet(){
   } else {
     subeler=[AKTIF_SUBE];
   }
-  KAMPANYALAR.push({
-    id:_kampanyaId++, ad:f.ad.trim(),
-    kapsam: sepetMod?"sepet":"urun",
-    urun: sepetMod?null:f.urun, esik: sepetMod?esik:0,
-    tip:f.tip, deger:deger,
+  const duzenleMod = f.duzenleId!=null;
+  const yeniVeri = {
+    ad:f.ad.trim(),
+    kapsam: sepetMod?"sepet":(katMod?"kategori":(seciliMod?"secili":"urun")),
+    urun: (sepetMod||katMod||seciliMod)?null:f.urun,
+    kategori: katMod?f.kategori:null,
+    urunler: seciliMod?f.urunler.slice():null,
+    esik: sepetMod?esik:0,
+    tip: (katMod||seciliMod)?"oran":f.tip, deger:deger,
     kanal:f.kanal, subeler:subeler,
     gunler:f.gunler.slice(), saatBas:f.saatBas, saatBit:f.saatBit,
-    tekrar:f.tekrar, aktif:true, olusturan:isGenel?"__merkez__":AKTIF_SUBE
-  });
-  kampanyaFormKapat();
-  note("🔥 Kampanya oluşturuldu: "+f.ad.trim());
+    tekrar:f.tekrar
+  };
+  if(duzenleMod){
+    const k = KAMPANYALAR.find(x=>x.id===f.duzenleId);
+    if(k){
+      // aktif durumu ve oluşturan bilgisini koru, geri kalanı güncelle
+      Object.assign(k, yeniVeri);
+    }
+    kampanyaFormKapat();
+    note("✓ Kampanya güncellendi: "+yeniVeri.ad);
+  } else {
+    KAMPANYALAR.push({
+      id:_kampanyaId++, ...yeniVeri,
+      aktif:true, olusturan:isGenel?"__merkez__":AKTIF_SUBE
+    });
+    kampanyaFormKapat();
+    note("🔥 Kampanya oluşturuldu: "+yeniVeri.ad);
+  }
   kampanyaKaydet_persist();
   go("kampanya");
 }
@@ -32605,6 +32797,26 @@ function raporBugunSec(){
   state.raporTarihBit = g;
   go("rapor", true);
 }
+/* Bu ay: ayın 1'inden bugüne (işletme günü) */
+function raporBuAySec(){
+  const bugun = isletmeGunu();          // "YYYY-MM-DD"
+  state.raporTarihBas = bugun.slice(0,8)+"01";
+  state.raporTarihBit = bugun;
+  go("rapor", true);
+}
+/* Tarih aralığı modu: başlangıç/bitiş alanlarını açık bırakır (kullanıcı seçer) */
+function raporAralikModu(){
+  // aralık seçimine geçerken tek güne kilitli kalmasın — bitişi bugüne, başlangıcı 7 gün öncesine al
+  const bugun = isletmeGunu();          // "YYYY-MM-DD"
+  // yerel saat diliminden bağımsız gün hesabı (UTC ile kaydırma olmasın)
+  const [Y,M,D] = bugun.split("-").map(Number);
+  const d = new Date(Y, M-1, D);
+  d.setDate(d.getDate()-6);
+  const bas = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  state.raporTarihBas = bas;
+  state.raporTarihBit = bugun;
+  go("rapor", true);
+}
 function raporSubeSec(s){ state.raporSube=s; go("rapor", true); }
 
 /* ── Günlük Ürün Satışları ── */
@@ -32685,14 +32897,30 @@ function raporUrunSatisHtml(){
     ? isletmeGunuGoster(tarihBas)
     : isletmeGunuGoster(tarihBas)+" – "+isletmeGunuGoster(tarihBit);
 
+  // hızlı aralık seçimi hangi durumda aktif? (buton vurgusu için)
+  const bugunG = isletmeGunu();
+  const ayBasG = bugunG.slice(0,8)+"01";
+  const hizli = (tarihBas===bugunG && tarihBit===bugunG) ? "bugun"
+              : (tarihBas===ayBasG && tarihBit===bugunG) ? "buay"
+              : "aralik";
+
   let html = `<div class="rapor-arac-bar">
-    <div class="rab-sol">
-      <label class="rab-lbl">📅 Başlangıç</label>
-      <input class="rab-tarih" type="date" value="${tarihBas}" max="${tarihBit}" onchange="raporTarihBasSec(this.value)">
-      <label class="rab-lbl">Bitiş</label>
-      <input class="rab-tarih" type="date" value="${tarihBit}" min="${tarihBas}" onchange="raporTarihBitSec(this.value)">
+    <div class="rab-hizli-row">
+      <button class="rab-hizli${hizli==="bugun"?' on':''}" onclick="raporBugunSec()">📅 Bugün</button>
+      <button class="rab-hizli${hizli==="buay"?' on':''}" onclick="raporBuAySec()">🗓️ Bu ay</button>
+      <button class="rab-hizli${hizli==="aralik"?' on':''}" onclick="raporAralikModu()">↔️ Tarih aralığı</button>
+    </div>
+    <div class="rab-tarih-row">
+      <div class="rab-tarih-grup">
+        <label class="rab-lbl">Başlangıç</label>
+        <input class="rab-tarih" type="date" value="${tarihBas}" max="${tarihBit}" onchange="raporTarihBasSec(this.value)">
+      </div>
+      <span class="rab-tarih-tire">–</span>
+      <div class="rab-tarih-grup">
+        <label class="rab-lbl">Bitiş</label>
+        <input class="rab-tarih" type="date" value="${tarihBit}" min="${tarihBas}" onchange="raporTarihBitSec(this.value)">
+      </div>
       <button class="btn btn-primary rab-filtrele" onclick="raporTarihFiltrele()">🔍 Filtrele</button>
-      <button class="btn rab-bugun" onclick="raporBugunSec()">📅 Bugün</button>
     </div>`;
   if(isGenel){
     html += `<div class="rab-sube-row">
