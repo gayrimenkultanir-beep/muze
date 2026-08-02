@@ -956,6 +956,24 @@ tr:last-child td{border-bottom:none}
 .bstok-tablo th:not(.bstok-sabit-col),.bstok-tablo td:not(.bstok-sabit-col){min-width:92px}
 .bstok-tablo tbody tr:nth-child(even) .bstok-sabit-col{background:var(--surface-2)}
 .bstok-tablo tfoot .bstok-sabit-col{background:var(--brand-soft)}
+/* mobil "alt alta" kart görünümü — masaüstünde gizli, tablo yerine 720px altında gösterilir */
+.bstok-kart-liste{display:none; flex-direction:column; gap:10px}
+.bstok-urun-kart{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:13px 15px}
+.buk-ad{font-size:15px; font-weight:800; color:var(--ink); margin-bottom:8px}
+.buk-birim{font-size:11px; font-weight:600; color:var(--ink-3)}
+.buk-satir{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid var(--line)}
+.buk-satir:first-of-type{border-top:none}
+.buk-lbl{font-size:12.5px; font-weight:700; color:var(--ink-2)}
+.buk-val{font-size:14px; font-weight:800; color:var(--ink); display:flex; align-items:center; gap:8px; white-space:nowrap}
+.buk-val.eksi{color:var(--danger)}
+.buk-tutar{font-size:12.5px; font-weight:700; color:var(--brand-d)}
+.bstok-urun-toplam{background:var(--brand-soft); border-color:var(--cocoa)}
+.bstok-urun-toplam .buk-ad{color:var(--cocoa)}
+.bstok-urun-toplam .buk-val{color:var(--brand-d); font-size:15px}
+@media(max-width:720px){
+  .bstok-wrap{display:none}
+  .bstok-kart-liste{display:flex}
+}
 /* Sipariş Ver — arama + kategori grupları */
 .bsip-ara-bar{margin-bottom:14px}
 .bsip-ara{width:100%; padding:11px 14px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface); font-family:inherit; font-size:14px; font-weight:600; color:var(--ink)}
@@ -2885,6 +2903,8 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .rab-sube{padding:7px 12px; border-radius:9px; border:1px solid var(--line); background:var(--surface-2); font-size:12.5px; font-weight:700; color:var(--ink-2); cursor:pointer; white-space:nowrap}
 .rab-sube.on{background:var(--cocoa); color:#fff; border-color:var(--cocoa)}
 .rab-excel{padding:10px 16px !important; font-size:13.5px !important}
+.rab-filtrele, .rab-bugun{padding:8px 14px !important; font-size:13px !important; border-radius:9px !important; font-weight:700 !important; white-space:nowrap}
+.rab-bugun{background:var(--surface-2) !important; color:var(--ink-2) !important; border:1.5px solid var(--line) !important}
 .rapor-ozet-row{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:16px}
 .rapor-ozet{flex:1; min-width:130px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:13px 15px}
 .rapor-ozet.ana{background:linear-gradient(135deg,var(--brand-soft),#ffd9cc); border-color:var(--brand)}
@@ -3509,8 +3529,9 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 }
 @media (max-width:720px){
   .rapor-arac-bar{ gap:10px; padding:12px 13px; }
-  .rab-sol{ flex:1 1 auto; }
-  .rab-tarih{ flex:1; min-width:0; padding:8px 10px; }
+  .rab-sol{ flex:1 1 auto; flex-wrap:wrap; }
+  .rab-tarih{ flex:1 1 45%; min-width:0; padding:8px 10px; }
+  .rab-filtrele, .rab-bugun{ flex:1 1 auto; justify-content:center; }
   /* şube listesi uzunsa kendi içinde kaysın, paneli şişirmesin */
   .rab-sube-row{
     max-height:96px; overflow-y:auto; -webkit-overflow-scrolling:touch;
@@ -28924,6 +28945,7 @@ function bayiStoklarHtml(){
 
   // satırlar — merkezdeki tüm kartlar (kaynak liste)
   let tbody = "";
+  let kartlar = "";   // mobil: alt alta kart görünümü (aynı data-ara ile arama filtresine dahil)
   const kodlar = Object.keys(STOCK);
   kodlar.forEach(kod=>{
     const s=STOCK[kod];
@@ -28932,19 +28954,40 @@ function bayiStoklarHtml(){
     if(!herhangi) return;
     const _araMetin = ((s.ad||"")+" "+(s.no||"")).toLocaleLowerCase("tr");
     let satir = `<tr class="bstok-satir" data-ara="${_araMetin.replace(/"/g,'')}"><td class="bstok-sabit-col"><strong>${s.ad}</strong> <span style="color:var(--ink-3);font-size:11px">${uomAl(s).tabanBirim}</span></td>`;
+    let kart = `<div class="bstok-satir bstok-urun-kart" data-ara="${_araMetin.replace(/"/g,'')}">
+      <div class="buk-ad">${s.ad} <span class="buk-birim">${uomAl(s).tabanBirim}</span></div>`;
     sutunlar.forEach(sc=>{
       const m = miktarAl(sc,kod);
       const satisF = bayiSatisFiyat(kod)||0;   // merkez ana depo SATIŞ fiyatı (KDV dahil)
       const tutar = m*satisF;
       const eksi = m<0;
       const u = uomAl(s);
+      const ad = sc==="__merkez" ? "🏢 Merkez (Ana)" : "🏬 "+sc;
       satir += `<td style="text-align:right;border-left:2px solid var(--line)${eksi?';color:var(--danger);font-weight:800':''}">${m!==0?uomGoster(u,m):'—'}</td>
         <td style="text-align:right;font-weight:700;color:var(--brand-d)">${tutar!==0?tutar.toFixed(2):'—'}</td>`;
+      kart += `<div class="buk-satir">
+        <span class="buk-lbl">${ad}</span>
+        <span class="buk-val${eksi?' eksi':''}">${m!==0?uomGoster(u,m):'—'} <span class="buk-tutar">${tutar!==0?tl(Math.round(tutar*100)/100)+' ₺':'—'}</span></span>
+      </div>`;
     });
     satir += `</tr>`;
     tbody += satir;
+    kart += `</div>`;
+    kartlar += kart;
   });
-  if(!tbody) tbody = `<tr><td colspan="${1+sutunlar.length*2}" style="text-align:center;color:var(--ink-3);padding:20px">Gösterilecek stok kaydı yok.</td></tr>`;
+  if(!tbody){
+    tbody = `<tr><td colspan="${1+sutunlar.length*2}" style="text-align:center;color:var(--ink-3);padding:20px">Gösterilecek stok kaydı yok.</td></tr>`;
+    kartlar = `<div class="bstok-ara-bos" style="display:block">Gösterilecek stok kaydı yok.</div>`;
+  }
+
+  // toplam kartı (mobil)
+  let kartToplam = `<div class="bstok-urun-kart bstok-urun-toplam">
+    <div class="buk-ad">GENEL TOPLAM</div>`;
+  sutunlar.forEach(sc=>{
+    const ad = sc==="__merkez" ? "🏢 Merkez (Ana)" : "🏬 "+sc;
+    kartToplam += `<div class="buk-satir"><span class="buk-lbl">${ad}</span><span class="buk-val">${tl(sutunToplam(sc))} ₺</span></div>`;
+  });
+  kartToplam += `</div>`;
 
   // toplam satırı
   let tfoot = `<tr class="bstok-toplam"><td class="bstok-sabit-col" style="font-weight:800">GENEL TOPLAM</td>`;
@@ -28956,6 +28999,7 @@ function bayiStoklarHtml(){
   html += `<div class="table-wrap bstok-wrap"><table class="bstok-tablo">
     <thead>${thead}</thead><tbody>${tbody}</tbody><tfoot>${tfoot}</tfoot>
   </table></div>`;
+  html += `<div class="bstok-kart-liste">${kartlar}${kartToplam}</div>`;
   return html;
 }
 function bstokTogglBayi(bayi){
@@ -32412,11 +32456,18 @@ function kvExcelIndir(){
 function raporTarihBasSec(t){
   state.raporTarihBas=t;
   if(state.raporTarihBit < t) state.raporTarihBit = t;   // bitiş başlangıçtan önce kalmasın
-  go("rapor", true);
+  // NOT: burada render tetiklenmiyor — "Filtrele" butonuna basınca uygulanır
 }
 function raporTarihBitSec(t){
   state.raporTarihBit=t;
   if(state.raporTarihBas > t) state.raporTarihBas = t;   // başlangıç bitişten sonra kalmasın
+  // NOT: burada render tetiklenmiyor — "Filtrele" butonuna basınca uygulanır
+}
+function raporTarihFiltrele(){ go("rapor", true); }
+function raporBugunSec(){
+  const g = isletmeGunu();
+  state.raporTarihBas = g;
+  state.raporTarihBit = g;
   go("rapor", true);
 }
 function raporSubeSec(s){ state.raporSube=s; go("rapor", true); }
@@ -32505,6 +32556,8 @@ function raporUrunSatisHtml(){
       <input class="rab-tarih" type="date" value="${tarihBas}" max="${tarihBit}" onchange="raporTarihBasSec(this.value)">
       <label class="rab-lbl">Bitiş</label>
       <input class="rab-tarih" type="date" value="${tarihBit}" min="${tarihBas}" onchange="raporTarihBitSec(this.value)">
+      <button class="btn btn-primary rab-filtrele" onclick="raporTarihFiltrele()">🔍 Filtrele</button>
+      <button class="btn rab-bugun" onclick="raporBugunSec()">📅 Bugün</button>
     </div>`;
   if(isGenel){
     html += `<div class="rab-sube-row">
