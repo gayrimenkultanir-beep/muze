@@ -3382,7 +3382,8 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .rcm-ipucu{font-size:11.5px; color:var(--ink-3); margin-top:10px; line-height:1.5; font-weight:600}
 .bayi-bos{padding:24px; text-align:center; color:var(--ink-3); font-size:13.5px}
 .bayi-gecmis-baslik{font-size:13px; font-weight:800; color:var(--cocoa); margin:18px 0 10px}
-.bayi-kalem-sil{width:22px; height:22px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800; border:none}
+.bayi-kalem-sil{display:inline-flex; align-items:center; gap:4px; width:auto; height:auto; padding:6px 11px; border-radius:8px; background:var(--surface); color:var(--brand-d); font-size:11.5px; font-weight:800; border:1.5px solid var(--brand); white-space:nowrap; cursor:pointer}
+.bayi-kalem-sil:hover{background:var(--brand); color:#fff}
 .bayi-form-foot .btn{flex:1}
 /* sipariş kartları */
 .bayi-sip-kart{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:14px 16px; margin-bottom:10px}
@@ -3676,9 +3677,17 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .bik-oran{font-weight:800; color:var(--ink-3); white-space:nowrap}
 .bayi-iskonto-kart.dolu .bik-oran{color:var(--ok)}
 .bayi-ozet-tablo{background:var(--surface-2); border-radius:10px; padding:12px 14px; margin:10px 0}
-.bayi-ozet-satir{display:flex; justify-content:space-between; font-size:13px; color:var(--ink-2); padding:3px 0}
+.bayi-ozet-satir{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:13px; color:var(--ink-2); padding:3px 0}
+.bayi-ozet-satir>span:first-child{flex:1 1 auto; min-width:0}
+.bayi-ozet-satir>span:last-child{flex:0 0 auto; white-space:nowrap}
 .bayi-ozet-satir.bayi-ozet-ind{color:var(--ok); font-weight:700}
 .bayi-ozet-satir.bayi-ozet-net{font-size:15px; font-weight:800; color:var(--ink); margin-top:5px; padding-top:7px; border-top:1px solid var(--line)}
+@media(max-width:400px){
+  .bayi-ozet-tablo{padding:10px 12px}
+  .bayi-ozet-satir{font-size:12px; gap:8px}
+  .bayi-ozet-satir.bayi-ozet-kdv{font-size:11px}
+  .bayi-ozet-satir.bayi-ozet-net{font-size:14px}
+}
 .bayi-duzenlendi-rozet{font-size:10px; font-weight:800; background:#fdf0dc; color:#e08a1e; padding:2px 8px; border-radius:99px; margin-left:6px}
 .bayi-kalem-silinmis{opacity:.6}
 /* Geçmiş siparişler filtre */
@@ -6706,6 +6715,7 @@ button.fk-urun-btn::before,button.fk-urun-btn::after{
 .sf-rozet{ font-size:11px; font-weight:800; padding:3px 9px; border-radius:99px; border:1px solid; }
 .sf-rozet.aktarildi{ color:#583c22; background:#f5ecd2; border-color:#8a6a47; }
 .sf-rozet.bekliyor{ color:#a86d43; background:#f3e6d6; border-color:#d4a574; }
+.sf-rozet.taslak{ color:#8a7458; background:#efe8dc; border-color:#c9bda8; }
 .sf-aksiyon{ display:flex; gap:8px; flex-wrap:wrap; }
 .sf-aktar-btn{ background:var(--pal-gold)!important; color:#3d2f26!important; font-weight:800!important; }
 .satis-aktar-liste{ background:var(--surface-2); border:1.5px solid var(--gold-3); border-radius:11px; padding:12px 14px; font-size:13.5px; font-weight:700; color:var(--ink-2); line-height:1.7; margin-bottom:12px; }
@@ -6777,6 +6787,19 @@ button.fk-urun-btn::before,button.fk-urun-btn::after{
 .sfk-islem{ display:flex; gap:5px; flex:none; }
 .sfk-duz,.sfk-sil{ background:none; border:none; cursor:pointer; font-size:16px; opacity:.65; padding:3px; }
 .sfk-duz:hover,.sfk-sil:hover{ opacity:1; }
+@media(max-width:480px){
+  .sfk-satir{
+    display:grid; grid-template-columns:46px 1fr auto;
+    grid-template-areas:"gorsel bilgi islem" "adet adet tutar";
+    gap:8px 10px; align-items:center;
+  }
+  .sfk-gorsel{ grid-area:gorsel; }
+  .sfk-bilgi{ grid-area:bilgi; min-width:0; }
+  .sfk-ad{ white-space:normal; overflow:visible; text-overflow:clip; word-break:break-word; }
+  .sfk-islem{ grid-area:islem; }
+  .sfk-adet{ grid-area:adet; justify-self:start; }
+  .sfk-tutar{ grid-area:tutar; justify-self:end; min-width:0; }
+}
 /* satış fatura kalem butonları evrensel modelden muaf */
 .main button.sfk-adet-btn,.main button.sfk-duz,.main button.sfk-sil{ overflow:visible; }
 .main button.sfk-adet-btn::before,.main button.sfk-adet-btn::after,
@@ -8001,7 +8024,9 @@ input, select, textarea{ max-width:100% !important; box-sizing:border-box; }
   .bsc-fiyat{ text-align:left !important; }
   .bsc-mik{ text-align:right !important; }
   .bsc-tutar{ grid-column:1 / -1 !important; text-align:right !important; }
-  .bsc-sil{ position:absolute !important; right:12px; top:9px; }
+  .bsc-sil{ position:absolute !important; right:10px; top:8px; }
+  .bsc-sil .bayi-kalem-sil{ padding:5px 9px; font-size:11px; }
+  .bsc-ad{ padding-right:82px; }
 }
 
 /* ── 28) STOK KATEGORİ ÇİPLERİ → metin kesilmesin (mobil + masaüstü) ── */
@@ -12976,9 +13001,9 @@ function bildirimEkle(opts){
 }
 function bildirimListesi(){
   const rol = state.role, sube = AKTIF_SUBE;
-  // Depo / Lojistik: SADECE Bayi Kanalı mesajları görür, diğer bildirimler gelmez
+  // Depo / Lojistik: Bayi Kanalı mesajları + doğrudan kendisine (hedefRol:"depo") gönderilen bildirimler
   if(rol==="depo"){
-    return BILDIRIMLER.filter(b=>b.kanal==="Bayi Kanalı").sort((a,b)=>b.ts-a.ts);
+    return BILDIRIMLER.filter(b=>b.kanal==="Bayi Kanalı" || b.hedefRol==="depo").sort((a,b)=>b.ts-a.ts);
   }
   return BILDIRIMLER.filter(b=>{
     if(b.hedefSube){ return rol!=="genel" && b.hedefSube===sube; }   // şube hedefli: sadece o şube müdürü
@@ -12993,9 +13018,9 @@ function bildirimSil(id){ const i=BILDIRIMLER.findIndex(x=>x.id===id); if(i>=0){
 function bildirimTemizle(){
   const rol=state.role, sube=AKTIF_SUBE;
   BILDIRIMLER = BILDIRIMLER.filter(b=>{
-    // Depo: yalnız Bayi Kanalı mesajları görünür → yalnız onları temizler
+    // Depo: Bayi Kanalı + doğrudan kendisine gönderilenler görünür → yalnız onları temizler
     const gorunur = (rol==="depo")
-      ? (b.kanal==="Bayi Kanalı")
+      ? (b.kanal==="Bayi Kanalı" || b.hedefRol==="depo")
       : (b.hedefSube ? b.hedefSube===sube : (b.hedefRol ? b.hedefRol===rol : true));
     return !gorunur;   // görünenleri sil
   });
@@ -25273,9 +25298,31 @@ function iadeFaturaListeHtml(){
     const yonEt = x.yon==="subeden"
       ? `<span class="iad-yon-rozet sube">🏪→🏢 Merkeze iade</span>`
       : `<span class="iad-yon-rozet ted">🏢→📮 Tedarikçiye iade</span>`;
-    const durum = x.islendi
-      ? `<span class="sf-rozet aktarildi">✓ İşlendi</span>`
-      : `<span class="sf-rozet bekliyor">⏳ İşlem bekliyor</span>`;
+    const gonderildi = x.onaySunuldu !== false; // subeden'de false=taslak; diğer tüm durumlarda true say
+    let durum;
+    if(x.islendi) durum = `<span class="sf-rozet aktarildi">✓ Stok işlendi</span>`;
+    else if(x.yon==="subeden" && !gonderildi) durum = `<span class="sf-rozet taslak">📝 Taslak · gönderilmedi</span>`;
+    else if(x.yon==="subeden" && !isGenel) durum = `<span class="sf-rozet bekliyor">⏳ Onayda · genel müdür/depo</span>`;
+    else durum = `<span class="sf-rozet bekliyor">⏳ İşlem bekliyor</span>`;
+
+    // aksiyon butonu: yöne, role ve onay durumuna göre değişir
+    let aksiyonBtn = '';
+    if(!x.islendi){
+      if(x.yon==="tedarikci"){
+        aksiyonBtn = `<button class="bayi-mini sf-aktar-btn" onclick="iadeIsleOnay(${x.id})">📦 İşle</button>`;
+      } else if(isGenel){
+        aksiyonBtn = gonderildi
+          ? `<button class="bayi-mini sf-aktar-btn" onclick="iadeIsleOnay(${x.id})">✓ Onayla</button>`
+          : '';
+      } else {
+        aksiyonBtn = gonderildi
+          ? ''
+          : `<button class="bayi-mini sf-aktar-btn" onclick="iadeOnayaGonder(${x.id})">📤 Onaya Gönder</button>`;
+      }
+    }
+    const duzenlenebilir = !x.islendi && (x.yon==="tedarikci" || !gonderildi);
+    const silinebilir = !x.islendi;
+
     html+=`<div class="bayi-satir sf-satir">
       <div class="sf-ust">
         <div class="sf-bilgi">
@@ -25286,12 +25333,12 @@ function iadeFaturaListeHtml(){
         <div class="sf-tutar">${tl(x.faturaTutar)} ₺</div>
       </div>
       <div class="sf-aksiyon">
-        ${!x.islendi ? `<button class="bayi-mini sf-aktar-btn" onclick="iadeIsleOnay(${x.id})">📦 İşle</button>` : ''}
+        ${aksiyonBtn}
         <button class="bayi-mini" onclick="iadeIrsaliyeAc(${x.id})">📋 İrsaliye</button>
         <button class="bayi-mini" onclick="iadeFaturaBelgeAc(${x.id})">🧾 Fatura</button>
-        ${!x.islendi ? `<button class="bayi-mini" onclick="iadeFaturaDuzenle(${x.id})">✏️ Düzenle</button>` : ''}
+        ${duzenlenebilir ? `<button class="bayi-mini" onclick="iadeFaturaDuzenle(${x.id})">✏️ Düzenle</button>` : ''}
         ${x.islendi && isGenel ? `<button class="bayi-mini" onclick="iadeFaturaGeriAl(${x.id})">↩️ Geri Al</button>` : ''}
-        ${!x.islendi ? `<button class="bayi-mini sil" onclick="iadeSilOnay(${x.id})">🗑️ Sil</button>` : ''}
+        ${silinebilir ? `<button class="bayi-mini sil" onclick="iadeSilOnay(${x.id})">🗑️ Sil</button>` : ''}
       </div>
     </div>`;
   });
@@ -25317,6 +25364,7 @@ function iadeFaturaYeni(yon){
 function iadeFaturaDuzenle(id){
   const f=IADE_FATURALARI.find(x=>x.id===id); if(!f) return;
   if(f.islendi){ note("⚠️ İşlenmiş iade düzenlenemez. Önce işlemi geri alın."); return; }
+  if(f.yon==="subeden" && f.onaySunuldu!==false){ note("⚠️ Onaya gönderilmiş iade düzenlenemez."); return; }
   state.iadeTaslak = JSON.parse(JSON.stringify({
     id:f.id, yon:f.yon, tarihISO:f.tarihISO, sube:f.sube||"", tedarikci:f.tedarikci||"",
     sebep:f.sebep||"bozuk", aciklama:f.aciklama||"", kalemler:f.kalemler||[]
@@ -25349,29 +25397,43 @@ function iadeFaturaKaydet(){
     sebep:t.sebep, aciklama:t.aciklama, kalemler:t.kalemler,
     matrah:top.matrah, kdvToplam:top.kdvToplam, faturaTutar:top.faturaTutar,
     islendi:false, islemTs:null,
+    onaySunuldu: t.yon==="subeden" ? false : true,
     olusturan:(typeof AKTIF_PERSONEL_AD!=="undefined" && AKTIF_PERSONEL_AD)||""
   };
   const i=IADE_FATURALARI.findIndex(x=>x.id===id);
-  const yeniKayit = (i<0);
-  if(i>=0){ kayit.islendi=IADE_FATURALARI[i].islendi; IADE_FATURALARI[i]=kayit; }
+  if(i>=0){ kayit.islendi=IADE_FATURALARI[i].islendi; kayit.onaySunuldu=IADE_FATURALARI[i].onaySunuldu; IADE_FATURALARI[i]=kayit; }
   else IADE_FATURALARI.push(kayit);
   state.iadeTaslak=null;
   b2bKaydet();
-  // ── ŞUBE→MERKEZ iadesi: depo/lojistik + genel müdüre onay bildirimi ──
-  // (yalnızca yeni oluşturulan, şubeden gelen ve henüz işlenmemiş iadelerde)
-  if(yeniKayit && kayit.yon==="subeden" && !kayit.islendi && typeof bildirimEkle==="function"){
-    const mesaj = kayit.sube+" · "+kayit.kalemler.length+" kalem · "+tl((kayit.faturaTutar||0))+" ₺ · "+iadeSebepAd(kayit.sebep);
+  // ── Şubeden merkeze iadelerde onay bildirimi artık "Onaya Gönder"
+  //    butonuyla (iadeOnayaGonder) tetiklenir, kayıt anında değil. ──
+  note(kayit.yon==="subeden"
+    ? "✓ İade faturası kaydedildi · onaylanması için \"Onaya Gönder\" butonunu kullanın"
+    : "✓ İade faturası kaydedildi · stoğa işlemek için \"İşle\" butonunu kullanın");
+  go("fatura", true);
+}
+/* Şubeden merkeze iade — onaya gönder: genel müdür + depo/lojistiğe bildirim */
+function iadeOnayaGonder(id){
+  const f=IADE_FATURALARI.find(x=>x.id===id); if(!f || f.islendi || f.yon!=="subeden") return;
+  f.onaySunuldu = true;
+  b2bKaydet();
+  if(typeof bildirimEkle==="function"){
+    const mesaj = f.sube+" · "+f.kalemler.length+" kalem · "+tl((f.faturaTutar||0))+" ₺ · "+iadeSebepAd(f.sebep);
     ["depo","genel"].forEach(rol=>{
-      bildirimEkle({ tip:"stok", baslik:"↩️ Onay bekleyen iade · "+kayit.no,
+      bildirimEkle({ tip:"stok", baslik:"↩️ Onay bekleyen iade · "+f.no,
         mesaj:mesaj, kanal:"Stok", hedefRol:rol, link:"fatura" });
     });
   }
-  note("✓ İade faturası kaydedildi · stoğa işlemek için \"İşle\" butonunu kullanın");
+  note("📤 "+f.no+" onaya gönderildi · genel müdür ve depo lojistiğe bildirim iletildi");
   go("fatura", true);
 }
 /* Stok etkisini uygula */
 function iadeFaturaIsle(id){
   const f=IADE_FATURALARI.find(x=>x.id===id); if(!f || f.islendi) return;
+  if(f.yon==="subeden"){
+    if(f.onaySunuldu===false){ note("⚠️ Bu iade henüz onaya gönderilmedi."); return; }
+    if(!depoVeyaGenel()){ note("⚠️ Bu işlemi yalnızca genel müdür veya depo/lojistik onaylayabilir."); return; }
+  }
   const eksikler=[];
   f.kalemler.forEach(k=>{
     const taban=k.tabanMiktar||k.miktar||0;
@@ -25395,7 +25457,7 @@ function iadeFaturaIsle(id){
   b2bKaydet();
   // ── şube→merkez iadesi onaylandı: iadeyi açan şubeye geri bilgi ──
   if(f.yon==="subeden" && f.sube && typeof bildirimEkle==="function"){
-    bildirimEkle({ tip:"stok", baslik:"✓ İadeniz merkeze işlendi · "+f.no,
+    bildirimEkle({ tip:"stok", baslik:"✓ Stok işlendi · "+f.no,
       mesaj:f.kalemler.length+" kalem merkez deposuna alındı"+(eksikler.length?" · ⚠️ bazı kalemler şube stoğunda yetersizdi":""),
       kanal:"Stok", hedefSube:f.sube, link:"fatura" });
   }
@@ -25437,13 +25499,14 @@ function iadeFaturaSil(id){
 /* — onay modalları — */
 function iadeIsleOnay(id){
   const f=IADE_FATURALARI.find(x=>x.id===id); if(!f) return;
+  const onayModu = f.yon==="subeden";
   const hedef = f.yon==="subeden" ? ("🏢 Merkez deposuna girecek") : ("📮 "+(f.tedarikci||"tedarikçiye")+" gönderilecek");
   const kaynak = f.yon==="subeden" ? ("🏪 "+f.sube+" stoğundan düşecek") : ("🏢 Merkez stoğundan düşecek");
   let mdl=document.getElementById("iadeIsleModal");
   if(!mdl){ mdl=document.createElement("div"); mdl.id="iadeIsleModal"; mdl.className="modal-bg"; mdl.style.zIndex="250"; document.body.appendChild(mdl); }
   mdl.innerHTML=`<div class="ypm-ic" style="max-width:460px">
     <div class="ypm-head"><div class="ypm-head-ic">📦</div>
-      <div class="ypm-head-baslik">İadeyi Stoğa İşle</div>
+      <div class="ypm-head-baslik">${onayModu?'İadeyi Onayla':'İadeyi Stoğa İşle'}</div>
       <div class="ypm-head-alt">${f.no} · ${f.kalemler.length} kalem</div></div>
     <div class="ypm-body">
       <div class="iad-onay-satir"><span class="iad-onay-ok">↓</span> ${kaynak}</div>
@@ -25451,7 +25514,7 @@ function iadeIsleOnay(id){
       <div class="iad-onay-not">İşlem sonrası fatura düzenlenemez; gerekirse "Geri Al" ile stok eski hâline döndürülebilir.</div>
       <div class="ypm-btn-row" style="margin-top:14px">
         <button class="ypm-iptal" onclick="iadeIsleKapat()">Vazgeç</button>
-        <button class="ypm-basla" onclick="iadeFaturaIsle(${id})">📦 İşle</button>
+        <button class="ypm-basla" onclick="iadeFaturaIsle(${id})">${onayModu?'✓ Onayla':'📦 İşle'}</button>
       </div>
     </div></div>`;
   mdl.classList.add("on");
@@ -28518,7 +28581,7 @@ function bayiSiparisGenelHtml(){
 }
 function bayiSiparisKartGenel(sp){
   const dm = SIPARIS_DURUM[sp.durum];
-  let html = `<div class="bayi-sip-kart">
+  let html = `<div class="bayi-sip-kart" id="sip-kart-${sp.id}">
     <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)} · ${sp.sube}</span>
       <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
     <div class="bayi-sip-tarih">${sp.tarih}</div>
@@ -28566,7 +28629,7 @@ function bayiSiparisKartGenel(sp){
       <span class="bsc-fiyat">${birimFiyat>0?tl(birimFiyat)+' ₺':'—'}<br><small>/ ${secBirim}</small></span>
       <span class="bsc-mik">${mikHucre}</span>
       <span class="bsc-tutar">${satirTutar>0?tl(satirTutar)+' ₺':'—'}</span>
-      <span class="bsc-sil">${sp.durum==="onayda"?`<button class="bayi-kalem-sil" onclick="sipKalemDuzenle(${sp.id},${i})">✏️</button>`:''}</span>
+      <span class="bsc-sil">${sp.durum==="onayda"?`<button class="bayi-kalem-sil" onclick="sipKalemDuzenle(${sp.id},${i})">✏️ Düzenle</button>`:''}</span>
     </div>`;
   });
   html += `</div>`;
@@ -29146,7 +29209,7 @@ function bayiBenimSiparisHtml(){
   benim.forEach(sp=>{
     const dm = SIPARIS_DURUM[sp.durum];
     const t = siparisTutar(sp);
-    html += `<div class="bayi-sip-kart">
+    html += `<div class="bayi-sip-kart" id="sip-kart-${sp.id}">
       <div class="bayi-sip-ust"><span class="bayi-sip-no">${siparisNo(sp)}</span>
         <span class="bayi-sip-durum" style="background:${dm.bg};color:${dm.renk}">${dm.ad}</span></div>
       <div class="bayi-sip-tarih">${sp.tarih}${sp.duzenlendi?' <span class="bayi-duzenlendi-rozet">✏️ genel müdür düzenledi</span>':''}</div>
