@@ -888,6 +888,30 @@ tr:last-child td{border-bottom:none}
 .opt-head .opt-base{font-size:13px; color:var(--ink-2)}
 .opt-head .opt-x{margin-left:auto; width:34px; height:34px; border-radius:10px; background:var(--surface-2); color:var(--ink-2); font-size:15px; font-weight:700}
 .opt-body{flex:1; overflow-y:auto; padding:6px 20px}
+/* ── MASA/KİŞİ/ÜRÜN TAŞI-BİRLEŞTİR paneli ── */
+.tasi-panel{display:flex; flex-direction:column; max-height:80vh}
+.tasi-p-head{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid var(--line); font-size:16px; font-weight:800; color:var(--cocoa)}
+.tasi-p-govde{overflow-y:auto; padding:14px 18px 18px}
+.tasi-p-alt{font-size:13px; color:var(--ink-2); margin-bottom:12px}
+.tasi-kat-bas{font-size:12.5px; font-weight:800; color:var(--cocoa); margin:14px 0 8px; padding-bottom:4px; border-bottom:1px solid var(--surface-2)}
+.tasi-kat-bas:first-child{margin-top:0}
+.tasi-masa-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:8px}
+.tasi-masa-btn{display:flex; flex-direction:column; gap:4px; padding:12px; border-radius:11px; background:var(--surface-2); border:1.5px solid var(--line); text-align:left; cursor:pointer}
+.tasi-masa-btn:hover{border-color:var(--brand)}
+.tasi-masa-btn strong{font-size:14px; color:var(--ink)}
+.tasi-masa-btn small{font-size:11px; color:var(--ink-3)}
+.tasi-masa-btn.dolu{background:var(--brand-soft); border-color:var(--brand)}
+.tasi-masa-btn.dolu small{color:var(--brand-d); font-weight:700}
+.tasi-masa-btn.kendisi{background:var(--surface); border-style:dashed}
+.tasi-kisi-liste{display:flex; flex-direction:column; gap:8px; margin-bottom:14px}
+.tasi-kisi-btn{display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-radius:11px; background:var(--surface-2); border:1.5px solid var(--line); font-size:14px; font-weight:700; color:var(--ink); text-align:left; cursor:pointer}
+.tasi-kisi-btn:hover{border-color:var(--brand)}
+.tasi-kisi-btn small{font-weight:800; color:var(--ink-2)}
+.tasi-kisi-btn.yeni{color:var(--brand-d); border-style:dashed; justify-content:center}
+.tasi-geri{padding:10px; border-radius:10px; background:none; color:var(--ink-2); font-size:12.5px; font-weight:700; border:1px solid var(--line); width:100%}
+@media(max-width:520px){
+  .tasi-masa-grid{grid-template-columns:repeat(2,1fr)}
+}
 /* Gruplu accordion opsiyon ekranı */
 .opt-bolum-baslik{font-size:20px; font-weight:800; color:var(--ink); margin:18px 0 10px}
 .opt-bolum-baslik:first-child{margin-top:6px}
@@ -2068,9 +2092,10 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .kasa-masa-detay{display:flex; flex-direction:column; gap:14px; margin-bottom:14px}
 .kmd-bos{text-align:center; padding:40px; color:var(--ink-3); font-size:14px}
 .kmd-kisi{background:var(--surface-2); border-radius:var(--radius); padding:14px 16px}
-.kmd-kisi-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+.kmd-kisi-ust{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; gap:8px}
 .kmd-odendi .kmd-kisi-ad{color:var(--ok)}
 .kmd-kisi-ad{font-size:15.5px; font-weight:800}
+.kmd-kisi-tasi{flex-shrink:0; padding:5px 11px; border-radius:8px; background:var(--surface-2); color:var(--ink-2); border:1px solid var(--line-2); font-size:11.5px; font-weight:700; white-space:nowrap}
 .kmd-kisi-ad small{color:var(--brand-d); font-weight:800; margin-left:6px}
 .kmd-kalem{background:var(--surface); border-radius:var(--radius-sm); padding:11px 13px; margin-bottom:8px}
 .kmd-kalem:last-child{margin-bottom:0}
@@ -3359,6 +3384,8 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .kasa-detay-head{display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--line); background:var(--surface-2)}
 .kdh-baslik{font-size:17px; font-weight:800}
 .kdh-alt{font-size:12.5px; color:var(--ink-2); margin-top:2px}
+.kdh-sag{display:flex; align-items:center; gap:8px}
+.kdh-tasi{padding:8px 13px; border-radius:10px; background:var(--brand-soft); color:var(--brand-d); border:1px solid var(--brand); font-size:12.5px; font-weight:800; white-space:nowrap}
 .kasa-detay-kapat{width:34px; height:34px; border-radius:10px; background:var(--surface); color:var(--ink-2); font-size:15px; font-weight:800; border:1px solid var(--line)}
 .kasa-sag-panel .kasa-masa-detay{flex:1; overflow-y:auto; padding:14px 16px}
 .kasa-sag-panel .kmd-foot{padding:14px 16px; border-top:1px solid var(--line); background:var(--surface-2)}
@@ -4677,6 +4704,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 /* seçenek ekle butonları */
 .kmd-k-aksiyon{display:flex; gap:8px; flex-wrap:wrap}
 .kmd-sec-ekle{padding:7px 13px; border-radius:9px; background:var(--ok-soft); color:var(--ok); border:none; font-size:12.5px; font-weight:700; cursor:pointer}
+.kmd-urun-tasi{padding:7px 13px; border-radius:9px; background:var(--surface-2); color:var(--ink-2); border:1px solid var(--line-2); font-size:12.5px; font-weight:700; cursor:pointer}
 .kak-btn.sec-ekle{background:var(--ok-soft); color:var(--ok)}
 /* === FİYAT DEĞİŞTİRME MODAL === */
 .fy-duz-ic{background:#fff; border-radius:20px; padding:22px; max-width:360px; width:92%; margin:auto}
@@ -8581,6 +8609,11 @@ input, select, textarea{ max-width:100% !important; box-sizing:border-box; }
 <!-- Hesap bölme modalı -->
 <div class="modal-bg" id="bolModal">
   <div class="opt-modal" id="bolModalInner"></div>
+</div>
+
+<!-- Masa/Kişi/Ürün Taşı-Birleştir modalı -->
+<div class="modal-bg" id="tasiModal">
+  <div class="opt-modal" id="tasiModalInner"></div>
 </div>
 
 <!-- Ödeme yöntemi modalı -->
@@ -18120,7 +18153,10 @@ function kasaMasaDetayHtml(m){
   const mq = "'"+String(m).replace(/'/g,"\\'")+"'";   // onclick için güvenli masa id
   let html=`<div class="kasa-detay-head">
       <div><div class="kdh-baslik">🍽️ ${masaEtiket(m)}</div><div class="kdh-alt">${s.kisiler.length} kişi · kalan <strong>${kalan} ₺</strong>${odenen>0?` · <span style="color:var(--ok)">${odenen} ₺ ödendi</span>`:''} <small>(toplam ${toplam} ₺)</small></div></div>
-      <button class="kasa-detay-kapat" onclick="kasaMasaKapat()">✕</button>
+      <div class="kdh-sag">
+        ${(s.kisiler.length>0 && !kasaSaltGoruntuleme())?`<button class="kdh-tasi" onclick="tasiBaslat('masa',${mq})" title="Masayı başka masaya taşı veya birleştir">↔️ Taşı/Birleştir</button>`:''}
+        <button class="kasa-detay-kapat" onclick="kasaMasaKapat()">✕</button>
+      </div>
     </div>`;
   // NOTLAR bölümü
   html+=`<div class="masa-not-blok">
@@ -18147,6 +18183,7 @@ function kasaMasaDetayHtml(m){
     const kisiToplam=aktifKalemler.reduce((s,it)=>s+it.fiyat,0);
     html+=`<div class="kmd-kisi"><div class="kmd-kisi-ust">
       <span class="kmd-kisi-ad">👤 ${k.ad} <small>${kisiToplam} ₺</small></span>
+      ${!kasaSaltGoruntuleme()?`<button class="kmd-kisi-tasi" onclick="tasiBaslat('kisi',${mq},${ki})" title="Bu kişiyi başka masaya taşı">⇄ Taşı</button>`:''}
     </div>`;
     k.kalemler.forEach(it=>{
       const dm=DURUM_META[it.durum]||{ad:it.durum||"",renk:"var(--ink-2)"};
@@ -18175,6 +18212,7 @@ function kasaMasaDetayHtml(m){
         html+=`<div class="kmd-k-aksiyon">
           <button class="kmd-iptal" onclick="kasaKalemIptal(${mq},${it.id})">İptal et</button>
           ${opsVar?`<button class="kmd-sec-ekle" onclick="kalemSecenekEkle(${mq},${it.id},'kasadetay')">+ Seçenek ekle</button>`:''}
+          ${!kasaSaltGoruntuleme()?`<button class="kmd-urun-tasi" onclick="tasiBaslat('urun',${mq},null,${it.id})" title="Bu ürünü başka kişiye/masaya taşı">⇄ Taşı</button>`:''}
         </div>`;
       }
       html+='</div>';
@@ -18204,6 +18242,162 @@ function masaNotSilTikla(m, i){ masaNotSil(m, i); go("masalar"); }
 function kasaYeniSiparis(m){
   if(izlemeKilit("Sipariş ekleme")) return;
   state.kasaEkle={masa:m, kisi:null, sepet:[]}; state.cat="Tatlılar"; go("satis"); note("Ürün seç · Masa "+m);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MASA / KİŞİ / ÜRÜN TAŞI — BİRLEŞTİR
+   Üç ayrı işlem, tek ortak seçim paneli (tasiModal) üzerinden yürür:
+   - "masa"  : tüm masa başka masaya taşınır; hedef doluysa BİRLEŞTİRME olur
+   - "kisi"  : bir kişi (tüm kalemleriyle) başka masaya taşınır
+   - "urun"  : tek bir ürün, hedef masadaki (yeni veya mevcut) bir kişiye taşınır
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Masa A → Masa B. B boşsa TAŞIMA, B doluysa aynı isimli kişiler birleşir, farklı isimliler eklenir (BİRLEŞTİRME) */
+function masaTasiVeyaBirlestir(kaynak, hedef){
+  if(kaynak===hedef) return;
+  const s1 = SESSIONS[kaynak];
+  if(!s1 || !s1.acik || s1.kisiler.length===0){ note("Taşınacak sipariş yok"); return; }
+  const s2 = SESSIONS[hedef];
+  const hedefDolu = s2 && s2.acik && s2.kisiler.length>0;
+  if(!hedefDolu){
+    SESSIONS[hedef] = {...s1, masa:hedef};
+    SESSIONS[kaynak] = {masa:kaynak, acik:false, zaman:Date.now(), kisiler:[]};
+    note("✓ "+masaEtiket(kaynak)+" → "+masaEtiket(hedef)+" taşındı");
+  } else {
+    s1.kisiler.forEach(k=>{
+      const mevcut = s2.kisiler.find(kk=>kk.ad===k.ad);
+      if(mevcut) mevcut.kalemler = mevcut.kalemler.concat(k.kalemler);
+      else s2.kisiler.push(k);
+    });
+    if(s1.notlar && s1.notlar.length) s2.notlar = (s2.notlar||[]).concat(s1.notlar);
+    s2.acik = true;
+    SESSIONS[kaynak] = {masa:kaynak, acik:false, zaman:Date.now(), kisiler:[]};
+    note("✓ "+masaEtiket(kaynak)+" → "+masaEtiket(hedef)+" ile birleştirildi");
+  }
+  state.kasaMasa = hedef;
+}
+/* Bir kişiyi (tüm kalemleriyle) başka masaya taşı — hedefte aynı isimli kişi varsa kalemleri birleşir */
+function kisiTasi(kaynakMasa, kisiIndex, hedefMasa){
+  if(kaynakMasa===hedefMasa) return;
+  const s1 = SESSIONS[kaynakMasa]; if(!s1) return;
+  const kisi = s1.kisiler[kisiIndex]; if(!kisi) return;
+  let s2 = SESSIONS[hedefMasa];
+  if(!s2){ s2 = SESSIONS[hedefMasa] = {masa:hedefMasa, acik:true, zaman:Date.now(), kisiler:[]}; }
+  const mevcut = s2.kisiler.find(kk=>kk.ad===kisi.ad);
+  if(mevcut) mevcut.kalemler = mevcut.kalemler.concat(kisi.kalemler);
+  else s2.kisiler.push(kisi);
+  s2.acik = true;
+  s1.kisiler.splice(kisiIndex,1);
+  if(s1.kisiler.length===0) s1.acik = false;
+  note("✓ "+kisi.ad+" → "+masaEtiket(hedefMasa)+" taşındı");
+  state.kasaMasa = hedefMasa;
+}
+/* Tek bir ürünü, hedef masadaki (yeni veya mevcut) bir kişiye taşı. hedefKisiIndex null/-1 → yeni kişi oluşturulur */
+function urunTasi(kaynakMasa, kalemId, hedefMasa, hedefKisiIndex){
+  const s1 = SESSIONS[kaynakMasa]; if(!s1) return;
+  let kaynakKisiIdx=-1, kalem=null, kalemIdx=-1;
+  s1.kisiler.forEach((k,ki)=>{
+    const idx = k.kalemler.findIndex(it=>it.id===kalemId);
+    if(idx>=0){ kaynakKisiIdx=ki; kalem=k.kalemler[idx]; kalemIdx=idx; }
+  });
+  if(!kalem) return;
+  let s2 = SESSIONS[hedefMasa];
+  if(!s2){ s2 = SESSIONS[hedefMasa] = {masa:hedefMasa, acik:true, zaman:Date.now(), kisiler:[]}; }
+  // hedef kişi nesnesi ÖNCE referans olarak yakalanır — kaynaktan silme, aynı masa/aynı dizi ise
+  // index kaydırabileceğinden nesne referansına göre çalışmak güvenlidir.
+  const hedefKisiRef = (hedefKisiIndex!=null && hedefKisiIndex>=0) ? s2.kisiler[hedefKisiIndex] : null;
+
+  s1.kisiler[kaynakKisiIdx].kalemler.splice(kalemIdx,1);
+  if(s1.kisiler[kaynakKisiIdx].kalemler.length===0) s1.kisiler.splice(kaynakKisiIdx,1);
+
+  if(hedefKisiRef) hedefKisiRef.kalemler.push(kalem);
+  else s2.kisiler.push({ad:"Misafir "+(s2.kisiler.length+1), kalemler:[kalem]});
+  s2.acik = true;
+  if(s1.kisiler.length===0) s1.acik = false;
+  note("✓ "+kalem.ad+" → "+masaEtiket(hedefMasa)+" taşındı");
+}
+
+/* ── Seçim paneli (modal) ── */
+function tasiBaslat(tip, kaynakMasa, kisiIndex, kalemId){
+  if(izlemeKilit("Taşıma/Birleştirme")) return;
+  state.tasiPanel = {tip, kaynakMasa, kisiIndex, kalemId, adim:"masa", hedefMasa:null};
+  tasiRender();
+  const el=document.getElementById("tasiModal"); if(el) el.classList.add("on");
+}
+function tasiKapat(){
+  const el=document.getElementById("tasiModal"); if(el) el.classList.remove("on");
+  state.tasiPanel = null;
+}
+function tasiRender(){
+  const el = document.getElementById("tasiModalInner");
+  if(el) el.innerHTML = tasiPanelHtml();
+}
+function tasiMasaSec(hedefMasa){
+  const tp = state.tasiPanel; if(!tp) return;
+  if(tp.tip==="masa"){ masaTasiVeyaBirlestir(tp.kaynakMasa, hedefMasa); tasiKapat(); go("masalar"); }
+  else if(tp.tip==="kisi"){ kisiTasi(tp.kaynakMasa, tp.kisiIndex, hedefMasa); tasiKapat(); go("masalar"); }
+  else if(tp.tip==="urun"){ tp.hedefMasa = hedefMasa; tp.adim = "kisi"; tasiRender(); }
+}
+function tasiKisiSec(hedefKisiIndex){
+  const tp = state.tasiPanel; if(!tp) return;
+  urunTasi(tp.kaynakMasa, tp.kalemId, tp.hedefMasa, hedefKisiIndex);
+  tasiKapat(); go("masalar");
+}
+function tasiGeri(){
+  const tp = state.tasiPanel; if(!tp) return;
+  tp.adim = "masa"; tp.hedefMasa = null;
+  tasiRender();
+}
+function tasiPanelHtml(){
+  const tp = state.tasiPanel; if(!tp) return "";
+  const basliklar = {masa:"↔️ Masa Taşı / Birleştir", kisi:"👤 Kişiyi Taşı", urun:"📦 Ürünü Taşı"};
+  let html = `<div class="tasi-panel">
+    <div class="tasi-p-head"><span>${basliklar[tp.tip]}</span><button class="bom-kapat" onclick="tasiKapat()">✕</button></div>`;
+
+  if(tp.tip==="urun" && tp.adim==="kisi"){
+    const s2 = SESSIONS[tp.hedefMasa];
+    html += `<div class="tasi-p-govde">
+      <div class="tasi-p-alt">Hedef: <strong>${masaEtiket(tp.hedefMasa)}</strong> · kime taşınsın?</div>
+      <div class="tasi-kisi-liste">`;
+    (s2&&s2.kisiler||[]).forEach((k,ki)=>{
+      const t = k.kalemler.filter(it=>it.durum!=="iptal").reduce((s,it)=>s+it.fiyat,0);
+      html += `<button class="tasi-kisi-btn" onclick="tasiKisiSec(${ki})">👤 ${k.ad} <small>${t} ₺</small></button>`;
+    });
+    html += `<button class="tasi-kisi-btn yeni" onclick="tasiKisiSec(-1)">+ Yeni kişi</button></div>
+      <button class="tasi-geri" onclick="tasiGeri()">← Masa seçimine dön</button>
+    </div></div>`;
+    return html;
+  }
+
+  const kaynakMasa = tp.kaynakMasa;
+  const masalar = subeMasalari(AKTIF_SUBE);
+  const katlar = [...new Set(masalar.map(m=>m.kat))];
+  html += `<div class="tasi-p-govde">
+    <div class="tasi-p-alt">Kaynak: <strong>${masaEtiket(kaynakMasa)}</strong> · hedef masayı seç</div>`;
+  katlar.forEach(kat=>{
+    const katMasalari = masalar.filter(m=>m.kat===kat).filter(mm=>{
+      const id = AKTIF_SUBE+"::"+mm.id;
+      return !(id===kaynakMasa && tp.tip!=="urun");   // ürün taşımada aynı masa (başka kişiye) da seçilebilir
+    });
+    if(katMasalari.length===0) return;
+    html += `<div class="tasi-kat-bas">${kat}</div><div class="tasi-masa-grid">`;
+    katMasalari.forEach(mm=>{
+      const id = AKTIF_SUBE+"::"+mm.id;
+      const s = SESSIONS[id];
+      const dolu = s && s.acik && s.kisiler.length>0;
+      const toplam = dolu ? masaToplam(id) : 0;
+      const altYazi = dolu
+        ? (tp.tip==="masa" ? "🔀 Birleştirilecek · "+toplam+" ₺" : s.kisiler.length+" kişi · "+toplam+" ₺")
+        : "Boş";
+      html += `<button class="tasi-masa-btn${dolu?' dolu':''}${id===kaynakMasa?' kendisi':''}" onclick="tasiMasaSec('${id.replace(/'/g,"\\'")}')">
+        <strong>${mm.ad}${id===kaynakMasa?' (burası)':''}</strong>
+        <small>${altYazi}</small>
+      </button>`;
+    });
+    html += `</div>`;
+  });
+  html += `</div></div>`;
+  return html;
 }
 
 /* =========================================================
