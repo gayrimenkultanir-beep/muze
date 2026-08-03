@@ -2412,14 +2412,15 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .qr-karsilama .qr-btn-ghost:hover{ border-color:var(--brand) !important; box-shadow:var(--emboss) !important; }
 .qr-karsilama .qr-btn-ghost:active{ transform:translateY(1px); box-shadow:var(--inset) !important; }
 
-/* SADAKATE KAYDOL — gold premium buton (siyah değil) */
+/* SADAKATE KAYDOL — gold premium buton, metin rengi "Menüye geç" ile aynı
+   (--gold-text koyu kahveydi, altın-kahve zeminde neredeyse okunmuyordu) */
 .qr-karsilama .qr-btn-uye-ol{
   background:var(--grad-gold-btn) !important;
-  color:var(--gold-text) !important;
+  color:var(--brand-ink) !important;
   border:1px solid #8a6a47 !important; border-radius:12px !important;
   font-weight:900 !important; letter-spacing:.2px;
   box-shadow:var(--gold-btn-sh) !important;
-  text-shadow:0 1px 0 rgba(255,255,255,.45);
+  text-shadow:0 1px 1px rgba(0,0,0,.22);
   transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
 .qr-karsilama .qr-btn-uye-ol:hover{
@@ -4262,16 +4263,19 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .ka-ilk-bas{font-size:14px; font-weight:800; color:var(--brand-d); margin-bottom:4px}
 .ka-ilk-ack{font-size:12.5px; color:var(--ink-2); line-height:1.5}
 .ka-devir{background:var(--surface-2); border:1px solid var(--line); border-radius:13px; padding:14px 16px; margin-bottom:20px}
-.ka-devir-satir{display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--ink-2)}
-.ka-devir-satir strong{font-size:22px; font-weight:900; color:var(--ink)}
+/* Etiket uzun olunca ("Önceki vardiyadan devreden") yan yana (space-between) düzende
+   değer kısmına ("1.500,00 ₺") yeterli yer kalmıyor, sayı ile ₺ işareti arasında satır
+   kırılıyordu. Etiket üstte, büyük tutar altta — ikisi de kendi satırında, taşma yok. */
+.ka-devir-satir{display:flex; flex-direction:column; align-items:flex-start; gap:3px; font-size:14px; color:var(--ink-2)}
+.ka-devir-satir strong{font-size:22px; font-weight:900; color:var(--ink); white-space:nowrap}
 .ka-devir-not{font-size:11.5px; color:var(--ink-3); margin-top:6px; text-align:left}
 /* Devir nakit/bozukluk kırılımı (açılış devreden kutusu) */
 .ka-devir-kirilim{display:flex; gap:10px; margin-top:10px}
 .ka-devir-kirilim>span{flex:1; text-align:center; font-size:12.5px; color:var(--ink-2); background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:7px 8px}
 .ka-devir-kirilim>span b{display:block; font-size:15px; font-weight:900; color:var(--ink); margin-top:2px}
 /* İkili giriş — nakit + bozukluk yan yana */
-.ka-devir-ikili{display:flex; gap:12px}
-.ka-devir-ikili .ka-alan{flex:1; margin-bottom:8px}
+.ka-devir-ikili{display:flex; gap:12px; align-items:stretch}
+.ka-devir-ikili .ka-alan{flex:1; margin-bottom:8px; display:flex; flex-direction:column}
 .ka-teslim-bas{text-align:left; font-size:13px; font-weight:800; color:var(--ink); margin:2px 0 8px}
 .kk-devir-ikili{display:flex; gap:12px}
 .kk-devir-ikili .ka-alan{flex:1; margin-bottom:6px}
@@ -4282,7 +4286,12 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 }
 .ka-alan{text-align:left; margin-bottom:14px}
 .ka-alan label{display:block; font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:6px}
-.ka-input{width:100%; padding:14px 16px; border-radius:12px; border:1.5px solid var(--line); font-size:20px; font-weight:800; color:var(--ink); background:var(--surface-2); font-family:inherit; text-align:right}
+/* "Nakit" (tek satır) ile "Bozukluk (para üstü)" (iki satıra kaçabiliyor) yan yana
+   olunca etiketler farklı yükseklikte kalıyor, altlarındaki kutular hizasız
+   başlıyordu — sabit min-height ile ikisi de aynı çizgiden başlar. */
+.ka-devir-ikili .ka-alan label{min-height:34px}
+.ka-devir-ikili .ka-alan .para-input-wrap{margin-top:auto}
+.ka-input{width:100%; padding:14px 40px 14px 16px; border-radius:12px; border:1.5px solid var(--line); font-size:20px; font-weight:800; color:var(--ink); background:var(--surface-2); font-family:inherit; text-align:right}
 .ka-input:focus{border-color:var(--brand); outline:none}
 .ka-input-not{font-size:11.5px; color:var(--ink-3); margin-top:5px; line-height:1.4}
 .ka-fark{font-size:13px; font-weight:700; min-height:20px; margin-bottom:14px}
