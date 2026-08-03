@@ -5307,7 +5307,7 @@ body::after{
    ═══════════════════════════════════════════════════════════ */
 
 /* Temel: içerik alanındaki tüm butonlar (qr hariç) */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle),
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn),
 .bom button:not([class*="qr-"]),
 .ypm-ic button,.skm-ic button,.op-ic button,.ikm-ic button,.kg-ic button,.myp-ic button,.uf-ic button,.bldr-ic button,.kmpf-ic button,.pop-ic button,.fat-belge button{
   position:relative;
@@ -5330,7 +5330,7 @@ body::after{
   cursor:pointer;
 }
 /* glossy üst parlama (kabartma tepe ışığı) */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle)::after,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn)::after,
 .ypm-ic button::after,.skm-ic button::after,.fat-belge button::after{
   content:"";
   position:absolute; top:1px; left:8%; right:8%; height:42%;
@@ -5339,7 +5339,7 @@ body::after{
   pointer-events:none; z-index:1;
 }
 /* glare sweep (hover'da soldan sağa parıltı) */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle)::before,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn)::before,
 .ypm-ic button::before,.skm-ic button::before{
   content:"";
   position:absolute; inset:0 auto 0 -60%; width:35%; z-index:2;
@@ -5348,12 +5348,12 @@ body::after{
   transition:left .7s ease;
   pointer-events:none;
 }
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):hover::before,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):hover::before,
 .ypm-ic button:hover::before{ left:130%; }
 /* buton içeriği parıltının üstünde */
 .main button:not([class*="qr-"]):not(.nav-item) > *{ position:relative; z-index:3; }
 /* hover / active kabartma */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):hover,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):hover,
 .ypm-ic button:hover,.skm-ic button:hover,.fat-belge button:hover{
   transform:translateY(-2px);
   box-shadow:
@@ -5363,7 +5363,7 @@ body::after{
     0 3px 0 #7a611f,
     0 14px 24px rgba(67,42,25,.36);
 }
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):active,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):active,
 .ypm-ic button:active,.skm-ic button:active{
   transform:translateY(1px);
   box-shadow:
@@ -7682,7 +7682,7 @@ html, body{ max-width:100%; overflow-x:hidden; }
 /* ── 2) EVRENSEL GOLD 3D BUTON MODELİ → DÜZ ──
    İçerik alanındaki tüm butonlar (qr menü hariç). Gradyan + bevel
    + gloss katmanları kaldırılıp düz gold-outline butona indirildi. */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.on):not(.aktif),
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):not(.on):not(.aktif),
 .bom button:not([class*="qr-"]):not(.on):not(.aktif),
 .ypm-ic button:not(.on):not(.aktif), .skm-ic button:not(.on):not(.aktif), .op-ic button:not(.on):not(.aktif), .ikm-ic button:not(.on):not(.aktif), .kg-ic button:not(.on):not(.aktif),
 .myp-ic button:not(.on):not(.aktif), .uf-ic button:not(.on):not(.aktif), .bldr-ic button:not(.on):not(.aktif), .kmpf-ic button:not(.on):not(.aktif), .pop-ic button:not(.on):not(.aktif),
@@ -7695,20 +7695,20 @@ html, body{ max-width:100%; overflow-x:hidden; }
   transition:background .15s ease, border-color .15s ease, box-shadow .15s ease !important;
 }
 /* gloss (::after tepe ışığı) ve glare (::before parıltı) katmanları iptal */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle)::after,
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle)::before,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn)::after,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn)::before,
 .ypm-ic button::after, .skm-ic button::after, .fat-belge button::after,
 .ypm-ic button::before, .skm-ic button::before{
   display:none !important;
 }
 /* hover / active — kabarma yerine düz vurgu */
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.on):not(.aktif):hover,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):not(.on):not(.aktif):hover,
 .ypm-ic button:not(.on):hover, .skm-ic button:not(.on):hover, .fat-belge button:not(.on):hover{
   transform:none !important;
   background:var(--surface-2) !important;
   box-shadow:0 1px 3px rgba(45,29,18,.10) !important;
 }
-.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.on):not(.aktif):active,
+.main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):not(.on):not(.aktif):active,
 .ypm-ic button:not(.on):active, .skm-ic button:not(.on):active{
   transform:none !important;
   box-shadow:none !important;
