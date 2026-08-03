@@ -909,6 +909,12 @@ tr:last-child td{border-bottom:none}
 .tasi-kisi-btn small{font-weight:800; color:var(--ink-2)}
 .tasi-kisi-btn.yeni{color:var(--brand-d); border-style:dashed; justify-content:center}
 .tasi-geri{padding:10px; border-radius:10px; background:none; color:var(--ink-2); font-size:12.5px; font-weight:700; border:1px solid var(--line); width:100%}
+.tasi-yeni-kisi-input{width:100%; padding:13px 14px; border-radius:11px; border:1.5px solid var(--line-2); font-size:15px; font-family:inherit; margin-bottom:12px; box-sizing:border-box}
+.tasi-yeni-kisi-input:focus{outline:none; border-color:var(--brand)}
+.tasi-yeni-kisi-input.eksik{border-color:var(--danger); background:var(--danger-soft)}
+.tasi-yeni-kisi-btnrow{display:flex; gap:10px}
+.tasi-yeni-kisi-btnrow .tasi-geri{width:auto; flex:1}
+.tasi-onayla{flex:1.4; padding:10px; border-radius:10px; background:var(--brand); color:var(--brand-ink); font-size:13px; font-weight:800; border:none}
 @media(max-width:520px){
   .tasi-masa-grid{grid-template-columns:repeat(2,1fr)}
 }
@@ -1521,6 +1527,7 @@ tr:last-child td{border-bottom:none}
 .stoksec-sat:last-child{border-bottom:none}
 .stoksec-sat:active,.stoksec-sat:hover{background:var(--brand-soft)}
 .stoksec-sat-ad{font-size:13.5px; font-weight:700; color:var(--ink); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.stoksec-uzun-ad{font-size:11px; font-weight:500; color:var(--ink-3)}
 .stoksec-sat-birim{font-size:11px; font-weight:700; color:var(--brand-d); flex:none; background:var(--brand-soft); padding:2px 8px; border-radius:6px}
 .stoksec-bos{padding:12px 14px; font-size:12.5px; color:var(--ink-3); text-align:center; font-weight:600}
 .spp-stok-donus{font-size:11.5px; color:var(--cocoa); margin-top:8px; line-height:1.5; font-weight:700; background:var(--surface-2); border:1px solid var(--line); border-radius:9px; padding:9px 11px}
@@ -18293,7 +18300,7 @@ function kisiTasi(kaynakMasa, kisiIndex, hedefMasa){
   state.kasaMasa = hedefMasa;
 }
 /* Tek bir ürünü, hedef masadaki (yeni veya mevcut) bir kişiye taşı. hedefKisiIndex null/-1 → yeni kişi oluşturulur */
-function urunTasi(kaynakMasa, kalemId, hedefMasa, hedefKisiIndex){
+function urunTasi(kaynakMasa, kalemId, hedefMasa, hedefKisiIndex, yeniKisiAdi){
   const s1 = SESSIONS[kaynakMasa]; if(!s1) return;
   let kaynakKisiIdx=-1, kalem=null, kalemIdx=-1;
   s1.kisiler.forEach((k,ki)=>{
@@ -18311,7 +18318,7 @@ function urunTasi(kaynakMasa, kalemId, hedefMasa, hedefKisiIndex){
   if(s1.kisiler[kaynakKisiIdx].kalemler.length===0) s1.kisiler.splice(kaynakKisiIdx,1);
 
   if(hedefKisiRef) hedefKisiRef.kalemler.push(kalem);
-  else s2.kisiler.push({ad:"Misafir "+(s2.kisiler.length+1), kalemler:[kalem]});
+  else s2.kisiler.push({ad:(yeniKisiAdi&&yeniKisiAdi.trim())?yeniKisiAdi.trim():("Misafir "+(s2.kisiler.length+1)), kalemler:[kalem]});
   s2.acik = true;
   if(s1.kisiler.length===0) s1.acik = false;
   note("✓ "+kalem.ad+" → "+masaEtiket(hedefMasa)+" taşındı");
@@ -18340,8 +18347,28 @@ function tasiMasaSec(hedefMasa){
 }
 function tasiKisiSec(hedefKisiIndex){
   const tp = state.tasiPanel; if(!tp) return;
+  if(hedefKisiIndex===-1){
+    // "+ Yeni kişi" — direkt "Misafir" olarak taşımak yerine önce isim sor
+    tp.yeniKisiModu = true;
+    tasiRender();
+    setTimeout(()=>{ const i=document.getElementById("tasiYeniKisiAd"); if(i) i.focus(); }, 50);
+    return;
+  }
   urunTasi(tp.kaynakMasa, tp.kalemId, tp.hedefMasa, hedefKisiIndex);
   tasiKapat(); go("masalar");
+}
+function tasiYeniKisiOnayla(){
+  const tp = state.tasiPanel; if(!tp) return;
+  const inp = document.getElementById("tasiYeniKisiAd");
+  const adi = inp ? inp.value.trim() : "";
+  if(!adi){ if(inp){ inp.classList.add("eksik"); inp.focus(); } return; }
+  urunTasi(tp.kaynakMasa, tp.kalemId, tp.hedefMasa, -1, adi);
+  tasiKapat(); go("masalar");
+}
+function tasiYeniKisiVazgec(){
+  const tp = state.tasiPanel; if(!tp) return;
+  tp.yeniKisiModu = false;
+  tasiRender();
 }
 function tasiGeri(){
   const tp = state.tasiPanel; if(!tp) return;
@@ -18356,6 +18383,19 @@ function tasiPanelHtml(){
 
   if(tp.tip==="urun" && tp.adim==="kisi"){
     const s2 = SESSIONS[tp.hedefMasa];
+    if(tp.yeniKisiModu){
+      html += `<div class="tasi-p-govde">
+        <div class="tasi-p-alt">Hedef: <strong>${masaEtiket(tp.hedefMasa)}</strong> · yeni kişinin adı?</div>
+        <input class="tasi-yeni-kisi-input" id="tasiYeniKisiAd" type="text" placeholder="örn. Ahmet, Masa önü…"
+          oninput="this.classList.remove('eksik')"
+          onkeydown="if(event.key==='Enter') tasiYeniKisiOnayla()">
+        <div class="tasi-yeni-kisi-btnrow">
+          <button class="tasi-geri" onclick="tasiYeniKisiVazgec()">← Vazgeç</button>
+          <button class="tasi-onayla" onclick="tasiYeniKisiOnayla()">✓ Bu isme taşı</button>
+        </div>
+      </div></div>`;
+      return html;
+    }
     html += `<div class="tasi-p-govde">
       <div class="tasi-p-alt">Hedef: <strong>${masaEtiket(tp.hedefMasa)}</strong> · kime taşınsın?</div>
       <div class="tasi-kisi-liste">`;
@@ -22964,6 +23004,8 @@ function sppStokSec(kod){
   const sm=g("sppStokMik"); if(sm!==undefined) p.stokMiktar=sm;
   p.stokKod=kod;
   if(kod && !p.stokMiktar) p.stokMiktar="1";
+  // Seçenek adı henüz girilmemişse, bağlanan stoğun kısa (Qr Seçenek) adını öner
+  if(kod && STOCK[kod] && !(p.ad||"").trim()) p.ad = stokGosterimAdi(STOCK[kod], true);
   sppCiz();
 }
 /* Seçenek stok miktarının dönüşüm bilgisi: "30 gr · her satışta düşer · 1 koli ≈ 400 satış" */
@@ -23045,7 +23087,7 @@ function sppCiz(){
     <div class="spp-etiket">📦 Stok kartı bağlantısı <span style="font-weight:400;color:var(--ink-3)">(seçilince her satışta düşer · boş = stoksuz)</span></div>
     <div class="spp-row">
       <div style="flex:1.6">
-        ${stokSeciciHtml("sppStokSecici", p.stokKod, "sppStokSec", "🔍 Stok ara / seç (yok)…")}
+        ${stokSeciciHtml("sppStokSecici", p.stokKod, "sppStokSec", "🔍 Stok ara / seç (yok)…", true)}
       </div>
       ${p.stokKod&&STOCK[p.stokKod]?`<div style="flex:1" class="spp-mik-wrap">
         <input class="spp-input" id="sppStokMik" type="number" inputmode="decimal" min="0" value="${p.stokMiktar||''}" placeholder="miktar" oninput="sppStokMikCanli()">
@@ -23053,7 +23095,7 @@ function sppCiz(){
       </div>`:''}
     </div>
     ${p.stokKod&&STOCK[p.stokKod]?`<div class="spp-stok-donus" id="sppStokDonus">${sppStokDonusMetin(p)}</div>`:''}
-    ${p.stokKod&&STOCK[p.stokKod]?`<div class="spp-stok-not">✓ Bu seçenek seçilince <strong>${STOCK[p.stokKod].ad}</strong> stoğundan düşer. Değişiklik bu seçeneği kullanan <strong>tüm ürünlere</strong> yansır.${uomAl(STOCK[p.stokKod]).seviyeler.length?` <span style="color:var(--brand-d)">· 1 ${uomAl(STOCK[p.stokKod]).seviyeler[0].ad} = ${uomTabanCarpani(uomAl(STOCK[p.stokKod]),0).toLocaleString('tr')} ${uomAl(STOCK[p.stokKod]).tabanBirim}</span>`:''}</div>`:''}
+    ${p.stokKod&&STOCK[p.stokKod]?`<div class="spp-stok-not">✓ Bu seçenek seçilince <strong>${stokGosterimAdi(STOCK[p.stokKod],true)}</strong> stoğundan düşer. Değişiklik bu seçeneği kullanan <strong>tüm ürünlere</strong> yansır.${uomAl(STOCK[p.stokKod]).seviyeler.length?` <span style="color:var(--brand-d)">· 1 ${uomAl(STOCK[p.stokKod]).seviyeler[0].ad} = ${uomTabanCarpani(uomAl(STOCK[p.stokKod]),0).toLocaleString('tr')} ${uomAl(STOCK[p.stokKod]).tabanBirim}</span>`:''}</div>`:''}
     <div class="spp-btn-row">
       <button class="spp-iptal" onclick="sppKapat()">İptal</button>
       <button class="spp-onayla" onclick="sppOnayla()">${p.mod==='ekle'?'Ekle':'Kaydet'}</button>
@@ -23776,11 +23818,17 @@ function renderUrunForm(){
 /* ══ ARANABİLİR STOK SEÇİCİ (ortak bileşen) ══
    <select> yerine: arama input'u + açılır filtreli liste. Odak korunur.
    kullanım: stokSeciciHtml(alanId, seciliKod, "onSecFn") → HTML
-   seçim yapılınca window[onSecFn](kod) çağrılır. */
-function stokSeciciHtml(alanId, seciliKod, onSecFn, placeholder){
+   seçim yapılınca window[onSecFn](kod) çağrılır.
+   kisaAd=true: seçenek/seçenek grubu oluştururken stok kartının UZUN/markalı adı yerine
+   "Qr Seçenek Adı" (kısa ad) gösterilir/aranır — o alan boşsa uzun ada düşülür. */
+function stokGosterimAdi(s, kisaAd){
+  if(!s) return "";
+  return (kisaAd && s.qrAd && s.qrAd.trim()) ? s.qrAd.trim() : (s.ad||"");
+}
+function stokSeciciHtml(alanId, seciliKod, onSecFn, placeholder, kisaAd){
   const secili = seciliKod && STOCK[seciliKod];
-  const gosterim = secili ? STOCK[seciliKod].ad+" ("+(uomAl(STOCK[seciliKod]).tabanBirim||"adet")+")" : "";
-  return `<div class="stoksec" id="${alanId}_wrap" data-onsec="${onSecFn}">
+  const gosterim = secili ? stokGosterimAdi(STOCK[seciliKod], kisaAd)+" ("+(uomAl(STOCK[seciliKod]).tabanBirim||"adet")+")" : "";
+  return `<div class="stoksec" id="${alanId}_wrap" data-onsec="${onSecFn}" data-kisaad="${kisaAd?'1':'0'}">
     <div class="stoksec-inp-wrap">
       <input class="stoksec-inp" id="${alanId}_inp" type="text" autocomplete="off"
         value="${(gosterim).replace(/"/g,'&quot;')}"
@@ -23802,19 +23850,25 @@ function stokSeciciFiltre(alanId, ilk){
   const inp=document.getElementById(alanId+"_inp");
   const liste=document.getElementById(alanId+"_liste");
   if(!inp||!liste) return;
+  const wrap=document.getElementById(alanId+"_wrap");
+  const kisaAd = wrap && wrap.getAttribute("data-kisaad")==="1";
   // ilk açılışta input'ta seçili ürünün adı yazılıysa onu arama sayma
   const q = (ilk ? "" : inp.value).trim().toLocaleLowerCase("tr-TR");
   liste.style.display="block";
   let kartlar = Object.entries(STOCK);
-  if(q) kartlar = kartlar.filter(([kod,s])=>(s.ad||"").toLocaleLowerCase("tr-TR").includes(q) || (s.no||"").toLocaleLowerCase("tr-TR").includes(q));
-  kartlar.sort((a,b)=>a[1].ad.localeCompare(b[1].ad,"tr"));
-  const wrap=document.getElementById(alanId+"_wrap");
+  if(q) kartlar = kartlar.filter(([kod,s])=>
+    stokGosterimAdi(s,kisaAd).toLocaleLowerCase("tr-TR").includes(q) ||
+    (s.ad||"").toLocaleLowerCase("tr-TR").includes(q) ||
+    (s.no||"").toLocaleLowerCase("tr-TR").includes(q));
+  kartlar.sort((a,b)=>stokGosterimAdi(a[1],kisaAd).localeCompare(stokGosterimAdi(b[1],kisaAd),"tr"));
   const onSec=wrap?wrap.getAttribute("data-onsec"):"";
   if(!kartlar.length){ liste.innerHTML=`<div class="stoksec-bos">Eşleşen stok yok</div>`; return; }
   liste.innerHTML = kartlar.slice(0,60).map(([kod,s])=>{
     const u=uomAl(s);
+    const gAd = stokGosterimAdi(s,kisaAd);
+    const uzunFarkli = kisaAd && s.qrAd && s.qrAd.trim() && s.qrAd.trim()!==s.ad;
     return `<div class="stoksec-sat" onclick="stokSeciciSecim('${alanId}','${kod.replace(/'/g,"\\'")}')">
-      <span class="stoksec-sat-ad">${s.ad}</span>
+      <span class="stoksec-sat-ad">${gAd}${uzunFarkli?` <small class="stoksec-uzun-ad">(${s.ad})</small>`:''}</span>
       <span class="stoksec-sat-birim">${u.tabanBirim}</span>
     </div>`;
   }).join("") + (kartlar.length>60?`<div class="stoksec-bos">${kartlar.length-60} sonuç daha… aramayı daraltın</div>`:"");
@@ -23822,8 +23876,12 @@ function stokSeciciFiltre(alanId, ilk){
 function stokSeciciSecim(alanId, kod){
   const wrap=document.getElementById(alanId+"_wrap");
   const onSec=wrap?wrap.getAttribute("data-onsec"):"";
+  const kisaAd = wrap && wrap.getAttribute("data-kisaad")==="1";
   const liste=document.getElementById(alanId+"_liste");
   if(liste) liste.style.display="none";
+  // seçilen kartın gösterim adını input'a yaz (kısa mod aktifse QR adı ile)
+  const inp=document.getElementById(alanId+"_inp");
+  if(inp && kod && STOCK[kod]) inp.value = stokGosterimAdi(STOCK[kod],kisaAd)+" ("+(uomAl(STOCK[kod]).tabanBirim||"adet")+")";
   if(onSec && typeof window[onSec]==="function") window[onSec](kod);
 }
 /* dışarı tıklanınca açık listeleri kapat */
@@ -27428,7 +27486,7 @@ function stokKartCsvYukle(ev){
 function stokKartEkle(){
   state._stokModal = {
     mod:"yeni", kod:null,
-    ad:"", mevcut:"0", birim:"adet", kritik:"0",
+    ad:"", qrAd:"", mevcut:"0", birim:"adet", kritik:"0",
     kategori:"Hammadde",
     kcal:"", aktif:true, subeDisAlim:false,
     gorsel:null,
@@ -27456,7 +27514,7 @@ function stokKartDuzenle(kod){
   const satisUst = (satisTaban!=null&&satisTaban>0) ? +(satisTaban*ustCarpan).toFixed(2) : "";
   state._stokModal = {
     mod:"duzenle", kod:kod,
-    ad:s.ad||"", mevcut:String(s.mevcut||0), birim:s.birim||"adet", kritik:String(s.kritik||0),
+    ad:s.ad||"", qrAd:s.qrAd||"", mevcut:String(s.mevcut||0), birim:s.birim||"adet", kritik:String(s.kritik||0),
     kategori:s.kategori||"Hammadde",
     kcal:(s.kcal!=null?String(s.kcal):""), aktif:(s.aktif!==false),
     subeDisAlim:!!s.subeDisAlim,
@@ -27611,6 +27669,7 @@ function stokModalOku(){
   const p=state._stokModal; if(!p) return;
   const g=id=>{ const e=document.getElementById(id); return e?e.value:undefined; };
   const ad=g("skmAd"); if(ad!==undefined) p.ad=ad;
+  const qad=g("skmQrAd"); if(qad!==undefined) p.qrAd=qad;
   const ack=g("skmAciklama"); if(ack!==undefined) p.aciklama=ack;
   const kr=g("skmKritik"); if(kr!==undefined) p.kritik=kr;
   const kc=g("skmKcal"); if(kc!==undefined) p.kcal=kc;
@@ -27641,6 +27700,7 @@ function stokModalKaydet(){
   const eski = STOCK[p.kod] || {};
   const veri={
     ad: ad,
+    qrAd: (p.qrAd||"").trim(),   // QR seçenek adı — seçenek/seçenek grubu oluştururken kısa/markasız isim olarak listelenir (boşsa uzun ad kullanılır)
     mevcut: (p.mod==="yeni") ? 0 : (eski.mevcut||0),   // stok miktarı modalda düzenlenmez (sayım/sipariş ile değişir)
     birim: p.birim||"adet",
     kategori: p.kategori||"Hammadde",
@@ -27845,6 +27905,11 @@ function stokModalCiz(){
           <label class="skm-lbl">Stok kartı adı *</label>
           <input class="skm-input" id="skmAd" type="text" value="${esc(p.ad)}" placeholder="örn. Antep fıstığı"
             oninput="this.classList.remove('eksik'); stokModalAdDegisti(this.value)">
+        </div>
+        <div class="skm-alan">
+          <label class="skm-lbl">Qr Seçenek Adı <small>· seçenek / seçenek grubu eklerken listelenecek kısa isim — boş bırakılırsa stok kartı adı kullanılır</small></label>
+          <input class="skm-input" id="skmQrAd" type="text" value="${esc(p.qrAd||'')}" placeholder="örn. Antep Fıstığı (uzun/markalı ad yerine kısa)"
+            oninput="stokModalOku()">
         </div>
         <div class="skm-alan">
           <label class="skm-lbl">Kategori</label>
