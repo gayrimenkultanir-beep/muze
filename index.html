@@ -271,30 +271,30 @@ input,select{font-family:inherit; font-size:15px}
 #app.on{display:flex}
 
 .topbar{
-  height:60px; flex:none;
+  height:50px; flex:none;
   background:var(--surface); border-bottom:1px solid var(--line);
-  display:flex; align-items:center; gap:14px; padding:0 18px;
+  display:flex; align-items:center; gap:10px; padding:0 14px;
 }
-.tb-logo{font-weight:800; font-size:18px; letter-spacing:-.3px; display:flex; align-items:center; gap:8px}
+.tb-logo{font-weight:800; font-size:15.5px; letter-spacing:-.3px; display:flex; align-items:center; gap:7px}
 /* Hamburger — masaüstünde GİZLİ, sadece mobilde görünür (aşağıda @media) */
-.tb-ham{display:none; background:var(--brand); color:#fff; border:none; width:40px; height:40px; border-radius:10px; font-size:20px; line-height:1; cursor:pointer; align-items:center; justify-content:center; flex:none}
+.tb-ham{display:none; background:var(--brand); color:#fff; border:none; width:34px; height:34px; border-radius:9px; font-size:17px; line-height:1; cursor:pointer; align-items:center; justify-content:center; flex:none}
 .tb-ham:active{transform:scale(.94)}
 /* Menü karartısı (backdrop) — sadece mobilde drawer açıkken görünür */
 .nav-backdrop{display:none; position:fixed; inset:0; background:rgba(45,29,18,.5); z-index:5; opacity:0; transition:opacity .28s}
 .nav-backdrop.acik{opacity:1}
-.tb-logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand-d));display:grid;place-items:center;font-size:17px}
+.tb-logo .mark{width:25px;height:25px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand-d));display:grid;place-items:center;font-size:14px}
 .tb-branch{
-  font-size:13px; color:var(--ink-2); padding:5px 12px;
+  font-size:12px; color:var(--ink-2); padding:4px 10px;
   background:var(--surface-2); border-radius:99px; font-weight:600;
 }
 .tb-spacer{flex:1}
 .role-chip{
-  display:flex; align-items:center; gap:8px;
-  padding:6px 14px 6px 8px; border-radius:99px;
-  background:var(--surface-2); font-weight:600; font-size:13px;
+  display:flex; align-items:center; gap:7px;
+  padding:5px 12px 5px 7px; border-radius:99px;
+  background:var(--surface-2); font-weight:600; font-size:12px;
 }
-.role-chip .rc-dot{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:14px}
-.tb-out{padding:8px 14px; border-radius:10px; font-weight:600; font-size:13px; color:var(--ink-2)}
+.role-chip .rc-dot{width:21px;height:21px;border-radius:6px;display:grid;place-items:center;color:#fff;font-size:12px}
+.tb-out{padding:7px 12px; border-radius:9px; font-weight:600; font-size:12px; color:var(--ink-2)}
 .tb-out:hover{background:var(--danger-soft); color:var(--danger)}
 
 .body{flex:1; display:flex; min-height:0}
@@ -1091,14 +1091,12 @@ tr:last-child td{border-bottom:none}
 .bf-donus-metin{font-size:11px; font-weight:600; color:var(--cocoa); line-height:1.35; background:var(--brand-soft); border-radius:7px; padding:4px 8px; white-space:normal}
 .bf-donus-yok{font-size:11px; font-weight:500; color:var(--ink-3); font-style:italic}
 .bsip-satir .bf-mik{display:flex; flex-direction:column; align-items:flex-start; gap:1px}
-@media(max-width:820px){
+@media(min-width:721px) and (max-width:820px){
   .bsip-head .bf-donus,.bsip-satir .bf-donus{display:none}
   .bsip-head,.bsip-satir{grid-template-columns:1.6fr 1fr 0.5fr 1.05fr 0.9fr !important}
 }
-@media(max-width:560px){
-  .bsip-head,.bsip-satir{grid-template-columns:1.5fr 1fr 1.05fr 0.85fr !important}
-  .bsip-head .bf-kdv,.bsip-satir .bf-kdv{display:none}
-}
+/* Not: KDV sütunu artık gizlenmiyor — mobilde kart görünümüne geçiliyor (aşağıda),
+   kartta her alanın kendi kutusu olduğu için yatay yer kaygısı kalmadı. */
 /* Stok durum ekranı — 7 sütun */
 .sdurum-head,.sdurum-satir{grid-template-columns:1.4fr 1fr 0.5fr 0.8fr 0.9fr 1fr 1fr !important}
 .sd-mik,.sd-kdv,.sd-bfiyat,.sd-tfiyat,.sd-tuk,.sd-alin{font-size:12.5px}
@@ -1139,9 +1137,33 @@ tr:last-child td{border-bottom:none}
   }
   .sdurum-satir .sd-fiyatyok{font-size:13.5px; font-weight:400; font-style:italic; color:var(--ink-3)}
 }
+/* Sipariş Ver kartı (mobil) — bfiyat-satir'in genel STOK/KDV/ALIŞ/SATIŞ ızgarası
+   burada uymuyor çünkü bu ekranın alanları farklı: Stok, Birim Dönüşümü, KDV, Satış, Ekle.
+   Genel kuralla çakışıp boş kutular/kaymalar oluşmasın diye HER alana kendi konumu
+   burada tek tek, eksiksiz veriliyor (aynı kural genel bloktan sonra geldiği için kazanır). */
 @media(max-width:720px){
   .bsip-satir{grid-template-columns:1fr 1fr !important}
-  .bsip-satir .bf-islem{grid-column:1/3; justify-content:flex-start; margin-top:4px}
+  .bsip-satir .bf-ad{grid-column:1/3; grid-row:1}
+  .bsip-satir .bf-mik{grid-column:1; grid-row:2}
+  .bsip-satir .bf-kdv{grid-column:2; grid-row:2}
+  .bsip-satir .bf-donus{grid-column:1/3; grid-row:3}
+  .bsip-satir .bf-satis{grid-column:1/3; grid-row:4}
+  .bsip-satir .bf-islem{grid-column:1/3; grid-row:5; justify-content:flex-start; margin-top:0}
+  /* bf-donus kutu görünümü almasın (uzun açıklama metni tam genişlikte, düz bant olarak kalsın) */
+  .bsip-satir .bf-donus{
+    display:flex; min-height:0; background:none; border:none; padding:0;
+  }
+  /* satış fiyatı tam genişlikte, öne çıkan tek satır (etiket solda, fiyat sağda) */
+  .bsip-satir .bf-satis{
+    flex-direction:row; align-items:center; justify-content:space-between;
+    min-height:0; padding:13px 16px;
+  }
+  /* ekle butonu kutusu: kart değil, düz satır — büyük boş alan kalmasın */
+  .bsip-satir .bf-islem{
+    background:none; border:none; padding:0; min-height:0; align-items:stretch;
+  }
+  .bsip-ekle{width:100%; padding:13px; font-size:14px; text-align:center; border-radius:10px}
+  .bayi-sepette-rozet{display:block; margin-bottom:8px; text-align:center}
 }
 /* İsteğe bağlı adetli seçenek */
 .opt-adetli{display:flex; align-items:center; gap:10px; cursor:default}
@@ -1684,9 +1706,46 @@ tr:last-child td{border-bottom:none}
 /* ══ Sevk İrsaliyesi önizleme modalı ══ */
 .irs-modal-bg{position:fixed; inset:0; z-index:300; background:rgba(20,10,20,.55); display:flex; align-items:flex-start; justify-content:center; padding:24px 16px; overflow-y:auto}
 .irs-modal-ic{background:#fff; border-radius:16px; max-width:760px; width:100%; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; margin:auto}
-.irs-arac-bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; background:var(--surface-2); border-bottom:1px solid var(--line)}
-.irs-arac-baslik{font-size:15px; font-weight:800; color:var(--cocoa)}
-.irs-arac-btnlar{display:flex; gap:8px}
+.irs-arac-bar{display:flex; flex-direction:column; gap:10px; padding:16px 20px; background:var(--brand-d); border-bottom:none}
+.irs-arac-baslik{font-size:15px; font-weight:800; color:#fff}
+.irs-arac-ust{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.irs-arac-btnlar{display:flex; align-items:center; justify-content:space-between; gap:8px}
+/* Kapat / Faturaya geç / İrsaliyeye geç / Yazdır — bu butonlar #irsModalWrap altında,
+   yani .main dışında render ediliyor; .main öneki gerektiren genel .gka-* kuralları
+   buraya hiç uygulanmıyordu (metin/renk/dolgu tamamen kayboluyordu). Kendi kendine
+   yeten, öneksiz bir tanım: */
+.irs-arac-bar button.gka-excel{
+  background:rgba(255,255,255,.12) !important; color:#fff !important;
+  border:1.5px solid rgba(255,255,255,.55) !important;
+  border-radius:10px !important; padding:9px 15px !important;
+  font-size:13px !important; font-weight:800 !important;
+  box-shadow:none !important; text-shadow:none !important; cursor:pointer;
+}
+.irs-arac-bar button.gka-excel:hover{
+  background:rgba(255,255,255,.22) !important; border-color:#fff !important;
+}
+/* Yazdır — koyu kahve zemin üzerinde öne çıkan, ters (açık dolgu) birincil buton */
+.irs-arac-bar button.gka-irsaliye{
+  background:#fff !important; color:var(--brand) !important;
+  border:1px solid #fff !important; border-radius:10px !important; padding:9px 15px !important;
+  font-size:13px !important; font-weight:800 !important;
+  box-shadow:none !important; text-shadow:none !important; cursor:pointer;
+}
+.irs-arac-bar button.gka-irsaliye:hover{ filter:brightness(.96) !important }
+/* Sevk İrsaliyesi araç çubuğu .gka-* değil .btn-primary/.btn-ghost kullanıyor;
+   .btn-primary marka kahvesiyle dolu olduğu için yeni koyu kahve başlıkta
+   neredeyse görünmez oluyordu — aynı ters (beyaz dolgu) mantığı burada da uygulanır. */
+.irs-arac-bar .btn-primary{
+  background:#fff !important; color:var(--brand) !important; border:1px solid #fff !important;
+}
+.irs-arac-bar .btn-primary:hover{ filter:brightness(.96) !important }
+.irs-arac-bar .btn-ghost{
+  background:rgba(255,255,255,.12) !important; color:#fff !important;
+  border:1.5px solid rgba(255,255,255,.55) !important;
+}
+.irs-arac-bar .btn-ghost:hover{
+  background:rgba(255,255,255,.22) !important; border-color:#fff !important;
+}
 .irs-kagit{padding:44px 48px; color:#1a1a1a; background:#fff}
 .irs-logo-orta{display:flex; flex-direction:column; align-items:center; gap:0; margin-bottom:14px}
 .irs-logo{width:56px; height:56px; object-fit:contain; flex:none; margin-bottom:-2px}
@@ -1702,8 +1761,10 @@ tr:last-child td{border-bottom:none}
 .irs-taraf-etiket{font-size:10px; font-weight:800; color:#71492d; letter-spacing:1px; margin-bottom:5px}
 .irs-taraf-unvan{font-size:14px; font-weight:800; margin-bottom:4px}
 .irs-taraf-satir{font-size:11.5px; color:#444; line-height:1.6}
-.irs-tablo{width:100%; border-collapse:collapse; margin-bottom:14px}
-.irs-tablo th{background:#2d1d12; color:#fff; font-size:11px; padding:9px 10px; text-align:left; font-weight:700}
+.irs-tablo{width:100%; border-collapse:collapse; margin-bottom:0}
+.irs-tablo-wrap{overflow-x:auto; -webkit-overflow-scrolling:touch; margin-bottom:6px}
+.irs-kaydir-ipucu{display:none; font-size:11px; color:var(--ink-3); text-align:center; margin:-2px 0 14px}
+.irs-tablo th{background:#2d1d12; color:#fff; font-size:11px; padding:9px 10px; text-align:left; font-weight:700; white-space:nowrap}
 .irs-tablo td{padding:9px 10px; border-bottom:1px solid #eee; font-size:12.5px}
 .irs-tablo .irs-sira{width:30px; text-align:center; color:#999}
 .irs-tablo .irs-kod{width:88px; font-size:11px; color:#777; font-weight:700}
@@ -1716,6 +1777,19 @@ tr:last-child td{border-bottom:none}
 .irs-tablo tfoot td{border-top:2px solid #2d1d12; border-bottom:none; font-weight:800; background:#faf4ec}
 .irs-toplam-lbl{text-align:right}
 .irs-bos{text-align:center; color:#999; padding:18px}
+@media(max-width:600px){
+  .irs-kagit{padding:22px 16px}
+  .irs-taraflar{gap:10px}
+  .irs-taraf{padding:10px 12px}
+  .irs-tablo th,.irs-tablo td{padding:7px 8px; font-size:11.5px}
+  .irs-tablo .irs-kod{width:70px}
+  .irs-tablo .irs-icerik{width:88px}
+  .irs-tablo .irs-birim,.irs-tablo .irs-miktar{width:52px}
+  /* Tablo hâlâ ekrandan geniş olabiliyor (Stok No + Malın Cinsi + Birim İçeriği + Birim + Miktar) —
+     sütunlar kırpılıp kaybolmasın diye .irs-tablo-wrap yatay kaydırılabilir; kullanıcı bunu
+     fark etsin diye küçük bir ipucu gösterilir. */
+  .irs-kaydir-ipucu{display:block}
+}
 .irs-not{font-size:10.5px; color:#888; font-style:italic; margin-bottom:24px; border-left:3px solid #71492d; padding-left:10px}
 .irs-imza-blok{display:flex; gap:40px; margin-top:34px}
 .irs-imza{flex:1; text-align:center}
@@ -3693,7 +3767,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .bayi-odendi-rozet{font-size:12px; font-weight:800; color:var(--ok); background:var(--ok-soft); padding:6px 12px; border-radius:99px}
 .bayi-sepet-baslik .bsip-excel{margin-left:auto}
 /* Sepet sütunlu tablo */
-.bsepet-tablo{margin-bottom:12px; max-height:280px; overflow-y:auto; border:1px solid var(--line); border-radius:11px}
+.bsepet-tablo{margin-bottom:12px; max-height:280px; overflow-y:auto; overflow-x:hidden; border:1px solid var(--line); border-radius:11px}
 .bsepet-thead,.bsepet-trow{display:grid; grid-template-columns:1.8fr 1.3fr 1fr 0.9fr 1fr 0.4fr; gap:8px; align-items:center; padding:9px 12px}
 .bsepet-thead{background:var(--surface-2); font-size:10.5px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.3px; position:sticky; top:0; z-index:2; border-bottom:1px solid var(--line)}
 .bsepet-trow{border-bottom:1px solid var(--line); font-size:13px}
@@ -3708,16 +3782,26 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .bsc-sil{justify-self:end}
 .bayi-sip-tablo{margin-bottom:12px}
 .bayi-sip-tablo .bsepet-trow.bayi-kalem-silinmis{opacity:.55; background:var(--err-soft,#fdeeee)}
-.bayi-sip-tablo-sube .bsepet-thead, .bayi-sip-tablo-sube .bsepet-trow{grid-template-columns:1.8fr 1.3fr 1fr 0.9fr 1fr}
+@media(min-width:721px){
+  .bayi-sip-tablo-sube .bsepet-thead, .bayi-sip-tablo-sube .bsepet-trow{grid-template-columns:1.8fr 1.3fr 1fr 0.9fr 1fr}
+}
+/* Mobilde sipariş kalemi kartı: ad/görsel üstte tam genişlik, içerik pili altında,
+   birim fiyat + miktar yan yana, tutar tam genişlik sağa yaslı, düzenle butonu da
+   normal akışta tam genişlik sağda — hiçbir eleman mutlak konumlanmıyor, üst üste binmez. */
 @media(max-width:720px){
   .bsepet-thead{display:none}
-  .bsepet-trow{grid-template-columns:1fr auto auto; gap:4px 8px; padding:10px}
-  .bsc-ad{grid-column:1/4; margin-bottom:2px}
-  .bsc-icerik{grid-column:1; justify-self:start}
-  .bsc-fiyat{grid-column:2; text-align:center}
-  .bsc-mik{grid-column:1; justify-self:start; font-size:12px}
-  .bsc-tutar{grid-column:2/3}
-  .bsc-sil{grid-column:3; grid-row:2/4}
+  .bsepet-trow{
+    grid-template-columns:1fr 1fr; grid-auto-rows:auto;
+    row-gap:6px; column-gap:8px; padding:12px;
+    align-items:start;
+  }
+  .bsc-ad{grid-column:1/3}
+  .bsc-ad strong{white-space:normal; overflow:visible; text-overflow:clip; line-height:1.3}
+  .bsc-icerik{grid-column:1/3; justify-self:start}
+  .bsc-fiyat{grid-column:1; text-align:left}
+  .bsc-mik{grid-column:2; text-align:right; padding-top:1px}
+  .bsc-tutar{grid-column:1/3; text-align:right; padding-top:2px; border-top:1px dashed var(--line)}
+  .bsc-sil{grid-column:1/3; justify-self:end}
 }
 .bsepet-gorsel{flex:0 0 36px; width:36px; height:36px; border-radius:9px; overflow:hidden; background:var(--surface); border:1px solid var(--line); display:grid; place-items:center}
 .bsepet-gorsel img{width:100%; height:100%; object-fit:cover; display:block}
@@ -5420,32 +5504,41 @@ body::after{
 }
 /* ═══════════════════════════════════════════════════════════
    MOBİL — ÜST BAR (topbar)
-   Dar ekranda logo + şube + rol çipi + Çıkış sığmıyordu;
-   Çıkış sağdan kesiliyordu. Çıkış EN ÖNEMLİ eleman — asla
-   küçülmez/kaybolmaz. Şube etiketi ve rol çipi kısaltılır.
+   Eskiden tek satıra ☰ + logo + şube etiketi + rol çipi + Çıkış hepsi
+   sığdırılmaya çalışılıyordu; hepsi aşırı kısaltılıp "Mi...", "Tüm ş...",
+   "Genel..." gibi okunaksız kırpılmış metinler ortaya çıkıyordu.
+   Artık iki satır: 1) ☰ + logo ... Çıkış (her zaman net görünür)
+                    2) Şube etiketi + rol çipi (artık kendi satırında,
+                       kısaltmaya gerek kalmadan tam okunur)
    ═══════════════════════════════════════════════════════════ */
 @media(max-width:560px){
-  .topbar{ padding:0 10px!important; gap:8px!important }
-  /* logo küçülsün, wordmark gerekirse kısalsın */
-  .topbar .tb-logo{ font-size:19px!important; gap:7px!important; flex-shrink:1; min-width:0 }
-  .topbar .tb-logo .mark:not(.mark-foto){ width:32px!important; height:32px!important; font-size:18px!important }
+  .topbar{
+    height:auto!important; flex-wrap:wrap; padding:10px 12px!important; gap:8px 10px!important;
+    row-gap:8px!important;
+  }
+  /* 1. satır: ☰ (sabit) — logo (kalan alanı doldurur, bu yüzden şube/rol
+     çipine yer kalmaz ve onlar otomatik 2. satıra düşer) — Çıkış (sabit) */
+  .topbar .tb-ham{ order:1; flex:0 0 auto }
+  .topbar .tb-logo{
+    order:2; flex:1 1 auto; min-width:0; font-size:17px!important; gap:7px!important;
+  }
+  .topbar .tb-logo .mark:not(.mark-foto){ width:30px!important; height:30px!important; font-size:16px!important }
   #tbWordmark{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-  /* şube etiketi daralabilir, taşarsa ... ile kesilir */
-  .topbar .tb-branch{ font-size:11px!important; padding:4px 9px!important; flex-shrink:1; min-width:0;
-    max-width:88px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
-  /* rol çipi de daralabilir */
-  .role-chip{ flex-shrink:1; min-width:0; font-size:11px; padding:4px 8px!important }
-  #roleLabel{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:70px }
-  /* ÇIKIŞ — asla küçülmez, asla kesilmez, her zaman görünür */
-  .topbar .tb-out{ flex-shrink:0!important; padding:7px 14px!important; font-size:13px!important; white-space:nowrap }
+  .topbar .tb-spacer{ display:none!important }
+  .topbar .tb-out{ order:3; flex:0 0 auto!important; padding:8px 15px!important; font-size:13px!important; white-space:nowrap }
+  /* 2. satır: şube etiketi + rol çipi — artık tüm genişlik onların,
+     kısaltma gerekmiyor, tam metin okunur */
+  .topbar .tb-branch{
+    order:4; flex:0 1 auto!important; min-width:0; font-size:12.5px!important; padding:6px 11px!important;
+    max-width:none!important; overflow:visible; text-overflow:clip; white-space:nowrap;
+  }
+  .role-chip{ order:5; flex:0 1 auto!important; min-width:0; font-size:12.5px!important; padding:6px 10px!important }
+  #roleLabel{ overflow:visible; text-overflow:clip; white-space:nowrap; max-width:none!important }
 }
 @media(max-width:380px){
-  .topbar{ gap:6px!important; padding:0 8px!important }
-  /* çok dar: rol çipi metnini gizle, sadece nokta kalsın (Çıkış'a yer aç) */
-  #roleLabel{ display:none }
-  .role-chip{ padding:5px!important }
-  .topbar .tb-branch{ max-width:64px }
-  #tbWordmark{ max-width:78px }
+  .topbar{ padding:9px 10px!important }
+  .topbar .tb-branch{ font-size:11.5px!important; padding:5px 9px!important }
+  .role-chip{ font-size:11.5px!important; padding:5px 9px!important }
 }
 /* ═══════════════════════════════════════════════════════════
    MOBİL — ÜRÜN YÖNETİMİ / FİYAT EKRANI
@@ -6018,6 +6111,26 @@ body::after{
     flex:1 1 auto!important; justify-content:center; text-align:center;
   }
 }
+/* Yukarıdaki .main-önekli kurallarla özgüllük eşitliği ihtimaline karşı — İrsaliye/Fatura
+   önizleme başlığındaki butonlar bu dosyanın en sonunda tanımlanarak kaynak sırası
+   avantajıyla kesin olarak kazanır (bkz. .irs-arac-bar tanımı, dosya başında). */
+.irs-arac-bar button.gka-excel{
+  background:rgba(255,255,255,.12) !important; color:#fff !important;
+  border:1.5px solid rgba(255,255,255,.55) !important;
+  border-radius:10px !important; padding:9px 15px !important;
+  font-size:13px !important; font-weight:800 !important;
+  box-shadow:none !important; text-shadow:none !important;
+}
+.irs-arac-bar button.gka-excel:hover{
+  background:rgba(255,255,255,.22) !important; border-color:#fff !important;
+}
+.irs-arac-bar button.gka-irsaliye{
+  background:#fff !important; color:var(--brand) !important;
+  border:1px solid #fff !important; border-radius:10px !important; padding:9px 15px !important;
+  font-size:13px !important; font-weight:800 !important;
+  box-shadow:none !important; text-shadow:none !important;
+}
+.irs-arac-bar button.gka-irsaliye:hover{ filter:brightness(.96) !important }
 
 /* ═══════════════════════════════════════════════════════════
    STOK KARTI DURUM SEÇİMİ (segment kontrolü)
@@ -7092,7 +7205,7 @@ body::after{
 /* ——— 2) ÜST MENÜ + SOL MENÜ = AYNI BEJ + kabartma + birleşik ——— */
 /* ÜST MENÜ = bej (sol menüyle aynı) — KALIN gold ışıltılı çizgi */
 .topbar{
-  height:66px!important;
+  height:52px!important;
   background:linear-gradient(180deg, #b7a596 0%, #9c8570 55%, #877158 100%)!important;
   border-bottom:none!important;
   box-shadow:
@@ -7751,6 +7864,13 @@ button{ text-shadow:none; }
   transform:none !important;
 }
 .bayi-mini:active, .btn-ghost:active{ transform:none !important; box-shadow:none !important; }
+/* .bsip-ekle ("+ Sepete") aynı zamanda .bayi-mini taşıyor; yukarıdaki düzleştirme kuralı
+   onu da gri/düz yapıp marka renkli tasarımını (bkz. .bsip-ekle tanımı) eziyordu.
+   Bileşik seçici daha özgül olduğu sırayla ilgisiz, marka rengi burada garanti geri geliyor. */
+.bayi-mini.bsip-ekle{
+  background:var(--brand) !important; color:#fff !important; border-color:var(--brand) !important;
+}
+.bayi-mini.bsip-ekle:hover{ background:var(--brand) !important; filter:brightness(.94); border-color:var(--brand) !important; }
 
 /* ── 13g) AKTİF şube seçim çipi (.bstok-kart.on) → iç yazı AÇIK renk ──
    Aktif çip koyu dolgu alıyor; içindeki ad/değer açık renk olmalı. */
@@ -8159,25 +8279,10 @@ input, select, textarea{ max-width:100% !important; box-sizing:border-box; }
   }
 }
 
-/* ── 27) SİPARİŞ KALEM SATIRI → mobilde ürün adı tam görünür ── */
-@media(max-width:640px){
-  .bsepet-thead{ display:none !important; }
-  .bsepet-trow{
-    grid-template-columns:1fr auto !important;
-    grid-auto-rows:auto !important;
-    row-gap:4px !important;
-    position:relative;
-  }
-  .bsc-ad{ grid-column:1 / -1 !important; padding-right:28px; }
-  .bsc-ad strong{ white-space:normal !important; overflow:visible !important; text-overflow:clip !important; }
-  .bsc-icerik{ grid-column:1 / -1 !important; justify-self:start !important; }
-  .bsc-fiyat{ text-align:left !important; }
-  .bsc-mik{ text-align:right !important; }
-  .bsc-tutar{ grid-column:1 / -1 !important; text-align:right !important; }
-  .bsc-sil{ position:absolute !important; right:10px; top:8px; }
-  .bsc-sil .bayi-kalem-sil{ padding:5px 9px; font-size:11px; }
-  .bsc-ad{ padding-right:82px; }
-}
+/* ── 27) SİPARİŞ KALEM SATIRI mobil düzeni artık tek kaynaktan (yukarıdaki
+   @media(max-width:720px) .bsepet-trow bloğu) geliyor — bu blok kaldırıldı,
+   çünkü onunla çakışıp Düzenle butonunun fiyatın üzerine binmesine ve
+   yatay kaydırma çubuğu görünmesine yol açıyordu. ── */
 
 /* ── 28) STOK KATEGORİ ÇİPLERİ → metin kesilmesin (mobil + masaüstü) ── */
 .skf-chip{
@@ -8215,6 +8320,31 @@ input, select, textarea{ max-width:100% !important; box-sizing:border-box; }
   .gecmis-ozet-bar button{ width:100% !important; justify-content:center !important; }
 }
 
+/* Üstteki ".topbar{height:66px!important}" (koşulsuz, tüm genişliklerde geçerli)
+   ile aynı özgüllükte olduğumuz için kaynak sırası belirleyici — bu yüzden bu
+   düzeltme dosyanın en sonunda tekrarlanarak mobilde kesin kazanır. Aksi halde
+   iki satırlı üst bar 66px'e sıkışıp ikinci satır (şube/rol çipi) kırpılırdı. */
+@media(max-width:560px){
+  .topbar{ height:auto!important; min-height:48px!important }
+}
+/* ── Üst bar biraz daha küçültüldü (yükseklik + yazı boyutları) ──
+   Yukarıdaki ".topbar .tb-logo{font-size:24px!important}" gibi eski/unconditional
+   tema kuralları aynı özgüllükte olduğundan kaynak sırasına göre kazanıyordu;
+   bu yüzden son küçültme burada, dosyanın en sonunda, kesin kazanacak şekilde.
+   Sabit yükseklik SADECE masaüstünde — mobilde iki satırlı bar için height:auto
+   şart, yoksa ikinci satır (şube/rol çipi) tekrar kırpılır. */
+@media(min-width:561px){
+  .topbar{ height:48px!important }
+}
+.topbar .tb-logo{ font-size:14px!important; gap:6px!important }
+.topbar .tb-logo .mark:not(.mark-foto){ width:22px!important; height:22px!important; font-size:12.5px!important }
+.topbar .mark.mark-foto{ width:30px!important; height:30px!important }
+.topbar .tb-wordmark-img{ height:22px!important }
+.topbar .tb-branch{ font-size:11px!important; padding:4px 9px!important }
+.topbar .role-chip{ font-size:11px!important; padding:4px 10px 4px 6px!important; gap:6px!important }
+.topbar .role-chip .rc-dot{ width:18px!important; height:18px!important; font-size:10.5px!important }
+.topbar .tb-out{ font-size:11px!important; padding:6px 11px!important }
+.topbar .tb-ham{ width:30px!important; height:30px!important; font-size:15px!important }
 </style>
 </head>
 <body>
@@ -28458,9 +28588,11 @@ function satisFaturaBelgeAc(id, tip){
   <div class="irs-modal-bg" id="irsModal" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) irsaliyeKapat()">
     <div class="irs-modal-ic">
       <div class="irs-arac-bar no-print">
-        <span class="irs-arac-baslik">${belgeIkon} ${belgeTip} · Önizleme</span>
-        <div class="irs-arac-btnlar">
+        <div class="irs-arac-ust">
+          <span class="irs-arac-baslik">${belgeIkon} ${belgeTip} · Önizleme</span>
           <button class="gka-excel" onclick="irsaliyeKapat()">Kapat</button>
+        </div>
+        <div class="irs-arac-btnlar">
           <button class="gka-excel" onclick="satisFaturaBelgeAc(${id},'${fiyatli?'irsaliye':'fatura'}')">${fiyatli?'📋 İrsaliyeye geç':'🧾 Faturaya geç'}</button>
           <button class="gka-irsaliye" onclick="irsaliyeYazdir()">🖨️ Yazdır</button>
         </div>
@@ -28503,11 +28635,14 @@ function satisFaturaBelgeAc(id, tip){
 
         ${f.aciklama?`<div class="irs-iade-sebep">Açıklama: <strong>${f.aciklama}</strong></div>`:''}
 
-        <table class="irs-tablo${fiyatli?' irs-tablo-fiyatli':''}">
-          <thead>${thead}</thead>
-          <tbody>${satirlar}</tbody>
-          <tfoot>${tfoot}</tfoot>
-        </table>
+        <div class="irs-tablo-wrap">
+          <table class="irs-tablo${fiyatli?' irs-tablo-fiyatli':''}">
+            <thead>${thead}</thead>
+            <tbody>${satirlar}</tbody>
+            <tfoot>${tfoot}</tfoot>
+          </table>
+        </div>
+        <div class="irs-kaydir-ipucu no-print">← Tüm sütunlar için kaydırın →</div>
 
         ${fiyatli?`<div class="irs-yaziyla">Yalnız: <strong>${tutarYaziyla(top.faturaTutar)}</strong></div>`:''}
 
@@ -29672,10 +29807,10 @@ function bayiSipGovdeHtml(){
       }
       html += `<div class="bfiyat-satir bsip-satir">
         <span class="bf-ad"><span class="bf-ad-ic"><span class="bf-gorsel${s.gorsel?` tiklanir`:``}"${s.gorsel?` onclick="stokGorselBuyutKod('${kod}')"`:``}>${s.gorsel?`<img src="${s.gorsel}" alt="">`:`<span class="bfg-bos">📦</span>`}</span><span class="bf-ad-metin"><strong>${s.ad}</strong>${s.aciklama?`<span class="bf-aciklama">${s.aciklama}</span>`:''}</span></span></span>
-        <span class="bf-mik"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
-        <span class="bf-donus">${donusAcik?`<span class="bf-donus-metin">${donusAcik}</span>`:`<span class="bf-donus-yok">tek birim (${ustBirimAd})</span>`}</span>
-        <span class="bf-kdv">%${d.satisKdv}</span>
-        <span class="bf-satis">${satisUst>0?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
+        <span class="bf-mik" data-l="Ana Bayi Stok"><span class="bf-mik-kutu${merkezVar<=0?' eksi':''}">${stokGoster}</span><small class="bf-birim-et">${ustBirimAd}</small></span>
+        <span class="bf-donus" data-l="Birim Dönüşümü">${donusAcik?`<span class="bf-donus-metin">${donusAcik}</span>`:`<span class="bf-donus-yok">tek birim (${ustBirimAd})</span>`}</span>
+        <span class="bf-kdv" data-l="KDV">%${d.satisKdv}</span>
+        <span class="bf-satis" data-l="Satış Fiyatı (KDV dahil)">${satisUst>0?tl(satisUst)+' ₺<br><small class="bf-birim-et">/ '+ustBirimAd+'</small>':'<span style="color:var(--ink-3)">—</span>'}</span>
         <span class="bf-islem">
           ${sepette
             ? `<span class="bayi-sepette-rozet">✓ ${birimGoster}</span><button class="bayi-mini bsip-ekle" onclick="bayiSepetEkle('${kod}')">+ Ekle</button>`
@@ -30321,15 +30456,18 @@ function irsaliyeAc(id){
           </div>
         </div>
 
-        <table class="irs-tablo">
-          <thead>
-            <tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th><th class="irs-icerik">Birim İçeriği</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
-          </thead>
-          <tbody>${satirlar}</tbody>
-          <tfoot>
-            <tr><td colspan="5" class="irs-toplam-lbl">TOPLAM</td><td class="irs-miktar">${toplamKalem} kalem</td></tr>
-          </tfoot>
-        </table>
+        <div class="irs-tablo-wrap">
+          <table class="irs-tablo">
+            <thead>
+              <tr><th class="irs-sira">#</th><th class="irs-kod">Stok No</th><th class="irs-ad">Malın Cinsi</th><th class="irs-icerik">Birim İçeriği</th><th class="irs-birim">Birim</th><th class="irs-miktar">Miktar</th></tr>
+            </thead>
+            <tbody>${satirlar}</tbody>
+            <tfoot>
+              <tr><td colspan="5" class="irs-toplam-lbl">TOPLAM</td><td class="irs-miktar">${toplamKalem} kalem</td></tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="irs-kaydir-ipucu no-print">← Tüm sütunlar için kaydırın →</div>
 
         <div class="irs-not">Bu irsaliye ticari mal sevkiyatı içindir; fiyat ve bedel içermez. Malın fiili sevk tarihi düzenleme tarihidir.</div>
 
@@ -30491,9 +30629,11 @@ function iadeBelgeAc(id, tip){
   <div class="irs-modal-bg" id="irsModal" onmousedown="window.__modalBasladi=(event.target===this)" onclick="if(event.target===this && window.__modalBasladi) irsaliyeKapat()">
     <div class="irs-modal-ic">
       <div class="irs-arac-bar no-print">
-        <span class="irs-arac-baslik">${belgeIkon} ${belgeTip} · Önizleme</span>
-        <div class="irs-arac-btnlar">
+        <div class="irs-arac-ust">
+          <span class="irs-arac-baslik">${belgeIkon} ${belgeTip} · Önizleme</span>
           <button class="gka-excel" onclick="irsaliyeKapat()">Kapat</button>
+        </div>
+        <div class="irs-arac-btnlar">
           <button class="gka-excel" onclick="iadeBelgeAc(${id},'${fiyatli?'irsaliye':'fatura'}')">${fiyatli?'📋 İrsaliyeye geç':'🧾 Faturaya geç'}</button>
           <button class="gka-irsaliye" onclick="irsaliyeYazdir()">🖨️ Yazdır</button>
         </div>
@@ -30537,11 +30677,14 @@ function iadeBelgeAc(id, tip){
         <div class="irs-iade-sebep">İade Sebebi: <strong>${iadeSebepAd(f.sebep)}</strong>${f.aciklama?` · ${f.aciklama}`:''}</div>
         ${f.kaynakFaturaNo?`<div class="irs-iade-sebep">İade Edilecek Fatura No: <strong>${f.kaynakFaturaNo}</strong>${f.kaynakFaturaTarihi?` · Tarihi: <strong>${new Date(f.kaynakFaturaTarihi).toLocaleDateString("tr-TR")}</strong>`:''}</div>`:''}
 
-        <table class="irs-tablo${fiyatli?' irs-tablo-fiyatli':''}">
-          <thead>${thead}</thead>
-          <tbody>${satirlar}</tbody>
-          <tfoot>${tfoot}</tfoot>
-        </table>
+        <div class="irs-tablo-wrap">
+          <table class="irs-tablo${fiyatli?' irs-tablo-fiyatli':''}">
+            <thead>${thead}</thead>
+            <tbody>${satirlar}</tbody>
+            <tfoot>${tfoot}</tfoot>
+          </table>
+        </div>
+        <div class="irs-kaydir-ipucu no-print">← Tüm sütunlar için kaydırın →</div>
 
         ${fiyatli?`<div class="irs-yaziyla">Yalnız: <strong>${tutarYaziyla(top.faturaTutar)}</strong></div>`:''}
 
@@ -30572,6 +30715,7 @@ function irsaliyeYazdir(){
 }
 function irsaliyeYazdirCss(){
   return `@page{margin:22mm 18mm}
+  .no-print{display:none !important}
   body{font-family:-apple-system,'Segoe UI',Roboto,sans-serif;margin:0;padding:0;color:#1a1a1a;background:#fff}
   .irs-kagit{max-width:720px;margin:0 auto}
   .irs-logo-orta{display:flex;flex-direction:column;align-items:center;gap:0;margin-bottom:14px}
