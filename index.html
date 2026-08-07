@@ -13,7 +13,8 @@
    MİNİPAN POS — Faz 1 iskeleti
    Modern wafflecı POS · rol bazlı arayüz · tek dosya
    ============================================================ */
-   :root{
+
+:root{
   /* ══ MİNİPAN KAHVE/GOLD TEMA — referans buton kartelası ══ */
   --bg:        #efe7d6;
   --surface:   #ffffff;
@@ -3425,19 +3426,29 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .kfk-urunler{font-size:13px; color:#c8ccd0; margin-bottom:4px}
 .kfk-alt{font-size:11.5px; color:#8a9099}
 /* Garson masa sepeti paneli */
-.grs-sepet-panel{position:sticky; bottom:0; background:var(--surface); border-top:2px solid var(--brand); padding:14px 16px; box-shadow:0 -4px 16px rgba(0,0,0,.08)}
-.grs-sp-kisi{margin-bottom:12px}
+.grs-sepet-panel{
+  position:sticky; bottom:0; background:var(--surface); border-top:2px solid var(--brand);
+  padding:14px 16px; box-shadow:0 -4px 16px rgba(0,0,0,.08);
+  /* Panel ekranın en fazla yarısını kaplasın — üstteki ürün seçme alanı hep görünür kalsın */
+  max-height:52vh; display:flex; flex-direction:column; min-height:0;
+}
+/* Kalem listesi kaydırılabilir; kişi seçimi, başlık ve alt bar sabit kalır */
+.grs-sp-liste{
+  flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  margin:0 -4px; padding:0 4px;
+}
+.grs-sp-kisi{margin-bottom:12px; flex:0 0 auto}
 .grs-sp-kbaslik{font-size:12.5px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
 .grs-sp-kisiler{display:flex; flex-wrap:wrap; gap:8px}
 .grs-sp-kbtn{padding:8px 14px; border-radius:99px; background:var(--surface-2); color:var(--ink-2); font-size:13px; font-weight:700; border:1.5px solid var(--line-2)}
 .grs-sp-kbtn.on{background:var(--brand); color:#1a1d21; border-color:var(--brand)}
 .grs-sp-kbtn.yeni{background:#583923; border-style:dashed; border-color:#3d2415; color:#f7efe9}
-.grs-sp-baslik{font-size:13px; font-weight:800; margin-bottom:8px}
+.grs-sp-baslik{font-size:13px; font-weight:800; margin-bottom:8px; flex:0 0 auto}
 .grs-sp-kalem{display:flex; justify-content:space-between; align-items:center; font-size:13.5px; padding:5px 0; border-bottom:1px solid var(--line)}
 .grs-sp-sag{display:flex; align-items:center; gap:8px; font-weight:700}
 .grs-sp-sil{width:22px; height:22px; border-radius:50%; background:var(--err-soft); color:var(--err); font-size:11px; font-weight:800}
-.grs-sp-kampanya{display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:8px 12px; background:var(--warn-soft); color:var(--warn); border-radius:var(--radius-sm); font-size:13px; font-weight:800}
-.grs-sepet-bar{display:flex; gap:12px; align-items:center; margin-top:12px}
+.grs-sp-kampanya{display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding:8px 12px; background:var(--warn-soft); color:var(--warn); border-radius:var(--radius-sm); font-size:13px; font-weight:800; flex:0 0 auto}
+.grs-sepet-bar{display:flex; gap:12px; align-items:center; margin-top:12px; flex:0 0 auto}
 .grs-sepet-bar .grs-pb-bilgi{flex:1; font-size:15px; font-weight:800}
 /* Kasa sepet kişi seçimi */
 .ke-kisi{padding:12px 16px; background:var(--surface-2); border-radius:var(--radius-sm); margin-bottom:12px}
@@ -3540,6 +3551,13 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .qr-card-indirimli{border-radius:16px}
 /* Kampanya açıklaması yazısı (satış/qr/garson) */
 .p-kampanya{display:block; font-size:11px; font-weight:800; color:var(--err); margin:2px 0}
+.prod-foto .p-kampanya{margin:0}   /* foto kartlarda yükseklik min-height ile sabitlenir */
+/* Kampanya adının yanındaki %indirim oranı (satış / QR / garson ortak) */
+.p-kmp-oran{
+  display:inline-block; margin-left:4px; padding:1px 6px; border-radius:99px;
+  background:var(--err); color:#fff; font-size:10px; font-weight:800;
+  vertical-align:middle; white-space:nowrap;
+}
 .qr-card-kampanya{font-size:12px; font-weight:800; color:var(--err); margin:3px 0}
 .grs-u-kampanya{font-size:11px; font-weight:800; color:var(--err); margin-top:3px}
 .grs-u-fiyat.indirimli{display:flex; flex-direction:column; align-items:flex-end; line-height:1.1}
@@ -5488,8 +5506,10 @@ body::after{
 }
 .main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):not(.ode-onayla):hover::before,
 .ypm-ic button:hover::before{ left:130%; }
-/* buton içeriği parıltının üstünde */
-.main button:not([class*="qr-"]):not(.nav-item) > *{ position:relative; z-index:3; }
+/* buton içeriği parıltının üstünde — ancak köşeye sabitlenen rozetler (p-ind-kose,
+   p-out) hariç: bu kural onların position:absolute'unu ezip tam genişlik bant
+   haline getiriyordu. */
+.main button:not([class*="qr-"]):not(.nav-item) > *:not(.p-ind-kose):not(.p-out){ position:relative; z-index:3; }
 /* hover / active kabartma */
 .main button:not([class*="qr-"]):not(.nav-item):not(.stok-arama-temizle):not(.kasa-masa-btn):not(.ode-onayla):hover,
 .ypm-ic button:hover,.skm-ic button:hover,.fat-belge button:hover{
@@ -7024,6 +7044,8 @@ body::after{
   display:flex!important; flex-direction:column!important;
   text-align:center!important;
   min-height:auto!important;
+  height:100%!important;          /* ızgara satırındaki tüm kartlar aynı boyda olsun */
+  position:relative;
 }
 .main button.prod.prod-foto::before,.main button.prod.prod-foto::after{ display:none!important; }
 .main button.prod.prod-foto:hover{
@@ -7032,7 +7054,8 @@ body::after{
 }
 .prod-foto .p-gorsel{
   display:flex; align-items:center; justify-content:center;
-  height:120px; width:100%;
+  height:120px; min-height:120px; flex:0 0 120px;   /* görsel alanı sabit — kart boyu buradan kaymasın */
+  width:100%;
   background:linear-gradient(180deg,#fffdf9,#f5ede0);
   overflow:hidden;
 }
@@ -7040,18 +7063,26 @@ body::after{
 .prod-foto .p-gorsel .p-emoji{ font-size:52px; margin:0; filter:drop-shadow(0 3px 6px rgba(90,73,23,.2)); }
 .prod-foto .p-name{
   font-weight:800; font-size:14px; line-height:1.25; color:var(--ink);
-  padding:11px 10px 9px; margin:0; min-height:2.4em;
+  padding:11px 10px 9px; margin:0;
+  min-height:3.65em;              /* 2 satırlık ad için sabit alan (tek satırlıklarla hizalanır) */
   display:flex; align-items:center; justify-content:center;
 }
 .prod-foto .p-fiyat-bant{
-  display:block; width:100%; margin-top:auto;
+  display:flex; align-items:center; justify-content:center;
+  width:100%; margin-top:auto;
+  height:52px; min-height:52px; max-height:52px;   /* indirimli ve normal bant BİREBİR aynı yükseklik */
+  overflow:hidden;
+  box-sizing:border-box;
   background:linear-gradient(180deg,#583923,#3d2717);
-  padding:11px 8px; border-top:2px solid var(--gold-3);
+  padding:6px 8px; border-top:2px solid var(--gold-3);
 }
 .prod-foto .p-fiyat-bant .p-price{ color:#f7efe9!important; font-size:16px; font-weight:800; text-shadow:0 1px 0 rgba(0,0,0,.3); }
-.prod-foto .p-fiyat-bant .p-price.indirimli{ display:flex; flex-direction:column; gap:1px; align-items:center; }
-.prod-foto .p-fiyat-bant .p-eski{ font-size:11px; text-decoration:line-through; opacity:.65; color:#e0cdb8; }
-.prod-foto .p-fiyat-bant .p-yeni{ color:#c2a679!important; font-size:16px; font-weight:800; }
+.prod-foto .p-fiyat-bant .p-price.indirimli{ display:flex; flex-direction:column; gap:0; align-items:center; line-height:1.1; }
+/* %indirim rozeti zaten sol üst köşede gösteriliyor — bantta tekrarlanması
+   bandı 3 satıra çıkarıp normal kartlardan uzun yapıyordu. */
+.prod-foto .p-fiyat-bant .p-ind-rozet{ display:none; }
+.prod-foto .p-fiyat-bant .p-eski{ font-size:11px; line-height:1.1; text-decoration:line-through; opacity:.65; color:#e0cdb8; }
+.prod-foto .p-fiyat-bant .p-yeni{ color:#c2a679!important; font-size:16px; line-height:1.15; font-weight:800; }
 .prod-foto .p-ind-kose{
   position:absolute; top:8px; left:8px; z-index:3;
   background:var(--pal-gold); color:#3d2f26; font-size:11px; font-weight:800;
@@ -7059,8 +7090,16 @@ body::after{
   box-shadow:0 2px 5px rgba(90,73,23,.3);
 }
 .prod-foto .p-out{ position:absolute; top:8px; right:8px; z-index:3; background:rgba(45,29,18,.85); color:#f7efe9; }
-.prod-foto .p-kampanya{ display:block; font-size:11px; font-weight:700; color:var(--warn); padding:0 8px 6px; }
-.prod-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr))!important; gap:14px!important; }
+/* Kampanya açıklaması ("🔥 happy") sadece indirimli kartlarda çıkıyordu ve o kartı
+   diğerlerinden uzun yapıyordu → bant, ad alanının altına sabit yükseklikle konur;
+   indirimsiz kartlarda da aynı boşluk ::after ile ayrılır, böylece boylar eşitlenir. */
+.prod-foto .p-kampanya{
+  display:flex; align-items:center; justify-content:center; gap:2px;
+  font-size:11px; font-weight:700; color:var(--warn);
+  padding:0 8px; min-height:20px; max-height:20px; line-height:1.2;
+  overflow:hidden; white-space:nowrap;
+}
+.prod-grid{ grid-template-columns:repeat(auto-fill, minmax(150px, 1fr))!important; gap:14px!important; align-items:stretch!important; }
 
 /* ——— ÜRÜN SEÇİM LİSTE BUTONLARI (fk-urun-btn) — okunabilir, köşeli ——— */
 /* Hammadde ekle, fatura kalem seç, satış geçmişi ürün seç listeleri */
@@ -15553,7 +15592,9 @@ function viewSatis(main){
             const fiyatHtml = fb.indirimli
               ? `<span class="p-price indirimli"><span class="p-eski">${fb.eski} ₺</span><span class="p-yeni blink">${fb.gecerli} ₺</span>${fb.indOran>0?`<span class="p-ind-rozet">%${fb.indOran}</span>`:''}</span>`
               : `<span class="p-price">${fb.gecerli} ₺</span>`;
-            const aciklamaHtml = (fb.indirimli && fb.aciklama) ? `<span class="p-kampanya blink">🔥 ${fb.aciklama}</span>` : '';
+            const aciklamaHtml = (fb.indirimli && fb.aciklama)
+              ? `<span class="p-kampanya blink">🔥 ${fb.aciklama}${fb.indOran>0?` <span class="p-kmp-oran">%${fb.indOran}</span>`:''}</span>`
+              : `<span class="p-kampanya bos"></span>`;   // boşken de yer ayrılır → tüm kartlar eşit boyda
             return `<button class="prod prod-foto ${satilir?'':'out'} ${fb.indirimli?'prod-indirimli':''}${kasaSaltGoruntuleme()?' izleme-kilit':''}" onclick="addToCart(${DEMO_PRODUCTS.indexOf(p)})">
               ${satilir?'':'<span class="p-out">Tükendi</span>'}
               ${fb.indirimli && fb.indOran>0?`<span class="p-ind-kose">%${fb.indOran}</span>`:''}
@@ -15611,8 +15652,9 @@ function addToCart(idx){
     note(p.ad+" → sepet ("+state.kasaEkle.kisi+")");
     go("satis");
   } else {
-    // opsiyonsuz ürün → direkt adisyona
-    state.cart.push({ad:p.ad, fiyat:fiyat, q:1, secimler:[], ekstraRecete:[], kcal:urunTemelKcal(p.ad)});
+    // Masa/paket seçilmemiş: eskiden ürün, mutfağa hiç gitmeyen sahte bir
+    // adisyona ekleniyordu. Artık sessizce eklemek yerine kullanıcı uyarılır.
+    note("Önce bir masa açın veya paket sipariş başlatın");
     go("satis");
   }
 }
@@ -16073,9 +16115,9 @@ function confirmOpt(){
     note(p.ad+" → sepet ("+state.kasaEkle.kisi+")");
     go("satis");
   } else {
-    // POS'tan eklendi → adisyona
-    state.cart.push(yeniKalem);
+    // Masa/paket seçilmemiş — mutfağa gitmeyen sahte adisyona eklemek yerine uyar
     closeOpt();
+    note("Önce bir masa açın veya paket sipariş başlatın");
     go("satis");
   }
 }
@@ -16150,31 +16192,26 @@ function cartHtml(){
         '<span class="ci-name">'+c.ad+secimTxt+'</span>'+
         '<span class="ci-price">'+(c.fiyat*c.q)+' ₺</span></div>';
       }).join("");
+  // ── MASA / PAKET SEÇİLMEMİŞ ──
+  // Buradaki panel eskiden sabit yazılmış bir demo idi ("Masa 7 · Oturum · 3 kişi ·
+  // Kişi: Ayşe"). Ürünler geçici bir listeye ekleniyor, MUTFAĞA GİTMİYOR, miktar
+  // artırma/silme de yoktu. Yanıltıcı olduğu için kaldırıldı: artık kullanıcı
+  // doğru akışa (masa seç veya paket başlat) yönlendiriliyor.
   return `
     <div class="cart">
       <div class="cart-top">
-        <div><div class="ct-table">Masa 7</div><div class="ct-session">Oturum · 3 kişi</div></div>
-        <button class="btn-ghost" style="padding:8px 12px;border-radius:9px;font-size:12px;font-weight:700">Kişi: Ayşe ▾</button>
+        <div><div class="ct-table">🧾 Adisyon seçilmedi</div>
+        <div class="ct-session">Sipariş almak için önce masa veya paket seçin</div></div>
       </div>
-      <div class="cart-items">${items}</div>
+      <div class="cart-items">
+        <div class="cart-empty">
+          Ürün eklemek için önce <strong>bir masa</strong> açın<br>ya da <strong>paket sipariş</strong> başlatın.
+        </div>
+      </div>
       <div class="cart-foot">
-        ${sepetInd ? `
-        <div class="cart-kampanya">
-          <div class="ck-satir"><span>Ara toplam</span><span>${tl(araToplam)} ₺</span></div>
-          <div class="ck-satir ck-ind"><span>🔥 ${sepetInd.kampanya.ad}</span><span>−${tl(sepetInd.indirim)} ₺</span></div>
-        </div>
-        ` : ``}
-        ${state.odenen>0 ? `
-        <div class="cart-odenen">
-          <div class="co-satir"><span>Toplam</span><span>${total} ₺</span></div>
-          <div class="co-satir odendi"><span>✓ Ödenen</span><span>−${tl(state.odenen)} ₺</span></div>
-        </div>
-        <div class="cart-total"><span class="cf-lbl">Kalan</span><span class="cf-amt">${tl((total-state.odenen))} ₺</span></div>
-        ` : `
-        <div class="cart-total"><span class="cf-lbl">Toplam</span><span class="cf-amt">${total} ₺</span></div>
-        `}
-        <div class="cart-actions">
-          <button class="btn btn-primary btn-full" onclick="checkout(${(total-(state.odenen||0))})">${state.odenen>0?'Kalanı al · '+(total-state.odenen).toFixed(2):'Ödeme al · '+total} ₺</button>
+        <div class="cart-actions" style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-primary btn-full" onclick="go('masalar')">🍽️ Masalara git</button>
+          <button class="btn btn-ghost btn-full" onclick="kasaPaketBasla()">🥡 Paket sipariş başlat</button>
         </div>
       </div>
     </div>`;
@@ -22328,26 +22365,61 @@ function katGorselSec(i){
   const inp = document.getElementById("katGorselInput");
   if(inp){ inp.value=""; inp.click(); }
 }
+/* ── ORTAK GÖRSEL KÜÇÜLTME/SIKIŞTIRMA ──
+   Ham (base64) görseller localStorage kotasını (~5MB) hızla doldurur; kota
+   dolunca TÜM menü kaydı sessizce başarısız olur ve görseller "kaybolur".
+   Bu yüzden her yükleme noktası görseli önce buradan geçirir.
+   geriCagir(dataUrl) ile sonucu alır. */
+function gorselKucultSikistir(dosya, geriCagir){
+  if(!/^image\//.test(dosya.type)){ note("Lütfen bir görsel dosyası seçin"); return; }
+  if(dosya.size > 8*1024*1024){ note("Görsel 8MB'den küçük olmalı"); return; }
+  const reader = new FileReader();
+  reader.onload = e=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const MAKS = 400;
+      let w = img.width, h = img.height;
+      if(w>MAKS || h>MAKS){
+        if(w>=h){ h = Math.round(h*MAKS/w); w = MAKS; }
+        else { w = Math.round(w*MAKS/h); h = MAKS; }
+      }
+      const c = document.createElement("canvas");
+      c.width = w; c.height = h;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(0,0,w,h);
+      ctx.drawImage(img, 0, 0, w, h);
+      let veri;
+      try{
+        veri = c.toDataURL("image/webp", 0.8);
+        if(veri.indexOf("data:image/webp")!==0){ veri = c.toDataURL("image/jpeg", 0.8); }
+      }catch(err){
+        try{ veri = c.toDataURL("image/jpeg", 0.8); }
+        catch(err2){ veri = e.target.result; }
+      }
+      geriCagir(veri);
+    };
+    img.onerror = ()=> note("Görsel okunamadı");
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(dosya);
+}
 function katGorselYukle(ev){
   const dosya = ev.target.files[0];
   if(!dosya) return;
-  if(dosya.size > 2*1024*1024){ note("⛔ Görsel 2 MB'dan küçük olmalı"); return; }
   const i = state._katGorselHedef;
-  const okuyucu = new FileReader();
-  okuyucu.onload = (e)=>{
+  gorselKucultSikistir(dosya, (veri)=>{
     // popup açıksa sadece geçici state'e yaz — kayıt Ekle/Kaydet'te olur
     if(state._fkpPopup){
-      state._fkpPopup.gorselOnizleme = e.target.result;
+      state._fkpPopup.gorselOnizleme = veri;
       fkpCiz();
     } else {
       // popup kapalıysa (eski akış uyumluluğu) doğrudan kaydet
       const k = DEMO_KATEGORILER[i];
-      KAT_GORSEL[k.ad] = e.target.result;
+      KAT_GORSEL[k.ad] = veri;
       note("✓ "+k.ad+" görseli eklendi");
       menuKaydet(); go("fiyat", true);
     }
-  };
-  okuyucu.readAsDataURL(dosya);
+  });
 }
 function katGorselSil(i){
   // popup açıksa sadece önizlemeyi sıfırla (henüz kaydedilmedi)
@@ -23656,7 +23728,8 @@ function urunSilOnay(i){
   const p = DEMO_PRODUCTS[i]; if(!p) return;
   delete PRODUCT_OPTIONS[p.ad];
   delete URUN_GORSEL[p.ad];
-  DEMO_PRODUCTS.splice(pi,1);
+  if(typeof RECIPES!=="undefined") delete RECIPES[p.ad];   // onay metninde "reçetesi de kaldırılır" deniyor
+  DEMO_PRODUCTS.splice(i,1);   // parametre adı "i" — eskiden tanımsız "pi" kullanılıyordu, silme çalışmıyordu
   note("Ürün silindi");
   menuKaydet();
   go("fiyat", true);
@@ -23670,9 +23743,15 @@ const KOD_SEC_KCAL = {"Sütlü Pankek":180,"Kakaolu":130,"Sütlü - Kakaolu":140
 
 const MENU_KEY = "minipan_menu_v1";
 function menuKaydet(){
-  MPStore.set(MENU_KEY, {
+  const ok = MPStore.set(MENU_KEY, {
     DEMO_KATEGORILER, DEMO_PRODUCTS, PRODUCT_OPTIONS, OPTION_GROUPS, OPTION_POOL, SEC_KAPALI, URUN_KAPALI, URUN_GORSEL, KAT_GORSEL, SUBE_FIYAT, MALIYET_RECETELERI, RECIPES, _urunNoSayac, URUN_SATIS
   }, 1);
+  // Kayıt başarısızsa (kota dolu) sessizce geçme — kullanıcı görselin/değişikliğin
+  // kaybolacağını ANINDA bilsin, "kaydettim ama gitti" durumu oluşmasın.
+  if(!ok){
+    try{ note("⛔ Değişiklik kalıcı kaydedilemedi (cihaz depolaması dolu). Sayfayı yenilerseniz KAYBOLUR."); }catch(_){}
+  }
+  return ok;
 }
 function menuYukle(){
   const v = MPStore.get(MENU_KEY, {}, {version:1});
@@ -24233,10 +24312,9 @@ function ufSecStokSelKur(gi, si){
 }
 function urunGorselYukle(input){
   const dosya = input.files[0]; if(!dosya) return;
-  if(dosya.size > 2*1024*1024){ note("Görsel 2MB'den küçük olmalı"); return; }
-  const reader = new FileReader();
-  reader.onload = e=>{ state.urunForm.gorsel = e.target.result; renderUrunForm(); };
-  reader.readAsDataURL(dosya);
+  gorselKucultSikistir(dosya, (veri)=>{
+    if(state.urunForm){ state.urunForm.gorsel = veri; renderUrunForm(); }
+  });
 }
 function urunEmojiSec(){
   const e = prompt("Emoji (ürün ikonu):", state.urunForm.emoji);
@@ -36204,7 +36282,7 @@ function qrMenuHtml(){
     const fiyatHtml = fb.indirimli
       ? '<div class="qr-card-fiyat indirimli"><span class="qr-eski">'+fb.eski+' ₺</span><span class="qr-yeni blink">'+fb.gecerli+' ₺</span>'+(fb.indOran>0?'<span class="qr-ind-rozet">%'+fb.indOran+'</span>':'')+'</div>'
       : '<div class="qr-card-fiyat">'+fb.gecerli+' ₺</div>';
-    const aciklamaHtml = (fb.indirimli && fb.aciklama) ? '<div class="qr-card-kampanya blink">🔥 '+fb.aciklama+'</div>' : '';
+    const aciklamaHtml = (fb.indirimli && fb.aciklama) ? '<div class="qr-card-kampanya blink">🔥 '+fb.aciklama+(fb.indOran>0?' <span class="p-kmp-oran">%'+fb.indOran+'</span>':'')+'</div>' : '';
     html += '<div class="qr-card'+(satilir?'':' qr-out')+(fb.indirimli?' qr-card-indirimli blink-soft':'')+'" data-urun="'+String(p.ad).replace(/"/g,'&quot;')+'">'+
       '<div class="qr-card-gorsel-wrap" onclick="event.stopPropagation();qrUrunGorselAc(this.closest(\'.qr-card\').getAttribute(\'data-urun\'))">'+
         urunGorsel(p,true)+
@@ -37768,7 +37846,7 @@ function garsonMenuHtml(){
     html+='<button class="grs-urun'+(satilir?'':' tukendi')+(fb.indirimli?' grs-indirimli blink-soft':'')+'" onclick="garsonUrunSec('+pi+')">'+
       '<div class="grs-u-info"><div class="grs-u-ad">'+p.ad+'</div>'+
       (p.aciklama?'<div class="grs-u-desc">'+p.aciklama+'</div>':'')+
-      ((fb.indirimli&&fb.aciklama)?'<div class="grs-u-kampanya blink">🔥 '+fb.aciklama+'</div>':'')+'</div>'+
+      ((fb.indirimli&&fb.aciklama)?'<div class="grs-u-kampanya blink">🔥 '+fb.aciklama+(fb.indOran>0?' <span class="p-kmp-oran">%'+fb.indOran+'</span>':'')+'</div>':'')+'</div>'+
       '<div class="grs-u-sag">'+(satilir?fiyatHtml+'<span class="grs-u-add">+</span>':'<span class="grs-u-tukendi">Tükendi</span>')+'</div>'+
     '</button>';
   });
@@ -37796,11 +37874,15 @@ function garsonMenuHtml(){
     html+='<button class="grs-sp-kbtn yeni" onclick="garsonSepetYeniKisi()">+ Yeni kişi</button>';
     html+='</div></div>';
     html+='<div class="grs-sp-baslik">🧾 Sepet ('+GARSON.masaSepet.length+')</div>';
+    // Kalem listesi kendi kaydırma alanında: sepet uzadıkça panel büyüyüp
+    // ürün seçme alanını yutmasın (tablette sorun oluyordu).
+    html+='<div class="grs-sp-liste">';
     GARSON.masaSepet.forEach((c,i)=>{
       html+='<div class="grs-sp-kalem'+(c.paket?' grs-sp-paketli':'')+'"><span>'+(c.paket?'📦 ':'')+c.ad+(c.secimler&&c.secimler.length?' <small>'+c.secimler.join(', ')+'</small>':'')+
         ' <button class="grs-sp-paketle'+(c.paket?' on':'')+'" onclick="garsonSepetPaket('+i+')">'+(c.paket?'📦 Paket':'📦 Paketle')+'</button></span>'+
         '<span class="grs-sp-sag"><span class="ci-miktar"><button class="ci-mik-btn" onclick="garsonSepetMiktar('+i+',-1)">−</button><span class="ci-mik-say">'+(c.q||1)+'</span><button class="ci-mik-btn" onclick="garsonSepetMiktar('+i+',1)">+</button></span> '+(c.fiyat*(c.q||1))+' ₺ <button class="grs-sp-sil" onclick="garsonSepetSil('+i+')">✕</button></span></div>';
     });
+    html+='</div>';
     const gonderAktif=!!GARSON.kisi;
     const grsSepetInd = sepetKampanyaIndirimi(mt, AKTIF_SUBE, "masa");
     const grsToplam = grsSepetInd ? grsSepetInd.yeniToplam : mt;
