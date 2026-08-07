@@ -4861,7 +4861,7 @@ select.uf-grup-ad{flex:1; cursor:pointer}
 .kmpf-kapsam-row .kmpf-secim{flex:1 1 45%; padding:10px 6px; font-size:12px}
 .kmpf-not-kucuk{font-size:11.5px; color:var(--ink-3); margin:-4px 0 4px; padding:0 2px}
 .kmpf-sec-say{font-size:11px; font-weight:800; color:var(--brand); background:var(--brand-soft); padding:2px 9px; border-radius:99px; white-space:nowrap}
-.kmpf-urun-secici{display:block; max-height:340px; overflow-y:auto; overflow-x:hidden; padding:10px; background:var(--surface-2); border:1.5px solid var(--line); border-radius:12px; -webkit-overflow-scrolling:touch; width:100%}
+.kmpf-urun-secici{display:block; flex-shrink:0; min-height:160px; max-height:340px; overflow-y:auto; overflow-x:hidden; padding:10px; background:var(--surface-2); border:1.5px solid var(--line); border-radius:12px; -webkit-overflow-scrolling:touch; width:100%}
 .kmpf-us-grup{display:block; width:100%}
 .kmpf-us-grup + .kmpf-us-grup{margin-top:14px; padding-top:12px; border-top:1px dashed var(--line-2)}
 .kmpf-us-grup-bas{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12.5px; font-weight:800; color:var(--ink-2); margin-bottom:8px}
@@ -20381,7 +20381,17 @@ function masaOdenmemisKalemler(m){
 function viewCanli(main){
   // Genel müdür/depo tüm şubeleri; şube müdürü/kasa sadece kendi şubesini görür
   const hepsi = (state.role==="genel" || state.role==="depo");
-  const subeler = hepsi ? DEMO_BRANCHES : DEMO_BRANCHES.filter(b=>b.ad===AKTIF_SUBE);
+  const subelerHam = hepsi ? DEMO_BRANCHES : DEMO_BRANCHES.filter(b=>b.ad===AKTIF_SUBE);
+  // Gerçek satış kaydı olan şube(ler) için demo ciroyu, indirim düşülmüş
+  // gerçek net ciro ile değiştir (Kasa Raporları/Gün Sonu ile aynı hesap:
+  // gunSonuOzetHesapla → brüt - indirim - iade). Kaydı olmayan diğer şubeler
+  // demo veride kalır.
+  const _bugun = isletmeGunu();
+  const subeler = subelerHam.map(b=>{
+    const _ozet = gunSonuOzetHesapla(b.ad, _bugun);
+    const gercekVarMi = _ozet.islemSayisi>0;
+    return gercekVarMi ? {...b, ciro: _ozet.net} : b;
+  });
   const toplam = subeler.reduce((s,b)=>s+b.ciro,0);
   const bekleyen = subeler.reduce((s,b)=>s+b.bekleyen,0);
   main.innerHTML=`
@@ -34078,15 +34088,19 @@ function raporUrunSatisVeri(){
   // ürün bazlı topla (genel müdür "tüm şubeler"de şube bazlı ayrı satır)
   const map = {};
   kayitlar.forEach(g=>{
+    const subeKey = (isGenel && subeFiltre==="__tum") ? (g.sube||"?") : "";
+    // kategori önbelleği (bu kayıt için ürün adı → kategori)
+    const katOnbellek = {};
+    const katBul = (ad)=>{
+      if(katOnbellek[ad]) return katOnbellek[ad];
+      const it0 = (g.kalemler||[]).find(x=>x.ad===ad && x.kat && x.kat!=="Diğer");
+      let kat = it0 ? it0.kat : null;
+      if(!kat){ const ref=DEMO_PRODUCTS.find(p=>p.ad===ad); kat = (ref&&ref.kat)?ref.kat:"Diğer"; }
+      katOnbellek[ad]=kat; return kat;
+    };
     (g.kalemler||[]).forEach(it=>{
       if(it.durum==="iptal") return;
-      const subeKey = (isGenel && subeFiltre==="__tum") ? (g.sube||"?") : "";
-      // kategori: satış anında kaydedilmişse onu kullan; yoksa (eski kayıt) menüden bul
-      let kat = it.kat;
-      if(!kat || kat==="Diğer"){
-        const ref = DEMO_PRODUCTS.find(p=>p.ad===it.ad);
-        kat = (ref && ref.kat) ? ref.kat : "Diğer";
-      }
+      const kat = katBul(it.ad);
       const key = it.ad + "||" + kat + "||" + subeKey;
       if(!map[key]) map[key] = {
         ad:it.ad, kat:kat, sube:subeKey,
@@ -34096,13 +34110,36 @@ function raporUrunSatisVeri(){
       r.adet++;
       r.brut += (it.fiyat||0);
       if(it.hediye){ r.hediyeAdet++; r.hediyeTutar += (it.fiyat||0); }
-      // kısmi ödeme farkı = indirim (ödenen < fiyat, hediye hariç)
-      if(!it.hediye){
-        const odenen = it.odenenTutar||0;
-        const fark = (it.fiyat||0) - odenen;
-        if(fark > 0.01) r.indirim += fark;
-      }
       if(r.birim===0 && it.fiyat) r.birim = it.fiyat;
+    });
+    // ══ İNDİRİM — tahsilat (fiş) kaydındaki gerçek `indirim` tutarı, o fişteki
+    // kalemlere tutar oranında dağıtılır. (Kalemin odenenTutar'ı üzerinden fark
+    // almak indirimi göstermiyordu, çünkü dağıtım tutarı indirimi de "ödenmiş"
+    // sayıp kalemlere geri ekliyordu — bkz. odemeTahsilEt/tahsilOran.)
+    (g.odemeIslemleri||[]).forEach(is=>{
+      if(is.tip!=="kalem" || !is.indirim || is.indirim<=0) return;
+      const kalemler = is.kalemler||[];
+      if(!kalemler.length) return;
+      // bu fişteki hediye kalemlerin tutarını indirim havuzundan çıkar
+      // (hediye zaten ayrı olarak r.hediyeTutar'da izleniyor, iki kez düşülmesin)
+      const hediyeAdSet = new Set(
+        (g.kalemler||[]).filter(x=>x.hediye).map(x=>x.ad+"||"+x.kisi)
+      );
+      let hediyeTutarBu = 0;
+      const gercekKalemler = kalemler.filter(k=>{
+        const hed = hediyeAdSet.has((k.ad||"")+"||"+(k.kisi||""));
+        if(hed) hediyeTutarBu += (k.tutar||0);
+        return !hed;
+      });
+      const kalanIndirim = Math.max(0, is.indirim - hediyeTutarBu);
+      const toplamTutar = gercekKalemler.reduce((t,k)=>t+(k.tutar||0),0);
+      if(kalanIndirim<=0 || toplamTutar<=0) return;
+      gercekKalemler.forEach(k=>{
+        const kat = katBul(k.ad);
+        const key = k.ad + "||" + kat + "||" + subeKey;
+        if(!map[key]) map[key] = { ad:k.ad, kat:kat, sube:subeKey, adet:0, birim:0, brut:0, hediyeAdet:0, hediyeTutar:0, indirim:0 };
+        map[key].indirim += kalanIndirim * (k.tutar/toplamTutar);
+      });
     });
   });
 
